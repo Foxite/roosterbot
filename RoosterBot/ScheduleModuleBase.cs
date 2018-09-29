@@ -1,0 +1,215 @@
+﻿using System;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+
+namespace RoosterBot {
+	public class ScheduleModuleBase : ModuleBase {
+		public ScheduleService Service { get; protected set; }
+		public ConfigService Config { get; protected set; }
+
+		private string m_LogTag;
+
+		public ScheduleModuleBase(ScheduleService serv, ConfigService config, string logTag) {
+			Service = serv;
+			Config = config;
+			m_LogTag = logTag;
+		}
+
+		protected string GetTeacherNameFromAbbr(string teacherString) {
+			string[] abbrs = teacherString.Split(", ");
+			string ret = "";
+			for (int i = 0; i < abbrs.Length; i++) {
+				ret += GetSingleTeacherNameFromAbbr(abbrs[i]);
+				if (i != abbrs.Length - 1) {
+					ret += ", ";
+				}
+			}
+			return ret;
+		}
+
+		protected string GetSingleTeacherNameFromAbbr(string abbr) {
+			switch (abbr) {
+			case "ATE":
+				return "Arnoud Telkamp";
+			case "BHN":
+				return "Bram den Hond";
+			case "CPE":
+				return "Chris-Jan Peterse";
+			case "CSP":
+				return "Cynthia Spier";
+			case "DWO":
+				return "Dick Wories";
+			case "HAL":
+				return "Hyltsje Altenburg";
+			case "HBE":
+				return "Hsin Chi Berenst";
+			case "JBO":
+				return "Jaap van Boggelen";
+			case "JWO":
+				return "Joram Wolters";
+			case "LEN":
+				return "Laura Endert";
+			case "LKR":
+				return "Lance Krasniqi";
+			case "LMU":
+				return "Liselotte Mulder";
+			case "MJA":
+				return "Martijn Jacobs";
+			case "MKU":
+				return "Martijn Kunstman";
+			case "MME":
+				return "Marijn Moerbeek";
+			case "MRE":
+				return "Miriam Reutelingsperger";
+			case "MVE":
+				return "Maart Veldman";
+			case "RBA":
+				return "René Balkenende";
+			case "RBR":
+				return "Rubin de Bruin";
+			case "SLO":
+				return "Suus Looijen";
+			case "SRI":
+				return "Suzanne Ringeling";
+			case "YWI":
+				return "Yelena de Wit";
+			default:
+				return null;
+			}
+		}
+
+		protected string GetTeacherAbbrFromName(string name) {
+			if (name.Length < 3)
+				return null;
+
+			if (name.ToLower() == "martijn kunstman")
+				return "MKU";
+			if (name.ToLower() == "martijn jacobs")
+				return "MJA";
+
+			switch (name.Split(' ')[0].ToLower()) {
+			case "ate":
+			case "arnoud":
+				return "ATE";
+			case "bhn":
+			case "bram":
+				return "BHN";
+			case "cpe":
+			case "chris-jan":
+			case "chrisjan":
+				return "CPE";
+			case "csp":
+			case "cynthia":
+				return "CSP";
+			case "dwo":
+			case "dick":
+				return "DWO";
+			case "hal":
+			case "hyltsje":
+				return "HAL";
+			case "hbe":
+			case "hsin":
+			case "chi":
+				return "HBE";
+			case "jbo":
+			case "jaap":
+				return "JBO";
+			case "jwo":
+			case "joram":
+				return "JWO";
+			case "len":
+			case "laura":
+				return "LEN";
+			case "lkr":
+			case "lance":
+				return "LKR";
+			case "lmu":
+			case "liselotte":
+				return "LMU";
+			case "mja":
+				return "MJA";
+			case "mku":
+				return "MKU";
+			case "martijn":
+				return "MJA, MKU";
+			case "mme":
+			case "marijn":
+				return "MME";
+			case "mre":
+			case "miriam":
+				return "MRE";
+			case "mve":
+			case "maart":
+				return "MVE";
+			case "rba":
+			case "rené":
+			case "rene":
+				return "RBA";
+			case "rbr":
+			case "rubin":
+				return "RBR";
+			case "slo":
+			case "suus":
+				return "SLO";
+			case "sri":
+			case "suzanne":
+				return "SRI";
+			case "ywi":
+			case "yelena":
+				return "YWI";
+			}
+			return null;
+		}
+
+		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
+			name = name.ToUpper();
+			ScheduleRecord record = null;
+			try {
+				if (next) {
+					record = Service.GetNextRecord(schedule, name);
+				} else {
+					record = Service.GetCurrentRecord(schedule, name);
+				}
+				return new ReturnValue<ScheduleRecord>() {
+					Success = true,
+					Value = record
+				};
+			} catch (ScheduleNotFoundException) {
+				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				await ReplyAsync("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError(ex.GetType().Name);
+				throw;
+			}
+		}
+
+		protected async Task FatalError(string message) {
+			Logger.Log(LogSeverity.Error, m_LogTag, message);
+			await Context.Message.AddReactionAsync(new Emoji("⛔"));
+			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n" +
+				$"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})");
+		}
+
+		protected async Task<bool> CheckCooldown() {
+			var result = Config.CheckCooldown(Context.User.Id);
+			if (result.Item1) {
+				return true;
+			} else {
+				if (!result.Item2) {
+					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
+				}
+				return false;
+			}
+		}
+	}
+}

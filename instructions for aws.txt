@@ -1,0 +1,12 @@
+Here's a basic overview that should get you on the right track.
+
+    Sign up for an AWS account (you need a payment card to be able to do this)
+    Once logged into AWS select the closest region (top right) to the region the discord server you will be using the bot on is located.
+    Go to the console home ("services" drop-down menu in the top left)
+    select "Launch a virtual machine" underneath "Build a solution"
+    Follow the steps. This will create a free tier eligible EC2 instance, if for whatever reason you use the advanced wizard only choose the free tier eligible options.
+    When asked for Operating system select the one you are most comfortable with. I went with Ubuntu server but if you have no knowledge of Linux you may wish to use windows server.
+    Wait for the instance to fully start (will take a few mins)
+    Connect to the server. How to do this will depend on what os you chose. If Linux you'll want to use PuTTY If windows use Remote Desktop Connection (aka RDP)
+    Once connected to the server install whatever bot you want. Again this is up to you, I'm still running RED and I'm happy with it.
+    You're done
