@@ -41,7 +41,6 @@ namespace RoosterBot {
 						 scheduleService.ReadScheduleCSV("Room", "lokalen.csv"));
 
 			m_Services = new ServiceCollection()
-				.AddSingleton(new EchoService())
 				.AddSingleton(new ConfigService(2f))
 				.AddSingleton(scheduleService)
 				.BuildServiceProvider();
