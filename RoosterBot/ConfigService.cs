@@ -1,14 +1,31 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public class ConfigService {
-		private ConcurrentDictionary<ulong, Cooldown> m_CooldownList;
-		private float m_Cooldown;
+		private ConcurrentDictionary<ulong, CooldownData> m_CooldownList;
 
-		public ConfigService(float cooldown) {
-			m_CooldownList = new ConcurrentDictionary<ulong, Cooldown>();
-			m_Cooldown = cooldown;
+		public float Cooldown { get; private set; }
+		public ulong BotOwnerId { get; private set; }
+
+		public ConfigService(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
+			string jsonFile = File.ReadAllText(jsonPath);
+			JObject jsonConfig = JObject.Parse(jsonFile);
+
+			m_CooldownList = new ConcurrentDictionary<ulong, CooldownData>();
+
+			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
+			schedules = new Dictionary<string, string>();
+			foreach (KeyValuePair<string, JToken> token in scheduleContainer) {
+				schedules.Add(token.Key, token.Value.ToObject<string>());
+			}
+
+			Cooldown = jsonConfig["cooldown"].ToObject<float>();
+			BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
+			authToken = jsonConfig["token"].ToObject<string>();
 		}
 
 		/// <summary>
@@ -18,7 +35,7 @@ namespace RoosterBot {
 		public Tuple<bool, bool> CheckCooldown(ulong userId) {
 			DateTime now = DateTime.UtcNow;
 			if (m_CooldownList.ContainsKey(userId)) {
-				if (now.AddSeconds(-m_Cooldown).Ticks > m_CooldownList[userId].TimeLastCommand) { // Note: DateTime.AddSeconds() returns a *new* DateTime object so this does not actually change {now}.
+				if (now.AddSeconds(-Cooldown).Ticks > m_CooldownList[userId].TimeLastCommand) { // Note: DateTime.AddSeconds() returns a *new* DateTime object so this does not actually change {now}.
 					m_CooldownList[userId].TimeLastCommand = now.Ticks;
 					m_CooldownList[userId].Warned = false;
 					return new Tuple<bool, bool>(true, false);
@@ -28,17 +45,17 @@ namespace RoosterBot {
 					return ret;
 				}
 			} else {
-				m_CooldownList.TryAdd(userId, new Cooldown(userId, now.Ticks));
+				m_CooldownList.TryAdd(userId, new CooldownData(userId, now.Ticks));
 				return new Tuple<bool, bool>(true, false);
 			}
 		}
 
-		private class Cooldown {
+		private class CooldownData {
 			public ulong UserId { get; set; }
 			public long TimeLastCommand { get; set; }
 			public bool Warned { get; set; }
 
-			public Cooldown(ulong userId, long timeLastCommand, bool warned = false) {
+			public CooldownData(ulong userId, long timeLastCommand, bool warned = false) {
 				UserId = userId;
 				TimeLastCommand = timeLastCommand;
 				Warned = warned;

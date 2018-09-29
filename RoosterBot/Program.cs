@@ -5,6 +5,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Reflection;
+using Discord.Net.Providers.WS4Net;
+using System.Collections.Generic;
 
 /* Development log (in lieu of git):
  * 27-09-18 16:30: Started work. Building on top of the EchoBot to skip basic bot construction.
@@ -16,7 +18,9 @@ using System.Reflection;
  * 29-09-18 11:00: Bot should now be able to determine a student's class based on their ranks. I need more users in the testing server to do a proper test, though.
  * 29-09-18 11:58: Dropped that feature. It isn't that much more practical than giving it your class, and it's not particularly easy to do in the code.
  * 29-09-18 12:04: Renamed project to RoosterBot (because that's what it is now).
- * 20-09-18 13:18: Investigating Amazon EC2 as a potential VPS for this bot. This means that I'm probably going to integrate this with their libraries later on.
+ * 29-09-18 13:18: Investigating Amazon EC2 as a potential VPS for this bot. This means that I'm probably going to integrate this with their libraries later on.
+ * 29-09-18 17:27: Project changed to .NET Framework instead of Core. Added git repository. Deleted Echo functionality. Project now runs on Amazon EC2.
+ * 29-09-18 23:16: Bot now loads config json file, eliminating hardcoded CSV filenames and auth tokens.
  */
 
 namespace RoosterBot {
@@ -30,25 +34,37 @@ namespace RoosterBot {
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 
-			m_Client = new DiscordSocketClient();
-			m_Client.Log += Logger.LogSync;
-			m_Commands = new CommandService();
-			m_Commands.Log += Logger.LogSync;
+			#region Start services
+			ConfigService configService = new ConfigService("Config.json", out string authToken, out Dictionary<string, string> schedules);
 
 			ScheduleService scheduleService = new ScheduleService();
-			Task.WaitAll(scheduleService.ReadScheduleCSV("StudentSets", "leerlingen.csv"),
-						 scheduleService.ReadScheduleCSV("StaffMember", "leraren.csv"),
-						 scheduleService.ReadScheduleCSV("Room", "lokalen.csv"));
+			Task[] readCSVs = new Task[schedules.Count];
+			int i = 0;
+			foreach (KeyValuePair<string, string> schedule in schedules) {
+				readCSVs[i] = scheduleService.ReadScheduleCSV(schedule.Key, schedule.Value);
+				i++;
+			}
+			Task.WaitAll(readCSVs);
 
 			m_Services = new ServiceCollection()
-				.AddSingleton(new ConfigService(2f))
+				.AddSingleton(configService)
 				.AddSingleton(scheduleService)
 				.BuildServiceProvider();
+			#endregion Start services
 
+			#region Start client
+			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
+				WebSocketProvider = WS4NetProvider.Instance
+			});
+			m_Client.Log += Logger.LogSync;
+
+			m_Commands = new CommandService();
+			m_Commands.Log += Logger.LogSync;
+			
 			m_Client.MessageReceived += HandleCommand;
 			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 			
-			string token = "NDMwNjk2Nzk5Mzk3NzQwNTQ1.Doe-JA.rvM99trs3ri5jVmlGCxdOC-Yyjk";
+			string token = authToken;
 			// permissions integer: 3147776 (send text messages, connect and speak to voice)
 			// client id: 430696799397740545
 			// client secret: pZzWaV8knPqMPIDSWdBCJh8FRE3PuEJU
@@ -56,6 +72,7 @@ namespace RoosterBot {
 
 			await m_Client.LoginAsync(TokenType.Bot, token);
 			await m_Client.StartAsync();
+			#endregion Start client
 
 			#region Quit code
 			ProgramState state = ProgramState.BeforeStart;
