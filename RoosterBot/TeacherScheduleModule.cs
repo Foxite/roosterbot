@@ -85,7 +85,7 @@ namespace RoosterBot {
 					response += $"{teacher} geeft nu ";
 					response += record.Activity + (record.StudentSets != "" ? $" aan {record.StudentSets}" : "") + (record.Room != "" ? $" in {record.Room}" : ", en ik weet niet waar") + ".\n";
 					TimeSpan actualDuration = record.End - record.Start;
-					string[] givenDuration = record.Duration.Split(":");
+					string[] givenDuration = record.Duration.Split(':');
 					response += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 					if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
 						response += $"Tenminste, dat staat er, maar volgens mijn berekeningen is dat complete onzin en duurt de les eigenlijk {actualDuration.Hours}:{actualDuration.Minutes}.\n";
@@ -102,7 +102,7 @@ namespace RoosterBot {
 			} else {
 				response += record.Activity + (record.StudentSets != "" ? $" aan {record.StudentSets}" : "") + (record.Room != "" ? $" in {record.Room}" : ", en ik weet niet waar") + ".\n";
 				TimeSpan actualDuration = record.End - record.Start;
-				string[] givenDuration = record.Duration.Split(":");
+				string[] givenDuration = record.Duration.Split(':');
 				if (record.Start.Day == DateTime.Today.Day) {
 					response += $"Dit begint om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 				} else {

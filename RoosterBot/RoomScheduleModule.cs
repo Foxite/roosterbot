@@ -32,7 +32,7 @@ namespace RoosterBot {
 					response += ".\n";
 
 					TimeSpan actualDuration = record.End - record.Start;
-					string[] givenDuration = record.Duration.Split(":");
+					string[] givenDuration = record.Duration.Split(':');
 					response += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 
 					if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
@@ -63,7 +63,7 @@ namespace RoosterBot {
 					response += ".\n";
 
 					TimeSpan actualDuration = record.End - record.Start;
-					string[] givenDuration = record.Duration.Split(":");
+					string[] givenDuration = record.Duration.Split(':');
 					response += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 
 					if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {

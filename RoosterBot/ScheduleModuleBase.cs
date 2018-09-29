@@ -17,7 +17,7 @@ namespace RoosterBot {
 		}
 
 		protected string GetTeacherNameFromAbbr(string teacherString) {
-			string[] abbrs = teacherString.Split(", ");
+			string[] abbrs = teacherString.Split(new[] { ", " }, StringSplitOptions.None);
 			string ret = "";
 			for (int i = 0; i < abbrs.Length; i++) {
 				ret += GetSingleTeacherNameFromAbbr(abbrs[i]);

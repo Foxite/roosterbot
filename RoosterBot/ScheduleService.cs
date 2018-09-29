@@ -40,9 +40,9 @@ namespace RoosterBot {
 					// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
 					record.Room = csv["Room"].Replace(" (0)", "");
 
-					int[] startDate = Array.ConvertAll(csv["StartDate"].Split("-"), item => int.Parse(item));
-					int[] startTime = Array.ConvertAll(csv["StartTime"].Split(":"), item => int.Parse(item));
-					int[] endTime   = Array.ConvertAll(csv["EndTime"].Split(":"), item => int.Parse(item));
+					int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
+					int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
+					int[] endTime   = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
 					record.Start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
 					record.End   = new DateTime(startDate[0], startDate[1], startDate[2],   endTime[0],   endTime[1], 0); // Under the assumption that nobody works overnight
 					records.Add(record);
