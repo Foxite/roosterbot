@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot", "RoosterBot\RoosterBot.csproj", "{531C343B-F91D-477A-AE27-55C4EA0BF085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot", "RoosterBot\RoosterBot.csproj", "{294CD2AF-490F-4432-AC24-17EAA9F0E112}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{531C343B-F91D-477A-AE27-55C4EA0BF085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{531C343B-F91D-477A-AE27-55C4EA0BF085}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{531C343B-F91D-477A-AE27-55C4EA0BF085}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{531C343B-F91D-477A-AE27-55C4EA0BF085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
