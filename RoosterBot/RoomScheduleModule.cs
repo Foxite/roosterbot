@@ -29,15 +29,8 @@ namespace RoosterBot {
 					if (!string.IsNullOrEmpty(record.StudentSets)) {
 						response += $" met de klas {record.StudentSets}";
 					}
-					response += ".\n";
+					response += $".\n{GetTimeSpanResponse(record)}";
 
-					TimeSpan actualDuration = record.End - record.Start;
-					string[] givenDuration = record.Duration.Split(':');
-					response += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-
-					if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
-						response += $"Tenminste, dat staat er, maar volgens mijn berekeningen is dat complete onzin en duurt dat eigenlijk {actualDuration.Hours}:{actualDuration.Minutes}.\n";
-					}
 					await ReplyAsync(response);
 				}
 			}
@@ -51,8 +44,10 @@ namespace RoosterBot {
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-				if (record != null) {
-					string response = $"In {room} is hierna {record.Activity}";
+				if (record == null) {
+					await FatalError("GetRecord(RS1)==null");
+				} else {
+					string response = $"In {room} is {GetTomorrowOrNext(record)} {record.Activity}";
 
 					if (!string.IsNullOrEmpty(record.StaffMember)) {
 						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
@@ -60,18 +55,8 @@ namespace RoosterBot {
 					if (!string.IsNullOrEmpty(record.StudentSets)) {
 						response += $" met de klas {record.StudentSets}";
 					}
-					response += ".\n";
-
-					TimeSpan actualDuration = record.End - record.Start;
-					string[] givenDuration = record.Duration.Split(':');
-					response += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-
-					if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
-						response += $"Tenminste, dat staat er, maar volgens mijn berekeningen is dat complete onzin en duurt dat eigenlijk {actualDuration.Hours}:{actualDuration.Minutes}.\n";
-					}
+					response += $".\n{GetTimeSpanResponse(record)}";
 					await ReplyAsync(response);
-				} else {
-					await FatalError("GetRecord(RS1)==null");
 				}
 			}
 		}

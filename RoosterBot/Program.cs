@@ -21,6 +21,7 @@ using System.Collections.Generic;
  * 29-09-18 13:18: Investigating Amazon EC2 as a potential VPS for this bot. This means that I'm probably going to integrate this with their libraries later on.
  * 29-09-18 17:27: Project changed to .NET Framework instead of Core. Added git repository. Deleted Echo functionality. Project now runs on Amazon EC2.
  * 29-09-18 23:16: Bot now loads config json file, eliminating hardcoded CSV filenames and auth tokens.
+ * 30-09-18 00:56: Made code more organized and easier to maintain without having to recompile.
  */
 
 namespace RoosterBot {

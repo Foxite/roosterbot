@@ -10,6 +10,7 @@ namespace RoosterBot {
 
 		public float Cooldown { get; private set; }
 		public ulong BotOwnerId { get; private set; }
+		public bool  ErrorReactions { get; private set; }
 
 		public ConfigService(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
 			string jsonFile = File.ReadAllText(jsonPath);
@@ -26,6 +27,7 @@ namespace RoosterBot {
 			Cooldown = jsonConfig["cooldown"].ToObject<float>();
 			BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 			authToken = jsonConfig["token"].ToObject<string>();
+			ErrorReactions = jsonConfig["errorReactions"].ToObject<bool>();
 		}
 
 		/// <summary>

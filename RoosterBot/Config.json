@@ -1,10 +1,11 @@
 {
-	"schedules" : {
-		"StudentSets" : "leerlingen.csv",
-		"StaffMember" : "leraren.csv",
-		"Room" : "lokalen.csv"
-	},
-	"cooldown" : 2,
-	"botOwnerId" : 133798410024255488,
-	"token" : "NDMwNjk2Nzk5Mzk3NzQwNTQ1.Doe-JA.rvM99trs3ri5jVmlGCxdOC-Yyjk"
+  "schedules": {
+    "StudentSets": "leerlingen.csv",
+    "StaffMember": "leraren.csv",
+    "Room": "lokalen.csv"
+  },
+  "cooldown": 2,
+  "botOwnerId": 133798410024255488,
+  "token": "NDMwNjk2Nzk5Mzk3NzQwNTQ1.Doe-JA.rvM99trs3ri5jVmlGCxdOC-Yyjk",
+  "errorReactions": true
 }

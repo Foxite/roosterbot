@@ -5,15 +5,14 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class ScheduleModuleBase : ModuleBase {
-		public ScheduleService Service { get; protected set; }
-		public ConfigService Config { get; protected set; }
-
-		private string m_LogTag;
+		protected ScheduleService Service { get; set; }
+		protected ConfigService Config { get; set; }
+		protected string LogTag { get; private set; }
 
 		public ScheduleModuleBase(ScheduleService serv, ConfigService config, string logTag) {
 			Service = serv;
 			Config = config;
-			m_LogTag = logTag;
+			LogTag = logTag;
 		}
 
 		protected string GetTeacherNameFromAbbr(string teacherString) {
@@ -176,13 +175,17 @@ namespace RoosterBot {
 					Value = record
 				};
 			} catch (ScheduleNotFoundException) {
-				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				if (Config.ErrorReactions) {
+					await Context.Message.AddReactionAsync(new Emoji("❌"));
+				}
 				await ReplyAsync("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				if (Config.ErrorReactions) {
+					await Context.Message.AddReactionAsync(new Emoji("❌"));
+				}
 				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
@@ -193,9 +196,17 @@ namespace RoosterBot {
 			}
 		}
 
+		protected async Task ReactMinorError() {
+			if (Config.ErrorReactions) {
+				await Context.Message.AddReactionAsync(new Emoji("❌"));
+			}
+		}
+
 		protected async Task FatalError(string message) {
-			Logger.Log(LogSeverity.Error, m_LogTag, message);
-			await Context.Message.AddReactionAsync(new Emoji("⛔"));
+			Logger.Log(LogSeverity.Error, LogTag, message);
+			if (Config.ErrorReactions) {
+				await Context.Message.AddReactionAsync(new Emoji("⛔"));
+			}
 			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n" +
 				$"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})");
 		}
@@ -206,9 +217,36 @@ namespace RoosterBot {
 				return true;
 			} else {
 				if (!result.Item2) {
+					if (Config.ErrorReactions) {
+						await Context.Message.AddReactionAsync(new Emoji("⚠️"));
+					}
 					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
 				}
 				return false;
+			}
+		}
+
+		protected string GetTimeSpanResponse(ScheduleRecord record) {
+			string ret = "";
+			TimeSpan actualDuration = record.End - record.Start;
+			string[] givenDuration = record.Duration.Split(':');
+			if (record.Start.Day == DateTime.Today.Day) {
+				ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+			} else {
+				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+			}
+
+			if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
+				ret += $"Tenminste, dat staat er, maar volgens mijn berekeningen is dat complete onzin en duurt de les eigenlijk {actualDuration.Hours}:{actualDuration.Minutes}.\n";
+			}
+			return ret;
+		}
+
+		protected string GetTomorrowOrNext(ScheduleRecord record) {
+			if (record.Start.Date > DateTime.Now.Date) {
+				return "morgen als eerste";
+			} else {
+				return "hierna";
 			}
 		}
 	}
