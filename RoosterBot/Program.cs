@@ -4,7 +4,6 @@ using Discord.WebSocket;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
-using System.Reflection;
 using Discord.Net.Providers.WS4Net;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +14,8 @@ namespace RoosterBot {
 
 		private DiscordSocketClient m_Client;
 		private IServiceProvider m_Services;
+
+		private static bool s_StopFlagSet = false;
 
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
@@ -108,11 +109,30 @@ namespace RoosterBot {
 			};
 
 			ConsoleKeyInfo keyPress;
+			bool keepRunning;
 			do {
-				keyPress = Console.ReadKey(true);
-			} while (state == ProgramState.BeforeStart || !(keyPress.Modifiers.HasFlag(ConsoleModifiers.Control) && keyPress.Key == ConsoleKey.Q));
+				keepRunning = true;
+				Task.WaitAny(new Task[] {
+					Task.Delay(500).ContinueWith((t) => {
+						if (Console.KeyAvailable) {
+							keyPress = Console.ReadKey(true);
+							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+								keepRunning = false;
+								Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q pressed");
+							}
+						}
+					}),
+					Task.Delay(500).ContinueWith((t) => {
+						if (s_StopFlagSet) {
+							keepRunning = false;
+							Logger.Log(LogSeverity.Info, "Main", "Stop flag set");
+						}
+					})
+				});
 
-			Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q: Stopping bot");
+			} while (state == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+
+			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 			state = ProgramState.BotStopped;
@@ -137,6 +157,13 @@ namespace RoosterBot {
 			var result = await m_Services.GetService<CommandService>().ExecuteAsync(context, argPos, m_Services);
 			if (!result.IsSuccess)
 				await context.Channel.SendMessageAsync(result.ErrorReason);
+		}
+
+		/// <summary>
+		/// Shuts down gracefully.
+		/// </summary>
+		public static void Shutdown() {
+			s_StopFlagSet = true;
 		}
 	}
 
