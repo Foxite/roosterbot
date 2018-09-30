@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net;
 
 namespace RoosterBot {
 	public abstract class ScheduleModuleBase : ModuleBase {
@@ -38,6 +39,8 @@ namespace RoosterBot {
 				return "Chris-Jan Peterse";
 			case "CSP":
 				return "Cynthia Spier";
+			case "DBU":
+				return "David Buzzi";
 			case "DWO":
 				return "Dick Wories";
 			case "HAL":
@@ -48,6 +51,8 @@ namespace RoosterBot {
 				return "Jaap van Boggelen";
 			case "JWO":
 				return "Joram Wolters";
+			case "LCA":
+				return "Laurence Candel";
 			case "LEN":
 				return "Laura Endert";
 			case "LKR":
@@ -68,10 +73,14 @@ namespace RoosterBot {
 				return "René Balkenende";
 			case "RBR":
 				return "Rubin de Bruin";
+			case "SSC":
+				return "Sander Scholl";
 			case "SLO":
 				return "Suus Looijen";
 			case "SRI":
 				return "Suzanne Ringeling";
+			case "WSC":
+				return "Willemijn Schmitz";
 			case "YWI":
 				return "Yelena de Wit";
 			default:
@@ -102,6 +111,9 @@ namespace RoosterBot {
 			case "csp":
 			case "cynthia":
 				return "CSP";
+			case "dbu":
+			case "david":
+				return "DBU";
 			case "dwo":
 			case "dick":
 				return "DWO";
@@ -121,6 +133,10 @@ namespace RoosterBot {
 			case "len":
 			case "laura":
 				return "LEN";
+			case "lca":
+			case "laurence":
+			case "laurens":
+				return "LCA";
 			case "lkr":
 			case "lance":
 				return "LKR";
@@ -155,14 +171,27 @@ namespace RoosterBot {
 			case "sri":
 			case "suzanne":
 				return "SRI";
+			case "ssc":
+			case "sander":
+				return "Sander Scholl";
 			case "ywi":
 			case "yelena":
 				return "YWI";
+			case "wsc":
+			case "willemijn":
+				return "Willemijn Schmitz";
 			}
 			return null;
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
+			if (name == "") {
+				await ReactMinorError();
+				await ReplyAsync("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			}
 			name = name.ToUpper();
 			ScheduleRecord record = null;
 			try {
@@ -191,7 +220,9 @@ namespace RoosterBot {
 
 		protected async Task ReactMinorError() {
 			if (Config.ErrorReactions) {
-				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				try {
+					await Context.Message.AddReactionAsync(new Emoji("❌"));
+				} catch (HttpException) { } // Permission denied
 			}
 		}
 
