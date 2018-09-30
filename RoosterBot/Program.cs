@@ -20,7 +20,7 @@ namespace RoosterBot {
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 
-			#region Start services
+			#region Load config
 			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 			if (!Directory.Exists(configPath)) {
 				Directory.CreateDirectory(configPath);
@@ -46,7 +46,9 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
+			#endregion Load config
 
+			#region Start services
 			ScheduleService scheduleService = new ScheduleService();
 			Task[] readCSVs = new Task[schedules.Count];
 			int i = 0;
@@ -75,10 +77,6 @@ namespace RoosterBot {
 			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 			
 			string token = authToken;
-			// permissions integer: 3147776 (send text messages, connect and speak to voice)
-			// client id: 430696799397740545
-			// client secret: pZzWaV8knPqMPIDSWdBCJh8FRE3PuEJU
-			// https://discordapp.com/oauth2/authorize?client_id=430696799397740545&scope=bot
 
 			await m_Client.LoginAsync(TokenType.Bot, token);
 			await m_Client.StartAsync();
