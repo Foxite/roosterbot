@@ -218,6 +218,40 @@ namespace RoosterBot {
 			}
 		}
 
+		protected async Task<ReturnValue<ScheduleRecord>> GetFirstRecord(DayOfWeek day, string schedule, string name) {
+			if (name == "") {
+				await ReactMinorError();
+				await ReplyAsync("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			}
+			name = name.ToUpper();
+			ScheduleRecord record = null;
+			try {
+				record = Service.GetFirstRecordForDay(schedule, name, day);
+				return new ReturnValue<ScheduleRecord>() {
+					Success = true,
+					Value = record
+				};
+			} catch (ScheduleNotFoundException) {
+				await ReactMinorError();
+				await ReplyAsync("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await ReactMinorError();
+				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError(ex.GetType().Name);
+				throw;
+			}
+		}
+
 		protected async Task ReactMinorError() {
 			if (Config.ErrorReactions) {
 				try {
@@ -256,10 +290,10 @@ namespace RoosterBot {
 			string ret = "";
 			TimeSpan actualDuration = record.End - record.Start;
 			string[] givenDuration = record.Duration.Split(':');
-			if (record.Start.Day == DateTime.Today.Day) {
-				ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-			} else {
+			if (record.Start.Date == DateTime.Today.AddDays(1).Date) {
 				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+			} else {
+				ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 			}
 
 			if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
@@ -275,6 +309,34 @@ namespace RoosterBot {
 				return "morgen als eerste";
 			} else { // Today
 				return "hierna";
+			}
+		}
+
+		protected DayOfWeek GetDayOfWeekFromString(string dayofweek) {
+			switch (dayofweek) {
+			case "ma":
+			case "maandag":
+				return DayOfWeek.Monday;
+			case "di":
+			case "dinsdag":
+				return DayOfWeek.Tuesday;
+			case "wo":
+			case "woensdag":
+				return DayOfWeek.Wednesday;
+			case "do":
+			case "donderdag":
+				return DayOfWeek.Thursday;
+			case "vr":
+			case "vrijdag":
+				return DayOfWeek.Friday;
+			case "za":
+			case "zaterdag":
+				return DayOfWeek.Saturday;
+			case "zo":
+			case "zondag":
+				return DayOfWeek.Sunday;
+			default:
+				throw new ArgumentException();
 			}
 		}
 	}

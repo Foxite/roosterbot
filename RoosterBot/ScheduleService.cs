@@ -98,6 +98,29 @@ namespace RoosterBot {
 				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
 			}
 		}
+
+		public ScheduleRecord GetFirstRecordForDay(string schedule, string identifier, DayOfWeek day) {
+			bool sawRecordForClass = false;
+			// Get the next {day} after today
+			// https://stackoverflow.com/a/6346190/3141917
+			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+
+			foreach (ScheduleRecord record in m_Schedules[schedule]) {
+				if (((string) record.GetType().GetProperty(schedule).GetValue(record)).Contains(identifier)) {
+					sawRecordForClass = true;
+					if (record.Start.Date == targetDate) {
+						return record;
+					} else if (record.Start > DateTime.Today.AddDays(7)) {
+						return null;
+					}
+				}
+			}
+			if (sawRecordForClass) {
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {schedule}");
+			} else {
+				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
+			}
+		}
 	}
 
 	public class ScheduleRecord : ICloneable {
