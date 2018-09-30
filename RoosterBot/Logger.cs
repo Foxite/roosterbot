@@ -1,9 +1,30 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
 	public static class Logger {
+		private static readonly string LogPath;
+		private static readonly object Lock;
+
+		static Logger() {
+			LogPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot", "RoosterBot");
+			Lock = new object();
+			
+			// Keep the log from the previous launch as ".old.log"
+			if (File.Exists(LogPath + ".log")) {
+				if (File.Exists(LogPath + ".old.log")) {
+					File.Delete(LogPath + ".old.log");
+				}
+				File.Move(LogPath + ".log", LogPath + ".old.log");
+				LogPath += ".log";
+				File.Create(LogPath).Dispose(); // File.Create automatically opens a stream to it, but we don't need that.
+			} else {
+				LogPath += ".log";
+			}
+		}
+
 		public static void Log(LogSeverity sev, string tag, string msg) {
 			Log(new LogMessage(sev, tag, msg));
 		}
@@ -13,9 +34,13 @@ namespace RoosterBot {
 		}
 		
 		public static void Log(LogMessage msg) {
-			Console.WriteLine(DateTime.Now.ToUniversalTime() + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message);
+			string loggedMessage = DateTime.Now.ToUniversalTime() + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
 			if (msg.Exception != null) {
-				Console.WriteLine(msg.Exception.ToString());
+				loggedMessage += "\n" + msg.Exception.ToString();
+			}
+			Console.WriteLine(loggedMessage);
+			lock (Lock) {
+				File.AppendAllText(LogPath, loggedMessage + "\n");
 			}
 		}
 
