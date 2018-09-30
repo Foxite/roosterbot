@@ -7,6 +7,7 @@ using Discord.Commands;
 using System.Reflection;
 using Discord.Net.Providers.WS4Net;
 using System.Collections.Generic;
+using System.IO;
 
 /* Development log (in lieu of git):
  * 27-09-18 16:30: Started work. Building on top of the EchoBot to skip basic bot construction.
@@ -36,13 +37,18 @@ namespace RoosterBot {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 
 			#region Start services
-			ConfigService configService = new ConfigService("Config.json", out string authToken, out Dictionary<string, string> schedules);
+			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
+			if (!Directory.Exists(configPath)) {
+				Directory.CreateDirectory(configPath);
+			}
+
+			ConfigService configService = new ConfigService(Path.Combine(configPath, "Config.json"), out string authToken, out Dictionary<string, string> schedules);
 
 			ScheduleService scheduleService = new ScheduleService();
 			Task[] readCSVs = new Task[schedules.Count];
 			int i = 0;
 			foreach (KeyValuePair<string, string> schedule in schedules) {
-				readCSVs[i] = scheduleService.ReadScheduleCSV(schedule.Key, schedule.Value);
+				readCSVs[i] = scheduleService.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
 				i++;
 			}
 			Task.WaitAll(readCSVs);
