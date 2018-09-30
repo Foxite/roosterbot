@@ -1,0 +1,14 @@
+27-09-18 16:30: Started work. Building on top of the EchoBot to skip basic bot construction.
+27-09-18 20:58: Got basics done, it can tells you what class you have now and where and by who, and what comes after this. same thing for any teacher.
+27-09-18 23:03: Can now look up teachers by any name, including their abbreviation, their first name, and alternative spellings of their name. this is hardcoded for now.
+28-09-18      : Can now look up rooms.
+28-09-18      : Better error handling, and now adds a reaction when an error occurs.
+28-09-18      : Code now a bit more organized.
+29-09-18 11:00: Bot should now be able to determine a student's class based on their ranks. I need more users in the testing server to do a proper test, though.
+29-09-18 11:58: Dropped that feature. It isn't that much more practical than giving it your class, and it's not particularly easy to do in the code.
+29-09-18 12:04: Renamed project to RoosterBot (because that's what it is now).
+29-09-18 13:18: Investigating Amazon EC2 as a potential VPS for this bot. This means that I'm probably going to integrate this with their libraries later on.
+29-09-18 17:27: Project changed to .NET Framework instead of Core. Added git repository. Deleted Echo functionality. Project now runs on Amazon EC2.
+29-09-18 23:16: Bot now loads config json file, eliminating hardcoded CSV filenames and auth tokens.
+30-09-18 00:56: Made code more organized and easier to maintain without having to recompile.
+30-09-18 11:24: Project now hosted on Gitlab.
