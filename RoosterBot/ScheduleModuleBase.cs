@@ -213,7 +213,7 @@ namespace RoosterBot {
 			} else {
 				if (!result.Item2) {
 					if (Config.ErrorReactions) {
-						await Context.Message.AddReactionAsync(new Emoji("⚠️"));
+						await Context.Message.AddReactionAsync(new Emoji("⚠"));
 					}
 					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
 				}
