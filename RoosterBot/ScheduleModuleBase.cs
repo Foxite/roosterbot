@@ -166,27 +166,19 @@ namespace RoosterBot {
 			name = name.ToUpper();
 			ScheduleRecord record = null;
 			try {
-				if (next) {
-					record = Service.GetNextRecord(schedule, name);
-				} else {
-					record = Service.GetCurrentRecord(schedule, name);
-				}
+				record = next ? Service.GetNextRecord(schedule, name) : Service.GetCurrentRecord(schedule, name);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
 				};
 			} catch (ScheduleNotFoundException) {
-				if (Config.ErrorReactions) {
-					await Context.Message.AddReactionAsync(new Emoji("❌"));
-				}
+				await ReactMinorError();
 				await ReplyAsync("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				if (Config.ErrorReactions) {
-					await Context.Message.AddReactionAsync(new Emoji("❌"));
-				}
+				await ReactMinorError();
 				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
