@@ -24,9 +24,28 @@ namespace RoosterBot {
 			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 			if (!Directory.Exists(configPath)) {
 				Directory.CreateDirectory(configPath);
+				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a config file to the newly created RoosterBot folder in %appdata%.");
+				Console.ReadKey();
+				return;
 			}
 
-			ConfigService configService = new ConfigService(Path.Combine(configPath, "Config.json"), out string authToken, out Dictionary<string, string> schedules);
+			string configFile = Path.Combine(configPath, "Config.json");
+			if (!File.Exists(configFile)) {
+				Logger.Log(LogSeverity.Critical, "Main", "Config.json file did not exist. Please add a config file to the RoosterBot folder in %appdata%.");
+				Console.ReadKey();
+				return;
+			}
+
+			ConfigService configService;
+			string authToken;
+			Dictionary<string, string> schedules;
+			try {
+				configService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken, out schedules);
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
+				Console.ReadKey();
+				return;
+			}
 
 			ScheduleService scheduleService = new ScheduleService();
 			Task[] readCSVs = new Task[schedules.Count];
