@@ -6,9 +6,9 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public abstract class ScheduleModuleBase : ModuleBase {
-		protected ScheduleService Service { get; set; }
-		protected ConfigService Config { get; set; }
-		protected string LogTag { get; private set; }
+		protected ScheduleService Service { get; }
+		protected ConfigService Config { get; }
+		protected string LogTag { get; }
 
 		public ScheduleModuleBase(ScheduleService serv, ConfigService config, string logTag) {
 			Service = serv;

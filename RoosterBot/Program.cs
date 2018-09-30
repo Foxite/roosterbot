@@ -15,7 +15,6 @@ namespace RoosterBot {
 
 		private DiscordSocketClient m_Client;
 		private IServiceProvider m_Services;
-		private CommandService m_Commands;
 
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
@@ -67,14 +66,18 @@ namespace RoosterBot {
 			}
 			Logger.Log(LogSeverity.Debug, "Main", "Loaded schedules");
 
-			m_Commands = new CommandService();
-			m_Commands.Log += Logger.LogSync;
-			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
+			CommandService commands = new CommandService();
+			commands.Log += Logger.LogSync;
+			// Add these manually to enforce command order when displayed by !help
+			await commands.AddModuleAsync<MetaCommandsModule>();
+			await commands.AddModuleAsync<StudentScheduleModule>();
+			await commands.AddModuleAsync<TeacherScheduleModule>();
+			await commands.AddModuleAsync<RoomScheduleModule>();
 
 			m_Services = new ServiceCollection()
 				.AddSingleton(configService)
 				.AddSingleton(scheduleService)
-				.AddSingleton(m_Commands)
+				.AddSingleton(commands)
 				.BuildServiceProvider();
 			Logger.Log(LogSeverity.Debug, "Main", "Started services");
 			#endregion Start services
@@ -125,13 +128,13 @@ namespace RoosterBot {
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
 			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasCharPrefix('!', ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
 				return;
 			// Create a Command Context
 			var context = new CommandContext(m_Client, message);
 			// Execute the command. (result does not indicate a return value, 
 			// rather an object stating if the command executed successfully)
-			var result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
+			var result = await m_Services.GetService<CommandService>().ExecuteAsync(context, argPos, m_Services);
 			if (!result.IsSuccess)
 				await context.Channel.SendMessageAsync(result.ErrorReason);
 		}

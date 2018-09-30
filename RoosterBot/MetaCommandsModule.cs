@@ -3,22 +3,24 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class MetaCommandsModule : ModuleBase {
-		protected CommandService CmdService { get; private set; }
+		protected ConfigService Config { get; }
+		protected CommandService CmdService { get;  }
 
-		public MetaCommandsModule(CommandService cmdService) {
+		public MetaCommandsModule(ConfigService config, CommandService cmdService) {
 			CmdService = cmdService;
+			Config = config;
 		}
 
 		[Command("help"), Summary("Lijst van alle commands")]
 		public async Task HelpCommand() {
 			// Print list of commands
-			string response = "";
+			string response = "Commands die je bij mij kan gebruiken:\n";
 			foreach (CommandInfo cmd in CmdService.Commands) {
-				response += cmd.Name;
+				response += "- `" + Config.CommandPrefix + cmd.Name;
 				foreach (ParameterInfo parameter in cmd.Parameters) {
 					response += $" <{parameter.Name}>";
 				}
-				response += "\n";
+				response += $"`: {cmd.Summary}\n";
 			}
 			await ReplyAsync(response);
 		}

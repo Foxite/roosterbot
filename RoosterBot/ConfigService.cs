@@ -8,9 +8,10 @@ namespace RoosterBot {
 	public class ConfigService {
 		private ConcurrentDictionary<ulong, CooldownData> m_CooldownList;
 
-		public float Cooldown { get; private set; }
-		public ulong BotOwnerId { get; private set; }
-		public bool  ErrorReactions { get; private set; }
+		public float  Cooldown { get; }
+		public ulong  BotOwnerId { get; }
+		public bool   ErrorReactions { get; }
+		public string CommandPrefix { get; }
 
 		public ConfigService(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
 			string jsonFile = File.ReadAllText(jsonPath);
@@ -28,6 +29,7 @@ namespace RoosterBot {
 			BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 			authToken = jsonConfig["token"].ToObject<string>();
 			ErrorReactions = jsonConfig["errorReactions"].ToObject<bool>();
+			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
 		}
 
 		/// <summary>
