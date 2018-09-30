@@ -6,12 +6,12 @@ namespace RoosterBot {
 	public class StudentScheduleModule : ScheduleModuleBase {
 		public StudentScheduleModule(ScheduleService serv, ConfigService config) : base(serv, config, "SSM") { }
 
-		[Command("nu", RunMode = RunMode.Async)]
-		public async Task StudentCurrentCommand(string clazz) {
+		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
+		public async Task StudentCurrentCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
 
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, "StudentSets", clazz);
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -32,12 +32,12 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async)]
-		public async Task StudentNextCommand(string clazz) {
+		[Command("hierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
+		public async Task StudentNextCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
 
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, "StudentSets", clazz);
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {

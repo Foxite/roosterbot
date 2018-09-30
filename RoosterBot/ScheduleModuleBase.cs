@@ -5,7 +5,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot {
-	public class ScheduleModuleBase : ModuleBase {
+	public abstract class ScheduleModuleBase : ModuleBase {
 		protected ScheduleService Service { get; set; }
 		protected ConfigService Config { get; set; }
 		protected string LogTag { get; private set; }

@@ -8,19 +8,19 @@ namespace RoosterBot {
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		public TeacherScheduleModule(ScheduleService serv, ConfigService config) : base(serv, config, "TSM") { }
 
-		[Command("leraarnu", RunMode = RunMode.Async)]
-		public async Task TeacherCurrentCommand([Remainder] string teacherInput) {
+		[Command("leraarnu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
+		public async Task TeacherCurrentCommand([Remainder] string leraar) {
 			if (!await CheckCooldown())
 				return;
 
-			string teacher = GetTeacherAbbrFromName(teacherInput);
+			string teacher = GetTeacherAbbrFromName(leraar);
 
 			if (teacher == null) {
 				await Context.Message.AddReactionAsync(new Emoji("❌"));
 				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teacher.Contains(", ")) { // There are multiple
-					await RespondTeacherMultiple(false, teacherInput, teacher.Split(new[] { ", " }, StringSplitOptions.None));
+					await RespondTeacherMultiple(false, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None));
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teacher);
 					if (result.Success) {
@@ -31,18 +31,18 @@ namespace RoosterBot {
 			}
 		}
 		
-		[Command("leraarhierna", RunMode = RunMode.Async)]
-		public async Task TeacherNextCommand([Remainder] string teacherInput) {
+		[Command("leraarhierna", RunMode = RunMode.Async), Summary("Waar een leraar hierna mee bezig is")]
+		public async Task TeacherNextCommand([Remainder] string leraar) {
 			if (!await CheckCooldown())
 				return;
 
-			string teacher = GetTeacherAbbrFromName(teacherInput);
+			string teacher = GetTeacherAbbrFromName(leraar);
 			if (teacher == null) {
 				await ReactMinorError();
 				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teacher.Contains(", ")) { // There are multiple
-					await RespondTeacherMultiple(true, teacherInput, teacher.Split(new[] { ", " }, StringSplitOptions.None));
+					await RespondTeacherMultiple(true, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None));
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teacher);
 					if (result.Success) {

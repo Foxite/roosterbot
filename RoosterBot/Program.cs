@@ -46,22 +46,37 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
+			Logger.Log(LogSeverity.Debug, "Main", "Loaded config file");
 			#endregion Load config
 
 			#region Start services
 			ScheduleService scheduleService = new ScheduleService();
+			// Concurrently read schedules.
 			Task[] readCSVs = new Task[schedules.Count];
 			int i = 0;
 			foreach (KeyValuePair<string, string> schedule in schedules) {
 				readCSVs[i] = scheduleService.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
 				i++;
 			}
-			Task.WaitAll(readCSVs);
+			try {
+				Task.WaitAll(readCSVs);
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading one of the CSV files.", ex);
+				Console.ReadKey();
+				return;
+			}
+			Logger.Log(LogSeverity.Debug, "Main", "Loaded schedules");
+
+			m_Commands = new CommandService();
+			m_Commands.Log += Logger.LogSync;
+			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
 			m_Services = new ServiceCollection()
 				.AddSingleton(configService)
 				.AddSingleton(scheduleService)
+				.AddSingleton(m_Commands)
 				.BuildServiceProvider();
+			Logger.Log(LogSeverity.Debug, "Main", "Started services");
 			#endregion Start services
 
 			#region Start client
@@ -69,16 +84,9 @@ namespace RoosterBot {
 				WebSocketProvider = WS4NetProvider.Instance
 			});
 			m_Client.Log += Logger.LogSync;
-
-			m_Commands = new CommandService();
-			m_Commands.Log += Logger.LogSync;
-			
 			m_Client.MessageReceived += HandleCommand;
-			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 			
-			string token = authToken;
-
-			await m_Client.LoginAsync(TokenType.Bot, token);
+			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 			#endregion Start client
 

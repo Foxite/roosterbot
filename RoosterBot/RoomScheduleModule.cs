@@ -6,12 +6,12 @@ namespace RoosterBot {
 	public class RoomScheduleModule : ScheduleModuleBase {
 		public RoomScheduleModule(ScheduleService serv, ConfigService config) : base(serv, config, "RSM") { }
 
-		[Command("lokaalnu", RunMode = RunMode.Async)]
-		private async Task RoomCurrentCommand(string room) {
+		[Command("lokaalnu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
+		private async Task RoomCurrentCommand(string lokaal) {
 			if (!await CheckCooldown())
 				return;
 
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, "Room", room);
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -21,7 +21,7 @@ namespace RoosterBot {
 					}
 					await ReplyAsync(response);
 				} else {
-					string response = $"In {room} is nu {record.Activity}";
+					string response = $"In {lokaal} is nu {record.Activity}";
 
 					if (!string.IsNullOrEmpty(record.StaffMember)) {
 						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
@@ -36,18 +36,18 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("lokaalhierna", RunMode = RunMode.Async)]
-		private async Task RoomNextCommand(string room) {
+		[Command("lokaalhierna", RunMode = RunMode.Async), Summary("Wat er hierna in een lokaal plaatsvindt")]
+		private async Task RoomNextCommand(string lokaal) {
 			if (!await CheckCooldown())
 				return;
 
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", room);
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
-					string response = $"In {room} is {GetNextTimeString(record)} {record.Activity}";
+					string response = $"In {lokaal} is {GetNextTimeString(record)} {record.Activity}";
 
 					if (!string.IsNullOrEmpty(record.StaffMember)) {
 						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
