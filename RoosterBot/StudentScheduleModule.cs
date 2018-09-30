@@ -43,7 +43,7 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(SS1)==null)");
 				} else {
-					string response = $"Je hebt {GetTomorrowOrNext(record)}";
+					string response = $"Je hebt {GetNextTimeString(record)}";
 					if (record.Activity == "pauze") {
 						response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
 					} else {

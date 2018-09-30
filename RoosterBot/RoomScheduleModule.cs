@@ -47,7 +47,7 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
-					string response = $"In {room} is {GetTomorrowOrNext(record)} {record.Activity}";
+					string response = $"In {room} is {GetNextTimeString(record)} {record.Activity}";
 
 					if (!string.IsNullOrEmpty(record.StaffMember)) {
 						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";

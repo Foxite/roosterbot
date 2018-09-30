@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -207,8 +208,10 @@ namespace RoosterBot {
 			if (Config.ErrorReactions) {
 				await Context.Message.AddReactionAsync(new Emoji("⛔"));
 			}
-			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n" +
-				$"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})");
+			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
+			//response += $"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})";
+			// TODO alert via Amazon AWS
+			await ReplyAsync(response);
 		}
 
 		protected async Task<bool> CheckCooldown() {
@@ -242,10 +245,12 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		protected string GetTomorrowOrNext(ScheduleRecord record) {
-			if (record.Start.Date > DateTime.Now.Date) {
+		protected string GetNextTimeString(ScheduleRecord record) {
+			if (record.Start.Date > DateTime.Now.Date.AddDays(1)) { // More than 1 day from now
+				return $"morgen niets, en op {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
+			} else if (record.Start.Date > DateTime.Now.Date) { // 1 day from now
 				return "morgen als eerste";
-			} else {
+			} else { // Today
 				return "hierna";
 			}
 		}

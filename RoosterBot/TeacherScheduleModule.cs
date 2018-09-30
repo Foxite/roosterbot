@@ -133,9 +133,9 @@ namespace RoosterBot {
 		private string RespondTeacherNext(string teacher, ScheduleRecord record) {
 			string response = "";
 			if (record.Activity == "pauze") {
-				response += $"{teacher} heeft {GetTomorrowOrNext(record)} pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
+				response += $"{teacher} heeft {GetNextTimeString(record)} pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
 			} else {
-				response += $"{teacher} geeft {GetTomorrowOrNext(record)} {record.Activity}";
+				response += $"{teacher} geeft {GetNextTimeString(record)} {record.Activity}";
 
 				if (!string.IsNullOrEmpty(record.StudentSets)) {
 					response += $" aan {record.StudentSets}";
