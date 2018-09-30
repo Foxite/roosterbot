@@ -151,7 +151,6 @@
     <Compile Include="ScheduleService.cs" />
     <Compile Include="StudentScheduleModule.cs" />
     <Compile Include="TeacherScheduleModule.cs" />
-    <Compile Include="TestModule.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

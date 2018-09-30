@@ -16,7 +16,7 @@ namespace RoosterBot {
 			string teacher = GetTeacherAbbrFromName(leraar);
 
 			if (teacher == null) {
-				await Context.Message.AddReactionAsync(new Emoji("❌"));
+				await ReactMinorError();
 				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teacher.Contains(", ")) { // There are multiple

@@ -15,6 +15,13 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
+		/// Clears all schedules.
+		/// </summary>
+		public void Reset() {
+			m_Schedules.Clear();
+		}
+
+		/// <summary>
 		/// Loads a schedule into memory from a CSV file so that it can be accessed using this service. It is safe to execute this function in parallel.
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
