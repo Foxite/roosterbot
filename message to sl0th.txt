@@ -1,1 +1,0 @@
-hey, i read a reddit thread from a year ago (https://www.reddit.com/r/discordapp/comments/5guuiz/how_to_host_a_discord_bot_for_free/) where you said that you were running RED on amazon AWS for free. are you still doing that? i want to use that service too but i'd like some to ask you some questions first.

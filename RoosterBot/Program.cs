@@ -23,6 +23,7 @@ using System.IO;
  * 29-09-18 17:27: Project changed to .NET Framework instead of Core. Added git repository. Deleted Echo functionality. Project now runs on Amazon EC2.
  * 29-09-18 23:16: Bot now loads config json file, eliminating hardcoded CSV filenames and auth tokens.
  * 30-09-18 00:56: Made code more organized and easier to maintain without having to recompile.
+ * 30-09-18 11:24: Project now hosted on Gitlab.
  */
 
 namespace RoosterBot {
