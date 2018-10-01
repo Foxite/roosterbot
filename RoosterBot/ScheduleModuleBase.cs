@@ -318,10 +318,6 @@ namespace RoosterBot {
 					ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 				}
 			}
-
-			if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
-				ret += $"Tenminste, dat staat er, maar volgens mijn berekeningen is dat complete onzin en duurt de les eigenlijk {actualDuration.Hours}:{actualDuration.Minutes}.\n";
-			}
 			return ret;
 		}
 
