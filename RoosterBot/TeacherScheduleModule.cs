@@ -93,17 +93,16 @@ namespace RoosterBot {
 			string response;
 			if (record == null) {
 				response = $"Het lijkt erop dat {teacher} nu niets heeft.";
-				if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
-					response += " Het is dan ook weekend.";
-				}
 			} else {
 				response = $"{teacher}: Nu\n";
 				response += $":notepad_spiral: {record.Activity}\n";
 
+				if (!string.IsNullOrWhiteSpace(record.Room)) {
+					response += $":round_pushpin: {record.Room}";
+				}
 				if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
 					response += $":busts_in_silhouette: {record.StudentSets}\n";
 				}
-				response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
 				response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 				response += $":stopwatch: {record.Duration}\n";
 			}
@@ -114,10 +113,15 @@ namespace RoosterBot {
 			string response = $"{teacher}: Hierna\n";
 			response += $":notepad_spiral: {record.Activity}\n";
 
+			if (!string.IsNullOrWhiteSpace(record.Room)) {
+				response += $":round_pushpin: {record.Room}\n";
+			}
 			if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
 				response += $":busts_in_silhouette: {record.StudentSets}\n";
 			}
-			response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+			if (record.Start.Date != DateTime.Today) {
+				response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+			}
 			response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 			response += $":stopwatch: {record.Duration}\n";
 			return response;
@@ -127,17 +131,21 @@ namespace RoosterBot {
 			string response;
 			if (record == null) {
 				response = $"Het lijkt er op dat {teacher} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets heeft.";
-				if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
-					response += "\nDat is dan ook in het weekend.";
-				}
 			} else {
-				response = $"{teacher}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+				if (DateTime.Today.DayOfWeek == day) {
+					response = $"{teacher}: Als eerste op volgende week {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+				} else {
+					response = $"{teacher}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+				}
 				response += $":notepad_spiral: {record.Activity}\n";
 
+				if (!string.IsNullOrWhiteSpace(record.Room)) {
+					response += $":round_pushpin: {record.Room}\n";
+				}
 				if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
 					response += $":busts_in_silhouette: {record.StudentSets}\n";
 				}
-				response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+				response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
 				response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 				response += $":stopwatch: {record.Duration}";
 			}
