@@ -300,8 +300,6 @@ namespace RoosterBot {
 
 		protected string GetTimeSpanResponse(ScheduleRecord record, bool mentionDayOfWeek = false) {
 			string ret = "";
-			TimeSpan actualDuration = record.End - record.Start;
-			string[] givenDuration = record.Duration.Split(':');
 			if (record.Start.Date == DateTime.Today.AddDays(1).Date) { // Happens tomorrow
 				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
 			} else if (record.Start.Date == DateTime.Today.Date) {
