@@ -1,5 +1,9 @@
-﻿namespace RoosterBot {
+﻿using System;
+
+namespace RoosterBot {
 	public static class Util {
+		public static readonly Random RNG = new Random();
+
 		/// <summary>
 		/// Format a string array nicely, with commas and an optional "and" between the last two items.
 		/// </summary>
