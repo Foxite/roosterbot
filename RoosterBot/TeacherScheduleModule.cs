@@ -87,7 +87,12 @@ namespace RoosterBot {
 				}
 			}
 		}
-		
+
+		[Command("leraarmorgen", RunMode = RunMode.Async), Summary("Welke les een leraar morgen als eerste heeft")]
+		public async Task StudentTomorrowCommand(string lokaal) {
+			await TeacherWeekdayCommand(lokaal, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+		}
+
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
 		private string RespondTeacherCurrent(string teacher, ScheduleRecord record) {
 			string response;

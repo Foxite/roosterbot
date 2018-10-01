@@ -357,6 +357,27 @@ namespace RoosterBot {
 			}
 		}
 
+		protected string GetStringFromDayOfWeek(DayOfWeek day) {
+			switch (day) {
+			case DayOfWeek.Monday:
+				return "maandag";
+			case DayOfWeek.Tuesday:
+				return "dinsdag";
+			case DayOfWeek.Wednesday:
+				return "woensdag";
+			case DayOfWeek.Thursday:
+				return "donderdag";
+			case DayOfWeek.Friday:
+				return "vrijdag";
+			case DayOfWeek.Saturday:
+				return "zaterdag";
+			case DayOfWeek.Sunday:
+				return "zondag";
+			default:
+				throw new ArgumentException();
+			}
+		}
+
 		/// <summary>
 		/// Given two command arguments, this determines which is a DayOfWeek and which is not.
 		/// </summary>

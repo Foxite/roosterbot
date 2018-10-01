@@ -115,5 +115,10 @@ namespace RoosterBot {
 				}
 			}
 		}
+
+		[Command("lokaalmorgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
+		public async Task RoomTomorrowCommand(string lokaal) {
+			await RoomWeekdayCommand(lokaal, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+		}
 	}
 }

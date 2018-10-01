@@ -114,10 +114,12 @@ namespace RoosterBot {
 
 						if (record.Activity != "pauze") {
 							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
-								response += $"<:VRjoram:392762653367336960> {teachers}\n";
-							} else {
-								response += $":bust_in_silhouette: {teachers}\n";
+							if (!string.IsNullOrWhiteSpace(teachers)) {
+								if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+									response += $"<:VRjoram:392762653367336960> {teachers}\n";
+								} else {
+									response += $":bust_in_silhouette: {teachers}\n";
+								}
 							}
 							if (!string.IsNullOrWhiteSpace(record.Room)) {
 								response += $":round_pushpin: {record.Room}\n";
@@ -131,6 +133,11 @@ namespace RoosterBot {
 					}
 				}
 			}
+		}
+
+		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
+		public async Task StudentTomorrowCommand(string klas) {
+			await StudentWeekdayCommand(klas, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 	}
 }
