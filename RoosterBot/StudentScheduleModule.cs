@@ -100,7 +100,12 @@ namespace RoosterBot {
 						}
 						await ReplyAsync(response);
 					} else {
-						string response = $"{record.StudentSets}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						string response;
+						if (DateTime.Today.DayOfWeek == day) {
+							response = $"{clazz}: Als eerste op volgende week {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						} else {
+							response = $"{clazz}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						}
 						response += $":notepad_spiral: {record.Activity}";
 						if (record.Activity == "pauze") {
 							response += " :thinking:";
