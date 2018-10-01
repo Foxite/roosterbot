@@ -22,16 +22,19 @@ namespace RoosterBot {
 					}
 					await ReplyAsync(response);
 				} else {
-					string response = $"In {lokaal} is nu {record.Activity}";
-
-					if (!string.IsNullOrEmpty(record.StaffMember)) {
-						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+					string response = $"{record.Room}: Nu\n";
+					response += $":notepad_spiral: {record.Activity}\n";
+					
+					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+					if (!string.IsNullOrWhiteSpace(teachers)) {
+						response += $":bust_in_silhouette: {teachers}\n";
 					}
-					if (!string.IsNullOrEmpty(record.StudentSets)) {
-						response += $" met de klas {record.StudentSets}";
+					if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+						response += $":busts_in_silhouette: {record.StudentSets}\n";
 					}
-					response += $".\n{GetTimeSpanResponse(record)}";
 
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -48,15 +51,22 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
-					string response = $"In {lokaal} is {GetNextTimeString(record)} {record.Activity}";
+					string response = $"{record.Room}: Nu\n";
+					response += $":notepad_spiral: {record.Activity}\n";
 
-					if (!string.IsNullOrEmpty(record.StaffMember)) {
-						response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+					if (!string.IsNullOrWhiteSpace(teachers)) {
+						response += $":bust_in_silhouette: {teachers}\n";
 					}
-					if (!string.IsNullOrEmpty(record.StudentSets)) {
-						response += $" met de klas {record.StudentSets}";
+					if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+						response += $":busts_in_silhouette: {record.StudentSets}\n";
 					}
-					response += $".\n{GetTimeSpanResponse(record)}";
+
+					if (record.Start.Date != DateTime.Today) {
+						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+					}
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -84,22 +94,22 @@ namespace RoosterBot {
 						}
 						await ReplyAsync(response);
 					} else {
-						string response = $"In {room} is er op {(DateTime.Today.DayOfWeek == day ? "volgende week " : "")}{DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
-						if (record.Activity == "pauze") {
-							response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
-						} else {
-							response += $" {record.Activity}";
+						string response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						response += $":notepad_spiral: {record.Activity}\n";
 
-							if (!string.IsNullOrEmpty(record.StaffMember)) {
-								response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
-							}
-							if (!string.IsNullOrEmpty(record.Room)) {
-								response += $" in {record.Room}";
-							} else {
-								response += ", maar ik weet niet waar";
-							}
-							response += $".\n{GetTimeSpanResponse(record)}";
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (!string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
 						}
+						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						}
+
+						if (record.Start.Date != DateTime.Today) {
+							response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
+						}
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
 						await ReplyAsync(response);
 					}
 				}
