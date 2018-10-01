@@ -111,8 +111,12 @@ namespace RoosterBot {
 					sawRecordForClass = true;
 					if (record.Start.Date == targetDate) {
 						return record;
-					} else if (record.Start > DateTime.Today.AddDays(7)) {
+					}
+				} else if (record.Start.Date > targetDate) {
+					if (sawRecordForClass) {
 						return null;
+					} else {
+						throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
 					}
 				}
 			}
