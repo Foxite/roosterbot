@@ -53,7 +53,7 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(SS1)==null)");
 				} else {
-					string response = $"{record.StudentSets}: Nu\n";
+					string response = $"{record.StudentSets}: Hierna\n";
 					response += $":notepad_spiral: {record.Activity}\n";
 
 					if (record.Activity != "pauze") {
@@ -70,7 +70,9 @@ namespace RoosterBot {
 						}
 					}
 
-					response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+					if (record.Start.Date != DateTime.Today) {
+						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+					}
 					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
@@ -98,7 +100,7 @@ namespace RoosterBot {
 						}
 						await ReplyAsync(response);
 					} else {
-						string response = $"{record.StudentSets}: Op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} als eerste\n";
+						string response = $"{record.StudentSets}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						response += $":notepad_spiral: {record.Activity}";
 						if (record.Activity == "pauze") {
 							response += " :thinking:";
@@ -116,7 +118,7 @@ namespace RoosterBot {
 								response += $":round_pushpin: {record.Room}\n";
 							}
 						} 
-						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 
