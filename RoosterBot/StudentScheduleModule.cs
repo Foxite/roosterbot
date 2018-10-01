@@ -22,21 +22,21 @@ namespace RoosterBot {
 					}
 					await ReplyAsync(response);
 				} else {
-					string response = "";
-					if (record.Activity == "pauze") {
-						response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
-					} else {
-						response += $"Je hebt nu {record.Activity}";
-						if (!string.IsNullOrEmpty(record.StaffMember)) {
-							response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+					string response = $"{record.StudentSets}: Nu\n";
+					response += $":notepad_spiral: {record.Activity}\n";
+
+					if (record.Activity != "pauze") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (!string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
 						}
-						if (!string.IsNullOrEmpty(record.Room)) {
-							response += $" in {record.Room}";
-						} else {
-							response += ", maar ik weet niet waar";
+						if (!string.IsNullOrWhiteSpace(record.Room)) {
+							response += $":round_pushpin: {record.Room}\n";
 						}
-						response += $".\n{GetTimeSpanResponse(record)}";
 					}
+
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -53,22 +53,26 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(SS1)==null)");
 				} else {
-					string response = $"Je hebt {GetNextTimeString(record)}";
-					if (record.Activity == "pauze") {
-						response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
-					} else {
-						response += $" {record.Activity}";
+					string response = $"{record.StudentSets}: Nu\n";
+					response += $":notepad_spiral: {record.Activity}\n";
 
-						if (!string.IsNullOrEmpty(record.StaffMember)) {
-							response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+					if (record.Activity != "pauze") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (!string.IsNullOrWhiteSpace(teachers)) {
+							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+								response += $"<:test_emoji:496301498234437656> {teachers}\n";
+							} else {
+								response += $":bust_in_silhouette: {teachers}\n";
+							}
 						}
-						if (!string.IsNullOrEmpty(record.Room)) {
-							response += $" in {record.Room}";
-						} else {
-							response += ", maar ik weet niet waar";
+						if (!string.IsNullOrWhiteSpace(record.Room)) {
+							response += $":round_pushpin: {record.Room}\n";
 						}
-						response += $".\n{GetTimeSpanResponse(record)}";
 					}
+
+					response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -94,22 +98,28 @@ namespace RoosterBot {
 						}
 						await ReplyAsync(response);
 					} else {
-						string response = $"Je hebt op {(DateTime.Today.DayOfWeek == day ? "volgende week " : "")}{DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
+						string response = $"{record.StudentSets}: Op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} als eerste\n";
+						response += $":notepad_spiral: {record.Activity}";
 						if (record.Activity == "pauze") {
-							response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
-						} else {
-							response += $" {record.Activity}";
-
-							if (!string.IsNullOrEmpty(record.StaffMember)) {
-								response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
-							}
-							if (!string.IsNullOrEmpty(record.Room)) {
-								response += $" in {record.Room}";
-							} else {
-								response += ", maar ik weet niet waar";
-							}
-							response += $".\n{GetTimeSpanResponse(record)}";
+							response += " :thinking:";
 						}
+						response += "\n";
+
+						if (record.Activity != "pauze") {
+							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+								response += $"<:VRjoram:392762653367336960> {teachers}\n";
+							} else {
+								response += $":bust_in_silhouette: {teachers}\n";
+							}
+							if (!string.IsNullOrWhiteSpace(record.Room)) {
+								response += $":round_pushpin: {record.Room}\n";
+							}
+						} 
+						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
+
 						await ReplyAsync(response);
 					}
 				}
