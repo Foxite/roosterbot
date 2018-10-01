@@ -20,10 +20,18 @@ namespace RoosterBot {
 		protected string GetTeacherNameFromAbbr(string teacherString) {
 			string[] abbrs = teacherString.Split(new[] { ", " }, StringSplitOptions.None);
 			string ret = "";
+			bool anyTeacherAdded = false;
 			for (int i = 0; i < abbrs.Length; i++) {
-				ret += GetSingleTeacherNameFromAbbr(abbrs[i]);
-				if (i != abbrs.Length - 1) {
-					ret += ", ";
+				string thisTeacher = GetSingleTeacherNameFromAbbr(abbrs[i]);
+
+				// The schedule occasionally contains teachers that don't actually exist (like XGVAC2). Skip those.
+				if (thisTeacher != null) {
+					// This prevents it from adding a comma if this is the first item, or if we've only had nonexistent teachers so far.
+					if (anyTeacherAdded) {
+						ret += ", ";
+					}
+					ret += thisTeacher;
+					anyTeacherAdded = true;
 				}
 			}
 			return ret;
@@ -252,18 +260,22 @@ namespace RoosterBot {
 			}
 		}
 
+		protected async Task AddReaction(string unicode) {
+			try {
+				await Context.Message.AddReactionAsync(new Emoji(unicode));
+			} catch (HttpException) { } // Permission denied
+		}
+
 		protected async Task ReactMinorError() {
 			if (Config.ErrorReactions) {
-				try {
-					await Context.Message.AddReactionAsync(new Emoji("❌"));
-				} catch (HttpException) { } // Permission denied
+				await AddReaction("❌");
 			}
 		}
 
 		protected async Task FatalError(string message) {
 			Logger.Log(LogSeverity.Error, LogTag, message);
 			if (Config.ErrorReactions) {
-				await Context.Message.AddReactionAsync(new Emoji("🚫"));
+				await AddReaction("🚫");
 			}
 			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
 			//response += $"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})";
@@ -272,13 +284,13 @@ namespace RoosterBot {
 		}
 
 		protected async Task<bool> CheckCooldown() {
-			var result = Config.CheckCooldown(Context.User.Id);
+			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
 			if (result.Item1) {
 				return true;
 			} else {
 				if (!result.Item2) {
 					if (Config.ErrorReactions) {
-						await Context.Message.AddReactionAsync(new Emoji("⚠"));
+						await AddReaction("⚠");
 					}
 					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
 				}

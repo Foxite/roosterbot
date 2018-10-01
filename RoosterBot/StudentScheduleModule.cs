@@ -22,12 +22,21 @@ namespace RoosterBot {
 					}
 					await ReplyAsync(response);
 				} else {
-					string response = "Je hebt nu ";
+					string response = "";
 					if (record.Activity == "pauze") {
-						response += $"pauze tot {record.End.ToShortTimeString()}.";
+						response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
+					} else {
+						response += $"Je hebt nu {record.Activity}";
+						if (!string.IsNullOrEmpty(record.StaffMember)) {
+							response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+						}
+						if (!string.IsNullOrEmpty(record.Room)) {
+							response += $" in {record.Room}";
+						} else {
+							response += ", maar ik weet niet waar";
+						}
+						response += $".\n{GetTimeSpanResponse(record)}";
 					}
-					response += $"{record.Activity} van {GetTeacherNameFromAbbr(record.StaffMember)} in {record.Room}\n";
-					response += GetTimeSpanResponse(record);
 					await ReplyAsync(response);
 				}
 			}

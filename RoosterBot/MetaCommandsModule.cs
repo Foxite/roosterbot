@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -43,6 +44,7 @@ namespace RoosterBot {
 
 		[Command("reload", RunMode = RunMode.Async), RequireBotManager()]
 		public async Task ReloadCSVCommand() {
+			Task<IUserMessage> progressMessage = ReplyAsync("Config herladen...");
 			try {
 				var configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 				Config.ReloadConfig(Path.Combine(configPath, "Config.Json"),
@@ -55,13 +57,19 @@ namespace RoosterBot {
 					i++;
 				}
 				Task.WaitAll(readCSVs);
+				await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "OK."; });
 			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reloading config.", ex);
-				if (Config.ErrorReactions) {
-					await Context.Message.AddReactionAsync(new Emoji("🚫"));
+				try {
+					Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reloading config.", ex);
+					if (Config.ErrorReactions) {
+						try {
+							await Context.Message.AddReactionAsync(new Emoji("🚫"));
+						} catch (HttpException) { } // Permission denied
+					}
+					await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "Critical error. Restart bot through AWS."; });
+				} finally {
+					await ShutdownCommand();
 				}
-				await ReplyAsync("Critical error. Restart bot through AWS.");
-				await ShutdownCommand();
 			}
 		}
 	}
@@ -72,7 +80,9 @@ namespace RoosterBot {
 				return PreconditionResult.FromSuccess();
 			} else {
 				if (services.GetService<ConfigService>().ErrorReactions) {
-					await context.Message.AddReactionAsync(new Emoji("⛔"));
+					try {
+						await context.Message.AddReactionAsync(new Emoji("⛔"));
+					} catch (HttpException) { } // Permission denied
 				}
 				return PreconditionResult.FromError("Je bent niet gemachtigd om dat te doen.");
 			}
