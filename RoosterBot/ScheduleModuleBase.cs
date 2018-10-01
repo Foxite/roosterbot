@@ -297,38 +297,7 @@ namespace RoosterBot {
 				return false;
 			}
 		}
-
-		protected string GetTimeSpanResponse(ScheduleRecord record, bool mentionDayOfWeek = false) {
-			string ret = "";
-			if (record.Start.Date == DateTime.Today.AddDays(1).Date) { // Happens tomorrow
-				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-			} else if (record.Start.Date == DateTime.Today.Date) {
-				if (record.Start.Ticks > DateTime.Now.Ticks) { // Happens today and not started yet
-					ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-				} else { // Happens today and already started
-					ret += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-				}
-			} else { // Happens on some other day
-				if (mentionDayOfWeek) {
-					ret += $"Dit begint op {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} om {record.Start.ToShortTimeString()} " +
-						$"en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-				} else {
-					ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-				}
-			}
-			return ret;
-		}
-
-		protected string GetNextTimeString(ScheduleRecord record) {
-			if (record.Start.Date > DateTime.Now.Date.AddDays(1)) { // More than 1 day from now
-				return $"morgen niets, en op {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
-			} else if (record.Start.Date > DateTime.Now.Date) { // 1 day from now
-				return "morgen als eerste";
-			} else { // Today
-				return "hierna";
-			}
-		}
-
+		
 		protected DayOfWeek GetDayOfWeekFromString(string dayofweek) {
 			switch (dayofweek) {
 			case "ma":
