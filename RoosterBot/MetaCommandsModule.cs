@@ -38,12 +38,14 @@ namespace RoosterBot {
 
 		[Command("shutdown"), RequireBotManager()]
 		public Task ShutdownCommand() {
+			Logger.Log(LogSeverity.Info, "MetaModule", "Shutting down");
 			Program.Shutdown();
 			return Task.CompletedTask;
 		}
 
 		[Command("reload", RunMode = RunMode.Async), RequireBotManager()]
 		public async Task ReloadCSVCommand() {
+			Logger.Log(LogSeverity.Info, "MetaModule", "Reloading config");
 			Task<IUserMessage> progressMessage = ReplyAsync("Config herladen...");
 			try {
 				var configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
