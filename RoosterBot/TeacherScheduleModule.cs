@@ -63,35 +63,26 @@ namespace RoosterBot {
 			if (!await CheckCooldown())
 				return;
 
-			string teacher;
-			DayOfWeek day;
-			bool argumentsSwapped = false;
-			try {
-				day = GetDayOfWeekFromString(weekdag);
-				teacher = GetTeacherAbbrFromName(leraar);
-			} catch (ArgumentException) {
-				try {
-					day = GetDayOfWeekFromString(leraar);
-					teacher = GetTeacherAbbrFromName(weekdag);
-					argumentsSwapped = true;
-				} catch (ArgumentException) {
+
+			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar, weekdag);
+
+			if (arguments.Item1) {
+				DayOfWeek day = arguments.Item2;
+				string teacherGiven = arguments.Item3;
+				string teacher = GetTeacherAbbrFromName(arguments.Item3);
+
+				if (teacher == null) {
 					await ReactMinorError();
-					await ReplyAsync($"Ik weet niet welke dag je bedoelt met {weekdag} of {leraar}");
-					return;
-				}
-			}
-			
-			if (teacher == null) {
-				await ReactMinorError();
-				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
-			} else {
-				if (teacher.Contains(", ")) {
-					await RespondTeacherWeekdayMultiple(day, argumentsSwapped ? weekdag : leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None));
+					await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
-					ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teacher);
-					if (result.Success) {
-						ScheduleRecord record = result.Value;
-						await ReplyAsync(RespondTeacherWeekday(GetTeacherNameFromAbbr(teacher), day, record));
+					if (teacher.Contains(", ")) {
+						await RespondTeacherWeekdayMultiple(day, teacherGiven, teacher.Split(new[] { ", " }, StringSplitOptions.None));
+					} else {
+						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teacher);
+						if (result.Success) {
+							ScheduleRecord record = result.Value;
+							await ReplyAsync(RespondTeacherWeekday(GetTeacherNameFromAbbr(teacher), day, record));
+						}
 					}
 				}
 			}

@@ -67,50 +67,41 @@ namespace RoosterBot {
 			if (!await CheckCooldown())
 				return;
 
-			DayOfWeek day;
-			bool argumentsSwapped = false;
-			try {
-				day = GetDayOfWeekFromString(weekdag);
-				lokaal = lokaal.ToUpper();
-			} catch (ArgumentException) {
-				try {
-					day = GetDayOfWeekFromString(lokaal);
-					lokaal = weekdag.ToUpper();
-					argumentsSwapped = true;
-				} catch (ArgumentException) {
-					await ReactMinorError();
-					await ReplyAsync($"Ik weet niet welke dag je bedoelt met {weekdag} of {lokaal}");
-					return;
-				}
-			}
 
-			ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "Room", argumentsSwapped ? weekdag : lokaal);
-			if (result.Success) {
-				ScheduleRecord record = result.Value;
-				if (record == null) {
-					string response = $"Het lijkt er op dat er in {lokaal} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets hebt.";
-					if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
-						response += "\nDat is dan ook in het weekend.";
-					}
-					await ReplyAsync(response);
-				} else {
-					string response = $"In {lokaal} is er op {(DateTime.Today.DayOfWeek == day ? "volgende week " : "")}{DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
-					if (record.Activity == "pauze") {
-						response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
+			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal, weekdag);
+
+			if (arguments.Item1) {
+				DayOfWeek day = arguments.Item2;
+				string room = arguments.Item3.ToUpper();
+
+				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "Room", room);
+				if (result.Success) {
+					ScheduleRecord record = result.Value;
+					if (record == null) {
+						string response = $"Het lijkt er op dat er in {room} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets is.";
+						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
+							response += "\nDat is dan ook in het weekend.";
+						}
+						await ReplyAsync(response);
 					} else {
-						response += $" {record.Activity}";
-
-						if (!string.IsNullOrEmpty(record.StaffMember)) {
-							response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
-						}
-						if (!string.IsNullOrEmpty(record.Room)) {
-							response += $" in {record.Room}";
+						string response = $"In {room} is er op {(DateTime.Today.DayOfWeek == day ? "volgende week " : "")}{DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} als eerste";
+						if (record.Activity == "pauze") {
+							response += $" pauze van {record.Start.ToShortTimeString()} tot {record.End.ToShortTimeString()}.";
 						} else {
-							response += ", maar ik weet niet waar";
+							response += $" {record.Activity}";
+
+							if (!string.IsNullOrEmpty(record.StaffMember)) {
+								response += $" van {GetTeacherNameFromAbbr(record.StaffMember)}";
+							}
+							if (!string.IsNullOrEmpty(record.Room)) {
+								response += $" in {record.Room}";
+							} else {
+								response += ", maar ik weet niet waar";
+							}
+							response += $".\n{GetTimeSpanResponse(record)}";
 						}
-						response += $".\n{GetTimeSpanResponse(record)}";
+						await ReplyAsync(response);
 					}
-					await ReplyAsync(response);
 				}
 			}
 		}

@@ -298,14 +298,25 @@ namespace RoosterBot {
 			}
 		}
 
-		protected string GetTimeSpanResponse(ScheduleRecord record) {
+		protected string GetTimeSpanResponse(ScheduleRecord record, bool mentionDayOfWeek = false) {
 			string ret = "";
 			TimeSpan actualDuration = record.End - record.Start;
 			string[] givenDuration = record.Duration.Split(':');
-			if (record.Start.Date == DateTime.Today.AddDays(1).Date) {
-				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
-			} else {
-				ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigd om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+			if (record.Start.Date == DateTime.Today.AddDays(1).Date) { // Happens tomorrow
+				ret += $"Dit begint morgen om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+			} else if (record.Start.Date == DateTime.Today.Date) {
+				if (record.Start.Ticks > DateTime.Now.Ticks) { // Happens today and not started yet
+					ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+				} else { // Happens today and already started
+					ret += $"Dit is begonnen om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+				}
+			} else { // Happens on some other day
+				if (mentionDayOfWeek) {
+					ret += $"Dit begint op {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} om {record.Start.ToShortTimeString()} " +
+						$"en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+				} else {
+					ret += $"Dit begint om {record.Start.ToShortTimeString()} en eindigt om {record.End.ToShortTimeString()}. Dit duurt dus {record.Duration}.\n";
+				}
 			}
 
 			if (!(actualDuration.Hours == int.Parse(givenDuration[0]) && actualDuration.Minutes == int.Parse(givenDuration[1]))) {
@@ -350,6 +361,29 @@ namespace RoosterBot {
 			default:
 				throw new ArgumentException();
 			}
+		}
+
+		/// <summary>
+		/// Given two command arguments, this determines which is a DayOfWeek and which is not.
+		/// </summary>
+		/// <returns>bool: Success, DayOfWeek: One of the arguments as DOW, string: the other argument as received</returns>
+		protected async Task<Tuple<bool, DayOfWeek, string>> GetValuesFromArguments(string argument1, string argument2) {
+			DayOfWeek day;
+			string entry;
+			try {
+				day = GetDayOfWeekFromString(argument1);
+				entry = argument2;
+			} catch (ArgumentException) {
+				try {
+					day = GetDayOfWeekFromString(argument2);
+					entry = argument1;
+				} catch (ArgumentException) {
+					await ReactMinorError();
+					await ReplyAsync($"Ik weet niet welke dag je bedoelt met {argument1} of {argument2}.");
+					return new Tuple<bool, DayOfWeek, string>(false, default(DayOfWeek), "");
+				}
+			}
+			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
 		}
 	}
 }
