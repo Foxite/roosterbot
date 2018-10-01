@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Net;
+using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -12,14 +13,16 @@ namespace RoosterBot {
 		protected ConfigService Config { get; }
 		protected ScheduleService Schedules { get; }
 		protected CommandService CmdService { get; }
+		protected DiscordSocketClient DiscordClient { get; }
 
-		public MetaCommandsModule(ConfigService config, ScheduleService schedules, CommandService cmdService) {
+		public MetaCommandsModule(ConfigService config, ScheduleService schedules, CommandService cmdService, DiscordSocketClient client) {
 			CmdService = cmdService;
 			Schedules = schedules;
 			Config = config;
+			DiscordClient = client;
 		}
 
-		[Command("help")]
+		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
 			// Print list of commands
 			string response = "Commands die je bij mij kan gebruiken:\n";
@@ -58,6 +61,7 @@ namespace RoosterBot {
 					readCSVs[i] = Schedules.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
 					i++;
 				}
+				await DiscordClient.SetGameAsync(Config.GameString);
 				Task.WaitAll(readCSVs);
 				await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "OK."; });
 			} catch (Exception ex) {

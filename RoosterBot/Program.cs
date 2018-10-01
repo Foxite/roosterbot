@@ -75,12 +75,8 @@ namespace RoosterBot {
 			await commands.AddModuleAsync<TeacherScheduleModule>();
 			await commands.AddModuleAsync<RoomScheduleModule>();
 
-			m_Services = new ServiceCollection()
-				.AddSingleton(configService)
-				.AddSingleton(scheduleService)
-				.AddSingleton(commands)
-				.BuildServiceProvider();
 			Logger.Log(LogSeverity.Debug, "Main", "Started services");
+			// Build ServiceProvider later because we need the client in it
 			#endregion Start services
 
 			#region Start client
@@ -92,13 +88,20 @@ namespace RoosterBot {
 			
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
+
+			m_Services = new ServiceCollection()
+				.AddSingleton(configService)
+				.AddSingleton(scheduleService)
+				.AddSingleton(commands)
+				.AddSingleton(m_Client)
+				.BuildServiceProvider();
 			#endregion Start client
 
 			#region Quit code
 			ProgramState state = ProgramState.BeforeStart;
-			m_Client.Ready += () => {
+			m_Client.Ready += async () => {
 				state = ProgramState.BotRunning;
-				return Task.CompletedTask;
+				await m_Client.SetGameAsync(configService.GameString);
 			};
 
 			Console.CancelKeyPress += (o, e) => {

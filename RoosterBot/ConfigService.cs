@@ -12,6 +12,7 @@ namespace RoosterBot {
 		public ulong  BotOwnerId { get; private set; }
 		public bool   ErrorReactions { get; private set; }
 		public string CommandPrefix { get; private set; }
+		public string GameString { get; private set; }
 
 		public ConfigService(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
 			m_CooldownList = new ConcurrentDictionary<ulong, CooldownData>();
@@ -38,6 +39,7 @@ namespace RoosterBot {
 			authToken = jsonConfig["token"].ToObject<string>();
 			ErrorReactions = jsonConfig["errorReactions"].ToObject<bool>();
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
+			GameString = jsonConfig["gameString"].ToObject<string>();
 		}
 
 		/// <summary>
