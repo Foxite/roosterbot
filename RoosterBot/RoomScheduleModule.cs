@@ -23,7 +23,7 @@ namespace RoosterBot {
 					await ReplyAsync(response);
 				} else {
 					string response = $"{record.Room}: Nu\n";
-					response += $":notepad_spiral: {record.Activity}\n";
+					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 					
 					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 					if (!string.IsNullOrWhiteSpace(teachers)) {
@@ -52,7 +52,7 @@ namespace RoosterBot {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
 					string response = $"{record.Room}: Nu\n";
-					response += $":notepad_spiral: {record.Activity}\n";
+					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 					if (!string.IsNullOrWhiteSpace(teachers)) {
@@ -95,7 +95,7 @@ namespace RoosterBot {
 						await ReplyAsync(response);
 					} else {
 						string response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
-						response += $":notepad_spiral: {record.Activity}\n";
+						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 						if (!string.IsNullOrWhiteSpace(teachers)) {

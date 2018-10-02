@@ -100,7 +100,7 @@ namespace RoosterBot {
 				response = $"Het lijkt erop dat {teacher} nu niets heeft.";
 			} else {
 				response = $"{teacher}: Nu\n";
-				response += $":notepad_spiral: {record.Activity}\n";
+				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 				if (!string.IsNullOrWhiteSpace(record.Room)) {
 					response += $":round_pushpin: {record.Room}";
@@ -116,7 +116,7 @@ namespace RoosterBot {
 
 		private string RespondTeacherNext(string teacher, ScheduleRecord record) {
 			string response = $"{teacher}: Hierna\n";
-			response += $":notepad_spiral: {record.Activity}\n";
+			response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 			if (!string.IsNullOrWhiteSpace(record.Room)) {
 				response += $":round_pushpin: {record.Room}\n";
@@ -142,7 +142,7 @@ namespace RoosterBot {
 				} else {
 					response = $"{teacher}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 				}
-				response += $":notepad_spiral: {record.Activity}\n";
+				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 				if (!string.IsNullOrWhiteSpace(record.Room)) {
 					response += $":round_pushpin: {record.Room}\n";

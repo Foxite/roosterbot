@@ -23,20 +23,22 @@ namespace RoosterBot {
 					await ReplyAsync(response);
 				} else {
 					string response = $"{record.StudentSets}: Nu\n";
-					response += $":notepad_spiral: {record.Activity}\n";
+					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
-					if (record.Activity != "pauze") {
-						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							response += $":bust_in_silhouette: {teachers}\n";
+					if (record.Activity != "stdag doc") {
+						if (record.Activity != "pauze") {
+							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							if (!string.IsNullOrWhiteSpace(teachers)) {
+								response += $":bust_in_silhouette: {teachers}\n";
+							}
+							if (!string.IsNullOrWhiteSpace(record.Room)) {
+								response += $":round_pushpin: {record.Room}\n";
+							}
 						}
-						if (!string.IsNullOrWhiteSpace(record.Room)) {
-							response += $":round_pushpin: {record.Room}\n";
-						}
+
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
 					}
-
-					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -54,27 +56,30 @@ namespace RoosterBot {
 					await FatalError("GetRecord(SS1)==null)");
 				} else {
 					string response = $"{record.StudentSets}: Hierna\n";
-					response += $":notepad_spiral: {record.Activity}\n";
+					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
-					if (record.Activity != "pauze") {
-						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
-								response += $"<:test_emoji:496301498234437656> {teachers}\n";
-							} else {
-								response += $":bust_in_silhouette: {teachers}\n";
+
+					if (record.Activity != "stdag doc") {
+						if (record.Activity != "pauze") {
+							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							if (!string.IsNullOrWhiteSpace(teachers)) {
+								if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+									response += $"<:test_emoji:496301498234437656> {teachers}\n";
+								} else {
+									response += $":bust_in_silhouette: {teachers}\n";
+								}
+							}
+							if (!string.IsNullOrWhiteSpace(record.Room)) {
+								response += $":round_pushpin: {record.Room}\n";
 							}
 						}
-						if (!string.IsNullOrWhiteSpace(record.Room)) {
-							response += $":round_pushpin: {record.Room}\n";
-						}
-					}
 
-					if (record.Start.Date != DateTime.Today) {
-						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						if (record.Start.Date != DateTime.Today) {
+							response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						}
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
 					}
-					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -106,29 +111,30 @@ namespace RoosterBot {
 						} else {
 							response = $"{record.StudentSets}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						}
-						response += $":notepad_spiral: {record.Activity}";
+						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}";
 						if (record.Activity == "pauze") {
 							response += " :thinking:";
 						}
 						response += "\n";
 
-						if (record.Activity != "pauze") {
-							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-							if (!string.IsNullOrWhiteSpace(teachers)) {
-								if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
-									response += $"<:VRjoram:392762653367336960> {teachers}\n";
-								} else {
-									response += $":bust_in_silhouette: {teachers}\n";
+						if (record.Activity != "stdag doc") {
+							if (record.Activity != "pauze") {
+								string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+								if (!string.IsNullOrWhiteSpace(teachers)) {
+									if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+										response += $"<:VRjoram:392762653367336960> {teachers}\n";
+									} else {
+										response += $":bust_in_silhouette: {teachers}\n";
+									}
+								}
+								if (!string.IsNullOrWhiteSpace(record.Room)) {
+									response += $":round_pushpin: {record.Room}\n";
 								}
 							}
-							if (!string.IsNullOrWhiteSpace(record.Room)) {
-								response += $":round_pushpin: {record.Room}\n";
-							}
-						} 
-						response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-						response += $":stopwatch: {record.Duration}\n";
-
+							response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
+							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+							response += $":stopwatch: {record.Duration}\n";
+						}
 						await ReplyAsync(response);
 					}
 				}

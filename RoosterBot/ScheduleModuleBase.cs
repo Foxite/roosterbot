@@ -87,6 +87,8 @@ namespace RoosterBot {
 				return "Suus Looijen";
 			case "SRI":
 				return "Suzanne Ringeling";
+			case "VV-GAGD":
+				return "een vervangende docent";
 			case "WSC":
 				return "Willemijn Schmitz";
 			case "YWI":
@@ -190,6 +192,55 @@ namespace RoosterBot {
 				return "Willemijn Schmitz";
 			}
 			return null;
+		}
+
+		protected string GetActivityFromAbbr(string abbr) {
+			switch (abbr) {
+			case "ned":
+				return "Nederlands";
+			case "eng":
+				return "Engels";
+			case "program":
+				return "Programmeren";
+			case "gamedes":
+				return "Gamedesign";
+			case "ond":
+				return "Onderneming";
+			case "k0072":
+				return "Keuzedeel (k0072)";
+			case "k0901":
+				return "Keuzedeel (k0901)";
+			case "burger":
+				return "Burgerschap";
+			case "rek":
+				return "Rekenen";
+			case "vormg":
+				return "Vormgeving";
+			case "engine":
+				return "Engineering";
+			case "stdag doc":
+				return "Studiedag :tada:";
+			
+			case "3d":
+			case "2d":
+			case "bpv":
+			case "vb bpv":
+			case "2d/3d":
+			case "slb":
+				return abbr.ToUpper();
+			
+			case "pauze":
+			case "gameaudio":
+			case "keuzedeel":
+			case "gametech":
+			case "project":
+			case "rapid":
+			case "gameplay":
+				return abbr.FirstCharToUpper();
+			
+			default:
+				return $"\"{abbr}\" (ik weet de volledige naam niet)";
+			}
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
