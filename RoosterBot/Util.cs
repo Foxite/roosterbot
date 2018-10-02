@@ -20,6 +20,10 @@ namespace RoosterBot {
 			return ret;
 		}
 
+		/// <summary>
+		/// Capitalize the first character in a string.
+		/// </summary>
+		/// From https://stackoverflow.com/a/4405876/3141917
 		public static string FirstCharToUpper(this string input) {
 			switch (input) {
 			case null:
