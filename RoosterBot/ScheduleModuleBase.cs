@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
-	public abstract class ScheduleModuleBase : ModuleBase {
+	public abstract class ScheduleModuleBase : EditableCmdModuleBase {
 		protected ScheduleService Service { get; }
 		protected ConfigService Config { get; }
 		protected SNSService SNS { get; }
 		protected string LogTag { get; }
 
-		public ScheduleModuleBase(ScheduleService serv, ConfigService config, SNSService sns, string logTag) {
+		public ScheduleModuleBase(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns, string logTag) : base(ecs) {
 			Service = serv;
 			Config = config;
 			LogTag = logTag;
@@ -415,7 +414,7 @@ namespace RoosterBot {
 				} catch (ArgumentException) {
 					await ReactMinorError();
 					await ReplyAsync($"Ik weet niet welke dag je bedoelt met {argument1} of {argument2}.");
-					return new Tuple<bool, DayOfWeek, string>(false, default(DayOfWeek), "");
+					return new Tuple<bool, DayOfWeek, string>(false, default, "");
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
