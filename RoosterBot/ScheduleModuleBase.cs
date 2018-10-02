@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -9,12 +8,14 @@ namespace RoosterBot {
 	public abstract class ScheduleModuleBase : ModuleBase {
 		protected ScheduleService Service { get; }
 		protected ConfigService Config { get; }
+		protected SNSService SNS { get; }
 		protected string LogTag { get; }
 
-		public ScheduleModuleBase(ScheduleService serv, ConfigService config, string logTag) {
+		public ScheduleModuleBase(ScheduleService serv, ConfigService config, SNSService sns, string logTag) {
 			Service = serv;
 			Config = config;
 			LogTag = logTag;
+			SNS = sns;
 		}
 
 		protected string GetTeacherNameFromAbbr(string teacherString) {
@@ -325,12 +326,11 @@ namespace RoosterBot {
 
 		protected async Task FatalError(string message) {
 			Logger.Log(LogSeverity.Error, LogTag, message);
+			await SNS.SendCriticalErrorNotificationAsync("Critical error: " + message);
 			if (Config.ErrorReactions) {
 				await AddReaction("🚫");
 			}
 			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
-			//response += $"{(await Context.Client.GetUserAsync(133798410024255488)).Mention} FIX IT! ({message})";
-			// TODO alert via Amazon AWS
 			await ReplyAsync(response);
 		}
 

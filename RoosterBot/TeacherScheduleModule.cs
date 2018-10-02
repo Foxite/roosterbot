@@ -2,12 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 
 namespace RoosterBot {
 	public class TeacherScheduleModule : ScheduleModuleBase {
-		public TeacherScheduleModule(ScheduleService serv, ConfigService config) : base(serv, config, "TSM") { }
+		public TeacherScheduleModule(ScheduleService serv, ConfigService config, SNSService sns) : base(serv, config, sns, "TSM") { }
 
 		[Command("leraarnu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {
