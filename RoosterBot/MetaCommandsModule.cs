@@ -9,13 +9,13 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	public class MetaCommandsModule : ModuleBase {
+	public class MetaCommandsModule : EditableCmdModuleBase {
 		protected ConfigService Config { get; }
 		protected ScheduleService Schedules { get; }
-		protected CommandService CmdService { get; }
+		protected EditedCommandService CmdService { get; }
 		protected DiscordSocketClient DiscordClient { get; }
 
-		public MetaCommandsModule(ConfigService config, ScheduleService schedules, CommandService cmdService, DiscordSocketClient client) {
+		public MetaCommandsModule(EditedCommandService ecs, ConfigService config, ScheduleService schedules, EditedCommandService cmdService, DiscordSocketClient client) : base(ecs) {
 			CmdService = cmdService;
 			Schedules = schedules;
 			Config = config;

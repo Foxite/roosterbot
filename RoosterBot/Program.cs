@@ -65,18 +65,7 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
-			Logger.Log(LogSeverity.Debug, "Main", "Loaded schedules");
-
-			CommandService commands = new CommandService();
-			commands.Log += Logger.LogSync;
-			// Add these manually to enforce command order when displayed by !help
-			await commands.AddModuleAsync<MetaCommandsModule>();
-			await commands.AddModuleAsync<StudentScheduleModule>();
-			await commands.AddModuleAsync<TeacherScheduleModule>();
-			await commands.AddModuleAsync<RoomScheduleModule>();
-
 			Logger.Log(LogSeverity.Debug, "Main", "Started services");
-			// Build ServiceProvider later because we need the client in it
 			#endregion Start services
 
 			#region Start client
@@ -84,8 +73,16 @@ namespace RoosterBot {
 				WebSocketProvider = WS4NetProvider.Instance
 			});
 			m_Client.Log += Logger.LogSync;
-			m_Client.MessageReceived += HandleCommand;
-			
+			m_Client.MessageReceived += HandleNewCommand;
+
+			EditedCommandService commands = new EditedCommandService(m_Client, HandleCommand);
+			commands.Log += Logger.LogSync;
+			// Add these manually to enforce command order when displayed by !help
+			await commands.AddModuleAsync<MetaCommandsModule>();
+			await commands.AddModuleAsync<StudentScheduleModule>();
+			await commands.AddModuleAsync<TeacherScheduleModule>();
+			await commands.AddModuleAsync<RoomScheduleModule>();
+
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
@@ -145,22 +142,36 @@ namespace RoosterBot {
 			#endregion Quit code
 		}
 
-		private async Task HandleCommand(SocketMessage messageParam) {
+		// This function is given to the CommandService.
+		private async Task HandleNewCommand(SocketMessage command) {
+			await HandleCommand(null, command);
+		}
+
+		// This function is called by CommandEditService and the above function.
+		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
 			// Don't process the command if it was a System Message
-			if (!(messageParam is SocketUserMessage message))
+			if (!(command is SocketUserMessage message))
 				return;
+
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
 			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
 			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
 				return;
 			// Create a Command Context
-			var context = new CommandContext(m_Client, message);
+			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 			// Execute the command. (result does not indicate a return value, 
 			// rather an object stating if the command executed successfully)
-			var result = await m_Services.GetService<CommandService>().ExecuteAsync(context, argPos, m_Services);
-			if (!result.IsSuccess)
-				await context.Channel.SendMessageAsync(result.ErrorReason);
+			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
+			IResult result = await commandService.ExecuteAsync(context, argPos, m_Services);
+			if (!result.IsSuccess) {
+				if (initialResponse == null) {
+					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
+					commandService.AddResponse(context.Message, response);
+				} else {
+					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
+				}
+			}
 		}
 
 		/// <summary>

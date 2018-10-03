@@ -12,3 +12,8 @@
 29-09-18 23:16: Bot now loads config json file, eliminating hardcoded CSV filenames and auth tokens.
 30-09-18 00:56: Made code more organized and easier to maintain without having to recompile.
 30-09-18 11:24: Project now hosted on Gitlab.
+30-09-18 16:17: Added !reload and !shutdown commands for the bot owner.
+30-09-18 21:44: Added !dag command that lets you look up the first item for a weekday.
+01-10-18 14:13: Bot now uses icons with minimal text for its output, following feedback from users.
+02-10-18 14:32: Bot now alerts critical errors to an Amazon SNS topic.
+02-10-18 19:59: Bot now detects when commands are edited and re-executes them.
