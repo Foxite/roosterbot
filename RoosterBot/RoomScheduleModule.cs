@@ -24,17 +24,18 @@ namespace RoosterBot {
 				} else {
 					string response = $"{record.Room}: Nu\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
-					
-					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-					if (!string.IsNullOrWhiteSpace(teachers)) {
-						response += $":bust_in_silhouette: {teachers}\n";
-					}
-					if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-						response += $":busts_in_silhouette: {record.StudentSets}\n";
-					}
 
-					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					response += $":stopwatch: {record.Duration}\n";
+					if (record.Activity != "stdag doc") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (!string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
+						}
+						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						}
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
+					}
 					await ReplyAsync(response);
 				}
 			}
@@ -54,19 +55,21 @@ namespace RoosterBot {
 					string response = $"{record.Room}: Nu\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
-					string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-					if (!string.IsNullOrWhiteSpace(teachers)) {
-						response += $":bust_in_silhouette: {teachers}\n";
-					}
-					if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-						response += $":busts_in_silhouette: {record.StudentSets}\n";
-					}
+					if (record.Activity != "stdag doc") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (!string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
+						}
+						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						}
 
-					if (record.Start.Date != DateTime.Today) {
-						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						if (record.Start.Date != DateTime.Today) {
+							response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						}
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+						response += $":stopwatch: {record.Duration}\n";
 					}
-					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					response += $":stopwatch: {record.Duration}\n";
 					await ReplyAsync(response);
 				}
 			}
@@ -97,19 +100,21 @@ namespace RoosterBot {
 						string response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
-						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							response += $":bust_in_silhouette: {teachers}\n";
-						}
-						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-							response += $":busts_in_silhouette: {record.StudentSets}\n";
-						}
+						if (record.Activity != "stdag doc") {
+							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							if (!string.IsNullOrWhiteSpace(teachers)) {
+								response += $":bust_in_silhouette: {teachers}\n";
+							}
+							if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+								response += $":busts_in_silhouette: {record.StudentSets}\n";
+							}
 
-						if (record.Start.Date != DateTime.Today) {
-							response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
+							if (record.Start.Date != DateTime.Today) {
+								response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
+							}
+							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+							response += $":stopwatch: {record.Duration}\n";
 						}
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-						response += $":stopwatch: {record.Duration}\n";
 						await ReplyAsync(response);
 					}
 				}
