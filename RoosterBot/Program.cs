@@ -82,6 +82,7 @@ namespace RoosterBot {
 			await commands.AddModuleAsync<StudentScheduleModule>();
 			await commands.AddModuleAsync<TeacherScheduleModule>();
 			await commands.AddModuleAsync<RoomScheduleModule>();
+			await commands.AddModuleAsync<ScheduleModuleBase>();
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
@@ -92,6 +93,7 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(configService))
+				.AddSingleton(new AfterRecordService(scheduleService))
 				.BuildServiceProvider();
 			#endregion Start client
 

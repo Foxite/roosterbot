@@ -5,7 +5,11 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class RoomScheduleModule : ScheduleModuleBase {
-		public RoomScheduleModule() : base("RSM") { }
+		private string LogTag { get; }
+
+		public RoomScheduleModule() : base() {
+			LogTag = "RSM";
+		}
 
 		[Command("lokaalnu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
@@ -15,14 +19,14 @@ namespace RoosterBot {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
+				string response;
 				if (record == null) {
-					string response = "Het ziet ernaar uit dat daar nu niets is.";
+					response = "Het ziet ernaar uit dat daar nu niets is.";
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response);
 				} else {
-					string response = $"{record.Room}: Nu\n";
+					response = $"{record.Room}: Nu\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
@@ -36,8 +40,8 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response);
 				}
+				await ReplyAsync(response, "Room", record);
 			}
 		}
 
@@ -70,7 +74,7 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response);
+					await ReplyAsync(response, "Room", record);
 				}
 			}
 		}
@@ -90,14 +94,14 @@ namespace RoosterBot {
 				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "Room", room);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
+					string response;
 					if (record == null) {
-						string response = $"Het lijkt er op dat er in {room} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets is.";
+						response = $"Het lijkt er op dat er in {room} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets is.";
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += "\nDat is dan ook in het weekend.";
 						}
-						await ReplyAsync(response);
 					} else {
-						string response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 						if (record.Activity != "stdag doc") {
@@ -115,8 +119,8 @@ namespace RoosterBot {
 							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 							response += $":stopwatch: {record.Duration}\n";
 						}
-						await ReplyAsync(response);
 					}
+					await ReplyAsync(response, "Room", record);
 				}
 			}
 		}

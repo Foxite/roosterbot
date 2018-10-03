@@ -126,6 +126,27 @@ namespace RoosterBot {
 				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
 			}
 		}
+
+		public ScheduleRecord GetRecordAfter(string schedule, ScheduleRecord givenRecord) {
+			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
+												//  reuse the code from GetNextRecord().
+			bool sawRecordForClass = false;
+			string identifier = (string) givenRecord.GetType().GetProperty(schedule).GetValue(givenRecord);
+
+			foreach (ScheduleRecord record in m_Schedules[schedule]) {
+				if (((string) record.GetType().GetProperty(schedule).GetValue(record)).Contains(identifier)) {
+					sawRecordForClass = true;
+					if (ticksNow < record.Start.Ticks) {
+						return record;
+					}
+				}
+			}
+			if (sawRecordForClass) {
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {schedule}");
+			} else {
+				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
+			}
+		}
 	}
 
 	public class ScheduleRecord : ICloneable {

@@ -14,8 +14,12 @@ namespace RoosterBot {
 		public ScheduleService Schedules { get; set; }
 		public EditedCommandService CmdService { get; set; }
 		public DiscordSocketClient DiscordClient { get; set; }
+		
+		private readonly string LogTag;
 
-		public MetaCommandsModule() : base() { }
+		public MetaCommandsModule() : base() {
+			LogTag = "MCM";
+		}
 
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
