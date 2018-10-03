@@ -10,17 +10,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public class MetaCommandsModule : EditableCmdModuleBase {
-		protected ConfigService Config { get; }
-		protected ScheduleService Schedules { get; }
-		protected EditedCommandService CmdService { get; }
-		protected DiscordSocketClient DiscordClient { get; }
+		public ConfigService Config { get; set; }
+		public ScheduleService Schedules { get; set; }
+		public EditedCommandService CmdService { get; set; }
+		public DiscordSocketClient DiscordClient { get; set; }
 
-		public MetaCommandsModule(EditedCommandService ecs, ConfigService config, ScheduleService schedules, EditedCommandService cmdService, DiscordSocketClient client) : base(ecs) {
-			CmdService = cmdService;
-			Schedules = schedules;
-			Config = config;
-			DiscordClient = client;
-		}
+		public MetaCommandsModule() : base() { }
 
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {

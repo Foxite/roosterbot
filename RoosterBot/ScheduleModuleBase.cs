@@ -1,20 +1,65 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
 	public abstract class ScheduleModuleBase : EditableCmdModuleBase {
-		protected ScheduleService Service { get; }
-		protected ConfigService Config { get; }
-		protected SNSService SNS { get; }
-		protected string LogTag { get; }
+		public ScheduleService Service { get; set; }
+		public ConfigService Config { get; set; }
+		public SNSService SNS { get; set; }
+		public AfterRecordService ARS { get; set; }
+		public string LogTag { get; }
 
-		public ScheduleModuleBase(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns, string logTag) : base(ecs) {
-			Service = serv;
-			Config = config;
+		public ScheduleModuleBase(string logTag) : base() {
 			LogTag = logTag;
-			SNS = sns;
+		}
+
+		public ScheduleModuleBase() : this("SMB") { }
+
+		[Command("!daarna"), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
+		public async Task GetAfterCommand() {
+			if (!(Context.User is IGuildUser user))
+				return;
+			ScheduleQueryContext query = ARS.GetRecordAfter(user);
+			ScheduleRecord record = query.Record;
+			if (record == null) {
+				await ReactMinorError();
+				await ReplyAsync("Na wat?");
+			} else {
+				string response;
+				if (query.SourceSchedule == "StudentSets") {
+					response = $"{record.StudentSets}: Na de vorige les\n";
+				} else if (query.SourceSchedule == "StaffMember") {
+					response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
+				} else if (query.SourceSchedule == "Room") {
+					response = $"{GetTeacherNameFromAbbr(record.Room)}: Na de vorige les\n";
+				} else {
+					await FatalError("query.SourceSchedule is not recognized");
+					return;
+				}
+				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+
+				if (record.Activity != "stdag doc") {
+					if (record.Activity != "pauze") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
+						}
+						if (query.SourceSchedule != "StudentSets" && !string.IsNullOrWhiteSpace(record.StudentSets)) {
+							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						}
+						if (query.SourceSchedule != "Room" && !string.IsNullOrWhiteSpace(record.Room)) {
+							response += $":round_pushpin: {record.Room}\n";
+						}
+					}
+
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
+				}
+				await ReplyAsync(response);
+			}
 		}
 
 		protected string GetTeacherNameFromAbbr(string teacherString) {

@@ -6,7 +6,7 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class TeacherScheduleModule : ScheduleModuleBase {
-		public TeacherScheduleModule(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns) : base(ecs, serv, config, sns, "TSM") { }
+		public TeacherScheduleModule() : base("TSM") { }
 
 		[Command("leraarnu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {

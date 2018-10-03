@@ -5,7 +5,7 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class RoomScheduleModule : ScheduleModuleBase {
-		public RoomScheduleModule(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns) : base(ecs, serv, config, sns, "RSM") { }
+		public RoomScheduleModule() : base("RSM") { }
 
 		[Command("lokaalnu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
