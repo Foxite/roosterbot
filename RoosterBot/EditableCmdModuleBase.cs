@@ -5,9 +5,9 @@ using Discord.Commands;
 namespace RoosterBot {
 	public abstract class EditableCmdModuleBase : ModuleBase<EditedCommandContext> {
 		public EditedCommandService EditService { get; set; }
-
+		
 		private bool m_ResponseWasModified;
-
+		
 		protected async override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			if (Context.OriginalResponse == null) {
 				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
