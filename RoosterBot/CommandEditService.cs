@@ -30,10 +30,8 @@ namespace RoosterBot {
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (!(messageAfter is SocketUserMessage socketMessageAfter))
 				return;
-
-			Console.WriteLine("aa");
+			
 			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
-				Console.WriteLine("bb");
 				// This part is the point of this class. It checks if the new message is a command, executes it, and tells ReplyAsync in modules that use this
 				//  class to edit their response instead of making a new one.
 				// This class is designed to work with EditableCmdModuleBase in that aspect. It can simply be replaced as ModuleBase in existing modules and they will
@@ -47,8 +45,7 @@ namespace RoosterBot {
 			IEnumerable<KeyValuePair<ulong, CommandResponsePair>> oldMessages = m_Messages.Where((kvp) => {
 				return kvp.Value.Command.Author.Id == userCommand.Author.Id;
 			});
-
-			Console.WriteLine(oldMessages == null);
+			
 			if (oldMessages.Count() > 0) {
 				foreach (KeyValuePair<ulong, CommandResponsePair> item in oldMessages) {
 					m_Messages.TryRemove(item.Key, out CommandResponsePair unused);
