@@ -19,14 +19,14 @@ namespace RoosterBot {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
+				string response;
 				if (record == null) {
-					string response = "Het ziet ernaar uit dat je nu niets hebt.";
+					response = "Het ziet ernaar uit dat je nu niets hebt.";
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response, "StudentSets", null);
 				} else {
-					string response = $"{record.StudentSets}: Nu\n";
+					response = $"{record.StudentSets}: Nu\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
@@ -43,8 +43,8 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response, "StudentSets", record);
 				}
+				await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response, "StudentSets", record);
+					await ReplyAsync(response, "StudentSets", record.StudentSets, record);
 				}
 			}
 		}
@@ -102,14 +102,13 @@ namespace RoosterBot {
 				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StudentSets", clazz);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
+					string response;
 					if (record == null) {
-						string response = $"Het lijkt er op dat je op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets hebt.";
+						response = $"Het lijkt er op dat je op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets hebt.";
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += "\nDat is dan ook in het weekend.";
 						}
-						await ReplyAsync(response, "StudentSets", record);
 					} else {
-						string response;
 						if (DateTime.Today.DayOfWeek == day) {
 							response = $"{record.StudentSets}: Als eerste op volgende week {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						} else {
@@ -139,8 +138,8 @@ namespace RoosterBot {
 							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 							response += $":stopwatch: {record.Duration}\n";
 						}
-						await ReplyAsync(response, "StudentSets", record);
 					}
+					await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
 				}
 			}
 		}

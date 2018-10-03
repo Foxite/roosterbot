@@ -41,7 +41,7 @@ namespace RoosterBot {
 						response += $":stopwatch: {record.Duration}\n";
 					}
 				}
-				await ReplyAsync(response, "Room", record);
+				await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response, "Room", record);
+					await ReplyAsync(response, "Room", record.Room, record);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ namespace RoosterBot {
 							response += $":stopwatch: {record.Duration}\n";
 						}
 					}
-					await ReplyAsync(response, "Room", record);
+					await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
 				}
 			}
 		}

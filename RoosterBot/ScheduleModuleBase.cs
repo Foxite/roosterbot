@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -9,7 +10,7 @@ namespace RoosterBot {
 		public ScheduleService Service { get; set; }
 		public ConfigService Config { get; set; }
 		public SNSService SNS { get; set; }
-		public AfterRecordService ARS { get; set; }
+		public LastScheduleCommandService ARS { get; set; }
 
 		private readonly string LogTag;
 
@@ -21,30 +22,36 @@ namespace RoosterBot {
 		public async Task GetAfterCommand() {
 			if (!(Context.User is IGuildUser user))
 				return;
-			ScheduleQueryContext query = ARS.GetRecordAfter(user);
-			if (query.Equals(default(ScheduleQueryContext))) {
-				await ReactMinorError();
-				await ReplyAsync("Na wat?");
+			ScheduleCommandInfo query = ARS.GetLastCommandFromUser(user);
+			if (query.Equals(default(ScheduleCommandInfo))) {
+				await MinorError("Na wat?");
 			} else {
 				ScheduleRecord record = query.Record;
 				string response;
+				bool nullRecord = record == null;
+				if (nullRecord) {
+					record = Service.GetNextRecord(query.SourceSchedule, query.Identifier);
+				} else {
+					record = Service.GetRecordAfter(query.SourceSchedule, query.Record);
+				}
+
 				if (query.SourceSchedule == "StudentSets") {
-					if (record == null) {
+					if (nullRecord) {
 						response = $"{record.StudentSets}: Hierna\n";
 					} else {
 						response = $"{record.StudentSets}: Na de vorige les\n";
 					}
 				} else if (query.SourceSchedule == "StaffMember") {
-					if (record == null) {
-						response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Hiermma\n";
+					if (nullRecord) {
+						response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Hierna\n";
 					} else {
 						response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
 					}
 				} else if (query.SourceSchedule == "Room") {
-					if (record == null) {
-						response = $"{GetTeacherNameFromAbbr(record.Room)}: Hierna\n";
+					if (nullRecord) {
+						response = $"{record.Room}: Hierna\n";
 					} else {
-						response = $"{GetTeacherNameFromAbbr(record.Room)}: Na de vorige les\n";
+						response = $"{record.Room}: Na de vorige les\n";
 					}
 				} else {
 					await FatalError("query.SourceSchedule is not recognized");
@@ -65,11 +72,11 @@ namespace RoosterBot {
 							response += $":round_pushpin: {record.Room}\n";
 						}
 					}
-
+					response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
 					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 					response += $":stopwatch: {record.Duration}\n";
 				}
-				await ReplyAsync(response, query.SourceSchedule, record);
+				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
 			}
 		}
 
@@ -292,6 +299,8 @@ namespace RoosterBot {
 			case "project":
 			case "rapid":
 			case "gameplay":
+			case "taken":
+			case "stage":
 				return abbr.FirstCharToUpper();
 			
 			default:
@@ -301,12 +310,18 @@ namespace RoosterBot {
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
 			if (name == "") {
-				await ReactMinorError();
-				await ReplyAsync("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
+				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			}
+			if (schedule == "Room" && name.Length != 4) {
+				await MinorError("Dat is geen lokaal.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			}
+
 			name = name.ToUpper();
 			ScheduleRecord record = null;
 			try {
@@ -316,14 +331,12 @@ namespace RoosterBot {
 					Value = record
 				};
 			} catch (ScheduleNotFoundException) {
-				await ReactMinorError();
-				await ReplyAsync("Dat item staat niet op mijn rooster.");
+				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await ReactMinorError();
-				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -335,12 +348,18 @@ namespace RoosterBot {
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetFirstRecord(DayOfWeek day, string schedule, string name) {
 			if (name == "") {
-				await ReactMinorError();
-				await ReplyAsync("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
+				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			}
+			if (schedule == "Room" && name.Length != 4) {
+				await MinorError("Dat is geen lokaal.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			}
+
 			name = name.ToUpper();
 			ScheduleRecord record = null;
 			try {
@@ -350,14 +369,12 @@ namespace RoosterBot {
 					Value = record
 				};
 			} catch (ScheduleNotFoundException) {
-				await ReactMinorError();
-				await ReplyAsync("Dat item staat niet op mijn rooster.");
+				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await ReactMinorError();
-				await ReplyAsync("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -373,10 +390,12 @@ namespace RoosterBot {
 			} catch (HttpException) { } // Permission denied
 		}
 
-		protected async Task ReactMinorError() {
+		protected async Task MinorError(string message) {
+			ARS.RemoveLastQuery(Context.User);
 			if (Config.ErrorReactions) {
 				await AddReaction("❌");
 			}
+			await ReplyAsync(message);
 		}
 
 		protected async Task FatalError(string message) {
@@ -386,6 +405,7 @@ namespace RoosterBot {
 				await AddReaction("🚫");
 			}
 			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n");
+			ARS.RemoveLastQuery(Context.User);
 		}
 
 		protected async Task<bool> CheckCooldown() {
@@ -467,20 +487,19 @@ namespace RoosterBot {
 					day = GetDayOfWeekFromString(argument2);
 					entry = argument1;
 				} catch (ArgumentException) {
-					await ReactMinorError();
-					await ReplyAsync($"Ik weet niet welke dag je bedoelt met {argument1} of {argument2}.");
+					await MinorError($"Ik weet niet welke dag je bedoelt met {argument1} of {argument2}.");
 					return new Tuple<bool, DayOfWeek, string>(false, default, "");
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
 		}
 
-		public async Task<IUserMessage> ReplyAsync(string message, string schedule, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		public async Task<IUserMessage> ReplyAsync(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
 			if (!(Context.User is IGuildUser user))
 				return ret;
-
-			ARS.OnRequestByUser(user, record, schedule);
+			
+			ARS.OnRequestByUser(user, schedule, identifier, record);
 			return ret;
 		}
 	}

@@ -20,16 +20,16 @@ namespace RoosterBot {
 			string teacher = GetTeacherAbbrFromName(leraar);
 
 			if (teacher == null) {
-				await ReactMinorError();
-				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
+				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teacher.Contains(", ")) { // There are multiple
 					await ReplyAsync(await RespondTeacherMultiple(false, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+					ARS.RemoveLastQuery(Context.User);
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teacher);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
-						await ReplyAsync(RespondTeacherCurrent(GetTeacherNameFromAbbr(teacher), record));
+						await ReplyAsync(RespondTeacherCurrent(GetTeacherNameFromAbbr(teacher), record), "StaffMember", teacher, record);
 					}
 				}
 			}
@@ -42,17 +42,17 @@ namespace RoosterBot {
 
 			string teacher = GetTeacherAbbrFromName(leraar);
 			if (teacher == null) {
-				await ReactMinorError();
-				await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
+				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teacher.Contains(", ")) { // There are multiple
 					await ReplyAsync(await RespondTeacherMultiple(true, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+					ARS.RemoveLastQuery(Context.User);
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teacher);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await ReplyAsync(RespondTeacherNext(GetTeacherNameFromAbbr(teacher), record));
+							await ReplyAsync(RespondTeacherNext(GetTeacherNameFromAbbr(teacher), record).FirstCharToUpper(), "StaffMember", teacher, record);
 						} else {
 							await FatalError("GetRecord(TS1)==null)");
 						}
@@ -65,8 +65,7 @@ namespace RoosterBot {
 		public async Task TeacherWeekdayCommand(string leraar, string weekdag) {
 			if (!await CheckCooldown())
 				return;
-
-
+			
 			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar, weekdag);
 
 			if (arguments.Item1) {
@@ -75,16 +74,16 @@ namespace RoosterBot {
 				string teacher = GetTeacherAbbrFromName(arguments.Item3);
 
 				if (teacher == null) {
-					await ReactMinorError();
-					await ReplyAsync("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
+					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
 					if (teacher.Contains(", ")) {
 						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teacherGiven, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+						ARS.RemoveLastQuery(Context.User);
 					} else {
 						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teacher);
 						if (result.Success) {
 							ScheduleRecord record = result.Value;
-							await ReplyAsync(RespondTeacherWeekday(GetTeacherNameFromAbbr(teacher), day, record));
+							await ReplyAsync(RespondTeacherWeekday(GetTeacherNameFromAbbr(teacher), day, record), "StaffMember", teacher, record);
 						}
 					}
 				}
@@ -108,7 +107,7 @@ namespace RoosterBot {
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
 						if (!string.IsNullOrWhiteSpace(record.Room)) {
-							response += $":round_pushpin: {record.Room}";
+							response += $":round_pushpin: {record.Room}\n";
 						}
 						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
 							response += $":busts_in_silhouette: {record.StudentSets}\n";
@@ -153,7 +152,10 @@ namespace RoosterBot {
 				} else {
 					response = $"{teacher}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 				}
-				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}";
+				if (record.Activity == "pauze")
+					response += " :thinking:";
+				response += "\n";
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {

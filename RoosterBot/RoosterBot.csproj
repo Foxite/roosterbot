@@ -149,7 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AfterRecordService.cs" />
+    <Compile Include="LastScheduleCommandService.cs" />
     <Compile Include="CommandEditService.cs" />
     <Compile Include="ConfigService.cs" />
     <Compile Include="EditableCmdModuleBase.cs" />

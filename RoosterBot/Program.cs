@@ -93,7 +93,7 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(configService))
-				.AddSingleton(new AfterRecordService(scheduleService))
+				.AddSingleton(new LastScheduleCommandService(scheduleService))
 				.BuildServiceProvider();
 			#endregion Start client
 
