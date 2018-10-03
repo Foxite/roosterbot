@@ -4,17 +4,14 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public abstract class EditableCmdModuleBase : ModuleBase<EditedCommandContext> {
+		public EditedCommandService EditService { get; set; }
+		
 		private bool m_ResponseWasModified;
-		private EditedCommandService m_EditService;
-
-		protected EditableCmdModuleBase(EditedCommandService editService) {
-			m_EditService = editService;
-		}
-
+		
 		protected async override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			if (Context.OriginalResponse == null) {
 				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
-				m_EditService.AddResponse(Context.Message, response);
+				EditService.AddResponse(Context.Message, response);
 				return response;
 			} else {
 				await Context.OriginalResponse.ModifyAsync((msgProps) => {

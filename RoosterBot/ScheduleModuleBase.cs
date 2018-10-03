@@ -1,20 +1,76 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
-	public abstract class ScheduleModuleBase : EditableCmdModuleBase {
-		protected ScheduleService Service { get; }
-		protected ConfigService Config { get; }
-		protected SNSService SNS { get; }
-		protected string LogTag { get; }
+	public class ScheduleModuleBase : EditableCmdModuleBase {
+		public ScheduleService Service { get; set; }
+		public ConfigService Config { get; set; }
+		public SNSService SNS { get; set; }
+		public AfterRecordService ARS { get; set; }
 
-		public ScheduleModuleBase(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns, string logTag) : base(ecs) {
-			Service = serv;
-			Config = config;
-			LogTag = logTag;
-			SNS = sns;
+		private readonly string LogTag;
+
+		public ScheduleModuleBase() : base() {
+			LogTag = "SMB";
+		}
+
+		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
+		public async Task GetAfterCommand() {
+			if (!(Context.User is IGuildUser user))
+				return;
+			ScheduleQueryContext query = ARS.GetRecordAfter(user);
+			if (query.Equals(default(ScheduleQueryContext))) {
+				await ReactMinorError();
+				await ReplyAsync("Na wat?");
+			} else {
+				ScheduleRecord record = query.Record;
+				string response;
+				if (query.SourceSchedule == "StudentSets") {
+					if (record == null) {
+						response = $"{record.StudentSets}: Hierna\n";
+					} else {
+						response = $"{record.StudentSets}: Na de vorige les\n";
+					}
+				} else if (query.SourceSchedule == "StaffMember") {
+					if (record == null) {
+						response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Hiermma\n";
+					} else {
+						response = $"{GetTeacherNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
+					}
+				} else if (query.SourceSchedule == "Room") {
+					if (record == null) {
+						response = $"{GetTeacherNameFromAbbr(record.Room)}: Hierna\n";
+					} else {
+						response = $"{GetTeacherNameFromAbbr(record.Room)}: Na de vorige les\n";
+					}
+				} else {
+					await FatalError("query.SourceSchedule is not recognized");
+					return;
+				}
+				response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+
+				if (record.Activity != "stdag doc") {
+					if (record.Activity != "pauze") {
+						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
+							response += $":bust_in_silhouette: {teachers}\n";
+						}
+						if (query.SourceSchedule != "StudentSets" && !string.IsNullOrWhiteSpace(record.StudentSets)) {
+							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						}
+						if (query.SourceSchedule != "Room" && !string.IsNullOrWhiteSpace(record.Room)) {
+							response += $":round_pushpin: {record.Room}\n";
+						}
+					}
+
+					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					response += $":stopwatch: {record.Duration}\n";
+				}
+				await ReplyAsync(response, query.SourceSchedule, record);
+			}
 		}
 
 		protected string GetTeacherNameFromAbbr(string teacherString) {
@@ -329,8 +385,7 @@ namespace RoosterBot {
 			if (Config.ErrorReactions) {
 				await AddReaction("🚫");
 			}
-			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
-			await ReplyAsync(response);
+			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n");
 		}
 
 		protected async Task<bool> CheckCooldown() {
@@ -418,6 +473,15 @@ namespace RoosterBot {
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
+		}
+
+		public async Task<IUserMessage> ReplyAsync(string message, string schedule, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
+			if (!(Context.User is IGuildUser user))
+				return ret;
+
+			ARS.OnRequestByUser(user, record, schedule);
+			return ret;
 		}
 	}
 }

@@ -5,7 +5,11 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public class StudentScheduleModule : ScheduleModuleBase {
-		public StudentScheduleModule(EditedCommandService ecs, ScheduleService serv, ConfigService config, SNSService sns) : base(ecs, serv, config, sns, "SSM") { }
+		private readonly string LogTag;
+
+		public StudentScheduleModule() : base() {
+			LogTag = "SSM";
+		}
 
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
@@ -20,7 +24,7 @@ namespace RoosterBot {
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response);
+					await ReplyAsync(response, "StudentSets", null);
 				} else {
 					string response = $"{record.StudentSets}: Nu\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
@@ -39,7 +43,7 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response);
+					await ReplyAsync(response, "StudentSets", record);
 				}
 			}
 		}
@@ -80,7 +84,7 @@ namespace RoosterBot {
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
-					await ReplyAsync(response);
+					await ReplyAsync(response, "StudentSets", record);
 				}
 			}
 		}
@@ -103,7 +107,7 @@ namespace RoosterBot {
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += "\nDat is dan ook in het weekend.";
 						}
-						await ReplyAsync(response);
+						await ReplyAsync(response, "StudentSets", record);
 					} else {
 						string response;
 						if (DateTime.Today.DayOfWeek == day) {
@@ -135,7 +139,7 @@ namespace RoosterBot {
 							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 							response += $":stopwatch: {record.Duration}\n";
 						}
-						await ReplyAsync(response);
+						await ReplyAsync(response, "StudentSets", record);
 					}
 				}
 			}

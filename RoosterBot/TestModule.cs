@@ -2,11 +2,12 @@
 
 namespace RoosterBot {
 	public class TestModule : EditableCmdModuleBase {
-		private ConfigService Config;
+		public ConfigService Config { get; set; }
+		
+		private readonly string LogTag;
 
-		public TestModule(EditedCommandService ecs, ConfigService configService) : base(ecs) {
-			Config = configService;
+		public TestModule() : base() {
+			LogTag = "TestModule";
 		}
-
 	}
 }
