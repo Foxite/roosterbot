@@ -32,7 +32,9 @@ namespace RoosterBot {
 					if (record.Activity != "stdag doc") {
 						if (record.Activity != "pauze") {
 							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
-							if (!string.IsNullOrWhiteSpace(teachers)) {
+							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.05) {
+								response += $"<:test_emoji:496301498234437656> {teachers}\n";
+							} else {
 								response += $":bust_in_silhouette: {teachers}\n";
 							}
 							if (!string.IsNullOrWhiteSpace(record.Room)) {
