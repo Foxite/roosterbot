@@ -49,6 +49,9 @@ namespace RoosterBot {
 		/// </summary>
 		/// <returns>1: true if the user is not in cooldown (in this case, the cooldown will be reset). 2: if the user was already warned for their cooldown excession.</returns>
 		public Tuple<bool, bool> CheckCooldown(ulong userId) {
+#if DEBUG
+			return new Tuple<bool, bool>(true, false);
+#else
 			DateTime now = DateTime.UtcNow;
 			if (m_CooldownList.ContainsKey(userId)) {
 				if (now.AddSeconds(-Cooldown).Ticks > m_CooldownList[userId].TimeLastCommand) { // Note: DateTime.AddSeconds() returns a *new* DateTime object so this does not actually change {now}.
@@ -64,6 +67,7 @@ namespace RoosterBot {
 				m_CooldownList.TryAdd(userId, new CooldownData(userId, now.Ticks));
 				return new Tuple<bool, bool>(true, false);
 			}
+			#endif
 		}
 
 		private class CooldownData {
