@@ -11,7 +11,7 @@ namespace RoosterBot {
 			LogTag = "SSM";
 		}
 
-		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
+		[Command("leerlingnu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
@@ -50,7 +50,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
+		[Command("leerlinghierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
@@ -91,12 +91,12 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
-		public async Task StudentWeekdayCommand(string klas, string weekdag) {
+		[Command("leerlingdag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
+		public async Task StudentWeekdayCommand([Remainder] string klas_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
 
-			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(klas, weekdag);
+			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(klas_en_weekdag);
 
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
@@ -141,14 +141,14 @@ namespace RoosterBot {
 							response += $":stopwatch: {record.Duration}\n";
 						}
 					}
-					await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
+					await ReplyAsync(response, "StudentSets", clazz, record);
 				}
 			}
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
+		[Command("leerlingmorgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
 		public async Task StudentTomorrowCommand(string klas) {
-			await StudentWeekdayCommand(klas, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await StudentWeekdayCommand(klas + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 	}
 }

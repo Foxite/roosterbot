@@ -149,6 +149,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandMatchingService.cs" />
+    <Compile Include="GenericCommandsModule.cs" />
     <Compile Include="LastScheduleCommandService.cs" />
     <Compile Include="CommandEditService.cs" />
     <Compile Include="ConfigService.cs" />

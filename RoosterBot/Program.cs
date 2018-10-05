@@ -10,12 +10,17 @@ using System.IO;
 
 namespace RoosterBot {
 	public class Program {
-		public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+		public static Program Instance { get; private set; }
+
+		private static bool s_StopFlagSet = false;
 
 		private DiscordSocketClient m_Client;
 		private IServiceProvider m_Services;
 
-		private static bool s_StopFlagSet = false;
+		public static void Main(string[] args) {
+			Instance = new Program();
+			Instance.MainAsync().GetAwaiter().GetResult();
+		}
 
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
@@ -79,10 +84,11 @@ namespace RoosterBot {
 			commands.Log += Logger.LogSync;
 			// Add these manually to enforce command order when displayed by !help
 			await commands.AddModuleAsync<MetaCommandsModule>();
+			await commands.AddModuleAsync<GenericCommandsModule>();
+			await commands.AddModuleAsync<ScheduleModuleBase>();
 			await commands.AddModuleAsync<StudentScheduleModule>();
 			await commands.AddModuleAsync<TeacherScheduleModule>();
 			await commands.AddModuleAsync<RoomScheduleModule>();
-			await commands.AddModuleAsync<ScheduleModuleBase>();
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
@@ -94,6 +100,7 @@ namespace RoosterBot {
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(configService))
 				.AddSingleton(new LastScheduleCommandService(scheduleService))
+				.AddSingleton(new CommandMatchingService())
 				.BuildServiceProvider();
 			#endregion Start client
 
@@ -166,6 +173,29 @@ namespace RoosterBot {
 			// rather an object stating if the command executed successfully)
 			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
 			IResult result = await commandService.ExecuteAsync(context, argPos, m_Services);
+			if (!result.IsSuccess) {
+				if (initialResponse == null) {
+					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
+					commandService.AddResponse(context.Message, response);
+				} else {
+					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
+				}
+			}
+		}
+
+		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
+			// Create a number to track where the prefix ends and the command begins
+			int argPos = 0;
+			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
+			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+				return;
+
+			// Create a Command Context
+			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
+			// Execute the command. (result does not indicate a return value, 
+			// rather an object stating if the command executed successfully)
+			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
+			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
 			if (!result.IsSuccess) {
 				if (initialResponse == null) {
 					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);

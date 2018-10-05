@@ -62,11 +62,11 @@ namespace RoosterBot {
 		}
 
 		[Command("leraardag", RunMode = RunMode.Async), Summary("Welke les een leraar als eerste heeft op een dag")]
-		public async Task TeacherWeekdayCommand(string leraar, string weekdag) {
+		public async Task TeacherWeekdayCommand([Remainder] string leraar_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
 			
-			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar, weekdag);
+			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar_en_weekdag);
 
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
@@ -91,8 +91,8 @@ namespace RoosterBot {
 		}
 
 		[Command("leraarmorgen", RunMode = RunMode.Async), Summary("Welke les een leraar morgen als eerste heeft")]
-		public async Task StudentTomorrowCommand(string lokaal) {
-			await TeacherWeekdayCommand(lokaal, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+		public async Task StudentTomorrowCommand([Remainder] string leraar) {
+			await TeacherWeekdayCommand(leraar + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().

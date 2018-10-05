@@ -104,7 +104,7 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		protected string GetSingleTeacherNameFromAbbr(string abbr) {
+		public static string GetSingleTeacherNameFromAbbr(string abbr) {
 			switch (abbr) {
 			case "ATE":
 				return "Arnoud Telkamp";
@@ -165,7 +165,7 @@ namespace RoosterBot {
 			}
 		}
 
-		protected string GetTeacherAbbrFromName(string name) {
+		public static string GetTeacherAbbrFromName(string name) {
 			if (name.Length < 3)
 				return null;
 
@@ -261,7 +261,7 @@ namespace RoosterBot {
 			return null;
 		}
 
-		protected string GetActivityFromAbbr(string abbr) {
+		public static string GetActivityFromAbbr(string abbr) {
 			switch (abbr) {
 			case "ned":
 				return "Nederlands";
@@ -413,6 +413,9 @@ namespace RoosterBot {
 		}
 
 		protected async Task<bool> CheckCooldown() {
+			if (Context.User.Id == 152412662972678144)
+				return false;
+
 			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
 			if (result.Item1) {
 				return true;
@@ -426,8 +429,8 @@ namespace RoosterBot {
 				return false;
 			}
 		}
-		
-		protected DayOfWeek GetDayOfWeekFromString(string dayofweek) {
+
+		public static DayOfWeek GetDayOfWeekFromString(string dayofweek) {
 			switch (dayofweek) {
 			case "ma":
 			case "maandag":
@@ -455,7 +458,7 @@ namespace RoosterBot {
 			}
 		}
 
-		protected string GetStringFromDayOfWeek(DayOfWeek day) {
+		public static string GetStringFromDayOfWeek(DayOfWeek day) {
 			switch (day) {
 			case DayOfWeek.Monday:
 				return "maandag";
@@ -480,18 +483,19 @@ namespace RoosterBot {
 		/// Given two command arguments, this determines which is a DayOfWeek and which is not.
 		/// </summary>
 		/// <returns>bool: Success, DayOfWeek: One of the arguments as DOW, string: the other argument as received</returns>
-		protected async Task<Tuple<bool, DayOfWeek, string>> GetValuesFromArguments(string argument1, string argument2) {
+		protected async Task<Tuple<bool, DayOfWeek, string>> GetValuesFromArguments(string arguments) {
 			DayOfWeek day;
 			string entry;
+			string[] argumentWords = arguments.Split(' ');
 			try {
-				day = GetDayOfWeekFromString(argument1);
-				entry = argument2;
+				day = GetDayOfWeekFromString(argumentWords[0]);
+				entry = argumentWords[argumentWords.Length - 1];
 			} catch (ArgumentException) {
 				try {
-					day = GetDayOfWeekFromString(argument2);
-					entry = argument1;
+					day = GetDayOfWeekFromString(argumentWords[argumentWords.Length - 1]);
+					entry = argumentWords[0];
 				} catch (ArgumentException) {
-					await MinorError($"Ik weet niet welke dag je bedoelt met {argument1} of {argument2}.");
+					await MinorError($"Ik weet niet welk deel van \"" + arguments + "\" een dag is.");
 					return new Tuple<bool, DayOfWeek, string>(false, default, "");
 				}
 			}

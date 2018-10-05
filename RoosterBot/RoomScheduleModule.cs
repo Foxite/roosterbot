@@ -56,7 +56,7 @@ namespace RoosterBot {
 				if (record == null) {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
-					string response = $"{record.Room}: Nu\n";
+					string response = $"{record.Room}: Hierna\n";
 					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
@@ -80,12 +80,12 @@ namespace RoosterBot {
 		}
 
 		[Command("lokaaldag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
-		public async Task RoomWeekdayCommand(string lokaal, string weekdag) {
+		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
 
 
-			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal, weekdag);
+			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
 
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
@@ -120,14 +120,14 @@ namespace RoosterBot {
 							response += $":stopwatch: {record.Duration}\n";
 						}
 					}
-					await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
+					await ReplyAsync(response, "Room", room, record);
 				}
 			}
 		}
 
 		[Command("lokaalmorgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
 		public async Task RoomTomorrowCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal, GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await RoomWeekdayCommand(lokaal + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 	}
 }
