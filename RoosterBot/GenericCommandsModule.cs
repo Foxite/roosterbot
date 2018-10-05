@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
+using Discord.Net;
 
 namespace RoosterBot {
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
+		public LastScheduleCommandService LastService { get; set; }
+		public ConfigService Config { get; set; }
 
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task GenericCurrentCommand([Remainder] string wat) {
@@ -43,19 +43,19 @@ namespace RoosterBot {
 
 				string result = MatchCommandNoWeekday(paramWithoutFirst, command);
 				if (result != null) {
-					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + argumentsAsList[0], Context.Message);
+					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + parameters, Context.Message);
 				} else {
 					result = MatchCommandNoWeekday(paramWithoutLast, command);
 					if (result != null) {
-						await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + argumentsAsList[argumentsAsList.Count - 1], Context.Message);
+						await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + parameters, Context.Message);
 					} else {
-						await FatalError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
+						await MinorError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
 					}
 				}
 			} else {
 				string result = MatchCommandNoWeekday(parameters, command);
 				if (result == null) {
-					await FatalError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
+					await MinorError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
 				} else {
 					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result, Context.Message);
 				}
@@ -65,19 +65,28 @@ namespace RoosterBot {
 		private string MatchCommandNoWeekday(string parameters, string command) {
 			switch (MatchingService.MatchCommand(parameters)) {
 			case CommandType.Student:
-				return "leerling" + command + " " + parameters;
+				return "leerling" + command;
 			case CommandType.Teacher:
-				return "leraar" + command + " " + parameters;
+				return "leraar" + command;
 			case CommandType.Room:
-				return "lokaal" + command + " " + parameters;
+				return "lokaal" + command;
 			default:
 				return null;
 			}
 		}
 
-		private async Task FatalError(string message) {
+		private async Task MinorError(string message) {
+			LastService.RemoveLastQuery(Context.User);
+			if (Config.ErrorReactions) {
+				await AddReaction("❌");
+			}
 			await ReplyAsync(message);
+		}
 
+		protected async Task AddReaction(string unicode) {
+			try {
+				await Context.Message.AddReactionAsync(new Emoji(unicode));
+			} catch (HttpException) { } // Permission denied
 		}
 	}
 }
