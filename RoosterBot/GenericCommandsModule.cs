@@ -11,22 +11,24 @@ namespace RoosterBot {
 		public LastScheduleCommandService LastService { get; set; }
 		public ConfigService Config { get; set; }
 
-		[Priority(1), Command("nu", RunMode = RunMode.Async)]
+		public GenericCommandsModule() : base() { }
+
+		[Priority(10), Command("nu", RunMode = RunMode.Async)]
 		public async Task GenericCurrentCommand([Remainder] string wat) {
 			await MatchCommand(wat, "nu"); // TODO display how much time is left
 		}
 
-		[Priority(1), Command("hierna", RunMode = RunMode.Async)]
+		[Priority(10), Command("hierna", RunMode = RunMode.Async)]
 		public async Task GenericNextCommand([Remainder] string wat) {
 			await MatchCommand(wat, "hierna");
 		}
 
-		[Priority(1), Command("dag", RunMode = RunMode.Async)]
+		[Priority(10), Command("dag", RunMode = RunMode.Async)]
 		public async Task GenericWeekdayCommand([Remainder] string wat) {
 			await MatchCommand(wat, "dag");
 		}
 
-		[Priority(1), Command("morgen", RunMode = RunMode.Async)]
+		[Priority(10), Command("morgen", RunMode = RunMode.Async)]
 		public async Task GenericTomorrowCommand([Remainder] string wat) {
 			await MatchCommand(wat, "morgen");
 		}
@@ -65,11 +67,11 @@ namespace RoosterBot {
 		private string MatchCommandNoWeekday(string parameters, string command) {
 			switch (MatchingService.MatchCommand(parameters)) {
 			case CommandType.Student:
-				return "leerling" + command;
+				return "klas " + command;
 			case CommandType.Teacher:
-				return "leraar" + command;
+				return "leraar " + command;
 			case CommandType.Room:
-				return "lokaal" + command;
+				return "lokaal " + command;
 			default:
 				return null;
 			}

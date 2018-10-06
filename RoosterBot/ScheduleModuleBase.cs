@@ -502,7 +502,7 @@ namespace RoosterBot {
 			} catch (ArgumentException) {
 				try {
 					day = GetDayOfWeekFromString(argumentWords[argumentWords.Length - 1]);
-					entry = string.Join(" ", argumentWords, 0, argumentWords.Length - 2); // get everything except last
+					entry = string.Join(" ", argumentWords, 0, argumentWords.Length - 1); // get everything except last
 				} catch (ArgumentException) {
 					await MinorError($"Ik weet niet welk deel van \"" + arguments + "\" een dag is.");
 					return new Tuple<bool, DayOfWeek, string>(false, default, "");
