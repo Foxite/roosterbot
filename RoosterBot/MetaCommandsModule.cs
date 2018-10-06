@@ -22,6 +22,9 @@ namespace RoosterBot {
 
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
+			if (!await CheckCooldown())
+				return;
+
 			// Print list of commands
 			string response = "Al mijn commands beginnen met een `!`. Hierdoor raken andere bots niet in de war.\n\n";
 			response += "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
@@ -66,14 +69,33 @@ namespace RoosterBot {
 				try {
 					Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reloading config.", ex);
 					if (Config.ErrorReactions) {
-						try {
-							await Context.Message.AddReactionAsync(new Emoji("🚫"));
-						} catch (HttpException) { } // Permission denied
+						await AddReaction("🚫");
 					}
 					await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "Critical error. Restart bot through AWS."; });
 				} finally {
 					await ShutdownCommand();
 				}
+			}
+		}
+
+		protected async Task AddReaction(string unicode) {
+			try {
+				await Context.Message.AddReactionAsync(new Emoji(unicode));
+			} catch (HttpException) { } // Permission denied
+		}
+
+		protected async Task<bool> CheckCooldown() {
+			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
+			if (result.Item1) {
+				return true;
+			} else {
+				if (!result.Item2) {
+					if (Config.ErrorReactions) {
+						await AddReaction("⚠");
+					}
+					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
+				}
+				return false;
 			}
 		}
 	}

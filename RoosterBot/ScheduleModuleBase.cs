@@ -22,6 +22,10 @@ namespace RoosterBot {
 		public async Task GetAfterCommand() {
 			if (!(Context.User is IGuildUser user))
 				return;
+
+			if (!await CheckCooldown())
+				return;
+
 			ScheduleCommandInfo query = ARS.GetLastCommandFromUser(user);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
