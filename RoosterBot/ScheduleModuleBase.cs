@@ -425,9 +425,6 @@ namespace RoosterBot {
 		}
 
 		protected async Task<bool> CheckCooldown() {
-			if (Context.User.Id == 152412662972678144)
-				return false;
-
 			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
 			if (result.Item1) {
 				return true;

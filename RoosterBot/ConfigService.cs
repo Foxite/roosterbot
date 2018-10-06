@@ -67,7 +67,7 @@ namespace RoosterBot {
 				m_CooldownList.TryAdd(userId, new CooldownData(userId, now.Ticks));
 				return new Tuple<bool, bool>(true, false);
 			}
-			#endif
+#endif
 		}
 
 		private class CooldownData {
