@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot {
+	[Group("klas")]
 	public class StudentScheduleModule : ScheduleModuleBase {
 		private readonly string LogTag;
 
@@ -11,7 +12,7 @@ namespace RoosterBot {
 			LogTag = "SSM";
 		}
 
-		[Command("leerlingnu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
+		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
@@ -33,7 +34,7 @@ namespace RoosterBot {
 						if (record.Activity != "pauze") {
 							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
-								response += $"<:test_emoji:496301498234437656> {teachers}\n";
+								response += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
 								response += $":bust_in_silhouette: {teachers}\n";
 							}
@@ -51,7 +52,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("leerlinghierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
+		[Command("hierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
 			if (!await CheckCooldown())
 				return;
@@ -71,7 +72,7 @@ namespace RoosterBot {
 							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 							if (!string.IsNullOrWhiteSpace(teachers)) {
 								if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
-									response += $"<:test_emoji:496301498234437656> {teachers}\n";
+									response += $"<:VRjoram:392762653367336960> {teachers}\n";
 								} else {
 									response += $":bust_in_silhouette: {teachers}\n";
 								}
@@ -92,7 +93,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("leerlingdag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
+		[Command("dag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
 		public async Task StudentWeekdayCommand([Remainder] string klas_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
@@ -147,7 +148,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("leerlingmorgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
+		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
 		public async Task StudentTomorrowCommand(string klas) {
 			await StudentWeekdayCommand(klas + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}

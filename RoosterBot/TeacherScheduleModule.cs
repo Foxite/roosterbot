@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot {
+	[Group("leraar")]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		private string LogTag { get; }
 
@@ -12,7 +13,7 @@ namespace RoosterBot {
 			LogTag = "TSM";
 		}
 
-		[Command("leraarnu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
+		[Command("nu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {
 			if (!await CheckCooldown())
 				return;
@@ -35,7 +36,7 @@ namespace RoosterBot {
 			}
 		}
 		
-		[Command("leraarhierna", RunMode = RunMode.Async), Summary("Waar een leraar hierna mee bezig is")]
+		[Command("hierna", RunMode = RunMode.Async), Summary("Waar een leraar hierna mee bezig is")]
 		public async Task TeacherNextCommand([Remainder] string leraar) {
 			if (!await CheckCooldown())
 				return;
@@ -61,7 +62,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("leraardag", RunMode = RunMode.Async), Summary("Welke les een leraar als eerste heeft op een dag")]
+		[Command("dag", RunMode = RunMode.Async), Summary("Welke les een leraar als eerste heeft op een dag")]
 		public async Task TeacherWeekdayCommand([Remainder] string leraar_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
@@ -90,7 +91,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("leraarmorgen", RunMode = RunMode.Async), Summary("Welke les een leraar morgen als eerste heeft")]
+		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les een leraar morgen als eerste heeft")]
 		public async Task StudentTomorrowCommand([Remainder] string leraar) {
 			await TeacherWeekdayCommand(leraar + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}

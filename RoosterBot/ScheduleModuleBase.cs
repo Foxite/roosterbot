@@ -75,7 +75,7 @@ namespace RoosterBot {
 						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
 						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
-								response += $"<:test_emoji:496301498234437656> {teachers}\n";
+								response += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
 								response += $":bust_in_silhouette: {teachers}\n";
 							}

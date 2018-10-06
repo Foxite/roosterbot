@@ -13,7 +13,6 @@ namespace RoosterBot {
 		public ConfigService Config { get; set; }
 		public ScheduleService Schedules { get; set; }
 		public EditedCommandService CmdService { get; set; }
-		public DiscordSocketClient DiscordClient { get; set; }
 		
 		private readonly string LogTag;
 
@@ -24,17 +23,17 @@ namespace RoosterBot {
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
 			// Print list of commands
-			string response = "Commands die je bij mij kan gebruiken:\n";
-			foreach (CommandInfo cmd in CmdService.Commands) {
-				if (cmd.Module.Name == this.GetType().Name) {
-					continue;
-				}
-				response += "- `" + Config.CommandPrefix + cmd.Name;
-				foreach (ParameterInfo parameter in cmd.Parameters) {
-					response += $" <{parameter.Name}>";
-				}
-				response += $"`: {cmd.Summary}\n";
-			}
+			string response = "Al mijn commands beginnen met een `!`. Hierdoor raken andere bots niet in de war.\n\n";
+			response += "Je kan opvragen welke lessen een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
+			response += "Ik ken de afkortingen, voornamen, en alternative spellingen van alle leraren.\n";
+			response += "`!nu 1gd2`, `!nu laurence candel`, `!nu laurens`, `!nu lca`, `!nu a223`\n";
+			response += "De bot begrijpt automatisch of je het over een klas, leraar of lokaal hebt.\n\n";
+			response += "Je kan ook opvragen wat er hierna, op een bepaalde weekdag, of morgen als eerste is.\n";
+			response += "`!hierna 2gd1`, `!dag lance woensdag` (de volgorde maakt niet uit: `!dag wo lkr` doet hetzelfde), `!morgen b114`\n\n";
+			response += "Je kan ook zien wat de klas/leraar/lokaal heeft na wat ik je net heb verteld. Dus als je pauze hebt, kun je zien wat je na de pauze hebt.\n";
+			response += "`!hierna 3ga1` en dan `!daarna`. Je kan `!daarna` zo vaak gebruiken als je wilt.\n\n";
+			response += "Als ik niet begrijp of je het over een klas, leraar, of lokaal hebt, kun je dit in de command zetten:\n";
+			response += "`!klasnu 2ga1`, `leraarnu martijn`, `!lokaalmorgen a128`";
 			await ReplyAsync(response);
 		}
 
@@ -60,7 +59,7 @@ namespace RoosterBot {
 					readCSVs[i] = Schedules.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
 					i++;
 				}
-				await DiscordClient.SetGameAsync(Config.GameString);
+				await (Context.Client as DiscordSocketClient)?.SetGameAsync(Config.GameString);
 				Task.WaitAll(readCSVs);
 				await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "OK."; });
 			} catch (Exception ex) {

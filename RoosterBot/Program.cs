@@ -7,6 +7,7 @@ using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace RoosterBot {
 	public class Program {
@@ -82,13 +83,7 @@ namespace RoosterBot {
 
 			EditedCommandService commands = new EditedCommandService(m_Client, HandleCommand);
 			commands.Log += Logger.LogSync;
-			// Add these manually to enforce command order when displayed by !help
-			await commands.AddModuleAsync<MetaCommandsModule>();
-			await commands.AddModuleAsync<GenericCommandsModule>();
-			await commands.AddModuleAsync<ScheduleModuleBase>();
-			await commands.AddModuleAsync<StudentScheduleModule>();
-			await commands.AddModuleAsync<TeacherScheduleModule>();
-			await commands.AddModuleAsync<RoomScheduleModule>();
+			await commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();

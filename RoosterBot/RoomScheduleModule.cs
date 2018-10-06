@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot {
+	[Group("lokaal")]
 	public class RoomScheduleModule : ScheduleModuleBase {
 		private string LogTag { get; }
 
@@ -11,7 +12,7 @@ namespace RoosterBot {
 			LogTag = "RSM";
 		}
 
-		[Command("lokaalnu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
+		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
 			if (!await CheckCooldown())
 				return;
@@ -46,7 +47,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("lokaalhierna", RunMode = RunMode.Async), Summary("Wat er hierna in een lokaal plaatsvindt")]
+		[Command("hierna", RunMode = RunMode.Async), Summary("Wat er hierna in een lokaal plaatsvindt")]
 		private async Task RoomNextCommand(string lokaal) {
 			if (!await CheckCooldown())
 				return;
@@ -80,7 +81,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("lokaaldag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
+		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
 		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
@@ -126,7 +127,7 @@ namespace RoosterBot {
 			}
 		}
 
-		[Command("lokaalmorgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
+		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
 		public async Task RoomTomorrowCommand(string lokaal) {
 			await RoomWeekdayCommand(lokaal + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}

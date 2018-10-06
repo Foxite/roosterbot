@@ -11,22 +11,22 @@ namespace RoosterBot {
 		public LastScheduleCommandService LastService { get; set; }
 		public ConfigService Config { get; set; }
 
-		[Command("nu", RunMode = RunMode.Async)]
+		[Priority(1), Command("nu", RunMode = RunMode.Async)]
 		public async Task GenericCurrentCommand([Remainder] string wat) {
 			await MatchCommand(wat, "nu"); // TODO display how much time is left
 		}
 
-		[Command("hierna", RunMode = RunMode.Async)]
+		[Priority(1), Command("hierna", RunMode = RunMode.Async)]
 		public async Task GenericNextCommand([Remainder] string wat) {
 			await MatchCommand(wat, "hierna");
 		}
 
-		[Command("dag", RunMode = RunMode.Async)]
+		[Priority(1), Command("dag", RunMode = RunMode.Async)]
 		public async Task GenericWeekdayCommand([Remainder] string wat) {
 			await MatchCommand(wat, "dag");
 		}
 
-		[Command("morgen", RunMode = RunMode.Async)]
+		[Priority(1), Command("morgen", RunMode = RunMode.Async)]
 		public async Task GenericTomorrowCommand([Remainder] string wat) {
 			await MatchCommand(wat, "morgen");
 		}
