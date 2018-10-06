@@ -114,7 +114,8 @@ namespace RoosterBot {
 						}
 					}
 					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					response += $":stopwatch: {record.Duration}\n";
+					TimeSpan timeLeft = record.End - DateTime.Now;
+					response += $":stopwatch: {record.Duration} - nog {timeLeft.Hours}:{timeLeft.Minutes}\n";
 				}
 			}
 			return response;

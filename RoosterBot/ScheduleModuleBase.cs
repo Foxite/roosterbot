@@ -29,10 +29,21 @@ namespace RoosterBot {
 				ScheduleRecord record = query.Record;
 				string response;
 				bool nullRecord = record == null;
-				if (nullRecord) {
-					record = Service.GetNextRecord(query.SourceSchedule, query.Identifier);
-				} else {
-					record = Service.GetRecordAfter(query.SourceSchedule, query.Record);
+				try {
+					if (nullRecord) {
+						record = Service.GetNextRecord(query.SourceSchedule, query.Identifier);
+					} else {
+						record = Service.GetRecordAfter(query.SourceSchedule, query.Record);
+					}
+				} catch (ScheduleNotFoundException) {
+					await MinorError("Dat item staat niet op mijn rooster.");
+					return;
+				} catch (RecordsOutdatedException) {
+					await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+					return;
+				} catch (Exception ex) {
+					await FatalError(ex.GetType().Name);
+					throw;
 				}
 
 				if (query.SourceSchedule == "StudentSets") {
@@ -490,11 +501,11 @@ namespace RoosterBot {
 			string[] argumentWords = arguments.Split(' ');
 			try {
 				day = GetDayOfWeekFromString(argumentWords[0]);
-				entry = string.Join(" ", argumentWords.; // get everything except first
+				entry = string.Join(" ", argumentWords, 1, argumentWords.Length - 1); // get everything except first
 			} catch (ArgumentException) {
 				try {
 					day = GetDayOfWeekFromString(argumentWords[argumentWords.Length - 1]);
-					entry = argumentWords[0]; // get everything except last
+					entry = string.Join(" ", argumentWords, 0, argumentWords.Length - 2); // get everything except last
 				} catch (ArgumentException) {
 					await MinorError($"Ik weet niet welk deel van \"" + arguments + "\" een dag is.");
 					return new Tuple<bool, DayOfWeek, string>(false, default, "");

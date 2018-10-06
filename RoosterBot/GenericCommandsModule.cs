@@ -57,7 +57,7 @@ namespace RoosterBot {
 				if (result == null) {
 					await MinorError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
 				} else {
-					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result, Context.Message);
+					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + parameters, Context.Message);
 				}
 			}
 		}

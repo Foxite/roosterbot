@@ -38,7 +38,8 @@ namespace RoosterBot {
 							response += $":busts_in_silhouette: {record.StudentSets}\n";
 						}
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-						response += $":stopwatch: {record.Duration}\n";
+						TimeSpan timeLeft = record.End - DateTime.Now;
+						response += $":stopwatch: {record.Duration} - nog {timeLeft.Hours}:{timeLeft.Minutes}\n";
 					}
 				}
 				await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
