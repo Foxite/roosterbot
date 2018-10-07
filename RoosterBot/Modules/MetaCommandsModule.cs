@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
