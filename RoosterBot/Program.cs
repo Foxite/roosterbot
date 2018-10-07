@@ -16,6 +16,8 @@ namespace RoosterBot {
 		private static bool s_StopFlagSet = false;
 
 		private DiscordSocketClient m_Client;
+		private EditedCommandService m_Comands;
+		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
 
 		public static void Main(string[] args) {
@@ -41,12 +43,10 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
-
-			ConfigService configService;
 			string authToken;
 			Dictionary<string, string> schedules;
 			try {
-				configService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken, out schedules);
+				m_ConfigService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken, out schedules);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
 				Console.ReadKey();
@@ -81,19 +81,19 @@ namespace RoosterBot {
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
 
-			EditedCommandService commands = new EditedCommandService(m_Client, HandleCommand);
-			commands.Log += Logger.LogSync;
-			await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+			m_Comands = new EditedCommandService(m_Client, HandleCommand);
+			m_Comands.Log += Logger.LogSync;
+			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
 			m_Services = new ServiceCollection()
-				.AddSingleton(configService)
+				.AddSingleton(m_ConfigService)
 				.AddSingleton(scheduleService)
-				.AddSingleton(commands)
+				.AddSingleton(m_Comands)
 				.AddSingleton(m_Client)
-				.AddSingleton(new SNSService(configService))
+				.AddSingleton(new SNSService(m_ConfigService))
 				.AddSingleton(new LastScheduleCommandService(scheduleService))
 				.AddSingleton(new CommandMatchingService())
 				.BuildServiceProvider();
@@ -103,7 +103,7 @@ namespace RoosterBot {
 			ProgramState state = ProgramState.BeforeStart;
 			m_Client.Ready += async () => {
 				state = ProgramState.BotRunning;
-				await m_Client.SetGameAsync(configService.GameString);
+				await m_Client.SetGameAsync(m_ConfigService.GameString);
 			};
 
 			Console.CancelKeyPress += (o, e) => {
@@ -160,18 +160,17 @@ namespace RoosterBot {
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
 			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
 				return;
 			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 			// Execute the command. (result does not indicate a return value, 
 			// rather an object stating if the command executed successfully)
-			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
-			IResult result = await commandService.ExecuteAsync(context, argPos, m_Services);
+			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
 			if (!result.IsSuccess) {
 				if (initialResponse == null) {
 					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
-					commandService.AddResponse(context.Message, response);
+					m_Comands.AddResponse(context.Message, response);
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
 				}
