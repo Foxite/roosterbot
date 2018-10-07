@@ -4,19 +4,10 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.Net;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
-		public ConfigService Config { get; set; }
-		public ScheduleService Schedules { get; set; }
-		public EditedCommandService CmdService { get; set; }
-		
-		private readonly string LogTag;
-
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}
@@ -76,42 +67,6 @@ namespace RoosterBot.Modules {
 				} finally {
 					await ShutdownCommand();
 				}
-			}
-		}
-
-		protected async Task AddReaction(string unicode) {
-			try {
-				await Context.Message.AddReactionAsync(new Emoji(unicode));
-			} catch (HttpException) { } // Permission denied
-		}
-
-		protected async Task<bool> CheckCooldown() {
-			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
-			if (result.Item1) {
-				return true;
-			} else {
-				if (!result.Item2) {
-					if (Config.ErrorReactions) {
-						await AddReaction("⚠");
-					}
-					await ReplyAsync(Context.User.Mention + ", je gaat een beetje te snel.");
-				}
-				return false;
-			}
-		}
-	}
-
-	public class RequireBotManagerAttribute : PreconditionAttribute {
-		public async override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			if (context.User.Id == services.GetService<ConfigService>().BotOwnerId) {
-				return PreconditionResult.FromSuccess();
-			} else {
-				if (services.GetService<ConfigService>().ErrorReactions) {
-					try {
-						await context.Message.AddReactionAsync(new Emoji("⛔"));
-					} catch (HttpException) { } // Permission denied
-				}
-				return PreconditionResult.FromError("Je bent niet gemachtigd om dat te doen.");
 			}
 		}
 	}

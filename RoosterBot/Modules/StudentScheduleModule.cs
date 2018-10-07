@@ -7,8 +7,6 @@ using RoosterBot.Services;
 namespace RoosterBot.Modules {
 	[Group("klas")]
 	public class StudentScheduleModule : ScheduleModuleBase {
-		private readonly string LogTag;
-
 		public StudentScheduleModule() : base() {
 			LogTag = "SSM";
 		}
@@ -29,11 +27,11 @@ namespace RoosterBot.Modules {
 					}
 				} else {
 					response = $"{record.StudentSets}: Nu\n";
-					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
 						if (record.Activity != "pauze") {
-							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 								response += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
@@ -65,12 +63,12 @@ namespace RoosterBot.Modules {
 					await FatalError("GetRecord(SS1)==null)");
 				} else {
 					string response = $"{record.StudentSets}: Hierna\n";
-					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 
 					if (record.Activity != "stdag doc") {
 						if (record.Activity != "pauze") {
-							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 							if (!string.IsNullOrWhiteSpace(teachers)) {
 								if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 									response += $"<:VRjoram:392762653367336960> {teachers}\n";
@@ -119,7 +117,7 @@ namespace RoosterBot.Modules {
 						} else {
 							response = $"{record.StudentSets}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
 						}
-						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}";
+						response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}";
 						if (record.Activity == "pauze") {
 							response += " :thinking:";
 						}
@@ -127,7 +125,7 @@ namespace RoosterBot.Modules {
 
 						if (record.Activity != "stdag doc") {
 							if (record.Activity != "pauze") {
-								string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+								string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 								if (!string.IsNullOrWhiteSpace(teachers)) {
 									if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 										response += $"<:VRjoram:392762653367336960> {teachers}\n";
@@ -151,7 +149,7 @@ namespace RoosterBot.Modules {
 
 		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
 		public async Task StudentTomorrowCommand(string klas) {
-			await StudentWeekdayCommand(klas + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await StudentWeekdayCommand(klas + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 	}
 }

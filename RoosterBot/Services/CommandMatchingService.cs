@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using RoosterBot.Modules;
 
 namespace RoosterBot.Services {
 	public class CommandMatchingService {
@@ -13,7 +12,7 @@ namespace RoosterBot.Services {
 				return CommandType.Student;
 			} else if (m_RoomRegex.IsMatch(parameters)) {
 				return CommandType.Room;
-			} else if (ScheduleModuleBase.GetTeacherAbbrFromName(parameters) != null) {
+			} else if (Util.GetTeacherAbbrFromName(parameters) != null) {
 				return CommandType.Teacher;
 			} else {
 				return CommandType.Unknown;

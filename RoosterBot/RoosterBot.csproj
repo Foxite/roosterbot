@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Services\CommandMatchingService.cs" />
     <Compile Include="Modules\GenericCommandsModule.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />

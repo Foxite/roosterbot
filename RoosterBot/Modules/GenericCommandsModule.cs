@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
-using Discord.Net;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
-		public LastScheduleCommandService LastService { get; set; }
-		public ConfigService Config { get; set; }
 
 		public GenericCommandsModule() : base() { }
 
@@ -76,20 +72,6 @@ namespace RoosterBot.Modules {
 			default:
 				return null;
 			}
-		}
-
-		private async Task MinorError(string message) {
-			LastService.RemoveLastQuery(Context.User);
-			if (Config.ErrorReactions) {
-				await AddReaction("❌");
-			}
-			await ReplyAsync(message);
-		}
-
-		protected async Task AddReaction(string unicode) {
-			try {
-				await Context.Message.AddReactionAsync(new Emoji(unicode));
-			} catch (HttpException) { } // Permission denied
 		}
 	}
 }

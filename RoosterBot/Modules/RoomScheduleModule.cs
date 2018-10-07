@@ -7,8 +7,6 @@ using RoosterBot.Services;
 namespace RoosterBot.Modules {
 	[Group("lokaal")]
 	public class RoomScheduleModule : ScheduleModuleBase {
-		private string LogTag { get; }
-
 		public RoomScheduleModule() : base() {
 			LogTag = "RSM";
 		}
@@ -29,10 +27,10 @@ namespace RoosterBot.Modules {
 					}
 				} else {
 					response = $"{record.Room}: Nu\n";
-					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
-						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 						if (!string.IsNullOrWhiteSpace(teachers)) {
 							response += $":bust_in_silhouette: {teachers}\n";
 						}
@@ -60,10 +58,10 @@ namespace RoosterBot.Modules {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
 					string response = $"{record.Room}: Hierna\n";
-					response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
-						string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+						string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 						if (!string.IsNullOrWhiteSpace(teachers)) {
 							response += $":bust_in_silhouette: {teachers}\n";
 						}
@@ -105,10 +103,10 @@ namespace RoosterBot.Modules {
 						}
 					} else {
 						response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
-						response += $":notepad_spiral: {GetActivityFromAbbr(record.Activity)}\n";
+						response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 						if (record.Activity != "stdag doc") {
-							string teachers = GetTeacherNameFromAbbr(record.StaffMember);
+							string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
 							if (!string.IsNullOrWhiteSpace(teachers)) {
 								response += $":bust_in_silhouette: {teachers}\n";
 							}
@@ -130,7 +128,7 @@ namespace RoosterBot.Modules {
 
 		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
 		public async Task RoomTomorrowCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal + " " + GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await RoomWeekdayCommand(lokaal + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 	}
 }
