@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Net;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public ScheduleService Service { get; set; }
 		public ConfigService Config { get; set; }

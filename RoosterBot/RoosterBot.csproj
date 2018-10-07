@@ -149,23 +149,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandMatchingService.cs" />
-    <Compile Include="GenericCommandsModule.cs" />
-    <Compile Include="LastScheduleCommandService.cs" />
-    <Compile Include="CommandEditService.cs" />
-    <Compile Include="ConfigService.cs" />
-    <Compile Include="EditableCmdModuleBase.cs" />
+    <Compile Include="Services\CommandMatchingService.cs" />
+    <Compile Include="Modules\GenericCommandsModule.cs" />
+    <Compile Include="Services\LastScheduleCommandService.cs" />
+    <Compile Include="Services\CommandEditService.cs" />
+    <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Modules\EditableCmdModuleBase.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="MetaCommandsModule.cs" />
+    <Compile Include="Modules\MetaCommandsModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomScheduleModule.cs" />
-    <Compile Include="ScheduleModuleBase.cs" />
-    <Compile Include="ScheduleService.cs" />
-    <Compile Include="SNSService.cs" />
-    <Compile Include="StudentScheduleModule.cs" />
-    <Compile Include="TeacherScheduleModule.cs" />
-    <Compile Include="TestModule.cs" />
+    <Compile Include="Modules\RoomScheduleModule.cs" />
+    <Compile Include="Modules\ScheduleModuleBase.cs" />
+    <Compile Include="Services\ScheduleService.cs" />
+    <Compile Include="Services\SNSService.cs" />
+    <Compile Include="Modules\StudentScheduleModule.cs" />
+    <Compile Include="Modules\TeacherScheduleModule.cs" />
+    <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

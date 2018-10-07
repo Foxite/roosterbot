@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	public abstract class EditableCmdModuleBase : ModuleBase<EditedCommandContext> {
 		public EditedCommandService EditService { get; set; }
 		

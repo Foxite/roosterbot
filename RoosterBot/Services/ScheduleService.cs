@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using System.Runtime.Serialization;
 
-namespace RoosterBot {
+namespace RoosterBot.Services {
 	public class ScheduleService {
 		private ConcurrentDictionary<string, List<ScheduleRecord>> m_Schedules;
 

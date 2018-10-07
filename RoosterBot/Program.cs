@@ -8,6 +8,7 @@ using Discord.Net.Providers.WS4Net;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using RoosterBot.Services;
 
 namespace RoosterBot {
 	public class Program {

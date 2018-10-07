@@ -3,8 +3,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	[Group("leraar")]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		private string LogTag { get; }

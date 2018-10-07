@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	public class TestModule : EditableCmdModuleBase {
 		public ConfigService Config { get; set; }
 		

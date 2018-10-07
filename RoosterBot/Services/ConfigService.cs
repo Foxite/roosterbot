@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
-namespace RoosterBot {
+namespace RoosterBot.Services {
 	public class ConfigService {
 		private ConcurrentDictionary<ulong, CooldownData> m_CooldownList;
 

@@ -7,8 +7,9 @@ using Discord.Commands;
 using Discord.Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public ConfigService Config { get; set; }
 		public ScheduleService Schedules { get; set; }

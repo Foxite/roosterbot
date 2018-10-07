@@ -2,8 +2,9 @@
 using System.Globalization;
 using System.Threading.Tasks;
 using Discord.Commands;
+using RoosterBot.Services;
 
-namespace RoosterBot {
+namespace RoosterBot.Modules {
 	[Group("klas")]
 	public class StudentScheduleModule : ScheduleModuleBase {
 		private readonly string LogTag;
