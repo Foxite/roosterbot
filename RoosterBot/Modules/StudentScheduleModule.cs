@@ -44,7 +44,7 @@ namespace RoosterBot.Modules {
 
 						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						TimeSpan timeLeft = record.End - DateTime.Now;
-						response += $":stopwatch: {record.Duration} - nog {timeLeft.Hours}:{timeLeft.Minutes}\n";
+						response += $":stopwatch: {record.Duration} - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}\n";
 					}
 				}
 				await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
@@ -80,11 +80,15 @@ namespace RoosterBot.Modules {
 								response += $":round_pushpin: {record.Room}\n";
 							}
 						}
-
-						if (record.Start.Date != DateTime.Today) {
+						
+						if (record.Start.Date == DateTime.Today) {
+							TimeSpan timeTillStart = record.Start - DateTime.Now;
+							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}" +
+								$" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}\n";
+						} else {
 							response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						}
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
 						response += $":stopwatch: {record.Duration}\n";
 					}
 					await ReplyAsync(response, "StudentSets", record.StudentSets, record);

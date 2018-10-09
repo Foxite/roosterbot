@@ -84,8 +84,14 @@ namespace RoosterBot.Modules {
 							response += $":round_pushpin: {record.Room}\n";
 						}
 					}
-					response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
-					response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					if (record.Start.Date == DateTime.Today) {
+						TimeSpan timeTillStart = record.Start - DateTime.Now;
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}" +
+								$" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}\n";
+					} else {
+						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
+						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
+					}
 					response += $":stopwatch: {record.Duration}\n";
 				}
 				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
