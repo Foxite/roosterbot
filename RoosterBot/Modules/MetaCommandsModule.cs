@@ -6,9 +6,12 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using RoosterBot.Modules.Preconditions;
+using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
+		public ScheduleService Schedules { get; set; }
+
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}

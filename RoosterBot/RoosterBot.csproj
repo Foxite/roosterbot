@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\Preconditions\RequireBotManagerAttribute.cs" />
+    <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Services\CommandMatchingService.cs" />
     <Compile Include="Modules\GenericCommandsModule.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Modules\StudentScheduleModule.cs" />
     <Compile Include="Modules\TeacherScheduleModule.cs" />
     <Compile Include="Modules\TestModule.cs" />
+    <Compile Include="Services\TeacherNameService.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

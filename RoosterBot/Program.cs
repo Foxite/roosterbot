@@ -72,6 +72,10 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
+
+			TeacherNameService teachers = new TeacherNameService();
+			await teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv"));
+
 			Logger.Log(LogSeverity.Debug, "Main", "Started services");
 			#endregion Start services
 
@@ -91,12 +95,13 @@ namespace RoosterBot {
 
 			m_Services = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
+				.AddSingleton(teachers)
 				.AddSingleton(scheduleService)
 				.AddSingleton(m_Comands)
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(m_ConfigService))
 				.AddSingleton(new LastScheduleCommandService(scheduleService))
-				.AddSingleton(new CommandMatchingService())
+				.AddSingleton(new CommandMatchingService(teachers))
 				.BuildServiceProvider();
 			#endregion Start client
 

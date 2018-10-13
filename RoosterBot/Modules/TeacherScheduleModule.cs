@@ -17,19 +17,19 @@ namespace RoosterBot.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			string teacher = Util.GetTeacherAbbrFromName(leraar);
+			string[] teachers = Teachers.GetAbbrFromNameInput(leraar);
 
-			if (teacher == null) {
+			if (teachers == null) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
-				if (teacher.Contains(", ")) { // There are multiple
-					await ReplyAsync(await RespondTeacherMultiple(false, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+				if (teachers.Length > 1) {
+					await ReplyAsync(await RespondTeacherMultiple(false, leraar, teachers));
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
-					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teacher);
+					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
-						await ReplyAsync(RespondTeacherCurrent(Util.GetTeacherNameFromAbbr(teacher), record), "StaffMember", teacher, record);
+						await ReplyAsync(RespondTeacherCurrent(Teachers.GetFullNameFromAbbr(teachers[0]), record), "StaffMember", teachers[0], record);
 					}
 				}
 			}
@@ -40,19 +40,19 @@ namespace RoosterBot.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			string teacher = Util.GetTeacherAbbrFromName(leraar);
-			if (teacher == null) {
+			string[] teachers = Teachers.GetAbbrFromNameInput(leraar);
+			if (teachers == null) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
-				if (teacher.Contains(", ")) { // There are multiple
-					await ReplyAsync(await RespondTeacherMultiple(true, leraar, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+				if (teachers.Length > 1) { // There are multiple
+					await ReplyAsync(await RespondTeacherMultiple(true, leraar, teachers));
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
-					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teacher);
+					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await ReplyAsync(RespondTeacherNext(Util.GetTeacherNameFromAbbr(teacher), record).FirstCharToUpper(), "StaffMember", teacher, record);
+							await ReplyAsync(RespondTeacherNext(Teachers.GetFullNameFromAbbr(teachers[0]), record).FirstCharToUpper(), "StaffMember", teachers[0], record);
 						} else {
 							await FatalError("GetRecord(TS1)==null)");
 						}
@@ -71,19 +71,19 @@ namespace RoosterBot.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string teacherGiven = arguments.Item3;
-				string teacher = Util.GetTeacherAbbrFromName(arguments.Item3);
+				string[] teachers = Teachers.GetAbbrFromNameInput(arguments.Item3);
 
-				if (teacher == null) {
+				if (teachers == null) {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
-					if (teacher.Contains(", ")) {
-						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teacherGiven, teacher.Split(new[] { ", " }, StringSplitOptions.None)));
+					if (teachers.Length > 1) {
+						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teacherGiven, teachers));
 						LSCService.RemoveLastQuery(Context.User);
 					} else {
-						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teacher);
+						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teachers[0]);
 						if (result.Success) {
 							ScheduleRecord record = result.Value;
-							await ReplyAsync(RespondTeacherWeekday(Util.GetTeacherNameFromAbbr(teacher), day, record), "StaffMember", teacher, record);
+							await ReplyAsync(RespondTeacherWeekday(Teachers.GetFullNameFromAbbr(teachers[0]), day, record), "StaffMember", teachers[0], record);
 						}
 					}
 				}
@@ -186,7 +186,7 @@ namespace RoosterBot.Modules {
 
 			string[] teachers = new string[teacherAbbrs.Length];
 			for (int i = 0; i < teacherAbbrs.Length; i++) {
-				teachers[i] = Util.GetTeacherNameFromAbbr(teacherAbbrs[i]);
+				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
 			}
 
 			if (teachers.Contains(null)) {
@@ -216,7 +216,7 @@ namespace RoosterBot.Modules {
 
 			string[] teachers = new string[teacherAbbrs.Length];
 			for (int i = 0; i < teacherAbbrs.Length; i++) {
-				teachers[i] = Util.GetTeacherNameFromAbbr(teacherAbbrs[i]);
+				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
 			}
 
 			if (teachers.Contains(null)) {

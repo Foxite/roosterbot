@@ -7,6 +7,9 @@ using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
+		public TeacherNameService Teachers { get; set; }
+		public ScheduleService Schedules { get; set; }
+
 		public ScheduleModuleBase() : base() {
 			LogTag = "SMB";
 		}
@@ -51,9 +54,9 @@ namespace RoosterBot.Modules {
 					}
 				} else if (query.SourceSchedule == "StaffMember") {
 					if (nullRecord) {
-						response = $"{Util.GetTeacherNameFromAbbr(record.StaffMember)}: Hierna\n";
+						response = $"{Teachers.GetFullNameFromAbbr(record.StaffMember)}: Hierna\n";
 					} else {
-						response = $"{Util.GetTeacherNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
+						response = $"{Teachers.GetFullNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
 					}
 				} else if (query.SourceSchedule == "Room") {
 					if (nullRecord) {
@@ -69,7 +72,7 @@ namespace RoosterBot.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						string teachers = Util.GetTeacherNameFromAbbr(record.StaffMember);
+						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
 						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 								response += $"<:VRjoram:392762653367336960> {teachers}\n";

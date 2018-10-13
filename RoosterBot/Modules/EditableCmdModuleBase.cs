@@ -10,7 +10,6 @@ namespace RoosterBot.Modules {
 		// There's a few other ways to get the services with the injection system, but this is the easiest way.
 		public LastScheduleCommandService LSCService { get; set; }
 		public EditedCommandService CmdService { get; set; }
-		public ScheduleService Schedules { get; set; }
 		public ConfigService Config { get; set; }
 		public SNSService SNSService { get; set; }
 

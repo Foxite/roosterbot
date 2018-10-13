@@ -26,10 +26,10 @@ namespace RoosterBot.Services {
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async Task ReadScheduleCSV(string name, string path) {
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Loading CSV file {path} into {name}");
+			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Loading schedule CSV file {path} into {name}");
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			if (!m_Schedules.TryAdd(name, records)) {
-				throw new ArgumentException($"A CSV file has already been loaded by the name {name}.");
+				throw new ArgumentException($"A schedule CSV file has already been loaded by the name {name}.");
 			}
 
 			using (StreamReader reader = File.OpenText(path)) {
@@ -56,7 +56,7 @@ namespace RoosterBot.Services {
 					records.Add(record);
 				}
 			}
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded CSV file {path} into {name}");
+			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded schedule CSV file {path} into {name}");
 		}
 		
 		/// <returns>null if the class has no activity currently ongoing.</returns>
