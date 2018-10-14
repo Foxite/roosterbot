@@ -10,7 +10,7 @@ namespace RoosterBot.Modules {
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 
-		[Command("docenten", RunMode = RunMode.Async)]
+		[Command("docenten", RunMode = RunMode.Async), Alias("leraren")]
 		public async Task TeacherListCommand() {
 			if (!await CheckCooldown())
 				return;
