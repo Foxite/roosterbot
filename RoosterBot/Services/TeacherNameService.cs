@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 
 namespace RoosterBot.Services {
 	public class TeacherNameService {
-		private List<TeacherAbbrRecord> m_Records = new List<TeacherAbbrRecord>();
+		private List<TeacherRecord> m_Records = new List<TeacherRecord>();
 
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async Task ReadAbbrCSV(string path) {
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Loading abbreviation CSV file {path}");
+			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {path}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				CsvReader csv = new CsvReader(reader);
 				await csv.ReadAsync();
 				csv.ReadHeader();
 
-				List<TeacherAbbrRecord> currentRecords = new List<TeacherAbbrRecord>();
+				List<TeacherRecord> currentRecords = new List<TeacherRecord>();
 
 				while (await csv.ReadAsync()) {
-					TeacherAbbrRecord record = new TeacherAbbrRecord() {
+					TeacherRecord record = new TeacherRecord() {
 						Abbreviation = csv["Abbreviation"],
 						FullName = csv["FullName"],
 						NoLookup = bool.Parse(csv["NoLookup"])
@@ -41,16 +42,15 @@ namespace RoosterBot.Services {
 					m_Records.AddRange(currentRecords);
 				}
 			}
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded abbreviation CSV file {path}");
+			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {path}");
 		}
 
 		/// <summary>
-		/// Not case sensitive.
+		/// Case sensitive.
 		/// </summary>
-		public TeacherAbbrRecord GetRecordFromAbbr(string abbr) {
-			abbr = abbr.ToLower();
-			foreach (TeacherAbbrRecord record in m_Records) {
-				if (record.Abbreviation.ToLower() == abbr) {
+		public TeacherRecord GetRecordFromAbbr(string abbr) {
+			foreach (TeacherRecord record in m_Records) {
+				if (record.Abbreviation == abbr) {
 					return record;
 				}
 			}
@@ -60,63 +60,86 @@ namespace RoosterBot.Services {
 		/// <summary>
 		/// Case sensitive.
 		/// </summary>
-		public TeacherAbbrRecord GetRecordFromAbbrCS(string abbr) {
-			foreach (TeacherAbbrRecord record in m_Records) {
-				if (record.Abbreviation == abbr) {
+		public TeacherRecord GetRecordFromFullName(string fullname) {
+			foreach (TeacherRecord record in m_Records) {
+				if (record.Abbreviation == fullname) {
 					return record;
 				}
 			}
 			return null;
 		}
 
-		public string[] GetAbbrFromNameInput(string nameInput) {
+		public TeacherRecord[] GetRecordsFromAbbrs(string[] abbrs) {
+			TeacherRecord[] records = new TeacherRecord[abbrs.Length];
+			for (int i = 0; i < abbrs.Length; i++) {
+				records[i] = GetRecordFromAbbr(abbrs[i]);
+			}
+			return records;
+		}
+		
+		public TeacherRecord[] GetRecordsFromNameInput(string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
 			// Get a list of all teachers matching the given input.
 			// We match them by first checking if their full name starts with the input (case insensitive),
 			//  and then by checking if the *input* starts with one of the alternative spellings (also case insensitive).
-			List<string> names = new List<string>();
+			List<TeacherRecord> records = new List<TeacherRecord>();
 
-			foreach (TeacherAbbrRecord record in m_Records) {
+			foreach (TeacherRecord record in m_Records) {
+				if (skipNoLookup && record.NoLookup)
+					continue;
+
 				// Check start of full name or exact match with abbreviation
 				if (record.Abbreviation.ToLower() == nameInput ||
 					record.FullName.ToLower().StartsWith(nameInput)) {
-					names.Add(record.Abbreviation);
+					records.Add(record);
 				} else if (record.AltSpellings != null) {
 					// Check alternative spellings
 					foreach (string altSpelling in record.AltSpellings) {
 						if (nameInput.StartsWith(altSpelling)) {
-							names.Add(record.Abbreviation);
+							records.Add(record);
 						}
 					}
 				}
 			}
 
 			// If we end up with an empty list, return null, otherwise, return 
-			if (names.Count == 0) {
+			if (records.Count == 0) {
 				return null;
 			} else {
-				return names.ToArray();
+				return records.ToArray();
 			}
 		}
 
 		public string GetFullNameFromAbbr(string abbr) {
-			return GetRecordFromAbbrCS(abbr)?.FullName;
+			return GetRecordFromAbbr(abbr)?.FullName;
 		}
 
-		public IReadOnlyList<TeacherAbbrRecord> GetAllRecords() {
-			return m_Records as IReadOnlyList<TeacherAbbrRecord>;
+		public string[] GetFullNamesFromNameInput(string nameInput, bool skipNoLookup = true) {
+			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.FullName).ToArray();
+		}
+
+		public string GetAbbrFromFullName(string fullname) {
+			return GetRecordFromFullName(fullname)?.Abbreviation;
+		}
+
+		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
+			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.Abbreviation).ToArray();
+		}
+
+		public IReadOnlyList<TeacherRecord> GetAllRecords() {
+			return m_Records as IReadOnlyList<TeacherRecord>;
 		}
 	}
 
-	public class TeacherAbbrRecord : ICloneable {
+	public class TeacherRecord : ICloneable {
 		public string	Abbreviation;
 		public string	FullName;
 		public string[] AltSpellings;
 		public bool		NoLookup;
 
 		public object Clone() {
-			return new TeacherAbbrRecord() {
+			return new TeacherRecord() {
 				Abbreviation = Abbreviation,
 				FullName = FullName,
 				AltSpellings = (string[]) AltSpellings.Clone(),
