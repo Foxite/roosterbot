@@ -209,7 +209,7 @@ namespace RoosterBot.Modules {
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		public async Task<IUserMessage> ReplyAsync(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected async Task<IUserMessage> ReplyAsync(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
 			if (!(Context.User is IGuildUser user))
 				return ret;
