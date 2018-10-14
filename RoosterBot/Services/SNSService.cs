@@ -4,12 +4,16 @@ using Amazon.SimpleNotificationService.Model;
 
 namespace RoosterBot.Services {
 	public class SNSService {
+#pragma warning disable CS0169
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private ConfigService m_ConfigService;
+#pragma warning restore CS0169
 
 		public SNSService(ConfigService config) {
+#if !DEBUG
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.EUWest3);
 			m_ConfigService = config;
+#endif
 		}
 
 		public async Task SendCriticalErrorNotificationAsync(string message) {
