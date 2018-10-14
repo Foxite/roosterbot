@@ -17,7 +17,7 @@ namespace RoosterBot.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			string[] teachers = Teachers.GetAbbrFromNameInput(leraar);
+			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 
 			if (teachers == null) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
@@ -40,7 +40,7 @@ namespace RoosterBot.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			string[] teachers = Teachers.GetAbbrFromNameInput(leraar);
+			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 			if (teachers == null) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
@@ -71,7 +71,7 @@ namespace RoosterBot.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string teacherGiven = arguments.Item3;
-				string[] teachers = Teachers.GetAbbrFromNameInput(arguments.Item3);
+				string[] teachers = Teachers.GetAbbrsFromNameInput(arguments.Item3);
 
 				if (teachers == null) {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");

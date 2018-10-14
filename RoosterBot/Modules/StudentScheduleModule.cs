@@ -31,7 +31,7 @@ namespace RoosterBot.Modules {
 
 					if (record.Activity != "stdag doc") {
 						if (record.Activity != "pauze") {
-							string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+							string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 								response += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
@@ -129,7 +129,7 @@ namespace RoosterBot.Modules {
 
 						if (record.Activity != "stdag doc") {
 							if (record.Activity != "pauze") {
-								string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+								string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
 								if (!string.IsNullOrWhiteSpace(teachers)) {
 									if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
 										response += $"<:VRjoram:392762653367336960> {teachers}\n";

@@ -30,7 +30,7 @@ namespace RoosterBot.Modules {
 					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
-						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+						string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
 						if (!string.IsNullOrWhiteSpace(teachers)) {
 							response += $":bust_in_silhouette: {teachers}\n";
 						}
@@ -61,7 +61,7 @@ namespace RoosterBot.Modules {
 					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 					if (record.Activity != "stdag doc") {
-						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+						string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
 						if (!string.IsNullOrWhiteSpace(teachers)) {
 							response += $":bust_in_silhouette: {teachers}\n";
 						}
@@ -113,7 +113,7 @@ namespace RoosterBot.Modules {
 						response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
 						if (record.Activity != "stdag doc") {
-							string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+							string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
 							if (!string.IsNullOrWhiteSpace(teachers)) {
 								response += $":bust_in_silhouette: {teachers}\n";
 							}

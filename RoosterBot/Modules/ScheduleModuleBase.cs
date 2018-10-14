@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -204,6 +205,10 @@ namespace RoosterBot.Modules {
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
+		}
+
+		protected string GetTeacherFullNamesFromAbbrs(string abbrs) {
+			return Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(abbrs.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(each => each.FullName).ToArray(), ", en ");
 		}
 
 		/// <summary>
