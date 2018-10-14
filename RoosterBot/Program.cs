@@ -29,6 +29,8 @@ namespace RoosterBot {
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 
+			List<Task> concurrentLoading = new List<Task>();
+
 			#region Load config
 			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 			if (!Directory.Exists(configPath)) {
@@ -59,22 +61,12 @@ namespace RoosterBot {
 			#region Start services
 			ScheduleService scheduleService = new ScheduleService();
 			// Concurrently read schedules.
-			Task[] readCSVs = new Task[schedules.Count];
-			int i = 0;
 			foreach (KeyValuePair<string, string> schedule in schedules) {
-				readCSVs[i] = scheduleService.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
-				i++;
-			}
-			try {
-				Task.WaitAll(readCSVs);
-			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading one of the CSV files.", ex);
-				Console.ReadKey();
-				return;
+				concurrentLoading.Add(scheduleService.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value)));
 			}
 
 			TeacherNameService teachers = new TeacherNameService();
-			await teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv"));
+			concurrentLoading.Add(teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")));
 
 			Logger.Log(LogSeverity.Debug, "Main", "Started services");
 			#endregion Start services
@@ -104,6 +96,16 @@ namespace RoosterBot {
 				.AddSingleton(new CommandMatchingService(teachers))
 				.BuildServiceProvider();
 			#endregion Start client
+
+			#region Finish initialization tasks
+			try {
+				Task.WaitAll(concurrentLoading.ToArray());
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
+				Logger.Log(LogSeverity.Critical, "Main", "A critical error occurred in startup after initializing the client. It will be stopped immediately after it is ready.");
+				s_StopFlagSet = true;
+			}
+			#endregion
 
 			#region Quit code
 			ProgramState state = ProgramState.BeforeStart;
