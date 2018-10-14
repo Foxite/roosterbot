@@ -15,7 +15,7 @@ namespace RoosterBot.Services {
 				return CommandType.Student;
 			} else if (m_RoomRegex.IsMatch(parameters)) {
 				return CommandType.Room;
-			} else if (m_Teachers.GetAbbrFromNameInput(parameters) != null) {
+			} else if (m_Teachers.GetAbbrsFromNameInput(parameters) != null) {
 				return CommandType.Teacher;
 			} else {
 				return CommandType.Unknown;

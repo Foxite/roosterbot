@@ -15,7 +15,7 @@ namespace RoosterBot.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			IReadOnlyList<TeacherAbbrRecord> allRecords = Teachers.GetAllRecords();
+			IReadOnlyList<TeacherRecord> allRecords = Teachers.GetAllRecords();
 
 			if (allRecords.Count == 0) {
 				await FatalError("Teacher list is empty.");
@@ -25,7 +25,7 @@ namespace RoosterBot.Modules {
 				// Because of NoLookup, we don't actually know how many times we use the item, but in practice, we almost always have to use it twice and not once.
 				string fullNameHeader = "Volledige naam";
 				int maxNameLength = fullNameHeader.Length;
-				foreach (TeacherAbbrRecord record in allRecords) {
+				foreach (TeacherRecord record in allRecords) {
 					if (record.NoLookup) {
 						continue;
 					}
@@ -33,7 +33,7 @@ namespace RoosterBot.Modules {
 				}
 
 				string response = $"`{fullNameHeader.PadRight(maxNameLength)} Afkorting";
-				foreach (TeacherAbbrRecord record in allRecords) {
+				foreach (TeacherRecord record in allRecords) {
 					if (record.NoLookup) {
 						continue;
 					}
