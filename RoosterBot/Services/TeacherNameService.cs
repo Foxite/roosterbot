@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using CsvHelper;
 
 namespace RoosterBot.Services {
 	public class TeacherNameService {
-		private ConcurrentBag<TeacherAbbrRecord> m_Records = new ConcurrentBag<TeacherAbbrRecord>();
+		private List<TeacherAbbrRecord> m_Records = new List<TeacherAbbrRecord>();
 
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
@@ -20,6 +19,9 @@ namespace RoosterBot.Services {
 				CsvReader csv = new CsvReader(reader);
 				await csv.ReadAsync();
 				csv.ReadHeader();
+
+				List<TeacherAbbrRecord> currentRecords = new List<TeacherAbbrRecord>();
+
 				while (await csv.ReadAsync()) {
 					TeacherAbbrRecord record = new TeacherAbbrRecord() {
 						Abbreviation = csv["Abbreviation"],
@@ -32,8 +34,11 @@ namespace RoosterBot.Services {
 						record.AltSpellings = altSpellingsString.Split(',');
 					};
 
-					m_Records.Add(record);
+					currentRecords.Add(record);
+				}
 
+				lock (m_Records) {
+					m_Records.AddRange(currentRecords);
 				}
 			}
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded abbreviation CSV file {path}");
@@ -97,6 +102,10 @@ namespace RoosterBot.Services {
 
 		public string GetFullNameFromAbbr(string abbr) {
 			return GetRecordFromAbbrCS(abbr)?.FullName;
+		}
+
+		public IReadOnlyList<TeacherAbbrRecord> GetAllRecords() {
+			return m_Records as IReadOnlyList<TeacherAbbrRecord>;
 		}
 	}
 
