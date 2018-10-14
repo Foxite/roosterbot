@@ -12,7 +12,7 @@ namespace RoosterBot.Modules {
 
 		[Priority(10), Command("nu", RunMode = RunMode.Async)]
 		public async Task GenericCurrentCommand([Remainder] string wat) {
-			await MatchCommand(wat, "nu"); // TODO display how much time is left
+			await MatchCommand(wat, "nu");
 		}
 
 		[Priority(10), Command("hierna", RunMode = RunMode.Async)]
