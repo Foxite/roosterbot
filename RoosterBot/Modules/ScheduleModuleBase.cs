@@ -49,21 +49,21 @@ namespace RoosterBot.Modules {
 
 				if (query.SourceSchedule == "StudentSets") {
 					if (nullRecord) {
-						response = $"{record.StudentSets}: Hierna\n";
+						response = $"{query.Identifier}: Hierna\n";
 					} else {
-						response = $"{record.StudentSets}: Na de vorige les\n";
+						response = $"{query.Identifier}: Na de vorige les\n";
 					}
 				} else if (query.SourceSchedule == "StaffMember") {
 					if (nullRecord) {
-						response = $"{Teachers.GetFullNameFromAbbr(record.StaffMember)}: Hierna\n";
+						response = $"{Teachers.GetFullNameFromAbbr(query.Identifier)}: Hierna\n";
 					} else {
-						response = $"{Teachers.GetFullNameFromAbbr(record.StaffMember)}: Na de vorige les\n";
+						response = $"{Teachers.GetFullNameFromAbbr(query.Identifier)}: Na de vorige les\n";
 					}
 				} else if (query.SourceSchedule == "Room") {
 					if (nullRecord) {
-						response = $"{record.Room}: Hierna\n";
+						response = $"{query.Identifier}: Hierna\n";
 					} else {
-						response = $"{record.Room}: Na de vorige les\n";
+						response = $"{query.Identifier}: Na de vorige les\n";
 					}
 				} else {
 					await FatalError("query.SourceSchedule is not recognized");
