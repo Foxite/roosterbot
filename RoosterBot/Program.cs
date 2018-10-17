@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using RoosterBot.Services;
+using System.Linq;
 
 namespace RoosterBot {
 	public class Program {
@@ -73,7 +74,19 @@ namespace RoosterBot {
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(m_ConfigService));
 
-			// TODO actually start components
+			// From https://stackoverflow.com/a/17680332/3141917 Get all derived types of a type
+			var components = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+							  from assemblyType in domainAssembly.GetTypes()
+							  where typeof(ComponentBase).IsAssignableFrom(assemblyType)
+							  select assemblyType).ToArray();
+
+			foreach (Type type in components) {
+				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
+				if (!component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace))) {
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " returned false from initialization.");
+					return;
+				}
+			}
 			#endregion Start components
 
 			#region Finish initialization tasks
