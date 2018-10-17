@@ -40,14 +40,14 @@ namespace RoosterBot {
 			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 			if (!Directory.Exists(configPath)) {
 				Directory.CreateDirectory(configPath);
-				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a config file to the newly created RoosterBot folder in %appdata%.");
+				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a Config.json file to the newly created RoosterBot folder in %appdata%.");
 				Console.ReadKey();
 				return;
 			}
 
 			string configFile = Path.Combine(configPath, "Config.json");
 			if (!File.Exists(configFile)) {
-				Logger.Log(LogSeverity.Critical, "Main", "Config.json file did not exist. Please add a config file to the RoosterBot folder in %appdata%.");
+				Logger.Log(LogSeverity.Critical, "Main", "Config.json file did not exist. Please add a Config.json file to the RoosterBot folder in %appdata%.");
 				Console.ReadKey();
 				return;
 			}
@@ -67,17 +67,24 @@ namespace RoosterBot {
 			m_Comands.Log += Logger.LogSync;
 			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
 
-			await m_Client.LoginAsync(TokenType.Bot, authToken);
-			await m_Client.StartAsync();
-
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_Comands)
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(m_ConfigService));
-			
+
 			// TODO actually start components
 			#endregion Start components
+
+			#region Finish initialization tasks
+			try {
+				Task.WaitAll(concurrentLoading.ToArray());
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
+				Console.ReadKey(true);
+				return;
+			}
+			#endregion
 
 			#region Start client
 			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
@@ -85,17 +92,10 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
-			#endregion Start client
 
-			#region Finish initialization tasks
-			try {
-				Task.WaitAll(concurrentLoading.ToArray());
-			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
-				Logger.Log(LogSeverity.Critical, "Main", "A critical error occurred in startup after initializing the client. It will be stopped immediately after it is ready.");
-				m_StopFlagSet = true;
-			}
-			#endregion
+			await m_Client.LoginAsync(TokenType.Bot, authToken);
+			await m_Client.StartAsync();
+			#endregion Start client
 
 			#region Quit code
 			m_Client.Ready += async () => {
