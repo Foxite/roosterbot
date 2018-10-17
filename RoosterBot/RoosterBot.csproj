@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentBase.cs" />
     <Compile Include="Modules\MetaCommandsModule.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RequireBotOperational.cs" />

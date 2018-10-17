@@ -52,9 +52,8 @@ namespace RoosterBot {
 				return;
 			}
 			string authToken;
-			Dictionary<string, string> schedules;
 			try {
-				m_ConfigService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken, out schedules);
+				m_ConfigService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
 				Console.ReadKey();
@@ -62,27 +61,8 @@ namespace RoosterBot {
 			}
 			Logger.Log(LogSeverity.Debug, "Main", "Loaded config file");
 			#endregion Load config
-
-			#region Start services
-			ScheduleService scheduleService = new ScheduleService();
-			// Concurrently read schedules.
-			foreach (KeyValuePair<string, string> schedule in schedules) {
-				concurrentLoading.Add(scheduleService.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value)));
-			}
-
-			TeacherNameService teachers = new TeacherNameService();
-			concurrentLoading.Add(teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")));
-
-			Logger.Log(LogSeverity.Debug, "Main", "Started services");
-			#endregion Start services
-
-			#region Start client
-			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = WS4NetProvider.Instance
-			});
-			m_Client.Log += Logger.LogSync;
-			m_Client.MessageReceived += HandleNewCommand;
-
+			
+			#region Start components
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
 			m_Comands.Log += Logger.LogSync;
 			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
@@ -90,16 +70,21 @@ namespace RoosterBot {
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
-			m_Services = new ServiceCollection()
+			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
-				.AddSingleton(teachers)
-				.AddSingleton(scheduleService)
 				.AddSingleton(m_Comands)
 				.AddSingleton(m_Client)
-				.AddSingleton(new SNSService(m_ConfigService))
-				.AddSingleton(new LastScheduleCommandService(scheduleService))
-				.AddSingleton(new CommandMatchingService(teachers))
-				.BuildServiceProvider();
+				.AddSingleton(new SNSService(m_ConfigService));
+			
+			// TODO actually start components
+			#endregion Start components
+
+			#region Start client
+			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
+				WebSocketProvider = WS4NetProvider.Instance
+			});
+			m_Client.Log += Logger.LogSync;
+			m_Client.MessageReceived += HandleNewCommand;
 			#endregion Start client
 
 			#region Finish initialization tasks
