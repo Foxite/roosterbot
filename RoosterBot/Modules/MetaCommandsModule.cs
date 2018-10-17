@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
-	internal class MetaCommandsModule : EditableCmdModuleBase {
+	public class MetaCommandsModule : EditableCmdModuleBase {
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}

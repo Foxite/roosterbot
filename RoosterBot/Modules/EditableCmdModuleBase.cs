@@ -40,7 +40,7 @@ namespace RoosterBot.Modules {
 		}
 
 		protected async virtual Task<bool> CheckCooldown() {
-			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id);
+			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id, 2f); // TODO set cooldowns per command
 			if (result.Item1) {
 				return true;
 			} else {
