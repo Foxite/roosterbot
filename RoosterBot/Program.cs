@@ -85,6 +85,7 @@ namespace RoosterBot {
 				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
 				if (!component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace))) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " returned false from initialization.");
+					Console.ReadKey(true);
 					return;
 				}
 			}
