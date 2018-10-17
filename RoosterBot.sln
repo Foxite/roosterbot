@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot", "RoosterBot\RoosterBot.csproj", "{294CD2AF-490F-4432-AC24-17EAA9F0E112}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleComponent", "ScheduleComponent\ScheduleComponent.csproj", "{0C053E6F-97D0-431D-B4E3-A2B340E60665}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

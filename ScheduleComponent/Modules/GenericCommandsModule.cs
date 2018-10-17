@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Services;
+using ScheduleComponent.Services;
+using RoosterBot;
+using RoosterBot.Modules;
+using RoosterBot.Modules.Preconditions;
 
-namespace RoosterBot.Modules {
-	[Preconditions.RequireBotOperational]
+namespace ScheduleComponent.Modules {
+	[RequireBotOperational]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 

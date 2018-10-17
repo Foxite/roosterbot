@@ -2,9 +2,10 @@
 using System.Globalization;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Services;
+using RoosterBot;
+using ScheduleComponent.Services;
 
-namespace RoosterBot.Modules {
+namespace ScheduleComponent.Modules {
 	[Group("lokaal")]
 	public class RoomScheduleModule : ScheduleModuleBase {
 		public RoomScheduleModule() : base() {

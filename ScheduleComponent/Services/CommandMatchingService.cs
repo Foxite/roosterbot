@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace RoosterBot.Services {
+namespace ScheduleComponent.Services {
 	public class CommandMatchingService {
 		private TeacherNameService m_Teachers;
 		private Regex m_StudentRegex = new Regex("[1-4][Gg][ADad][12]");

@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using RoosterBot;
 
-namespace RoosterBot.Services {
+namespace ScheduleComponent.Services {
 	public class TeacherNameService {
 		private List<TeacherRecord> m_Records = new List<TeacherRecord>();
 

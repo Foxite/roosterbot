@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Services;
+using RoosterBot.Modules;
+using RoosterBot.Modules.Preconditions;
+using ScheduleComponent.Services;
 
-namespace RoosterBot.Modules {
-	[Preconditions.RequireBotOperational]
+namespace ScheduleComponent.Modules {
+	[RequireBotOperational]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 

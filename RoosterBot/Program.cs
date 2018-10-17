@@ -24,8 +24,10 @@ namespace RoosterBot {
 		private IServiceProvider m_Services;
 
 		public static void Main(string[] args) {
+
+			/*
 			Instance = new Program();
-			Instance.MainAsync().GetAwaiter().GetResult();
+			Instance.MainAsync().GetAwaiter().GetResult();*/
 		}
 
 		public async Task MainAsync() {

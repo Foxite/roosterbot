@@ -3,9 +3,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Services;
+using RoosterBot;
+using ScheduleComponent.Services;
 
-namespace RoosterBot.Modules {
+namespace ScheduleComponent.Modules {
 	[Group("leraar")]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		public TeacherScheduleModule() : base() {

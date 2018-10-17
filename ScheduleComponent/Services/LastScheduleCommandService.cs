@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
 
-namespace RoosterBot.Services {
+namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
 		// ulong: ID of IGuildUser who requested the ScheduleRecord given in the ScheduleQueryContext.
 		// It is used by the !daarna command that looks up the schedule that takes place after the last one the user received.

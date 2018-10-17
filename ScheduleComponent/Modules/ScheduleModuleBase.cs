@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot.Services;
+using ScheduleComponent.Services;
+using RoosterBot.Modules;
+using RoosterBot.Modules.Preconditions;
+using RoosterBot;
 
-namespace RoosterBot.Modules {
-	[Preconditions.RequireBotOperational]
+namespace ScheduleComponent.Modules {
+	[RequireBotOperational]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleService Schedules { get; set; }

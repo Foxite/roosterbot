@@ -6,13 +6,9 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using RoosterBot.Modules.Preconditions;
-using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
-		public ScheduleService Schedules { get; set; }
-		public TeacherNameService Teachers { get; set; }
-
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}
@@ -43,48 +39,6 @@ namespace RoosterBot.Modules {
 			Logger.Log(LogSeverity.Info, "MetaModule", "Shutting down");
 			Program.Instance.Shutdown();
 			return Task.CompletedTask;
-		}
-
-		[Command("reload", RunMode = RunMode.Async), RequireBotOperational, RequireBotManager]
-		public async Task ReloadCSVCommand() {
-			Logger.Log(LogSeverity.Info, "MetaModule", "Reloading config");
-			Task<IUserMessage> progressMessage = ReplyAsync("Config herladen...");
-			try {
-				Program.Instance.State = ProgramState.BeforeStart;
-				var configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
-
-				// Clear everything
-				Schedules.Reset();
-				Teachers.Reset();
-
-				// Reload
-				Config.ReloadConfig(Path.Combine(configPath, "Config.Json"), out Dictionary<string, string> schedules);
-
-				List<Task> concurrentLoading = new List<Task>();
-				int i = 0;
-				foreach (KeyValuePair<string, string> schedule in schedules) {
-					concurrentLoading.Add(Schedules.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value)));
-					i++;
-				}
-				concurrentLoading.Add(Teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")));
-				concurrentLoading.Add((Context.Client as DiscordSocketClient)?.SetGameAsync(Config.GameString));
-				
-				Task.WaitAll(concurrentLoading.ToArray());
-
-				Program.Instance.State = ProgramState.BotRunning;
-
-				await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "OK."; });
-			} catch (Exception ex) {
-				try {
-					Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reloading config.", ex);
-					if (Config.ErrorReactions) {
-						await AddReaction("🚫");
-					}
-					await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "Critical error. Bot shutting down."; });
-				} finally {
-					await ShutdownCommand();
-				}
-			}
 		}
 	}
 }

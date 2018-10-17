@@ -1,18 +1,17 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Discord;
-using System.Collections.Generic;
 using Discord.WebSocket;
 using Discord.Commands;
-using System;
 
 namespace RoosterBot.Services {
 	/* The class lets us change our response when a user edits their command (especially after an error occured).
 	 * This only works for the last message a user has sent.
 	 * 
 	 * It's easily possible to make this work for all messages a user has sent, but that would cause unlimited rise in memory usage, and we only have 1GB to work with on EC2.
-	 * However, we remove periodically remove messages older than a certain age, like five minutes.
+	 * However, we could periodically remove messages older than a certain age, like five minutes.
 	 */
 	public class EditedCommandService : CommandService {
 		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
