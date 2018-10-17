@@ -81,6 +81,7 @@ namespace RoosterBot {
 							  select assemblyType).ToArray();
 
 			foreach (Type type in components) {
+				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
 				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
 				if (!component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace))) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " returned false from initialization.");
