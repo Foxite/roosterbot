@@ -5,36 +5,30 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Services {
-	public class ConfigService {
+	internal class ConfigService {
 		private ConcurrentDictionary<ulong, CooldownData> m_CooldownList;
 
-		public float  Cooldown { get; private set; }
+		public float  Cooldown { get; private set; } // TODO allow cooldown to be set per command
 		public ulong  BotOwnerId { get; private set; }
 		public bool   ErrorReactions { get; private set; }
 		public string CommandPrefix { get; private set; }
 		public string GameString { get; private set; }
 		public string SNSCriticalFailureARN { get; private set; }
 
-		public ConfigService(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
+		public ConfigService(string jsonPath, out string authToken) {
 			m_CooldownList = new ConcurrentDictionary<ulong, CooldownData>();
-			LoadConfigInternal(jsonPath, out authToken, out schedules);
+			LoadConfigInternal(jsonPath, out authToken);
 		}
 
 		// The auth token will not be returned, because to take effect after changing it you would need to restart the bot.
-		public void ReloadConfig(string jsonPath, out Dictionary<string, string> schedules) {
-			LoadConfigInternal(jsonPath, out string unused, out schedules);
+		public void ReloadConfig(string jsonPath) {
+			LoadConfigInternal(jsonPath, out string unused);
 		}
 
-		private void LoadConfigInternal(string jsonPath, out string authToken, out Dictionary<string, string> schedules) {
+		private void LoadConfigInternal(string jsonPath, out string authToken) {
 			string jsonFile = File.ReadAllText(jsonPath);
 			JObject jsonConfig = JObject.Parse(jsonFile);
-
-			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
-			schedules = new Dictionary<string, string>();
-			foreach (KeyValuePair<string, JToken> token in scheduleContainer) {
-				schedules.Add(token.Key, token.Value.ToObject<string>());
-			}
-
+			
 			Cooldown = jsonConfig["cooldown"].ToObject<float>();
 			BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 			authToken = jsonConfig["token"].ToObject<string>();
