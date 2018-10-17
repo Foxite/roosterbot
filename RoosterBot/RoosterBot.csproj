@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\Preconditions\RequireBotManagerAttribute.cs" />
+    <Compile Include="Modules\Preconditions\RequireBotOperational.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Services\CommandMatchingService.cs" />
     <Compile Include="Modules\GenericCommandsModule.cs" />

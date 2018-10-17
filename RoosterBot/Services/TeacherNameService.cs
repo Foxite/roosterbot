@@ -10,6 +10,13 @@ namespace RoosterBot.Services {
 		private List<TeacherRecord> m_Records = new List<TeacherRecord>();
 
 		/// <summary>
+		/// Clears all records.
+		/// </summary>
+		public void Reset() {
+			m_Records.Clear();
+		}
+
+		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
@@ -27,7 +34,8 @@ namespace RoosterBot.Services {
 					TeacherRecord record = new TeacherRecord() {
 						Abbreviation = csv["Abbreviation"],
 						FullName = csv["FullName"],
-						NoLookup = bool.Parse(csv["NoLookup"])
+						NoLookup = bool.Parse(csv["NoLookup"]),
+						DiscordUser = csv["DiscordUser"]
 					};
 					string altSpellingsString = csv["AltSpellings"];
 
@@ -137,13 +145,15 @@ namespace RoosterBot.Services {
 		public string	FullName;
 		public string[] AltSpellings;
 		public bool		NoLookup;
+		public string	DiscordUser;
 
 		public object Clone() {
 			return new TeacherRecord() {
 				Abbreviation = Abbreviation,
 				FullName = FullName,
 				AltSpellings = (string[]) AltSpellings.Clone(),
-				NoLookup = NoLookup
+				NoLookup = NoLookup,
+				DiscordUser = DiscordUser
 			};
 		}
 	}

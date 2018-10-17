@@ -5,6 +5,7 @@ using Discord.Commands;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
+	[Preconditions.RequireBotOperational]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 

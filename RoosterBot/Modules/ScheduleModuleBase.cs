@@ -7,6 +7,7 @@ using Discord.Commands;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
+	[Preconditions.RequireBotOperational]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleService Schedules { get; set; }
@@ -76,6 +77,7 @@ namespace RoosterBot.Modules {
 						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
 						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
 							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
+
 								response += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
 								response += $":bust_in_silhouette: {teachers}\n";

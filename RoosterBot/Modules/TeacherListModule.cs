@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
+	[Preconditions.RequireBotOperational]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 
@@ -32,12 +31,12 @@ namespace RoosterBot.Modules {
 					maxNameLength = Math.Max(maxNameLength, record.FullName.Length);
 				}
 
-				string response = $"`{fullNameHeader.PadRight(maxNameLength)} Afkorting";
+				string response = $"`{fullNameHeader.PadRight(maxNameLength)}  Afk. Discord naam";
 				foreach (TeacherRecord record in allRecords) {
 					if (record.NoLookup) {
 						continue;
 					}
-					response += $"\n{record.FullName.PadRight(maxNameLength)} {record.Abbreviation}";
+					response += $"\n{record.FullName.PadRight(maxNameLength)}  {record.Abbreviation}  {record.DiscordUser}";
 				}
 				response += "`";
 

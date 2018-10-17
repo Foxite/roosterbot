@@ -11,12 +11,13 @@ using RoosterBot.Services;
 namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public ScheduleService Schedules { get; set; }
+		public TeacherNameService Teachers { get; set; }
 
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}
 
-		[Command("help", RunMode = RunMode.Async)]
+		[Command("help", RunMode = RunMode.Async), RequireBotOperational]
 		public async Task HelpCommand() {
 			if (!await CheckCooldown())
 				return;
@@ -36,30 +37,41 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("shutdown"), RequireBotManager()]
+		[Command("shutdown"), RequireBotManager]
 		public Task ShutdownCommand() {
 			Logger.Log(LogSeverity.Info, "MetaModule", "Shutting down");
-			Program.Shutdown();
+			Program.Instance.Shutdown();
 			return Task.CompletedTask;
 		}
 
-		[Command("reload", RunMode = RunMode.Async), RequireBotManager()]
+		[Command("reload", RunMode = RunMode.Async), RequireBotOperational, RequireBotManager]
 		public async Task ReloadCSVCommand() {
 			Logger.Log(LogSeverity.Info, "MetaModule", "Reloading config");
 			Task<IUserMessage> progressMessage = ReplyAsync("Config herladen...");
 			try {
+				Program.Instance.State = ProgramState.BeforeStart;
 				var configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
-				Config.ReloadConfig(Path.Combine(configPath, "Config.Json"),
-					out Dictionary<string, string> schedules);
+
+				// Clear everything
 				Schedules.Reset();
-				Task[] readCSVs = new Task[schedules.Count];
+				Teachers.Reset();
+
+				// Reload
+				Config.ReloadConfig(Path.Combine(configPath, "Config.Json"), out Dictionary<string, string> schedules);
+
+				List<Task> concurrentLoading = new List<Task>();
 				int i = 0;
 				foreach (KeyValuePair<string, string> schedule in schedules) {
-					readCSVs[i] = Schedules.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value));
+					concurrentLoading.Add(Schedules.ReadScheduleCSV(schedule.Key, Path.Combine(configPath, schedule.Value)));
 					i++;
 				}
-				await (Context.Client as DiscordSocketClient)?.SetGameAsync(Config.GameString);
-				Task.WaitAll(readCSVs);
+				concurrentLoading.Add(Teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")));
+				concurrentLoading.Add((Context.Client as DiscordSocketClient)?.SetGameAsync(Config.GameString));
+				
+				Task.WaitAll(concurrentLoading.ToArray());
+
+				Program.Instance.State = ProgramState.BotRunning;
+
 				await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "OK."; });
 			} catch (Exception ex) {
 				try {
@@ -67,7 +79,7 @@ namespace RoosterBot.Modules {
 					if (Config.ErrorReactions) {
 						await AddReaction("🚫");
 					}
-					await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "Critical error. Restart bot through AWS."; });
+					await (await progressMessage).ModifyAsync((msgProps) => { msgProps.Content = "Critical error. Bot shutting down."; });
 				} finally {
 					await ShutdownCommand();
 				}

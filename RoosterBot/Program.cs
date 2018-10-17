@@ -14,7 +14,9 @@ namespace RoosterBot {
 	public class Program {
 		public static Program Instance { get; private set; }
 
-		private static bool s_StopFlagSet = false;
+		public ProgramState State { get; set; }
+
+		private bool m_StopFlagSet = false;
 
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Comands;
@@ -28,6 +30,7 @@ namespace RoosterBot {
 
 		public async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
+			State = ProgramState.BeforeStart;
 
 			List<Task> concurrentLoading = new List<Task>();
 
@@ -103,19 +106,18 @@ namespace RoosterBot {
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
 				Logger.Log(LogSeverity.Critical, "Main", "A critical error occurred in startup after initializing the client. It will be stopped immediately after it is ready.");
-				s_StopFlagSet = true;
+				m_StopFlagSet = true;
 			}
 			#endregion
 
 			#region Quit code
-			ProgramState state = ProgramState.BeforeStart;
 			m_Client.Ready += async () => {
-				state = ProgramState.BotRunning;
+				State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
 			};
 
 			Console.CancelKeyPress += (o, e) => {
-				if (state != ProgramState.BotStopped) {
+				if (State != ProgramState.BotStopped) {
 					e.Cancel = true;
 					Logger.Log(LogSeverity.Warning, "Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
 				}
@@ -136,19 +138,19 @@ namespace RoosterBot {
 						}
 					}),
 					Task.Delay(500).ContinueWith((t) => {
-						if (s_StopFlagSet) {
+						if (m_StopFlagSet) {
 							keepRunning = false;
 							Logger.Log(LogSeverity.Info, "Main", "Stop flag set");
 						}
 					})
 				});
 
-			} while (state == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+			} while (State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
-			state = ProgramState.BotStopped;
+			State = ProgramState.BotStopped;
 			Console.WriteLine("Press any key to quit.");
 			Console.ReadKey(true);
 			#endregion Quit code
@@ -211,8 +213,8 @@ namespace RoosterBot {
 		/// <summary>
 		/// Shuts down gracefully.
 		/// </summary>
-		public static void Shutdown() {
-			s_StopFlagSet = true;
+		public void Shutdown() {
+			m_StopFlagSet = true;
 		}
 	}
 
