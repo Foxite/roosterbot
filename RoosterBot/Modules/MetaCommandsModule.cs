@@ -33,7 +33,8 @@ namespace RoosterBot.Modules {
 			response += "Je kan ook zien wat de klas/leraar/lokaal heeft na wat ik je net heb verteld. Dus als je pauze hebt, kun je zien wat je na de pauze hebt.\n";
 			response += "`!hierna 3ga1` en dan `!daarna`. Je kan `!daarna` zo vaak gebruiken als je wilt.\n\n";
 			response += "Als ik niet begrijp of je het over een klas, leraar, of lokaal hebt, kun je dit in de command zetten:\n";
-			response += "`!klas nu 2ga1`, `leraar dag martijn dinsdag`, `!lokaal morgen a128`";
+			response += "`!klas nu 2ga1`, `leraar dag martijn dinsdag`, `!lokaal morgen a128`\n\n";
+			response += "Je kan een lijst van alle docenten opvragen, met hun afkortingen en discord namen: `!docenten` of `!leraren`";
 			await ReplyAsync(response);
 		}
 
