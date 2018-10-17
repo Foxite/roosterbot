@@ -12,6 +12,7 @@ using RoosterBot;
 namespace ScheduleComponent.Modules {
 	[RequireBotOperational]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
+		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleService Schedules { get; set; }
 
@@ -226,6 +227,16 @@ namespace ScheduleComponent.Modules {
 			
 			LSCService.OnRequestByUser(user, schedule, identifier, record);
 			return ret;
+		}
+
+		protected async override Task MinorError(string message) {
+			await base.MinorError(message);
+			LSCService.RemoveLastQuery(Context.User);
+		}
+
+		protected async override Task FatalError(string message) {
+			await base.FatalError(message);
+			LSCService.RemoveLastQuery(Context.User);
 		}
 	}
 }

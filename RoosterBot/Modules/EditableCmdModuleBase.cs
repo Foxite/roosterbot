@@ -8,7 +8,6 @@ namespace RoosterBot.Modules {
 	public abstract class EditableCmdModuleBase : ModuleBase<EditedCommandContext> {
 		// These should actually be protected, but they're here because Discord.NET injects these services when a command is called.
 		// There's a few other ways to get the services with the injection system, but this is the easiest way.
-		public LastScheduleCommandService LSCService { get; set; }
 		public EditedCommandService CmdService { get; set; }
 		public ConfigService Config { get; set; }
 		public SNSService SNSService { get; set; }
@@ -55,7 +54,6 @@ namespace RoosterBot.Modules {
 		}
 
 		protected async virtual Task MinorError(string message) {
-			LSCService.RemoveLastQuery(Context.User);
 			if (Config.ErrorReactions) {
 				await AddReaction("❌");
 			}
@@ -69,7 +67,6 @@ namespace RoosterBot.Modules {
 				await AddReaction("🚫");
 			}
 			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n");
-			LSCService.RemoveLastQuery(Context.User);
 		}
 	}
 }
