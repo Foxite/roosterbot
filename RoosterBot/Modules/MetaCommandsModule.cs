@@ -8,7 +8,7 @@ using Discord.WebSocket;
 using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
-	public class MetaCommandsModule : EditableCmdModuleBase {
+	internal class MetaCommandsModule : EditableCmdModuleBase {
 		public MetaCommandsModule() : base() {
 			LogTag = "MCM";
 		}
