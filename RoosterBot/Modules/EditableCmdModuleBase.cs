@@ -9,8 +9,9 @@ namespace RoosterBot.Modules {
 		// These should actually be protected, but they're here because Discord.NET injects these services when a command is called.
 		// There's a few other ways to get the services with the injection system, but this is the easiest way.
 		public EditedCommandService CmdService { get; set; }
-		public ConfigService Config { get; set; }
-		public SNSService SNSService { get; set; }
+
+		internal ConfigService Config { get; set; }
+		internal SNSService SNSService { get; set; }
 
 		public string LogTag { get; protected set; }
 

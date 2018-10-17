@@ -3,7 +3,7 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 
 namespace RoosterBot.Services {
-	public class SNSService {
+	internal class SNSService {
 #pragma warning disable CS0169
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private ConfigService m_ConfigService;
