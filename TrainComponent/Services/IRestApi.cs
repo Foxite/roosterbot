@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace TrainComponent.Services {
+namespace PublicTransitComponent.Services {
 	public interface IRestApi {
 		string GetCallDomain();
 

@@ -1,1 +1,2 @@
 ScheduleComponent.dll
+PublicTransitComponent.dll

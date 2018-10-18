@@ -24,6 +24,8 @@ namespace RoosterBot {
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
 
+		public event EventHandler ProgramStopping;
+
 		private static void Main(string[] args) {
 			Instance = new Program();
 			Instance.MainAsync().GetAwaiter().GetResult();
@@ -170,6 +172,9 @@ namespace RoosterBot {
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
+
+			ProgramStopping?.Invoke(this, null);
+
 			State = ProgramState.BotStopped;
 			#endregion Quit code
 		}

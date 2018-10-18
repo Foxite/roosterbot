@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace TrainComponent.Services {
+namespace PublicTransitComponent.Services {
 	public class XmlRestApi : IRestApiAsync {
 		private string m_CallDomain;
 		private string m_Username;
 		private string m_Password;
 
-		public XmlRestApi(string callDomain, string username, string password) {
+		private WebClient m_HTTP;
+
+		public XmlRestApi(WebClient http, string callDomain, string username, string password) {
 			m_CallDomain = callDomain;
 			m_Username = username;
 			m_Password = password;
+
+			m_HTTP = http;
+			CredentialCache creds = new CredentialCache {
+				{ new Uri(new Uri(callDomain).GetLeftPart(UriPartial.Authority)), "Basic", new NetworkCredential(username, password) }
+			};
+			m_HTTP.Credentials = creds;
 		}
 		
 		public string GetCallDomain() {
@@ -26,7 +33,16 @@ namespace TrainComponent.Services {
 		}
 
 		public async Task<string> GetDirectOutputAsync(string call, IDictionary<string, string> parameters) {
-			throw new NotImplementedException();
+			string uri = m_CallDomain + call + "?";
+			bool notFirstParam = false;
+			foreach (KeyValuePair<string, string> kvp in parameters) {
+				if (notFirstParam) {
+					uri += "&";
+				}
+				uri += $"{kvp.Key}={kvp.Value}";
+				notFirstParam = true;
+			}
+			return await m_HTTP.DownloadStringTaskAsync(uri);
 		}
 
 		public XmlDocument GetXmlOutput(string call, IDictionary<string, string> parameters) {
