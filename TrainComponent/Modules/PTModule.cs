@@ -9,7 +9,7 @@ using TrainComponent.Services;
 
 namespace TrainComponent.Modules {
 	public class PTModule : EditableCmdModuleBase {
-		public NSAPI NSAPI { get; set; }
+		public XmlRestApi NSAPI { get; set; }
 
 		[Command("ov")]
 		public async Task GetTrainRouteCommand([Remainder] string parameters) {

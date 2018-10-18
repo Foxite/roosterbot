@@ -16,7 +16,7 @@ namespace TrainComponent {
 			string password = jsonConfig["nsapi_Password"].ToObject<string>();
 			#endregion Config
 			
-			services.AddSingleton(new NSAPI("http://webservices.ns.nl/ns-api-", username, password));
+			services.AddSingleton(new XmlRestApi("http://webservices.ns.nl/ns-api-", username, password));
 
 			commandService.AddModuleAsync<PTModule>();
 		}
