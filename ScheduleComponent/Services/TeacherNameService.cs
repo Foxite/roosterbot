@@ -9,7 +9,7 @@ using RoosterBot;
 namespace ScheduleComponent.Services {
 	public class TeacherNameService {
 		private List<TeacherRecord> m_Records = new List<TeacherRecord>();
-
+		public const int dummy = 5;
 		/// <summary>
 		/// Clears all records.
 		/// </summary>

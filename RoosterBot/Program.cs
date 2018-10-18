@@ -24,14 +24,12 @@ namespace RoosterBot {
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
 
-		public static void Main(string[] args) {
-
-			/*
+		private static void Main(string[] args) {
 			Instance = new Program();
-			Instance.MainAsync().GetAwaiter().GetResult();*/
+			Instance.MainAsync().GetAwaiter().GetResult();
 		}
 
-		public async Task MainAsync() {
+		private async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 			State = ProgramState.BeforeStart;
 
@@ -60,10 +58,18 @@ namespace RoosterBot {
 				Console.ReadKey();
 				return;
 			}
-			Logger.Log(LogSeverity.Debug, "Main", "Loaded config file");
 			#endregion Load config
-			
+
 			#region Start components
+			Logger.Log(LogSeverity.Info, "Main", "Preparing to load components");
+			// Client is needed by CommandService. Don't start it just yet.
+			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
+				WebSocketProvider = WS4NetProvider.Instance
+			});
+			m_Client.Log += Logger.LogSync;
+			m_Client.MessageReceived += HandleNewCommand;
+
+
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
 			m_Comands.Log += Logger.LogSync;
 			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
@@ -74,11 +80,34 @@ namespace RoosterBot {
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(m_ConfigService));
 
-			// From https://stackoverflow.com/a/17680332/3141917 Get all derived types of a type
-			var components = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
-							  from assemblyType in domainAssembly.GetTypes()
-							  where typeof(ComponentBase).IsAssignableFrom(assemblyType)
-							  select assemblyType).ToArray();
+			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
+			// FIXME: detailed info
+			// The problem here is that ScheduleComponent does not get loaded when the program is run. This is because no references are made to it at all.
+			// Unless we explicitly reference our dependents, which is exactly what we did NOT want to achieve with this change, we will have more trouble actually loading the
+			//  components.
+			// Perhaps we need a more complicated build process and to automatically locate compatible components in DLLs. Or we might need to have a file with all components we
+			//  want to load.
+
+			// This does seem to work, but I'm getting a huge DLL error when loading the ScheduleComponent assembly, because it tries to load Newtonsoft.Json and it can't find
+			//  the exact one that it's been compiled with. Despite an identical one being present in the folder, that one was for RoosterBot and it just doesn't work.
+			// I've tried to copy ScheduleComponent into its own folder in the RoosterBot build directory and load it from there, but somehow it still doesn't work.
+			// I'm going to ask someone on advice, including if this whole approach of seperating projects is even correct.
+			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
+			foreach (string file in toLoad) {
+				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+				var a = File.Exists(path);
+				var b = Path.GetExtension(path).ToLower() == ".dll";
+				if (a && b) {
+					AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path));
+				} else {
+					Logger.Log(LogSeverity.Error, "Main", "Component " + file + " does not exist or it is not a DLL file");
+				}
+			}
+
+			Type[] components = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+							from assemblyType in domainAssembly.GetExportedTypes()
+							where assemblyType.IsSubclassOf(typeof(ComponentBase))
+							select assemblyType).ToArray();
 
 			foreach (Type type in components) {
 				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
@@ -89,6 +118,7 @@ namespace RoosterBot {
 					return;
 				}
 			}
+			m_Services = serviceCollection.BuildServiceProvider();
 			#endregion Start components
 
 			#region Finish initialization tasks
@@ -102,12 +132,6 @@ namespace RoosterBot {
 			#endregion
 
 			#region Start client
-			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = WS4NetProvider.Instance
-			});
-			m_Client.Log += Logger.LogSync;
-			m_Client.MessageReceived += HandleNewCommand;
-
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 			#endregion Start client
