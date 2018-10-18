@@ -27,6 +27,8 @@ namespace RoosterBot {
 		private static void Main(string[] args) {
 			Instance = new Program();
 			Instance.MainAsync().GetAwaiter().GetResult();
+			Console.WriteLine("Press any key to quit.");
+			Console.ReadKey(true);
 		}
 
 		private async Task MainAsync() {
@@ -47,7 +49,6 @@ namespace RoosterBot {
 			string configFile = Path.Combine(configPath, "Config.json");
 			if (!File.Exists(configFile)) {
 				Logger.Log(LogSeverity.Critical, "Main", "Config.json file did not exist. Please add a Config.json file to the RoosterBot folder in %appdata%.");
-				Console.ReadKey();
 				return;
 			}
 			string authToken;
@@ -55,7 +56,6 @@ namespace RoosterBot {
 				m_ConfigService = new ConfigService(Path.Combine(configPath, "Config.json"), out authToken);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
-				Console.ReadKey();
 				return;
 			}
 			#endregion Load config
@@ -105,9 +105,10 @@ namespace RoosterBot {
 			foreach (Type type in components) {
 				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
 				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
-				if (!component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace))) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " returned false from initialization.");
-					Console.ReadKey(true);
+				try {
+					component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace));
+				} catch (Exception ex) {
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during initialization.", ex);
 					return;
 				}
 			}
@@ -120,7 +121,6 @@ namespace RoosterBot {
 				Task.WaitAll(concurrentLoading.ToArray());
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
-				Console.ReadKey(true);
 				return;
 			}
 			#endregion
@@ -171,8 +171,6 @@ namespace RoosterBot {
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 			State = ProgramState.BotStopped;
-			Console.WriteLine("Press any key to quit.");
-			Console.ReadKey(true);
 			#endregion Quit code
 		}
 
