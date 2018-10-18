@@ -15,7 +15,7 @@ namespace RoosterBot {
 	public class Program {
 		public static Program Instance { get; private set; }
 
-		public ProgramState State { get; set; }
+		internal ProgramState State { get; set; }
 
 		private bool m_StopFlagSet = false;
 
