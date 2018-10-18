@@ -1,1 +1,1 @@
-ScheduleComponent/ScheduleComponent.dll
+ScheduleComponent.dll

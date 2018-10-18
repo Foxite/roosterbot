@@ -81,17 +81,8 @@ namespace RoosterBot {
 				.AddSingleton(new SNSService(m_ConfigService));
 
 			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
-			// FIXME: detailed info
-			// The problem here is that ScheduleComponent does not get loaded when the program is run. This is because no references are made to it at all.
-			// Unless we explicitly reference our dependents, which is exactly what we did NOT want to achieve with this change, we will have more trouble actually loading the
-			//  components.
-			// Perhaps we need a more complicated build process and to automatically locate compatible components in DLLs. Or we might need to have a file with all components we
-			//  want to load.
-
-			// This does seem to work, but I'm getting a huge DLL error when loading the ScheduleComponent assembly, because it tries to load Newtonsoft.Json and it can't find
-			//  the exact one that it's been compiled with. Despite an identical one being present in the folder, that one was for RoosterBot and it just doesn't work.
-			// I've tried to copy ScheduleComponent into its own folder in the RoosterBot build directory and load it from there, but somehow it still doesn't work.
-			// I'm going to ask someone on advice, including if this whole approach of seperating projects is even correct.
+			
+			// Locate DLL files from a txt file
 			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
 			foreach (string file in toLoad) {
 				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
@@ -104,11 +95,13 @@ namespace RoosterBot {
 				}
 			}
 
+			// Look for children of ComponentBase in all assemblies (takes a while)
 			Type[] components = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
 							from assemblyType in domainAssembly.GetExportedTypes()
 							where assemblyType.IsSubclassOf(typeof(ComponentBase))
 							select assemblyType).ToArray();
 
+			// Create instances of these classes and call Initialize()
 			foreach (Type type in components) {
 				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
 				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
@@ -118,6 +111,7 @@ namespace RoosterBot {
 					return;
 				}
 			}
+			// And we're done.
 			m_Services = serviceCollection.BuildServiceProvider();
 			#endregion Start components
 

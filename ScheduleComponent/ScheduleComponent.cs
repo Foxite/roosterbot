@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
@@ -47,13 +48,15 @@ namespace ScheduleComponent {
 				#region Modules
 				//commandService.AddModulesAsync(GetType().Assembly);
 				commandService.AddModuleAsync<GenericCommandsModule>();
+				commandService.AddModuleAsync<ScheduleModuleBase>();
 				commandService.AddModuleAsync<StudentScheduleModule>();
 				commandService.AddModuleAsync<TeacherScheduleModule>();
 				commandService.AddModuleAsync<RoomScheduleModule>();
 				commandService.AddModuleAsync<TeacherListModule>();
 				#endregion Modules
 				return true;
-			} catch {
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Schedule", "Error: ", ex);
 				return false;
 			}
 		}

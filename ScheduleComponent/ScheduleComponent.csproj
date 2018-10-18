@@ -189,6 +189,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>call copy /Y * ..\..\..\RoosterBot\bin\Debug\ScheduleComponent</PostBuildEvent>
+    <PostBuildEvent>call copy /Y * ..\..\..\RoosterBot\bin\Debug</PostBuildEvent>
   </PropertyGroup>
 </Project>
