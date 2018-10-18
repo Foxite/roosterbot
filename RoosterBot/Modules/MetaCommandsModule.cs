@@ -15,6 +15,7 @@ namespace RoosterBot.Modules {
 				return;
 
 			// Print list of commands
+			// TODO allow components to define their own help text
 			string response = "Al mijn commands beginnen met een `!`. Hierdoor raken andere bots niet in de war.\n\n";
 			response += "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			response += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
