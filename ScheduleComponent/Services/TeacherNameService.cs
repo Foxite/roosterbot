@@ -79,11 +79,14 @@ namespace ScheduleComponent.Services {
 		}
 
 		public TeacherRecord[] GetRecordsFromAbbrs(string[] abbrs) {
-			TeacherRecord[] records = new TeacherRecord[abbrs.Length];
+			List<TeacherRecord> records = new List<TeacherRecord>();
 			for (int i = 0; i < abbrs.Length; i++) {
-				records[i] = GetRecordFromAbbr(abbrs[i]);
+				TeacherRecord record = GetRecordFromAbbr(abbrs[i]);
+				if (record != null) {
+					records.Add(record);
+				}
 			}
-			return records;
+			return records.ToArray();
 		}
 		
 		public TeacherRecord[] GetRecordsFromNameInput(string nameInput, bool skipNoLookup = true) {

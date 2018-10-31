@@ -200,6 +200,7 @@ namespace RoosterBot {
 			// Execute the command. (result does not indicate a return value, 
 			// rather an object stating if the command executed successfully)
 			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
+
 			if (!result.IsSuccess) {
 				if (initialResponse == null) {
 					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
