@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using RoosterBot;
-using Newtonsoft.Json.Linq;
 using RoosterBot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using MiscStuffComponent.Services;
