@@ -9,7 +9,7 @@ namespace RoosterBot.Modules {
 			LogTag = "MCM";
 		}
 
-		[Command("help", RunMode = RunMode.Async), RequireBotOperational]
+		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
 			if (!await CheckCooldown())
 				return;
