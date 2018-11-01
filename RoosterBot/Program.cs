@@ -87,19 +87,20 @@ namespace RoosterBot {
 			
 			// Locate DLL files from a txt file
 			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
+			List<Assembly> assemblies = new List<Assembly>();
 			foreach (string file in toLoad) {
 				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
 				var a = File.Exists(path);
 				var b = Path.GetExtension(path).ToLower() == ".dll";
 				if (a && b) {
-					AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path));
+					assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path)));
 				} else {
 					Logger.Log(LogSeverity.Error, "Main", "Component " + file + " does not exist or it is not a DLL file");
 				}
 			}
 
-			// Look for children of ComponentBase in all assemblies (takes a while)
-			Type[] components = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+			// Look for children of ComponentBase in the loaded assemblies
+			Type[] components = (from domainAssembly in assemblies
 							from assemblyType in domainAssembly.GetExportedTypes()
 							where assemblyType.IsSubclassOf(typeof(ComponentBase))
 							select assemblyType).ToArray();
