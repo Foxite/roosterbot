@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Threading.Tasks;
+using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Services {
 	public class ConfigService {
 		private ConcurrentDictionary<ulong, CooldownData> m_CooldownList;
 		
-		public	 ulong  BotOwnerId { get; private set; }
-		public	 bool   ErrorReactions { get; private set; }
-		public	 string CommandPrefix { get; private set; }
-		public	 string GameString { get; private set; }
-		internal string SNSCriticalFailureARN { get; private set; }
+		public	 ulong        BotOwnerId { get; private set; }
+		public	 bool         ErrorReactions { get; private set; }
+		public	 string       CommandPrefix { get; private set; }
+		public	 string       GameString { get; private set; }
+		public   ITextChannel LogChannel { get; private set; }
+		internal string       SNSCriticalFailureARN { get; private set; }
 
 		internal ConfigService(string jsonPath, out string authToken) {
-			m_CooldownList = new ConcurrentDictionary<ulong, CooldownData>();
+			m_CooldownList = new ConcurrentDictionary<ulong, CooldownData>();       
 			LoadConfigInternal(jsonPath, out authToken);
 		}
 
@@ -33,6 +36,15 @@ namespace RoosterBot.Services {
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
 			GameString = jsonConfig["gameString"].ToObject<string>();
 			SNSCriticalFailureARN = jsonConfig["snsCF_ARN"].ToObject<string>();
+		}
+
+		internal async Task SetLogChannelAsync(IDiscordClient client, string jsonPath) {
+			string jsonFile = File.ReadAllText(jsonPath);
+			JObject jsonConfig = JObject.Parse(jsonFile);
+			LogChannel = await client.GetChannelAsync(jsonConfig["logChannelId"].ToObject<ulong>(), CacheMode.AllowDownload) as ITextChannel;
+			if (LogChannel == null) {
+				Logger.Log(LogSeverity.Info, "Config", "LogChannel could not be found.");
+			}
 		}
 
 		/// <summary>

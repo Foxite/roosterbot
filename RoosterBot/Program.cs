@@ -138,6 +138,7 @@ namespace RoosterBot {
 			m_Client.Ready += async () => {
 				State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
+				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
 			};
 
 			Console.CancelKeyPress += (o, e) => {
@@ -172,6 +173,7 @@ namespace RoosterBot {
 			} while (State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
+			await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
@@ -243,6 +245,10 @@ namespace RoosterBot {
 
 			if (message.Author.Id == m_Client.CurrentUser.Id) {
 				return;
+			}
+			Console.WriteLine(message.Author.Username + "#" + message.Author.Discriminator + " : ID " + message.Author.Id);
+			if (message.Author.Id == 244147515375484928) {
+				Console.WriteLine("kevin");
 			}
 
 			if (message.Content == "?slots" && Util.RNG.NextDouble() < 0.02) {
