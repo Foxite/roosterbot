@@ -17,3 +17,12 @@
 01-10-18 14:13: Bot now uses icons with minimal text for its output, following feedback from users.
 02-10-18 14:32: Bot now alerts critical errors to an Amazon SNS topic.
 02-10-18 19:59: Bot now detects when commands are edited and re-executes them.
+03-10-18 17:10: Added !daarna command which tells you what comes after the last thing you asked about.
+05-10-18 17:15: Info for students, teachers, and rooms can now be looked up through the same !nu, !hierna, !dag commands. Behind the scenes, these commands were moved into a "leerling" group and new ones were created that determine which one to call.
+06-10-18 20:57: The bot will now delete its response if a command is deleted. This only works for the last command of each user.
+14-10-18 00:43: Names for teachers are now read from a .csv file instead of using a hardcoded switch block.
+14-10-18 21:03: Added !docenten which displays all known teachers.
+18-10-18 17:04: Functionality split: All basic bot stuff is now in its own project, and all schedule stuff is now in its own project called ScheduleComponent. Interaction is one-way, and RoosterBot loads components through DLL file names in a text file.
+18-10-18 22:31: Added PublicTransitComponent, which contains a functional !ov command which looks up train route data from the NS Reisplanner API. However, formatting is nonexistent and you can only use the station's internal shortcode. (Work on this component mostly stalled after losing interest in it.)
+01-11-18 10:35: When the bot sees a user play slots with DynoBot, there is now a 2% chance that RoosterBot will join.
+01-11-18 17:48: Added a requested feature in which the bot tracks when a certain teacher had last beatboxed. It is easily extensible and works through updating the modification date of files.
