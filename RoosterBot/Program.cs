@@ -173,7 +173,9 @@ namespace RoosterBot {
 			} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-			await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
+			if (m_ConfigService.LogChannel != null) {
+				await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
+			}
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 

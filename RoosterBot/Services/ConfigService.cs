@@ -39,7 +39,7 @@ namespace RoosterBot.Services {
 		}
 
 		internal async Task SetLogChannelAsync(IDiscordClient client, string jsonPath) {
-			string jsonFile = File.ReadAllText(jsonPath);
+			string jsonFile = File.ReadAllText(Path.Combine(jsonPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			LogChannel = await client.GetChannelAsync(jsonConfig["logChannelId"].ToObject<ulong>(), CacheMode.AllowDownload) as ITextChannel;
 			if (LogChannel == null) {
