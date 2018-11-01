@@ -13,14 +13,18 @@ namespace RoosterBot {
 		/// </summary>
 		/// <param name="finalDelimiter">Should include a comma and a trailing space.</param>
 		public static string FormatStringArray(this string[] array, string finalDelimiter = ", ") {
-			string ret = array[0];
-			for (int i = 1; i < array.Length - 1; i++) {
-				ret += ", " + array[i];
+			if (array.Length > 0) {
+				string ret = array[0];
+				for (int i = 1; i < array.Length - 1; i++) {
+					ret += ", " + array[i];
+				}
+				if (array.Length > 1) {
+					ret += finalDelimiter + array[array.Length - 1];
+				}
+				return ret;
+			} else {
+				return null;
 			}
-			if (array.Length > 1) {
-				ret += finalDelimiter + array[array.Length - 1];
-			}
-			return ret;
 		}
 
 		/// <summary>
