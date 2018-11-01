@@ -21,7 +21,7 @@ namespace RoosterBot {
 				// Play slots
 				await Task.Delay(1500);
 				await command.Channel.SendMessageAsync("?slots");
-			} else if (message.Author.Id == 133798410024255488 /*244147515375484928 /* Kevin Rommes#1429 */) {
+			} else if (message.Author.Id == 244147515375484928 /* Kevin Rommes#1429 */) {
 				string contentLower = message.Content.ToLower();
 				if (contentLower.Contains("snappie") ||
 					contentLower.Contains("snap je") ||
