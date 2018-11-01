@@ -5,7 +5,7 @@ using Discord.Commands;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
-	public class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
+	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
 		public ConfigService Config { get; set; }
 		public SNSService SNSService { get; set; }
 
@@ -40,6 +40,9 @@ namespace RoosterBot.Modules {
 		protected async virtual Task FatalError(string message) {
 			Logger.Log(LogSeverity.Error, LogTag, message);
 			await SNSService.SendCriticalErrorNotificationAsync("Critical error: " + message);
+			if (Config.LogChannel != null) {
+				await Config.LogChannel.SendMessageAsync((await Context.Client.GetUserAsync(Config.BotOwnerId)).Mention + " fatal error: " + message);
+			}
 			if (Config.ErrorReactions) {
 				await AddReaction("🚫");
 			}
@@ -47,5 +50,5 @@ namespace RoosterBot.Modules {
 		}
 	}
 
-	public class RoosterModuleBase : RoosterModuleBase<CommandContext> { }
+	public abstract class RoosterModuleBase : RoosterModuleBase<CommandContext> { }
 }
