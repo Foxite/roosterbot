@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Modules;
-using RoosterBot.Modules.Preconditions;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[RequireBotOperational]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
+
+		public TeacherListModule() : base() {
+			LogTag = "TLM";
+		}
 
 		[Command("docenten", RunMode = RunMode.Async), Alias("leraren")]
 		public async Task TeacherListCommand() {

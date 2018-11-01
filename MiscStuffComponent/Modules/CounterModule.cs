@@ -10,6 +10,10 @@ namespace MiscStuffComponent.Modules {
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }
 
+		public CounterModule() {
+			LogTag = "CoM";
+		}
+
 		[Command(""), Priority(0)]
 		public async Task GetCounterCommand([Remainder] string counter) {
 			try {

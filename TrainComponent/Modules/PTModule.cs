@@ -7,6 +7,10 @@ using PublicTransitComponent.DataTypes;
 namespace PublicTransitComponent.Modules {
 	public class PTModule : EditableCmdModuleBase {
 		public NSAPI NSAPI { get; set; }
+		
+		public PTModule() {
+			LogTag = "PTM";
+		}
 
 		[Command("ov", RunMode = RunMode.Async)]
 		public async Task GetTrainRouteCommand(string from, string to) {

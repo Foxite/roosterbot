@@ -8,11 +8,12 @@ using RoosterBot.Modules;
 using RoosterBot.Modules.Preconditions;
 
 namespace ScheduleComponent.Modules {
-	[RequireBotOperational]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 
-		public GenericCommandsModule() : base() { }
+		public GenericCommandsModule() : base() {
+			LogTag = "GCM";
+		}
 
 		[Priority(10), Command("nu", RunMode = RunMode.Async)]
 		public async Task GenericCurrentCommand([Remainder] string wat) {

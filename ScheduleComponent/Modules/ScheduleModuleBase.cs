@@ -10,7 +10,6 @@ using RoosterBot.Modules.Preconditions;
 using RoosterBot;
 
 namespace ScheduleComponent.Modules {
-	[RequireBotOperational]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
