@@ -70,8 +70,9 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
-			m_Client.MessageReceived += EasterEggCommands;
 
+			EasterEggCommands easterEggs = new EasterEggCommands();
+			m_Client.MessageReceived += (msg) => { return easterEggs.TryEasterEggCommands(m_Client, msg); };
 
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
 			m_Comands.Log += Logger.LogSync;
@@ -149,7 +150,8 @@ namespace RoosterBot {
 			};
 
 			ConsoleKeyInfo keyPress;
-			bool keepRunning;
+			bool keepRunning = true;
+			bool manualStop = false;
 			do {
 				keepRunning = true;
 				Task.WaitAny(new Task[] {
@@ -158,6 +160,7 @@ namespace RoosterBot {
 							keyPress = Console.ReadKey(true);
 							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
 								keepRunning = false;
+								manualStop = true;
 								Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q pressed");
 							}
 						}
@@ -173,7 +176,7 @@ namespace RoosterBot {
 			} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-			if (m_ConfigService.LogChannel != null) {
+			if (m_ConfigService.LogChannel != null && !manualStop) {
 				await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
 			}
 			await m_Client.StopAsync();
@@ -209,11 +212,56 @@ namespace RoosterBot {
 			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
 
 			if (!result.IsSuccess) {
-				if (initialResponse == null) {
-					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
-					m_Comands.AddResponse(context.Message, response);
+				string response = null;
+				bool bad = false;
+				string badReport = $"\"{message.Content}\": ";
+
+				if (result.Error.HasValue) {
+					switch (result.Error.Value) {
+					case CommandError.UnknownCommand:
+						response = "Die command ken ik niet.";
+						break;
+					case CommandError.BadArgCount:
+						response = "Dat zijn te veel of te weinig parameters.";
+						break;
+					case CommandError.ParseFailed:
+						badReport += "ParseFailed";
+						goto default;
+					case CommandError.ObjectNotFound:
+						badReport += "ObjectNotFound";
+						goto default;
+					case CommandError.MultipleMatches:
+						badReport += "MultipleMatches";
+						goto default;
+					case CommandError.Exception:
+						badReport += "Exception";
+						goto default;
+					case CommandError.Unsuccessful:
+						badReport += "Unsuccessful";
+						goto default;
+					default:
+						badReport += "Unknown error";
+						bad = true;
+						break;
+					}
 				} else {
-					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
+					badReport += "No error reason";
+					bad = true;
+				}
+
+				if (bad) {
+					Logger.Log(LogSeverity.Error, "Program", "Error occurred while parsing command " + badReport);
+					if (m_ConfigService.LogChannel != null) {
+						await m_ConfigService.LogChannel.SendMessageAsync(m_Client.GetUser(m_ConfigService.BotOwnerId).Mention + " " + badReport);
+					}
+					await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(badReport);
+					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
+				}
+
+				if (initialResponse == null) {
+					this.m_Comands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
+				} else {
+					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
 			}
 		}
@@ -238,25 +286,6 @@ namespace RoosterBot {
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
 				}
-			}
-		}
-
-		private async Task EasterEggCommands(SocketMessage command) {
-			if (!(command is SocketUserMessage message))
-				return;
-
-			if (message.Author.Id == m_Client.CurrentUser.Id) {
-				return;
-			}
-			Console.WriteLine(message.Author.Username + "#" + message.Author.Discriminator + " : ID " + message.Author.Id);
-			if (message.Author.Id == 244147515375484928) {
-				Console.WriteLine("kevin");
-			}
-
-			if (message.Content == "?slots" && Util.RNG.NextDouble() < 0.02) {
-				// Play slots
-				await Task.Delay(1500);
-				await command.Channel.SendMessageAsync("?slots");
 			}
 		}
 
