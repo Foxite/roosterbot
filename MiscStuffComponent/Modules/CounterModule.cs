@@ -5,15 +5,19 @@ using Discord.Commands;
 using MiscStuffComponent.Services;
 using RoosterBot.Modules;
 
-namespace MiscStuffComponent {
-	[Group("counter")]
+namespace MiscStuffComponent.Modules {
+	[Group("counter"), Alias("teller")]
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }
 
-		[Command("")]
-		public async Task GetCounterCommand(string counter) {
+		[Command(""), Priority(0)]
+		public async Task GetCounterCommand([Remainder] string counter) {
 			try {
-				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {(int) (DateTime.Now - Service.GetDateCounter(counter)).TotalDays}";
+				DateTime counterDT = Service.GetDateCounter(counter);
+				TimeSpan timeSinceReset = DateTime.Now - counterDT;
+				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {(int) timeSinceReset.TotalDays} dagen {timeSinceReset.Hours} uur\n";
+				response += $"(Laatst gereset op {counterDT.ToShortDateString()} om {counterDT.ToShortTimeString()})\n";
+				response += $"Reset de counter met \"!counter reset {counter}\"";
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
 				await MinorError("Die bestaat niet.");
@@ -22,8 +26,8 @@ namespace MiscStuffComponent {
 			}
 		}
 
-		[Command("reset")]
-		public async Task ResetCounterCommand(string counter) {
+		[Command("reset"), Priority(1)]
+		public async Task ResetCounterCommand([Remainder] string counter) {
 			try {
 				Service.ResetDateCounter(counter);
 				await ReplyAsync($"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0");

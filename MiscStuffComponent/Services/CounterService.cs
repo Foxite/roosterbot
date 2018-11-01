@@ -10,15 +10,15 @@ namespace MiscStuffComponent.Services {
 		}
 
 		public string GetCounterDescription(string counterName) {
-			if (File.Exists(counterName)) {
-				return File.ReadAllText(counterName);
+			if (File.Exists(Path.Combine(m_CounterPath, counterName))) {
+				return File.ReadAllText(Path.Combine(m_CounterPath, counterName));
 			} else {
 				throw new FileNotFoundException();
 			}
 		}
 
 		public DateTime GetDateCounter(string counterName) {
-			if (File.Exists(counterName)) {
+			if (File.Exists(Path.Combine(m_CounterPath, counterName))) {
 				return File.GetLastWriteTime(Path.Combine(m_CounterPath, counterName));
 			} else {
 				throw new FileNotFoundException();
@@ -26,7 +26,7 @@ namespace MiscStuffComponent.Services {
 		}
 
 		public void ResetDateCounter(string counterName) {
-			if (File.Exists(counterName)) {
+			if (File.Exists(Path.Combine(m_CounterPath, counterName))) {
 				File.SetLastWriteTime(Path.Combine(m_CounterPath, counterName), DateTime.Now);
 			} else {
 				throw new FileNotFoundException();
