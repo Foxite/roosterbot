@@ -16,12 +16,7 @@ namespace RoosterBot {
 			if (message.Author.Id == client.CurrentUser.Id) {
 				return;
 			}
-
-			Console.WriteLine(message.Author.Username + "#" + message.Author.Discriminator + " : ID " + message.Author.Id);
-			if (message.Author.Id == 244147515375484928) {
-				Console.WriteLine("kevin");
-			}
-
+			
 			if (message.Content == "?slots" && Util.RNG.NextDouble() < 0.02) {
 				// Play slots
 				await Task.Delay(1500);
