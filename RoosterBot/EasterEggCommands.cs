@@ -30,8 +30,8 @@ namespace RoosterBot {
 				string contentLower = message.Content.ToLower();
 				if (contentLower.Contains("snappie") ||
 					contentLower.Contains("snap je") ||
-					contentLower.Contains("snapje")  ||
-					Regex.Match(message.Content, @"(.*)\*\*(.+)\*\*(.*)").Success) { // Text in bold - he usually does that when making a pun
+					contentLower.Contains("snapje")/*||
+					Regex.Match(message.Content, @"(.*)\*\*(.+)\*\*(.*)").Success*/) { // Text in bold - he usually does that when making a pun but it's probably better to wait for the "get it"
 
 					if ((DateTime.Now - m_LastKevinPunResponse).TotalSeconds >= 3) {
 						m_LastKevinPunResponse = DateTime.Now;
