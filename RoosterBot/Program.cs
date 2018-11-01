@@ -15,7 +15,7 @@ namespace RoosterBot {
 	public class Program {
 		public static Program Instance { get; private set; }
 
-		internal ProgramState State { get; set; }
+		private ProgramState m_State
 
 		private bool m_StopFlagSet = false;
 
@@ -35,7 +35,7 @@ namespace RoosterBot {
 
 		private async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
-			State = ProgramState.BeforeStart;
+			m_State = ProgramState.BeforeStart;
 
 			List<Task> concurrentLoading = new List<Task>();
 
@@ -136,13 +136,13 @@ namespace RoosterBot {
 
 			#region Quit code
 			m_Client.Ready += async () => {
-				State = ProgramState.BotRunning;
+				m_State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
 				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
 			};
 
 			Console.CancelKeyPress += (o, e) => {
-				if (State != ProgramState.BotStopped) {
+				if (m_State != ProgramState.BotStopped) {
 					e.Cancel = true;
 					Logger.Log(LogSeverity.Warning, "Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
 				}
@@ -170,7 +170,7 @@ namespace RoosterBot {
 					})
 				});
 
-			} while (State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+			} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
 			await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
@@ -179,7 +179,7 @@ namespace RoosterBot {
 
 			ProgramStopping?.Invoke(this, null);
 
-			State = ProgramState.BotStopped;
+			m_State = ProgramState.BotStopped;
 			#endregion Quit code
 		}
 
