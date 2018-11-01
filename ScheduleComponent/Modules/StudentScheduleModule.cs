@@ -6,12 +6,8 @@ using RoosterBot;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("klas")]
+	[Group("klas"), RoosterBot.Attributes.LogTag("SSM")]
 	public class StudentScheduleModule : ScheduleModuleBase {
-		public StudentScheduleModule() : base() {
-			LogTag = "SSM";
-		}
-
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
 			if (!await CheckCooldown())

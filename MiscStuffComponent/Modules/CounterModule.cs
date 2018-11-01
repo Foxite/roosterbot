@@ -6,14 +6,10 @@ using MiscStuffComponent.Services;
 using RoosterBot.Modules;
 
 namespace MiscStuffComponent.Modules {
-	[Group("counter"), Alias("teller")]
+	[Group("counter"), Alias("teller"), RoosterBot.Attributes.LogTag("CoM")]
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }
-
-		public CounterModule() {
-			LogTag = "CoM";
-		}
-
+		
 		[Command(""), Priority(0)]
 		public async Task GetCounterCommand([Remainder] string counter) {
 			try {

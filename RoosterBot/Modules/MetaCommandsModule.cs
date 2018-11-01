@@ -4,11 +4,8 @@ using Discord.Commands;
 using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
+	[RoosterBot.Attributes.LogTag("MCM")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
-		public MetaCommandsModule() : base() {
-			LogTag = "MCM";
-		}
-
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
 			if (!await CheckCooldown())

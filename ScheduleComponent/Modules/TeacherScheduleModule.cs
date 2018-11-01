@@ -7,12 +7,8 @@ using RoosterBot;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("leraar")]
+	[Group("leraar"), RoosterBot.Attributes.LogTag("PTM")]
 	public class TeacherScheduleModule : ScheduleModuleBase {
-		public TeacherScheduleModule() : base() {
-			LogTag = "TSM";
-		}
-
 		[Command("nu", RunMode = RunMode.Async), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {
 			if (!await CheckCooldown())

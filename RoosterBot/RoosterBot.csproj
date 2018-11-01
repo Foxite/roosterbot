@@ -146,6 +146,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Modules\MetaCommandsModule.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />

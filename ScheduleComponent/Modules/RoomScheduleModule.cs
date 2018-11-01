@@ -6,12 +6,8 @@ using RoosterBot;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("lokaal")]
+	[Group("lokaal"), RoosterBot.Attributes.LogTag("PTM")]
 	public class RoomScheduleModule : ScheduleModuleBase {
-		public RoomScheduleModule() : base() {
-			LogTag = "RSM";
-		}
-
 		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
 			if (!await CheckCooldown())

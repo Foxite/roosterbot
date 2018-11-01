@@ -6,13 +6,10 @@ using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
+	[RoosterBot.Attributes.LogTag("TLM")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
-
-		public TeacherListModule() : base() {
-			LogTag = "TLM";
-		}
-
+		
 		[Command("docenten", RunMode = RunMode.Async), Alias("leraren")]
 		public async Task TeacherListCommand() {
 			if (!await CheckCooldown())

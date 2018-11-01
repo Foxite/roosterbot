@@ -6,19 +6,15 @@ using Discord;
 using Discord.Commands;
 using ScheduleComponent.Services;
 using RoosterBot.Modules;
-using RoosterBot.Modules.Preconditions;
 using RoosterBot;
 
 namespace ScheduleComponent.Modules {
+	[RoosterBot.Attributes.LogTag("SMB")]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleService Schedules { get; set; }
-
-		public ScheduleModuleBase() : base() {
-			LogTag = "SMB";
-		}
-
+		
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand() {
 			if (!(Context.User is IGuildUser user))

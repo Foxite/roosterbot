@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using RoosterBot.Attributes;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
@@ -9,7 +10,26 @@ namespace RoosterBot.Modules {
 		public ConfigService Config { get; set; }
 		public SNSService SNSService { get; set; }
 
-		public string LogTag { get; protected set; }
+		private string m_LogTag = null;
+		protected string LogTag {
+			get {
+				if (m_LogTag == null) {
+					m_LogTag = "UnknownModule";
+					Logger.Log(LogSeverity.Warning, m_LogTag, GetType().Name + " did not have a LogTag attribute and its tag has been set to UnknownModule.");
+				}
+				return m_LogTag;
+			}
+			private set => m_LogTag = value;
+		}
+
+		protected override void BeforeExecute(CommandInfo command) {
+			base.BeforeExecute(command);
+			foreach (Attribute attr in command.Module.Attributes) {
+				if (attr is LogTagAttribute logTagAttribute) {
+					LogTag = logTagAttribute.LogTag;
+				}
+			}
+		}
 
 		protected async virtual Task<bool> AddReaction(string unicode) {
 			return await Util.AddReaction(Context.Message, unicode);
