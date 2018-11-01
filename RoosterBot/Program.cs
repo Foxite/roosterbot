@@ -70,6 +70,7 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
+			m_Client.MessageReceived += EasterEggCommands;
 
 
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
@@ -195,6 +196,7 @@ namespace RoosterBot {
 			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
 			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
 				return;
+
 			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 			// Execute the command. (result does not indicate a return value, 
@@ -231,6 +233,21 @@ namespace RoosterBot {
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
 				}
+			}
+		}
+
+		private async Task EasterEggCommands(SocketMessage command) {
+			if (!(command is SocketUserMessage message))
+				return;
+
+			if (message.Author.Id == m_Client.CurrentUser.Id) {
+				return;
+			}
+
+			if (message.Content == "?slots" && Util.RNG.NextDouble() < 0.02) {
+				// Play slots
+				await Task.Delay(1500);
+				await command.Channel.SendMessageAsync("?slots");
 			}
 		}
 
