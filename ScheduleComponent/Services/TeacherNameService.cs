@@ -22,7 +22,7 @@ namespace ScheduleComponent.Services {
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async Task ReadAbbrCSV(string path) {
-			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {path}");
+			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				CsvReader csv = new CsvReader(reader);
@@ -51,7 +51,7 @@ namespace ScheduleComponent.Services {
 					m_Records.AddRange(currentRecords);
 				}
 			}
-			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {path}");
+			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
 		}
 
 		/// <summary>
