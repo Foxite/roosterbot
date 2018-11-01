@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿#if DEBUG
+using Discord.Commands;
 using RoosterBot.Services;
 using RoosterBot.Modules.Preconditions;
 using System.Threading.Tasks;
@@ -10,3 +11,4 @@ namespace RoosterBot.Modules {
 		}
 	}
 }
+#endif
