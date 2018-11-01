@@ -3,11 +3,12 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 
 namespace RoosterBot.Services {
+	// Note to self: The reason this class is not internal is because Discord.NET needs to inject this into EditableCmdModuleBase.
 	public class SNSService {
-#pragma warning disable CS0169
+#if !DEBUG
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private ConfigService m_ConfigService;
-#pragma warning restore CS0169
+#endif
 
 		internal SNSService(ConfigService config) {
 #if !DEBUG
