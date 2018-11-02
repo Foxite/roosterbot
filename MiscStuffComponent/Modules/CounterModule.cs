@@ -29,8 +29,10 @@ namespace MiscStuffComponent.Modules {
 		[Command("reset"), Priority(1)]
 		public async Task ResetCounterCommand([Remainder] string counter) {
 			try {
+				DateTime counterDT = Service.GetDateCounter(counter);
+				TimeSpan timeSinceReset = DateTime.Now - counterDT;
+				await ReplyAsync($"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0 (was {(int) timeSinceReset.TotalDays} dagen {timeSinceReset.Hours} uur)");
 				Service.ResetDateCounter(counter);
-				await ReplyAsync($"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0");
 			} catch (FileNotFoundException) {
 				await MinorError("Die bestaat niet.");
 			} catch (Exception e) {
