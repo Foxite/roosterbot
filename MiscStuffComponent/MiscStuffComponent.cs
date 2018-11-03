@@ -1,5 +1,4 @@
-﻿using System.IO;
-using RoosterBot;
+﻿using RoosterBot;
 using RoosterBot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using MiscStuffComponent.Services;
