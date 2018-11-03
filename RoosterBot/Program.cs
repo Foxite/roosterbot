@@ -226,19 +226,24 @@ namespace RoosterBot {
 						break;
 					case CommandError.ParseFailed:
 						badReport += "ParseFailed";
-						goto default;
+						bad = true;
+						break;
 					case CommandError.ObjectNotFound:
 						badReport += "ObjectNotFound";
-						goto default;
+						bad = true;
+						break;
 					case CommandError.MultipleMatches:
 						badReport += "MultipleMatches";
-						goto default;
+						bad = true;
+						break;
 					case CommandError.Exception:
 						badReport += "Exception";
-						goto default;
+						bad = true;
+						break;
 					case CommandError.Unsuccessful:
 						badReport += "Unsuccessful";
-						goto default;
+						bad = true;
+						break;
 					default:
 						badReport += "Unknown error";
 						bad = true;
