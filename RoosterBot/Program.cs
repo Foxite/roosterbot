@@ -70,10 +70,7 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
-
-			EasterEggCommands easterEggs = new EasterEggCommands();
-			m_Client.MessageReceived += (msg) => { return easterEggs.TryEasterEggCommands(m_Client, msg); };
-
+			
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
 			m_Comands.Log += Logger.LogSync;
 			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
@@ -211,6 +208,7 @@ namespace RoosterBot {
 			// rather an object stating if the command executed successfully)
 			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
 
+			#region Error handling
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
@@ -256,6 +254,7 @@ namespace RoosterBot {
 
 				if (bad) {
 					Logger.Log(LogSeverity.Error, "Program", "Error occurred while parsing command " + badReport);
+					Logger.Log(LogSeverity.Error, "Program", result.ErrorReason);
 					if (m_ConfigService.LogChannel != null) {
 						await m_ConfigService.LogChannel.SendMessageAsync(m_Client.GetUser(m_ConfigService.BotOwnerId).Mention + " " + badReport);
 					}
@@ -269,6 +268,7 @@ namespace RoosterBot {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
 			}
+			#endregion Error handling
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
