@@ -16,6 +16,7 @@ namespace MiscStuffComponent
 			services.AddSingleton(new CounterService(configPath));
 
 			commandService.AddModuleAsync<CounterModule>();
+			commandService.AddModuleAsync<MiscModule>();
 		}
 	}
 }
