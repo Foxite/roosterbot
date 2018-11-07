@@ -58,24 +58,7 @@ namespace ScheduleComponent.Services {
 		/// Case sensitive.
 		/// </summary>
 		public TeacherRecord GetRecordFromAbbr(string abbr) {
-			foreach (TeacherRecord record in m_Records) {
-				if (record.Abbreviation == abbr) {
-					return record;
-				}
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Case sensitive.
-		/// </summary>
-		public TeacherRecord GetRecordFromFullName(string fullname) {
-			foreach (TeacherRecord record in m_Records) {
-				if (record.Abbreviation == fullname) {
-					return record;
-				}
-			}
-			return null;
+			return m_Records.Find(record => record.Abbreviation == abbr);
 		}
 
 		public TeacherRecord[] GetRecordsFromAbbrs(string[] abbrs) {
@@ -120,10 +103,6 @@ namespace ScheduleComponent.Services {
 
 		public string[] GetFullNamesFromNameInput(string nameInput, bool skipNoLookup = true) {
 			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.FullName).ToArray();
-		}
-
-		public string GetAbbrFromFullName(string fullname) {
-			return GetRecordFromFullName(fullname)?.Abbreviation;
 		}
 
 		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
