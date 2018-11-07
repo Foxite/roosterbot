@@ -130,15 +130,14 @@ namespace RoosterBot {
 			#region Start client
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
-			#endregion Start client
-
-			#region Quit code
 			m_Client.Ready += async () => {
 				m_State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
 				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
 			};
+			#endregion Start client
 
+			#region Quit code
 			Console.CancelKeyPress += (o, e) => {
 				if (m_State != ProgramState.BotStopped) {
 					e.Cancel = true;
@@ -238,7 +237,8 @@ namespace RoosterBot {
 						bad = true;
 						break;
 					case CommandError.Exception:
-						badReport += "Exception";
+						badReport += "Exception\n";
+						badReport += result.ErrorReason;
 						bad = true;
 						break;
 					case CommandError.Unsuccessful:
