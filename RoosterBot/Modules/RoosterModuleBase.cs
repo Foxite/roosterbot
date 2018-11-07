@@ -31,12 +31,12 @@ namespace RoosterBot.Modules {
 			}
 		}
 
-		protected async virtual Task<bool> AddReaction(string unicode) {
+		protected virtual async Task<bool> AddReaction(string unicode) {
 			return await Util.AddReaction(Context.Message, unicode);
 		}
 
-		protected async virtual Task<bool> CheckCooldown() {
-			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id, 2f); // TODO set cooldowns per command
+		protected virtual async Task<bool> CheckCooldown(float cooldown = 2f) {
+			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id, cooldown);
 			if (result.Item1) {
 				return true;
 			} else {
@@ -50,14 +50,14 @@ namespace RoosterBot.Modules {
 			}
 		}
 
-		protected async virtual Task MinorError(string message) {
+		protected virtual async Task MinorError(string message) {
 			if (Config.ErrorReactions) {
 				await AddReaction("❌");
 			}
 			await ReplyAsync(message);
 		}
 
-		protected async virtual Task FatalError(string message) {
+		protected virtual async Task FatalError(string message) {
 			Logger.Log(LogSeverity.Error, LogTag, message);
 			await SNSService.SendCriticalErrorNotificationAsync("Critical error: " + message);
 			if (Config.LogChannel != null) {
