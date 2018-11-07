@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 
 namespace RoosterBot.Services {
 	// Note to self: The reason this class is not internal is because Discord.NET needs to inject this into EditableCmdModuleBase.
-	public class SNSService {
+	public class SNSService : IDisposable {
 #if !DEBUG
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private ConfigService m_ConfigService;
@@ -14,23 +15,43 @@ namespace RoosterBot.Services {
 #if !DEBUG
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.EUWest3);
 			m_ConfigService = config;
+			Program.Instance.ProgramStopping += (o, e) => { Dispose(); };
 #endif
 		}
 
-		internal async Task SendCriticalErrorNotificationAsync(string message) {
 #if !DEBUG
+		internal async Task SendCriticalErrorNotificationAsync(string message) {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (async)");
 			await m_SNSClient.PublishAsync(new PublishRequest(m_ConfigService.SNSCriticalFailureARN, message));
+		}
 #else
-			await Task.CompletedTask; // Just await it instead of returning it to suppress the warning
-#endif
+		internal Task SendCriticalErrorNotificationAsync(string message) {
+			return Task.CompletedTask; // Just await it instead of returning it to suppress the warning
 		}
+#endif
 		
-		internal void SendCriticalErrorNotification(string message) {
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing) {
+			if (!disposedValue) {
 #if !DEBUG
-			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS");
-			m_SNSClient.Publish(new PublishRequest(m_ConfigService.SNSCriticalFailureARN, message));
+				if (disposing) {
+					m_SNSClient?.Dispose();
+				}
+
+				m_ConfigService = null;
 #endif
+
+				disposedValue = true;
+			}
 		}
+
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose() {
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+		}
+#endregion
 	}
 }
