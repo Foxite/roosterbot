@@ -93,13 +93,13 @@ namespace ScheduleComponent.Services {
 				return records.ToArray();
 			}
 		}
+		
+		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
+			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.Abbreviation).ToArray();
+		}
 
 		public string GetFullNameFromAbbr(string abbr) {
 			return GetRecordFromAbbr(abbr)?.FullName;
-		}
-
-		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
-			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.Abbreviation).ToArray();
 		}
 
 		public IReadOnlyList<TeacherRecord> GetAllRecords() {
