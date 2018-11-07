@@ -4,21 +4,26 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Modules;
 using ScheduleComponent.Services;
+using System.Linq;
 
 namespace ScheduleComponent.Modules {
 	[RoosterBot.Attributes.LogTag("TLM")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("docenten", RunMode = RunMode.Async), Alias("leraren")]
-		public async Task TeacherListCommand() {
+		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent", "leraar")]
+		public async Task TeacherListCommand([Remainder] string name = "") {
 			if (!await CheckCooldown())
 				return;
 
 			IReadOnlyList<TeacherRecord> allRecords = Teachers.GetAllRecords();
 
+			if (!string.IsNullOrWhiteSpace(name)) {
+				allRecords = allRecords.Where(record => record.MatchName(name)).ToList();
+			}
+
 			if (allRecords.Count == 0) {
-				await FatalError("Teacher list is empty.");
+				await ReplyAsync("Geen leraren gevonden.");
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
 				// https://www.dotnetperls.com/for-foreach
