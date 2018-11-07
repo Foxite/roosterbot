@@ -11,6 +11,7 @@ namespace ScheduleComponent.Services {
 		}
 
 		public CommandType MatchCommand(string parameters) {
+			// Try to recognize what the parameters are for. For student sets and rooms we have a regex, if these don't match we go through the list of teachers and see if we can find one.
 			if (m_StudentRegex.IsMatch(parameters)) {
 				return CommandType.Student;
 			} else if (m_RoomRegex.IsMatch(parameters)) {
