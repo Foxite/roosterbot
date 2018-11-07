@@ -101,17 +101,8 @@ namespace ScheduleComponent.Services {
 				if (skipNoLookup && record.NoLookup)
 					continue;
 
-				// Check start of full name or exact match with abbreviation
-				if (record.Abbreviation.ToLower() == nameInput ||
-					record.FullName.ToLower().StartsWith(nameInput)) {
+				if (record.MatchName(nameInput)) {
 					records.Add(record);
-				} else if (record.AltSpellings != null) {
-					// Check alternative spellings
-					foreach (string altSpelling in record.AltSpellings) {
-						if (nameInput.StartsWith(altSpelling)) {
-							records.Add(record);
-						}
-					}
 				}
 			}
 
@@ -150,6 +141,22 @@ namespace ScheduleComponent.Services {
 		public string[] AltSpellings;
 		public bool		NoLookup;
 		public string	DiscordUser;
+
+		public bool MatchName(string nameInput) {
+			// Check start of full name or exact match with abbreviation
+			if (Abbreviation.ToLower() == nameInput ||
+				FullName.ToLower().StartsWith(nameInput)) {
+				return true;
+			} else if (AltSpellings != null) {
+				// Check alternative spellings
+				foreach (string altSpelling in AltSpellings) {
+					if (nameInput.StartsWith(altSpelling)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 
 		public object Clone() {
 			return new TeacherRecord() {
