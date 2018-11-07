@@ -37,7 +37,9 @@ namespace RoosterBot.Services {
 			if (!disposedValue) {
 #if !DEBUG
 				if (disposing) {
-					m_SNSClient?.Dispose();
+					if (m_SNSClient != null) { // No idea why, but the code analyzer will complain if you use null coalescence for this.
+						m_SNSClient.Dispose(); // It won't if you do it like this, and it won't even suggest you use coalescence.
+					}
 				}
 
 				m_ConfigService = null;
