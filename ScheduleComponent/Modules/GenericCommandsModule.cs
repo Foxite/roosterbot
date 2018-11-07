@@ -33,6 +33,10 @@ namespace ScheduleComponent.Modules {
 
 		private async Task MatchCommand(string parameters, string command) {
 			if (command == "dag") {
+				// `dag` command is made so that you can specify the day as either the first or last parameter. The identifier (student set, teacher, or room) may be any length.
+				// So we have to check which one is the day, then we can assume the rest is the identifier.
+				// Because it's easier (or seemed at the time, because I'm commenting this way after writing it), we do the opposite:
+				// We take all the parameters *except* the first or last, and check if it mmatches a student set, teacher, or room (in another function).
 				List<string> argumentsAsList = parameters.Split(' ').ToList();
 				List<string> argumentsWithoutFirst = argumentsAsList.Select(item => (string) item.Clone()).ToList(); // clone list
 				List<string> argumentsWithoutLast  = argumentsAsList.Select(item => (string) item.Clone()).ToList(); // from https://stackoverflow.com/a/222640/3141917
@@ -41,18 +45,23 @@ namespace ScheduleComponent.Modules {
 				string paramWithoutFirst = string.Join(" ", argumentsWithoutFirst);
 				string paramWithoutLast  = string.Join(" ", argumentsWithoutLast);
 
+				// Here we call a function that does the matching for us, it will return the correct command call based on the parameters. If it can't figure it out, it returns null.
+				// We first try it without the first parameter (to see if that one is the weekday).
 				string result = MatchCommandNoWeekday(paramWithoutFirst, command);
 				if (result != null) {
 					await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + parameters, Context.Message);
 				} else {
+					// If it's null, it may be that the last parameter is the weekday.
 					result = MatchCommandNoWeekday(paramWithoutLast, command);
 					if (result != null) {
 						await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, result + " " + parameters, Context.Message);
 					} else {
+						// If it still returns null, the identifier was not recognized by the function.
 						await MinorError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
 					}
 				}
 			} else {
+				// For all other commands we can just parse the command parameters directly.
 				string result = MatchCommandNoWeekday(parameters, command);
 				if (result == null) {
 					await MinorError("Ik weet niet wat je bedoelt met \"" + parameters + "\".");
