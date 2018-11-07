@@ -222,6 +222,9 @@ namespace RoosterBot {
 					case CommandError.BadArgCount:
 						response = "Dat zijn te veel of te weinig parameters.";
 						break;
+					case CommandError.UnmetPrecondition:
+						response += result.ErrorReason;
+						break;
 					case CommandError.ParseFailed:
 						badReport += "ParseFailed";
 						bad = true;
