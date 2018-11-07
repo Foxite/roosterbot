@@ -5,14 +5,13 @@ using Discord.Commands;
 using ScheduleComponent.Services;
 using RoosterBot;
 using RoosterBot.Modules;
-using RoosterBot.Modules.Preconditions;
 
 namespace ScheduleComponent.Modules {
 	[RoosterBot.Attributes.LogTag("GCM")]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		
-		[Priority(10), Command("nu", RunMode = RunMode.Async)]
+		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
 		public async Task GenericCurrentCommand([Remainder] string wat) {
 			await MatchCommand(wat, "nu");
 		}
