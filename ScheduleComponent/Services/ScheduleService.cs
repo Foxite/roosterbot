@@ -160,6 +160,7 @@ namespace ScheduleComponent.Services {
 		public string	StudentSets { get; set; }
 	}
 
+	[Serializable]
 	public class ScheduleNotFoundException : Exception {
 		public ScheduleNotFoundException() { }
 		public ScheduleNotFoundException(string message) : base(message) { }
@@ -167,6 +168,7 @@ namespace ScheduleComponent.Services {
 		protected ScheduleNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
+	[Serializable]
 	public class RecordsOutdatedException : Exception {
 		public RecordsOutdatedException() { }
 		public RecordsOutdatedException(string message) : base(message) { }
