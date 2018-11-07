@@ -98,10 +98,6 @@ namespace ScheduleComponent.Services {
 			return GetRecordFromAbbr(abbr)?.FullName;
 		}
 
-		public string[] GetFullNamesFromNameInput(string nameInput, bool skipNoLookup = true) {
-			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.FullName).ToArray();
-		}
-
 		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
 			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.Abbreviation).ToArray();
 		}
