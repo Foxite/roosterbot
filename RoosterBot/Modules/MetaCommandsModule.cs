@@ -8,7 +8,7 @@ namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
-			if (!await CheckCooldown())
+			if (!await CheckCooldown(1f))
 				return;
 
 			// Print list of commands
