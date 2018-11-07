@@ -75,9 +75,6 @@ namespace ScheduleComponent.Services {
 		public TeacherRecord[] GetRecordsFromNameInput(string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
-			// Get a list of all teachers matching the given input.
-			// We match them by first checking if their full name starts with the input (case insensitive),
-			//  and then by checking if the *input* starts with one of the alternative spellings (also case insensitive).
 			List<TeacherRecord> records = new List<TeacherRecord>();
 
 			foreach (TeacherRecord record in m_Records) {
@@ -122,6 +119,9 @@ namespace ScheduleComponent.Services {
 		public string	DiscordUser;
 
 		public bool MatchName(string nameInput) {
+			// We match the input by first checking if their full name starts with the input (case insensitive),
+			//  and then by checking if the *input* starts with one of the alternative spellings (also case insensitive).
+
 			// Check start of full name or exact match with abbreviation
 			if (Abbreviation.ToLower() == nameInput ||
 				FullName.ToLower().StartsWith(nameInput)) {
