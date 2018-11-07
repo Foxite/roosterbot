@@ -86,7 +86,7 @@ namespace ScheduleComponent.Services {
 				}
 			}
 
-			// If we end up with an empty list, return null, otherwise, return 
+			// If we end up with an empty list, return null, otherwise, return  the list
 			if (records.Count == 0) {
 				return null;
 			} else {
@@ -107,7 +107,7 @@ namespace ScheduleComponent.Services {
 		}
 	}
 
-	public class TeacherRecord : ICloneable {
+	public class TeacherRecord {
 		public string	Abbreviation;
 		public string	FullName;
 		public string[] AltSpellings;
@@ -131,16 +131,6 @@ namespace ScheduleComponent.Services {
 				}
 			}
 			return false;
-		}
-
-		public object Clone() {
-			return new TeacherRecord() {
-				Abbreviation = Abbreviation,
-				FullName = FullName,
-				AltSpellings = (string[]) AltSpellings.Clone(),
-				NoLookup = NoLookup,
-				DiscordUser = DiscordUser
-			};
 		}
 	}
 }

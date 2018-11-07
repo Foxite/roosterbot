@@ -150,7 +150,7 @@ namespace ScheduleComponent.Services {
 		}
 	}
 
-	public class ScheduleRecord : ICloneable {
+	public class ScheduleRecord {
 		public string	Activity { get; set; }
 		public string	Duration { get; set; }
 		public DateTime	Start { get; set; }
@@ -158,18 +158,6 @@ namespace ScheduleComponent.Services {
 		public string	StaffMember { get; set; }
 		public string	Room { get; set; }
 		public string	StudentSets { get; set; }
-		
-		public object Clone() {
-			return new ScheduleRecord() {
-				Activity = Activity,
-				Duration = Duration,
-				Start = Start,
-				End = End,
-				StaffMember = StaffMember,
-				Room = Room,
-				StudentSets = StudentSets
-			};
-		}
 	}
 
 	public class ScheduleNotFoundException : Exception {
