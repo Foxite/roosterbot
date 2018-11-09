@@ -16,7 +16,7 @@ namespace ScheduleComponent.Modules {
 
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 
-			if (teachers == null) {
+			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) {
@@ -38,7 +38,7 @@ namespace ScheduleComponent.Modules {
 				return;
 
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
-			if (teachers == null) {
+			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) { // There are multiple
@@ -70,7 +70,7 @@ namespace ScheduleComponent.Modules {
 				string teacherGiven = arguments.Item3;
 				string[] teachers = Teachers.GetAbbrsFromNameInput(arguments.Item3);
 
-				if (teachers == null) {
+				if (teachers.Length == 0) {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
 					if (teachers.Length > 1) {

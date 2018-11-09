@@ -85,17 +85,12 @@ namespace ScheduleComponent.Services {
 					records.Add(record);
 				}
 			}
-
-			// If we end up with an empty list, return null, otherwise, return  the list
-			if (records.Count == 0) {
-				return null;
-			} else {
-				return records.ToArray();
-			}
+			
+			return records.ToArray();
 		}
 		
 		public string[] GetAbbrsFromNameInput(string nameInput, bool skipNoLookup = true) {
-			return GetRecordsFromNameInput(nameInput, skipNoLookup)?.Select(record => record.Abbreviation).ToArray();
+			return GetRecordsFromNameInput(nameInput, skipNoLookup).Select(record => record.Abbreviation).ToArray();
 		}
 
 		public string GetFullNameFromAbbr(string abbr) {

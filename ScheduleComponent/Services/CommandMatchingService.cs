@@ -16,7 +16,7 @@ namespace ScheduleComponent.Services {
 				return CommandType.Student;
 			} else if (m_RoomRegex.IsMatch(parameters)) {
 				return CommandType.Room;
-			} else if (m_Teachers.GetAbbrsFromNameInput(parameters) != null) {
+			} else if (m_Teachers.GetAbbrsFromNameInput(parameters).Length != 0) {
 				return CommandType.Teacher;
 			} else {
 				return CommandType.Unknown;
