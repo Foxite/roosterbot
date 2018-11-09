@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Modules;
 using ScheduleComponent.Services;
-using System.Linq;
 
 namespace ScheduleComponent.Modules {
 	[RoosterBot.Attributes.LogTag("TLM")]
@@ -16,13 +15,15 @@ namespace ScheduleComponent.Modules {
 			if (!await CheckCooldown())
 				return;
 
-			IReadOnlyList<TeacherRecord> allRecords = Teachers.GetAllRecords();
+			IReadOnlyList<TeacherRecord> records;
 
-			if (!string.IsNullOrWhiteSpace(name)) {
-				allRecords = allRecords.Where(record => record.MatchName(name)).ToList();
+			if (string.IsNullOrWhiteSpace(name)) {
+				records = Teachers.GetAllRecords();
+			} else {
+				records = Teachers.GetRecordsFromNameInput(name);
 			}
 
-			if (allRecords.Count == 0) {
+			if (records.Count == 0) {
 				await ReplyAsync("Geen leraren gevonden.");
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
@@ -30,7 +31,7 @@ namespace ScheduleComponent.Modules {
 				// Because of NoLookup, we don't actually know how many times we use the item, but in practice, we almost always have to use it twice and not once.
 				string fullNameHeader = "Volledige naam";
 				int maxNameLength = fullNameHeader.Length;
-				foreach (TeacherRecord record in allRecords) {
+				foreach (TeacherRecord record in records) {
 					if (record.NoLookup) {
 						continue;
 					}
@@ -38,7 +39,7 @@ namespace ScheduleComponent.Modules {
 				}
 
 				string response = $"`{fullNameHeader.PadRight(maxNameLength)}  Afk. Discord naam";
-				foreach (TeacherRecord record in allRecords) {
+				foreach (TeacherRecord record in records) {
 					if (record.NoLookup) {
 						continue;
 					}
