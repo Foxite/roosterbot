@@ -26,7 +26,7 @@ namespace ScheduleComponent.Modules {
 					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
-						await ReplyAsync(RespondTeacherCurrent(Teachers.GetFullNameFromAbbr(teachers[0]), record), "StaffMember", teachers[0], record);
+						await ReplyAsync(RespondTeacherCurrent(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record), "StaffMember", teachers[0], record);
 					}
 				}
 			}
@@ -49,7 +49,7 @@ namespace ScheduleComponent.Modules {
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await ReplyAsync(RespondTeacherNext(Teachers.GetFullNameFromAbbr(teachers[0]), record).FirstCharToUpper(), "StaffMember", teachers[0], record);
+							await ReplyAsync(RespondTeacherNext(record.StaffMember, Teachers.GetFullNameFromAbbr(teachers[0]), record).FirstCharToUpper(), "StaffMember", teachers[0], record);
 						} else {
 							await FatalError("GetRecord(TS1)==null)");
 						}
@@ -93,10 +93,15 @@ namespace ScheduleComponent.Modules {
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
-		private string RespondTeacherCurrent(string teacher, ScheduleRecord record) {
+		private string RespondTeacherCurrent(string teacherAbbr, string teacher, ScheduleRecord record) {
 			string response;
 			if (record == null) {
 				response = $"Het lijkt erop dat {teacher} nu niets heeft.";
+				ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, "StaffMember", teacherAbbr).GetAwaiter().GetResult();
+
+				if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
+					response += "\nHij/zij staat vandaag ook niet op het rooster, en is dus waarschijnlijk afwezig.";
+				}
 			} else {
 				response = $"{teacher}: Nu\n";
 				response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
@@ -117,8 +122,8 @@ namespace ScheduleComponent.Modules {
 			}
 			return response;
 		}
-
-		private string RespondTeacherNext(string teacher, ScheduleRecord record) {
+		
+		private string RespondTeacherNext(string teacherAbbr, string teacher, ScheduleRecord record) {
 			string response = $"{teacher}: Hierna\n";
 			response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
 
@@ -195,11 +200,11 @@ namespace ScheduleComponent.Modules {
 				results[i] = await GetRecord(next, "StaffMember", teacherAbbrs[i]);
 			}
 
-			Func<string, ScheduleRecord, string> respondFunction = next ? (Func<string, ScheduleRecord, string>) RespondTeacherNext : RespondTeacherCurrent;
+			Func<string, string, ScheduleRecord, string> respondFunction = next ? (Func<string, string, ScheduleRecord, string>) RespondTeacherNext : RespondTeacherCurrent;
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
-					response += respondFunction(teachers[i], results[i].Value) + "\n\n";
+					response += respondFunction(results[i].Value.StaffMember, teachers[i], results[i].Value) + "\n\n";
 				} else {
 					response += $"{teachers[i]}: Geen info.";
 				}
