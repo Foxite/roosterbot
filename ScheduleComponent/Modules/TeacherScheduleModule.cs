@@ -88,7 +88,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar morgen als eerste heeft")]
-		public async Task StudentTomorrowCommand([Remainder] string leraar) {
+		public async Task TeacherTomorrowCommand([Remainder] string leraar) {
 			await TeacherWeekdayCommand(leraar + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
 		}
 
