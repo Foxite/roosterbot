@@ -4,7 +4,7 @@ using Discord.Commands;
 using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
-	[RoosterBot.Attributes.LogTag("MCM")]
+	[Attributes.LogTag("MCM")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
@@ -24,7 +24,8 @@ namespace RoosterBot.Modules {
 			response += "`!hierna 3ga1` en dan `!daarna`. Je kan `!daarna` zo vaak gebruiken als je wilt.\n\n";
 			response += "Als ik niet begrijp of je het over een klas, leraar, of lokaal hebt, kun je dit in de command zetten:\n";
 			response += "`!klas nu 2ga1`, `leraar dag martijn dinsdag`, `!lokaal morgen a128`\n\n";
-			response += "Je kan een lijst van alle docenten opvragen, met hun afkortingen en discord namen: `!docenten` of `!leraren`";
+			response += "Je kan een lijst van alle docenten opvragen, met hun afkortingen en discord namen: `!docenten` of `!leraren`\n";
+			response += "Deze lijst kan ook gefilterd worden: `!docenten martijn`";
 			await ReplyAsync(response);
 		}
 
