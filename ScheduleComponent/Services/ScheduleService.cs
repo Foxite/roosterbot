@@ -128,11 +128,10 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord GetRecordAfter(string schedule, ScheduleRecord givenRecord) {
+		public ScheduleRecord GetRecordAfter(string schedule, string identifier, ScheduleRecord givenRecord) {
 			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
 												//  reuse the code from GetNextRecord().
 			bool sawRecordForClass = false;
-			string identifier = (string) givenRecord.GetType().GetProperty(schedule).GetValue(givenRecord);
 
 			foreach (ScheduleRecord record in m_Schedules[schedule]) {
 				if (((string) record.GetType().GetProperty(schedule).GetValue(record)).Contains(identifier)) {
