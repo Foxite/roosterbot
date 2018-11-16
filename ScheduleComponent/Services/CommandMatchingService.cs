@@ -16,10 +16,13 @@ namespace ScheduleComponent.Services {
 				return CommandType.Student;
 			} else if (m_RoomRegex.IsMatch(parameters)) {
 				return CommandType.Room;
-			} else if (m_Teachers.GetAbbrsFromNameInput(parameters).Length != 0) {
-				return CommandType.Teacher;
 			} else {
-				return CommandType.Unknown;
+				int teacherResults = m_Teachers.GetAbbrsFromNameInput(parameters).Length;
+				if (teacherResults > 0 && teacherResults < 3) {
+					return CommandType.Teacher;
+				} else {
+					return CommandType.Unknown;
+				}
 			}
 		}
 	}
