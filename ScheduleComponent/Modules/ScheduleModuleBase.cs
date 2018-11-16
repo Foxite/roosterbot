@@ -43,7 +43,7 @@ namespace ScheduleComponent.Modules {
 					await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 					return;
 				} catch (Exception ex) {
-					await FatalError(ex.GetType().Name);
+					await FatalError($"{ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
 					throw;
 				}
 
@@ -69,35 +69,24 @@ namespace ScheduleComponent.Modules {
 					await FatalError("query.SourceSchedule is not recognized");
 					return;
 				}
-				response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
+				response += TableItemActivity(record, false);
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
 						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
-						if (query.SourceSchedule != "StaffMember" && !string.IsNullOrWhiteSpace(teachers)) {
-							if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
-
-								response += $"<:VRjoram:392762653367336960> {teachers}\n";
-							} else {
-								response += $":bust_in_silhouette: {teachers}\n";
-							}
+						if (query.SourceSchedule != "StaffMember") {
+							response += TableItemStaffMember(record);
 						}
-						if (query.SourceSchedule != "StudentSets" && !string.IsNullOrWhiteSpace(record.StudentSets)) {
-							response += $":busts_in_silhouette: {record.StudentSets}\n";
+						if (query.SourceSchedule != "StudentSets") {
+							response += TableItemStudentSets(record);
 						}
-						if (query.SourceSchedule != "Room" && !string.IsNullOrWhiteSpace(record.Room)) {
-							response += $":round_pushpin: {record.Room}\n";
+						if (query.SourceSchedule != "Room") {
+							response += TableItemRoom(record);
 						}
 					}
-					if (record.Start.Date == DateTime.Today) {
-						TimeSpan timeTillStart = record.Start - DateTime.Now;
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}" +
-								$" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}\n";
-					} else {
-						response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-					}
-					response += $":stopwatch: {record.Duration}\n";
+					bool isToday = record.Start.Date == DateTime.Today;
+					response += TableItemStartEndTime(record);
+					response += TableItemDuration(record);
 				}
 				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
 			}
@@ -140,15 +129,15 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected string TableItemStartEndTime(ScheduleRecord record, bool includeTimeTill, bool includeDate) {
+		protected string TableItemStartEndTime(ScheduleRecord record) {
 			string ret = "";
 
-			if (includeDate) {
+			if (record.Start.Date != DateTime.Today) {
 				ret += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n" + ret;
 			}
 
 			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
-			if (includeTimeTill) {
+			if (record.Start.Date == DateTime.Today && record.Start > DateTime.Now) {
 				TimeSpan timeTillStart = record.Start - DateTime.Now;
 				ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
 			}
@@ -156,9 +145,9 @@ namespace ScheduleComponent.Modules {
 			return ret + "\n";
 		}
 
-		protected string TableItemDuration(ScheduleRecord record, bool isActive) {
+		protected string TableItemDuration(ScheduleRecord record) {
 			string ret = $":stopwatch: {record.Duration}";
-			if (isActive) {
+			if (record.Start < DateTime.Now && record.End > DateTime.Now) {
 				TimeSpan timeLeft = record.End - DateTime.Now;
 				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
 			}

@@ -29,8 +29,8 @@ namespace ScheduleComponent.Modules {
 					if (record.Activity != "stdag doc") {
 						response += TableItemStaffMember(record);
 						response += TableItemStudentSets(record);
-						response += TableItemStartEndTime(record, false, false);
-						response += TableItemDuration(record, true);
+						response += TableItemStartEndTime(record);
+						response += TableItemDuration(record);
 					}
 				}
 				await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
@@ -62,8 +62,8 @@ namespace ScheduleComponent.Modules {
 					if (record.Activity != "stdag doc") {
 						response += TableItemStaffMember(record);
 						response += TableItemStudentSets(record);
-						response += TableItemStartEndTime(record, isToday, !isToday);
-						response += TableItemDuration(record, false);
+						response += TableItemStartEndTime(record);
+						response += TableItemDuration(record);
 					}
 					await ReplyAsync(response, "Room", record.Room, record);
 				}
@@ -99,8 +99,8 @@ namespace ScheduleComponent.Modules {
 						if (record.Activity != "stdag doc") {
 							response += TableItemStaffMember(record);
 							response += TableItemStudentSets(record);
-							response += TableItemStartEndTime(record, false, true);
-							response += TableItemDuration(record, false);
+							response += TableItemStartEndTime(record);
+							response += TableItemDuration(record);
 						}
 					}
 					await ReplyAsync(response, "Room", room, record);

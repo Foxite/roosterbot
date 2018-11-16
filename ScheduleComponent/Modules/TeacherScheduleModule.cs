@@ -112,8 +112,8 @@ namespace ScheduleComponent.Modules {
 						response += TableItemStudentSets(record);
 					}
 
-					response += TableItemStartEndTime(record, false, false);
-					response += TableItemDuration(record, true);
+					response += TableItemStartEndTime(record);
+					response += TableItemDuration(record);
 				}
 			}
 			return response;
@@ -137,8 +137,8 @@ namespace ScheduleComponent.Modules {
 					response += TableItemStudentSets(record);
 				}
 
-				response += TableItemStartEndTime(record, isToday, !isToday);
-				response += TableItemDuration(record, false);
+				response += TableItemStartEndTime(record);
+				response += TableItemDuration(record);
 			}
 			return response;
 		}
@@ -161,8 +161,8 @@ namespace ScheduleComponent.Modules {
 						response += TableItemStudentSets(record);
 					}
 
-					response += TableItemStartEndTime(record, false, true);
-					response += TableItemDuration(record, false);
+					response += TableItemStartEndTime(record);
+					response += TableItemDuration(record);
 				}
 			}
 			return response;

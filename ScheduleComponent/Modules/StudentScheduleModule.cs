@@ -32,8 +32,8 @@ namespace ScheduleComponent.Modules {
 							response += TableItemRoom(record);
 						}
 
-						response += TableItemStartEndTime(record, false, false);
-						response += TableItemDuration(record, true);
+						response += TableItemStartEndTime(record);
+						response += TableItemDuration(record);
 					}
 				}
 				await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
@@ -68,8 +68,8 @@ namespace ScheduleComponent.Modules {
 							response += TableItemRoom(record);
 						}
 						
-						response += TableItemStartEndTime(record, isToday, !isToday);
-						response += TableItemDuration(record, false);
+						response += TableItemStartEndTime(record);
+						response += TableItemDuration(record);
 					}
 					await ReplyAsync(response, "StudentSets", record.StudentSets, record);
 				}
@@ -109,8 +109,8 @@ namespace ScheduleComponent.Modules {
 								response += TableItemRoom(record);
 							}
 
-							response += TableItemStartEndTime(record, false, true);
-							response += TableItemDuration(record, false);
+							response += TableItemStartEndTime(record);
+							response += TableItemDuration(record);
 						}
 					}
 					await ReplyAsync(response, "StudentSets", clazz, record);
