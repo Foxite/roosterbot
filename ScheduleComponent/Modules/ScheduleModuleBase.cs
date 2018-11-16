@@ -34,7 +34,7 @@ namespace ScheduleComponent.Modules {
 					if (nullRecord) {
 						record = Schedules.GetNextRecord(query.SourceSchedule, query.Identifier);
 					} else {
-						record = Schedules.GetRecordAfter(query.SourceSchedule, query.Record);
+						record = Schedules.GetRecordAfter(query.SourceSchedule, query.Identifier, query.Record);
 					}
 				} catch (ScheduleNotFoundException) {
 					await MinorError("Dat item staat niet op mijn rooster.");
@@ -103,6 +103,68 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
+		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
+			string ret = $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}";
+			if (isFirstRecord && record.Activity == "pauze") {
+				ret += " :thinking:";
+			}
+			return ret + "\n";
+		}
+		
+		protected string TableItemStaffMember(ScheduleRecord record) {
+			string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
+			if (string.IsNullOrWhiteSpace(teachers)) {
+				return "";
+			} else {
+				if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
+					return $"<:VRjoram:392762653367336960> {teachers}\n";
+				} else {
+					return $":bust_in_silhouette: {teachers}\n";
+				}
+			}
+		}
+
+		protected string TableItemStudentSets(ScheduleRecord record) {
+			if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
+				return $":busts_in_silhouette: {record.StudentSets}\n";
+			} else {
+				return "";
+			}
+		}
+		
+		protected string TableItemRoom(ScheduleRecord record) {
+			if (!string.IsNullOrWhiteSpace(record.Room)) {
+				return $":round_pushpin: {record.Room}\n";
+			} else {
+				return "";
+			}
+		}
+
+		protected string TableItemStartEndTime(ScheduleRecord record, bool includeTimeTill, bool includeDate) {
+			string ret = "";
+
+			if (includeDate) {
+				ret += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n" + ret;
+			}
+
+			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+			if (includeTimeTill) {
+				TimeSpan timeTillStart = record.Start - DateTime.Now;
+				ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
+			}
+
+			return ret + "\n";
+		}
+
+		protected string TableItemDuration(ScheduleRecord record, bool isActive) {
+			string ret = $":stopwatch: {record.Duration}";
+			if (isActive) {
+				TimeSpan timeLeft = record.End - DateTime.Now;
+				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
+			}
+			return ret + "\n";
+		}
+
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
 			if (name == "") {
 				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
@@ -136,7 +198,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (Exception ex) {
-				await FatalError(ex.GetType().Name);
+				await FatalError($"{ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
 				throw;
 			}
 		}

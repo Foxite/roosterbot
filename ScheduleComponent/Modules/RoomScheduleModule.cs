@@ -24,19 +24,13 @@ namespace ScheduleComponent.Modules {
 					}
 				} else {
 					response = $"{record.Room}: Nu\n";
-					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
+					response += TableItemActivity(record, false);
 
 					if (record.Activity != "stdag doc") {
-						string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							response += $":bust_in_silhouette: {teachers}\n";
-						}
-						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-							response += $":busts_in_silhouette: {record.StudentSets}\n";
-						}
-						response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-						TimeSpan timeLeft = record.End - DateTime.Now;
-						response += $":stopwatch: {record.Duration} - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}\n";
+						response += TableItemStaffMember(record);
+						response += TableItemStudentSets(record);
+						response += TableItemStartEndTime(record, false, false);
+						response += TableItemDuration(record, true);
 					}
 				}
 				await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
@@ -54,30 +48,22 @@ namespace ScheduleComponent.Modules {
 				if (record == null) {
 					await FatalError("GetRecord(RS1)==null");
 				} else {
-					string response = $"{record.Room}: Hierna\n";
-					response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
+					bool isToday = record.Start.Date == DateTime.Today;
+					string response;
+
+					if (isToday) {
+						response = $"{record.Room}: Hierna\n";
+					} else {
+						response = $"{record.Room}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+					}
+
+					response += TableItemActivity(record, false);
 
 					if (record.Activity != "stdag doc") {
-						string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							response += $":bust_in_silhouette: {teachers}\n";
-						}
-						if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-							response += $":busts_in_silhouette: {record.StudentSets}\n";
-						}
-
-						if (record.Start.Date != DateTime.Today) {
-							response += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n";
-						}
-
-						if (record.Start.Date == DateTime.Today) {
-							TimeSpan timeTillStart = record.Start - DateTime.Now;
-							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}" +
-								$" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}\n";
-						} else {
-							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-						}
-						response += $":stopwatch: {record.Duration}\n";
+						response += TableItemStaffMember(record);
+						response += TableItemStudentSets(record);
+						response += TableItemStartEndTime(record, isToday, !isToday);
+						response += TableItemDuration(record, false);
 					}
 					await ReplyAsync(response, "Room", record.Room, record);
 				}
@@ -107,22 +93,14 @@ namespace ScheduleComponent.Modules {
 						}
 					} else {
 						response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
-						response += $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}\n";
+
+						response += TableItemActivity(record, false);
 
 						if (record.Activity != "stdag doc") {
-							string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
-							if (!string.IsNullOrWhiteSpace(teachers)) {
-								response += $":bust_in_silhouette: {teachers}\n";
-							}
-							if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-								response += $":busts_in_silhouette: {record.StudentSets}\n";
-							}
-
-							if (record.Start.Date != DateTime.Today) {
-								response += $":calendar_spiral: {record.Start.ToShortDateString()}\n";
-							}
-							response += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}\n";
-							response += $":stopwatch: {record.Duration}\n";
+							response += TableItemStaffMember(record);
+							response += TableItemStudentSets(record);
+							response += TableItemStartEndTime(record, false, true);
+							response += TableItemDuration(record, false);
 						}
 					}
 					await ReplyAsync(response, "Room", room, record);
