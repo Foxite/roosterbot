@@ -105,7 +105,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(teachers)) {
 				return "";
 			} else {
-				if (record.StaffMember == "JWO" && Util.RNG.NextDouble() < 0.1) {
+				if (record.StaffMember == "JWO") {
 					return $"<:VRjoram:392762653367336960> {teachers}\n";
 				} else {
 					return $":bust_in_silhouette: {teachers}\n";
