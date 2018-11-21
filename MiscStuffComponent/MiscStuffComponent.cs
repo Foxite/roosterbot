@@ -3,6 +3,7 @@ using RoosterBot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using MiscStuffComponent.Services;
 using MiscStuffComponent.Modules;
+using System.IO;
 
 namespace MiscStuffComponent
 {
@@ -13,7 +14,7 @@ namespace MiscStuffComponent
 		public override void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath) {
 			ConfigPath = configPath;
 
-			services.AddSingleton(new CounterService(configPath));
+			services.AddSingleton(new CounterService(Path.Combine(configPath, "counters")));
 
 			commandService.AddModuleAsync<CounterModule>();
 			commandService.AddModuleAsync<MiscModule>();
