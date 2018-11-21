@@ -17,13 +17,10 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand() {
-			if (!(Context.User is IGuildUser user))
-				return;
-
 			if (!await CheckCooldown())
 				return;
 
-			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(user);
+			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(Context.User);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
 			} else {
