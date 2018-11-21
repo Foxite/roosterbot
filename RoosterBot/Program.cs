@@ -198,8 +198,14 @@ namespace RoosterBot {
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
 			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos))) {
 				return;
+			}
+
+			if (message.Content.Length == m_ConfigService.CommandPrefix.Length) {
+				// Message looks like a command but it does not actually have a command
+				return;
+			}
 
 			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
