@@ -20,6 +20,11 @@ namespace ScheduleComponent.Modules {
 			if (!await CheckCooldown())
 				return;
 
+			// This allows us to call !daarna automatically in certain conditions, and prevents the cooldown from causing problems.
+			await GetAfterCommandFunction();
+		}
+
+		protected async Task GetAfterCommandFunction() {
 			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(Context.User);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
@@ -86,6 +91,10 @@ namespace ScheduleComponent.Modules {
 					response += TableItemDuration(record);
 				}
 				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
+
+				if (record.Activity == "pauze") {
+					await GetAfterCommandFunction();
+				}
 			}
 		}
 

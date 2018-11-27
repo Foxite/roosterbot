@@ -22,6 +22,7 @@ namespace ScheduleComponent.Modules {
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
+					await ReplyAsync(response, "StudentSets", klas.ToUpper(), null);
 				} else {
 					response = $"{record.StudentSets}: Nu\n";
 					response += TableItemActivity(record, false);
@@ -35,8 +36,12 @@ namespace ScheduleComponent.Modules {
 						response += TableItemStartEndTime(record);
 						response += TableItemDuration(record);
 					}
+					await ReplyAsync(response, "StudentSets", record.StudentSets, record);
+
+					if (record.Activity == "pauze") {
+						await GetAfterCommandFunction();
+					}
 				}
-				await ReplyAsync(response, "StudentSets", (record?.StudentSets) ?? klas.ToUpper(), record);
 			}
 		}
 
@@ -72,6 +77,10 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 					}
 					await ReplyAsync(response, "StudentSets", record.StudentSets, record);
+					
+					if (record.Activity == "pauze") {
+						await GetAfterCommandFunction();
+					}
 				}
 			}
 		}
@@ -114,6 +123,10 @@ namespace ScheduleComponent.Modules {
 						}
 					}
 					await ReplyAsync(response, "StudentSets", clazz, record);
+					
+					if (record.Activity == "pauze") {
+						await GetAfterCommandFunction();
+					}
 				}
 			}
 		}
