@@ -15,9 +15,9 @@ namespace MiscStuffComponent.Modules {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
-				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {(long) timeSinceReset.TotalDays} dagen {timeSinceReset.Hours} uur.\n";
+				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {Service.FormatTimeSpan(timeSinceReset)}.\n";
 				response += $"(Laatst gereset op {counterData.LastResetDate.ToShortDateString()} om {counterData.LastResetDate.ToShortTimeString()}.)\n";
-				response += $"De highscore is {(long) counterData.HighScoreTimespan.TotalDays} dagen en {counterData.HighScoreTimespan.Hours} uur.\n";
+				response += $"De highscore is {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.\n";
 				response += $"Reset de counter met \"!counter reset {counter}\".";
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
@@ -32,12 +32,12 @@ namespace MiscStuffComponent.Modules {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
-				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0 (was {(long) timeSinceReset.TotalDays} dagen {timeSinceReset.Hours} uur).\n";
+				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0 (was {Service.FormatTimeSpan(timeSinceReset)}).\n";
 				bool newRecord = Service.ResetDateCounter(counter);
 				if (newRecord) {
-					response += $"Dat is een nieuw record! De vorige highscore was {(long) counterData.HighScoreTimespan.TotalDays} dagen en {counterData.HighScoreTimespan.Hours} uur.";
+					response += $"Dat is een nieuw record! De vorige highscore was {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.";
 				} else {
-					response += $"De highscore is {(long) counterData.HighScoreTimespan.TotalDays} dagen en {counterData.HighScoreTimespan.Hours} uur.";
+					response += $"De highscore is {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.";
 				}
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {

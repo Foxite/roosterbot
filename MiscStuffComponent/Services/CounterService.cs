@@ -56,6 +56,14 @@ namespace MiscStuffComponent.Services {
 				throw new FileNotFoundException();
 			}
 		}
+
+		public string FormatTimeSpan(TimeSpan ts) {
+			if (((long) ts.TotalDays) == 1) {
+				return $"{(long) ts.TotalDays} dag en {ts.Hours} uur";
+			} else {
+				return $"{(long) ts.TotalDays} dagen en {ts.Hours} uur";
+			}
+		}
 	}
 
 	public struct CounterData {
