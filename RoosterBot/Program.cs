@@ -213,11 +213,32 @@ namespace RoosterBot {
 			// rather an object stating if the command executed successfully)
 			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
 
-			#region Error handling
+			await HandleError(result, message, initialResponse);
+		}
+
+		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
+			// Create a number to track where the prefix ends and the command begins
+			int argPos = 0;
+			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
+			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+				return;
+
+			// Create a Command Context
+			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
+			// Execute the command. (result does not indicate a return value, 
+			// rather an object stating if the command executed successfully)
+			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
+			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
+			if (!result.IsSuccess) {
+				await HandleError(result, message, initialResponse);
+			}
+		}
+
+		private async Task HandleError(IResult result, IUserMessage command, IUserMessage initialResponse = null) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
-				string badReport = $"\"{message.Content}\": ";
+				string badReport = $"\"{command.Content}\": ";
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
@@ -252,7 +273,7 @@ namespace RoosterBot {
 						bad = true;
 						break;
 					default:
-						badReport += "Unknown error";
+						badReport += "Unknown error: " + result.Error.Value;
 						bad = true;
 						break;
 					}
@@ -272,33 +293,9 @@ namespace RoosterBot {
 				}
 
 				if (initialResponse == null) {
-					this.m_Comands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
+					this.m_Comands.AddResponse(command, await command.Channel.SendMessageAsync(response));
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
-				}
-			}
-			#endregion Error handling
-		}
-
-		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
-			// Create a number to track where the prefix ends and the command begins
-			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
-				return;
-
-			// Create a Command Context
-			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
-			// Execute the command. (result does not indicate a return value, 
-			// rather an object stating if the command executed successfully)
-			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
-			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
-			if (!result.IsSuccess) {
-				if (initialResponse == null) {
-					IUserMessage response = await context.Channel.SendMessageAsync(result.ErrorReason);
-					commandService.AddResponse(context.Message, response);
-				} else {
-					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = result.ErrorReason; });
 				}
 			}
 		}
