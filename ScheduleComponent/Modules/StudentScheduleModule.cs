@@ -124,7 +124,7 @@ namespace ScheduleComponent.Modules {
 					}
 					await ReplyAsync(response, "StudentSets", clazz, record);
 					
-					if (record.Activity == "pauze") {
+					if (record?.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
 				}
