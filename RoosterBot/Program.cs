@@ -88,9 +88,7 @@ namespace RoosterBot {
 			List<Assembly> assemblies = new List<Assembly>();
 			foreach (string file in toLoad) {
 				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
-				var a = File.Exists(path);
-				var b = Path.GetExtension(path).ToLower() == ".dll";
-				if (a && b) {
+				if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".dll") {
 					assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path)));
 				} else {
 					Logger.Log(LogSeverity.Error, "Main", "Component " + file + " does not exist or it is not a DLL file");
