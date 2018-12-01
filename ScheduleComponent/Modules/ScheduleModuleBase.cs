@@ -193,7 +193,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (Exception ex) {
-				await FatalError("Uncaught exception", e);
+				await FatalError("Uncaught exception", ex);
 				throw;
 			}
 		}
@@ -231,7 +231,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (Exception ex) {
-				await FatalError("Uncaught exception", e);
+				await FatalError("Uncaught exception", ex);
 				throw;
 			}
 		}
