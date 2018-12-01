@@ -31,6 +31,8 @@ namespace RoosterBot.Services {
 #endif
 		
 		#region IDisposable Support
+		// Everything in this region was added by Visual Studio during code analysis, I don't understand most of it.
+		// I mean, I do, but why would you have a second method for this? Why not just stick with a regular Dispose()? I don't see the reason.
 		private bool disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing) {
