@@ -45,7 +45,7 @@ namespace ScheduleComponent.Modules {
 					await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 					return;
 				} catch (Exception ex) {
-					await FatalError($"{ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
+					await FatalError("Uncaught exception", ex);
 					throw;
 				}
 
@@ -68,7 +68,7 @@ namespace ScheduleComponent.Modules {
 						response = $"{query.Identifier}: Na de vorige les\n";
 					}
 				} else {
-					await FatalError("query.SourceSchedule is not recognized");
+					await FatalError($"query.SourceSchedule is not recognized: {query.SourceSchedule}");
 					return;
 				}
 				response += TableItemActivity(record, false);
@@ -193,7 +193,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (Exception ex) {
-				await FatalError($"{ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
+				await FatalError("Uncaught exception", e);
 				throw;
 			}
 		}
@@ -231,7 +231,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (Exception ex) {
-				await FatalError(ex.GetType().Name);
+				await FatalError("Uncaught exception", e);
 				throw;
 			}
 		}
@@ -286,8 +286,8 @@ namespace ScheduleComponent.Modules {
 			LSCService.RemoveLastQuery(Context.User);
 		}
 
-		protected async override Task FatalError(string message) {
-			await base.FatalError(message);
+		protected async override Task FatalError(string message, Exception exception = null) {
+			await base.FatalError(message, exception);
 			LSCService.RemoveLastQuery(Context.User);
 		}
 	}

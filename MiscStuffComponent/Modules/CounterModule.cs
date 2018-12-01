@@ -23,7 +23,7 @@ namespace MiscStuffComponent.Modules {
 			} catch (FileNotFoundException) {
 				await MinorError("Die bestaat niet.");
 			} catch (Exception e) {
-				await FatalError($"Uncaught exception {e.ToString()}");
+				await FatalError("Uncaught exception", e);
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace MiscStuffComponent.Modules {
 			} catch (FileNotFoundException) {
 				await MinorError("Die bestaat niet.");
 			} catch (Exception e) {
-				await FatalError($"Uncaught exception {e.ToString()}");
+				await FatalError("Uncaught exception", e);
 			}
 		}
 	}

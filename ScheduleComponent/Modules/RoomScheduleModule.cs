@@ -46,7 +46,7 @@ namespace ScheduleComponent.Modules {
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError("GetRecord(RS1)==null");
+					await FatalError($"`GetRecord(true, \"Room\", {lokaal})` returned null");
 				} else {
 					bool isToday = record.Start.Date == DateTime.Today;
 					string response;
@@ -74,8 +74,7 @@ namespace ScheduleComponent.Modules {
 		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
 			if (!await CheckCooldown())
 				return;
-
-
+			
 			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
 
 			if (arguments.Item1) {

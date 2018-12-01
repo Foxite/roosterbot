@@ -51,7 +51,7 @@ namespace ScheduleComponent.Modules {
 						if (record != null) {
 							await ReplyAsync(RespondTeacherNext(record.StaffMember, Teachers.GetFullNameFromAbbr(teachers[0]), record).FirstCharToUpper(), "StaffMember", teachers[0], record);
 						} else {
-							await FatalError("GetRecord(TS1)==null)");
+							await FatalError($"`GetRecord(true, \"StaffMember\", {teachers[0]})` returned null");
 						}
 					}
 				}
@@ -175,10 +175,6 @@ namespace ScheduleComponent.Modules {
 			for (int i = 0; i < teacherAbbrs.Length; i++) {
 				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
 			}
-
-			if (teachers.Contains(null)) {
-				await FatalError($"RespondTeacherMultiple: GetTeacherName({string.Join(",", teacherAbbrs)}) == null");
-			}
 			
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
 			for (int i = 0; i < results.Length; i++) {
@@ -204,10 +200,6 @@ namespace ScheduleComponent.Modules {
 			string[] teachers = new string[teacherAbbrs.Length];
 			for (int i = 0; i < teacherAbbrs.Length; i++) {
 				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
-			}
-
-			if (teachers.Contains(null)) {
-				await FatalError($"RespondTeacherWeekdayMultiple: GetTeacherName({string.Join(",", teacherAbbrs)}) == null");
 			}
 			
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];

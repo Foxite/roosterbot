@@ -54,7 +54,7 @@ namespace ScheduleComponent.Modules {
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError("GetRecord(SS1)==null)");
+					await FatalError($"`GetRecord(true, \"StudentSets\", {klas})` returned null");
 				} else {
 					bool isToday = record.Start.Date == DateTime.Today;
 					string response;

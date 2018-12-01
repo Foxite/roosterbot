@@ -94,7 +94,7 @@ namespace ScheduleComponent.Services {
 		}
 
 		public string GetFullNameFromAbbr(string abbr) {
-			return GetRecordFromAbbr(abbr)?.FullName;
+			return GetRecordFromAbbr(abbr).FullName;
 		}
 
 		public IReadOnlyList<TeacherRecord> GetAllRecords() {
