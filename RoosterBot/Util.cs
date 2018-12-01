@@ -92,6 +92,9 @@ namespace RoosterBot {
 			case "examen":
 				return abbr.FirstCharToUpper();
 
+			case "Sinterklaas":
+				return abbr;
+
 			default:
 				return $"\"{abbr}\" (ik weet de volledige naam niet)";
 			}
@@ -103,9 +106,9 @@ namespace RoosterBot {
 			try {
 				await message.AddReactionAsync(new Emoji(unicode));
 				return true;
-			} catch (HttpException) {
+			} catch (HttpException) { // Permission denied
 				return false;
-			} // Permission denied
+			}
 		}
 		
 		/// <summary>
