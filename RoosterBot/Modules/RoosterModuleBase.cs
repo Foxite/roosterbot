@@ -37,8 +37,17 @@ namespace RoosterBot.Modules {
 			Log.Info($"Executing command `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}");
 		}
 
+		protected virtual async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			await AddReaction(reactionUnicode);
+			return await ReplyAsync(message, isTTS, embed, options);
+		}
+
 		protected virtual async Task<bool> AddReaction(string unicode) {
 			return await Util.AddReaction(Context.Message, unicode);
+		}
+
+		protected virtual async Task<bool> RemoveReaction(string unicode) {
+			return await Util.RemoveReaction(Context.Message, unicode, Context.Client.CurrentUser);
 		}
 
 		protected virtual async Task<bool> CheckCooldown(float cooldown = 2f) {
@@ -46,12 +55,13 @@ namespace RoosterBot.Modules {
 			if (result.Item1) {
 				return true;
 			} else {
+				Log.Info($"Did not execute command `{Context.Message.Content}` for `{Context.User.Mention}` as they are still in cooldown");
 				if (!result.Item2) {
-					Log.Info($"Did not execute command `{Context.Message.Content}` for `{Context.User.Mention}` as they are still in cooldown");
 					if (Config.ErrorReactions) {
-						await AddReaction("⚠");
+						await ReplyAsync($"{Context.User.Mention}, je gaat een beetje te snel.", "⚠");
+					} else {
+						await ReplyAsync($"{Context.User.Mention}, je gaat een beetje te snel.");
 					}
-					await ReplyAsync($"{Context.User.Mention}, je gaat een beetje te snel.");
 				}
 				return false;
 			}
@@ -60,9 +70,10 @@ namespace RoosterBot.Modules {
 		protected virtual async Task MinorError(string message) {
 			Log.Info($"Command failed: {message}");
 			if (Config.ErrorReactions) {
-				await AddReaction("❌");
+				await ReplyAsync(message, "❌");
+			} else {
+				await ReplyAsync(message);
 			}
-			await ReplyAsync(message);
 		}
 
 		protected virtual async Task FatalError(string message, Exception exception = null) {
@@ -78,10 +89,12 @@ namespace RoosterBot.Modules {
 			if (Config.LogChannel != null) {
 				await Config.LogChannel.SendMessageAsync($"{(await Context.Client.GetUserAsync(Config.BotOwnerId)).Mention} {report}");
 			}
+			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
 			if (Config.ErrorReactions) {
-				await AddReaction("🚫");
+				await ReplyAsync(response, "🚫");
+			} else {
+				await ReplyAsync(response);
 			}
-			await ReplyAsync("Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n");
 		}
 
 		public abstract class ModuleLogger {

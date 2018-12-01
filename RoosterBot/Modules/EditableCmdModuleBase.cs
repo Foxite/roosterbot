@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using RoosterBot.Services;
 
@@ -10,11 +11,19 @@ namespace RoosterBot.Modules {
 
 		private bool m_ResponseWasModified;
 		
-		protected async override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			return await ReplyAsync(message, null, isTTS, embed, options);
+		}
+
+		protected override async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode = null, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			IUserMessage ret;
 			if (Context.OriginalResponse == null) {
+				if (reactionUnicode != null) {
+					await AddReaction(reactionUnicode);
+				}
 				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
-				CmdService.AddResponse(Context.Message, response);
-				return response;
+				CmdService.AddResponse(Context.Message, response, reactionUnicode);
+				ret = response;
 			} else {
 				await Context.OriginalResponse.ModifyAsync((msgProps) => {
 					if (m_ResponseWasModified) {
@@ -24,8 +33,21 @@ namespace RoosterBot.Modules {
 						msgProps.Content = message;
 					}
 				});
-				return Context.OriginalResponse;
+				ret = Context.OriginalResponse;
+
+				CommandResponsePair crp = CmdService.GetResponse(Context.Message);
+				if (crp.ReactionUnicode != reactionUnicode) {
+					if (crp.ReactionUnicode != null) {
+						await RemoveReaction(crp.ReactionUnicode);
+					}
+					if (reactionUnicode != null) {
+						await AddReaction(reactionUnicode);
+					}
+					crp.ReactionUnicode = reactionUnicode;
+				}
 			}
+
+			return ret;
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace RoosterBot.Services {
 		}
 
 		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, ISocketMessageChannel channel) {
-			if (m_Messages.TryGetValue(message.Id, out CommandResponsePair crp)) {
+			if (m_Messages.TryRemove(message.Id, out CommandResponsePair crp)) {
 				await crp.Response.DeleteAsync();
 			}
 		}
@@ -51,7 +51,7 @@ namespace RoosterBot.Services {
 			}
 		}
 
-		public void AddResponse(IUserMessage userCommand, IUserMessage botResponse) {
+		public void AddResponse(IUserMessage userCommand, IUserMessage botResponse, string reactionUnicode = null) {
 			// Remove previous messages from this user
 			IEnumerable<KeyValuePair<ulong, CommandResponsePair>> oldMessages = m_Messages.Where((kvp) => {
 				return kvp.Value.Command.Author.Id == userCommand.Author.Id;
@@ -63,7 +63,15 @@ namespace RoosterBot.Services {
 				}
 			}
 
-			m_Messages.TryAdd(userCommand.Id, new CommandResponsePair(userCommand, botResponse));
+			m_Messages.TryAdd(userCommand.Id, new CommandResponsePair(userCommand, botResponse, reactionUnicode));
+		}
+
+		public CommandResponsePair GetResponse(IUserMessage userCommand) {
+			if (m_Messages.TryGetValue(userCommand.Id, out CommandResponsePair ret)) {
+				return ret;
+			} else {
+				return default;
+			}
 		}
 	}
 
@@ -76,13 +84,15 @@ namespace RoosterBot.Services {
 		public IUserMessage OriginalResponse { get; }
 	}
 
-	public struct CommandResponsePair {
+	public class CommandResponsePair {
 		public IUserMessage Command;
 		public IUserMessage Response;
+		public string ReactionUnicode;
 
-		public CommandResponsePair(IUserMessage command, IUserMessage response) {
+		public CommandResponsePair(IUserMessage command, IUserMessage response, string reactionUnicode = null) {
 			Command = command;
 			Response = response;
+			ReactionUnicode = reactionUnicode;
 		}
 	}
 }

@@ -110,11 +110,23 @@ namespace RoosterBot {
 				return false;
 			}
 		}
-		
+
+		/// <summary>Removes our own reaction to an IUserMessage. If we have not added this reaction, nothing will happen. Only supports Emoji, not server-specific emotes.</summary>
+		/// <param name="botUser">The bot's user.</param>
+		/// <returns>Success. It can fail if the bot does not have permission to add reactions.</returns>
+		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
+			try {
+				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
+				return true;
+			} catch (HttpException) { // Permission denied
+				return false;
+			}
+		}
+
 		/// <summary>
 		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
 		/// </summary>
-		/// <exception cref="System.ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
+		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
 		public static DayOfWeek GetDayOfWeekFromString(string dayofweek) {
 			switch (dayofweek.ToLower()) {
 			case "ma":
@@ -146,6 +158,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Given a DayOfWeek, this returns the Dutch name of that day.
 		/// </summary>
+		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
 		public static string GetStringFromDayOfWeek(DayOfWeek day) {
 			switch (day) {
 			case DayOfWeek.Monday:
