@@ -36,9 +36,7 @@ namespace RoosterBot {
 		private async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 			m_State = ProgramState.BeforeStart;
-
-			List<Task> concurrentLoading = new List<Task>();
-
+			
 			#region Load config
 			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
 			if (!Directory.Exists(configPath)) {
@@ -115,16 +113,7 @@ namespace RoosterBot {
 			// And we're done.
 			m_Services = serviceCollection.BuildServiceProvider();
 			#endregion Start components
-
-			#region Finish initialization tasks
-			try {
-				Task.WaitAll(concurrentLoading.ToArray());
-			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "One or more errors occurred in the background initialization tasks.", ex);
-				return;
-			}
-			#endregion
-
+			
 			#region Start client
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
