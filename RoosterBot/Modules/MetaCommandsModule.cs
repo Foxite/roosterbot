@@ -31,7 +31,7 @@ namespace RoosterBot.Modules {
 
 		[Command("shutdown"), RequireBotManager]
 		public Task ShutdownCommand() {
-			Logger.Log(LogSeverity.Info, "MetaModule", "Shutting down");
+			Log.Info("Shutting down");
 			Program.Instance.Shutdown();
 			return Task.CompletedTask;
 		}
