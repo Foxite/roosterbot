@@ -26,7 +26,7 @@ namespace RoosterBot.Services {
 		}
 #else
 		internal Task SendCriticalErrorNotificationAsync(string message) {
-			return Task.CompletedTask; // Just await it instead of returning it to suppress the warning
+			return Task.CompletedTask;
 		}
 #endif
 		
