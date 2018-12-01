@@ -100,15 +100,15 @@ namespace ScheduleComponent.Modules {
 					ScheduleRecord record = result.Value;
 					string response;
 					if (record == null) {
-						response = $"Het lijkt er op dat je op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets hebt.";
+						response = $"Het lijkt er op dat je op {Util.GetStringFromDayOfWeek(day)} niets hebt.";
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += "\nDat is dan ook in het weekend.";
 						}
 					} else {
 						if (DateTime.Today.DayOfWeek == day) {
-							response = $"{record.StudentSets}: Als eerste op volgende week {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+							response = $"{record.StudentSets}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
 						} else {
-							response = $"{record.StudentSets}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+							response = $"{record.StudentSets}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 						}
 						response += TableItemActivity(record, true);
 

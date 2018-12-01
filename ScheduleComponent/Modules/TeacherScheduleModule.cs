@@ -146,12 +146,12 @@ namespace ScheduleComponent.Modules {
 		private string RespondTeacherWeekday(string teacher, DayOfWeek day, ScheduleRecord record) {
 			string response;
 			if (record == null) {
-				response = $"Het lijkt er op dat {teacher} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets heeft.";
+				response = $"Het lijkt er op dat {teacher} op {Util.GetStringFromDayOfWeek(day)} niets heeft.";
 			} else {
 				if (DateTime.Today.DayOfWeek == day) {
-					response = $"{teacher}: Als eerste op volgende week {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+					response = $"{teacher}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
 				} else {
-					response = $"{teacher}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+					response = $"{teacher}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 				}
 				response += TableItemActivity(record, true);
 

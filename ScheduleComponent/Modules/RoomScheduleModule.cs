@@ -87,12 +87,12 @@ namespace ScheduleComponent.Modules {
 					ScheduleRecord record = result.Value;
 					string response;
 					if (record == null) {
-						response = $"Het lijkt er op dat er in {room} op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)} niets is.";
+						response = $"Het lijkt er op dat er in {room} op {Util.GetStringFromDayOfWeek(day)} niets is.";
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += "\nDat is dan ook in het weekend.";
 						}
 					} else {
-						response = $"{record.Room}: Als eerste op {DateTimeFormatInfo.CurrentInfo.GetDayName(day)}\n";
+						response = $"{record.Room}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 
 						response += TableItemActivity(record, false);
 
