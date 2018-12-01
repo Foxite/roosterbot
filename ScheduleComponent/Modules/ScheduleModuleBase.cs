@@ -139,7 +139,7 @@ namespace ScheduleComponent.Modules {
 			string ret = "";
 
 			if (record.Start.Date != DateTime.Today) {
-				ret += $":calendar_spiral: {DateTimeFormatInfo.CurrentInfo.GetDayName(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n" + ret;
+				ret += $":calendar_spiral: {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n" + ret;
 			}
 
 			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
