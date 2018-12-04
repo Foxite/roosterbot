@@ -10,31 +10,27 @@ namespace RoosterBot.Modules {
 		public ConfigService Config { get; set; }
 		public SNSService SNSService { get; set; }
 
-		private string m_LogTag = null;
-		protected string LogTag {
-			get {
-				if (m_LogTag == null) {
-					m_LogTag = "UnknownModule";
-					Logger.Log(LogSeverity.Warning, m_LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to UnknownModule.");
-				}
-				return m_LogTag;
-			}
-			private set => m_LogTag = value;
-		}
-
+		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
 
 		protected override void BeforeExecute(CommandInfo command) {
 			base.BeforeExecute(command);
+
+			LogTag = null;
 			foreach (Attribute attr in command.Module.Attributes) {
 				if (attr is LogTagAttribute logTagAttribute) {
 					LogTag = logTagAttribute.LogTag;
 				}
 			}
 
+			if (LogTag == null) {
+				LogTag = "UnknownModule";
+				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to UnknownModule.");
+			}
+
 			Log = new ModuleLoggerInternal(LogTag);
 
-			Log.Info($"Executing command `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}");
+			Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in {Context.Guild.Name} channel {Context.Channel.Name}");
 		}
 
 		protected virtual async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
