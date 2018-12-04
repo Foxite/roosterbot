@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using RoosterBot.Modules.Preconditions;
 
 namespace RoosterBot.Modules {
-	[Attributes.LogTag("MCM")]
+	[Attributes.LogTag("MetaModule")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {

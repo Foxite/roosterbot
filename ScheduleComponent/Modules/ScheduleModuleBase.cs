@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -9,7 +8,7 @@ using RoosterBot.Modules;
 using RoosterBot;
 
 namespace ScheduleComponent.Modules {
-	[RoosterBot.Attributes.LogTag("SMB")]
+	[RoosterBot.Attributes.LogTag("ScheduleModuleBase")]
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }

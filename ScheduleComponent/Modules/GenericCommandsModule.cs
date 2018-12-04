@@ -7,7 +7,7 @@ using RoosterBot;
 using RoosterBot.Modules;
 
 namespace ScheduleComponent.Modules {
-	[RoosterBot.Attributes.LogTag("GCM")]
+	[RoosterBot.Attributes.LogTag("GenericCommandsModule")]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		

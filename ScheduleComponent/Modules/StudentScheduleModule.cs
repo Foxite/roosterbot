@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("klas"), RoosterBot.Attributes.LogTag("SSM")]
+	[Group("klas"), RoosterBot.Attributes.LogTag("StudentSM")]
 	public class StudentScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {

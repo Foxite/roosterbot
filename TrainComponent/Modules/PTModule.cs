@@ -3,9 +3,10 @@ using Discord.Commands;
 using RoosterBot.Modules;
 using PublicTransitComponent.Services;
 using PublicTransitComponent.DataTypes;
+using RoosterBot.Attributes;
 
 namespace PublicTransitComponent.Modules {
-	[RoosterBot.Attributes.LogTag("PTM")]
+	[LogTag("PublicTransitModule")]
 	public class PTModule : EditableCmdModuleBase {
 		public NSAPI NSAPI { get; set; }
 

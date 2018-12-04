@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using RoosterBot.Attributes;
 using RoosterBot.Modules;
 
 namespace MiscStuffComponent.Modules {
+	[LogTag("MiscModule")]
 	public class MiscModule : RoosterModuleBase {
 		[Command("send"), RequireOwner]
 		public async Task SendMessageCommand(ulong channel, [Remainder] string message) {
