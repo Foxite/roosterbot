@@ -64,7 +64,7 @@ namespace RoosterBot {
 			}
 			Console.WriteLine(loggedMessage);
 			lock (Lock) {
-				File.AppendAllText(LogPath, loggedMessage + "\n");
+				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
 			}
 		}
 
