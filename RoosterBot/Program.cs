@@ -68,7 +68,23 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.MessageReceived += HandleNewCommand;
-			
+			m_Client.Ready += async () => {
+				m_State = ProgramState.BotRunning;
+				await m_Client.SetGameAsync(m_ConfigService.GameString);
+				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
+
+				m_Client.Disconnected += (e) => {
+					m_State = ProgramState.BotStopped;
+					Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
+						await Task.Delay(10000);
+						if (m_State != ProgramState.BotRunning) {
+							await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync($"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}");
+						}
+					});
+					return Task.CompletedTask;
+				};
+			};
+
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
 			m_Comands.Log += Logger.LogSync;
 			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
@@ -117,22 +133,6 @@ namespace RoosterBot {
 			#region Start client
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
-			m_Client.Ready += async () => {
-				m_State = ProgramState.BotRunning;
-				await m_Client.SetGameAsync(m_ConfigService.GameString);
-				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
-
-				m_Client.Disconnected += (e) => {
-					m_State = ProgramState.BotStopped;
-					Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
-						await Task.Delay(10000);
-						if (m_State != ProgramState.BotRunning) {
-							await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync($"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}");
-						}
-					});
-					return Task.CompletedTask;
-				};
-			};
 			#endregion Start client
 
 			#region Quit code
