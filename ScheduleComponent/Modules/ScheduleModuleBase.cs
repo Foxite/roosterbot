@@ -74,7 +74,7 @@ namespace ScheduleComponent.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						string teachers = Teachers.GetFullNameFromAbbr(record.StaffMember);
+						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray());
 						if (query.SourceSchedule != "StaffMember") {
 							response += TableItemStaffMember(record);
 						}
