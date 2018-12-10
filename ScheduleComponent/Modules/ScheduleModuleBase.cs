@@ -16,7 +16,7 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand() {
-			if (!await CheckCooldown())
+			if (!await CheckCooldown(1f))
 				return;
 
 			// This allows us to call !daarna automatically in certain conditions, and prevents the cooldown from causing problems.
