@@ -83,6 +83,11 @@ namespace RoosterBot {
 					});
 					return Task.CompletedTask;
 				};
+
+				m_Client.Connected += () => {
+					m_State = ProgramState.BotRunning;
+					return Task.CompletedTask;
+				};
 			};
 
 			m_Comands = new EditedCommandService(m_Client, HandleCommand);
