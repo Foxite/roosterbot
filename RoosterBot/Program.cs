@@ -232,9 +232,8 @@ namespace RoosterBot {
 			// rather an object stating if the command executed successfully)
 			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
 			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
-			if (!result.IsSuccess) {
-				await HandleError(result, message, initialResponse);
-			}
+
+			await HandleError(result, message, initialResponse);
 		}
 
 		private async Task HandleError(IResult result, IUserMessage command, IUserMessage initialResponse = null) {
