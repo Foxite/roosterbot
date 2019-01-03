@@ -78,8 +78,12 @@ namespace RoosterBot {
 					Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
 						System.Threading.Thread.Sleep(10000);
 						if (m_State != ProgramState.BotRunning) {
-							string report = $"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
-							Logger.Log(LogSeverity.Critical, "Main", report);
+							string report = $"RoosterBot has been disconnected for more than ten seconds. ";
+							if (e == null) {
+								report += "No exception is attached.";
+							} else {
+								report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
+							}
 							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
 						}
 					});

@@ -14,6 +14,7 @@ namespace RoosterBot.Services {
 		internal SNSService(ConfigService config) {
 #if !DEBUG
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.EUWest3);
+			
 			m_ConfigService = config;
 			Program.Instance.ProgramStopping += (o, e) => { Dispose(); };
 #endif
@@ -24,7 +25,6 @@ namespace RoosterBot.Services {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (async)");
 			try {
 				await this.m_SNSClient.PublishAsync(m_ConfigService.SNSCriticalFailureARN, message);
-				Logger.Log(Discord.LogSeverity.Debug, "SNSService", "Send error report to SNS (async)");
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (async)", ex);
 			}
@@ -34,7 +34,6 @@ namespace RoosterBot.Services {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (sync)");
 			try {
 				this.m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
-				Logger.Log(Discord.LogSeverity.Debug, "SNSService", "Send error report to SNS (sync)");
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (sync)", ex);
 			}
