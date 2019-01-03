@@ -78,7 +78,9 @@ namespace RoosterBot {
 					Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
 						await Task.Delay(10000);
 						if (m_State != ProgramState.BotRunning) {
-							await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync($"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}");
+							string report = $"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
+							Logger.Log(LogSeverity.Critical, "Main", report);
+							await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(report);
 						}
 					});
 					return Task.CompletedTask;

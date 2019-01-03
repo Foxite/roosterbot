@@ -23,17 +23,30 @@ namespace RoosterBot.Services {
 		internal async Task SendCriticalErrorNotificationAsync(string message) {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (async)");
 			try {
-				await this.m_SNSClient.PublishAsync(new PublishRequest(m_ConfigService.SNSCriticalFailureARN, message));
+				await this.m_SNSClient.PublishAsync(m_ConfigService.SNSCriticalFailureARN, message);
+				Logger.Log(Discord.LogSeverity.Debug, "SNSService", "Send error report to SNS (async)");
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (async)", ex);
+			}
+		}
+
+		internal void SendCriticalErrorNotification(string message) {
+			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (sync)");
+			try {
+				this.m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
+				Logger.Log(Discord.LogSeverity.Debug, "SNSService", "Send error report to SNS (sync)");
+			} catch (AmazonSimpleNotificationServiceException ex) {
+				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (sync)", ex);
 			}
 		}
 #else
 		internal Task SendCriticalErrorNotificationAsync(string message) {
 			return Task.CompletedTask;
 		}
+
+		internal void SendCriticalErrorNotification(string message) { }
 #endif
-		
+
 		#region IDisposable Support
 		// Everything in this region was added by Visual Studio during code analysis, I don't understand most of it.
 		// I mean, I do, but why would you have a second method for this? Why not just stick with a regular Dispose()? I don't see the reason.
