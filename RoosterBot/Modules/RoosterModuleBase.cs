@@ -30,7 +30,11 @@ namespace RoosterBot.Modules {
 
 			Log = new ModuleLoggerInternal(LogTag);
 
-			Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in {Context.Guild.Name} channel {Context.Channel.Name}");
+			if (Context.Guild == null) {
+				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in PM channel {Context.Channel.Name}");
+			} else {
+				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in {Context.Guild.Name} channel {Context.Channel.Name}");
+			}
 		}
 
 		protected virtual async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
