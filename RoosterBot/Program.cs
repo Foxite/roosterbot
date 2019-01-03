@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using Discord.Commands;
-using Discord.Net.Providers.WS4Net;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using RoosterBot.Services;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.Net.Providers.WS4Net;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using RoosterBot.Services;
 
 namespace RoosterBot {
 	public class Program {
@@ -75,12 +75,12 @@ namespace RoosterBot {
 
 				m_Client.Disconnected += (e) => {
 					m_State = ProgramState.BotStopped;
-					Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
-						await Task.Delay(10000);
+					Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
+						System.Threading.Thread.Sleep(10000);
 						if (m_State != ProgramState.BotRunning) {
 							string report = $"RoosterBot has been disconnected for more than ten seconds. The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
 							Logger.Log(LogSeverity.Critical, "Main", report);
-							await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(report);
+							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
 						}
 					});
 					return Task.CompletedTask;
