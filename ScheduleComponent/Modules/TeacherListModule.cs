@@ -10,7 +10,7 @@ namespace ScheduleComponent.Modules {
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent", "leraar")]
+		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent")]
 		public async Task TeacherListCommand([Remainder] string name = "") {
 			if (!await CheckCooldown())
 				return;
