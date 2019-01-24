@@ -90,6 +90,7 @@ namespace RoosterBot {
 			case "taken":
 			case "stage":
 			case "examen":
+			case "animatie":
 				return abbr.FirstCharToUpper();
 
 			case "Sinterklaas":
