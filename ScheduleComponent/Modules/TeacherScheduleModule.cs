@@ -184,7 +184,7 @@ namespace ScheduleComponent.Modules {
 			}
 			return response;
 		}
-
+		
 		private string RespondTeacherWeekday(string teacher, DayOfWeek day, ScheduleRecord record) {
 			string response;
 			if (record == null) {
@@ -227,7 +227,8 @@ namespace ScheduleComponent.Modules {
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
-					response += respondFunction(results[i].Value.StaffMember, teachers[i], results[i].Value) + "\n\n";
+					Console.WriteLine(results[i].Value == null);
+					response += respondFunction(teacherAbbrs[i], teachers[i], results[i].Value) + "\n\n";
 				} else {
 					response += $"{teachers[i]}: Geen info.";
 				}
