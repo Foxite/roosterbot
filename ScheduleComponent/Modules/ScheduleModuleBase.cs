@@ -234,7 +234,44 @@ namespace ScheduleComponent.Modules {
 				throw;
 			}
 		}
-		
+
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetScheduleForToday(string schedule, string name) {
+			if (name == "") {
+				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			}
+			if (schedule == "Room" && name.Length != 4) {
+				await MinorError("Dat is geen lokaal.");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			}
+
+			name = name.ToUpper();
+			try {
+				ScheduleRecord[] records = Schedules.GetScheduleForToday(schedule, name);
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = true,
+					Value = records
+				};
+			} catch (ScheduleNotFoundException) {
+				await MinorError("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError("Uncaught exception", ex);
+				throw;
+			}
+		}
+
 		/// <summary>
 		/// Given two command arguments, this determines which is a DayOfWeek and which is not.
 		/// </summary>

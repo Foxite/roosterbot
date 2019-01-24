@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
@@ -133,6 +134,45 @@ namespace ScheduleComponent.Modules {
 		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
 		public async Task StudentTomorrowCommand(string klas) {
 			await StudentWeekdayCommand(klas + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+		}
+
+		[Command("vandaag", RunMode = RunMode.Async), Summary("Je rooster voor vandaag")]
+		public async Task StudentTodayCommand(string klas) {
+			if (!await CheckCooldown())
+				return;
+
+			DayOfWeek day = DateTime.Today.DayOfWeek;
+
+			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("StudentSets", klas);
+			if (result.Success) {
+				ScheduleRecord[] records = result.Value;
+				string response;
+				if (records.Length == 0) {
+					response = "Het ziet ernaar uit dat je vandaag niets hebt.";
+					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
+						response += " Het is dan ook weekend.";
+					}
+					await ReplyAsync(response, "StudentSets", klas.ToUpper(), null);
+				} else {
+					response = $"{klas.ToUpper()}: Rooster voor vandaag\n";
+
+					foreach (ScheduleRecord record in records) {
+						response += $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}: {Util.GetActivityFromAbbr(record.Activity)}";
+							
+
+						if (record.Activity != "stdag doc" && record.Activity != "pauze") {
+							if (!string.IsNullOrEmpty(record.StaffMember)) {
+								response += $" van {GetTeacherFullNamesFromAbbrs(record.StaffMember)}";
+							}
+							if (!string.IsNullOrEmpty(record.Room)) {
+								response += $" in {record.Room}";
+							}
+						}
+						response += "\n";
+					}
+					await ReplyAsync(response, "StudentSets", klas.ToUpper(), records.Last());
+				}
+			}
 		}
 	}
 }

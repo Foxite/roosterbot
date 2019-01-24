@@ -147,6 +147,34 @@ namespace ScheduleComponent.Services {
 				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
 			}
 		}
+
+		public ScheduleRecord[] GetScheduleForToday(string schedule, string identifier) {
+			List<ScheduleRecord> records = new List<ScheduleRecord>();
+			bool sawRecordForClass = false;
+			bool sawRecordAfterTarget = false;
+
+			Console.WriteLine(identifier);
+			foreach (ScheduleRecord record in m_Schedules[schedule]) {
+				if (((string) record.GetType().GetProperty(schedule).GetValue(record)).Contains(identifier)) {
+					sawRecordForClass = true;
+					if (record.Start.Date == DateTime.Today) {
+						records.Add(record);
+					} else if (record.Start.Date > DateTime.Today) {
+						sawRecordAfterTarget = true;
+						break;
+					}
+				}
+			}
+
+			if (records.Count == 0) {
+				if (!sawRecordForClass) {
+					throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {schedule}.");
+				} else if (!sawRecordAfterTarget) {
+					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {schedule}");
+				}
+			}
+			return records.ToArray();
+		}
 	}
 
 	public class ScheduleRecord {

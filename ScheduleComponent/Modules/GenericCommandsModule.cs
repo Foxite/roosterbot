@@ -31,6 +31,11 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "morgen");
 		}
 
+		[Priority(10), Command("vandaag", RunMode = RunMode.Async)]
+		public async Task GenericTodayCommand([Remainder] string wat) {
+			await MatchCommand(wat, "vandaag");
+		}
+
 		private async Task MatchCommand(string parameters, string command) {
 			if (command == "dag") {
 				// `dag` command is made so that you can specify the day as either the first or last parameter. The identifier (student set, teacher, or room) may be any length.

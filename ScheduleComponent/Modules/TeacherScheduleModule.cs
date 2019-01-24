@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
@@ -88,6 +89,49 @@ namespace ScheduleComponent.Modules {
 		[Command("morgen", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar morgen als eerste heeft")]
 		public async Task TeacherTomorrowCommand([Remainder] string leraar) {
 			await TeacherWeekdayCommand(leraar + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+		}
+
+		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
+		public async Task StudentTodayCommand([Remainder] string leraarInput) {
+			if (!await CheckCooldown())
+				return;
+
+			DayOfWeek day = DateTime.Today.DayOfWeek;
+
+			string[] teachers = Teachers.GetAbbrsFromNameInput(leraarInput);
+
+			if (teachers.Length == 0) {
+				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
+			} else {
+				string response = "";
+				foreach (string teacher in teachers) {
+					ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("StaffMember", teacher);
+					if (result.Success) {
+						ScheduleRecord[] records = result.Value;
+						if (records.Length != 0) {
+							response += $"{Teachers.GetFullNameFromAbbr(teacher)}: Rooster voor vandaag\n";
+
+							foreach (ScheduleRecord record in records) {
+								response += $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}: {Util.GetActivityFromAbbr(record.Activity)}";
+
+								if (record.Activity != "stdag doc" && record.Activity != "pauze") {
+									if (!string.IsNullOrEmpty(record.StudentSets)) {
+										response += $" aan {record.StudentSets}";
+									}
+									if (!string.IsNullOrEmpty(record.Room)) {
+										response += $" in {record.Room}";
+									}
+								}
+								response += "\n";
+							}
+							response += "\n";
+						} else {
+							response += $"Het lijkt er op dat {Teachers.GetFullNameFromAbbr(teacher)} vandaag niets heeft.\n";
+						}
+					}
+				}
+				await ReplyAsync(response, "StaffMember", Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(teachers).Select(r => r.Abbreviation).ToArray()), null);
+			}
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
