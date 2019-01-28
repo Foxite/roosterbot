@@ -71,6 +71,8 @@ namespace RoosterBot {
 				return "Engineering";
 			case "stdag doc":
 				return "Studiedag :tada:";
+			case "to":
+				return "Teamoverleg";
 
 			case "3d":
 			case "2d":
