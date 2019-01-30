@@ -113,7 +113,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Summary("Het rooster voor een lokaal voor vandaag")]
-		public async Task StudentTodayCommand(string lokaal) {
+		public async Task RoomTodayCommand(string lokaal) {
 			if (!await CheckCooldown())
 				return;
 
