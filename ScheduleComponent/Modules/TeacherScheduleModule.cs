@@ -111,20 +111,23 @@ namespace ScheduleComponent.Modules {
 						if (records.Length != 0) {
 							response += $"{Teachers.GetFullNameFromAbbr(teacher)}: Rooster voor vandaag\n";
 
+							string[][] cells = new string[records.Length + 1][];
+							cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
+							int recordIndex = 1;
 							foreach (ScheduleRecord record in records) {
-								response += $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}: {Util.GetActivityFromAbbr(record.Activity)}";
+								cells[recordIndex] = new string[4];
+								cells[recordIndex][0] = record.Activity;
+								cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+								cells[recordIndex][2] = record.StudentSets;
 
-								if (record.Activity != "stdag doc" && record.Activity != "pauze") {
-									if (!string.IsNullOrEmpty(record.StudentSets)) {
-										response += $" aan {record.StudentSets}";
-									}
-									if (!string.IsNullOrEmpty(record.Room)) {
-										response += $" in {record.Room}";
-									}
+								string room = record.Room;
+								if (room.Contains(',')) {
+									room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
 								}
-								response += "\n";
+								cells[recordIndex][3] = room;
+								recordIndex++;
 							}
-							response += "\n";
+							response += Util.FormatTextTable(cells, true);
 						} else {
 							response += $"Het lijkt er op dat {Teachers.GetFullNameFromAbbr(teacher)} vandaag niets heeft.\n";
 						}

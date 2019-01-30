@@ -182,6 +182,40 @@ namespace RoosterBot {
 				throw new ArgumentException();
 			}
 		}
+
+		/// <summary>
+		/// Generate a table for use in a Discord message. Output will be formatted into a code block.
+		/// Warning: This will glitch out when the table array is jagged.
+		/// </summary>
+		/// <param name="table">An array[row][column]. While it can be jagged, if it is jagged, this will not work properly.</param>
+		/// <param name="includeHeaderSeperation">Include a line of '-'s after the first row.</param>
+		/// <returns>A string that you can send directly into a chat message.</returns>
+		public static string FormatTextTable(string[][] table, bool includeHeaderSeperation) {
+			int[] columnWidths = new int[table[0].Length];
+			
+			for (int column = 0; column < table[0].Length; column++) {
+				columnWidths[column] = 1;
+				for (int row = 0; row < table.Length; row++) {
+					columnWidths[column] = Math.Max(columnWidths[column], table[row][column].Length);
+				}
+			}
+
+			string ret = "```";
+			for (int row = 0; row < table.Length; row++) {
+				for (int column = 0; column < table[0].Length; column++) {
+					if (column != 0) {
+						ret += " | ";
+					}
+					ret += table[row][column].PadRight(columnWidths[column]);
+				}
+
+				if (row != table.Length - 1) {
+					ret += "\n";
+				}
+			}
+			ret += "```";
+			return ret;
+		}
 	}
 
 	public class ReturnValue<T> {

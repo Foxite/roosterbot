@@ -132,20 +132,18 @@ namespace ScheduleComponent.Modules {
 				} else {
 					response = $"{lokaal.ToUpper()}: Rooster voor vandaag\n";
 
+					string[][] cells = new string[records.Length + 1][];
+					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
+					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
-						response += $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}: {Util.GetActivityFromAbbr(record.Activity)}";
-
-
-						if (record.Activity != "stdag doc" && record.Activity != "pauze") {
-							if (!string.IsNullOrEmpty(record.StaffMember)) {
-								response += $" van {GetTeacherFullNamesFromAbbrs(record.StaffMember)}";
-							}
-							if (!string.IsNullOrEmpty(record.Room)) {
-								response += $" in {record.Room}";
-							}
-						}
-						response += "\n";
+						cells[recordIndex] = new string[4];
+						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+						cells[recordIndex][2] = record.StudentSets;
+						cells[recordIndex][3] = string.IsNullOrEmpty(record.StaffMember) ? "" : GetTeacherFullNamesFromAbbrs(record.StaffMember);
+						recordIndex++;
 					}
+					response += Util.FormatTextTable(cells, true);
 					await ReplyAsync(response, "Room", lokaal.ToUpper(), records.Last());
 				}
 			}
