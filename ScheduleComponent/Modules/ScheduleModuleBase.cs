@@ -74,7 +74,7 @@ namespace ScheduleComponent.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray());
+						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { " en " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray(), " en ");
 						if (query.SourceSchedule != "StaffMember") {
 							response += TableItemStaffMember(record);
 						}
@@ -302,7 +302,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected string GetTeacherFullNamesFromAbbrs(string abbrs) {
-			return Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(abbrs.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(each => each.FullName).ToArray(), ", en ");
+			return Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(abbrs.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(each => each.FullName).ToArray(), " en ");
 		}
 
 		/// <summary>
