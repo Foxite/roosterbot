@@ -10,9 +10,6 @@ namespace ScheduleComponent.Modules {
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {
-			if (!await CheckCooldown())
-				return;
-
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 
 			if (teachers.Length == 0) {
@@ -33,9 +30,6 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("hierna", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar hierna mee bezig is")]
 		public async Task TeacherNextCommand([Remainder] string leraar) {
-			if (!await CheckCooldown())
-				return;
-
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
@@ -59,9 +53,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("dag", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar als eerste heeft op een dag")]
 		public async Task TeacherWeekdayCommand([Remainder] string leraar_en_weekdag) {
-			if (!await CheckCooldown())
-				return;
-			
 			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar_en_weekdag);
 
 			if (arguments.Item1) {
@@ -93,9 +84,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
 		public async Task StudentTodayCommand([Remainder] string leraarInput) {
-			if (!await CheckCooldown())
-				return;
-
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraarInput);

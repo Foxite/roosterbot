@@ -12,9 +12,6 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent")]
 		public async Task TeacherListCommand([Remainder] string name = "") {
-			if (!await CheckCooldown())
-				return;
-
 			IReadOnlyList<TeacherRecord> records;
 
 			if (string.IsNullOrWhiteSpace(name)) {

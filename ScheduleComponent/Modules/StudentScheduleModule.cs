@@ -10,9 +10,6 @@ namespace ScheduleComponent.Modules {
 	public class StudentScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
-			if (!await CheckCooldown())
-				return;
-
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -47,9 +44,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
-			if (!await CheckCooldown())
-				return;
-
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -87,9 +81,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("dag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
 		public async Task StudentWeekdayCommand([Remainder] string klas_en_weekdag) {
-			if (!await CheckCooldown())
-				return;
-
 			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(klas_en_weekdag);
 
 			if (arguments.Item1) {
@@ -138,9 +129,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async), Summary("Je rooster voor vandaag")]
 		public async Task StudentTodayCommand(string klas) {
-			if (!await CheckCooldown())
-				return;
-
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
 			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("StudentSets", klas);

@@ -49,24 +49,7 @@ namespace RoosterBot.Modules {
 		protected virtual async Task<bool> RemoveReaction(string unicode) {
 			return await Util.RemoveReaction(Context.Message, unicode, Context.Client.CurrentUser);
 		}
-
-		protected virtual async Task<bool> CheckCooldown(float cooldown = 2f) {
-			Tuple<bool, bool> result = Config.CheckCooldown(Context.User.Id, cooldown);
-			if (result.Item1) {
-				return true;
-			} else {
-				Log.Info($"Did not execute command `{Context.Message.Content}` for `{Context.User.Mention}` as they are still in cooldown");
-				if (!result.Item2) {
-					if (Config.ErrorReactions) {
-						await ReplyAsync($"{Context.User.Mention}, je gaat een beetje te snel.", "⚠");
-					} else {
-						await ReplyAsync($"{Context.User.Mention}, je gaat een beetje te snel.");
-					}
-				}
-				return false;
-			}
-		}
-
+		
 		protected virtual async Task MinorError(string message) {
 			Log.Info($"Command failed: {message}");
 			if (Config.ErrorReactions) {

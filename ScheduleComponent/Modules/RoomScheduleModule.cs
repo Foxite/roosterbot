@@ -10,9 +10,6 @@ namespace ScheduleComponent.Modules {
 	public class RoomScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
-			if (!await CheckCooldown())
-				return;
-
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -39,9 +36,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Summary("Wat er hierna in een lokaal plaatsvindt")]
 		private async Task RoomNextCommand(string lokaal) {
-			if (!await CheckCooldown())
-				return;
-
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -72,9 +66,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
 		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
-			if (!await CheckCooldown())
-				return;
-			
 			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
 
 			if (arguments.Item1) {
@@ -114,9 +105,6 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async), Summary("Het rooster voor een lokaal voor vandaag")]
 		public async Task RoomTodayCommand(string lokaal) {
-			if (!await CheckCooldown())
-				return;
-
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
 			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("Room", lokaal);

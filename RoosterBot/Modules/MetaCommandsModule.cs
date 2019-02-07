@@ -7,9 +7,6 @@ namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand() {
-			if (!await CheckCooldown(1f))
-				return;
-
 			// Print list of commands
 			// TODO allow components to define their own help text
 			string response = "Al mijn commands beginnen met een `!`. Hierdoor raken andere bots niet in de war.\n\n";
