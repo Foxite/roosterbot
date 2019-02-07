@@ -317,10 +317,7 @@ namespace ScheduleComponent.Modules {
 		/// </summary>
 		protected async Task<IUserMessage> ReplyAsync(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			if (!(Context.User is IGuildUser user))
-				return ret;
-			
-			LSCService.OnRequestByUser(user, schedule, identifier, record);
+			LSCService.OnRequestByUser(Context.User, schedule, identifier, record);
 			return ret;
 		}
 
