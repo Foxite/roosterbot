@@ -185,6 +185,10 @@ namespace ScheduleComponent.Services {
 		public string	StaffMember { get; set; }
 		public string	Room { get; set; }
 		public string	StudentSets { get; set; }
+
+		public override string ToString() {
+			return $"{StudentSets}: {Activity} in {Room} from {Start.ToString()} (for {Duration}) to {End.ToString()} by {StaffMember}";
+		}
 	}
 
 	[Serializable]
