@@ -23,7 +23,7 @@ namespace ScheduleComponent.Modules {
 			await GetAfterCommandFunction();
 		}
 
-		protected async Task GetAfterCommandFunction() {
+		protected async Task GetAfterCommandFunction(int recursion = 0) {
 			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(Context.User);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
@@ -91,8 +91,8 @@ namespace ScheduleComponent.Modules {
 				}
 				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
 
-				if (record.Activity == "pauze") {
-					await GetAfterCommandFunction();
+				if (record.Activity == "pauze" && recursion <= 5) {
+					await GetAfterCommandFunction(recursion + 1);
 				}
 			}
 		}
