@@ -37,11 +37,18 @@ namespace ScheduleComponent.Modules {
 					} else {
 						record = Schedules.GetRecordAfter(query.SourceSchedule, query.Identifier, query.Record);
 					}
-				} catch (ScheduleNotFoundException) {
-					await MinorError("Dat item staat niet op mijn rooster.");
-					return;
 				} catch (RecordsOutdatedException) {
-					await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+					return;
+				} catch (ScheduleNotFoundException) {
+					string report = $"daarna failed for query {query.SourceSchedule}:{query.Identifier}";
+					if (nullRecord) {
+						report += " with no record";
+					} else {
+						report += $" with record: {query.Record.ToString()}";
+					}
+
+					await FatalError(report);
 					return;
 				} catch (Exception ex) {
 					await FatalError("Uncaught exception", ex);
