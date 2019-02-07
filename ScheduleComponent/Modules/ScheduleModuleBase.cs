@@ -81,7 +81,7 @@ namespace ScheduleComponent.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { " en " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray(), " en ");
+						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray(), " en ");
 						if (query.SourceSchedule != "StaffMember") {
 							response += TableItemStaffMember(record);
 						}
