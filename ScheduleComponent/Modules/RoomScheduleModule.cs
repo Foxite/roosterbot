@@ -59,7 +59,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemStartEndTime(record);
 						response += TableItemDuration(record);
 					}
-					await ReplyAsync(response, "Room", record.Room, record);
+					await ReplyAsync(response, "Room", lokaal.ToUpper(), record);
 				}
 			}
 		}
