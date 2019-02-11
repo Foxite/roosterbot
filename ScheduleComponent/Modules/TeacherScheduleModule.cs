@@ -147,6 +147,7 @@ namespace ScheduleComponent.Modules {
 
 					response += TableItemStartEndTime(record);
 					response += TableItemDuration(record);
+					response += TableItemBreak(record);
 				}
 			}
 			return response;
@@ -172,6 +173,7 @@ namespace ScheduleComponent.Modules {
 
 				response += TableItemStartEndTime(record);
 				response += TableItemDuration(record);
+				response += TableItemBreak(record);
 			}
 			return response;
 		}
@@ -196,6 +198,7 @@ namespace ScheduleComponent.Modules {
 
 					response += TableItemStartEndTime(record);
 					response += TableItemDuration(record);
+					response += TableItemBreak(record);
 				}
 			}
 			return response;

@@ -92,6 +92,7 @@ namespace ScheduleComponent.Modules {
 					bool isToday = record.Start.Date == DateTime.Today;
 					response += TableItemStartEndTime(record);
 					response += TableItemDuration(record);
+					response += TableItemBreak(record);
 				}
 				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
 
@@ -161,6 +162,14 @@ namespace ScheduleComponent.Modules {
 				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
 			}
 			return ret + "\n";
+		}
+
+		protected string TableItemBreak(ScheduleRecord record) {
+			if (record.BreakStart.HasValue) {
+				return $":coffee: {record.BreakStart.Value.ToShortTimeString()} - {record.BreakEnd.Value.ToShortTimeString()}\n";
+			} else {
+				return "";
+			}
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {

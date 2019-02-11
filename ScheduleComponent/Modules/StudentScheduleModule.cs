@@ -32,6 +32,7 @@ namespace ScheduleComponent.Modules {
 
 						response += TableItemStartEndTime(record);
 						response += TableItemDuration(record);
+						response += TableItemBreak(record);
 					}
 					await ReplyAsync(response, "StudentSets", klas.ToUpper(), record);
 
@@ -69,6 +70,7 @@ namespace ScheduleComponent.Modules {
 						
 						response += TableItemStartEndTime(record);
 						response += TableItemDuration(record);
+						response += TableItemBreak(record);
 					}
 					await ReplyAsync(response, "StudentSets", klas.ToUpper(), record);
 					
@@ -111,6 +113,7 @@ namespace ScheduleComponent.Modules {
 
 							response += TableItemStartEndTime(record);
 							response += TableItemDuration(record);
+							response += TableItemBreak(record);
 						}
 					}
 					await ReplyAsync(response, "StudentSets", clazz.ToUpper(), record);

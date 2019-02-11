@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using System.Runtime.Serialization;
 using RoosterBot;
+using System.Reflection;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleService {
@@ -37,6 +38,10 @@ namespace ScheduleComponent.Services {
 				CsvReader csv = new CsvReader(reader);
 				await csv.ReadAsync();
 				csv.ReadHeader();
+
+				Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+				PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(name);
+
 				while (await csv.ReadAsync()) {
 					ScheduleRecord record = new ScheduleRecord() {
 						Activity = csv["Activity"],
@@ -47,14 +52,28 @@ namespace ScheduleComponent.Services {
 						Room = csv["Room"].Replace(" (0)", ""),
 						Duration = csv["Duration"]
 					};
-					
+
 					int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
 					int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-					int[] endTime   = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
+					int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
 					record.Start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-					record.End   = new DateTime(startDate[0], startDate[1], startDate[2],   endTime[0],   endTime[1], 0); // Under the assumption that nobody works overnight
+					record.End = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
-					records.Add(record);
+					string key = identifier.GetValue(record) as string;
+					if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
+						record.Activity == lastRecord.Activity &&
+						record.Start.Date == lastRecord.Start.Date &&
+						record.StudentSets == lastRecord.StudentSets &&
+						record.StaffMember == lastRecord.StaffMember &&
+						record.Room == lastRecord.Room) {
+						//Console.WriteLine(record.Activity);
+						lastRecord.BreakStart = lastRecord.End;
+						lastRecord.BreakEnd = record.Start;
+						lastRecord.End = record.End;
+					} else {
+						lastRecords[key] = record;
+						records.Add(record);
+					}
 				}
 			}
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded schedule CSV file {Path.GetFileName(path)} into {name}");
@@ -178,16 +197,19 @@ namespace ScheduleComponent.Services {
 	}
 
 	public class ScheduleRecord {
-		public string	Activity { get; set; }
-		public string	Duration { get; set; }
-		public DateTime	Start { get; set; }
-		public DateTime End { get; set; }
-		public string	StaffMember { get; set; }
-		public string	Room { get; set; }
-		public string	StudentSets { get; set; }
+		public string	 Activity { get; set; }
+		public string	 Duration { get; set; }
+		public DateTime	 Start { get; set; }
+		public DateTime  End { get; set; }
+		public string	 StaffMember { get; set; }
+		public string	 Room { get; set; }
+		public string	 StudentSets { get; set; }
+		public DateTime? BreakStart { get; set; }
+		public DateTime? BreakEnd { get; set; }
 
 		public override string ToString() {
-			return $"{StudentSets}: {Activity} in {Room} from {Start.ToString()} (for {Duration}) to {End.ToString()} by {StaffMember}";
+			return $"{StudentSets}: {Activity} in {Room} from {Start.ToString()} (for {Duration}) (with " +
+				$"{(BreakStart.HasValue ? "no break" : ("a break from " + BreakStart.Value.ToString() + " to " + BreakEnd.Value.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 	}
 
