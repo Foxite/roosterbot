@@ -66,7 +66,6 @@ namespace ScheduleComponent.Services {
 						record.StudentSets == lastRecord.StudentSets &&
 						record.StaffMember == lastRecord.StaffMember &&
 						record.Room == lastRecord.Room) {
-						//Console.WriteLine(record.Activity);
 						lastRecord.BreakStart = lastRecord.End;
 						lastRecord.BreakEnd = record.Start;
 						lastRecord.End = record.End;
