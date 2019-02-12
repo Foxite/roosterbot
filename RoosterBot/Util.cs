@@ -59,6 +59,8 @@ namespace RoosterBot {
 				return "Onderneming";
 			case "k0072":
 				return "Keuzedeel (k0072)";
+			case "k0821":
+				return "Keuzedeel (k0821)";
 			case "k0901":
 				return "Keuzedeel (k0901)";
 			case "burger":
@@ -75,13 +77,19 @@ namespace RoosterBot {
 				return "Teamoverleg";
 			case "skc":
 				return "Studiekeuzecheck";
+			case "soll":
+				return "Solliciteren";
+			case "mastercl":
+				return "Masterclass";
 
 			case "3d":
 			case "2d":
 			case "bpv":
 			case "vb bpv":
+			case "vb pvb":
 			case "2d/3d":
 			case "slb":
+			case "avo":
 				return abbr.ToUpper();
 
 			case "pauze":
@@ -95,6 +103,8 @@ namespace RoosterBot {
 			case "stage":
 			case "examen":
 			case "animatie":
+			case "werkveld":
+			case "afstudeer":
 				return abbr.FirstCharToUpper();
 
 			case "Sinterklaas":
