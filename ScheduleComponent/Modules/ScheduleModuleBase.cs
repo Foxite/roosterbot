@@ -156,7 +156,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected string TableItemDuration(ScheduleRecord record) {
-			string ret = $":stopwatch: {record.Duration}";
+			string ret = $":stopwatch: {(int) record.Duration.TotalHours}:{record.Duration.Minutes}";
 			if (record.Start < DateTime.Now && record.End > DateTime.Now) {
 				TimeSpan timeLeft = record.End - DateTime.Now;
 				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";

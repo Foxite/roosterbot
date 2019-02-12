@@ -49,8 +49,7 @@ namespace ScheduleComponent.Services {
 						StudentSets = csv["StudentSets"],
 						// Rooms often have " (0)" behind them. unknown reason.
 						// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-						Room = csv["Room"].Replace(" (0)", ""),
-						Duration = csv["Duration"]
+						Room = csv["Room"].Replace(" (0)", "")
 					};
 
 					int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
@@ -197,7 +196,7 @@ namespace ScheduleComponent.Services {
 
 	public class ScheduleRecord {
 		public string	 Activity { get; set; }
-		public string	 Duration { get; set; }
+		public TimeSpan	 Duration => End - Start;
 		public DateTime	 Start { get; set; }
 		public DateTime  End { get; set; }
 		public string	 StaffMember { get; set; }
@@ -207,7 +206,7 @@ namespace ScheduleComponent.Services {
 		public DateTime? BreakEnd { get; set; }
 
 		public override string ToString() {
-			return $"{StudentSets}: {Activity} in {Room} from {Start.ToString()} (for {Duration}) (with " +
+			return $"{StudentSets}: {Activity} in {Room} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
 				$"{(BreakStart.HasValue ? "no break" : ("a break from " + BreakStart.Value.ToString() + " to " + BreakEnd.Value.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 	}
