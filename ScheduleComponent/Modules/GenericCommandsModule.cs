@@ -5,6 +5,7 @@ using Discord.Commands;
 using ScheduleComponent.Services;
 using RoosterBot;
 using RoosterBot.Modules;
+using Discord;
 
 namespace ScheduleComponent.Modules {
 	[RoosterBot.Attributes.LogTag("GenericCommandsModule")]
