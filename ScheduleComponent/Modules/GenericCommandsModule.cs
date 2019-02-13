@@ -16,8 +16,11 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "nu");
 		}
 
-		[Priority(10), Command("hierna", RunMode = RunMode.Async)]
-		public async Task GenericNextCommand([Remainder] string wat) {
+		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip")]
+		public async Task GenericNextCommand([Remainder] string wat = "") {
+			if (Context.Message.Content.StartsWith("!kip")) {
+				await ReplyAsync((await Context.Client.GetUserAsync(177154773424799753)).Mention); // dinny
+			}
 			await MatchCommand(wat, "hierna");
 		}
 

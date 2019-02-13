@@ -43,8 +43,12 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Summary("Welke les een klas hierna heeft")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip"), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
+			if (Context.Message.Content.StartsWith("!kip")) {
+				await ReplyAsync((await Context.Client.GetUserAsync(177154773424799753)).Mention); // dinny
+			}
+
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, "StudentSets", klas);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;

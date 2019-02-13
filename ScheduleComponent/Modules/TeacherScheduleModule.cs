@@ -28,8 +28,12 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 		
-		[Command("hierna", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar hierna mee bezig is")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip"), Priority(1), Summary("Waar een leraar hierna mee bezig is")]
 		public async Task TeacherNextCommand([Remainder] string leraar) {
+			if (Context.Message.Content.StartsWith("!kip")) {
+				await ReplyAsync((await Context.Client.GetUserAsync(177154773424799753)).Mention); // dinny
+			}
+
 			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
 			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");

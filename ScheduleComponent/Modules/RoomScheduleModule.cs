@@ -35,8 +35,12 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Summary("Wat er hierna in een lokaal plaatsvindt")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip"), Summary("Wat er hierna in een lokaal plaatsvindt")]
 		private async Task RoomNextCommand(string lokaal) {
+			if (Context.Message.Content.StartsWith("!kip")) {
+				await ReplyAsync((await Context.Client.GetUserAsync(177154773424799753)).Mention); // dinny
+			}
+
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", lokaal);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
