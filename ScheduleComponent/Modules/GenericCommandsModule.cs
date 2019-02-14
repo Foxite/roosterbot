@@ -24,8 +24,6 @@ namespace ScheduleComponent.Modules {
 				if (dinny != null) {
 					await ReplyAsync(dinny.Mention);
 				}
-			} else {
-				await MatchCommand(wat, "hierna");
 			}
 			await MatchCommand(wat, "hierna");
 		}
