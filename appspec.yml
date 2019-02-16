@@ -1,0 +1,20 @@
+# https://docs.aws.amazon.com/codedeploy/latest/userguide/application-revisions-appspec-file.html#add-appspec-file-server
+
+version: 0.0
+os: windows
+
+#files:
+#  - source: PipeServer\bin\Debug\
+#    destination: c:\temp\deploytest\
+
+hooks:
+  ApplicationStop:
+    - location: AppStop\bin\Debug\AppStop.exe
+#  BeforeInstall:
+#    - location: 
+#  AfterInstall:
+#    - location: 
+  ApplicationStart:
+    - location: AppStart\bin\Debug\AppStart.exe
+#  ValidateService:
+#   - location: 
