@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicTransitComponent", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiscStuffComponent", "MiscStuffComponent\MiscStuffComponent.csproj", "{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStop", "AppStop\AppStop.csproj", "{EE3B243E-3A2A-408B-985B-77B3C046DB8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStart", "AppStart\AppStart.csproj", "{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE3B243E-3A2A-408B-985B-77B3C046DB8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE3B243E-3A2A-408B-985B-77B3C046DB8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE3B243E-3A2A-408B-985B-77B3C046DB8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE3B243E-3A2A-408B-985B-77B3C046DB8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
