@@ -296,7 +296,7 @@ namespace ScheduleComponent.Modules {
 
 			if (argumentWords.Length < 2) {
 				await MinorError("Ik minstens twee woorden nodig.");
-				return new Tuple<bool, DayOfWeek, string>(false, default, "");
+				return new Tuple<bool, DayOfWeek, string>(false, DayOfWeek.Monday, "");
 			}
 
 			try {
@@ -308,7 +308,7 @@ namespace ScheduleComponent.Modules {
 					entry = string.Join(" ", argumentWords, 0, argumentWords.Length - 1); // get everything except last
 				} catch (ArgumentException) {
 					await MinorError($"Ik weet niet welk deel van \"" + arguments + "\" een dag is.");
-					return new Tuple<bool, DayOfWeek, string>(false, default, "");
+					return new Tuple<bool, DayOfWeek, string>(false, DayOfWeek.Monday, "");
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);

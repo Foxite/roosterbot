@@ -14,10 +14,11 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleCommandInfo GetLastCommandFromUser(IUser user) {
-			if (m_SCIs.TryGetValue(user.Id, out ScheduleCommandInfo previous)) {
+			ScheduleCommandInfo previous;
+			if (m_SCIs.TryGetValue(user.Id, out previous)) {
 				return previous;
 			} else {
-				return default;
+				return default(ScheduleCommandInfo);
 			}
 		}
 
@@ -27,7 +28,8 @@ namespace ScheduleComponent.Services {
 		}
 
 		public bool RemoveLastQuery(IUser user) {
-			return m_SCIs.TryRemove(user.Id, out ScheduleCommandInfo unused);
+			ScheduleCommandInfo unused;
+			return m_SCIs.TryRemove(user.Id, out unused);
 		}
 	}
 

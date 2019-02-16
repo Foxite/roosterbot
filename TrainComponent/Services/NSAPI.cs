@@ -30,7 +30,7 @@ namespace PublicTransitComponent.Services {
 			for (int i = 0; i < amount; i++) {
 				XmlNode xmlJourney = xmlOptions[i];
 
-				int parseDeparture(string input) {
+				Func<string, int> parseDeparture = (input) => {
 					if (input == null) {
 						return 0;
 					}
@@ -41,7 +41,7 @@ namespace PublicTransitComponent.Services {
 					} else {
 						throw new XmlException("Departure delay is not valid: " + input);
 					}
-				}
+				};
 
 				journeys[i] = new Journey() {
 					Transfers = int.Parse(xmlJourney["AantalOverstappen"].InnerText),
@@ -61,7 +61,7 @@ namespace PublicTransitComponent.Services {
 				foreach (XmlNode xmlComponent in xmlComponents) {
 					XmlNodeList xmlStops = xmlComponent.SelectNodes("ReisStop");
 
-					JourneyStop parseJourneyStop(XmlNode xmlStop) {
+					Func<XmlNode, JourneyStop> parseJourneyStop = (xmlStop) => {
 						XmlNode xmlStopPlatform = xmlStop["Spoor"];
 						return new JourneyStop() {
 							Location = xmlStop["Naam"].InnerText,
@@ -70,7 +70,7 @@ namespace PublicTransitComponent.Services {
 							Time = DateTime.Parse(xmlStop["Tijd"].InnerText),
 							DelayMinutes = parseDeparture(xmlStop["VertrekVertraging"]?.InnerText)
 						};
-					}
+					};
 					
 					JourneyComponent component = new JourneyComponent() {
 						Carrier = xmlComponent["Vervoerder"].InnerText,

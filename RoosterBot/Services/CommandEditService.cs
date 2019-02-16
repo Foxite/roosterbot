@@ -30,7 +30,8 @@ namespace RoosterBot.Services {
 		}
 
 		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, ISocketMessageChannel channel) {
-			if (m_Messages.TryRemove(message.Id, out CommandResponsePair crp)) {
+			CommandResponsePair crp;
+			if (m_Messages.TryRemove(message.Id, out crp)) {
 				await crp.Response.DeleteAsync();
 			}
 		}
@@ -43,10 +44,12 @@ namespace RoosterBot.Services {
 			//  class to edit their response instead of making a new one.
 			// This class is designed to work with EditableCmdModuleBase in that aspect. It can simply be replaced as ModuleBase in existing modules and they will
 			//  automatically adopt this functionality without needing additional work.
-			if (!(messageAfter is SocketUserMessage socketMessageAfter))
+			SocketUserMessage socketMessageAfter;
+			if ((socketMessageAfter = messageAfter as SocketUserMessage) != null)
 				return;
-			
-			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
+
+			CommandResponsePair crp;
+			if (m_Messages.TryGetValue(messageAfter.Id, out crp)) {
 				await m_HandleCommandFunction(crp.Response, socketMessageAfter);
 			}
 		}
@@ -59,7 +62,8 @@ namespace RoosterBot.Services {
 			
 			if (oldMessages.Count() > 0) {
 				foreach (KeyValuePair<ulong, CommandResponsePair> item in oldMessages) {
-					m_Messages.TryRemove(item.Key, out CommandResponsePair unused);
+					CommandResponsePair unused;
+					m_Messages.TryRemove(item.Key, out unused);
 				}
 			}
 
@@ -67,10 +71,11 @@ namespace RoosterBot.Services {
 		}
 
 		public CommandResponsePair GetResponse(IUserMessage userCommand) {
-			if (m_Messages.TryGetValue(userCommand.Id, out CommandResponsePair ret)) {
+			CommandResponsePair ret;
+			if (m_Messages.TryGetValue(userCommand.Id, out ret)) {
 				return ret;
 			} else {
-				return default;
+				return default(CommandResponsePair);
 			}
 		}
 	}

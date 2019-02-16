@@ -59,7 +59,8 @@ namespace ScheduleComponent.Services {
 					record.End = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
 					string key = identifier.GetValue(record) as string;
-					if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
+					ScheduleRecord lastRecord;
+					if (lastRecords.TryGetValue(key, out lastRecord) &&
 						record.Activity == lastRecord.Activity &&
 						record.Start.Date == lastRecord.Start.Date &&
 						record.StudentSets == lastRecord.StudentSets &&

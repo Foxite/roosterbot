@@ -18,7 +18,8 @@ namespace RoosterBot.Modules {
 
 			LogTag = null;
 			foreach (Attribute attr in command.Module.Attributes) {
-				if (attr is LogTagAttribute logTagAttribute) {
+				LogTagAttribute logTagAttribute;
+				if ((logTagAttribute = attr as LogTagAttribute) != null) {
 					LogTag = logTagAttribute.LogTag;
 				}
 			}

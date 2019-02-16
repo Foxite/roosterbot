@@ -220,7 +220,8 @@ namespace RoosterBot {
 		// This function is called by CommandEditService and the above function.
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
 			// Don't process the command if it was a System Message
-			if (!(command is SocketUserMessage message))
+			SocketUserMessage message;
+			if ((message = command as SocketUserMessage) != null)
 				return;
 
 			// Create a number to track where the prefix ends and the command begins
