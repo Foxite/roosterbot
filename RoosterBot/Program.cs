@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -29,8 +31,7 @@ namespace RoosterBot {
 		private static void Main(string[] args) {
 			Instance = new Program();
 			Instance.MainAsync().GetAwaiter().GetResult();
-			Console.WriteLine("Press any key to quit.");
-			Console.ReadKey(true);
+			Console.WriteLine("Async main ended at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 		}
 
 		private async Task MainAsync() {
@@ -156,34 +157,52 @@ namespace RoosterBot {
 
 			ConsoleKeyInfo keyPress;
 			bool keepRunning = true;
-			bool manualStop = false;
-			do {
-				keepRunning = true;
-				Task.WaitAny(new Task[] {
-					Task.Delay(500).ContinueWith((t) => {
-						if (Console.KeyAvailable) {
-							keyPress = Console.ReadKey(true);
-							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-								keepRunning = false;
-								manualStop = true;
-								Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q pressed");
-							}
-						}
-					}),
-					Task.Delay(500).ContinueWith((t) => {
-						if (m_StopFlagSet) {
-							keepRunning = false;
-							Logger.Log(LogSeverity.Info, "Main", "Stop flag set");
-						}
-					})
-				});
 
-			} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+			CancellationTokenSource cts = new CancellationTokenSource();
+			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In)) {
+				Task pipeWait = pipeServer.WaitForConnectionAsync(cts.Token);
+
+				do {
+					keepRunning = true;
+					Task.WaitAny(new Task[] {
+						Task.Delay(500).ContinueWith((t) => {
+							// Ctrl-Q pressed by user
+							if (Console.KeyAvailable) {
+								keyPress = Console.ReadKey(true);
+								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+									keepRunning = false;
+									Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q pressed");
+								}
+							}
+						}),
+						Task.Delay(500).ContinueWith((t) => {
+							// Stop flag set by RoosterBot or components
+							if (m_StopFlagSet) {
+								keepRunning = false;
+								Logger.Log(LogSeverity.Info, "Main", "Stop flag set");
+							}
+						}),
+						Task.Delay(500).ContinueWith((t) => {
+							// Pipe connection by stop executable
+							if (pipeServer.IsConnected) {
+								using (StreamReader sr = new StreamReader(pipeServer)) {
+									string input = sr.ReadLine();
+									if (input == "stop") {
+										Console.WriteLine("Stop command received by external process");
+										keepRunning = false;
+									}
+								}
+								
+							}
+						})
+					});
+
+				} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+			}
+			cts.Cancel();
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-			if (m_ConfigService.LogChannel != null && !manualStop) {
-				await m_ConfigService.LogChannel.SendMessageAsync("Bot shutting down.");
-			}
+			
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
