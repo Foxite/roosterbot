@@ -8,6 +8,7 @@ env:
     
 phases:
   pre_build:
+    commands:
       - 'dir "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework"'
   build:
     commands:
