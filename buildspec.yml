@@ -7,6 +7,8 @@ env:
     DOTNET_FRAMEWORK: 4.6.2
     
 phases:
+  pre_build:
+      - 'dir "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework"'
   build:
     commands:
       - '& "C:\ProgramData\chocolatey\bin\NuGet.exe" restore $env:SOLUTION -PackagesDirectory $env:PACKAGE_DIRECTORY'
