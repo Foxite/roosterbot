@@ -23,6 +23,8 @@ namespace ScheduleComponent.Modules {
 				IUser dinny = await Context.Client.GetUserAsync(177154773424799753);
 				if (dinny != null) {
 					await ReplyAsync(dinny.Mention);
+				} else {
+					await ReplyAsync("@ dinny");
 				}
 			}
 			await MatchCommand(wat, "hierna");
