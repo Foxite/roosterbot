@@ -58,7 +58,7 @@ namespace RoosterBot {
 		}
 		
 		public static void Log(LogMessage msg) {
-			string loggedMessage = DateTime.Now.ToUniversalTime() + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
+			string loggedMessage = DateTime.Now + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
 			if (msg.Exception != null) {
 				loggedMessage += "\n" + msg.Exception.ToString();
 			}
