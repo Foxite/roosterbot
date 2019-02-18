@@ -22,7 +22,7 @@ namespace RoosterBot {
 		private bool m_StopFlagSet = false;
 
 		private DiscordSocketClient m_Client;
-		private EditedCommandService m_Comands;
+		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
 
@@ -97,13 +97,13 @@ namespace RoosterBot {
 				};
 			};
 
-			m_Comands = new EditedCommandService(m_Client, HandleCommand);
-			m_Comands.Log += Logger.LogSync;
-			await m_Comands.AddModulesAsync(Assembly.GetEntryAssembly());
+			m_Commands = new EditedCommandService(m_Client, HandleCommand);
+			m_Commands.Log += Logger.LogSync;
+			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
-				.AddSingleton(m_Comands)
+				.AddSingleton(m_Commands)
 				.AddSingleton(m_Client)
 				.AddSingleton(new SNSService(m_ConfigService));
 
@@ -132,7 +132,7 @@ namespace RoosterBot {
 				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
 				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					component.Initialize(ref serviceCollection, m_Comands, Path.Combine(configPath, type.Namespace));
+					component.Initialize(ref serviceCollection, m_Commands, Path.Combine(configPath, type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during initialization.", ex);
 					return;
@@ -240,7 +240,7 @@ namespace RoosterBot {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 			// Execute the command. (result does not indicate a return value, 
 			// rather an object stating if the command executed successfully)
-			IResult result = await m_Comands.ExecuteAsync(context, argPos, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
 
 			await HandleError(result, message, initialResponse);
 		}
@@ -321,7 +321,7 @@ namespace RoosterBot {
 				}
 
 				if (initialResponse == null) {
-					this.m_Comands.AddResponse(command, await command.Channel.SendMessageAsync(response));
+					this.m_Commands.AddResponse(command, await command.Channel.SendMessageAsync(response));
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
