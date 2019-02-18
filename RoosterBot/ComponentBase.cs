@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Services;
 
 namespace RoosterBot {
 	public abstract class ComponentBase {
-		/// <summary>
-		/// Initializes the component.
-		/// </summary>
-		public abstract void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath);
+		public abstract void AddServices(ref IServiceCollection services, string configPath);
+		public abstract void AddModules(IServiceProvider services, EditedCommandService commandService);
 	}
 }

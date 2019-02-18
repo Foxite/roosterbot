@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MiscStuffComponent.Services;
 using MiscStuffComponent.Modules;
 using System.IO;
+using System;
 
 namespace MiscStuffComponent
 {
@@ -11,13 +12,15 @@ namespace MiscStuffComponent
     {
 		public string ConfigPath { get; private set; }
 
-		public override void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath) {
+		public override void AddServices(ref IServiceCollection services, string configPath) {
 			ConfigPath = configPath;
 
 			services.AddSingleton(new CounterService(Path.Combine(configPath, "counters")));
+		}
 
-			commandService.AddModuleAsync<CounterModule>();
-			commandService.AddModuleAsync<MiscModule>();
+		public override void AddModules(IServiceProvider services, EditedCommandService commandService) {
+			commandService.AddModuleAsync<CounterModule>(services);
+			commandService.AddModuleAsync<MiscModule>(services);
 		}
 	}
 }

@@ -5,10 +5,11 @@ using PublicTransitComponent.Services;
 using PublicTransitComponent.Modules;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System;
 
 namespace PublicTransitComponent {
 	public class PublicTransitComponent : ComponentBase {
-		public override void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath) {
+		public override void AddServices(ref IServiceCollection services, string configPath) {
 			#region Config
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
@@ -22,8 +23,9 @@ namespace PublicTransitComponent {
 			//services.AddSingleton(http);
 			//services.AddSingleton(xml);
 			services.AddSingleton(new NSAPI(xml));
-
-			commandService.AddModuleAsync<PTModule>();
+		}
+		public override void AddModules(IServiceProvider services, EditedCommandService commandService) {
+			commandService.AddModuleAsync<PTModule>(services);
 		}
 	}
 }

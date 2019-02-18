@@ -100,7 +100,6 @@ namespace RoosterBot {
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
 			m_Commands.Log += Logger.LogSync;
-			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
@@ -123,26 +122,40 @@ namespace RoosterBot {
 			}
 
 			// Look for children of ComponentBase in the loaded assemblies
-			Type[] components = (from domainAssembly in assemblies
-							from assemblyType in domainAssembly.GetExportedTypes()
-							where assemblyType.IsSubclassOf(typeof(ComponentBase))
-							select assemblyType).ToArray();
+			Type[] componentTypes = (from domainAssembly in assemblies
+								 from assemblyType in domainAssembly.GetExportedTypes()
+								 where assemblyType.IsSubclassOf(typeof(ComponentBase))
+								 select assemblyType).ToArray();
 
-			// Create instances of these classes and call Initialize()
-			foreach (Type type in components) {
-				Logger.Log(LogSeverity.Info, "Main", "Loading component " + type.Name);
-				ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
+			ComponentBase[] components = new ComponentBase[componentTypes.Length];
+			// Create instances of these classes and call AddServices and then AddModules
+			for (int i = 0; i < componentTypes.Length; i++) {
+				Type type = (Type) componentTypes[i];
+				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
+				components[i] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					component.Initialize(ref serviceCollection, m_Commands, Path.Combine(configPath, type.Namespace));
+					components[i].AddServices(ref serviceCollection, Path.Combine(configPath, type.Namespace));
 				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during initialization.", ex);
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AdServices.", ex);
 					return;
 				}
 			}
-			// And we're done.
+
 			m_Services = serviceCollection.BuildServiceProvider();
-			#endregion Start components
 			
+			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
+
+			foreach (ComponentBase component in components) {
+				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + component.GetType().Name);
+				try {
+					component.AddModules(m_Services, m_Commands);
+				} catch (Exception ex) {
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + component.GetType().Name + " threw an exception during AddModules.", ex);
+					return;
+				}
+			}
+			#endregion Start components
+
 			#region Start client
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();

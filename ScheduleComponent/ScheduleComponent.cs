@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
@@ -11,8 +12,8 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
-		public override void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath) {
-			#region Services
+		//public override void Initialize(ref IServiceCollection services, EditedCommandService commandService, string configPath) {
+		public override void AddServices(ref IServiceCollection services, string configPath) {
 			List<Task> concurrentLoading = new List<Task>();
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -41,17 +42,16 @@ namespace ScheduleComponent {
 				.AddSingleton(scheduleService)
 				.AddSingleton(new LastScheduleCommandService(scheduleService))
 				.AddSingleton(new CommandMatchingService(teachers));
-			#endregion
+		}
 
-			#region Modules
+		public override void AddModules(IServiceProvider services, EditedCommandService commandService) {
 			//commandService.AddModulesAsync(GetType().Assembly);
-			commandService.AddModuleAsync<GenericCommandsModule>();
-			commandService.AddModuleAsync<ScheduleModuleBase>();
-			commandService.AddModuleAsync<StudentScheduleModule>();
-			commandService.AddModuleAsync<TeacherScheduleModule>();
-			commandService.AddModuleAsync<RoomScheduleModule>();
-			commandService.AddModuleAsync<TeacherListModule>();
-			#endregion Modules
+			commandService.AddModuleAsync<GenericCommandsModule>(services);
+			commandService.AddModuleAsync<ScheduleModuleBase>(services);
+			commandService.AddModuleAsync<StudentScheduleModule>(services);
+			commandService.AddModuleAsync<TeacherScheduleModule>(services);
+			commandService.AddModuleAsync<RoomScheduleModule>(services);
+			commandService.AddModuleAsync<TeacherListModule>(services);
 		}
 	}
 }
