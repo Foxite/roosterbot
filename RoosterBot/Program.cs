@@ -73,6 +73,7 @@ namespace RoosterBot {
 				m_State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
 				await m_ConfigService.SetLogChannelAsync(m_Client, configPath);
+				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				m_Client.Disconnected += (e) => {
 					m_State = ProgramState.BotStopped;
