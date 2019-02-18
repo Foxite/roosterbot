@@ -45,7 +45,7 @@ namespace RoosterBot.Services {
 			// This class is designed to work with EditableCmdModuleBase in that aspect. It can simply be replaced as ModuleBase in existing modules and they will
 			//  automatically adopt this functionality without needing additional work.
 			SocketUserMessage socketMessageAfter;
-			if ((socketMessageAfter = messageAfter as SocketUserMessage) != null)
+			if ((socketMessageAfter = messageAfter as SocketUserMessage) == null)
 				return;
 
 			CommandResponsePair crp;

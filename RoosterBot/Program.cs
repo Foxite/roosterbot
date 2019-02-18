@@ -235,7 +235,7 @@ namespace RoosterBot {
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
 			// Don't process the command if it was a System Message
 			SocketUserMessage message;
-			if ((message = command as SocketUserMessage) != null)
+			if ((message = command as SocketUserMessage) == null)
 				return;
 
 			// Create a number to track where the prefix ends and the command begins
