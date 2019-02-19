@@ -13,12 +13,22 @@ namespace ScheduleComponent.Modules {
 		public CommandMatchingService MatchingService { get; set; }
 		
 		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
-		public async Task GenericCurrentCommand([Remainder] string wat) {
+		public async Task GenericCurrentCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
+				return;
+			}
+
 			await MatchCommand(wat, "nu");
 		}
 
 		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip")]
 		public async Task GenericNextCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
+				return;
+			}
+
 			if (Context.Message.Content.StartsWith("!kip")) {
 				IUser dinny = await Context.Client.GetUserAsync(177154773424799753);
 				if (dinny != null) {
@@ -31,17 +41,32 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("dag", RunMode = RunMode.Async)]
-		public async Task GenericWeekdayCommand([Remainder] string wat) {
+		public async Task GenericWeekdayCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await MinorError("Ik moet een klas, lokaal of leraar hebben, en een weekdag.");
+				return;
+			}
+
 			await MatchCommand(wat, "dag");
 		}
 
 		[Priority(10), Command("morgen", RunMode = RunMode.Async)]
-		public async Task GenericTomorrowCommand([Remainder] string wat) {
+		public async Task GenericTomorrowCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
+				return;
+			}
+
 			await MatchCommand(wat, "morgen");
 		}
 
 		[Priority(10), Command("vandaag", RunMode = RunMode.Async)]
-		public async Task GenericTodayCommand([Remainder] string wat) {
+		public async Task GenericTodayCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
+				return;
+			}
+
 			await MatchCommand(wat, "vandaag");
 		}
 
