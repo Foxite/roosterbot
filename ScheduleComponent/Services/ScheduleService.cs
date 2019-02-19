@@ -35,43 +35,44 @@ namespace ScheduleComponent.Services {
 			}
 
 			using (StreamReader reader = File.OpenText(path)) {
-				CsvReader csv = new CsvReader(reader);
-				await csv.ReadAsync();
-				csv.ReadHeader();
+				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
+					await csv.ReadAsync();
+					csv.ReadHeader();
 
-				Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
-				PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(name);
+					Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+					PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(name);
 
-				while (await csv.ReadAsync()) {
-					ScheduleRecord record = new ScheduleRecord() {
-						Activity = csv["Activity"],
-						StaffMember = csv["StaffMember"],
-						StudentSets = csv["StudentSets"],
-						// Rooms often have " (0)" behind them. unknown reason.
-						// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-						Room = csv["Room"].Replace(" (0)", "")
-					};
+					while (await csv.ReadAsync()) {
+						ScheduleRecord record = new ScheduleRecord() {
+							Activity = csv["Activity"],
+							StaffMember = csv["StaffMember"],
+							StudentSets = csv["StudentSets"],
+							// Rooms often have " (0)" behind them. unknown reason.
+							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
+							Room = csv["Room"].Replace(" (0)", "")
+						};
 
-					int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
-					int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-					int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
-					record.Start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-					record.End = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
+						int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
+						int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
+						int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
+						record.Start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
+						record.End = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
-					string key = identifier.GetValue(record) as string;
-					ScheduleRecord lastRecord;
-					if (lastRecords.TryGetValue(key, out lastRecord) &&
-						record.Activity == lastRecord.Activity &&
-						record.Start.Date == lastRecord.Start.Date &&
-						record.StudentSets == lastRecord.StudentSets &&
-						record.StaffMember == lastRecord.StaffMember &&
-						record.Room == lastRecord.Room) {
-						lastRecord.BreakStart = lastRecord.End;
-						lastRecord.BreakEnd = record.Start;
-						lastRecord.End = record.End;
-					} else {
-						lastRecords[key] = record;
-						records.Add(record);
+						string key = identifier.GetValue(record) as string;
+						ScheduleRecord lastRecord;
+						if (lastRecords.TryGetValue(key, out lastRecord) &&
+							record.Activity == lastRecord.Activity &&
+							record.Start.Date == lastRecord.Start.Date &&
+							record.StudentSets == lastRecord.StudentSets &&
+							record.StaffMember == lastRecord.StaffMember &&
+							record.Room == lastRecord.Room) {
+							lastRecord.BreakStart = lastRecord.End;
+							lastRecord.BreakEnd = record.Start;
+							lastRecord.End = record.End;
+						} else {
+							lastRecords[key] = record;
+							records.Add(record);
+						}
 					}
 				}
 			}

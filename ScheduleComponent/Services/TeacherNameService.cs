@@ -20,35 +20,35 @@ namespace ScheduleComponent.Services {
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
-		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async Task ReadAbbrCSV(string path) {
 			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
-				CsvReader csv = new CsvReader(reader);
-				await csv.ReadAsync();
-				csv.ReadHeader();
+				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
+					await csv.ReadAsync();
+					csv.ReadHeader();
 
-				List<TeacherRecord> currentRecords = new List<TeacherRecord>();
+					List<TeacherRecord> currentRecords = new List<TeacherRecord>();
 
-				while (await csv.ReadAsync()) {
-					TeacherRecord record = new TeacherRecord() {
-						Abbreviation = csv["Abbreviation"],
-						FullName = csv["FullName"],
-						NoLookup = bool.Parse(csv["NoLookup"]),
-						DiscordUser = csv["DiscordUser"]
-					};
-					string altSpellingsString = csv["AltSpellings"];
+					while (await csv.ReadAsync()) {
+						TeacherRecord record = new TeacherRecord() {
+							Abbreviation = csv["Abbreviation"],
+							FullName = csv["FullName"],
+							NoLookup = bool.Parse(csv["NoLookup"]),
+							DiscordUser = csv["DiscordUser"]
+						};
+						string altSpellingsString = csv["AltSpellings"];
 
-					if (altSpellingsString != "") {
-						record.AltSpellings = altSpellingsString.Split(',');
-					};
+						if (altSpellingsString != "") {
+							record.AltSpellings = altSpellingsString.Split(',');
+						};
 
-					currentRecords.Add(record);
-				}
+						currentRecords.Add(record);
+					}
 
-				lock (m_Records) {
-					m_Records.AddRange(currentRecords);
+					lock (m_Records) {
+						m_Records.AddRange(currentRecords);
+					}
 				}
 			}
 			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
