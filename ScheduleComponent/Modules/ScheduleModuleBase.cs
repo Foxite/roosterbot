@@ -17,7 +17,7 @@ namespace ScheduleComponent.Modules {
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
-				await ReplyAsync("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
+				ReplyDeferred("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
 			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await GetAfterCommandFunction();
@@ -97,7 +97,7 @@ namespace ScheduleComponent.Modules {
 					response += TableItemDuration(record);
 					response += TableItemBreak(record);
 				}
-				await ReplyAsync(response, query.SourceSchedule, query.Identifier, record);
+				ReplyDeferred(response, query.SourceSchedule, query.Identifier, record);
 
 				if (record.Activity == "pauze" && recursion <= 5) {
 					await GetAfterCommandFunction(recursion + 1);

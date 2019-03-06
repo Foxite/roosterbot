@@ -16,13 +16,13 @@ namespace ScheduleComponent.Modules {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) {
-					await ReplyAsync(await RespondTeacherMultiple(false, leraar, teachers));
+					await ReplyAsync(await RespondTeacherMultiple(false, teachers));
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
-						await ReplyAsync(RespondTeacherCurrent(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record), "StaffMember", teachers[0], record);
+						RespondTeacherCurrent(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record);
 					}
 				}
 			}
@@ -35,14 +35,14 @@ namespace ScheduleComponent.Modules {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) { // There are multiple
-					await ReplyAsync(await RespondTeacherMultiple(true, leraar, teachers));
+					await ReplyAsync(await RespondTeacherMultiple(true, teachers));
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
 					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await ReplyAsync(RespondTeacherNext(record.StaffMember, Teachers.GetFullNameFromAbbr(teachers[0]), record).FirstCharToUpper(), "StaffMember", teachers[0], record);
+							RespondTeacherNext(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record);
 						} else {
 							await FatalError($"`GetRecord(true, \"StaffMember\", {teachers[0]})` returned null");
 						}
@@ -64,13 +64,13 @@ namespace ScheduleComponent.Modules {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
 					if (teachers.Length > 1) {
-						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teacherGiven, teachers));
+						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teachers));
 						LSCService.RemoveLastQuery(Context.User);
 					} else {
 						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teachers[0]);
 						if (result.Success) {
 							ScheduleRecord record = result.Value;
-							await ReplyAsync(RespondTeacherWeekday(Teachers.GetFullNameFromAbbr(teachers[0]), day, record), "StaffMember", teachers[0], record);
+							RespondTeacherWeekday(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), day, record);
 						}
 					}
 				}
@@ -126,7 +126,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
-		private string RespondTeacherCurrent(string teacherAbbr, string teacher, ScheduleRecord record) {
+		private void RespondTeacherCurrent(string teacherAbbr, string teacher, ScheduleRecord record) {
 			string response;
 			if (record == null) {
 				response = $"Het lijkt erop dat {teacher} nu niets heeft.";
@@ -150,10 +150,11 @@ namespace ScheduleComponent.Modules {
 					response += TableItemBreak(record);
 				}
 			}
-			return response;
+
+			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
 		}
 
-		private string RespondTeacherNext(string teacherAbbr, string teacher, ScheduleRecord record) {
+		private void RespondTeacherNext(string teacherAbbr, string teacher, ScheduleRecord record) {
 			bool isToday = record.Start.Date == DateTime.Today;
 			string response;
 
@@ -175,10 +176,10 @@ namespace ScheduleComponent.Modules {
 				response += TableItemDuration(record);
 				response += TableItemBreak(record);
 			}
-			return response;
+			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
 		}
 		
-		private string RespondTeacherWeekday(string teacher, DayOfWeek day, ScheduleRecord record) {
+		private void RespondTeacherWeekday(string teacherAbbr, string teacher, DayOfWeek day, ScheduleRecord record) {
 			string response;
 			if (record == null) {
 				response = $"Het lijkt er op dat {teacher} op {Util.GetStringFromDayOfWeek(day)} niets heeft.";
@@ -201,10 +202,10 @@ namespace ScheduleComponent.Modules {
 					response += TableItemBreak(record);
 				}
 			}
-			return response;
+			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
 		}
 
-		private async Task<string> RespondTeacherMultiple(bool next, string ambiguousPart, params string[] teacherAbbrs) {
+		private async Task<string> RespondTeacherMultiple(bool next, params string[] teacherAbbrs) {
 			string response = "";
 
 			string[] teachers = new string[teacherAbbrs.Length];
@@ -217,21 +218,21 @@ namespace ScheduleComponent.Modules {
 				results[i] = await GetRecord(next, "StaffMember", teacherAbbrs[i]);
 			}
 
-			Func<string, string, ScheduleRecord, string> respondFunction = next ? (Func<string, string, ScheduleRecord, string>) RespondTeacherNext : RespondTeacherCurrent;
+			Action<string, string, ScheduleRecord> respondFunction = next ? (Action<string, string, ScheduleRecord>) RespondTeacherNext : RespondTeacherCurrent;
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
 					Console.WriteLine(results[i].Value == null);
-					response += respondFunction(teacherAbbrs[i], teachers[i], results[i].Value) + "\n\n";
+					respondFunction(teacherAbbrs[i], teachers[i], results[i].Value);
 				} else {
-					response += $"{teachers[i]}: Geen info.";
+					ReplyDeferred($"{teachers[i]}: Geen info.");
 				}
 			}
 
 			return response;
 		}
 
-		private async Task<string> RespondTeacherWeekdayMultiple(DayOfWeek day, string ambiguousPart, params string[] teacherAbbrs) {
+		private async Task<string> RespondTeacherWeekdayMultiple(DayOfWeek day, params string[] teacherAbbrs) {
 			string response = "";
 
 			string[] teachers = new string[teacherAbbrs.Length];
@@ -246,9 +247,9 @@ namespace ScheduleComponent.Modules {
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
-					response += RespondTeacherWeekday(teachers[i], day, results[i].Value) + "\n\n";
+					RespondTeacherWeekday(teacherAbbrs[i], teachers[i], day, results[i].Value);
 				} else {
-					response += $"{teachers[i]}: Geen info.";
+					ReplyDeferred($"{teachers[i]}: Geen info.");
 				}
 			}
 

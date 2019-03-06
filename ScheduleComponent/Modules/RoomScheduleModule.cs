@@ -31,7 +31,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemBreak(record);
 					}
 				}
-				await ReplyAsync(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
+				ReplyDeferred(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
 			}
 		}
 
@@ -61,7 +61,8 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					await ReplyAsync(response, "Room", lokaal.ToUpper(), record);
+
+					ReplyDeferred(response, "Room", lokaal.ToUpper(), record);
 				}
 			}
 		}
@@ -96,7 +97,7 @@ namespace ScheduleComponent.Modules {
 							response += TableItemBreak(record);
 						}
 					}
-					await ReplyAsync(response, "Room", room, record);
+					ReplyDeferred(response, "Room", room, record);
 				}
 			}
 		}

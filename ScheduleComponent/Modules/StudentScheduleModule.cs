@@ -34,7 +34,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					await ReplyAsync(response, "StudentSets", klas.ToUpper(), record);
+					ReplyDeferred(response, "StudentSets", klas.ToUpper(), record);
 
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -72,7 +72,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					await ReplyAsync(response, "StudentSets", klas.ToUpper(), record);
+					ReplyDeferred(response, "StudentSets", klas.ToUpper(), record);
 					
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -116,7 +116,7 @@ namespace ScheduleComponent.Modules {
 							response += TableItemBreak(record);
 						}
 					}
-					await ReplyAsync(response, "StudentSets", clazz.ToUpper(), record);
+					ReplyDeferred(response, "StudentSets", clazz.ToUpper(), record);
 					
 					if (record?.Activity == "pauze") {
 						await GetAfterCommandFunction();
