@@ -15,7 +15,10 @@ namespace ScheduleComponent.Modules {
 		public ScheduleService Schedules { get; set; }
 		
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
-		public async Task GetAfterCommand() {
+		public async Task GetAfterCommand([Remainder] string ignored = "") {
+			if (!string.IsNullOrWhiteSpace(ignored)) {
+				await ReplyAsync("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
+			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await GetAfterCommandFunction();
 		}
