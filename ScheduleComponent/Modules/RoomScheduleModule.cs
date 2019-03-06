@@ -32,6 +32,10 @@ namespace ScheduleComponent.Modules {
 					}
 				}
 				ReplyDeferred(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
+				
+				if (record?.Activity == "pauze") {
+					await GetAfterCommandFunction();
+				}
 			}
 		}
 
@@ -63,6 +67,10 @@ namespace ScheduleComponent.Modules {
 					}
 
 					ReplyDeferred(response, "Room", lokaal.ToUpper(), record);
+					
+					if (record.Activity == "pauze") {
+						await GetAfterCommandFunction();
+					}
 				}
 			}
 		}
@@ -98,6 +106,10 @@ namespace ScheduleComponent.Modules {
 						}
 					}
 					ReplyDeferred(response, "Room", room, record);
+					
+					if (record?.Activity == "pauze") {
+						await GetAfterCommandFunction();
+					}
 				}
 			}
 		}

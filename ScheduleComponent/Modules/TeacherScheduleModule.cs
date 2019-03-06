@@ -152,6 +152,10 @@ namespace ScheduleComponent.Modules {
 			}
 
 			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+
+			if (record?.Activity == "pauze") {
+				GetAfterCommandFunction().GetAwaiter().GetResult();
+			}
 		}
 
 		private void RespondTeacherNext(string teacherAbbr, string teacher, ScheduleRecord record) {
@@ -177,6 +181,10 @@ namespace ScheduleComponent.Modules {
 				response += TableItemBreak(record);
 			}
 			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+			
+			if (record.Activity == "pauze") {
+				GetAfterCommandFunction().GetAwaiter().GetResult();
+			}
 		}
 		
 		private void RespondTeacherWeekday(string teacherAbbr, string teacher, DayOfWeek day, ScheduleRecord record) {
@@ -203,6 +211,10 @@ namespace ScheduleComponent.Modules {
 				}
 			}
 			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+
+			if (record.Activity == "pauze") {
+				GetAfterCommandFunction().GetAwaiter().GetResult();
+			}
 		}
 
 		private async Task<string> RespondTeacherMultiple(bool next, params string[] teacherAbbrs) {
