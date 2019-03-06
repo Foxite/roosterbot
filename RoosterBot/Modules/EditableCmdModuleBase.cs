@@ -10,15 +10,11 @@ namespace RoosterBot.Modules {
 
 		private bool m_ResponseWasModified;
 		
-		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
-			return await ReplyAsync(message, null, isTTS, embed, options);
-		}
-
 		protected override async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode = null, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret;
 			if (Context.OriginalResponse == null) {
 				if (reactionUnicode != null) {
-					await AddReaction(reactionUnicode);
+					await AddReactionAsync(reactionUnicode);
 				}
 				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
 				CmdService.AddResponse(Context.Message, response, reactionUnicode);
@@ -37,10 +33,10 @@ namespace RoosterBot.Modules {
 				CommandResponsePair crp = CmdService.GetResponse(Context.Message);
 				if (crp.ReactionUnicode != reactionUnicode) {
 					if (crp.ReactionUnicode != null) {
-						await RemoveReaction(crp.ReactionUnicode);
+						await RemoveReactionAsync(crp.ReactionUnicode);
 					}
 					if (reactionUnicode != null) {
-						await AddReaction(reactionUnicode);
+						await AddReactionAsync(reactionUnicode);
 					}
 					crp.ReactionUnicode = reactionUnicode;
 				}

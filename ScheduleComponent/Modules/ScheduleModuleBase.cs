@@ -329,6 +329,14 @@ namespace ScheduleComponent.Modules {
 			LSCService.OnRequestByUser(Context.User, schedule, identifier, record);
 			return ret;
 		}
+		
+		/// <summary>
+		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
+		/// </summary>
+		protected void ReplyDeferred(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			base.ReplyDeferred(message);
+			LSCService.OnRequestByUser(Context.User, schedule, identifier, record);
+		}
 
 		protected async override Task MinorError(string message) {
 			await base.MinorError(message);
