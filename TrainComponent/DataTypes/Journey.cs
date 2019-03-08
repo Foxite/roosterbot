@@ -102,5 +102,45 @@ namespace PublicTransitComponent.DataTypes {
 				return JourneyComponentStatus.OnSchedule;
 			}
 		}
+
+		public static string HumanStringFromJStatus(JourneyStatus status) {
+			switch (status) {
+			case JourneyStatus.OnSchedule:
+				return "Op tijd";
+			case JourneyStatus.Changed:
+				return "Gewijzigd";
+			case JourneyStatus.Delayed:
+				return "Vertraagd";
+			case JourneyStatus.New:
+				return "Nieuw";
+			case JourneyStatus.NotOptimal:
+				return "Niet optimaal";
+			case JourneyStatus.NotPossible:
+				return "Niet mogelijk";
+			case JourneyStatus.PlanChanged:
+				return "Plan gewijzigd";
+			default:
+				return "ERROR";
+			}
+		}
+
+		public static string HummanStringFromJCStatus(JourneyComponentStatus status) {
+			switch (status) {
+			case JourneyComponentStatus.OnSchedule:
+				return "Op tijd";
+			case JourneyComponentStatus.Cancelled:
+				return "Geannulleerd";
+			case JourneyComponentStatus.Changed:
+				return "Gewijzigd";
+			case JourneyComponentStatus.TransferNotPossible:
+				return "Overstap niet mogelijk";
+			case JourneyComponentStatus.Delayed:
+				return "Vertraagd";
+			case JourneyComponentStatus.New:
+				return "Nieuw";
+			default:
+				return "ERROR";
+			}
+		}
 	}
 }
