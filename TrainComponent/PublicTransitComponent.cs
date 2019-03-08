@@ -15,6 +15,7 @@ namespace PublicTransitComponent {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			string username = jsonConfig["username"].ToObject<string>();
 			string password = jsonConfig["password"].ToObject<string>();
+			string defaultDepartureCode = jsonConfig["defaultDepartureCode"].ToObject<string>();
 			#endregion Config
 
 			HTTPClient http = new HTTPClient();
@@ -23,6 +24,7 @@ namespace PublicTransitComponent {
 			//services.AddSingleton(http);
 			//services.AddSingleton(xml);
 			services.AddSingleton(new NSAPI(xml));
+			services.AddSingleton(new StationCodeService(Path.Combine(configPath, "stations.xml"), defaultDepartureCode));
 		}
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService) {
 			commandService.AddModuleAsync<PTModule>(services);
