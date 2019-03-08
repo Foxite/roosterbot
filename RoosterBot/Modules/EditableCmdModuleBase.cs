@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using RoosterBot.Services;
 
@@ -9,7 +10,11 @@ namespace RoosterBot.Modules {
 		public EditedCommandService CmdService { get; set; }
 
 		private bool m_ResponseWasModified;
-		
+
+		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+			return await ReplyAsync(message, null, isTTS, embed, options);
+		}
+
 		protected override async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode = null, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret;
 			if (Context.OriginalResponse == null) {
