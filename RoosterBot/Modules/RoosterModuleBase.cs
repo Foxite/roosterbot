@@ -57,7 +57,6 @@ namespace RoosterBot.Modules {
 		/// </summary>
 		protected virtual void ReplyDeferred(string message, string reactionUnicode) {
 			lock (m_Response) {
-				m_Response.AppendLine();
 				m_Response.AppendLine(message);
 			}
 			SetReactionDeferred(reactionUnicode);
@@ -68,7 +67,6 @@ namespace RoosterBot.Modules {
 		/// </summary>
 		protected virtual void ReplyDeferred(string message) {
 			lock (m_Response) {
-				m_Response.AppendLine();
 				m_Response.AppendLine(message);
 			}
 		}
@@ -106,7 +104,6 @@ namespace RoosterBot.Modules {
 		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
-					.AppendLine()
 					.AppendLine(message)
 					.ToString();
 				m_Response.Clear();
