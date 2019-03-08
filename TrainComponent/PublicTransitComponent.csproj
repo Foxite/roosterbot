@@ -59,6 +59,7 @@
     <Compile Include="Services\HTTPClient.cs" />
     <Compile Include="Services\IRestApi.cs" />
     <Compile Include="Services\NSAPI.cs" />
+    <Compile Include="Services\StationCodeService.cs" />
     <Compile Include="Services\XmlRestApi.cs" />
     <Compile Include="PublicTransitComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
