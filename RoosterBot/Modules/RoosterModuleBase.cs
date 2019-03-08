@@ -48,7 +48,9 @@ namespace RoosterBot.Modules {
 			}
 
 			if (m_Response.Length != 0) {
-				base.ReplyAsync(m_Response.ToString()).GetAwaiter().GetResult();
+				string message = m_Response.ToString();
+				m_Response.Clear();
+				ReplyAsync(message).GetAwaiter().GetResult();
 			}
 		}
 
@@ -80,7 +82,9 @@ namespace RoosterBot.Modules {
 
 		protected async virtual Task<IUserMessage> SendDeferredResponseAsync() {
 			if (m_Response.Length != 0) {
-				return await ReplyAsync(m_Response.ToString());
+				string message = m_Response.ToString();
+				m_Response.Clear();
+				return await ReplyAsync(message);
 			} else {
 				return null;
 			}
