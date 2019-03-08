@@ -17,7 +17,7 @@ namespace ScheduleComponent.Services {
 			} else if (m_RoomRegex.IsMatch(parameters)) {
 				return CommandType.Room;
 			} else {
-				int teacherResults = m_Teachers.GetAbbrsFromNameInput(parameters).Length;
+				int teacherResults = m_Teachers.Lookup(parameters).Length;
 				if (teacherResults > 0 && teacherResults < 3) {
 					return CommandType.Teacher;
 				} else {

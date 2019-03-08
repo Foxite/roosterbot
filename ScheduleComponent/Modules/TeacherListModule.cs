@@ -12,12 +12,12 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent")]
 		public async Task TeacherListCommand([Remainder] string name = "") {
-			IReadOnlyList<TeacherRecord> records;
+			IReadOnlyList<TeacherInfo> records;
 
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords();
 			} else {
-				records = Teachers.GetRecordsFromNameInput(name);
+				records = Teachers.Lookup(name);
 			}
 
 			if (records.Count == 0) {
@@ -28,7 +28,7 @@ namespace ScheduleComponent.Modules {
 				// Because of NoLookup, we don't actually know how many times we use the item, but in practice, we almost always have to use it twice and not once.
 				string fullNameHeader = "Volledige naam";
 				int maxNameLength = fullNameHeader.Length;
-				foreach (TeacherRecord record in records) {
+				foreach (TeacherInfo record in records) {
 					if (record.NoLookup) {
 						continue;
 					}
@@ -36,11 +36,11 @@ namespace ScheduleComponent.Modules {
 				}
 
 				string response = $"`{fullNameHeader.PadRight(maxNameLength)}  Afk. Discord naam";
-				foreach (TeacherRecord record in records) {
+				foreach (TeacherInfo record in records) {
 					if (record.NoLookup) {
 						continue;
 					}
-					response += $"\n{record.FullName.PadRight(maxNameLength)}  {record.Abbreviation}  {record.DiscordUser}";
+					response += $"\n{record.DisplayText.PadRight(maxNameLength)}  {record.Abbreviation}  {record.DiscordUser}";
 				}
 				response += "`";
 

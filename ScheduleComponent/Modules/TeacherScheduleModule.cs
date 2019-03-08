@@ -7,22 +7,22 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[Group("leraar"), RoosterBot.Attributes.LogTag("TeacherSM")]
-	public class TeacherScheduleModule : ScheduleModuleBase {
+	public class TeacherScheduleModule : ScheduleModuleBase<TeacherInfo> {
 		[Command("nu", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {
-			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
+			TeacherInfo[] teachers = Teachers.Lookup(leraar);
 
 			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) {
-					await ReplyAsync(await RespondTeacherMultiple(false, teachers));
+					await RespondTeacherMultiple(false, teachers);
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
-					ReturnValue<ScheduleRecord> result = await GetRecord(false, "StaffMember", teachers[0]);
+					ReturnValue<ScheduleRecord> result = await GetRecord(false, teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
-						RespondTeacherCurrent(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record);
+						RespondTeacherCurrent(teachers[0], record);
 					}
 				}
 			}
@@ -30,19 +30,20 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1), Summary("Waar een leraar hierna mee bezig is")]
 		public async Task TeacherNextCommand([Remainder] string leraar) {
-			string[] teachers = Teachers.GetAbbrsFromNameInput(leraar);
+			TeacherInfo[] teachers = Teachers.Lookup(leraar);
+
 			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				if (teachers.Length > 1) { // There are multiple
-					await ReplyAsync(await RespondTeacherMultiple(true, teachers));
+					await RespondTeacherMultiple(true, teachers);
 					LSCService.RemoveLastQuery(Context.User);
 				} else {
-					ReturnValue<ScheduleRecord> result = await GetRecord(true, "StaffMember", teachers[0]);
+					ReturnValue<ScheduleRecord> result = await GetRecord(true, teachers[0]);
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							RespondTeacherNext(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), record);
+							RespondTeacherNext(teachers[0], record);
 						} else {
 							await FatalError($"`GetRecord(true, \"StaffMember\", {teachers[0]})` returned null");
 						}
@@ -58,19 +59,19 @@ namespace ScheduleComponent.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string teacherGiven = arguments.Item3;
-				string[] teachers = Teachers.GetAbbrsFromNameInput(arguments.Item3);
+				TeacherInfo[] teachers = Teachers.Lookup(arguments.Item3);
 
 				if (teachers.Length == 0) {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
 					if (teachers.Length > 1) {
-						await ReplyAsync(await RespondTeacherWeekdayMultiple(day, teachers));
+						await RespondTeacherWeekdayMultiple(day, teachers);
 						LSCService.RemoveLastQuery(Context.User);
 					} else {
-						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StaffMember", teachers[0]);
+						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, teachers[0]);
 						if (result.Success) {
 							ScheduleRecord record = result.Value;
-							RespondTeacherWeekday(teachers[0], Teachers.GetFullNameFromAbbr(teachers[0]), day, record);
+							RespondTeacherWeekday(teachers[0], day, record);
 						}
 					}
 				}
@@ -83,21 +84,21 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
-		public async Task StudentTodayCommand([Remainder] string leraarInput) {
+		public async Task TeacherTodayCommand([Remainder] string leraarInput) {
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
-			string[] teachers = Teachers.GetAbbrsFromNameInput(leraarInput);
+			TeacherInfo[] teachers = Teachers.Lookup(leraarInput);
 
 			if (teachers.Length == 0) {
 				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 			} else {
 				string response = "";
-				foreach (string teacher in teachers) {
-					ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("StaffMember", teacher);
+				foreach (TeacherInfo teacher in teachers) {
+					ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday(teacher);
 					if (result.Success) {
 						ScheduleRecord[] records = result.Value;
 						if (records.Length != 0) {
-							response += $"{Teachers.GetFullNameFromAbbr(teacher)}: Rooster voor vandaag\n";
+							response += $"{teacher.DisplayText}: Rooster voor vandaag\n";
 
 							string[][] cells = new string[records.Length + 1][];
 							cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
@@ -106,9 +107,9 @@ namespace ScheduleComponent.Modules {
 								cells[recordIndex] = new string[4];
 								cells[recordIndex][0] = record.Activity;
 								cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
-								cells[recordIndex][2] = record.StudentSets;
+								cells[recordIndex][2] = record.StudentSetsString;
 
-								string room = record.Room;
+								string room = record.RoomString;
 								if (room.Contains(',')) {
 									room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
 								}
@@ -117,26 +118,26 @@ namespace ScheduleComponent.Modules {
 							}
 							response += Util.FormatTextTable(cells, true);
 						} else {
-							response += $"Het lijkt er op dat {Teachers.GetFullNameFromAbbr(teacher)} vandaag niets heeft.\n";
+							response += $"Het lijkt er op dat {teacher.DisplayText} vandaag niets heeft.\n";
 						}
 					}
 				}
-				await ReplyAsync(response, "StaffMember", Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(teachers).Select(r => r.Abbreviation).ToArray()), null);
+				await ReplyAsync(response, null, null);
 			}
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
-		private void RespondTeacherCurrent(string teacherAbbr, string teacher, ScheduleRecord record) {
+		private void RespondTeacherCurrent(TeacherInfo teacher, ScheduleRecord record) {
 			string response;
 			if (record == null) {
-				response = $"Het lijkt erop dat {teacher} nu niets heeft.";
-				ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, "StaffMember", teacherAbbr).GetAwaiter().GetResult();
+				response = $"Het lijkt erop dat {teacher.DisplayText} nu niets heeft.";
+				ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, teacher).GetAwaiter().GetResult();
 
 				if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
 					response += "\nHij/zij staat vandaag ook niet op het rooster, en is dus waarschijnlijk afwezig.";
 				}
 			} else {
-				response = $"{teacher}: Nu\n";
+				response = $"{teacher.DisplayText}: Nu\n";
 				response += TableItemActivity(record, false);
 
 				if (record.Activity != "stdag doc") {
@@ -151,21 +152,21 @@ namespace ScheduleComponent.Modules {
 				}
 			}
 
-			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+			ReplyDeferred(response, teacher, record);
 
 			if (record?.Activity == "pauze") {
 				GetAfterCommandFunction().GetAwaiter().GetResult();
 			}
 		}
 
-		private void RespondTeacherNext(string teacherAbbr, string teacher, ScheduleRecord record) {
+		private void RespondTeacherNext(TeacherInfo teacher, ScheduleRecord record) {
 			bool isToday = record.Start.Date == DateTime.Today;
 			string response;
 
 			if (isToday) {
-				response = $"{teacher}: Hierna\n";
+				response = $"{teacher.DisplayText}: Hierna\n";
 			} else {
-				response = $"{teacher}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+				response = $"{teacher.DisplayText}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 			}
 
 			response += TableItemActivity(record, !isToday);
@@ -180,22 +181,22 @@ namespace ScheduleComponent.Modules {
 				response += TableItemDuration(record);
 				response += TableItemBreak(record);
 			}
-			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+			ReplyDeferred(response, teacher, record);
 			
 			if (record.Activity == "pauze") {
 				GetAfterCommandFunction().GetAwaiter().GetResult();
 			}
 		}
 		
-		private void RespondTeacherWeekday(string teacherAbbr, string teacher, DayOfWeek day, ScheduleRecord record) {
+		private void RespondTeacherWeekday(TeacherInfo teacher, DayOfWeek day, ScheduleRecord record) {
 			string response;
 			if (record == null) {
-				response = $"Het lijkt er op dat {teacher} op {Util.GetStringFromDayOfWeek(day)} niets heeft.";
+				response = $"Het lijkt er op dat {teacher.DisplayText} op {Util.GetStringFromDayOfWeek(day)} niets heeft.";
 			} else {
 				if (DateTime.Today.DayOfWeek == day) {
-					response = $"{teacher}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
+					response = $"{teacher.DisplayText}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
 				} else {
-					response = $"{teacher}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
+					response = $"{teacher.DisplayText}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 				}
 				response += TableItemActivity(record, true);
 
@@ -210,62 +211,43 @@ namespace ScheduleComponent.Modules {
 					response += TableItemBreak(record);
 				}
 			}
-			ReplyDeferred(response, "StaffMember", teacherAbbr, record);
+			ReplyDeferred(response, teacher, record);
 
 			if (record.Activity == "pauze") {
 				GetAfterCommandFunction().GetAwaiter().GetResult();
 			}
 		}
 
-		private async Task<string> RespondTeacherMultiple(bool next, params string[] teacherAbbrs) {
-			string response = "";
-
-			string[] teachers = new string[teacherAbbrs.Length];
-			for (int i = 0; i < teacherAbbrs.Length; i++) {
-				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
-			}
-			
+		private async Task RespondTeacherMultiple(bool next, params TeacherInfo[] teachers) {
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
 			for (int i = 0; i < results.Length; i++) {
-				results[i] = await GetRecord(next, "StaffMember", teacherAbbrs[i]);
+				results[i] = await GetRecord(next, teachers[i]);
 			}
 
-			Action<string, string, ScheduleRecord> respondFunction = next ? (Action<string, string, ScheduleRecord>) RespondTeacherNext : RespondTeacherCurrent;
+			Action<TeacherInfo, ScheduleRecord> respondFunction = next ? (Action<TeacherInfo, ScheduleRecord>) RespondTeacherNext : RespondTeacherCurrent;
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
-					Console.WriteLine(results[i].Value == null);
-					respondFunction(teacherAbbrs[i], teachers[i], results[i].Value);
+					respondFunction(teachers[i], results[i].Value);
 				} else {
-					ReplyDeferred($"{teachers[i]}: Geen info.");
+					ReplyDeferred($"{teachers[i].DisplayText}: Geen info.");
 				}
 			}
-
-			return response;
 		}
 
-		private async Task<string> RespondTeacherWeekdayMultiple(DayOfWeek day, params string[] teacherAbbrs) {
-			string response = "";
-
-			string[] teachers = new string[teacherAbbrs.Length];
-			for (int i = 0; i < teacherAbbrs.Length; i++) {
-				teachers[i] = Teachers.GetFullNameFromAbbr(teacherAbbrs[i]);
-			}
-			
+		private async Task RespondTeacherWeekdayMultiple(DayOfWeek day, params TeacherInfo[] teachers) {
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
 			for (int i = 0; i < results.Length; i++) {
-				results[i] = await GetFirstRecord(day, "StaffMember", teacherAbbrs[i]);
+				results[i] = await GetFirstRecord(day, teachers[i]);
 			}
 			
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
-					RespondTeacherWeekday(teacherAbbrs[i], teachers[i], day, results[i].Value);
+					RespondTeacherWeekday(teachers[i], day, results[i].Value);
 				} else {
-					ReplyDeferred($"{teachers[i]}: Geen info.");
+					ReplyDeferred($"{teachers[i].DisplayText}: Geen info.");
 				}
 			}
-
-			return response;
 		}
 	}
 }

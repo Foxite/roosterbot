@@ -7,10 +7,10 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[Group("lokaal"), RoosterBot.Attributes.LogTag("RoomSM")]
-	public class RoomScheduleModule : ScheduleModuleBase {
+	public class RoomScheduleModule : ScheduleModuleBase<RoomInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, "Room", lokaal);
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, new RoomInfo() { Room = lokaal.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				string response;
@@ -20,7 +20,7 @@ namespace ScheduleComponent.Modules {
 						response += " Het is dan ook weekend.";
 					}
 				} else {
-					response = $"{record.Room}: Nu\n";
+					response = $"{record.RoomString}: Nu\n";
 					response += TableItemActivity(record, false);
 
 					if (record.Activity != "stdag doc") {
@@ -31,7 +31,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemBreak(record);
 					}
 				}
-				ReplyDeferred(response, "Room", (record?.Room) ?? lokaal.ToUpper(), record);
+				ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, record);
 				
 				if (record?.Activity == "pauze") {
 					await GetAfterCommandFunction();
@@ -41,7 +41,7 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Wat er hierna in een lokaal plaatsvindt")]
 		private async Task RoomNextCommand(string lokaal) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, "Room", lokaal);
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, new RoomInfo() { Room = lokaal.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -51,9 +51,9 @@ namespace ScheduleComponent.Modules {
 					string response;
 
 					if (isToday) {
-						response = $"{record.Room}: Hierna\n";
+						response = $"{record.RoomString}: Hierna\n";
 					} else {
-						response = $"{record.Room}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						response = $"{record.RoomString}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
 
 					response += TableItemActivity(record, false);
@@ -66,7 +66,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemBreak(record);
 					}
 
-					ReplyDeferred(response, "Room", lokaal.ToUpper(), record);
+					ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, record);
 					
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -83,7 +83,7 @@ namespace ScheduleComponent.Modules {
 				DayOfWeek day = arguments.Item2;
 				string room = arguments.Item3.ToUpper();
 
-				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "Room", room);
+				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, new RoomInfo() { Room = room });
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					string response;
@@ -93,7 +93,7 @@ namespace ScheduleComponent.Modules {
 							response += "\nDat is dan ook in het weekend.";
 						}
 					} else {
-						response = $"{record.Room}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
+						response = $"{record.RoomString}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 
 						response += TableItemActivity(record, false);
 
@@ -105,8 +105,8 @@ namespace ScheduleComponent.Modules {
 							response += TableItemBreak(record);
 						}
 					}
-					ReplyDeferred(response, "Room", room, record);
-					
+					ReplyDeferred(response, new RoomInfo() { Room = room }, record);
+
 					if (record?.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
@@ -123,7 +123,7 @@ namespace ScheduleComponent.Modules {
 		public async Task RoomTodayCommand(string lokaal) {
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
-			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("Room", lokaal);
+			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday(new RoomInfo() { Room = lokaal.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
 				string response;
@@ -132,7 +132,7 @@ namespace ScheduleComponent.Modules {
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response, "Room", lokaal.ToUpper(), null);
+					ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, null);
 				} else {
 					response = $"{lokaal.ToUpper()}: Rooster voor vandaag\n";
 
@@ -143,12 +143,12 @@ namespace ScheduleComponent.Modules {
 						cells[recordIndex] = new string[4];
 						cells[recordIndex][0] = record.Activity;
 						cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
-						cells[recordIndex][2] = record.StudentSets;
-						cells[recordIndex][3] = string.IsNullOrEmpty(record.StaffMember) ? "" : GetTeacherFullNamesFromAbbrs(record.StaffMember);
+						cells[recordIndex][2] = record.StudentSetsString;
+						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);
-					await ReplyAsync(response, "Room", lokaal.ToUpper(), records.Last());
+					ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, records.Last());
 				}
 			}
 		}

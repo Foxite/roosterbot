@@ -7,10 +7,10 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[Group("klas"), RoosterBot.Attributes.LogTag("StudentSM")]
-	public class StudentScheduleModule : ScheduleModuleBase {
+	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, "StudentSets", klas);
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, new StudentSetInfo() { ClassName = klas.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				string response;
@@ -19,9 +19,9 @@ namespace ScheduleComponent.Modules {
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response, "StudentSets", klas.ToUpper(), null);
+					await ReplyAsync(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, null);
 				} else {
-					response = $"{record.StudentSets}: Nu\n";
+					response = $"{record.StudentSetsString}: Nu\n";
 					response += TableItemActivity(record, false);
 
 					if (record.Activity != "stdag doc") {
@@ -34,7 +34,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					ReplyDeferred(response, "StudentSets", klas.ToUpper(), record);
+					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
 
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -45,7 +45,7 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, "StudentSets", klas);
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, new StudentSetInfo() { ClassName = klas.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -55,9 +55,9 @@ namespace ScheduleComponent.Modules {
 					string response;
 
 					if (isToday) {
-						response = $"{record.StudentSets}: Hierna\n";
+						response = $"{record.StudentSetsString}: Hierna\n";
 					} else {
-						response = $"{record.StudentSets}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						response = $"{record.StudentSetsString}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
 					
 					response += TableItemActivity(record, false);
@@ -72,8 +72,8 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					ReplyDeferred(response, "StudentSets", klas.ToUpper(), record);
-					
+					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
+
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
@@ -88,7 +88,7 @@ namespace ScheduleComponent.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string clazz = arguments.Item3;
-				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, "StudentSets", clazz);
+				ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, new StudentSetInfo() { ClassName = clazz.ToUpper() });
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					string response;
@@ -99,9 +99,9 @@ namespace ScheduleComponent.Modules {
 						}
 					} else {
 						if (DateTime.Today.DayOfWeek == day) {
-							response = $"{record.StudentSets}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
+							response = $"{record.StudentSetsString}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
 						} else {
-							response = $"{record.StudentSets}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
+							response = $"{record.StudentSetsString}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
 						}
 						response += TableItemActivity(record, true);
 
@@ -116,8 +116,8 @@ namespace ScheduleComponent.Modules {
 							response += TableItemBreak(record);
 						}
 					}
-					ReplyDeferred(response, "StudentSets", clazz.ToUpper(), record);
-					
+					ReplyDeferred(response, new StudentSetInfo() { ClassName = clazz.ToUpper() }, record);
+
 					if (record?.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
@@ -134,7 +134,7 @@ namespace ScheduleComponent.Modules {
 		public async Task StudentTodayCommand(string klas) {
 			DayOfWeek day = DateTime.Today.DayOfWeek;
 
-			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday("StudentSets", klas);
+			ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday(new StudentSetInfo() { ClassName = klas.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
 				string response;
@@ -143,7 +143,7 @@ namespace ScheduleComponent.Modules {
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
-					await ReplyAsync(response, "StudentSets", klas.ToUpper(), null);
+					await ReplyAsync(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, null);
 				} else {
 					response = $"{klas.ToUpper()}: Rooster voor vandaag\n\n";
 					string[][] cells = new string[records.Length + 1][];
@@ -153,9 +153,9 @@ namespace ScheduleComponent.Modules {
 						cells[recordIndex] = new string[4];
 						cells[recordIndex][0] = record.Activity;
 						cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
-						cells[recordIndex][2] = string.IsNullOrEmpty(record.StaffMember) ? "" : GetTeacherFullNamesFromAbbrs(record.StaffMember);
+						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 						
-						string room = record.Room;
+						string room = record.RoomString;
 						if (room.Contains(',')) {
 							room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
 						}
@@ -163,7 +163,7 @@ namespace ScheduleComponent.Modules {
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);
-					await ReplyAsync(response, "StudentSets", klas.ToUpper(), records.Last());
+					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, records.Last());
 				}
 			}
 		}

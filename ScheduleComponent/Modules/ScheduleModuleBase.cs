@@ -9,11 +9,12 @@ using RoosterBot;
 
 namespace ScheduleComponent.Modules {
 	[RoosterBot.Attributes.LogTag("ScheduleModuleBase")]
-	public class ScheduleModuleBase : EditableCmdModuleBase {
+	public class ScheduleModuleBase<T> : EditableCmdModuleBase where T : IdentifierInfo {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
-		public ScheduleService Schedules { get; set; }
-		
+		public ScheduleService<T> Schedules { get; set; }
+		public ScheduleProvider AllSchedules { get; set; }
+
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
@@ -33,9 +34,9 @@ namespace ScheduleComponent.Modules {
 				bool nullRecord = record == null;
 				try {
 					if (nullRecord) {
-						record = Schedules.GetNextRecord(query.SourceSchedule, query.Identifier);
+						record = AllSchedules.GetNextRecord(query.Identifier);
 					} else {
-						record = Schedules.GetRecordAfter(query.SourceSchedule, query.Identifier, query.Record);
+						record = AllSchedules.GetRecordAfter(query.Identifier, query.Record);
 					}
 				} catch (RecordsOutdatedException) {
 					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
@@ -55,33 +56,16 @@ namespace ScheduleComponent.Modules {
 					throw;
 				}
 
-				if (query.SourceSchedule == "StudentSets") {
-					if (nullRecord) {
-						response = $"{query.Identifier}: Hierna\n";
-					} else {
-						response = $"{query.Identifier}: Na de vorige les\n";
-					}
-				} else if (query.SourceSchedule == "StaffMember") {
-					if (nullRecord) {
-						response = $"{Teachers.GetFullNameFromAbbr(query.Identifier)}: Hierna\n";
-					} else {
-						response = $"{Teachers.GetFullNameFromAbbr(query.Identifier)}: Na de vorige les\n";
-					}
-				} else if (query.SourceSchedule == "Room") {
-					if (nullRecord) {
-						response = $"{query.Identifier}: Hierna\n";
-					} else {
-						response = $"{query.Identifier}: Na de vorige les\n";
-					}
+				if (nullRecord) {
+					response = $"{query.Identifier.DisplayText}: Hierna\n";
 				} else {
-					await FatalError($"query.SourceSchedule is not recognized: {query.SourceSchedule}");
-					return;
+					response = $"{query.Identifier.DisplayText}: Na de vorige les\n";
 				}
+
 				response += TableItemActivity(record, false);
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						string teachers = Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(record.StaffMember.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(trecord => trecord.FullName).ToArray(), " en ");
 						if (query.SourceSchedule != "StaffMember") {
 							response += TableItemStaffMember(record);
 						}
@@ -97,7 +81,7 @@ namespace ScheduleComponent.Modules {
 					response += TableItemDuration(record);
 					response += TableItemBreak(record);
 				}
-				ReplyDeferred(response, query.SourceSchedule, query.Identifier, record);
+				ReplyDeferred(response, query.Identifier, record);
 
 				if (record.Activity == "pauze" && recursion <= 5) {
 					await GetAfterCommandFunction(recursion + 1);
@@ -114,11 +98,11 @@ namespace ScheduleComponent.Modules {
 		}
 		
 		protected string TableItemStaffMember(ScheduleRecord record) {
-			string teachers = GetTeacherFullNamesFromAbbrs(record.StaffMember);
+			string teachers = string.Join(", ", record.StaffMember.Select(teacher => teacher.DisplayText));
 			if (string.IsNullOrWhiteSpace(teachers)) {
 				return "";
 			} else {
-				if (record.StaffMember == "JWO") {
+				if (record.StaffMember.Length == 1 && record.StaffMember[0].Abbreviation == "JWO") {
 					return $"<:VRjoram:392762653367336960> {teachers}\n";
 				} else {
 					return $":bust_in_silhouette: {teachers}\n";
@@ -127,16 +111,16 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected string TableItemStudentSets(ScheduleRecord record) {
-			if (!string.IsNullOrWhiteSpace(record.StudentSets)) {
-				return $":busts_in_silhouette: {record.StudentSets}\n";
+			if (!string.IsNullOrWhiteSpace(record.StudentSetsString)) {
+				return $":busts_in_silhouette: {record.StudentSetsString}\n";
 			} else {
 				return "";
 			}
 		}
 		
 		protected string TableItemRoom(ScheduleRecord record) {
-			if (!string.IsNullOrWhiteSpace(record.Room)) {
-				return $":round_pushpin: {record.Room}\n";
+			if (!string.IsNullOrWhiteSpace(record.RoomString)) {
+				return $":round_pushpin: {record.RoomString}\n";
 			} else {
 				return "";
 			}
@@ -175,24 +159,10 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, string schedule, string name) {
-			if (name == "") {
-				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			}
-			if (schedule == "Room" && name.Length != 4) {
-				await MinorError("Dat is geen lokaal.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			}
-
-			name = name.ToUpper();
+		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, T identifier) {
 			ScheduleRecord record = null;
 			try {
-				record = next ? Schedules.GetNextRecord(schedule, name) : Schedules.GetCurrentRecord(schedule, name);
+				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
@@ -213,24 +183,10 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetFirstRecord(DayOfWeek day, string schedule, string name) {
-			if (name == "") {
-				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			}
-			if (schedule == "Room" && name.Length != 4) {
-				await MinorError("Dat is geen lokaal.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			}
-
-			name = name.ToUpper();
+		protected async Task<ReturnValue<ScheduleRecord>> GetFirstRecord(DayOfWeek day, T identifier) {
 			ScheduleRecord record = null;
 			try {
-				record = Schedules.GetFirstRecordForDay(schedule, name, day);
+				record = Schedules.GetFirstRecordForDay(identifier, day);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
@@ -251,23 +207,9 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetScheduleForToday(string schedule, string name) {
-			if (name == "") {
-				await MinorError("Dat item staat niet op mijn rooster (of eigenlijk wel, maar niet op een zinvolle manier).");
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			}
-			if (schedule == "Room" && name.Length != 4) {
-				await MinorError("Dat is geen lokaal.");
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			}
-
-			name = name.ToUpper();
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetScheduleForToday(T identifier) {
 			try {
-				ScheduleRecord[] records = Schedules.GetScheduleForToday(schedule, name);
+				ScheduleRecord[] records = Schedules.GetScheduleForToday(identifier);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records
@@ -316,26 +258,22 @@ namespace ScheduleComponent.Modules {
 			}
 			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
 		}
-
-		protected string GetTeacherFullNamesFromAbbrs(string abbrs) {
-			return Util.FormatStringArray(Teachers.GetRecordsFromAbbrs(abbrs.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)).Select(each => each.FullName).ToArray(), " en ");
-		}
-
+		
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected async Task<IUserMessage> ReplyAsync(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			LSCService.OnRequestByUser(Context.User, schedule, identifier, record);
+			LSCService.OnRequestByUser(Context.User, identifier, record);
 			return ret;
 		}
 		
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected void ReplyDeferred(string message, string schedule, string identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			base.ReplyDeferred(message);
-			LSCService.OnRequestByUser(Context.User, schedule, identifier, record);
+			LSCService.OnRequestByUser(Context.User, identifier, record);
 		}
 
 		protected async override Task MinorError(string message) {
