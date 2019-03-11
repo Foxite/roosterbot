@@ -34,7 +34,7 @@ namespace PublicTransitComponent.Modules {
 
 			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom.Code, stationTo.Code);
 
-			ReplyDeferred($"{Context.User.Mention} Mogelijkheden: (elke optie is in een aparte tabel, en elke rij is één overstap");
+			ReplyDeferred($"{Context.User.Mention} Mogelijkheden: (elke optie is in een aparte tabel, en elke rij is één overstap)");
 
 			foreach (Journey journey in journeys) {
 				string pretext = "";
@@ -43,7 +43,7 @@ namespace PublicTransitComponent.Modules {
 				}
 
 				string[][] cells = new string[journey.Components.Count + 1][];
-				cells[0] = new string[] { "Trein", "Vertrek om", "Vertrekspoor", "Aankomst", "Aankomst om", "Aakomstspoor", "Waarschuwing" };
+				cells[0] = new string[] { "Trein", "Vertrek om", "Vertrekspoor", "Aankomst", "Aankomst om", "Aankomstspoor", "Waarschuwing" };
 				int recordIndex = 1;
 				foreach (JourneyComponent component in journey.Components) {
 					cells[recordIndex] = new string[7];
