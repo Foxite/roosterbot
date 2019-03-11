@@ -26,8 +26,15 @@ namespace PublicTransitComponent {
 			services.AddSingleton(new NSAPI(xml));
 			services.AddSingleton(new StationCodeService(Path.Combine(configPath, "stations.xml"), defaultDepartureCode));
 		}
-		public override void AddModules(IServiceProvider services, EditedCommandService commandService) {
+		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
 			commandService.AddModuleAsync<PTModule>(services);
+
+			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
+			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";
+			helpText += "Dit is hoe je de command gebruikt: `!ov <naam van vertrekstation>, <naam van aankomststation>`\n";
+			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n";
+			helpText += "De maker heeft een paar maanden geleden cooldowns uitgezet, maar als met !ov gespammed wordt, gaat de cooldown voor dat command op 5 seconden (vanwege API regels).";
+			help.AddHelpSection("trein", helpText);
 		}
 	}
 }

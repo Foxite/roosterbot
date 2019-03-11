@@ -101,10 +101,13 @@ namespace RoosterBot {
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
 			m_Commands.Log += Logger.LogSync;
 
+			HelpService helpService = new HelpService();
+
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_Commands)
 				.AddSingleton(m_Client)
+				.AddSingleton(helpService)
 				.AddSingleton(new SNSService(m_ConfigService));
 
 			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
@@ -148,7 +151,7 @@ namespace RoosterBot {
 			foreach (ComponentBase component in components) {
 				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + component.GetType().Name);
 				try {
-					component.AddModules(m_Services, m_Commands);
+					component.AddModules(m_Services, m_Commands, helpService);
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + component.GetType().Name + " threw an exception during AddModules.", ex);
 					return;
