@@ -5,6 +5,7 @@ using PublicTransitComponent.Services;
 using PublicTransitComponent.DataTypes;
 using RoosterBot.Attributes;
 using RoosterBot;
+using System;
 
 namespace PublicTransitComponent.Modules {
 	[LogTag("PublicTransitModule")]
@@ -20,14 +21,31 @@ namespace PublicTransitComponent.Modules {
 				return;
 			}
 
+			for (int i = 0; i < stops.Length; i++) {
+				stops[i] = stops[i].Trim();
+			}
+
 			StationInfo stationFrom;
 			StationInfo stationTo;
 			if (stops.Length == 2) {
-				stationFrom = Stations.Lookup(stops[0]);
-				stationTo = Stations.Lookup(stops[1]);
+				if (stops[0][0] == '$') {
+					stationFrom = Stations.GetByCode(stops[0].Substring(1));
+				} else {
+					stationFrom = Stations.Lookup(stops[0]).Station;
+				}
+
+				if (stops[1][0] == '$') {
+					stationTo = Stations.GetByCode(stops[1].Substring(1));
+				} else {
+					stationTo = Stations.Lookup(stops[1]).Station;
+				}
 			} else {
 				stationFrom = Stations.DefaultDeparture;
-				stationTo = Stations.Lookup(stops[0]);
+				if (stops[0][0] == '$') {
+					stationTo = Stations.GetByCode(stops[0].Substring(1));
+				} else {
+					stationTo = Stations.Lookup(stops[0]).Station;
+				}
 			}
 
 			await ReplyAsync($"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName} opzoeken...");

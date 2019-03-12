@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="DataTypes\Journey.cs" />
     <Compile Include="Modules\PTModule.cs" />
+    <Compile Include="Modules\StationsModule.cs" />
     <Compile Include="Services\HTTPClient.cs" />
     <Compile Include="Services\IRestApi.cs" />
     <Compile Include="Services\NSAPI.cs" />

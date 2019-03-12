@@ -39,26 +39,33 @@ namespace PublicTransitComponent.Services {
 			}
 		}
 
-		public StationInfo Lookup(string input) {
+		public StationInfo GetByCode(string code) {
+			return m_Stations.Find(info =>  info.Code == code);
+		}
+
+		public StationMatchInfo[] Lookup(string input, int count) {
 			string inputLower = input.ToLower();
-			int bestMatchScore = m_Stations[0].Match(inputLower);
-			StationInfo bestMatch = m_Stations[0];
+			List<StationMatchInfo> matches = new List<StationMatchInfo>();
 
-			for (int i = 1; i < m_Stations.Count; i++) {
+			for (int i = 0; i < m_Stations.Count; i++) {
 				int score = m_Stations[i].Match(inputLower);
-				if (score < bestMatchScore) {
-					bestMatchScore = score;
-					bestMatch = m_Stations[i];
-				}
-
-				if (bestMatchScore == 0) {
-					break;
-				}
+				matches.Add(new StationMatchInfo() { Station = m_Stations[i], Score = score });
 			}
 
-			Logger.Debug("SCS", $"`{input}` matched to `{bestMatch.DisplayName}` ({bestMatch.Code}) with a score of {bestMatchScore}");
+			matches.Sort();
+			StationMatchInfo[] ret = matches.GetRange(0, count).ToArray();
 
-			return bestMatch;
+			if (count == 1) {
+				Logger.Debug("SCS", $"Asked for 1 for `{input}`: result is {ret[0].Station.DisplayName} with {ret[0].Score}");
+			} else {
+				Logger.Debug("SCS", $"Asked for {count} matches for `{input}`: best result is {ret[0].Station.DisplayName} with {ret[0].Score}, worst is {ret[count - 1].Station.DisplayName} with {ret[count - 1].Score}");
+			}
+
+			return ret;
+		}
+
+		public StationMatchInfo Lookup(string input) {
+			return Lookup(input, 1)[0];
 		}
 	}
 
@@ -79,6 +86,15 @@ namespace PublicTransitComponent.Services {
 				score = Math.Min(score, Util.Levenshtein(input, Names[i]));
 			}
 			return score;
+		}
+	}
+
+	public class StationMatchInfo : IComparable<StationMatchInfo> {
+		public StationInfo Station { get; set; }
+		public int Score { get; set; }
+
+		public int CompareTo(StationMatchInfo other) {
+			return Score - other.Score;
 		}
 	}
 }
