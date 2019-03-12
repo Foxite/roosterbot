@@ -21,20 +21,25 @@ namespace PublicTransitComponent.Modules {
 				response += $"{i}. {match.Station.DisplayName}";
 
 				if (match.Station.Names.Length != 1) {
-					response += " (ook bekend als: ";
+					string aka = " (ook bekend als: ";
 
+					int count = 0;
 					bool notFirst = false;
 					for (int j = 1; j < match.Station.Names.Length; j++) {
 						if (match.Station.Names[j] != match.Station.DisplayName.ToLower()) {
 							if (notFirst) {
-								response += ", ";
+								aka += ", ";
 							}
-							response += "\"" + match.Station.Names[j] + "\"";
+							aka += "\"" + match.Station.Names[j] + "\"";
 							notFirst = true;
+							count++;
 						}
 					}
 
-					response += ")";
+					aka += ")";
+					if (count != 0) {
+						response += aka;
+					}
 				}
 
 				response += $". Code: {match.Station.Code}\n";

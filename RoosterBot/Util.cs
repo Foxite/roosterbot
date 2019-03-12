@@ -271,9 +271,9 @@ namespace RoosterBot {
 
 			for (int i = 1; i <= n; i++) {
 				for (int j = 1; j <= m; j++) {
-					int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
-					int min1 = d[i - 1, j] + 1;
-					int min2 = d[i, j - 1] + 1;
+					int cost = (target[j - 1] == source[i - 1]) ? 0 : Math.Min(n - i, m - j);
+					int min1 = d[i - 1, j] + n - i;
+					int min2 = d[i, j - 1] + m - j;
 					int min3 = d[i - 1, j - 1] + cost;
 					d[i, j] = Math.Min(Math.Min(min1, min2), min3);
 				}
