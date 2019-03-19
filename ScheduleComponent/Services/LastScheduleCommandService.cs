@@ -21,8 +21,13 @@ namespace ScheduleComponent.Services {
 		}
 
 		public void OnRequestByUser(IUser user, IdentifierInfo identifier, ScheduleRecord record) {
-			ScheduleCommandInfo ctx = new ScheduleCommandInfo(identifier, record);
-			m_SCIs.AddOrUpdate(user.Id, ctx, (key, existing) => { return ctx; });
+			if (identifier != null) {
+				ScheduleCommandInfo ctx = new ScheduleCommandInfo(identifier, record);
+				m_SCIs.AddOrUpdate(user.Id, ctx, (key, existing) => { return ctx; });
+			} else {
+				ScheduleCommandInfo unused;
+				m_SCIs.TryRemove(user.Id, out unused);
+			}
 		}
 
 		public bool RemoveLastQuery(IUser user) {
