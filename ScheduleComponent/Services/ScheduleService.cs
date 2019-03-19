@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -23,11 +22,11 @@ namespace ScheduleComponent.Services {
 		}
 		
 		/// <summary>
-		/// Loads a schedule into memory from a CSV file so that it can be accessed using this service. It is safe to execute this function in parallel.
+		/// Loads a schedule into memory from a CSV file so that it can be accessed using this service.
 		/// </summary>
 		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async Task ReadScheduleCSV(string path) {
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading schedule CSV file");
+			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading CSV file from {path}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
@@ -38,20 +37,26 @@ namespace ScheduleComponent.Services {
 					PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
 
 					while (await csv.ReadAsync()) {
+						int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
+						int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
+						int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
+						DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
+						if (start.Date < DateTime.Today) {
+							continue;
+						}
+
+						DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
+
 						ScheduleRecord record = new ScheduleRecord() {
 							Activity = csv["Activity"],
 							StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
 							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
 							// Rooms often have " (0)" behind them. unknown reason.
 							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray()
+							Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
+							Start = start,
+							End = end
 						};
-
-						int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
-						int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-						int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
-						record.Start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-						record.End = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
 						string key = (string) identifier.GetValue(record);
 						ScheduleRecord lastRecord;
@@ -71,7 +76,7 @@ namespace ScheduleComponent.Services {
 					}
 				}
 			}
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded schedule CSV file {Path.GetFileName(path)} into for {Name}");
+			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded CSV file {Path.GetFileName(path)} into schedule for {Name}");
 		}
 		
 		/// <returns>null if the class has no activity currently ongoing.</returns>
