@@ -39,10 +39,8 @@ namespace ScheduleComponent.Services {
 	public struct ScheduleCommandInfo {
 		public ScheduleRecord Record;
 		public IdentifierInfo Identifier;
-		public string SourceSchedule;
 
 		public ScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord record) {
-			SourceSchedule = identifier.TypeName;
 			Identifier = identifier;
 			Record = record;
 		}

@@ -42,7 +42,7 @@ namespace ScheduleComponent.Modules {
 					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 					return;
 				} catch (ScheduleNotFoundException) {
-					string report = $"daarna failed for query {query.SourceSchedule}:{query.Identifier}";
+					string report = $"daarna failed for query {query.Identifier.ScheduleField}:{query.Identifier}";
 					if (nullRecord) {
 						report += " with no record";
 					} else {
@@ -66,17 +66,16 @@ namespace ScheduleComponent.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						if (query.SourceSchedule != "StaffMember") {
+						if (query.Identifier.ScheduleField != "StaffMember") {
 							response += TableItemStaffMember(record);
 						}
-						if (query.SourceSchedule != "StudentSets") {
+						if (query.Identifier.ScheduleField != "StudentSets") {
 							response += TableItemStudentSets(record);
 						}
-						if (query.SourceSchedule != "Room") {
+						if (query.Identifier.ScheduleField != "Room") {
 							response += TableItemRoom(record);
 						}
 					}
-					bool isToday = record.Start.Date == DateTime.Today;
 					response += TableItemStartEndTime(record);
 					response += TableItemDuration(record);
 					response += TableItemBreak(record);
