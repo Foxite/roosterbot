@@ -116,7 +116,7 @@ namespace ScheduleComponent.Services {
 			return false;
 		}
 
-		public override string TypeName => "StaffMember";
+		public override string ScheduleField => "StaffMember";
 		public override string ScheduleCode => Abbreviation;
 		public override string DisplayText => FullName;
 

@@ -191,7 +191,7 @@ namespace ScheduleComponent.Services {
 	}
 
 	public abstract class IdentifierInfo {
-		public abstract string TypeName { get; }
+		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
 
@@ -203,7 +203,7 @@ namespace ScheduleComponent.Services {
 				return false;
 
 			return otherInfo.ScheduleCode == ScheduleCode
-				&& otherInfo.TypeName == TypeName;
+				&& otherInfo.ScheduleField == ScheduleField;
 		}
 
 		public override int GetHashCode() {
@@ -217,7 +217,7 @@ namespace ScheduleComponent.Services {
 				return true;
 
 			return lhs.ScheduleCode == rhs.ScheduleCode
-				&& lhs.TypeName == rhs.TypeName;
+				&& lhs.ScheduleField == rhs.ScheduleField;
 		}
 
 		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
@@ -227,7 +227,7 @@ namespace ScheduleComponent.Services {
 				return false;
 
 			return lhs.ScheduleCode != rhs.ScheduleCode
-				|| lhs.TypeName != rhs.TypeName;
+				|| lhs.ScheduleField != rhs.ScheduleField;
 		}
 	}
 
@@ -238,7 +238,7 @@ namespace ScheduleComponent.Services {
 			return record.StudentSets.Contains(this);
 		}
 		
-		public override string TypeName => "StudentSets";
+		public override string ScheduleField => "StudentSets";
 		public override string ScheduleCode => ClassName;
 		public override string DisplayText => ClassName;
 	}
@@ -250,7 +250,7 @@ namespace ScheduleComponent.Services {
 			return record.Room.Contains(this);
 		}
 		
-		public override string TypeName => "Room";
+		public override string ScheduleField => "Room";
 		public override string ScheduleCode => Room;
 		public override string DisplayText => Room;
 	}
