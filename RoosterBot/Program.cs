@@ -18,9 +18,7 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 
 		private ProgramState m_State;
-
 		private bool m_StopFlagSet = false;
-
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
@@ -139,7 +137,7 @@ namespace RoosterBot {
 				try {
 					components[i].AddServices(ref serviceCollection, Path.Combine(configPath, type.Namespace));
 				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AdServices.", ex);
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
 				}
 			}
