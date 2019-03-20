@@ -16,6 +16,7 @@ artifacts:
   files:
     # CodeBuild for some reason always makes a debug build rather than a release build. Haven't figured out a way to fix this.
     - .\RoosterBot\bin\Debug\*
-    - .\AppStart\bin\Debug\*
+#    - .\AppStart\bin\Debug\*
     - .\AppStop\bin\Debug\*
-    - appspec.yml
+    - .\appspec.yml
+    - .\appstart.cmd
