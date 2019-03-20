@@ -15,6 +15,7 @@ hooks:
 #  AfterInstall:
 #    - location: 
   ApplicationStart:
-    - location: AppStart\bin\Debug\AppStart.exe
+#    - location: AppStart\bin\Debug\AppStart.exe
+    - location: appstart.cmd
 #  ValidateService:
 #   - location: 
