@@ -3,9 +3,9 @@
 version: 0.0
 os: windows
 
-#files:
-#  - source: PipeServer\bin\Debug\
-#    destination: c:\temp\deploytest\
+files:
+  - source: RoosterBot\bin\Debug
+    destination: C:\temp\RoosterBot
 
 hooks:
   ApplicationStop:
@@ -19,3 +19,4 @@ hooks:
     - location: appstart.cmd
 #  ValidateService:
 #   - location: 
+
