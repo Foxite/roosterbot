@@ -18,5 +18,5 @@ artifacts:
     - .\RoosterBot\bin\Debug\*
 #    - .\AppStart\bin\Debug\*
     - .\AppStop\bin\Debug\*
-    - .\appspec.yml
-    - .\appstart.cmd
+    - appspec.yml
+    - appstart.cmd
