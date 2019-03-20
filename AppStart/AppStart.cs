@@ -11,7 +11,7 @@ namespace RoosterBot.Automation {
 			}
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
-				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../../../PipeServer/bin/Debug/PipeServer.exe"),
+				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../../../RoosterBot/bin/Debug/RoosterBot.exe"),
 				CreateNoWindow = false,
 				UseShellExecute = true,
 
