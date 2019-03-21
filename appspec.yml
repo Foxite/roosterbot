@@ -16,7 +16,5 @@ hooks:
 #    - location: 
   ApplicationStart:
     - location: appstart.cmd
-      timeout: 10
 #  ValidateService:
 #   - location: 
-
