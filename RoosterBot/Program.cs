@@ -75,7 +75,7 @@ namespace RoosterBot {
 				m_Client.Disconnected += (e) => {
 					m_State = ProgramState.BotStopped;
 					Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-						System.Threading.Thread.Sleep(10000);
+						Thread.Sleep(10000);
 						if (m_State != ProgramState.BotRunning) {
 							string report = $"RoosterBot has been disconnected for more than ten seconds. ";
 							if (e == null) {
@@ -86,6 +86,7 @@ namespace RoosterBot {
 							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
 						}
 					});
+
 					return Task.CompletedTask;
 				};
 
@@ -93,6 +94,9 @@ namespace RoosterBot {
 					m_State = ProgramState.BotRunning;
 					return Task.CompletedTask;
 				};
+
+				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
+				await ownerDM.SendMessageAsync("New version deployed.");
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
