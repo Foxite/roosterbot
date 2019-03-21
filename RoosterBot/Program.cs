@@ -15,7 +15,7 @@ using RoosterBot.Services;
 
 namespace RoosterBot {
 	public class Program {
-		public const string ConfigPath = @"C:\RoosterBot\config";
+		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
 
 		private ProgramState m_State;
@@ -27,9 +27,25 @@ namespace RoosterBot {
 
 		public event EventHandler ProgramStopping;
 
-		private static void Main(string[] args) {
-			Instance = new Program();
-			Instance.MainAsync().GetAwaiter().GetResult();
+		private static int Main(string[] args) {
+			string indicatorPath = Path.Combine(DataPath, "running");
+			
+			if (File.Exists(indicatorPath)) {
+				Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
+				return 1;
+			} else {
+				File.Create(indicatorPath).Dispose();
+			}
+
+			try {
+				Instance = new Program();
+				Instance.MainAsync().GetAwaiter().GetResult();
+			} catch {
+				return 2;
+			} finally {
+				File.Delete(indicatorPath);
+			}
+			return 0;
 		}
 
 		private async Task MainAsync() {
@@ -37,28 +53,26 @@ namespace RoosterBot {
 			m_State = ProgramState.BeforeStart;
 			
 			#region Load config
-			if (!Directory.Exists(ConfigPath)) {
-				Directory.CreateDirectory(ConfigPath);
-				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a Config.json file to the newly created RoosterBot folder in %appdata%.");
-				Console.ReadKey();
-				return;
+			if (!Directory.Exists(DataPath)) {
+				Logger.Log(LogSeverity.Critical, "Main", "Data folder did not exist.");
+				throw new InvalidOperationException("Data folder did not exist.");
 			}
 
-			string configFile = Path.Combine(ConfigPath, "Config.json");
+			string configFile = Path.Combine(DataPath, "Config.json");
 			if (!File.Exists(configFile)) {
-				Logger.Log(LogSeverity.Critical, "Main", "Config.json file did not exist. Please add a Config.json file to the RoosterBot folder in %appdata%.");
-				return;
+				Logger.Log(LogSeverity.Critical, "Main", "Config file did not exist.");
+				throw new InvalidOperationException("Config file did not exist.");
 			}
 			string authToken;
 			try {
-				m_ConfigService = new ConfigService(Path.Combine(ConfigPath, "Config.json"), out authToken);
+				m_ConfigService = new ConfigService(Path.Combine(DataPath, "Config.json"), out authToken);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
-				return;
+				throw;
 			}
 			#endregion Load config
 
-			#region Start components
+			#region Start client
 			Logger.Log(LogSeverity.Info, "Main", "Preparing to load components");
 			// Client is needed by CommandService. Don't start it just yet.
 			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
@@ -69,7 +83,7 @@ namespace RoosterBot {
 			m_Client.Ready += async () => {
 				m_State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
-				await m_ConfigService.SetLogChannelAsync(m_Client, ConfigPath);
+				await m_ConfigService.SetLogChannelAsync(m_Client, DataPath);
 				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				m_Client.Disconnected += (e) => {
@@ -111,6 +125,9 @@ namespace RoosterBot {
 				.AddSingleton(helpService)
 				.AddSingleton(new SNSService(m_ConfigService));
 
+			#endregion
+
+			#region Start components
 			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
 			
 			// Locate DLL files from a txt file
@@ -138,7 +155,7 @@ namespace RoosterBot {
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
 				components[i] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					components[i].AddServices(ref serviceCollection, Path.Combine(ConfigPath, type.Namespace));
+					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;

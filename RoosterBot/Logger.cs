@@ -9,7 +9,7 @@ namespace RoosterBot {
 		private static readonly object Lock;
 
 		static Logger() {
-			LogPath = Path.Combine(Program.ConfigPath, "RoosterBot");
+			LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 			Lock = new object();
 			
 			// Keep the log from the previous launch as ".old.log"
