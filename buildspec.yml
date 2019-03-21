@@ -10,13 +10,11 @@ phases:
   build:
     commands:
       - '& "C:\ProgramData\chocolatey\bin\NuGet.exe" restore $env:SOLUTION -PackagesDirectory $env:PACKAGE_DIRECTORY'
-      - '& "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" -m -p:FrameworkPathOverride="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v$env:DOTNET_FRAMEWORK" $env:SOLUTION'
+      - '& "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" -m -p:Configuration=Release -p:FrameworkPathOverride="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v$env:DOTNET_FRAMEWORK" $env:SOLUTION'
 
 artifacts:
   files:
-    # CodeBuild for some reason always makes a debug build rather than a release build. Haven't figured out a way to fix this.
     - .\RoosterBot\bin\Debug\*
     - .\AppStart\bin\Debug\*
     - .\AppStop\bin\Debug\*
     - appspec.yml
-#    - appstart.cmd
