@@ -3,9 +3,9 @@
 version: 0.0
 os: windows
 
-files:
-  - source: RoosterBot\bin\Debug
-    destination: C:\temp\RoosterBot
+#files:
+#  - source: RoosterBot\bin\Debug
+#    destination: C:\temp\RoosterBot
 
 hooks:
   ApplicationStop:
@@ -15,7 +15,6 @@ hooks:
 #  AfterInstall:
 #    - location: 
   ApplicationStart:
-#    - location: AppStart\bin\Debug\AppStart.exe
     - location: appstart.cmd
 #  ValidateService:
 #   - location: 
