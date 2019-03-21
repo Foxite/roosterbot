@@ -27,22 +27,9 @@ namespace RoosterBot {
 		public event EventHandler ProgramStopping;
 
 		private static void Main(string[] args) {
-			StreamWriter sw = null;
-			try {
-				FileStream fw = new FileStream(Logger.LogPath, FileMode.Open);
-				sw = new StreamWriter(fw);
-				Console.SetOut(sw);
-
-				Instance = new Program();
-				Instance.MainAsync().GetAwaiter().GetResult();
-			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "Program encountered an exception: ", ex);
-			} finally {
-				if (sw != null) {
-					sw.Dispose();
-					sw = null;
-				}
-			}
+			Instance = new Program();
+			Instance.MainAsync().GetAwaiter().GetResult();
+			Console.ReadKey();
 		}
 
 		private async Task MainAsync() {
@@ -50,7 +37,7 @@ namespace RoosterBot {
 			m_State = ProgramState.BeforeStart;
 			
 			#region Load config
-			string configPath = Path.Combine(@"C:\RoosterBot\config");
+			const string configPath = @"C:\RoosterBot\config";
 			if (!Directory.Exists(configPath)) {
 				Directory.CreateDirectory(configPath);
 				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a Config.json file to the newly created RoosterBot folder in %appdata%.");
