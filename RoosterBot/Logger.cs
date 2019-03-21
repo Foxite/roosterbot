@@ -5,7 +5,7 @@ using Discord;
 
 namespace RoosterBot {
 	public static class Logger {
-		public static readonly string LogPath;
+		private static readonly string LogPath;
 		private static readonly object Lock;
 
 		static Logger() {
@@ -63,9 +63,9 @@ namespace RoosterBot {
 				loggedMessage += "\n" + msg.Exception.ToString();
 			}
 			Console.WriteLine(loggedMessage);
-			/*lock (Lock) {
+			lock (Lock) {
 				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
-			}*/
+			}
 		}
 
 		/// <summary>
