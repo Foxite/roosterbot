@@ -27,9 +27,22 @@ namespace RoosterBot {
 		public event EventHandler ProgramStopping;
 
 		private static void Main(string[] args) {
-			Instance = new Program();
-			Instance.MainAsync().GetAwaiter().GetResult();
-			Console.WriteLine("Async main ended at " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+			StreamWriter sw = null;
+			try {
+				FileStream fw = new FileStream(Logger.LogPath, FileMode.Open);
+				sw = new StreamWriter(fw);
+				Console.SetOut(sw);
+
+				Instance = new Program();
+				Instance.MainAsync().GetAwaiter().GetResult();
+			} catch (Exception ex) {
+				Logger.Log(LogSeverity.Critical, "Main", "Program encountered an exception: ", ex);
+			} finally {
+				if (sw != null) {
+					sw.Dispose();
+					sw = null;
+				}
+			}
 		}
 
 		private async Task MainAsync() {
