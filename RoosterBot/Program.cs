@@ -50,7 +50,7 @@ namespace RoosterBot {
 			m_State = ProgramState.BeforeStart;
 			
 			#region Load config
-			string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RoosterBot");
+			string configPath = Path.Combine(@"C:\RoosterBot\config");
 			if (!Directory.Exists(configPath)) {
 				Directory.CreateDirectory(configPath);
 				Logger.Log(LogSeverity.Critical, "Main", "Config folder did not exist. Please add a Config.json file to the newly created RoosterBot folder in %appdata%.");
