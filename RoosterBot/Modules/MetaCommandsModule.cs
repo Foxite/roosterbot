@@ -10,9 +10,6 @@ namespace RoosterBot.Modules {
 
 		[Command("help", RunMode = RunMode.Async)]
 		public async Task HelpCommand([Remainder] string section = "") {
-			// Print list of commands
-			// TODO allow components to define their own help text
-			
 			string response = "";
 
 			if (string.IsNullOrWhiteSpace(section)) {
