@@ -27,9 +27,9 @@ namespace RoosterBot {
 		public event EventHandler ProgramStopping;
 
 		private static void Main(string[] args) {
+			Console.WriteLine("TEST");
 			Instance = new Program();
 			Instance.MainAsync().GetAwaiter().GetResult();
-			Console.ReadKey();
 		}
 
 		private async Task MainAsync() {
