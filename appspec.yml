@@ -5,9 +5,9 @@ os: windows
 
 hooks:
   ApplicationStop:
-    - location: AppStop\bin\Debug\AppStop.exe
+    - location: AppStop\bin\Release\AppStop.exe
   ApplicationStart:
-    - location: AppStart\bin\Debug\AppStart.exe
+    - location: AppStart\bin\Release\AppStart.exe
 
 # Other events we can use:
 #  BeforeInstall (after ApplicationStop)

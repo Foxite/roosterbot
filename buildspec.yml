@@ -14,7 +14,7 @@ phases:
 
 artifacts:
   files:
-    - .\RoosterBot\bin\Debug\*
-    - .\AppStart\bin\Debug\*
-    - .\AppStop\bin\Debug\*
+    - .\RoosterBot\bin\Release\*
+    - .\AppStart\bin\Release\*
+    - .\AppStop\bin\Release\*
     - appspec.yml
