@@ -9,7 +9,7 @@ namespace RoosterBot.Automation {
 			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStart : Starting app");
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
-				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../../../RoosterBot/RoosterBot.exe"),
+				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../RoosterBot/RoosterBot.exe"),
 				CreateNoWindow = false,
 				UseShellExecute = true,
 			};
