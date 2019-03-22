@@ -269,4 +269,4 @@ Release/
 Release.dat
 
 # Generated code
-**/*1.cs
+**/*.gen.cs
