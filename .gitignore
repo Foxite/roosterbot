@@ -262,3 +262,11 @@ __pycache__/
 
 # VS packages.config -> PackageReference migration
 MigrationBackup/
+
+# Release folder and script
+Release.ps1
+Release/
+Release.dat
+
+# Generated code
+**/*1.cs

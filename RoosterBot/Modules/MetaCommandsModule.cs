@@ -24,6 +24,8 @@ namespace RoosterBot.Modules {
 					response += helpSection;
 					notFirst = true;
 				}
+
+				response += "\n\nDit is versie " + Constants.VersionString + ".";
 			} else {
 				if (Help.HelpSectionExists(section)) {
 					response += Help.GetHelpSection(section);

@@ -58,14 +58,14 @@ namespace RoosterBot {
 				throw new InvalidOperationException("Data folder did not exist.");
 			}
 
-			string configFile = Path.Combine(DataPath, "Config.json");
+			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			if (!File.Exists(configFile)) {
 				Logger.Log(LogSeverity.Critical, "Main", "Config file did not exist.");
 				throw new InvalidOperationException("Config file did not exist.");
 			}
 			string authToken;
 			try {
-				m_ConfigService = new ConfigService(Path.Combine(DataPath, "Config.json"), out authToken);
+				m_ConfigService = new ConfigService(configFile, out authToken);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
 				throw;
@@ -83,7 +83,7 @@ namespace RoosterBot {
 			m_Client.Ready += async () => {
 				m_State = ProgramState.BotRunning;
 				await m_Client.SetGameAsync(m_ConfigService.GameString);
-				await m_ConfigService.SetLogChannelAsync(m_Client, DataPath);
+				await m_ConfigService.SetLogChannelAsync(m_Client, Path.Combine(DataPath, "config"));
 				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				m_Client.Disconnected += (e) => {
@@ -110,7 +110,7 @@ namespace RoosterBot {
 				};
 
 				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
-				await ownerDM.SendMessageAsync("New version deployed.");
+				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
@@ -155,7 +155,7 @@ namespace RoosterBot {
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
 				components[i] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, type.Namespace));
+					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
