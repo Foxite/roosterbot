@@ -13,7 +13,7 @@ namespace RoosterBot.Automation {
 			;
 
 		private static void Main(string[] args) {
-			File.AppendAllText("C:/RoosterBot/install.log", DateTime.Now + " AppStart : Starting app");
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStart : Starting app");
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
 				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../../../RoosterBot/bin/" + Folder + "/RoosterBot.exe"),
@@ -22,7 +22,7 @@ namespace RoosterBot.Automation {
 			};
 			Process.Start(psi);
 
-			File.AppendAllText("C:/RoosterBot/install.log", DateTime.Now + " AppStart : App started");
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStart : App started");
 		}
 	}
 }
