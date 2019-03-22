@@ -4,7 +4,7 @@ version: 0.0
 os: windows
 
 hooks:
-  ApplicationStop:
+  AfterInstall:
     - location: AppStop\bin\Release\AppStop.exe
   ApplicationStart:
     - location: AppStart\bin\Release\AppStart.exe
