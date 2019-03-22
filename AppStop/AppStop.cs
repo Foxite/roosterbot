@@ -5,26 +5,24 @@ using System.IO.Pipes;
 namespace RoosterBot.Automation {
 	internal class AppStop {
 		private static void Main(string[] args) {
-			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStop : Stopping app");
-
-			bool stopped = false;
+			Log("Stopping app");
+			
 			using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "roosterbotStopPipe", PipeDirection.Out)) {
 				try {
 					pipeClient.Connect(1);
 					using (StreamWriter sw = new StreamWriter(pipeClient)) {
 						sw.WriteLine("stop");
 					}
-					Console.WriteLine("Process stopped.");
-					stopped = true;
+					Log("Process stopped.");
 				} catch (TimeoutException) {
-					Console.WriteLine("No process to stop.");
+					Log("No process to stop.");
 				}
 			}
-			if (stopped) {
-				File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStop : App stopped");
-			} else {
-				File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStop : App not running");
-			}
+		}
+
+		private static void Log(string message) {
+			Console.WriteLine(DateTime.Now + " : " + message);
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", Environment.NewLine + DateTime.Now + " AppStop : " + message);
 		}
 	}
 }
