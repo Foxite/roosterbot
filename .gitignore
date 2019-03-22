@@ -264,5 +264,9 @@ __pycache__/
 MigrationBackup/
 
 # Release folder and script
-release.ps1
+Release.ps1
 Release/
+Release.dat
+
+# Generated code
+**/*1.cs
