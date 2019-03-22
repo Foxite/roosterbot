@@ -58,14 +58,14 @@ namespace RoosterBot {
 				throw new InvalidOperationException("Data folder did not exist.");
 			}
 
-			string configFile = Path.Combine(DataPath, "Config.json");
+			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			if (!File.Exists(configFile)) {
 				Logger.Log(LogSeverity.Critical, "Main", "Config file did not exist.");
 				throw new InvalidOperationException("Config file did not exist.");
 			}
 			string authToken;
 			try {
-				m_ConfigService = new ConfigService(Path.Combine(DataPath, "Config.json"), out authToken);
+				m_ConfigService = new ConfigService(configFile, out authToken);
 			} catch (Exception ex) {
 				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
 				throw;
@@ -155,7 +155,7 @@ namespace RoosterBot {
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
 				components[i] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, type.Namespace));
+					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
