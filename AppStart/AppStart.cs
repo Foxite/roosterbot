@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace RoosterBot.Automation {
 	internal class AppStart {
@@ -12,7 +13,7 @@ namespace RoosterBot.Automation {
 #endif
 			;
 
-		private static void Main(string[] args) {
+		private static int Main(string[] args) {
 			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStart : Starting app");
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
@@ -20,9 +21,16 @@ namespace RoosterBot.Automation {
 				CreateNoWindow = false,
 				UseShellExecute = true,
 			};
-			Process.Start(psi);
+			Process process = Process.Start(psi);
 
 			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", DateTime.Now + " AppStart : App started");
+
+			Thread.Sleep(7000);
+			if (process.HasExited) {
+				return process.ExitCode;
+			} else {
+				return 0;
+			}
 		}
 	}
 }
