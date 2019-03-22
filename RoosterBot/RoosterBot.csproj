@@ -242,4 +242,7 @@
     <Analyzer Include="..\packages\AWSSDK.SimpleNotificationService.3.3.3.26\analyzers\dotnet\cs\AWSSDK.SimpleNotificationService.CodeAnalysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>del C:\ProgramData\RoosterBot\running</PreBuildEvent>
+  </PropertyGroup>
 </Project>
