@@ -99,7 +99,14 @@ namespace ScheduleComponent.Modules {
 						}
 						await ReplyAsync(response, new StudentSetInfo() { ClassName = clazz.ToUpper() }, null);
 					} else {
-						response = $"{clazz.ToUpper()}: Rooster voor vandaag\n\n";
+						response = $"{clazz.ToUpper()}: Rooster voor ";
+						if (DateTime.Today.DayOfWeek == day) {
+							response += "vandaag";
+						} else {
+							response += Util.GetStringFromDayOfWeek(day);
+						}
+						response += "\n";
+
 						string[][] cells = new string[records.Length + 1][];
 						cells[0] = new string[] { "Activiteit", "Tijd", "Leraar", "Lokaal" };
 						int recordIndex = 1;

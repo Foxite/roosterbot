@@ -255,6 +255,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>rem del C:\ProgramData\RoosterBot\running</PreBuildEvent>
+    <PreBuildEvent>del C:\ProgramData\RoosterBot\running</PreBuildEvent>
   </PropertyGroup>
 </Project>

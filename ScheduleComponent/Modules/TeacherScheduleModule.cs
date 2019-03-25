@@ -70,7 +70,14 @@ namespace ScheduleComponent.Modules {
 						if (result.Success) {
 							ScheduleRecord[] records = result.Value;
 							if (records.Length != 0) {
-								response += $"{teacher.DisplayText}: Rooster voor vandaag\n";
+								response += $"{teacher.DisplayText}: Rooster voor ";
+								if (DateTime.Today.DayOfWeek == day) {
+									response += "vandaag";
+								} else {
+									response += Util.GetStringFromDayOfWeek(day);
+								}
+								response += "\n";
+
 
 								string[][] cells = new string[records.Length + 1][];
 								cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };

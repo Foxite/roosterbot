@@ -94,7 +94,13 @@ namespace ScheduleComponent.Modules {
 						}
 						ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, null);
 					} else {
-						response = $"{lokaal.ToUpper()}: Rooster voor vandaag\n";
+						response = $"{lokaal.ToUpper()}: Rooster voor ";
+						if (DateTime.Today.DayOfWeek == day) {
+							response += "vandaag";
+						} else {
+							response += Util.GetStringFromDayOfWeek(day);
+						}
+						response += "\n";
 
 						string[][] cells = new string[records.Length + 1][];
 						cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
