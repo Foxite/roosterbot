@@ -200,7 +200,7 @@
   <ItemGroup>
     <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="ComponentBase.cs" />
-    <Compile Include="Constants.cs">
+    <Compile Include="Constants.gen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Constants.tt</DependentUpon>
@@ -232,7 +232,7 @@
     </Content>
     <Content Include="Constants.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Constants.cs</LastGenOutput>
+      <LastGenOutput>Constants.gen.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
