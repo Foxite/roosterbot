@@ -64,16 +64,37 @@ namespace ScheduleComponent.Modules {
 				if (teachers.Length == 0) {
 					await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
 				} else {
-					if (teachers.Length > 1) {
-						await RespondTeacherWeekdayMultiple(day, teachers);
-						LSCService.RemoveLastQuery(Context.User);
-					} else {
-						ReturnValue<ScheduleRecord> result = await GetFirstRecord(day, teachers[0]);
+					string response = "";
+					foreach (TeacherInfo teacher in teachers) {
+						ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(teacher, day);
 						if (result.Success) {
-							ScheduleRecord record = result.Value;
-							RespondTeacherWeekday(teachers[0], day, record);
+							ScheduleRecord[] records = result.Value;
+							if (records.Length != 0) {
+								response += $"{teacher.DisplayText}: Rooster voor vandaag\n";
+
+								string[][] cells = new string[records.Length + 1][];
+								cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
+								int recordIndex = 1;
+								foreach (ScheduleRecord record in records) {
+									cells[recordIndex] = new string[4];
+									cells[recordIndex][0] = record.Activity;
+									cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+									cells[recordIndex][2] = record.StudentSetsString;
+
+									string room = record.RoomString;
+									if (room.Contains(',')) {
+										room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
+									}
+									cells[recordIndex][3] = room;
+									recordIndex++;
+								}
+								response += Util.FormatTextTable(cells, true);
+							} else {
+								response += $"Het lijkt er op dat {teacher.DisplayText} vandaag niets heeft.\n";
+							}
 						}
 					}
+					await ReplyAsync(response, null, null);
 				}
 			}
 		}
@@ -85,45 +106,7 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
 		public async Task TeacherTodayCommand([Remainder] string leraarInput) {
-			DayOfWeek day = DateTime.Today.DayOfWeek;
-
-			TeacherInfo[] teachers = Teachers.Lookup(leraarInput);
-
-			if (teachers.Length == 0) {
-				await MinorError("Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
-			} else {
-				string response = "";
-				foreach (TeacherInfo teacher in teachers) {
-					ReturnValue<ScheduleRecord[]> result = await GetScheduleForToday(teacher);
-					if (result.Success) {
-						ScheduleRecord[] records = result.Value;
-						if (records.Length != 0) {
-							response += $"{teacher.DisplayText}: Rooster voor vandaag\n";
-
-							string[][] cells = new string[records.Length + 1][];
-							cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
-							int recordIndex = 1;
-							foreach (ScheduleRecord record in records) {
-								cells[recordIndex] = new string[4];
-								cells[recordIndex][0] = record.Activity;
-								cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
-								cells[recordIndex][2] = record.StudentSetsString;
-
-								string room = record.RoomString;
-								if (room.Contains(',')) {
-									room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
-								}
-								cells[recordIndex][3] = room;
-								recordIndex++;
-							}
-							response += Util.FormatTextTable(cells, true);
-						} else {
-							response += $"Het lijkt er op dat {teacher.DisplayText} vandaag niets heeft.\n";
-						}
-					}
-				}
-				await ReplyAsync(response, null, null);
-			}
+			await TeacherWeekdayCommand(leraarInput + " " + Util.GetStringFromDayOfWeek(DateTime.Today.DayOfWeek));
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().

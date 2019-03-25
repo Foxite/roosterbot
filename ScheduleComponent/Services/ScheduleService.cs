@@ -167,17 +167,18 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetScheduleForToday(T identifier) {
+		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			
+			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (record.Start.Date == DateTime.Today) {
+					if (record.Start.Date == targetDate) {
 						records.Add(record);
-					} else if (record.Start.Date > DateTime.Today) {
+					} else if (record.Start.Date > targetDate) {
 						sawRecordAfterTarget = true;
 						break;
 					}

@@ -206,9 +206,9 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetScheduleForToday(T identifier) {
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day) {
 			try {
-				ScheduleRecord[] records = Schedules.GetScheduleForToday(identifier);
+				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records
