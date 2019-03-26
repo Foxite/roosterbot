@@ -270,3 +270,4 @@ Release.dat
 
 # Generated code
 **/*1.cs
+RoosterBot/Constants.gen.cs

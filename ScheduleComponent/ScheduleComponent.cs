@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
@@ -12,6 +13,9 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
+		private DiscordSocketClient m_Client;
+		private WatsonClient m_Watson;
+
 		public override void AddServices(ref IServiceCollection services, string configPath) {
 			List<Task> concurrentLoading = new List<Task>();
 
@@ -56,6 +60,9 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
 
+			m_Client = services.GetService<DiscordSocketClient>();
+			m_Client.MessageReceived += ProcessNaturalLanguageCommands;
+
 			string helpText = "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			helpText += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
 			helpText += "Ik ken de afkortingen, voornamen, en alternative spellingen van alle leraren.\n";
@@ -70,6 +77,12 @@ namespace ScheduleComponent {
 			helpText += "Deze lijst kan ook gefilterd worden: `!docenten martijn`";
 
 			help.AddHelpSection("rooster", helpText);
+		}
+
+		private Task ProcessNaturalLanguageCommands(SocketMessage msg) {
+			if (msg.Content.StartsWith(m_Client.CurrentUser.Mention)) {
+
+			}
 		}
 	}
 
