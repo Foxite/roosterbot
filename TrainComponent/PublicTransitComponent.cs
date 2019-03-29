@@ -37,7 +37,7 @@ namespace PublicTransitComponent {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n";
 			helpText += "De maker heeft een paar maanden geleden cooldowns uitgezet, maar als met !ov gespammed wordt, gaat de cooldown voor dat command op 5 seconden (vanwege API regels).\n\n";
 
-			helpText += "Je kunt stations opzoeken met `!stations <naam van station>";
+			helpText += "Je kunt stations opzoeken met `!stations <naam van station>`";
 			help.AddHelpSection("trein", helpText);
 		}
 	}
