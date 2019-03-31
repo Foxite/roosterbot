@@ -392,6 +392,10 @@ namespace RoosterBot {
 			return sbLcs.ToString();
 		}
 		#endregion
+
+		public static bool IsAprilFools() {
+			return DateTime.Today.Month == 4 && DateTime.Today.Day == 1;
+		}
 	}
 
 	public class ReturnValue<T> {

@@ -8,11 +8,34 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent.Modules {
 	[Group("klas"), RoosterBot.Attributes.LogTag("StudentSM")]
 	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
+
+		private ScheduleRecord GetFakeRecord(string klas) {
+			ScheduleRecord m_FakeRecord =
+				new ScheduleRecord() {
+					Activity = "stdag doc",
+					StudentSets = new[] { new StudentSetInfo() { ClassName = klas.ToUpper() } },
+					StaffMember = new[] { new TeacherInfo() },
+					Start = new DateTime(2019, 4, 1, 8, 30, 0),
+					End = new DateTime(2019, 4, 1, 16, 30, 0)
+				};
+
+			return m_FakeRecord;
+		}
+
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, new StudentSetInfo() { ClassName = klas.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
+
+				bool doingPrank = false;
+
+				if (Util.IsAprilFools()) {
+					doingPrank = true;
+					record = GetFakeRecord(klas);
+				}
+
+				respond:
 				string response;
 				if (record == null) {
 					response = "Het ziet ernaar uit dat je nu niets hebt.";
@@ -36,9 +59,19 @@ namespace ScheduleComponent.Modules {
 					}
 					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
 
-					if (record.Activity == "pauze") {
+					if (!doingPrank && record.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
+				}
+				
+				if (doingPrank) {
+					await SendDeferredResponseAsync();
+					await Task.Delay(3000);
+					await ReplyAsync("Nee grapje");
+					await Task.Delay(1000);
+					doingPrank = false;
+					record = result.Value;
+					goto respond;
 				}
 			}
 		}
@@ -48,6 +81,15 @@ namespace ScheduleComponent.Modules {
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, new StudentSetInfo() { ClassName = klas.ToUpper() });
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
+
+				bool doingPrank = false;
+
+				if (Util.IsAprilFools()) {
+					doingPrank = true;
+					record = GetFakeRecord(klas);
+				}
+
+				respond:
 				if (record == null) {
 					await FatalError($"`GetRecord(true, \"StudentSets\", {klas})` returned null");
 				} else {
@@ -74,9 +116,19 @@ namespace ScheduleComponent.Modules {
 					}
 					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
 
-					if (record.Activity == "pauze") {
+					if (!doingPrank && record.Activity == "pauze") {
 						await GetAfterCommandFunction();
 					}
+				}
+
+				if (doingPrank) {
+					await SendDeferredResponseAsync();
+					await Task.Delay(3000);
+					await ReplyAsync("Nee grapje");
+					await Task.Delay(1000);
+					doingPrank = false;
+					record = result.Value;
+					goto respond;
 				}
 			}
 		}
@@ -91,6 +143,7 @@ namespace ScheduleComponent.Modules {
 				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(new StudentSetInfo() { ClassName = clazz.ToUpper() }, day);
 				if (result.Success) {
 					ScheduleRecord[] records = result.Value;
+					
 					string response;
 					if (records.Length == 0) {
 						response = "Het ziet ernaar uit dat je vandaag niets hebt.";
@@ -124,7 +177,7 @@ namespace ScheduleComponent.Modules {
 							recordIndex++;
 						}
 						response += Util.FormatTextTable(cells, true);
-						ReplyDeferred(response, new StudentSetInfo() { ClassName = clazz.ToUpper() }, records.Last());
+						await ReplyAsync(response, new StudentSetInfo() { ClassName = clazz.ToUpper() }, records.Last());
 					}
 				}
 			}
