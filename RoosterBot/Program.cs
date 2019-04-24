@@ -177,7 +177,7 @@ namespace RoosterBot {
 			}
 			#endregion Start components
 
-			#region Log in
+			#region Connect to Discord
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 			#endregion Start client

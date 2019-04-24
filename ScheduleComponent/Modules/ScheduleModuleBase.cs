@@ -129,7 +129,7 @@ namespace ScheduleComponent.Modules {
 			string ret = "";
 
 			if (record.Start.Date != DateTime.Today) {
-				ret += $":calendar_spiral: {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToShortDateString()}\n" + ret;
+				ret += $":calendar_spiral: {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToString("dd-MM-yyyy")}\n" + ret;
 			}
 
 			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
@@ -206,9 +206,9 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetScheduleForToday(T identifier) {
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day) {
 			try {
-				ScheduleRecord[] records = Schedules.GetScheduleForToday(identifier);
+				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records

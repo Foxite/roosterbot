@@ -149,14 +149,14 @@ namespace ScheduleComponent {
 			}
 		}
 
-		public ScheduleRecord[] GetScheduleForToday(IdentifierInfo identifier) {
+		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day) {
 			switch (GetScheduleType(identifier)) {
 			case ScheduleType.StudentSets:
-				return m_Students.GetScheduleForToday((StudentSetInfo) identifier);
+				return m_Students.GetSchedulesForDay((StudentSetInfo) identifier, day);
 			case ScheduleType.StaffMember:
-				return m_Teachers.GetScheduleForToday((TeacherInfo) identifier);
+				return m_Teachers.GetSchedulesForDay((TeacherInfo) identifier, day);
 			case ScheduleType.Room:
-				return m_Rooms.GetScheduleForToday((RoomInfo) identifier);
+				return m_Rooms.GetSchedulesForDay((RoomInfo) identifier, day);
 			default:
 				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
 			}
