@@ -284,8 +284,8 @@ namespace RoosterBot {
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
+			// Determine if the message is a command, based on if it starts with '!'
+			if (!message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos))
 				return;
 
 			// Create a Command Context
