@@ -70,7 +70,6 @@
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />
-    <Compile Include="Services\WatsonClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
@@ -89,11 +88,8 @@
     <PackageReference Include="Discord.Net">
       <Version>2.0.1</Version>
     </PackageReference>
-    <PackageReference Include="IBM.WatsonDeveloperCloud.Assistant.v2">
-      <Version>2.17.0</Version>
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

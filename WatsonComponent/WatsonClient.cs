@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -10,7 +8,7 @@ using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
 using IBM.WatsonDeveloperCloud.Util;
 using RoosterBot;
 
-namespace ScheduleComponent.Services {
+namespace WatsonComponent {
 	public class WatsonClient {
 		internal static readonly string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
@@ -62,14 +60,14 @@ namespace ScheduleComponent.Services {
 								int? start = (int?) entity.Location[i];
 								int? end = (int?) entity.Location[++i];
 								if (start.HasValue && end.HasValue) {
-									params_ += input.Substring(start.Value, end.Value - start.Value);
+									params_ += " " + input.Substring(start.Value, end.Value - start.Value);
 								} else {
 									Logger.Error(LogTag, $"Entity {entity.Entity}: {entity.Value} was skipped: Start or end is null");
 								}
 							}
 						}
 						response += $"\nParams: {params_}\n";
-						response += $"Converted: `!{maxConfidence.Intent} {params_}`";
+						response += $"Converted: `!{maxConfidence.Intent}{params_}`";
 						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `!{maxConfidence.Intent} {params_}`");
 
 						await message.Channel.SendMessageAsync(response);

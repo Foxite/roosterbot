@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -16,7 +15,6 @@ namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
 		private DiscordSocketClient m_Client;
 		private ConfigService m_Config;
-		private WatsonClient m_Watson;
 
 		public override void AddServices(ref IServiceCollection services, string configPath) {
 			List<Task> concurrentLoading = new List<Task>();
@@ -40,8 +38,6 @@ namespace ScheduleComponent {
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
 			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
 
-			m_Watson = new WatsonClient(m_Client, jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
-
 			services
 				.AddSingleton(teachers)
 				.AddSingleton(new ScheduleProvider(schedStudents, schedTeachers, schedRooms))
@@ -49,8 +45,7 @@ namespace ScheduleComponent {
 				.AddSingleton(schedTeachers)
 				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new CommandMatchingService(teachers))
-				.AddSingleton(m_Watson);
+				.AddSingleton(new CommandMatchingService(teachers));
 
 			Task.WaitAll(concurrentLoading.ToArray());
 
@@ -67,7 +62,6 @@ namespace ScheduleComponent {
 
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
-			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 
 			string helpText = "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			helpText += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
@@ -83,27 +77,6 @@ namespace ScheduleComponent {
 			helpText += "Deze lijst kan ook gefilterd worden: `!docenten martijn`";
 
 			help.AddHelpSection("rooster", helpText);
-		}
-
-		private Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
-			if (socketMsg is IUserMessage msg) {
-				int argPos = 0;
-				bool process = false;
-				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.CommandPrefix)) {
-					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel {socketMsg.Content}");
-					process = true;
-				} else if (msg.Channel is IGuildChannel gch && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {
-					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in `{gch.Guild.Name}` channel `{gch.Name}`: {socketMsg.Content.Substring(argPos)}");
-					process = true;
-				}
-
-				if (process) {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-					m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
-#pragma warning restore CS4014
-				}
-			}
-			return Task.CompletedTask;
 		}
 	}
 
