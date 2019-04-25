@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -38,9 +39,7 @@ namespace ScheduleComponent {
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
 			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
 
-			Logger.Log(LogSeverity.Debug, "Main", "Started services");
-
-			Task.WaitAll(concurrentLoading.ToArray());
+			m_Watson = new WatsonClient(m_Client);
 
 			services
 				.AddSingleton(teachers)
@@ -49,7 +48,12 @@ namespace ScheduleComponent {
 				.AddSingleton(schedTeachers)
 				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new CommandMatchingService(teachers));
+				.AddSingleton(new CommandMatchingService(teachers))
+				.AddSingleton(m_Watson);
+
+			Task.WaitAll(concurrentLoading.ToArray());
+
+			Logger.Log(LogSeverity.Debug, "ScheduleComponent", "Started services");
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
@@ -61,7 +65,7 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<TeacherListModule>(services);
 
 			m_Client = services.GetService<DiscordSocketClient>();
-			m_Client.MessageReceived += ProcessNaturalLanguageCommands;
+			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 
 			string helpText = "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			helpText += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
@@ -79,10 +83,14 @@ namespace ScheduleComponent {
 			help.AddHelpSection("rooster", helpText);
 		}
 
-		private Task ProcessNaturalLanguageCommands(SocketMessage msg) {
-			if (msg.Content.StartsWith(m_Client.CurrentUser.Mention)) {
-
+		private Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
+			int argPos = 0;
+			if (socketMsg is IUserMessage msg && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
+#pragma warning restore CS4014
 			}
+			return Task.CompletedTask;
 		}
 	}
 
