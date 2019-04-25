@@ -125,6 +125,20 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleNotificationService">
+      <Version>3.3.100.9</Version>
+    </PackageReference>
+    <PackageReference Include="Discord.Net">
+      <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Discord.Net.Providers.WS4Net">
+      <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>del C:\ProgramData\RoosterBot\running</PreBuildEvent>
