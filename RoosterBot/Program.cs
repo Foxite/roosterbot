@@ -307,7 +307,7 @@ namespace RoosterBot {
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 					case CommandError.UnknownCommand:
-						response = "Die command ken ik niet.";
+						response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
 						break;
 					case CommandError.BadArgCount:
 						response = "Dat zijn te veel of te weinig parameters.";
