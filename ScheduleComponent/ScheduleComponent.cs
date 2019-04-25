@@ -39,7 +39,7 @@ namespace ScheduleComponent {
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
 			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
 
-			m_Watson = new WatsonClient(m_Client);
+			m_Watson = new WatsonClient(m_Client, jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
 
 			services
 				.AddSingleton(teachers)

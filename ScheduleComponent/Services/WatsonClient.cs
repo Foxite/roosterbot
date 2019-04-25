@@ -12,15 +12,16 @@ using RoosterBot;
 
 namespace ScheduleComponent.Services {
 	public class WatsonClient {
-		internal const string VersionDate = "2019-04-24";
-		private const string AssistantId = "9cdb7736-dbaf-4e40-949b-c3635dc41361";
+		internal static readonly string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
+		private readonly string AssistantId;
 		private AssistantService m_Assistant;
 		private DiscordSocketClient m_Client;
 
-		public WatsonClient(DiscordSocketClient client) {
+		public WatsonClient(DiscordSocketClient client, string apiKey, string assistantId) {
+			AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
-				IamApiKey = "SvawLQ8YlHv41jikWYpn5jt67GHtls5mkoOT7c_74C4J",
+				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
 			};
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
