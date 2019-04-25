@@ -51,8 +51,7 @@ namespace WatsonComponent {
 						foreach (RuntimeEntity entity in result.Output.Entities) {
 							for (int i = 0; i < entity.Location.Count; i++) {
 								// The C# API says this is a nullable long, but the API documentation says its an "integer[]"
-								// Even though it is literally impossible to have a string longer than (2^31-1)/2 (about 1 billion) characters (https://stackoverflow.com/a/140749/3141917),
-								//  which is a length that easily fits into an Int32.
+								// Even though it is literally impossible to have a string longer than Int32.MaxValue characters, because an array can only have that much items.huh
 								// And to top it off, they made it nullable as well.
 								// Who knows why? God, and maybe the programmers at IBM as well, but don't count on it.
 								int? start = (int?) entity.Location[i];
