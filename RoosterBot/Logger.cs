@@ -49,11 +49,6 @@ namespace RoosterBot {
 			Log(LogSeverity.Critical, tag, msg, e);
 		}
 
-		// TODO delete this commented function if nothing blows up
-		//public static void Log(LogSeverity sev, string tag, string msg) {
-		//	Log(new LogMessage(sev, tag, msg));
-		//}
-
 		public static void Log(LogSeverity sev, string tag, string msg, Exception ex = null) {
 			Log(new LogMessage(sev, tag, msg, ex));
 		}
