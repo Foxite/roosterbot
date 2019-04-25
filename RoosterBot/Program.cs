@@ -109,8 +109,10 @@ namespace RoosterBot {
 					return Task.CompletedTask;
 				};
 
+#if !DEBUG
 				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
 				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
+#endif
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
