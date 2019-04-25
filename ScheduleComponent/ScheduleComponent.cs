@@ -15,6 +15,7 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
 		private DiscordSocketClient m_Client;
+		private ConfigService m_Config;
 		private WatsonClient m_Watson;
 
 		public override void AddServices(ref IServiceCollection services, string configPath) {
@@ -64,6 +65,7 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
 
+			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 
@@ -84,8 +86,14 @@ namespace ScheduleComponent {
 		}
 
 		private Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
-			int argPos = 0;
-			if (socketMsg is IUserMessage msg && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {
+			if (socketMsg is IUserMessage msg) {
+				int argPos = 0;
+				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.CommandPrefix)) {
+					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natural language command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel {socketMsg.Content}");
+				} else if (msg.Channel is IGuildChannel gch && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {
+					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natural language command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in `{gch.Guild.Name}` channel `{gch.Name}`: {socketMsg.Content.Substring(argPos)}");
+				}
+
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 				m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
 #pragma warning restore CS4014
@@ -171,14 +179,15 @@ namespace ScheduleComponent {
 		}
 
 		private ScheduleType GetScheduleType(IdentifierInfo info) {
-			if (info is StudentSetInfo)
+			if (info is StudentSetInfo) {
 				return ScheduleType.StudentSets;
-			else if (info is TeacherInfo)
+			} else if (info is TeacherInfo) {
 				return ScheduleType.StaffMember;
-			else if (info is RoomInfo)
+			} else if (info is RoomInfo) {
 				return ScheduleType.Room;
-			else
+			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider (A)");
+			}
 		}
 
 		private enum ScheduleType {
