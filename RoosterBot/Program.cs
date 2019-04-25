@@ -257,14 +257,13 @@ namespace RoosterBot {
 		// This function is called by CommandEditService and the above function.
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
 			// Don't process the command if it was a System Message
-			SocketUserMessage message;
-			if ((message = command as SocketUserMessage) == null)
+			if (!(command is SocketUserMessage message))
 				return;
 
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos))) {
+			// Determine if the message is a command, based on if it starts with '!'
+			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				return;
 			}
 
