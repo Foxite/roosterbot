@@ -20,8 +20,7 @@ namespace RoosterBot.Services {
 
 		// The auth token will not be returned, because to take effect after changing it you would need to restart the bot.
 		internal void ReloadConfig(string jsonPath) {
-			string unused;
-			LoadConfigInternal(jsonPath, out unused);
+			LoadConfigInternal(jsonPath, out string unused);
 		}
 
 		private void LoadConfigInternal(string jsonPath, out string authToken) {
