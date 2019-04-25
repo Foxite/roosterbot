@@ -46,11 +46,9 @@ namespace WatsonComponent {
 							}
 						}
 						Logger.Debug(LogTag, $"Selected {maxConfidence.Intent}");
-						string response = "Result: " + maxConfidence.Intent + "\nEntities:\n";
+						string response = "Result: " + maxConfidence.Intent;
 						string params_ = "";
 						foreach (RuntimeEntity entity in result.Output.Entities) {
-							response += $"- {entity.Entity}: {entity.Value}\n";
-
 							for (int i = 0; i < entity.Location.Count; i++) {
 								// The C# API says this is a nullable long, but the API documentation says its an "integer[]"
 								// Even though it is literally impossible to have a string longer than (2^31-1)/2 (about 1 billion) characters (https://stackoverflow.com/a/140749/3141917),
@@ -66,9 +64,10 @@ namespace WatsonComponent {
 								}
 							}
 						}
-						response += $"\nParams: {params_}\n";
-						response += $"Converted: `!{maxConfidence.Intent}{params_}`";
-						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `!{maxConfidence.Intent} {params_}`");
+						string convertedCommand = "!" + maxConfidence.Intent + params_;
+						response += $"\nParams: {params_}";
+						response += $"\nConverted: `{convertedCommand}`";
+						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into !{convertedCommand}`");
 
 						await message.Channel.SendMessageAsync(response);
 					} else {
