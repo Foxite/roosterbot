@@ -57,7 +57,7 @@ namespace WatsonComponent {
 								int? start = (int?) entity.Location[i];
 								int? end = (int?) entity.Location[++i];
 								if (start.HasValue && end.HasValue) {
-									params_ += " " + input.Substring(start.Value, end.Value - start.Value);
+									params_ += " " + FixWeekday(input.Substring(start.Value, end.Value - start.Value));
 								} else {
 									Logger.Error(LogTag, $"Entity {entity.Entity}: {entity.Value} was skipped: Start or end is null");
 								}
@@ -66,7 +66,7 @@ namespace WatsonComponent {
 						string convertedCommand = "!" + maxConfidence.Intent + params_;
 						response += $"\nParams: {params_}";
 						response += $"\nConverted: `{convertedCommand}`";
-						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into !{convertedCommand}`");
+						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into {convertedCommand}`");
 
 						await message.Channel.SendMessageAsync(response);
 					} else {
@@ -84,6 +84,14 @@ namespace WatsonComponent {
 					}
 				}
 			});
+		}
+
+		private string FixWeekday(string entityValue) {
+			if (entityValue.StartsWith("op ")) {
+				return entityValue.Substring(3);
+			} else {
+				return entityValue;
+			}
 		}
 	}
 }
