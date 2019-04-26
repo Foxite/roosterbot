@@ -30,7 +30,7 @@ namespace WatsonComponent {
 		}
 
 		private Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
-			if (socketMsg is IUserMessage msg) {
+			if (socketMsg is IUserMessage msg && !msg.Author.IsBot) {
 				int argPos = 0;
 				bool process = false;
 				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.CommandPrefix)) {
