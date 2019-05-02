@@ -46,7 +46,7 @@ namespace WatsonComponent {
 							}
 						}
 						Logger.Debug(LogTag, $"Selected {maxConfidence.Intent}");
-						string response = "Result: " + maxConfidence.Intent;
+						//string response = "Result: " + maxConfidence.Intent;
 						string params_ = "";
 						foreach (RuntimeEntity entity in result.Output.Entities) {
 							for (int i = 0; i < entity.Location.Count; i++) {
@@ -63,12 +63,13 @@ namespace WatsonComponent {
 								}
 							}
 						}
-						string convertedCommand = "!" + maxConfidence.Intent + params_;
-						response += $"\nParams: {params_}";
-						response += $"\nConverted: `{convertedCommand}`";
-						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into {convertedCommand}`");
+						string convertedCommand = maxConfidence.Intent + params_;
+						//response += $"\nParams: {params_}";
+						//response += $"\nConverted: `{convertedCommand}`";
+						//await message.Channel.SendMessageAsync(response);
 
-						await message.Channel.SendMessageAsync(response);
+						Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
+						await Program.Instance.ExecuteSpecificCommand(null, convertedCommand, message);
 					} else {
 						Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
 						await Util.AddReaction(message, "❓");
