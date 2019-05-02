@@ -282,16 +282,8 @@ namespace RoosterBot {
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
-			// Create a number to track where the prefix ends and the command begins
-			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!'
-			if (!message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.Author.IsBot)
-				return;
-
-			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
-			// Execute the command. (result does not indicate a return value, 
-			// rather an object stating if the command executed successfully)
+
 			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
 			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
 
