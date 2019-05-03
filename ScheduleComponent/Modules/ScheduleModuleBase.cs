@@ -182,9 +182,9 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day) {
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			try {
-				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day);
+				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records
@@ -208,30 +208,33 @@ namespace ScheduleComponent.Modules {
 		/// <summary>
 		/// Given two command arguments, this determines which is a DayOfWeek and which is not.
 		/// </summary>
-		/// <returns>bool: Success, DayOfWeek: One of the arguments as DOW, string: the other argument as received</returns>
-		protected async Task<Tuple<bool, DayOfWeek, string>> GetValuesFromArguments(string arguments) {
+		/// <returns>bool: Success, DayOfWeek: One of the arguments as DOW, string: the other argument as received, bool: wether "vandaag" was used as weekday</returns>
+		protected async Task<Tuple<bool, DayOfWeek, string, bool>> GetValuesFromArguments(string arguments) {
 			DayOfWeek day;
 			string entry;
 			string[] argumentWords = arguments.Split(' ');
 
 			if (argumentWords.Length < 2) {
 				await MinorError("Ik minstens twee woorden nodig.");
-				return new Tuple<bool, DayOfWeek, string>(false, DayOfWeek.Monday, "");
+				return new Tuple<bool, DayOfWeek, string, bool>(false, DayOfWeek.Monday, "", false);
 			}
 
+			bool today = false;
 			try {
 				day = Util.GetDayOfWeekFromString(argumentWords[0]);
 				entry = string.Join(" ", argumentWords, 1, argumentWords.Length - 1); // get everything except first
+				today = argumentWords[0].ToLower() == "vandaag";
 			} catch (ArgumentException) {
 				try {
 					day = Util.GetDayOfWeekFromString(argumentWords[argumentWords.Length - 1]);
 					entry = string.Join(" ", argumentWords, 0, argumentWords.Length - 1); // get everything except last
+					today = argumentWords[argumentWords.Length - 1].ToLower() == "vandaag";
 				} catch (ArgumentException) {
 					await MinorError($"Ik weet niet welk deel van \"" + arguments + "\" een dag is.");
-					return new Tuple<bool, DayOfWeek, string>(false, DayOfWeek.Monday, "");
+					return new Tuple<bool, DayOfWeek, string, bool>(false, DayOfWeek.Monday, "", false);
 				}
 			}
-			return new Tuple<bool, DayOfWeek, string>(true, day, entry);
+			return new Tuple<bool, DayOfWeek, string, bool>(true, day, entry, today);
 		}
 		
 		/// <summary>

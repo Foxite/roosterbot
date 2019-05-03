@@ -59,8 +59,7 @@ namespace ScheduleComponent.Services {
 						};
 
 						string key = (string) identifier.GetValue(record);
-						ScheduleRecord lastRecord;
-						if (lastRecords.TryGetValue(key, out lastRecord) &&
+						if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
 							record.Activity == lastRecord.Activity &&
 							record.Start.Date == lastRecord.Start.Date &&
 							record.StudentSetsString == lastRecord.StudentSetsString &&
@@ -140,11 +139,20 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day) {
+		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			DateTime targetDate;
+
+			// https://stackoverflow.com/a/6346190/3141917
+			if (includeToday) {
+				// Get the next {day} including today
+				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
+			} else {
+				// Get the next {day} after today
+				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			}
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
