@@ -190,9 +190,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator ==(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return false;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return true;
 
 			return lhs.ScheduleCode == rhs.ScheduleCode
@@ -200,9 +200,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return true;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return false;
 
 			return lhs.ScheduleCode != rhs.ScheduleCode
