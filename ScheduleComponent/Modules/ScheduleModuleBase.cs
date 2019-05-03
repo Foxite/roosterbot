@@ -182,30 +182,6 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetFirstRecord(DayOfWeek day, T identifier) {
-			ScheduleRecord record = null;
-			try {
-				record = Schedules.GetFirstRecordForDay(identifier, day);
-				return new ReturnValue<ScheduleRecord>() {
-					Success = true,
-					Value = record
-				};
-			} catch (ScheduleNotFoundException) {
-				await MinorError("Dat item staat niet op mijn rooster.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				throw;
-			}
-		}
-
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day) {
 			try {
 				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day);

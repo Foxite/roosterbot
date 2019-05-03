@@ -117,19 +117,6 @@ namespace ScheduleComponent {
 			}
 		}
 
-		public ScheduleRecord GetFirstRecordForDay(IdentifierInfo identifier, DayOfWeek day) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetFirstRecordForDay((StudentSetInfo) identifier, day);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetFirstRecordForDay((TeacherInfo) identifier, day);
-			case ScheduleType.Room:
-				return m_Rooms.GetFirstRecordForDay((RoomInfo) identifier, day);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
-		}
-
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
 			switch (GetScheduleType(identifier)) {
 			case ScheduleType.StudentSets:
