@@ -34,10 +34,10 @@ namespace WatsonComponent {
 				int argPos = 0;
 				bool process = false;
 				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.CommandPrefix)) {
-					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel {socketMsg.Content}");
+					Logger.Log(LogSeverity.Info, "WatsonComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel: {socketMsg.Content}");
 					process = true;
 				} else if (msg.Channel is IGuildChannel gch && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {
-					Logger.Log(LogSeverity.Info, "ScheduleComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in `{gch.Guild.Name}` channel `{gch.Name}`: {socketMsg.Content.Substring(argPos)}");
+					Logger.Log(LogSeverity.Info, "WatsonComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in `{gch.Guild.Name}` channel `{gch.Name}`: {socketMsg.Content.Substring(argPos)}");
 					process = true;
 				}
 
