@@ -28,53 +28,59 @@ namespace ScheduleComponent.Services {
 		public async Task ReadScheduleCSV(string path) {
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading CSV file from {path}");
 
-			using (StreamReader reader = File.OpenText(path)) {
-				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
-					await csv.ReadAsync();
-					csv.ReadHeader();
+			int n = 0;
+			try {
+				using (StreamReader reader = File.OpenText(path)) {
+					using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
+						await csv.ReadAsync();
+						csv.ReadHeader();
 
-					Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
-					PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
+						Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
+						while (await csv.ReadAsync()) {
+							n++;
+							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
+							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
+							int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
+							DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
+							if (start.Date < DateTime.Today) {
+								continue;
+							}
 
-					while (await csv.ReadAsync()) {
-						int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
-						int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-						int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
-						DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-						if (start.Date < DateTime.Today) {
-							continue;
-						}
+							DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
-						DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
+							ScheduleRecord record = new ScheduleRecord() {
+								Activity = csv["Activity"],
+								StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
+								StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
+								// Rooms often have " (0)" behind them. unknown reason.
+								// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
+								Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
+								Start = start,
+								End = end
+							};
 
-						ScheduleRecord record = new ScheduleRecord() {
-							Activity = csv["Activity"],
-							StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
-							// Rooms often have " (0)" behind them. unknown reason.
-							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
-							Start = start,
-							End = end
-						};
-
-						string key = (string) identifier.GetValue(record);
-						ScheduleRecord lastRecord;
-						if (lastRecords.TryGetValue(key, out lastRecord) &&
-							record.Activity == lastRecord.Activity &&
-							record.Start.Date == lastRecord.Start.Date &&
-							record.StudentSetsString == lastRecord.StudentSetsString &&
-							record.StaffMember == lastRecord.StaffMember &&
-							record.RoomString == lastRecord.RoomString) {
-							lastRecord.BreakStart = lastRecord.End;
-							lastRecord.BreakEnd = record.Start;
-							lastRecord.End = record.End;
-						} else {
-							lastRecords[key] = record;
-							m_Schedule.Add(record);
+							string key = (string) identifier.GetValue(record);
+							ScheduleRecord lastRecord;
+							if (lastRecords.TryGetValue(key, out lastRecord) &&
+								record.Activity == lastRecord.Activity &&
+								record.Start.Date == lastRecord.Start.Date &&
+								record.StudentSetsString == lastRecord.StudentSetsString &&
+								record.StaffMember == lastRecord.StaffMember &&
+								record.RoomString == lastRecord.RoomString) {
+								lastRecord.BreakStart = lastRecord.End;
+								lastRecord.BreakEnd = record.Start;
+								lastRecord.End = record.End;
+							} else {
+								lastRecords[key] = record;
+								m_Schedule.Add(record);
+							}
 						}
 					}
 				}
+			} catch (Exception e) {
+				Logger.Log(Discord.LogSeverity.Critical, "ScheduleService", "The following exception was thrown while loading the CSV at \"" + path + "\" on line " + n, e);
+				throw;
 			}
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded CSV file {Path.GetFileName(path)} into schedule for {Name}");
 		}
