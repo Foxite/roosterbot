@@ -54,7 +54,7 @@ namespace ScheduleComponent.Modules {
 
 		[Command("dag", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar als eerste heeft op een dag")]
 		public async Task TeacherWeekdayCommand([Remainder] string leraar_en_weekdag) {
-			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(leraar_en_weekdag);
+			Tuple<bool, DayOfWeek, string, bool> arguments = await GetValuesFromArguments(leraar_en_weekdag);
 
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
@@ -66,15 +66,17 @@ namespace ScheduleComponent.Modules {
 				} else {
 					string response = "";
 					foreach (TeacherInfo teacher in teachers) {
-						ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(teacher, day);
+						ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(teacher, day, arguments.Item4);
 						if (result.Success) {
 							ScheduleRecord[] records = result.Value;
 							if (records.Length != 0) {
-								response += $"{teacher.DisplayText}: Rooster voor ";
-								if (DateTime.Today.DayOfWeek == day) {
-									response += "vandaag";
+								response += $"{teacher.DisplayText}: Rooster ";
+								if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
+									response += "voor vandaag";
+								} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+									response += "voor morgen";
 								} else {
-									response += Util.GetStringFromDayOfWeek(day);
+									response += "op " + Util.GetStringFromDayOfWeek(day);
 								}
 								response += "\n";
 
@@ -97,7 +99,19 @@ namespace ScheduleComponent.Modules {
 								}
 								response += Util.FormatTextTable(cells, true);
 							} else {
-								response += $"Het lijkt er op dat {teacher.DisplayText} vandaag niets heeft.\n";
+								response += $"Het lijkt er op dat {teacher.DisplayText} ";
+								if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
+									response += "vandaag";
+								} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+									response += "morgen";
+								} else {
+									response += "op " + Util.GetStringFromDayOfWeek(day);
+								}
+								response += " niets heeft.";
+								if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
+									response += " Het is dan ook weekend.";
+								}
+								response += "\n";
 							}
 						}
 					}
@@ -108,12 +122,12 @@ namespace ScheduleComponent.Modules {
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar morgen als eerste heeft")]
 		public async Task TeacherTomorrowCommand([Remainder] string leraar) {
-			await TeacherWeekdayCommand(leraar + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await TeacherWeekdayCommand(leraar + " morgen");
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
 		public async Task TeacherTodayCommand([Remainder] string leraarInput) {
-			await TeacherWeekdayCommand(leraarInput + " " + Util.GetStringFromDayOfWeek(DateTime.Today.DayOfWeek));
+			await TeacherWeekdayCommand(leraarInput + " vandaag");
 		}
 
 		// This is a seperate function because two teachers have the same name. We would have to write this function three times in TeacherCurrentCommand().
@@ -177,36 +191,6 @@ namespace ScheduleComponent.Modules {
 				GetAfterCommandFunction().GetAwaiter().GetResult();
 			}
 		}
-		
-		private void RespondTeacherWeekday(TeacherInfo teacher, DayOfWeek day, ScheduleRecord record) {
-			string response;
-			if (record == null) {
-				response = $"Het lijkt er op dat {teacher.DisplayText} op {Util.GetStringFromDayOfWeek(day)} niets heeft.";
-			} else {
-				if (DateTime.Today.DayOfWeek == day) {
-					response = $"{teacher.DisplayText}: Als eerste op volgende week {Util.GetStringFromDayOfWeek(day)}\n";
-				} else {
-					response = $"{teacher.DisplayText}: Als eerste op {Util.GetStringFromDayOfWeek(day)}\n";
-				}
-				response += TableItemActivity(record, true);
-
-				if (record.Activity != "stdag doc") {
-					if (record.Activity != "pauze") {
-						response += TableItemRoom(record);
-						response += TableItemStudentSets(record);
-					}
-
-					response += TableItemStartEndTime(record);
-					response += TableItemDuration(record);
-					response += TableItemBreak(record);
-				}
-			}
-			ReplyDeferred(response, teacher, record);
-
-			if (record.Activity == "pauze") {
-				GetAfterCommandFunction().GetAwaiter().GetResult();
-			}
-		}
 
 		private async Task RespondTeacherMultiple(bool next, params TeacherInfo[] teachers) {
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
@@ -219,21 +203,6 @@ namespace ScheduleComponent.Modules {
 			for (int i = 0; i < results.Length; i++) {
 				if (results[i].Success) {
 					respondFunction(teachers[i], results[i].Value);
-				} else {
-					ReplyDeferred($"{teachers[i].DisplayText}: Geen info.");
-				}
-			}
-		}
-
-		private async Task RespondTeacherWeekdayMultiple(DayOfWeek day, params TeacherInfo[] teachers) {
-			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
-			for (int i = 0; i < results.Length; i++) {
-				results[i] = await GetFirstRecord(day, teachers[i]);
-			}
-			
-			for (int i = 0; i < results.Length; i++) {
-				if (results[i].Success) {
-					RespondTeacherWeekday(teachers[i], day, results[i].Value);
 				} else {
 					ReplyDeferred($"{teachers[i].DisplayText}: Geen info.");
 				}

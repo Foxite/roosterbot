@@ -60,8 +60,7 @@ namespace ScheduleComponent.Services {
 							};
 
 							string key = (string) identifier.GetValue(record);
-							ScheduleRecord lastRecord;
-							if (lastRecords.TryGetValue(key, out lastRecord) &&
+							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
 								record.Activity == lastRecord.Activity &&
 								record.Start.Date == lastRecord.Start.Date &&
 								record.StudentSetsString == lastRecord.StudentSetsString &&
@@ -74,7 +73,6 @@ namespace ScheduleComponent.Services {
 								lastRecords[key] = record;
 								m_Schedule.Add(record);
 							}
-							line++;
 						}
 					}
 				}
@@ -126,33 +124,6 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord GetFirstRecordForDay(T identifier, DayOfWeek day) {
-			bool sawRecordForClass = false;
-			// Get the next {day} after today
-			// https://stackoverflow.com/a/6346190/3141917
-			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
-
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (record.Start.Date == targetDate) {
-						return record;
-					}
-				} else if (record.Start.Date > targetDate) {
-					if (sawRecordForClass) {
-						return null;
-					} else {
-						throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
-					}
-				}
-			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
-			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
-			}
-		}
-
 		public ScheduleRecord GetRecordAfter(T identifier, ScheduleRecord givenRecord) {
 			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
 													 //  reuse the code from GetNextRecord().
@@ -173,11 +144,20 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day) {
+		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			DateTime targetDate;
+
+			// https://stackoverflow.com/a/6346190/3141917
+			if (includeToday) {
+				// Get the next {day} including today
+				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
+			} else {
+				// Get the next {day} after today
+				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			}
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
@@ -223,9 +203,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator ==(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return false;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return true;
 
 			return lhs.ScheduleCode == rhs.ScheduleCode
@@ -233,9 +213,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return true;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return false;
 
 			return lhs.ScheduleCode != rhs.ScheduleCode
