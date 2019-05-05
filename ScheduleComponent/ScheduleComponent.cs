@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
@@ -12,6 +13,9 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
+		private DiscordSocketClient m_Client;
+		private ConfigService m_Config;
+
 		public override void AddServices(ref IServiceCollection services, string configPath) {
 			List<Task> concurrentLoading = new List<Task>();
 
@@ -34,10 +38,6 @@ namespace ScheduleComponent {
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
 			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
 
-			Logger.Log(LogSeverity.Debug, "Main", "Started services");
-
-			Task.WaitAll(concurrentLoading.ToArray());
-
 			services
 				.AddSingleton(teachers)
 				.AddSingleton(new ScheduleProvider(schedStudents, schedTeachers, schedRooms))
@@ -46,6 +46,10 @@ namespace ScheduleComponent {
 				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
 				.AddSingleton(new CommandMatchingService(teachers));
+
+			Task.WaitAll(concurrentLoading.ToArray());
+
+			Logger.Log(LogSeverity.Debug, "ScheduleComponent", "Started services");
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
@@ -55,6 +59,9 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<TeacherScheduleModule>(services);
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
+
+			m_Config = services.GetService<ConfigService>();
+			m_Client = services.GetService<DiscordSocketClient>();
 
 			string helpText = "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			helpText += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
@@ -110,19 +117,6 @@ namespace ScheduleComponent {
 			}
 		}
 
-		public ScheduleRecord GetFirstRecordForDay(IdentifierInfo identifier, DayOfWeek day) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetFirstRecordForDay((StudentSetInfo) identifier, day);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetFirstRecordForDay((TeacherInfo) identifier, day);
-			case ScheduleType.Room:
-				return m_Rooms.GetFirstRecordForDay((RoomInfo) identifier, day);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
-		}
-
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
 			switch (GetScheduleType(identifier)) {
 			case ScheduleType.StudentSets:
@@ -136,28 +130,29 @@ namespace ScheduleComponent {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day) {
+		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
 			switch (GetScheduleType(identifier)) {
 			case ScheduleType.StudentSets:
-				return m_Students.GetSchedulesForDay((StudentSetInfo) identifier, day);
+				return m_Students.GetSchedulesForDay((StudentSetInfo) identifier, day, includeToday);
 			case ScheduleType.StaffMember:
-				return m_Teachers.GetSchedulesForDay((TeacherInfo) identifier, day);
+				return m_Teachers.GetSchedulesForDay((TeacherInfo) identifier, day, includeToday);
 			case ScheduleType.Room:
-				return m_Rooms.GetSchedulesForDay((RoomInfo) identifier, day);
+				return m_Rooms.GetSchedulesForDay((RoomInfo) identifier, day, includeToday);
 			default:
 				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
 			}
 		}
 
 		private ScheduleType GetScheduleType(IdentifierInfo info) {
-			if (info is StudentSetInfo)
+			if (info is StudentSetInfo) {
 				return ScheduleType.StudentSets;
-			else if (info is TeacherInfo)
+			} else if (info is TeacherInfo) {
 				return ScheduleType.StaffMember;
-			else if (info is RoomInfo)
+			} else if (info is RoomInfo) {
 				return ScheduleType.Room;
-			else
+			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider (A)");
+			}
 		}
 
 		private enum ScheduleType {

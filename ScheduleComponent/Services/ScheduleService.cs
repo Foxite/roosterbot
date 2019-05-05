@@ -28,53 +28,57 @@ namespace ScheduleComponent.Services {
 		public async Task ReadScheduleCSV(string path) {
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading CSV file from {path}");
 
-			using (StreamReader reader = File.OpenText(path)) {
-				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
-					await csv.ReadAsync();
-					csv.ReadHeader();
+			int line = 1;
+			try {
+				using (StreamReader reader = File.OpenText(path)) {
+					using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
+						await csv.ReadAsync();
+						csv.ReadHeader();
 
-					Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
-					PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
+						Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
+						while (await csv.ReadAsync()) {
+							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
+							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
+							int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
+							DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
+							if (start.Date < DateTime.Today) {
+								continue;
+							}
 
-					while (await csv.ReadAsync()) {
-						int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
-						int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-						int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
-						DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-						if (start.Date < DateTime.Today) {
-							continue;
-						}
+							DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
 
-						DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
+							ScheduleRecord record = new ScheduleRecord() {
+								Activity = csv["Activity"],
+								StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
+								StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
+								// Rooms often have " (0)" behind them. unknown reason.
+								// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
+								Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
+								Start = start,
+								End = end
+							};
 
-						ScheduleRecord record = new ScheduleRecord() {
-							Activity = csv["Activity"],
-							StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
-							// Rooms often have " (0)" behind them. unknown reason.
-							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
-							Start = start,
-							End = end
-						};
-
-						string key = (string) identifier.GetValue(record);
-						ScheduleRecord lastRecord;
-						if (lastRecords.TryGetValue(key, out lastRecord) &&
-							record.Activity == lastRecord.Activity &&
-							record.Start.Date == lastRecord.Start.Date &&
-							record.StudentSetsString == lastRecord.StudentSetsString &&
-							record.StaffMember == lastRecord.StaffMember &&
-							record.RoomString == lastRecord.RoomString) {
-							lastRecord.BreakStart = lastRecord.End;
-							lastRecord.BreakEnd = record.Start;
-							lastRecord.End = record.End;
-						} else {
-							lastRecords[key] = record;
-							m_Schedule.Add(record);
+							string key = (string) identifier.GetValue(record);
+							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
+								record.Activity == lastRecord.Activity &&
+								record.Start.Date == lastRecord.Start.Date &&
+								record.StudentSetsString == lastRecord.StudentSetsString &&
+								record.StaffMember == lastRecord.StaffMember &&
+								record.RoomString == lastRecord.RoomString) {
+								lastRecord.BreakStart = lastRecord.End;
+								lastRecord.BreakEnd = record.Start;
+								lastRecord.End = record.End;
+							} else {
+								lastRecords[key] = record;
+								m_Schedule.Add(record);
+							}
 						}
 					}
 				}
+			} catch (Exception e) {
+				Logger.Log(Discord.LogSeverity.Critical, "ScheduleService", "The following exception was thrown while loading the CSV at \"" + path + "\" on line " + line, e);
+				throw;
 			}
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded CSV file {Path.GetFileName(path)} into schedule for {Name}");
 		}
@@ -120,33 +124,6 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord GetFirstRecordForDay(T identifier, DayOfWeek day) {
-			bool sawRecordForClass = false;
-			// Get the next {day} after today
-			// https://stackoverflow.com/a/6346190/3141917
-			DateTime targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
-
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (record.Start.Date == targetDate) {
-						return record;
-					}
-				} else if (record.Start.Date > targetDate) {
-					if (sawRecordForClass) {
-						return null;
-					} else {
-						throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
-					}
-				}
-			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
-			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
-			}
-		}
-
 		public ScheduleRecord GetRecordAfter(T identifier, ScheduleRecord givenRecord) {
 			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
 													 //  reuse the code from GetNextRecord().
@@ -167,12 +144,20 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day) {
+		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			// Get next {day}, or today if that is {day}
-			DateTime targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
+			DateTime targetDate;
+
+			// https://stackoverflow.com/a/6346190/3141917
+			if (includeToday) {
+				// Get the next {day} including today
+				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
+			} else {
+				// Get the next {day} after today
+				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			}
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
@@ -218,9 +203,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator ==(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return false;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return true;
 
 			return lhs.ScheduleCode == rhs.ScheduleCode
@@ -228,9 +213,9 @@ namespace ScheduleComponent.Services {
 		}
 
 		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (ReferenceEquals(lhs, null) != ReferenceEquals(rhs, null))
+			if (lhs is null != rhs is null)
 				return true;
-			if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null))
+			if (lhs is null && rhs is null)
 				return false;
 
 			return lhs.ScheduleCode != rhs.ScheduleCode

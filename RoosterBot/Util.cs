@@ -167,6 +167,10 @@ namespace RoosterBot {
 			case "zo":
 			case "zondag":
 				return DayOfWeek.Sunday;
+			case "vandaag":
+				return DateTime.Today.DayOfWeek;
+			case "morgen":
+				return DateTime.Today.AddDays(1).DayOfWeek;
 			default:
 				throw new ArgumentException(dayofweek + " is not a weekday.");
 			}

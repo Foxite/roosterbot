@@ -82,7 +82,7 @@ namespace RoosterBot {
 			m_Client.MessageReceived += HandleNewCommand;
 			m_Client.Ready += async () => {
 				m_State = ProgramState.BotRunning;
-				await m_Client.SetGameAsync(m_ConfigService.GameString);
+				await m_Client.SetGameAsync(m_ConfigService.GameString, type: ActivityType.Watching);
 				await m_ConfigService.SetLogChannelAsync(m_Client, Path.Combine(DataPath, "config"));
 				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
@@ -109,8 +109,10 @@ namespace RoosterBot {
 					return Task.CompletedTask;
 				};
 
+#if !DEBUG
 				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
 				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
+#endif
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
@@ -255,14 +257,13 @@ namespace RoosterBot {
 		// This function is called by CommandEditService and the above function.
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
 			// Don't process the command if it was a System Message
-			SocketUserMessage message;
-			if ((message = command as SocketUserMessage) == null)
+			if (!(command is SocketUserMessage message) || message.Author.IsBot)
 				return;
 
 			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos))) {
+			// Determine if the message is a command, based on if it starts with '!'
+			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				return;
 			}
 
@@ -281,16 +282,8 @@ namespace RoosterBot {
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
-			// Create a number to track where the prefix ends and the command begins
-			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (!(message.HasStringPrefix(m_Services.GetService<ConfigService>().CommandPrefix, ref argPos) || message.HasMentionPrefix(m_Client.CurrentUser, ref argPos)))
-				return;
-
-			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
-			// Execute the command. (result does not indicate a return value, 
-			// rather an object stating if the command executed successfully)
+
 			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
 			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
 
@@ -306,7 +299,7 @@ namespace RoosterBot {
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 					case CommandError.UnknownCommand:
-						response = "Die command ken ik niet.";
+						response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
 						break;
 					case CommandError.BadArgCount:
 						response = "Dat zijn te veel of te weinig parameters.";

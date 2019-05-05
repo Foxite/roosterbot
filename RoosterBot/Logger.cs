@@ -25,35 +25,31 @@ namespace RoosterBot {
 			}
 		}
 
-		public static void Verbose(string tag, string msg) {
-			Log(LogSeverity.Verbose, tag, msg);
+		public static void Verbose(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Verbose, tag, msg, e);
 		}
 
-		public static void Debug(string tag, string msg) {
-			Log(LogSeverity.Debug, tag, msg);
+		public static void Debug(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Debug, tag, msg, e);
 		}
 
-		public static void Info(string tag, string msg) {
-			Log(LogSeverity.Info, tag, msg);
+		public static void Info(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Info, tag, msg, e);
 		}
 
-		public static void Warning(string tag, string msg) {
-			Log(LogSeverity.Warning, tag, msg);
+		public static void Warning(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Warning, tag, msg, e);
 		}
 
-		public static void Error(string tag, string msg) {
-			Log(LogSeverity.Error, tag, msg);
+		public static void Error(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Error, tag, msg, e);
 		}
 
-		public static void Critical(string tag, string msg) {
-			Log(LogSeverity.Critical, tag, msg);
+		public static void Critical(string tag, string msg, Exception e = null) {
+			Log(LogSeverity.Critical, tag, msg, e);
 		}
 
-		public static void Log(LogSeverity sev, string tag, string msg) {
-			Log(new LogMessage(sev, tag, msg));
-		}
-
-		public static void Log(LogSeverity sev, string tag, string msg, Exception ex) {
+		public static void Log(LogSeverity sev, string tag, string msg, Exception ex = null) {
 			Log(new LogMessage(sev, tag, msg, ex));
 		}
 		

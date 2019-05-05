@@ -77,28 +77,39 @@ namespace ScheduleComponent.Modules {
 
 		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
 		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
-			Tuple<bool, DayOfWeek, string> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
+			Tuple<bool, DayOfWeek, string, bool> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
 
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string lokaal = arguments.Item3.ToUpper();
 
-				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(new RoomInfo() { Room = lokaal.ToUpper() }, day);
+				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(new RoomInfo() { Room = lokaal.ToUpper() }, day, arguments.Item4);
 				if (result.Success) {
 					ScheduleRecord[] records = result.Value;
 					string response;
 					if (records.Length == 0) {
-						response = "Het ziet ernaar uit dat daar vandaag niets is.";
-						if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
+						response = "Het ziet ernaar uit dat daar ";
+						if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
+							response += "vandaag";
+						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+							response += "morgen";
+						} else {
+							response += "op " + Util.GetStringFromDayOfWeek(day);
+						}
+						response += " niets is.";
+
+						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += " Het is dan ook weekend.";
 						}
 						ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, null);
 					} else {
-						response = $"{lokaal.ToUpper()}: Rooster voor ";
-						if (DateTime.Today.DayOfWeek == day) {
-							response += "vandaag";
+						response = $"{lokaal.ToUpper()}: Rooster ";
+						if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
+							response += "voor vandaag";
+						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+							response += "voor morgen";
 						} else {
-							response += Util.GetStringFromDayOfWeek(day);
+							response += "op " + Util.GetStringFromDayOfWeek(day);
 						}
 						response += "\n";
 
@@ -122,12 +133,12 @@ namespace ScheduleComponent.Modules {
 
 		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
 		public async Task RoomTomorrowCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal + " " + Util.GetStringFromDayOfWeek(DateTime.Today.AddDays(1).DayOfWeek));
+			await RoomWeekdayCommand(lokaal + " morgen");
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Summary("Het rooster voor een lokaal voor vandaag")]
 		public async Task RoomTodayCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal + " " + Util.GetStringFromDayOfWeek(DateTime.Today.DayOfWeek));
+			await RoomWeekdayCommand(lokaal + " vandaag");
 		}
 	}
 }
