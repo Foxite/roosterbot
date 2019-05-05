@@ -28,7 +28,7 @@ namespace ScheduleComponent.Services {
 		public async Task ReadScheduleCSV(string path) {
 			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading CSV file from {path}");
 
-			int line = 0;
+			int line = 1;
 			try {
 				using (StreamReader reader = File.OpenText(path)) {
 					using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
@@ -38,7 +38,6 @@ namespace ScheduleComponent.Services {
 						Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
 						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
 						while (await csv.ReadAsync()) {
-							line++;
 							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
 							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
 							int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
@@ -75,6 +74,7 @@ namespace ScheduleComponent.Services {
 								lastRecords[key] = record;
 								m_Schedule.Add(record);
 							}
+							line++;
 						}
 					}
 				}
