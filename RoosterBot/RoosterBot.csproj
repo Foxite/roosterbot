@@ -50,7 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.0</LangVersion>
+    <LangVersion>7</LangVersion>
     <AllowedReferenceRelatedFileExtensions>
       <!-- Prevent default XML and PDB files copied to output in RELEASE. 
          Only *.allowedextension files will be included, which doesn't exist.
