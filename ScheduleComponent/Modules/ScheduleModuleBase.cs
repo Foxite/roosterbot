@@ -14,6 +14,7 @@ namespace ScheduleComponent.Modules {
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleService<T> Schedules { get; set; }
 		public ScheduleProvider AllSchedules { get; set; }
+		public UserClassesService Classes { get; set; }
 
 		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
@@ -161,6 +162,7 @@ namespace ScheduleComponent.Modules {
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, T identifier) {
 			ScheduleRecord record = null;
 			try {
+				Console.WriteLine(identifier.ScheduleCode);
 				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
@@ -184,6 +186,10 @@ namespace ScheduleComponent.Modules {
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			try {
+				if (identifier is StudentSetInfo && identifier.ScheduleCode == "ik") {
+					Console.WriteLine("ssg");
+					identifier = (T) (IdentifierInfo) await Classes.GetClassForDiscordUser(Context.User); // Ugly as fuck but this should never happen if it won't work
+				}
 				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
@@ -235,6 +241,14 @@ namespace ScheduleComponent.Modules {
 				}
 			}
 			return new Tuple<bool, DayOfWeek, string, bool>(true, day, entry, today);
+		}
+
+		protected async Task<T> ResolveMeQuery(string input) {
+			if (input == "ik") {
+				return (T) (IdentifierInfo) await Classes.GetClassForDiscordUser(Context.User); // Ugly as fuck but this should never happen if it won't work
+			} else {
+				return null;
+			}
 		}
 		
 		/// <summary>

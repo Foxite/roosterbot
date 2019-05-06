@@ -64,9 +64,11 @@
     <Compile Include="Modules\StudentScheduleModule.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Modules\TeacherScheduleModule.cs" />
+    <Compile Include="Modules\TestUserClassModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="Services\CommandMatchingService.cs" />
+    <Compile Include="Services\UserClassesService.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />
@@ -82,6 +84,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2">
+      <Version>3.3.101.5</Version>
+    </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>12.1.2</Version>
     </PackageReference>

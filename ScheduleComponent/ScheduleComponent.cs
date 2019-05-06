@@ -45,7 +45,8 @@ namespace ScheduleComponent {
 				.AddSingleton(schedTeachers)
 				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new CommandMatchingService(teachers));
+				.AddSingleton(new CommandMatchingService(teachers))
+				.AddSingleton(new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>()));
 
 			Task.WaitAll(concurrentLoading.ToArray());
 
@@ -59,6 +60,7 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<TeacherScheduleModule>(services);
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
+			commandService.AddModuleAsync<TestUserClassModule>(services);
 
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
