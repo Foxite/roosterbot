@@ -3,7 +3,7 @@
 namespace ScheduleComponent.Services {
 	public class CommandMatchingService {
 		private TeacherNameService m_Teachers;
-		private Regex m_StudentRegex = new Regex("[1-4][Gg][ADad][12]");
+		private Regex m_StudentRegex = new Regex("([1-4][Gg][ADad][12])|(ik)");
 		private Regex m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		
 		public CommandMatchingService(TeacherNameService teachers) {

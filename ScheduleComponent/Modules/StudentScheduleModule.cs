@@ -10,7 +10,11 @@ namespace ScheduleComponent.Modules {
 	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, new StudentSetInfo() { ClassName = klas.ToUpper() });
+			StudentSetInfo info = await ResolveMeQuery(klas);
+			if (info == null) {
+				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+			}
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				string response;
@@ -34,7 +38,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
+					ReplyDeferred(response, info, record);
 
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -45,7 +49,11 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, new StudentSetInfo() { ClassName = klas.ToUpper() });
+			StudentSetInfo info = await ResolveMeQuery(klas);
+			if (info == null) {
+				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+			}
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -72,7 +80,7 @@ namespace ScheduleComponent.Modules {
 						response += TableItemDuration(record);
 						response += TableItemBreak(record);
 					}
-					ReplyDeferred(response, new StudentSetInfo() { ClassName = klas.ToUpper() }, record);
+					ReplyDeferred(response, info, record);
 
 					if (record.Activity == "pauze") {
 						await GetAfterCommandFunction();
@@ -88,7 +96,11 @@ namespace ScheduleComponent.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string clazz = arguments.Item3;
-				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(new StudentSetInfo() { ClassName = clazz.ToUpper() }, day, arguments.Item4);
+				StudentSetInfo info = await ResolveMeQuery(clazz);
+				if (info == null) {
+					info = new StudentSetInfo() { ClassName = clazz.ToUpper() };
+				}
+				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, arguments.Item4);
 				if (result.Success) {
 					ScheduleRecord[] records = result.Value;
 					string response;
@@ -107,9 +119,9 @@ namespace ScheduleComponent.Modules {
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
 							response += " Het is dan ook weekend.";
 						}
-						await ReplyAsync(response, new StudentSetInfo() { ClassName = clazz.ToUpper() }, null);
+						await ReplyAsync(response, info, null);
 					} else {
-						response = $"{clazz.ToUpper()}: Rooster ";
+						response = $"{info.DisplayText}: Rooster ";
 						if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
 							response += "voor vandaag";
 						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
