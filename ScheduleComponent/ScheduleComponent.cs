@@ -60,7 +60,7 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<TeacherScheduleModule>(services);
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
-			commandService.AddModuleAsync<TestUserClassModule>(services);
+			commandService.AddModuleAsync<UserClassModule>(services);
 
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();

@@ -6,19 +6,19 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("UserClassTest")]
-	public class TestUserClassModule : EditableCmdModuleBase {
+	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }
 
-		[Command("getclass")]
+		[Command("ik")]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User)).DisplayText;
-			await ReplyAsync(clazz);
+			await ReplyAsync("Jij zit in " + clazz + ". Gebruik bijvoorbeeld `!ik 2gd1` om dit te veranderen.");
 		}
 		
-		[Command("setclass")]
+		[Command("ik")]
 		public async Task SetClassForUser(string clazz) {
-			await Classes.SetClassForDiscordUser(Context.User, clazz);
-			await ReplyAsync("OK: " + clazz);
+			await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
+			await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
 		}
 	}
 }
