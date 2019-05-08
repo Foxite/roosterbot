@@ -13,7 +13,7 @@ namespace ScheduleComponent.Modules {
 		public CommandMatchingService MatchingService { get; set; }
 		
 		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
-		public async Task GenericCurrentCommand([Remainder] string wat = "") {
+		public async Task GenericCurrentCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -23,7 +23,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip")]
-		public async Task GenericNextCommand([Remainder] string wat = "") {
+		public async Task GenericNextCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -51,7 +51,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("morgen", RunMode = RunMode.Async)]
-		public async Task GenericTomorrowCommand([Remainder] string wat = "") {
+		public async Task GenericTomorrowCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -61,7 +61,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("vandaag", RunMode = RunMode.Async)]
-		public async Task GenericTodayCommand([Remainder] string wat = "") {
+		public async Task GenericTodayCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;

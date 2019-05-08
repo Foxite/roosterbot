@@ -9,7 +9,7 @@ namespace ScheduleComponent.Modules {
 	[Group("klas"), RoosterBot.Attributes.LogTag("StudentSM")]
 	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
-		public async Task StudentCurrentCommand(string klas) {
+		public async Task StudentCurrentCommand(string klas = "ik") {
 			StudentSetInfo info = await ResolveMeQuery(klas);
 			if (info == null) {
 				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
@@ -48,7 +48,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Welke les een klas hierna heeft")]
-		public async Task StudentNextCommand(string klas) {
+		public async Task StudentNextCommand(string klas = "ik") {
 			StudentSetInfo info = await ResolveMeQuery(klas);
 			if (info == null) {
 				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
@@ -155,12 +155,12 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
-		public async Task StudentTomorrowCommand(string klas) {
+		public async Task StudentTomorrowCommand(string klas = "ik") {
 			await StudentWeekdayCommand(klas + " morgen");
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Summary("Je rooster voor vandaag")]
-		public async Task StudentTodayCommand(string klas) {
+		public async Task StudentTodayCommand(string klas = "ik") {
 			await StudentWeekdayCommand(klas + " vandaag");
 		}
 	}
