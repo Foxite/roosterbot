@@ -162,7 +162,6 @@ namespace ScheduleComponent.Modules {
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, T identifier) {
 			ScheduleRecord record = null;
 			try {
-				Console.WriteLine(identifier.ScheduleCode);
 				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
@@ -186,10 +185,6 @@ namespace ScheduleComponent.Modules {
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
 			try {
-				if (identifier is StudentSetInfo && identifier.ScheduleCode == "ik") {
-					Console.WriteLine("ssg");
-					identifier = (T) (IdentifierInfo) await Classes.GetClassForDiscordUser(Context.User); // Ugly as fuck but this should never happen if it won't work
-				}
 				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
