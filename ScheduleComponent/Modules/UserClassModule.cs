@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
@@ -17,8 +18,12 @@ namespace ScheduleComponent.Modules {
 		
 		[Command("ik")]
 		public async Task SetClassForUser(string clazz) {
-			await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
-			await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
+			try {
+				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
+				await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
+			} catch (ArgumentException) {
+				await ReplyAsync("Dat is geen klas.");
+			}
 		}
 	}
 }
