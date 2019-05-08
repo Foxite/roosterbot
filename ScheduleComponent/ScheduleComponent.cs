@@ -54,6 +54,7 @@ namespace ScheduleComponent {
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+			// TODO await all of these
 			commandService.AddModuleAsync<GenericCommandsModule>(services);
 			commandService.AddModuleAsync<ScheduleModuleBase<StudentSetInfo>>(services);
 			commandService.AddModuleAsync<StudentScheduleModule>(services);
@@ -61,6 +62,7 @@ namespace ScheduleComponent {
 			commandService.AddModuleAsync<RoomScheduleModule>(services);
 			commandService.AddModuleAsync<TeacherListModule>(services);
 			commandService.AddModuleAsync<UserClassModule>(services);
+			
 
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
