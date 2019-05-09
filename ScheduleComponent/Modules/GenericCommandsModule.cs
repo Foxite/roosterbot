@@ -70,12 +70,18 @@ namespace ScheduleComponent.Modules {
 				// Because it's easier (or seemed at the time, because I'm commenting this way after writing it), we do the opposite:
 				// We take all the parameters *except* the first or last, and check if it mmatches a student set, teacher, or room (in another function).
 				List<string> argumentsAsList = parameters.Split(' ').ToList();
+
+				if (argumentsAsList.Count == 1) {
+					parameters += " ik";
+					argumentsAsList = parameters.Split(' ').ToList();
+				}
+
 				List<string> argumentsWithoutFirst = argumentsAsList.Select(item => (string) item.Clone()).ToList(); // clone list
-				List<string> argumentsWithoutLast  = argumentsAsList.Select(item => (string) item.Clone()).ToList(); // from https://stackoverflow.com/a/222640/3141917
+				List<string> argumentsWithoutLast = argumentsAsList.Select(item => (string) item.Clone()).ToList(); // from https://stackoverflow.com/a/222640/3141917
 				argumentsWithoutFirst.RemoveAt(0);
-				argumentsWithoutLast .RemoveAt(argumentsAsList.Count - 1);
+				argumentsWithoutLast.RemoveAt(argumentsAsList.Count - 1);
 				string paramWithoutFirst = string.Join(" ", argumentsWithoutFirst);
-				string paramWithoutLast  = string.Join(" ", argumentsWithoutLast);
+				string paramWithoutLast = string.Join(" ", argumentsWithoutLast);
 
 				// Here we call a function that does the matching for us, it will return the correct command call based on the parameters. If it can't figure it out, it returns null.
 				// We first try it without the first parameter (to see if that one is the weekday).
