@@ -13,7 +13,7 @@ namespace ScheduleComponent.Modules {
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		
-		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
+		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster"), Summary("Kijk wat er nu op het rooster staat.")]
 		public async Task GenericCurrentCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
@@ -23,7 +23,7 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "nu");
 		}
 
-		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Kijk wat er hierna op het rooster staat")]
 		public async Task GenericNextCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
