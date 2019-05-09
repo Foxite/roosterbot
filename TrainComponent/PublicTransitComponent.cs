@@ -28,7 +28,6 @@ namespace PublicTransitComponent {
 		}
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
 			commandService.AddModuleAsync<PTModule>(services);
-			commandService.AddModuleAsync<StationsModule>(services);
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";

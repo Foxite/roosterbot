@@ -8,12 +8,12 @@ using RoosterBot;
 using System;
 
 namespace PublicTransitComponent.Modules {
-	[LogTag("PublicTransitModule")]
+	[LogTag("PublicTransitModule"), Name("OV")]
 	public class PTModule : RoosterModuleBase {
 		public NSAPI NSAPI { get; set; }
 		public StationCodeService Stations { get; set; }
 
-		[Command("ov", RunMode = RunMode.Async)]
+		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations.")]
 		public async Task GetTrainRouteCommand([Remainder] string van_en_naar) {
 			string[] stops = van_en_naar.Split(',');
 			if (stops.Length < 1 || stops.Length > 2) {
@@ -102,6 +102,43 @@ namespace PublicTransitComponent.Modules {
 				}
 				ReplyDeferred(pretext + "\n" + Util.FormatTextTable(cells, true));
 			}
+		}
+
+		[Command("stations", RunMode = RunMode.Async), Summary("Zoek een station op in de lijst.")]
+		public async Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
+			StationMatchInfo[] matches = Stations.Lookup(input.ToLower(), 5);
+			string response = "Gevonden stations zijn (beste match eerst):\n\n";
+
+			int i = 1;
+			foreach (StationMatchInfo match in matches) {
+				response += $"{i}. {match.Station.DisplayName}";
+
+				if (match.Station.Names.Length != 1) {
+					string aka = " (ook bekend als: ";
+
+					int count = 0;
+					bool notFirst = false;
+					for (int j = 1; j < match.Station.Names.Length; j++) {
+						if (match.Station.Names[j] != match.Station.DisplayName.ToLower()) {
+							if (notFirst) {
+								aka += ", ";
+							}
+							aka += "\"" + match.Station.Names[j] + "\"";
+							notFirst = true;
+							count++;
+						}
+					}
+
+					aka += ")";
+					if (count != 0) {
+						response += aka;
+					}
+				}
+
+				response += $". Code: {match.Station.Code}\n";
+				i++;
+			}
+			await ReplyAsync(response);
 		}
 	}
 }
