@@ -11,36 +11,39 @@ namespace RoosterBot.Modules {
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
 
-		[Command("help", RunMode = RunMode.Async), Summary("Uitleg over een onderdeel van de bot.")]
-		public async Task HelpCommand([Remainder, Name("hoofdstuk")] string section = "") {
-			string response = "";
+		[Command("help"), Summary("Uitleg over de bot.")]
+		public async Task HelpCommand() {
+			string response = "Dit is RoosterBot " + Constants.VersionString + ".\n";
 
-			if (string.IsNullOrWhiteSpace(section)) {
-				response += "Al mijn commands beginnen met een `!`. Hierdoor raken andere bots niet in de war.\n\n";
-				response += "Gebruik `!help <hoofdstuk>`. Beschikbare hoofdstukken zijn:\n";
+			response += $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
+			response += "Je kan `!commands` gebruiken om te alle commands te zien, of `!commands <filter>` gebruiken om te zoeken.\n";
+			response += "Gebruik `!help <hoofdstuk>` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:\n";
 
-				bool notFirst = false;
-				foreach (string helpSection in Help.GetSectionNames()) {
-					if (notFirst) {
-						response += ", ";
-					}
-					response += helpSection;
-					notFirst = true;
+			bool notFirst = false;
+			foreach (string helpSection in Help.GetSectionNames()) {
+				if (notFirst) {
+					response += ", ";
 				}
-				response += "\nJe kan ook `!commands` gebruiken om te alle commands te zien, of `!commands <filter>` gebruiken om te zoeken.\n\nDit is versie " + Constants.VersionString + ".";
-			} else {
-				if (Help.HelpSectionExists(section)) {
-					response += Help.GetHelpSection(section);
-				} else {
-					response += "Sorry, dat hoofdstuk bestaat niet.";
-				}
+				response += helpSection;
+				notFirst = true;
 			}
-			
+
+			await ReplyAsync(response);
+		}
+		
+		[Command("help"), Summary("Uitleg over een onderdeel van de bot.")]
+		public async Task HelpCommand([Remainder, Name("hoofdstuk")] string section) {
+			string response = "";
+			if (Help.HelpSectionExists(section)) {
+				response += Help.GetHelpSection(section);
+			} else {
+				response += "Sorry, dat hoofdstuk bestaat niet.";
+			}
 			await ReplyAsync(response);
 		}
 
 		[Command("commands"), Summary("Alle commands, of zoek op een command of categorie.")]
-		public async Task CommandListCommand([Summary("Een command of categorie"), Name("zoekterm")] string term = "") {
+		public async Task CommandListCommand([Name("zoekterm")] string term = "") {
 			IEnumerable<CommandInfo> commands = CmdService.Commands;
 			
 			if (!string.IsNullOrWhiteSpace(term)) {
