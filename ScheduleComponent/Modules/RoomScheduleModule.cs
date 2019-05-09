@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
+using RoosterBot.Attributes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("lokaal"), RoosterBot.Attributes.LogTag("RoomSM")]
+	[Group("lokaal"), LogTag("RoomSM"), HiddenFromList]
 	public class RoomScheduleModule : ScheduleModuleBase<RoomInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(string lokaal) {

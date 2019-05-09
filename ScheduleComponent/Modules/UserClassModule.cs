@@ -6,7 +6,7 @@ using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("UserClassTest")]
+	[LogTag("UserClassTest"), Name("Jouw klas"), Summary("Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.")]
 	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }
 
@@ -17,7 +17,7 @@ namespace ScheduleComponent.Modules {
 		}
 		
 		[Command("ik")]
-		public async Task SetClassForUser(string clazz) {
+		public async Task SetClassForUser([Summary("In welke klas je zit."), Name("klas")] string clazz) {
 			try {
 				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
 				await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");

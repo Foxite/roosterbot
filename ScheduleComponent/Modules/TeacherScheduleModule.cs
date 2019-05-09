@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
+using RoosterBot.Attributes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[Group("leraar"), RoosterBot.Attributes.LogTag("TeacherSM")]
+	[Group("leraar"), LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase<TeacherInfo> {
 		[Command("nu", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand([Remainder] string leraar) {

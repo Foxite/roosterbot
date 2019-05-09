@@ -6,9 +6,10 @@ using Discord.Commands;
 using ScheduleComponent.Services;
 using RoosterBot.Modules;
 using RoosterBot;
+using RoosterBot.Attributes;
 
 namespace ScheduleComponent.Modules {
-	[RoosterBot.Attributes.LogTag("ScheduleModuleBase")]
+	[LogTag("ScheduleModuleBase"), Name("Rooster")]
 	public class ScheduleModuleBase<T> : EditableCmdModuleBase where T : IdentifierInfo {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
@@ -16,8 +17,8 @@ namespace ScheduleComponent.Modules {
 		public ScheduleProvider AllSchedules { get; set; }
 		public UserClassesService Classes { get; set; }
 
-		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken")]
-		public async Task GetAfterCommand([Remainder] string ignored = "") {
+		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
+		public async Task GetAfterCommand([Remainder, HiddenFromList] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
 				ReplyDeferred("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
 			}

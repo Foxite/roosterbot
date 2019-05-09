@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
+using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[RoosterBot.Attributes.LogTag("TeacherListModule")]
+	[LogTag("TeacherListModule"), Name("Leraren")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("docenten", RunMode = RunMode.Async), Alias("leraren", "docent")]
+		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is)")]
 		public async Task TeacherListCommand([Remainder] string name = "") {
 			IReadOnlyList<TeacherInfo> records;
 
