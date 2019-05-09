@@ -6,13 +6,14 @@ using ScheduleComponent.Services;
 using RoosterBot;
 using RoosterBot.Modules;
 using Discord;
+using RoosterBot.Attributes;
 
 namespace ScheduleComponent.Modules {
-	[RoosterBot.Attributes.LogTag("GenericCommandsModule")]
+	[LogTag("GenericCommandsModule"), Name("Rooster"), Summary("Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt."), Remarks("Je kan dit ook voor je command zetten: !klas nu 2gd1")]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		
-		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
+		[Priority(10), Command("nu", RunMode = RunMode.Async), Summary("Wat er nu op het rooster staat.")]
 		public async Task GenericCurrentCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
@@ -22,25 +23,17 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "nu");
 		}
 
-		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen", "kip")]
+		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Wat er hierna op het rooster staat.")]
 		public async Task GenericNextCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
 			}
-
-			if (Context.Message.Content.StartsWith("!kip")) {
-				IUser dinny = await Context.Client.GetUserAsync(177154773424799753);
-				if (dinny != null) {
-					await ReplyAsync(dinny.Mention);
-				} else {
-					await ReplyAsync("@ dinny");
-				}
-			}
+			
 			await MatchCommand(wat, "hierna");
 		}
 
-		[Priority(10), Command("dag", RunMode = RunMode.Async)]
+		[Priority(10), Command("dag", RunMode = RunMode.Async), Summary("Het rooster voor een hele dag."), Remarks("Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]
 		public async Task GenericWeekdayCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben, en een weekdag.");
@@ -50,7 +43,7 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "dag");
 		}
 
-		[Priority(10), Command("morgen", RunMode = RunMode.Async)]
+		[Priority(10), Command("morgen", RunMode = RunMode.Async), Summary("Wat er morgen op het rooster staat.")]
 		public async Task GenericTomorrowCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
@@ -60,7 +53,7 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "morgen");
 		}
 
-		[Priority(10), Command("vandaag", RunMode = RunMode.Async)]
+		[Priority(10), Command("vandaag", RunMode = RunMode.Async), Summary("Wat er vandaag op het rooster staat.")]
 		public async Task GenericTodayCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
