@@ -12,7 +12,7 @@ namespace ScheduleComponent.Modules {
 		public TeacherNameService Teachers { get; set; }
 		
 		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is)")]
-		public async Task TeacherListCommand([Remainder] string name = "") {
+		public async Task TeacherListCommand([Remainder, Name("naam")] string name = "") {
 			IReadOnlyList<TeacherInfo> records;
 
 			if (string.IsNullOrWhiteSpace(name)) {

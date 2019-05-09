@@ -10,14 +10,14 @@ namespace ScheduleComponent.Modules {
 	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }
 
-		[Command("ik")]
+		[Command("ik"), Summary("Kijk in welke klas jij zit, volgens mijn gegevens.")]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User)).DisplayText;
 			await ReplyAsync("Jij zit in " + clazz + ". Gebruik bijvoorbeeld `!ik 2gd1` om dit te veranderen.");
 		}
 		
-		[Command("ik")]
-		public async Task SetClassForUser([Summary("In welke klas je zit."), Name("klas")] string clazz) {
+		[Command("ik"), Summary("Stel in in welke klas jij zit.")]
+		public async Task SetClassForUser([Name("klas")] string clazz) {
 			try {
 				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
 				await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
