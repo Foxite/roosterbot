@@ -33,13 +33,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.0</LangVersion>
+    <LangVersion>7</LangVersion>
     <AllowedReferenceRelatedFileExtensions>
       <!-- Prevent default XML and PDB files copied to output in RELEASE. 
          Only *.allowedextension files will be included, which doesn't exist.
 		 From https://stackoverflow.com/a/2300049/3141917 -->
       .allowedextension
 	</AllowedReferenceRelatedFileExtensions>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
@@ -64,7 +65,7 @@
     <Compile Include="Modules\StudentScheduleModule.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Modules\TeacherScheduleModule.cs" />
-    <Compile Include="Modules\TestUserClassModule.cs" />
+    <Compile Include="Modules\UserClassModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="Services\CommandMatchingService.cs" />

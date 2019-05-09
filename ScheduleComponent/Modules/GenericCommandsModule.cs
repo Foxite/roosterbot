@@ -13,8 +13,8 @@ namespace ScheduleComponent.Modules {
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		
-		[Priority(10), Command("nu", RunMode = RunMode.Async), Summary("Wat er nu op het rooster staat.")]
-		public async Task GenericCurrentCommand([Remainder] string wat = "") {
+		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster")]
+		public async Task GenericCurrentCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -23,8 +23,8 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "nu");
 		}
 
-		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Wat er hierna op het rooster staat.")]
-		public async Task GenericNextCommand([Remainder] string wat = "") {
+		[Priority(10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		public async Task GenericNextCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -44,7 +44,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("morgen", RunMode = RunMode.Async), Summary("Wat er morgen op het rooster staat.")]
-		public async Task GenericTomorrowCommand([Remainder] string wat = "") {
+		public async Task GenericTomorrowCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;
@@ -54,7 +54,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(10), Command("vandaag", RunMode = RunMode.Async), Summary("Wat er vandaag op het rooster staat.")]
-		public async Task GenericTodayCommand([Remainder] string wat = "") {
+		public async Task GenericTodayCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben.");
 				return;

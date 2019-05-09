@@ -27,6 +27,12 @@ namespace WatsonComponent {
 		}
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
+			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
+				await Util.AddReaction(message, "❌");
+				await message.Channel.SendMessageAsync("Er kunnen geen extra regels of tabs in de input zitten.");
+				return;
+			}
+
 			await Task.Run(async () => {
 				string sessionId = null;
 				IDisposable typingState = null;

@@ -10,24 +10,32 @@ namespace MiscStuffComponent.Services {
 		}
 
 		public string GetCounterDescription(string counterName) {
-			if (File.Exists(Path.Combine(m_CounterFolder, counterName))) {
-				return File.ReadAllLines(Path.Combine(m_CounterFolder, counterName))[0];
-			} else {
-				throw new FileNotFoundException();
+			try {
+				if (File.Exists(Path.Combine(m_CounterFolder, counterName))) {
+					return File.ReadAllLines(Path.Combine(m_CounterFolder, counterName))[0];
+				} else {
+					throw new FileNotFoundException();
+				}
+			} catch (ArgumentException e) {
+				throw new FileNotFoundException("Counter is invalid", e);
 			}
 		}
 
 		public CounterData GetDateCounter(string counterName) {
-			string counterPath = Path.Combine(m_CounterFolder, counterName);
-			if (File.Exists(counterPath)) {
-				string[] contents = File.ReadAllLines(counterPath);
-				return new CounterData() {
-					Description = contents[0],
-					LastResetDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(contents[1])).UtcDateTime,
-					HighScoreTimespan = TimeSpan.FromSeconds(long.Parse(contents[2]))
-				};
-			} else {
-				throw new FileNotFoundException();
+			try {
+				string counterPath = Path.Combine(m_CounterFolder, counterName);
+				if (File.Exists(counterPath)) {
+					string[] contents = File.ReadAllLines(counterPath);
+					return new CounterData() {
+						Description = contents[0],
+						LastResetDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(contents[1])).UtcDateTime,
+						HighScoreTimespan = TimeSpan.FromSeconds(long.Parse(contents[2]))
+					};
+				} else {
+					throw new FileNotFoundException();
+				}
+			} catch (ArgumentException e) {
+				throw new FileNotFoundException("Counter is invalid", e);
 			}
 		}
 
