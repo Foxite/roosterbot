@@ -6,8 +6,10 @@ using Discord.Net;
 using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Services;
 
-namespace RoosterBot.Modules.Preconditions {
-	public class RequireBotManagerAttribute : PreconditionAttribute {
+namespace RoosterBot.Preconditions {
+	public class RequireBotManagerAttribute : RoosterPreconditionAttribute {
+		public override string Summary => "Vereist bot controle";
+
 		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
 			if (context.User.Id == services.GetService<ConfigService>().BotOwnerId) {
 				return PreconditionResult.FromSuccess();

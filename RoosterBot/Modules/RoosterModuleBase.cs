@@ -20,8 +20,7 @@ namespace RoosterBot.Modules {
 		protected override void BeforeExecute(CommandInfo command) {
 			LogTag = null;
 			foreach (Attribute attr in command.Module.Attributes) {
-				LogTagAttribute logTagAttribute;
-				if ((logTagAttribute = attr as LogTagAttribute) != null) {
+				if (attr is LogTagAttribute logTagAttribute) {
 					LogTag = logTagAttribute.LogTag;
 				}
 			}

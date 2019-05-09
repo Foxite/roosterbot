@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="ComponentBase.cs" />
     <Compile Include="Constants.gen.cs">
@@ -84,6 +85,7 @@
     <Compile Include="Modules\MetaCommandsModule.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
+    <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
     <Compile Include="Services\CommandEditService.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Modules\EditableCmdModuleBase.cs" />

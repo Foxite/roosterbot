@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Modules.Preconditions;
+using RoosterBot.Attributes;
+using RoosterBot.Preconditions;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
-	[Attributes.LogTag("MetaModule")]
+	[LogTag("MetaModule")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
 
@@ -37,7 +40,62 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("shutdown"), RequireBotManager]
+		[Command("commands")]
+		public async Task CommandListCommand(string welke = "") {
+			IEnumerable<CommandInfo> commands = CmdService.Commands;
+
+			if (!string.IsNullOrWhiteSpace(welke)) {
+				// Filter list
+				commands = commands.Where(command => command.Name.Contains(welke));
+			}
+
+			if (commands.Count() == 0) {
+				await ReplyAsync("Geen commands gevonden.");
+			} else {
+				IEnumerable<IGrouping<ModuleInfo, CommandInfo>> groupedCommands = commands.GroupBy(command => command.Module);
+
+				string response = "";
+				foreach (IGrouping<ModuleInfo, CommandInfo> group in groupedCommands) {
+					response += $"**{group.Key.Name}**: {group.Key.Summary}\n";
+					foreach (CommandInfo command in group) {
+						if (command.Attributes.Any(attr => attr.GetType() == typeof(HiddenFromListAttribute))) {
+							continue;
+						}
+
+						response += $"`{Config.CommandPrefix}{command.Name}";
+						foreach (ParameterInfo param in command.Parameters) {
+							response += $" {param.Name}{(param.IsOptional ? "(?)" : "")}";
+						}
+						response += $"`: {command.Summary}";
+
+						if (command.Preconditions.Count() != 0) {
+							string preconditionText = " (";
+							int preconditionsAdded = 0;
+
+							foreach (PreconditionAttribute pc in command.Preconditions) {
+								if (pc is RoosterPreconditionAttribute rpc) {
+									if (preconditionsAdded != 0) {
+										preconditionText += ", ";
+									}
+									preconditionText += rpc.Summary;
+									preconditionsAdded++;
+								}
+							}
+
+							if (preconditionsAdded != 0) {
+								response += preconditionText + ")";
+							}
+						}
+						response += "\n";
+					}
+					response += "\n";
+				}
+				response += "Parameters met een `(?)` zijn optioneel.";
+				await ReplyAsync(response);
+			}
+		}
+
+		[Command("shutdown"), RequireBotManager, HiddenFromList]
 		public Task ShutdownCommand() {
 			Log.Info("Shutting down");
 			Program.Instance.Shutdown();
