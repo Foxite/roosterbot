@@ -33,7 +33,7 @@ namespace ScheduleComponent.Modules {
 			await MatchCommand(wat, "hierna");
 		}
 
-		[Priority(10), Command("dag", RunMode = RunMode.Async), Summary("Het rooster voor een hele dag."), Remarks("Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]
+		[Priority(10), Command("dag", RunMode = RunMode.Async), Summary("Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]
 		public async Task GenericWeekdayCommand([Remainder] string wat_en_weekdag) {
 			if (string.IsNullOrWhiteSpace(wat_en_weekdag)) {
 				await MinorError("Ik moet een klas, lokaal of leraar hebben, en een weekdag.");
