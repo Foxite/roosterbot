@@ -13,11 +13,11 @@ namespace ScheduleComponent.Modules {
 		[Command("ik"), Summary("Kijk in welke klas jij zit, volgens mijn gegevens.")]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User)).DisplayText;
-			await ReplyAsync("Jij zit in " + clazz + ". Gebruik bijvoorbeeld `!ik 2gd1` om dit te veranderen.");
+			await ReplyAsync("Jij zit in " + clazz + ". Gebruik bijvoorbeeld `!ik <jouw klas>` om dit te veranderen.");
 		}
 		
 		[Command("ik"), Summary("Stel in in welke klas jij zit.")]
-		public async Task SetClassForUser([Name("klas")] string clazz) {
+		public async Task SetClassForUser([Name("jouw klas")] string clazz) {
 			try {
 				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
 				await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
