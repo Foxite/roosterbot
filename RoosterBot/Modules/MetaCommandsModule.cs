@@ -56,14 +56,22 @@ namespace RoosterBot.Modules {
 
 				string response = "";
 				foreach (IGrouping<ModuleInfo, CommandInfo> group in groupedCommands) {
+					if (group.Key.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
+						continue;
+					}
+
 					response += $"**{group.Key.Name}**: {group.Key.Summary}\n";
 					foreach (CommandInfo command in group) {
-						if (command.Attributes.Any(attr => attr.GetType() == typeof(HiddenFromListAttribute))) {
+						if (command.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 							continue;
 						}
 
 						response += $"`{Config.CommandPrefix}{command.Name}";
 						foreach (ParameterInfo param in command.Parameters) {
+							if (param.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
+								continue;
+							}
+
 							response += $" {param.Name}{(param.IsOptional ? "(?)" : "")}";
 						}
 						response += $"`: {command.Summary}";
