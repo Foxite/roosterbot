@@ -26,8 +26,8 @@ namespace RoosterBot.Modules {
 			}
 
 			if (LogTag == null) {
-				LogTag = "UnknownModule";
-				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to UnknownModule.");
+				LogTag = GetType().Name;
+				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
 			}
 
 			Log = new ModuleLoggerInternal(LogTag);
