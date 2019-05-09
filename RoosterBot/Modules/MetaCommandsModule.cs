@@ -7,12 +7,12 @@ using RoosterBot.Preconditions;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
-	[LogTag("MetaModule")]
+	[LogTag("MetaModule"), Name("Meta")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
 
-		[Command("help", RunMode = RunMode.Async)]
-		public async Task HelpCommand([Remainder] string section = "") {
+		[Command("help", RunMode = RunMode.Async), Summary("Uitleg over een onderdeel van de bot.")]
+		public async Task HelpCommand([Remainder, Summary("hoofdstuk"), Name("hoofdstuk")] string section = "") {
 			string response = "";
 
 			if (string.IsNullOrWhiteSpace(section)) {
@@ -40,13 +40,14 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("commands")]
-		public async Task CommandListCommand(string welke = "") {
+		[Command("commands"), Summary("Alle commands, of zoek op een command of categorie.")]
+		public async Task CommandListCommand([Summary("Een command of categorie"), Name("zoekterm")] string term = "") {
 			IEnumerable<CommandInfo> commands = CmdService.Commands;
-
-			if (!string.IsNullOrWhiteSpace(welke)) {
+			
+			if (!string.IsNullOrWhiteSpace(term)) {
 				// Filter list
-				commands = commands.Where(command => command.Name.Contains(welke));
+				term = term.ToLower();
+				commands = commands.Where(command => command.Name.ToLower().Contains(term) || command.Module.Name.ToLower().Contains(term));
 			}
 
 			if (commands.Count() == 0) {
