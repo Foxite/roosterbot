@@ -12,7 +12,7 @@ namespace RoosterBot.Modules {
 		public HelpService Help { get; set; }
 
 		[Command("help", RunMode = RunMode.Async), Summary("Uitleg over een onderdeel van de bot.")]
-		public async Task HelpCommand([Remainder, Summary("hoofdstuk"), Name("hoofdstuk")] string section = "") {
+		public async Task HelpCommand([Remainder, Name("hoofdstuk")] string section = "") {
 			string response = "";
 
 			if (string.IsNullOrWhiteSpace(section)) {
@@ -60,21 +60,22 @@ namespace RoosterBot.Modules {
 						continue;
 					}
 
-					response += $"**{group.Key.Name}**: {group.Key.Summary}\n";
+					string moduleResponse = $"**{group.Key.Name}**: {group.Key.Summary}\n";
+					int addedCommands = 0;
 					foreach (CommandInfo command in group) {
 						if (command.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 							continue;
 						}
 
-						response += $"`{Config.CommandPrefix}{command.Name}";
+						moduleResponse += $"`{Config.CommandPrefix}{command.Name}";
 						foreach (ParameterInfo param in command.Parameters) {
 							if (param.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 								continue;
 							}
 
-							response += $" {param.Name}{(param.IsOptional ? "(?)" : "")}";
+							moduleResponse += $" {param.Name}{(param.IsOptional ? "(?)" : "")}";
 						}
-						response += $"`: {command.Summary}";
+						moduleResponse += $"`: {command.Summary}";
 
 						if (command.Preconditions.Count() != 0) {
 							string preconditionText = " (";
@@ -94,9 +95,14 @@ namespace RoosterBot.Modules {
 								response += preconditionText + ")";
 							}
 						}
-						response += "\n";
+						moduleResponse += "\n";
+						addedCommands++;
 					}
-					response += "\n";
+					moduleResponse += "\n";
+
+					if (addedCommands != 0) {
+						response += moduleResponse;
+					}
 				}
 				response += "Parameters met een `(?)` zijn optioneel.";
 				await ReplyAsync(response);
