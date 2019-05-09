@@ -98,6 +98,11 @@ namespace RoosterBot.Modules {
 						moduleResponse += "\n";
 						addedCommands++;
 					}
+
+					if (!string.IsNullOrWhiteSpace(group.Key.Remarks)) {
+						moduleResponse += group.Key.Remarks + "\n";
+					}
+
 					moduleResponse += "\n";
 
 					if (addedCommands != 0) {
