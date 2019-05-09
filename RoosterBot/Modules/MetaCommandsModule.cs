@@ -73,7 +73,7 @@ namespace RoosterBot.Modules {
 								continue;
 							}
 
-							moduleResponse += $" {param.Name}{(param.IsOptional ? "(?)" : "")}";
+							moduleResponse += $" <{param.Name.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{(string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {param.Summary}")}>";
 						}
 						moduleResponse += $"`: {command.Summary}";
 
