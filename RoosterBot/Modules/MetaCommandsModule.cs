@@ -27,8 +27,7 @@ namespace RoosterBot.Modules {
 					response += helpSection;
 					notFirst = true;
 				}
-
-				response += "\n\nDit is versie " + Constants.VersionString + ".";
+				response += "\nJe kan ook `!commands` gebruiken om te alle commands te zien, of `!commands <filter>` gebruiken om te zoeken.\n\nDit is versie " + Constants.VersionString + ".";
 			} else {
 				if (Help.HelpSectionExists(section)) {
 					response += Help.GetHelpSection(section);
