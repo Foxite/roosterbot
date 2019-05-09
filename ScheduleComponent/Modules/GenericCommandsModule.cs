@@ -9,7 +9,7 @@ using RoosterBot.Attributes;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("GenericCommandsModule"), Name("Rooster"), Summary("Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt."),
-		Remarks("Je kan dit ook voor je command zetten: `!klas nu 2gd1`.\nMet `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.")]
+		Remarks("Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.")]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
 		
