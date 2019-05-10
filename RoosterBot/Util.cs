@@ -407,6 +407,9 @@ namespace RoosterBot {
 		public static ulong? ExtractIDFromMentionString(string search) {
 			int startIndex = search.IndexOf("<@");
 			if (startIndex != -1) {
+				if (search[startIndex + 2] == '!') {
+					startIndex++;
+				}
 				int endIndex = search.IndexOf(">", startIndex);
 				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
 			}
