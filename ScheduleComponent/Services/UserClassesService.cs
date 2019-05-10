@@ -17,8 +17,8 @@ namespace ScheduleComponent.Services {
 			m_Table = Table.LoadTable(m_Client, "roosterbot-userclasses");
 		}
 
-		public async Task<StudentSetInfo> GetClassForDiscordUser(IUser user) {
-			Document document = await m_Table.GetItemAsync(user.Id);
+		public async Task<StudentSetInfo> GetClassForDiscordUser(ulong userId) {
+			Document document = await m_Table.GetItemAsync(userId);
 			if (document != null) {
 				return new StudentSetInfo() { ClassName = document["class"].AsString() };
 			} else {
@@ -26,14 +26,18 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public async Task SetClassForDiscordUser(IUser user, string clazz) {
+		public Task<StudentSetInfo> GetClassForDiscordUser(IUser user) {
+			return GetClassForDiscordUser(user.Id);
+		}
+
+		public async Task SetClassForDiscordUser(ulong userId, string clazz) {
 			if (m_StudentSetRegex.IsMatch(clazz)) {
-				Document document = await m_Table.GetItemAsync(user.Id);
+				Document document = await m_Table.GetItemAsync(userId);
 				if (document is null) {
 					document = new Document(new Dictionary<string, DynamoDBEntry>() {
-					{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(user.Id) },
-					{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(clazz.ToUpper()) }
-				});
+						{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(userId) },
+						{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(clazz.ToUpper()) }
+					});
 					await m_Table.PutItemAsync(document);
 				} else {
 					document["class"] = clazz;
@@ -42,6 +46,10 @@ namespace ScheduleComponent.Services {
 			} else {
 				throw new ArgumentException(clazz + " is not a valid StudentSet.");
 			}
+		}
+
+		public Task SetClassForDiscordUser(IUser user, string clazz) {
+			return SetClassForDiscordUser(user.Id, clazz);
 		}
 	}
 }

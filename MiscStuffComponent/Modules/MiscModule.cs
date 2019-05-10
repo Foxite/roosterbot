@@ -19,7 +19,7 @@ namespace MiscStuffComponent.Modules {
 		}
 
 		[Command("test"), RequireBotManager, HiddenFromList]
-		public async Task TestCommand() {
+		public async Task TestCommand([Remainder] string ignored = "") {
 			await Context.Channel.SendMessageAsync("test ok");
 		}
 	}
