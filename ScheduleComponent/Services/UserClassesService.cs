@@ -19,7 +19,11 @@ namespace ScheduleComponent.Services {
 
 		public async Task<StudentSetInfo> GetClassForDiscordUser(IUser user) {
 			Document document = await m_Table.GetItemAsync(user.Id);
-			return new StudentSetInfo() { ClassName = document["class"].AsString() };
+			if (document != null) {
+				return new StudentSetInfo() { ClassName = document["class"].AsString() };
+			} else {
+				return null;
+			}
 		}
 
 		public async Task SetClassForDiscordUser(IUser user, string clazz) {
