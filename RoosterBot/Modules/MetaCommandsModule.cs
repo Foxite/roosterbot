@@ -58,12 +58,19 @@ namespace RoosterBot.Modules {
 				IEnumerable<IGrouping<ModuleInfo, CommandInfo>> groupedCommands = commands.GroupBy(command => command.Module);
 
 				string response = "";
+				Dictionary<string, string> moduleTexts = new Dictionary<string, string>();
 				foreach (IGrouping<ModuleInfo, CommandInfo> group in groupedCommands) {
 					if (group.Key.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 						continue;
 					}
 
-					string moduleResponse = $"**{group.Key.Name}**: {group.Key.Summary}\n";
+					string moduleResponse;
+					if (moduleTexts.ContainsKey(group.Key.Name)) {
+						moduleResponse = "";
+					} else {
+						moduleResponse = $"\n**{group.Key.Name}**: {group.Key.Summary}\n";
+					}
+
 					int addedCommands = 0;
 					foreach (CommandInfo command in group) {
 						if (command.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
@@ -106,12 +113,19 @@ namespace RoosterBot.Modules {
 						moduleResponse += group.Key.Remarks + "\n";
 					}
 
-					moduleResponse += "\n";
-
 					if (addedCommands != 0) {
-						response += moduleResponse;
+						if (moduleTexts.ContainsKey(group.Key.Name)) {
+							moduleTexts[group.Key.Name] += moduleResponse;
+						} else {
+							moduleTexts[group.Key.Name] = moduleResponse;
+						}
 					}
 				}
+
+				foreach (KeyValuePair<string, string> kvp in moduleTexts) {
+					response += kvp.Value;
+				}
+
 				response += "Parameters met een `(?)` zijn optioneel.";
 				await ReplyAsync(response);
 			}
