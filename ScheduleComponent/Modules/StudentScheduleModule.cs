@@ -11,9 +11,14 @@ namespace ScheduleComponent.Modules {
 	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
 		public async Task StudentCurrentCommand(string klas = "ik") {
-			StudentSetInfo info = await ResolveMeQuery(klas);
+			(StudentSetInfo, bool) meResult = await ResolveMeQuery(klas);
+			StudentSetInfo info = meResult.Item1;
 			if (info == null) {
-				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+				if (meResult.Item2) {
+					return;
+				} else {
+					info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+				}
 			}
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);
 			if (result.Success) {
@@ -50,9 +55,14 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Welke les een klas hierna heeft")]
 		public async Task StudentNextCommand(string klas = "ik") {
-			StudentSetInfo info = await ResolveMeQuery(klas);
+			(StudentSetInfo, bool) meResult = await ResolveMeQuery(klas);
+			StudentSetInfo info = meResult.Item1;
 			if (info == null) {
-				info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+				if (meResult.Item2) {
+					return;
+				} else {
+					info = new StudentSetInfo() { ClassName = klas.ToUpper() };
+				}
 			}
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, info);
 			if (result.Success) {
@@ -97,9 +107,14 @@ namespace ScheduleComponent.Modules {
 			if (arguments.Item1) {
 				DayOfWeek day = arguments.Item2;
 				string clazz = arguments.Item3;
-				StudentSetInfo info = await ResolveMeQuery(clazz);
+				(StudentSetInfo, bool) meResult = await ResolveMeQuery(clazz);
+				StudentSetInfo info = meResult.Item1;
 				if (info == null) {
-					info = new StudentSetInfo() { ClassName = clazz.ToUpper() };
+					if (meResult.Item2) {
+						return;
+					} else {
+						info = new StudentSetInfo() { ClassName = clazz.ToUpper() };
+					}
 				}
 				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, arguments.Item4);
 				if (result.Success) {
@@ -165,15 +180,29 @@ namespace ScheduleComponent.Modules {
 			await StudentWeekdayCommand(klas + " vandaag");
 		}
 		
-		protected async Task<StudentSetInfo> ResolveMeQuery(string input) {
+		/// <summary>
+		/// Resolves a query for a mentioned user or the user themselves.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns>1. The StudentSetInfo that was resolved (might be null), 2. If a user was mentioned or "ik" was used (no additional error response should be given if this Item1 is null)</returns>
+		protected async Task<(StudentSetInfo, bool)> ResolveMeQuery(string input) {
 			if (input == "ik") {
 				StudentSetInfo result = await Classes.GetClassForDiscordUser(Context.User);
 				if (result == null) {
 					ReplyDeferred("Ik weet niet in welke klas jij zit. Gebruik `!ik <jouw klas>` om dit in te stellen.");
 				}
-				return result;
+				return (result, true);
 			} else {
-				return null;
+				ulong? mentionedId = Util.ExtractIDFromMentionString(input, out int unused, out unused);
+				if (mentionedId.HasValue) {
+					StudentSetInfo result = await Classes.GetClassForDiscordUser(mentionedId.Value);
+					if (result != null) {
+						ReplyDeferred("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.");
+					}
+					return (result, true);
+				} else {
+					return (null, false);
+				}
 			}
 		}
 
