@@ -164,5 +164,18 @@ namespace ScheduleComponent.Modules {
 		public async Task StudentTodayCommand(string klas = "ik") {
 			await StudentWeekdayCommand(klas + " vandaag");
 		}
+		
+		protected async Task<StudentSetInfo> ResolveMeQuery(string input) {
+			if (input == "ik") {
+				StudentSetInfo result = await Classes.GetClassForDiscordUser(Context.User);
+				if (result == null) {
+					ReplyDeferred("Ik weet niet in welke klas jij zit. Gebruik `!ik <jouw klas>` om dit in te stellen.");
+				}
+				return result;
+			} else {
+				return null;
+			}
+		}
+
 	}
 }

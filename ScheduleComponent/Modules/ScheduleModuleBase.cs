@@ -239,14 +239,6 @@ namespace ScheduleComponent.Modules {
 			return new Tuple<bool, DayOfWeek, string, bool>(true, day, entry, today);
 		}
 
-		protected async Task<T> ResolveMeQuery(string input) {
-			if (input == "ik") {
-				return (T) (IdentifierInfo) await Classes.GetClassForDiscordUser(Context.User); // Ugly as fuck but this should never happen if it won't work
-			} else {
-				return null;
-			}
-		}
-		
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
