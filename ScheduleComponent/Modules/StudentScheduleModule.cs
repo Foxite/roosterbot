@@ -166,7 +166,11 @@ namespace ScheduleComponent.Modules {
 		
 		protected async Task<StudentSetInfo> ResolveMeQuery(string input) {
 			if (input == "ik") {
-				return await Classes.GetClassForDiscordUser(Context.User);
+				StudentSetInfo result = await Classes.GetClassForDiscordUser(Context.User);
+				if (result == null) {
+					ReplyDeferred("Ik weet niet in welke klas jij zit. Gebruik `!ik <jouw klas>` om dit in te stellen.");
+				}
+				return result;
 			} else {
 				return null;
 			}
