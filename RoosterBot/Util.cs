@@ -404,11 +404,10 @@ namespace RoosterBot {
 		/// <param name="startIndex">The index where the mention starts.</param>
 		/// <param name="endIndex">The index where the mention ends.</param>
 		/// <returns>The ID in the mention, or null if there is no valid mention.</returns>
-		public static ulong? ExtractIDFromMentionString(string search, out int startIndex, out int endIndex) {
-			endIndex = -1;
-			startIndex = search.IndexOf("<@");
+		public static ulong? ExtractIDFromMentionString(string search) {
+			int startIndex = search.IndexOf("<@");
 			if (startIndex != -1) {
-				endIndex = search.IndexOf(">", startIndex);
+				int endIndex = search.IndexOf(">", startIndex);
 				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
 			}
 			return null;

@@ -193,10 +193,10 @@ namespace ScheduleComponent.Modules {
 				}
 				return (result, true);
 			} else {
-				ulong? mentionedId = Util.ExtractIDFromMentionString(input, out int unused, out unused);
+				ulong? mentionedId = Util.ExtractIDFromMentionString(input);
 				if (mentionedId.HasValue) {
 					StudentSetInfo result = await Classes.GetClassForDiscordUser(mentionedId.Value);
-					if (result != null) {
+					if (result == null) {
 						ReplyDeferred("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.");
 					}
 					return (result, true);
