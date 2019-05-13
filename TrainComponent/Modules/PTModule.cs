@@ -13,7 +13,7 @@ namespace PublicTransitComponent.Modules {
 		public NSAPI NSAPI { get; set; }
 		public StationCodeService Stations { get; set; }
 
-		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations.")]
+		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
 		public async Task GetTrainRouteCommand([Remainder] string van_en_naar) {
 			string[] stops = van_en_naar.Split(',');
 			if (stops.Length < 1 || stops.Length > 2) {
