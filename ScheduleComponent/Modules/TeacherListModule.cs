@@ -11,7 +11,7 @@ namespace ScheduleComponent.Modules {
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is)")]
+		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.")]
 		public async Task TeacherListCommand([Remainder, Name("naam")] string name = "") {
 			IReadOnlyList<TeacherInfo> records;
 
