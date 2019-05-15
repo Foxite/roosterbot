@@ -147,8 +147,8 @@ namespace ScheduleComponent.Modules {
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
-						response += TableItemRoom(record);
 						response += TableItemStudentSets(record);
+						response += TableItemRoom(record);
 					}
 
 					response += TableItemStartEndTime(record);
@@ -178,8 +178,8 @@ namespace ScheduleComponent.Modules {
 
 			if (record.Activity != "stdag doc") {
 				if (record.Activity != "pauze") {
-					response += TableItemRoom(record);
 					response += TableItemStudentSets(record);
+					response += TableItemRoom(record);
 				}
 
 				response += TableItemStartEndTime(record);
