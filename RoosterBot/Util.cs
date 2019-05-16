@@ -108,6 +108,7 @@ namespace RoosterBot {
 			case "werkveld":
 			case "afstudeer":
 			case "rozosho":
+			case "twinstick":
 				return abbr.FirstCharToUpper();
 
 			case "Sinterklaas":
