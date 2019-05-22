@@ -5,6 +5,7 @@ using MiscStuffComponent.Services;
 using MiscStuffComponent.Modules;
 using System.IO;
 using System;
+using Discord.WebSocket;
 
 namespace MiscStuffComponent
 {
@@ -27,6 +28,13 @@ namespace MiscStuffComponent
 			helpText += "`counter reset <naam van counter>`\n";
 			helpText += "En nog minstens 4 geheime commands voor de bot owner.";
 			help.AddHelpSection("misc", helpText);
+
+			services.GetService<DiscordSocketClient>().MessageReceived += async (msg) => {
+				if (msg.Author.Id == 244147515375484928 // Kevin
+				 && msg.Content.Contains("snap")) {
+					await msg.Channel.SendMessageAsync("Ja Kevin, leuke pun.");
+				}
+			};
 		}
 	}
 }
