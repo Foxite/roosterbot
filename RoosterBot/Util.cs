@@ -115,7 +115,7 @@ namespace RoosterBot {
 				return abbr;
 
 			default:
-				return $"\"{abbr}\" (ik weet de volledige naam niet)";
+				return $"\"{abbr}\"";
 			}
 		}
 		
