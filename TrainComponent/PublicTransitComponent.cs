@@ -27,7 +27,7 @@ namespace PublicTransitComponent {
 			services.AddSingleton(new StationCodeService(Path.Combine(configPath, "stations.xml"), defaultDepartureCode));
 		}
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			commandService.AddModuleAsync<PTModule>(services);
+			commandService.AddModuleAsync<PTModule>(services).GetAwaiter().GetResult();
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";

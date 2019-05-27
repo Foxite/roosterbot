@@ -6,6 +6,7 @@ using MiscStuffComponent.Modules;
 using System.IO;
 using System;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace MiscStuffComponent
 {
@@ -20,8 +21,10 @@ namespace MiscStuffComponent
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			commandService.AddModuleAsync<CounterModule>(services);
-			commandService.AddModuleAsync<MiscModule>(services);
+			Task.WaitAll(
+				commandService.AddModuleAsync<CounterModule>(services),
+				commandService.AddModuleAsync<MiscModule>(services)
+			);
 
 			string helpText = "Voor de rest zijn er nog deze commands:\n";
 			helpText += "`counter <naam van counter>`\n";

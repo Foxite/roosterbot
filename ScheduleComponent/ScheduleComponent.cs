@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using RoosterBot;
 using RoosterBot.Services;
 using ScheduleComponent.Modules;
+using ScheduleComponent.Readers;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
@@ -54,15 +55,20 @@ namespace ScheduleComponent {
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			// TODO await all of these
-			commandService.AddModuleAsync<GenericCommandsModule>(services);
-			commandService.AddModuleAsync<ScheduleModuleBase<StudentSetInfo>>(services);
-			commandService.AddModuleAsync<StudentScheduleModule>(services);
-			commandService.AddModuleAsync<TeacherScheduleModule>(services);
-			commandService.AddModuleAsync<RoomScheduleModule>(services);
-			commandService.AddModuleAsync<TeacherListModule>(services);
-			commandService.AddModuleAsync<UserClassModule>(services);
-			
+			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
+			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
+			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
+			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
+
+			Task.WaitAll(
+				//commandService.AddModuleAsync<GenericCommandsModule>(services),
+				commandService.AddModuleAsync<ScheduleModuleBase<StudentSetInfo>>(services),
+				commandService.AddModuleAsync<StudentScheduleModule>(services),
+				commandService.AddModuleAsync<TeacherScheduleModule>(services),
+				commandService.AddModuleAsync<RoomScheduleModule>(services),
+				commandService.AddModuleAsync<TeacherListModule>(services),
+				commandService.AddModuleAsync<UserClassModule>(services)
+			);
 
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();

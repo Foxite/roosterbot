@@ -6,13 +6,15 @@ using ScheduleComponent.Services;
 using RoosterBot;
 using RoosterBot.Modules;
 using RoosterBot.Attributes;
+using System;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("GenericCommandsModule"), Name("Rooster"), Summary("Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt."),
 		Remarks("Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.")]
+	[Obsolete]
 	public class GenericCommandsModule : EditableCmdModuleBase {
 		public CommandMatchingService MatchingService { get; set; }
-		
+
 		[Priority(10), Command("nu", RunMode = RunMode.Async), Alias("rooster"), Summary("Kijk wat er nu op het rooster staat.")]
 		public async Task GenericCurrentCommand([Remainder] string wat = "ik") {
 			if (string.IsNullOrWhiteSpace(wat)) {
