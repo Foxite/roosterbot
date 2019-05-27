@@ -6,6 +6,7 @@ using MiscStuffComponent.Modules;
 using System.IO;
 using System;
 using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace MiscStuffComponent
 {
@@ -30,9 +31,13 @@ namespace MiscStuffComponent
 			help.AddHelpSection("misc", helpText);
 
 			services.GetService<DiscordSocketClient>().MessageReceived += async (msg) => {
-				if (msg.Author.Id == 244147515375484928 // Kevin
-				 && msg.Content.Contains("snap")) {
-					await msg.Channel.SendMessageAsync("Ja Kevin, leuke pun.");
+				Dictionary<ulong, string> usersByName = new Dictionary<ulong, string>() {
+					{ 244147515375484928, "Kevin" },
+					{ 368317619838779393, "Lars" }
+				};
+
+				if (usersByName.TryGetValue(msg.Author.Id, out string name) && msg.Content.Contains("snap")) {
+					await msg.Channel.SendMessageAsync($"Ja {name}, leuke pun.");
 				}
 			};
 		}
