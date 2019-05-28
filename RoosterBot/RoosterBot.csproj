@@ -76,7 +76,9 @@
   <ItemGroup>
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
+    <Compile Include="Attributes\PartOfComponentAttribute.cs" />
     <Compile Include="ComponentBase.cs" />
+    <Compile Include="ComponentException.cs" />
     <Compile Include="Constants.gen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
