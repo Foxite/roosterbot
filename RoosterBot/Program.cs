@@ -11,6 +11,7 @@ using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using RoosterBot.Attributes;
 using RoosterBot.Services;
 
 namespace RoosterBot {
@@ -24,6 +25,7 @@ namespace RoosterBot {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
+		private Dictionary<Type, ComponentBase> m_Components;
 
 		public event EventHandler ProgramStopping;
 
@@ -117,6 +119,7 @@ namespace RoosterBot {
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
 			m_Commands.Log += Logger.LogSync;
+			m_Commands.CommandExecuted += OnCommandExecuted;
 
 			HelpService helpService = new HelpService();
 
@@ -150,14 +153,14 @@ namespace RoosterBot {
 								 where assemblyType.IsSubclassOf(typeof(ComponentBase))
 								 select assemblyType).ToArray();
 
-			ComponentBase[] components = new ComponentBase[componentTypes.Length];
+			m_Components = new Dictionary<Type, ComponentBase>(componentTypes.Length);
 			// Create instances of these classes and call AddServices and then AddModules
 			for (int i = 0; i < componentTypes.Length; i++) {
-				Type type = (Type) componentTypes[i];
+				Type type = componentTypes[i];
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
-				components[i] = Activator.CreateInstance(type) as ComponentBase;
+				m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
+					m_Components[type].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
@@ -168,12 +171,12 @@ namespace RoosterBot {
 			
 			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
 
-			foreach (ComponentBase component in components) {
-				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + component.GetType().Name);
+			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
+				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + componentKVP.Key.Name);
 				try {
-					component.AddModules(m_Services, m_Commands, helpService);
+					componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
 				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + component.GetType().Name + " threw an exception during AddModules.", ex);
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex);
 					return;
 				}
 			}
@@ -256,13 +259,11 @@ namespace RoosterBot {
 
 		// This function is called by CommandEditService and the above function.
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
-			// Don't process the command if it was a System Message
+			// Don't process the command if it was a System Message or came from a bot
 			if (!(command is SocketUserMessage message) || message.Author.IsBot)
 				return;
-
-			// Create a number to track where the prefix ends and the command begins
+			
 			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!'
 			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				return;
 			}
@@ -271,30 +272,40 @@ namespace RoosterBot {
 				// Message looks like a command but it does not actually have a command
 				return;
 			}
-
-			// Create a Command Context
+			
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
-			// Execute the command. (result does not indicate a return value, 
-			// rather an object stating if the command executed successfully)
-			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
 
-			await HandleError(result, message, initialResponse);
+			await m_Commands.ExecuteAsync(context, argPos, m_Services);
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
-			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
-
-			await HandleError(result, message, initialResponse);
+			await m_Commands.ExecuteAsync(context, specificInput, m_Services);
 		}
+		
+		private async Task OnCommandExecuted(Optional<CommandInfo> commandInfo, ICommandContext context, IResult result) {
+			if (commandInfo.IsSpecified) {
+				// Get Type of the Module of the command, find its Component, and then consult its ErrorHandler.
+				PartOfComponentAttribute partOfComponent;
+				try {
+					partOfComponent = commandInfo.Value.Module.Attributes.OfType<PartOfComponentAttribute>().SingleOrDefault();
+				} catch (InvalidOperationException e) {
+					throw new ComponentException($"The command `{commandInfo.Value.GetCommandSignature()}` is in a module that has multiple PartOfComponent attributes.", e);
+				}
 
-		private async Task HandleError(IResult result, IUserMessage command, IUserMessage initialResponse = null) {
+				if (partOfComponent != null) {
+					bool componentHandlingSuccessful = m_Components[partOfComponent.ComponentType].HandleCommandError(commandInfo.Value, context, result);
+					if (componentHandlingSuccessful) {
+						return;
+					}
+				}
+			}
+
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
-				string badReport = $"\"{command.Content}\": ";
+				string badReport = $"\"{context.Message}\": ";
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
@@ -348,14 +359,15 @@ namespace RoosterBot {
 					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
 				}
 
+				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;
 				if (initialResponse == null) {
-					this.m_Commands.AddResponse(command, await command.Channel.SendMessageAsync(response));
+					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
 			}
 		}
-
+		
 		/// <summary>
 		/// Shuts down gracefully.
 		/// </summary>
