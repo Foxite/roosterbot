@@ -35,7 +35,7 @@ namespace ScheduleComponent.Modules {
 				ReplyDeferred(response, room, record);
 				
 				if (record?.Activity == "pauze") {
-					await GetAfterCommandFunction();
+					await GetAfterCommand();
 				}
 			}
 		}
@@ -70,7 +70,7 @@ namespace ScheduleComponent.Modules {
 					ReplyDeferred(response, room, record);
 					
 					if (record.Activity == "pauze") {
-						await GetAfterCommandFunction();
+						await GetAfterCommand();
 					}
 				}
 			}

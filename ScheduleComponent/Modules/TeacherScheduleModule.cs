@@ -146,7 +146,7 @@ namespace ScheduleComponent.Modules {
 			ReplyDeferred(response, teacher, record);
 
 			if (record?.Activity == "pauze") {
-				GetAfterCommandFunction().GetAwaiter().GetResult();
+				GetAfterCommand().GetAwaiter().GetResult();
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace ScheduleComponent.Modules {
 			ReplyDeferred(response, teacher, record);
 			
 			if (record.Activity == "pauze") {
-				GetAfterCommandFunction().GetAwaiter().GetResult();
+				GetAfterCommand().GetAwaiter().GetResult();
 			}
 		}
 
