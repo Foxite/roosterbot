@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
@@ -414,6 +415,40 @@ namespace RoosterBot {
 				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
 			}
 			return null;
+		}
+
+		private static string GetModuleSignature(this ModuleInfo module) {
+			string ret = module.Name;
+			if (!string.IsNullOrEmpty(module.Group)) {
+				ret = $"{module.Group} {ret}";
+			}
+
+			if (module.IsSubmodule) {
+				return $"{GetModuleSignature(module.Parent)} {ret}";
+			} else {
+				return ret;
+			}
+		}
+
+		public static string GetCommandSignature(this CommandInfo command) {
+			string ret = command.Name;
+
+			bool notFirst = false;
+			foreach (ParameterInfo param in command.Parameters) {
+				ret += param.Type.Name + " " + param.Name;
+				if (notFirst) {
+					ret += ", ";
+				}
+				notFirst = true;
+			}
+			
+			string moduleSig = command.Module.GetModuleSignature();
+			if (!string.IsNullOrEmpty(moduleSig)) {
+				ret = moduleSig + " " + ret;
+			}
+
+			return ret;
+			
 		}
 	}
 
