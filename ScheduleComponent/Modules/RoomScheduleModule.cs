@@ -9,8 +9,8 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent.Modules {
 	[LogTag("RoomSM"), HiddenFromList]
 	public class RoomScheduleModule : ScheduleModuleBase<RoomInfo> {
-		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
-		private async Task RoomCurrentCommand(RoomInfo room) {
+		[Command("nu", RunMode = RunMode.Async)]
+		public async Task RoomCurrentCommand(RoomInfo room) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -40,8 +40,8 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Wat er hierna in een lokaal plaatsvindt")]
-		private async Task RoomNextCommand(RoomInfo room) {
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		public async Task RoomNextCommand(RoomInfo room) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -76,22 +76,22 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
+		[Command("dag", RunMode = RunMode.Async)]
 		public async Task RoomWeekdayCommand(RoomInfo info, DayOfWeek day) {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
+		[Command("dag", RunMode = RunMode.Async)]
 		public async Task RoomWeekdayCommand(DayOfWeek day, RoomInfo info) {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
+		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task RoomTomorrowCommand(RoomInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("morgen"), false);
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async), Summary("Het rooster voor een lokaal voor vandaag")]
+		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task RoomTodayCommand(RoomInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}

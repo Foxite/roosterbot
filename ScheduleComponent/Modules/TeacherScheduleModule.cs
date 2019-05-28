@@ -9,7 +9,7 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent.Modules {
 	[LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase<TeacherInfo> {
-		[Command("nu", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar nu mee bezig is")]
+		[Command("nu", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherCurrentCommand(TeacherInfo[] teachers) {
 			if (teachers.Length > 1) {
 				await RespondTeacherMultiple(false, teachers);
@@ -24,7 +24,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 		
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1), Summary("Waar een leraar hierna mee bezig is")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
 		public async Task TeacherNextCommand(TeacherInfo[] teachers) {
 			if (teachers.Length > 1) { // There are multiple
 				await RespondTeacherMultiple(true, teachers);
@@ -42,22 +42,22 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar als eerste heeft op een dag")]
+		[Command("dag", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherWeekdayCommand(TeacherInfo[] teachers, DayOfWeek day) {
 			await RespondTeacherDay(teachers, day, false);
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar als eerste heeft op een dag")]
+		[Command("dag", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherWeekdayCommand(DayOfWeek day, TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Priority(1), Summary("Welke les een leraar morgen als eerste heeft")]
+		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherTomorrowCommand(TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("morgen"), false);
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async), Priority(1), Summary("Het rooster van vandaag van een leraar")]
+		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherTodayCommand(TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("vandaag"), true);
 		}

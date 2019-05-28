@@ -9,7 +9,7 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent.Modules {
 	[LogTag("StudentSM"), HiddenFromList]
 	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
-		[Command("nu", RunMode = RunMode.Async), Summary("Welke les een klas nu heeft")]
+		[Command("nu", RunMode = RunMode.Async)]
 		public async Task StudentCurrentCommand(StudentSetInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);
 			if (result.Success) {
@@ -44,7 +44,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Welke les een klas hierna heeft")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
 		public async Task StudentNextCommand(StudentSetInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(true, info);
 			if (result.Success) {
@@ -82,22 +82,22 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
+		[Command("dag", RunMode = RunMode.Async)]
 		public async Task StudentWeekdayCommand(StudentSetInfo info, DayOfWeek day) {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les je als eerste hebt op een dag")]
+		[Command("dag", RunMode = RunMode.Async)]
 		public async Task StudentWeekdayCommand(DayOfWeek day, StudentSetInfo info) {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les je morgen als eerste hebt")]
+		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task StudentTomorrowCommand(StudentSetInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async), Summary("Je rooster voor vandaag")]
+		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task StudentTodayCommand(StudentSetInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
