@@ -62,8 +62,8 @@ namespace ScheduleComponent {
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			Task.WaitAll(
-				//commandService.AddModuleAsync<GenericCommandsModule>(services),
-				commandService.AddModuleAsync<ScheduleModuleBase<StudentSetInfo>>(services),
+				commandService.AddModuleAsync<DefaultScheduleModule>(services),
+				commandService.AddModuleAsync<AfterScheduleModule>(services),
 				commandService.AddModuleAsync<StudentScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherScheduleModule>(services),
 				commandService.AddModuleAsync<RoomScheduleModule>(services),

@@ -59,7 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\GenericCommandsModule.cs" />
+    <Compile Include="Modules\AfterScheduleModule.cs" />
+    <Compile Include="Modules\DefaultScheduleModule.cs" />
     <Compile Include="Modules\RoomScheduleModule.cs" />
     <Compile Include="Modules\ScheduleModuleBase.cs" />
     <Compile Include="Modules\StudentScheduleModule.cs" />
