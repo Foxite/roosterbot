@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -51,7 +52,7 @@ namespace ScheduleComponent {
 
 			Task.WaitAll(concurrentLoading.ToArray());
 
-			Logger.Log(LogSeverity.Debug, "ScheduleComponent", "Started services");
+			Logger.Debug("ScheduleComponent", "Started services");
 		}
 
 		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {

@@ -119,7 +119,6 @@ namespace RoosterBot {
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
 			m_Commands.Log += Logger.LogSync;
-			m_Commands.CommandExecuted += OnCommandExecuted;
 
 			HelpService helpService = new HelpService();
 
@@ -275,33 +274,20 @@ namespace RoosterBot {
 			
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			await m_Commands.ExecuteAsync(context, argPos, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
+
+			await HandleError(context, result);
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			await m_Commands.ExecuteAsync(context, specificInput, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Services);
+
+			await HandleError(context, result);
 		}
 		
-		private async Task OnCommandExecuted(Optional<CommandInfo> commandInfo, ICommandContext context, IResult result) {
-			if (commandInfo.IsSpecified) {
-				// Get Type of the Module of the command, find its Component, and then consult its ErrorHandler.
-				PartOfComponentAttribute partOfComponent;
-				try {
-					partOfComponent = commandInfo.Value.Module.Attributes.OfType<PartOfComponentAttribute>().SingleOrDefault();
-				} catch (InvalidOperationException e) {
-					throw new ComponentException($"The command `{commandInfo.Value.GetCommandSignature()}` is in a module that has multiple PartOfComponent attributes.", e);
-				}
-
-				if (partOfComponent != null) {
-					bool componentHandlingSuccessful = m_Components[partOfComponent.ComponentType].HandleCommandError(commandInfo.Value, context, result);
-					if (componentHandlingSuccessful) {
-						return;
-					}
-				}
-			}
-
+		private async Task HandleError(ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;

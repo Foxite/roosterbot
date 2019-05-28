@@ -9,7 +9,7 @@ using RoosterBot;
 using RoosterBot.Attributes;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("ScheduleModuleBase"), PartOfComponent(typeof(ScheduleComponent)), Name("Rooster")]
+	[LogTag("ScheduleModuleBase"), Name("Rooster")]
 	public class ScheduleModuleBase<T> : EditableCmdModuleBase where T : IdentifierInfo {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
