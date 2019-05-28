@@ -7,7 +7,7 @@ using RoosterBot.Attributes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("TeacherSM"), HiddenFromList]
+	[LogTag("TeacherSM"), PartOfComponent(typeof(ScheduleComponent)), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase<TeacherInfo> {
 		[Command("nu", RunMode = RunMode.Async), Priority(1), Summary("Waar een leraar nu mee bezig is")]
 		public async Task TeacherCurrentCommand(TeacherInfo[] teachers) {

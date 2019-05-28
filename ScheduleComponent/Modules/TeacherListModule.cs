@@ -7,7 +7,7 @@ using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("TeacherListModule"), Name("Leraren")]
+	[LogTag("TeacherListModule"), PartOfComponent(typeof(ScheduleComponent)), Name("Leraren")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		

@@ -7,7 +7,7 @@ using RoosterBot.Attributes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("RoomSM"), HiddenFromList]
+	[LogTag("RoomSM"), PartOfComponent(typeof(ScheduleComponent)), HiddenFromList]
 	public class RoomScheduleModule : ScheduleModuleBase<RoomInfo> {
 		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
 		private async Task RoomCurrentCommand(RoomInfo room) {
