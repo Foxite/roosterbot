@@ -60,5 +60,10 @@ namespace ScheduleComponent.Modules {
 				await ReplyAsync(ErrorMessage);
 			}
 		}
+
+		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
+		public async Task AfterCommand() {
+			await ReplyAsync("Als je dit ziet is er een groot probleemm");
+		}
 	}
 }

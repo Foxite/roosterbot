@@ -5,9 +5,9 @@ using RoosterBot.Attributes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("AfterScheduleModule")]
+	[LogTag("AfterScheduleModule"), HiddenFromList]
 	public class AfterScheduleModule : ScheduleModuleBase {
-		[Command("daarna", RunMode = RunMode.Async), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
+		[Command("daarna", RunMode = RunMode.Async)]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
 				ReplyDeferred("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
