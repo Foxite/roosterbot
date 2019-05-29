@@ -128,10 +128,16 @@ namespace ScheduleComponent.Modules {
 					response += $"Over {weeksFromNow} weken";
 				}
 				response += " op school op \n";
+				
+				string[][] cells = new string[availability.Length + 1][];
+				cells[0] = new[] { "Dag", "Van", "Tot" };
 
+				int i = 1;
 				foreach (AvailabilityInfo item in availability) {
-					response += $" - {Util.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper()}: {item.StartOfAvailability.ToShortTimeString()} - {item.EndOfAvailability.ToShortTimeString()}\n";
+					cells[i] = new[] { Util.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+					i++;
 				}
+				response += Util.FormatTextTable(cells, false);
 			} else {
 				response += "Niet op school ";
 				if (weeksFromNow == 0) {
