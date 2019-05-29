@@ -73,7 +73,6 @@
     <Compile Include="Readers\StudentSetInfoReader.cs" />
     <Compile Include="Readers\TeacherInfoReader.cs" />
     <Compile Include="ScheduleComponent.cs" />
-    <Compile Include="Services\CommandMatchingService.cs" />
     <Compile Include="Services\UserClassesService.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
