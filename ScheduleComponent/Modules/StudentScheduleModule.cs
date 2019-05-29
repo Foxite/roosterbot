@@ -92,16 +92,16 @@ namespace ScheduleComponent.Modules {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async)]
-		public async Task StudentTomorrowCommand(StudentSetInfo info) {
-			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
-		}
-
 		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task StudentTodayCommand(StudentSetInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
-		
+
+		[Command("morgen", RunMode = RunMode.Async)]
+		public async Task StudentTomorrowCommand(StudentSetInfo info) {
+			await RespondDay(info, Util.GetDayOfWeekFromString("morgen"), true);
+		}
+
 		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(StudentSetInfo info) {
 			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);

@@ -51,16 +51,15 @@ namespace ScheduleComponent.Modules {
 			await RespondTeacherDay(teachers, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTomorrowCommand(TeacherInfo[] teachers) {
-			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("morgen"), false);
-		}
-
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherTodayCommand(TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
 
+		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
+		public async Task TeacherTomorrowCommand(TeacherInfo[] teachers) {
+			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("morgen"), false);
+		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(TeacherInfo[] teachers) {

@@ -86,14 +86,14 @@ namespace ScheduleComponent.Modules {
 			await RespondDay(info, day, false);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async)]
-		public async Task RoomTomorrowCommand(RoomInfo info) {
-			await RespondDay(info, Util.GetDayOfWeekFromString("morgen"), false);
-		}
-
 		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task RoomTodayCommand(RoomInfo info) {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
+		}
+
+		[Command("morgen", RunMode = RunMode.Async)]
+		public async Task RoomTomorrowCommand(RoomInfo info) {
+			await RespondDay(info, Util.GetDayOfWeekFromString("morgen"), false);
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
