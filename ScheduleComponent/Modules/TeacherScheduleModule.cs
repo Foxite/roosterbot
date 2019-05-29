@@ -19,7 +19,6 @@ namespace ScheduleComponent.Modules {
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					RespondTeacherCurrent(teachers[0], record);
-
 				}
 			}
 		}

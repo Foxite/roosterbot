@@ -11,7 +11,7 @@ namespace ScheduleComponent.Modules {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }
-		public ScheduleProvider AllSchedules { get; set; }
+		public ScheduleProvider Schedules { get; set; }
 		public UserClassesService Classes { get; set; }
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
