@@ -61,6 +61,24 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
+		[Priority(-10), Command("deze week", RunMode = RunMode.Async), Summary("Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "deze week ik", Context.Message);
+			} else {
+				await ReplyAsync(ErrorMessage);
+			}
+		}
+
+		[Priority(-10), Command("volgende week", RunMode = RunMode.Async), Summary("Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "volgende week ik", Context.Message);
+			} else {
+				await ReplyAsync(ErrorMessage);
+			}
+		}
+
 		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
 		public async Task AfterCommand() {
 			await ReplyAsync("Als je dit ziet is er een groot probleemm");

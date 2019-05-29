@@ -96,6 +96,50 @@ namespace ScheduleComponent.Modules {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
 
+		[Priority(-10), Command("deze week", RunMode = RunMode.Sync)]
+		public Task ShowThisWeekWorkingDaysCommand(RoomInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
+			RespondWorkingDays(info, days, 0);
+			return Task.CompletedTask;
+		}
+
+		[Priority(-10), Command("volgende week", RunMode = RunMode.Sync)]
+		public Task ShowNextWeekWorkingDaysCommand(RoomInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
+			RespondWorkingDays(info, days, 1);
+			return Task.CompletedTask;
+		}
+
+		private void RespondWorkingDays(RoomInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
+			string response = info.DisplayText + ": ";
+
+			if (availability.Length > 0) {
+				if (weeksFromNow == 0) {
+					response += "Deze week";
+				} else if (weeksFromNow == 1) {
+					response += "Volgende week";
+				} else {
+					response += $"Over {weeksFromNow} weken";
+				}
+				response += " op school op \n";
+
+				foreach (AvailabilityInfo item in availability) {
+					response += $" - {Util.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper()}: {item.StartOfAvailability.ToShortTimeString()} - {item.EndOfAvailability.ToShortTimeString()}\n";
+				}
+			} else {
+				response += "Niet in gebruik ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
+				}
+			}
+
+			ReplyDeferred(response);
+		}
+
 		private async Task RespondDay(RoomInfo info, DayOfWeek day, bool includeToday) {
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, includeToday);
 			if (result.Success) {

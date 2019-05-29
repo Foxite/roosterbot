@@ -180,6 +180,69 @@ namespace ScheduleComponent.Services {
 			}
 			return records.ToArray();
 		}
+
+		/// <summary>
+		/// Gets all the days in a week that have at least 1 record on those days.
+		/// </summary>
+		public AvailabilityInfo[] GetWeekAvailability(T identifier, int weeksFromNow = 0) {
+			DateTime targetFirstDate =
+				DateTime.Today
+				.AddDays(-(int) DateTime.Today.DayOfWeek) // First date in this week
+				.AddDays(7 * weeksFromNow); // First date in the week n weeks from now
+			DateTime targetLastDate = targetFirstDate.AddDays(4); // Friday
+
+			List<ScheduleRecord> weekRecords = new List<ScheduleRecord>();
+
+			foreach (ScheduleRecord record in m_Schedule) {
+				if (identifier.Matches(record)) {
+					if (record.Start.Date >= targetFirstDate) {
+						if (record.Start.Date > targetLastDate) {
+							break;
+						}
+						weekRecords.Add(record);
+					}
+				}
+
+				//if (!inSearchArea && record.Start.Date >= targetFirstDate) {
+				//	inSearchArea = true;
+				//}
+
+				//if (inSearchArea) {
+				//	if (identifier.Matches(record) && record.Start.DayOfWeek > checkingDay) {
+				//		checkingDay = record.Start.DayOfWeek;
+
+				//		sawDays.Add(checkingDay);
+
+				//		if (checkingDay == DayOfWeek.Saturday) {
+				//			break;
+				//		}
+				//	}
+				//	if (record.Start.Date > targetLastDate) {
+				//		break;
+				//	}
+				//}
+			}
+
+			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
+			var ret = new AvailabilityInfo[recordsByDay.Count()];
+			int i = 0;
+			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
+				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
+				i++;
+			}
+			
+			return ret;
+		}
+	}
+
+	public struct AvailabilityInfo {
+		public DateTime StartOfAvailability { get; }
+		public DateTime EndOfAvailability { get; }
+
+		public AvailabilityInfo(DateTime startOfAvailability, DateTime endOfAvailability) {
+			StartOfAvailability = startOfAvailability;
+			EndOfAvailability = endOfAvailability;
+		}
 	}
 
 	public abstract class IdentifierInfo {
