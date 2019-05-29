@@ -63,7 +63,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 
-		[Priority(-10), Command("deze week", RunMode = RunMode.Sync)]
+		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
 				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
@@ -72,7 +72,7 @@ namespace ScheduleComponent.Modules {
 			return Task.CompletedTask;
 		}
 
-		[Priority(-10), Command("volgende week", RunMode = RunMode.Sync)]
+		[Command("volgende week", RunMode = RunMode.Sync)]
 		public Task ShowNextWeekWorkingDaysCommand(TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
 				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);

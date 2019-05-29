@@ -102,14 +102,14 @@ namespace ScheduleComponent.Modules {
 			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
 		
-		[Priority(-10), Command("deze week", RunMode = RunMode.Sync)]
+		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(StudentSetInfo info) {
 			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
 			RespondWorkingDays(info, days, 0);
 			return Task.CompletedTask;
 		}
 
-		[Priority(-10), Command("volgende week", RunMode = RunMode.Sync)]
+		[Command("volgende week", RunMode = RunMode.Sync)]
 		public Task ShowNextWeekWorkingDaysCommand(StudentSetInfo info) {
 			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
 			RespondWorkingDays(info, days, 1);
