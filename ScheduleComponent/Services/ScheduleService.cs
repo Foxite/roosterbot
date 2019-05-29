@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Linq;
 
 namespace ScheduleComponent.Services {
-	public class ScheduleService<T> where T : IdentifierInfo {
+	public class ScheduleService {
 		private List<ScheduleRecord> m_Schedule;
 		private TeacherNameService m_Teachers;
 		private PropertyInfo m_SearchProperty;
@@ -35,8 +35,8 @@ namespace ScheduleComponent.Services {
 						await csv.ReadAsync();
 						csv.ReadHeader();
 
-						Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
-						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
+						Dictionary<IdentifierInfo, ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo, ScheduleRecord>();
+						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name);
 						while (await csv.ReadAsync()) {
 							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
 							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
@@ -59,7 +59,7 @@ namespace ScheduleComponent.Services {
 								End = end
 							};
 
-							string key = (string) identifier.GetValue(record);
+							IdentifierInfo key = (IdentifierInfo) identifier.GetValue(record);
 							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
 								record.Activity == lastRecord.Activity &&
 								record.Start.Date == lastRecord.Start.Date &&
@@ -84,7 +84,7 @@ namespace ScheduleComponent.Services {
 		}
 		
 		/// <returns>null if the class has no activity currently ongoing.</returns>
-		public ScheduleRecord GetCurrentRecord(T identifier) {
+		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
 			long ticksNow = DateTime.Now.Ticks;
 			bool sawRecordForClass = false;
 
@@ -105,7 +105,7 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord GetNextRecord(T identifier) {
+		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
 			long ticksNow = DateTime.Now.Ticks;
 			bool sawRecordForClass = false;
 
@@ -124,7 +124,7 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord GetRecordAfter(T identifier, ScheduleRecord givenRecord) {
+		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
 			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
 													 //  reuse the code from GetNextRecord().
 			bool sawRecordForClass = false;
@@ -144,7 +144,7 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
+		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
@@ -184,7 +184,7 @@ namespace ScheduleComponent.Services {
 		/// <summary>
 		/// Gets all the days in a week that have at least 1 record on those days.
 		/// </summary>
-		public AvailabilityInfo[] GetWeekAvailability(T identifier, int weeksFromNow = 0) {
+		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow = 0) {
 			DateTime targetFirstDate =
 				DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek) // First date in this week

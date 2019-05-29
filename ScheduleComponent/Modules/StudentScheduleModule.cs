@@ -8,7 +8,7 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("StudentSM"), HiddenFromList]
-	public class StudentScheduleModule : ScheduleModuleBase<StudentSetInfo> {
+	public class StudentScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task StudentCurrentCommand(StudentSetInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);

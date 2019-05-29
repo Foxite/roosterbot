@@ -32,9 +32,9 @@ namespace ScheduleComponent {
 			TeacherNameService teachers = new TeacherNameService();
 			teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")).GetAwaiter().GetResult();
 
-			ScheduleService<StudentSetInfo> schedStudents = new ScheduleService<StudentSetInfo>(teachers, "StudentSets");
-			ScheduleService<TeacherInfo>	schedTeachers = new ScheduleService<TeacherInfo>   (teachers, "StaffMember");
-			ScheduleService<RoomInfo>		schedRooms    = new ScheduleService<RoomInfo>	   (teachers, "Room");
+			ScheduleService schedStudents = new ScheduleService(teachers, "StudentSets");
+			ScheduleService schedTeachers = new ScheduleService(teachers, "StaffMember");
+			ScheduleService schedRooms    = new ScheduleService(teachers, "Room");
 			// Concurrently read schedules.
 			concurrentLoading.Add(schedStudents.ReadScheduleCSV(Path.Combine(configPath, schedules["StudentSets"])));
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
@@ -103,77 +103,45 @@ namespace ScheduleComponent {
 	}
 
 	public class ScheduleProvider {
-		private ScheduleService<StudentSetInfo> m_Students;
-		private ScheduleService<TeacherInfo> m_Teachers;
-		private ScheduleService<RoomInfo> m_Rooms;
+		private ScheduleService m_Students;
+		private ScheduleService m_Teachers;
+		private ScheduleService m_Rooms;
 
-		public ScheduleProvider(ScheduleService<StudentSetInfo> students, ScheduleService<TeacherInfo> teachers, ScheduleService<RoomInfo> rooms) {
+		public ScheduleProvider(ScheduleService students, ScheduleService teachers, ScheduleService rooms) {
 			m_Students = students;
 			m_Teachers = teachers;
 			m_Rooms = rooms;
 		}
 
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetCurrentRecord((StudentSetInfo) identifier);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetCurrentRecord((TeacherInfo) identifier);
-			case ScheduleType.Room:
-				return m_Rooms.GetCurrentRecord((RoomInfo) identifier);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
+			return GetScheduleType(identifier).GetCurrentRecord((StudentSetInfo) identifier);
 		}
 
 		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetNextRecord((StudentSetInfo) identifier);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetNextRecord((TeacherInfo) identifier);
-			case ScheduleType.Room:
-				return m_Rooms.GetNextRecord((RoomInfo) identifier);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
+			return GetScheduleType(identifier).GetNextRecord((StudentSetInfo) identifier);
 		}
 
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetRecordAfter((StudentSetInfo) identifier, givenRecord);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetRecordAfter((TeacherInfo) identifier, givenRecord);
-			case ScheduleType.Room:
-				return m_Rooms.GetRecordAfter((RoomInfo) identifier, givenRecord);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
+			return GetScheduleType(identifier).GetRecordAfter((StudentSetInfo) identifier, givenRecord);
 		}
 
 		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
-			switch (GetScheduleType(identifier)) {
-			case ScheduleType.StudentSets:
-				return m_Students.GetSchedulesForDay((StudentSetInfo) identifier, day, includeToday);
-			case ScheduleType.StaffMember:
-				return m_Teachers.GetSchedulesForDay((TeacherInfo) identifier, day, includeToday);
-			case ScheduleType.Room:
-				return m_Rooms.GetSchedulesForDay((RoomInfo) identifier, day, includeToday);
-			default:
-				throw new ArgumentException("Identifier type " + identifier.GetType().Name + " is not known to ScheduleProvider (B - shouldn't have happened)");
-			}
+			return GetScheduleType(identifier).GetSchedulesForDay((StudentSetInfo) identifier, day, includeToday);
 		}
 
-		private ScheduleType GetScheduleType(IdentifierInfo info) {
+		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
+			return GetScheduleType(identifier).GetWeekAvailability(identifier, weeksFromNow);
+		}
+
+		private ScheduleService GetScheduleType(IdentifierInfo info) {
 			if (info is StudentSetInfo) {
-				return ScheduleType.StudentSets;
+				return m_Students;
 			} else if (info is TeacherInfo) {
-				return ScheduleType.StaffMember;
+				return m_Teachers;
 			} else if (info is RoomInfo) {
-				return ScheduleType.Room;
+				return m_Rooms;
 			} else {
-				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider (A)");
+				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
 		}
 

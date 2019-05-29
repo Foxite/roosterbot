@@ -8,7 +8,7 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("TeacherSM"), HiddenFromList]
-	public class TeacherScheduleModule : ScheduleModuleBase<TeacherInfo> {
+	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherCurrentCommand(TeacherInfo[] teachers) {
 			if (teachers.Length > 1) {

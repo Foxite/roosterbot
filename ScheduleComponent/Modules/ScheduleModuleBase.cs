@@ -114,12 +114,8 @@ namespace ScheduleComponent.Modules {
 		protected async Task GetAfterCommand() {
 			await Program.Instance.ExecuteSpecificCommand(null, "!daarna", Context.Message);
 		}
-	}
 
-	public class ScheduleModuleBase<T> : ScheduleModuleBase where T : IdentifierInfo {
-		public ScheduleService<T> Schedules { get; set; }
-
-		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, T identifier) {
+		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, IdentifierInfo identifier) {
 			ScheduleRecord record = null;
 			try {
 				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
@@ -143,7 +139,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(T identifier, DayOfWeek day, bool includeToday) {
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
 			try {
 				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
 				return new ReturnValue<ScheduleRecord[]>() {
