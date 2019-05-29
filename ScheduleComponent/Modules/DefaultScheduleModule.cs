@@ -13,8 +13,6 @@ namespace ScheduleComponent.Modules {
 	public class DefaultScheduleModule : EditableCmdModuleBase {
 		private const string ErrorMessage = "Ik weet niet of je het over een leraar, klas of lokaal hebt.";
 
-		public CommandMatchingService MatchingService { get; set; }
-
 		[Priority(-10), Command("nu", RunMode = RunMode.Sync), Alias("rooster"), Summary("Kijk wat er nu op het rooster staat.")]
 		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
 			await ReplyAsync(ErrorMessage);

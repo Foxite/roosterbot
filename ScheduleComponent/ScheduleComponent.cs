@@ -47,7 +47,6 @@ namespace ScheduleComponent {
 				.AddSingleton(schedTeachers)
 				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new CommandMatchingService(teachers))
 				.AddSingleton(new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>()));
 
 			Task.WaitAll(concurrentLoading.ToArray());
