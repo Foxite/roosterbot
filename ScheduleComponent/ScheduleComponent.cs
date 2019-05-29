@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
@@ -15,9 +12,6 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
-		private DiscordSocketClient m_Client;
-		private ConfigService m_Config;
-
 		public override void AddServices(ref IServiceCollection services, string configPath) {
 			List<Task> concurrentLoading = new List<Task>();
 
@@ -69,9 +63,6 @@ namespace ScheduleComponent {
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
 			);
-
-			m_Config = services.GetService<ConfigService>();
-			m_Client = services.GetService<DiscordSocketClient>();
 
 			string helpText = "Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.\n";
 			helpText += "Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.\n";
