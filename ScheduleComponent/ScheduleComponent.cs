@@ -105,19 +105,19 @@ namespace ScheduleComponent {
 		}
 
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetCurrentRecord((StudentSetInfo) identifier);
+			return GetScheduleType(identifier).GetCurrentRecord(identifier);
 		}
 
 		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetNextRecord((StudentSetInfo) identifier);
+			return GetScheduleType(identifier).GetNextRecord(identifier);
 		}
 
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			return GetScheduleType(identifier).GetRecordAfter((StudentSetInfo) identifier, givenRecord);
+			return GetScheduleType(identifier).GetRecordAfter(identifier, givenRecord);
 		}
 
 		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
-			return GetScheduleType(identifier).GetSchedulesForDay((StudentSetInfo) identifier, day, includeToday);
+			return GetScheduleType(identifier).GetSchedulesForDay(identifier, day, includeToday);
 		}
 
 		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {

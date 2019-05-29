@@ -35,7 +35,7 @@ namespace ScheduleComponent.Services {
 						await csv.ReadAsync();
 						csv.ReadHeader();
 
-						Dictionary<IdentifierInfo, ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo, ScheduleRecord>();
+						Dictionary<IdentifierInfo[], ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo[], ScheduleRecord>();
 						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name);
 						while (await csv.ReadAsync()) {
 							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
@@ -59,7 +59,7 @@ namespace ScheduleComponent.Services {
 								End = end
 							};
 
-							IdentifierInfo key = (IdentifierInfo) identifier.GetValue(record);
+							IdentifierInfo[] key = (IdentifierInfo[]) identifier.GetValue(record);
 							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
 								record.Activity == lastRecord.Activity &&
 								record.Start.Date == lastRecord.Start.Date &&
