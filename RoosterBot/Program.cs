@@ -11,7 +11,6 @@ using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Attributes;
 using RoosterBot.Services;
 
 namespace RoosterBot {
@@ -112,10 +111,10 @@ namespace RoosterBot {
 					return Task.CompletedTask;
 				};
 
-#if !DEBUG
-				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
-				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
-#endif
+				if (m_ConfigService.ReportStartupVersionToOwner) {
+					IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
+					await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
+				}
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
