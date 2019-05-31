@@ -10,7 +10,7 @@ namespace ScheduleComponent.Modules {
 	[LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherCurrentCommand(TeacherInfo[] teachers) {
+		public async Task TeacherCurrentCommand([Remainder] TeacherInfo[] teachers) {
 			if (teachers.Length > 1) {
 				await RespondTeacherMultiple(false, teachers);
 				LSCService.RemoveLastQuery(Context.User);
@@ -24,7 +24,7 @@ namespace ScheduleComponent.Modules {
 		}
 		
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
-		public async Task TeacherNextCommand(TeacherInfo[] teachers) {
+		public async Task TeacherNextCommand([Remainder] TeacherInfo[] teachers) {
 			if (teachers.Length > 1) { // There are multiple
 				await RespondTeacherMultiple(true, teachers);
 				LSCService.RemoveLastQuery(Context.User);
@@ -47,22 +47,22 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("dag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherWeekdayCommand(DayOfWeek day, TeacherInfo[] teachers) {
+		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, day, false);
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTodayCommand(TeacherInfo[] teachers) {
+		public async Task TeacherTodayCommand([Remainder] TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("vandaag"), true);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTomorrowCommand(TeacherInfo[] teachers) {
+		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo[] teachers) {
 			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("morgen"), false);
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public Task ShowThisWeekWorkingDaysCommand(TeacherInfo[] teachers) {
+		public Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
 				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
 				RespondWorkingDays(info, days, 0);
@@ -71,7 +71,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public Task ShowNextWeekWorkingDaysCommand(TeacherInfo[] teachers) {
+		public Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
 				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
 				RespondWorkingDays(info, days, 1);
@@ -232,7 +232,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		private async Task RespondTeacherMultiple(bool next, params TeacherInfo[] teachers) {
+		private async Task RespondTeacherMultiple(bool next, TeacherInfo[] teachers) {
 			ReturnValue<ScheduleRecord>[] results = new ReturnValue<ScheduleRecord>[teachers.Length];
 			for (int i = 0; i < results.Length; i++) {
 				results[i] = await GetRecord(next, teachers[i]);
