@@ -5,7 +5,6 @@ using Discord;
 using ScheduleComponent.Services;
 using RoosterBot.Modules;
 using RoosterBot;
-using RoosterBot.Attributes;
 
 namespace ScheduleComponent.Modules {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
