@@ -302,11 +302,10 @@ namespace RoosterBot {
 						response = "Dat zijn te veel of te weinig parameters.";
 						break;
 					case CommandError.UnmetPrecondition:
-						response += result.ErrorReason;
+						response = result.ErrorReason;
 						break;
 					case CommandError.ParseFailed:
-						badReport += "ParseFailed";
-						bad = true;
+						response = "Ik begrijp de parameter(s) niet.";
 						break;
 					case CommandError.ObjectNotFound:
 						badReport += "ObjectNotFound";
