@@ -42,7 +42,8 @@ namespace RoosterBot {
 			try {
 				Instance = new Program();
 				Instance.MainAsync().GetAwaiter().GetResult();
-			} catch {
+			} catch (Exception e) {
+				Logger.Log(LogSeverity.Critical, "Program", "Application has crashed.", e);
 				return 2;
 			} finally {
 				File.Delete(indicatorPath);
