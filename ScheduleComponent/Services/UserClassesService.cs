@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System;
+using RoosterBot;
 
 namespace ScheduleComponent.Services {
 	public class UserClassesService {
@@ -15,6 +16,10 @@ namespace ScheduleComponent.Services {
 		public UserClassesService(string keyId, string secretKey) {
 			m_Client = new AmazonDynamoDBClient(keyId, secretKey, Amazon.RegionEndpoint.EUWest1);
 			m_Table = Table.LoadTable(m_Client, "roosterbot-userclasses");
+
+			Program.Instance.ProgramStopping += (o, e) => {
+				m_Client.Dispose();
+			};
 		}
 
 		public async Task<StudentSetInfo> GetClassForDiscordUser(ulong userId) {
