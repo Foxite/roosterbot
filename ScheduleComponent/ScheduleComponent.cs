@@ -13,7 +13,12 @@ using ScheduleComponent.Services;
 
 namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
-		public override void AddServices(ref IServiceCollection services, string configPath) {
+		private UserClassesService m_UserClasses;
+
+		public async override Task AddServices(IServiceCollection services, string configPath) {
+			TeacherNameService teachers = new TeacherNameService();
+			Task teacherLoading = teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv"));
+
 			List<Task> concurrentLoading = new List<Task>();
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -23,39 +28,36 @@ namespace ScheduleComponent {
 			foreach (KeyValuePair<string, JToken> token in scheduleContainer) {
 				schedules.Add(token.Key, token.Value.ToObject<string>());
 			}
-			
-			TeacherNameService teachers = new TeacherNameService();
-			teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv")).GetAwaiter().GetResult();
 
-			ScheduleService schedStudents = new ScheduleService(teachers, "StudentSets");
-			ScheduleService schedTeachers = new ScheduleService(teachers, "StaffMember");
-			ScheduleService schedRooms    = new ScheduleService(teachers, "Room");
+			await teacherLoading;
+
+			ScheduleService schedStudents = new ScheduleService(teachers, nameof(ScheduleRecord.StudentSets));
+			ScheduleService schedTeachers = new ScheduleService(teachers, nameof(ScheduleRecord.StaffMember));
+			ScheduleService schedRooms    = new ScheduleService(teachers, nameof(ScheduleRecord.Room));
 			// Concurrently read schedules.
 			concurrentLoading.Add(schedStudents.ReadScheduleCSV(Path.Combine(configPath, schedules["StudentSets"])));
 			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
 			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
 
+			m_UserClasses = new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>());
 			services
 				.AddSingleton(teachers)
 				.AddSingleton(new ScheduleProvider(schedStudents, schedTeachers, schedRooms))
-				.AddSingleton(schedStudents)
-				.AddSingleton(schedTeachers)
-				.AddSingleton(schedRooms)
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>()));
+				.AddSingleton(m_UserClasses);
 
-			Task.WaitAll(concurrentLoading.ToArray());
+			await Task.WhenAll(concurrentLoading);
 
 			Logger.Debug("ScheduleComponent", "Started services");
 		}
 
-		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
 			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
 			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
 			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
-			Task.WaitAll(
+			await Task.WhenAll(
 				commandService.AddModuleAsync<DefaultScheduleModule>(services),
 				commandService.AddModuleAsync<AfterScheduleModule>(services),
 				commandService.AddModuleAsync<StudentScheduleModule>(services),
@@ -91,6 +93,11 @@ namespace ScheduleComponent {
 				" (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)\n\n";
 			helpText += "Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`";
 			help.AddHelpSection("klas", helpText);
+		}
+
+		public override Task OnShutdown() {
+			m_UserClasses.Dispose();
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -9,7 +9,7 @@ using RoosterBot;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
-	public class UserClassesService {
+	public class UserClassesService : IDisposable {
 		private AmazonDynamoDBClient m_Client;
 		private Regex m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 		private Table m_Table;
@@ -17,10 +17,6 @@ namespace ScheduleComponent.Services {
 		public UserClassesService(string keyId, string secretKey) {
 			m_Client = new AmazonDynamoDBClient(keyId, secretKey, Amazon.RegionEndpoint.EUWest1);
 			m_Table = Table.LoadTable(m_Client, "roosterbot-userclasses");
-
-			Program.Instance.ProgramStopping += (o, e) => {
-				m_Client.Dispose();
-			};
 		}
 
 		public async Task<StudentSetInfo> GetClassForDiscordUser(ulong userId) {
@@ -57,5 +53,23 @@ namespace ScheduleComponent.Services {
 		public Task SetClassForDiscordUser(IUser user, string clazz) {
 			return SetClassForDiscordUser(user.Id, clazz);
 		}
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing) {
+			if (!disposedValue) {
+				if (disposing) {
+					m_Client.Dispose();
+				}
+
+				disposedValue = true;
+			}
+		}
+		
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
 	}
 }
