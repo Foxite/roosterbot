@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Text.RegularExpressions;
 using Discord;
 using RoosterBot;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Readers {
 	public class StudentSetInfoReader : TypeReader {

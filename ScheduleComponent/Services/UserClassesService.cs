@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System;
 using RoosterBot;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class UserClassesService {

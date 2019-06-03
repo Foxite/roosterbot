@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using RoosterBot;
 using System.Reflection;
 using System.Linq;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleService {
@@ -232,102 +233,6 @@ namespace ScheduleComponent.Services {
 			}
 			
 			return ret;
-		}
-	}
-
-	public struct AvailabilityInfo {
-		public DateTime StartOfAvailability { get; }
-		public DateTime EndOfAvailability { get; }
-
-		public AvailabilityInfo(DateTime startOfAvailability, DateTime endOfAvailability) {
-			StartOfAvailability = startOfAvailability;
-			EndOfAvailability = endOfAvailability;
-		}
-	}
-
-	public abstract class IdentifierInfo {
-		public abstract string ScheduleField { get; }
-		public abstract string ScheduleCode { get; }
-		public abstract string DisplayText { get; }
-
-		public abstract bool Matches(ScheduleRecord info);
-
-		public override bool Equals(object other) {
-			IdentifierInfo otherInfo = other as IdentifierInfo;
-			if (other == null)
-				return false;
-
-			return otherInfo.ScheduleCode == ScheduleCode
-				&& otherInfo.ScheduleField == ScheduleField;
-		}
-
-		public override int GetHashCode() {
-			return 53717137 + EqualityComparer<string>.Default.GetHashCode(ScheduleCode);
-		}
-
-		public static bool operator ==(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (lhs is null != rhs is null)
-				return false;
-			if (lhs is null && rhs is null)
-				return true;
-
-			return lhs.ScheduleCode == rhs.ScheduleCode
-				&& lhs.ScheduleField == rhs.ScheduleField;
-		}
-
-		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
-			if (lhs is null != rhs is null)
-				return true;
-			if (lhs is null && rhs is null)
-				return false;
-
-			return lhs.ScheduleCode != rhs.ScheduleCode
-				|| lhs.ScheduleField != rhs.ScheduleField;
-		}
-	}
-
-	public class StudentSetInfo : IdentifierInfo {
-		public string ClassName { get; set; }
-
-		public override bool Matches(ScheduleRecord record) {
-			return record.StudentSets.Contains(this);
-		}
-		
-		public override string ScheduleField => "StudentSets";
-		public override string ScheduleCode => ClassName;
-		public override string DisplayText => ClassName;
-	}
-
-	public class RoomInfo : IdentifierInfo {
-		public string Room { get; set; }
-
-		public override bool Matches(ScheduleRecord record) {
-			return record.Room.Contains(this);
-		}
-		
-		public override string ScheduleField => "Room";
-		public override string ScheduleCode => Room;
-		public override string DisplayText => Room;
-	}
-
-	public class ScheduleRecord {
-		public string			Activity { get; set; }
-		public DateTime			Start { get; set; }
-		public DateTime			End { get; set; }
-		public StudentSetInfo[]	StudentSets { get; set; }
-		public TeacherInfo[]	StaffMember { get; set; }
-		public RoomInfo[]		Room { get; set; }
-		public DateTime?		BreakStart { get; set; }
-		public DateTime?		BreakEnd { get; set; }
-		
-		public TimeSpan			Duration => End - Start;
-		public string			StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ClassName));
-		public string			StaffMemberString => string.Join(", ", StaffMember.Select(info => info.Abbreviation));
-		public string			RoomString => string.Join(", ", Room.Select(info => info.Room));
-
-		public override string ToString() {
-			return $"{StudentSetsString}: {Activity} in {RoomString} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
-				$"{(BreakStart.HasValue ? "no break" : ("a break from " + BreakStart.Value.ToString() + " to " + BreakEnd.Value.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 	}
 

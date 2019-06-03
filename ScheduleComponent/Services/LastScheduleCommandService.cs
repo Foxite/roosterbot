@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
+using ScheduleComponent.DataTypes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {

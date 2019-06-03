@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
 using RoosterBot.Services;
+using ScheduleComponent.DataTypes;
 using ScheduleComponent.Modules;
 using ScheduleComponent.Readers;
 using ScheduleComponent.Services;
