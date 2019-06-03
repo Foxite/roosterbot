@@ -26,8 +26,6 @@ namespace RoosterBot {
 		private IServiceProvider m_Services;
 		private Dictionary<Type, ComponentBase> m_Components;
 
-		public event EventHandler ProgramStopping;
-
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
 
@@ -153,32 +151,39 @@ namespace RoosterBot {
 									 select assemblyType).ToArray();
 
 			m_Components = new Dictionary<Type, ComponentBase>(componentTypes.Length);
+			Task[] servicesLoading = new Task[componentTypes.Length];
 			// Create instances of these classes and call AddServices and then AddModules
 			for (int i = 0; i < componentTypes.Length; i++) {
 				Type type = componentTypes[i];
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
 				m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					m_Components[type].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
+					servicesLoading[i] = m_Components[type].AddServices(serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
 				}
 			}
+			await Task.WhenAll(servicesLoading);
 
 			m_Services = serviceCollection.BuildServiceProvider();
 
-			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
+			Task[] modulesLoading = new Task[componentTypes.Length + 1];
+			modulesLoading[0] = m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
 
+			int moduleIndex = 1;
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
 				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + componentKVP.Key.Name);
 				try {
-					componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
+					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex);
 					return;
 				}
+				moduleIndex++;
 			}
+
+			await Task.WhenAll(modulesLoading);
 			#endregion Start components
 
 			#region Connect to Discord
@@ -203,7 +208,7 @@ namespace RoosterBot {
 
 				do {
 					keepRunning = true;
-					Task.WaitAny(new Task[] {
+					await Task.WhenAny(new Task[] {
 						Task.Delay(500).ContinueWith((t) => {
 							// Ctrl-Q pressed by user
 							if (Console.KeyAvailable) {
@@ -244,8 +249,10 @@ namespace RoosterBot {
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
-			ProgramStopping?.Invoke(this, null);
-
+			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
+				await componentKVP.Value.OnShutdown();
+			}
+			
 			m_State = ProgramState.BotStopped;
 			#endregion Quit code
 		}
