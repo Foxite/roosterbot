@@ -6,10 +6,14 @@ using PublicTransitComponent.Modules;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace PublicTransitComponent {
 	public class PublicTransitComponent : ComponentBase {
-		public override void AddServices(ref IServiceCollection services, string configPath) {
+		private NSAPI m_NSAPI;
+
+		public override Task AddServices(IServiceCollection services, string configPath) {
 			#region Config
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
@@ -18,16 +22,15 @@ namespace PublicTransitComponent {
 			string defaultDepartureCode = jsonConfig["defaultDepartureCode"].ToObject<string>();
 			#endregion Config
 
-			HTTPClient http = new HTTPClient();
-			XmlRestApi xml = new XmlRestApi(http.Client, "http://webservices.ns.nl/ns-api-", username, password);
-
-			//services.AddSingleton(http);
-			//services.AddSingleton(xml);
-			services.AddSingleton(new NSAPI(xml));
+			m_NSAPI = new NSAPI(username, password);
+			services.AddSingleton(m_NSAPI);
 			services.AddSingleton(new StationCodeService(Path.Combine(configPath, "stations.xml"), defaultDepartureCode));
+
+			return Task.CompletedTask;
 		}
-		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			commandService.AddModuleAsync<PTModule>(services).GetAwaiter().GetResult();
+
+		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+			await commandService.AddModuleAsync<PTModule>(services);
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";
@@ -38,6 +41,12 @@ namespace PublicTransitComponent {
 
 			helpText += "Je kunt stations opzoeken met `!stations <naam van station>`";
 			help.AddHelpSection("trein", helpText);
+		}
+
+		public override Task OnShutdown() {
+			m_NSAPI.Dispose();
+
+			return Task.CompletedTask;
 		}
 	}
 }

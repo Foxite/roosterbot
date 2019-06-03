@@ -7,13 +7,13 @@ using System.Xml;
 using PublicTransitComponent.DataTypes;
 
 namespace PublicTransitComponent.Services {
-	public class NSAPI {
+	public class NSAPI : IDisposable {
 		// Documentation: https://www.ns.nl/en/travel-information/ns-api/
 		private XmlRestApi m_RestApi;
 		private Regex m_DelayRegex;
 
-		public NSAPI(XmlRestApi restApi) {
-			m_RestApi = restApi;
+		public NSAPI(string username, string password) {
+			m_RestApi = new XmlRestApi("http://webservices.ns.nl/ns-api-", username, password);
 			m_DelayRegex = new Regex("[0-9]+");
 		}
 
@@ -30,18 +30,18 @@ namespace PublicTransitComponent.Services {
 			for (int i = 0; i < amount; i++) {
 				XmlNode xmlJourney = xmlOptions[i];
 
-				Func<string, int> parseDeparture = (input) => {
+				int parseDelay(string input) {
 					if (input == null) {
 						return 0;
 					}
-					Match depDelayMatch = m_DelayRegex.Match(input);
-					if (depDelayMatch.Success) {
-						var result = depDelayMatch.Value;
+					Match delayMatch = m_DelayRegex.Match(input);
+					if (delayMatch.Success) {
+						var result = delayMatch.Value;
 						return int.Parse(result);
 					} else {
 						throw new XmlException("Departure delay is not valid: " + input);
 					}
-				};
+				}
 
 				journeys[i] = new Journey() {
 					Transfers = int.Parse(xmlJourney["AantalOverstappen"].InnerText),
@@ -51,8 +51,8 @@ namespace PublicTransitComponent.Services {
 					ActualDepartureTime = DateTime.Parse(xmlJourney["ActueleVertrekTijd"].InnerText),
 					PlannedArrivalTime = DateTime.Parse(xmlJourney["GeplandeAankomstTijd"].InnerText),
 					ActualArrivalTime = DateTime.Parse(xmlJourney["ActueleAankomstTijd"].InnerText),
-					DepartureDelayMinutes = parseDeparture(xmlJourney["VertrekVertraging"]?.InnerText),
-					ArrivalDelayMinutes = parseDeparture(xmlJourney["AankomstVertraging"]?.InnerText),
+					DepartureDelayMinutes = parseDelay(xmlJourney["VertrekVertraging"]?.InnerText),
+					ArrivalDelayMinutes = parseDelay(xmlJourney["AankomstVertraging"]?.InnerText),
 					Status = JourneyStatusFunctions.JStatusFromString(xmlJourney["Status"].InnerText)
 				};
 
@@ -61,17 +61,17 @@ namespace PublicTransitComponent.Services {
 				foreach (XmlNode xmlComponent in xmlComponents) {
 					XmlNodeList xmlStops = xmlComponent.SelectNodes("ReisStop");
 
-					Func<XmlNode, JourneyStop> parseJourneyStop = (xmlStop) => {
+					JourneyStop parseJourneyStop(XmlNode xmlStop) {
 						XmlNode xmlStopPlatform = xmlStop["Spoor"];
 						return new JourneyStop() {
 							Location = xmlStop["Naam"].InnerText,
 							Platform = xmlStopPlatform.InnerText,
 							PlatformModified = bool.Parse((xmlStopPlatform.Attributes["wijziging"]?.InnerText) ?? "false"),
 							Time = DateTime.Parse(xmlStop["Tijd"].InnerText),
-							DelayMinutes = parseDeparture(xmlStop["VertrekVertraging"]?.InnerText)
+							DelayMinutes = parseDelay(xmlStop["VertrekVertraging"]?.InnerText)
 						};
-					};
-					
+					}
+
 					JourneyComponent component = new JourneyComponent() {
 						Carrier = xmlComponent["Vervoerder"].InnerText,
 						TransportType = xmlComponent["VervoerType"].InnerText,
@@ -85,5 +85,26 @@ namespace PublicTransitComponent.Services {
 			}
 			return journeys;
 		}
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing) {
+			if (!disposedValue) {
+				if (disposing) {
+					m_RestApi.Dispose();
+					m_RestApi = null;
+				}
+
+				m_DelayRegex = null;
+
+				disposedValue = true;
+			}
+		}
+		
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
 	}
 }
