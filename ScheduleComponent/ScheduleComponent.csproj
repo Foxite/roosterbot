@@ -80,6 +80,7 @@
     <Compile Include="Readers\TeacherInfoReader.cs" />
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="ScheduleUtil.cs" />
+    <Compile Include="Services\ScheduleProvider.cs" />
     <Compile Include="Services\UserClassesService.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
