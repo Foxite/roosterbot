@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
-using ScheduleComponent.Services;
 using RoosterBot.Modules;
 using RoosterBot.Attributes;
 using RoosterBot;
@@ -35,7 +34,7 @@ namespace ScheduleComponent.Modules {
 
 		[Priority(-9), Command("dag", RunMode = RunMode.Sync), HiddenFromList]
 		public async Task DefaultWeekdayCommand(DayOfWeek day) {
-			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "dag ik " + Util.GetStringFromDayOfWeek(day), Context.Message);
+			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "dag ik " + ScheduleUtil.GetStringFromDayOfWeek(day), Context.Message);
 		}
 
 		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]

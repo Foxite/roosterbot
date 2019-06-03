@@ -14,7 +14,7 @@ namespace ScheduleComponent.Modules {
 		public UserClassesService Classes { get; set; }
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
-			string ret = $":notepad_spiral: {Util.GetActivityFromAbbr(record.Activity)}";
+			string ret = $":notepad_spiral: {ScheduleUtil.GetActivityFromAbbr(record.Activity)}";
 			if (isFirstRecord && record.Activity == "pauze") {
 				ret += " :thinking:";
 			}
@@ -54,7 +54,7 @@ namespace ScheduleComponent.Modules {
 			string ret = "";
 
 			if (record.Start.Date != DateTime.Today) {
-				ret += $":calendar_spiral: {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToString("dd-MM-yyyy")}\n" + ret;
+				ret += $":calendar_spiral: {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToString("dd-MM-yyyy")}\n" + ret;
 			}
 
 			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";

@@ -53,12 +53,12 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherTodayCommand([Remainder] TeacherInfo[] teachers) {
-			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("vandaag"), true);
+			await RespondTeacherDay(teachers, ScheduleUtil.GetDayOfWeekFromString("vandaag"), true);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo[] teachers) {
-			await RespondTeacherDay(teachers, Util.GetDayOfWeekFromString("morgen"), false);
+			await RespondTeacherDay(teachers, ScheduleUtil.GetDayOfWeekFromString("morgen"), false);
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
@@ -97,7 +97,7 @@ namespace ScheduleComponent.Modules {
 
 				int i = 1;
 				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { Util.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
 					i++;
 				}
 				response += Util.FormatTextTable(cells, false);
@@ -128,7 +128,7 @@ namespace ScheduleComponent.Modules {
 						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
 							response += "voor morgen";
 						} else {
-							response += "op " + Util.GetStringFromDayOfWeek(day);
+							response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
 						}
 						response += "\n";
 
@@ -157,7 +157,7 @@ namespace ScheduleComponent.Modules {
 						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
 							response += "morgen";
 						} else {
-							response += "op " + Util.GetStringFromDayOfWeek(day);
+							response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
 						}
 						response += " niets heeft.";
 						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
@@ -210,7 +210,7 @@ namespace ScheduleComponent.Modules {
 			if (isToday) {
 				response = $"{teacher.DisplayText}: Hierna\n";
 			} else {
-				response = $"{teacher.DisplayText}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+				response = $"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 			}
 
 			response += TableItemActivity(record, !isToday);

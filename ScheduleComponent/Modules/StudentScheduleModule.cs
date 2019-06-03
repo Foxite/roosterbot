@@ -58,7 +58,7 @@ namespace ScheduleComponent.Modules {
 					if (isToday) {
 						response = $"{record.StudentSetsString}: Hierna\n";
 					} else {
-						response = $"{record.StudentSetsString}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						response = $"{record.StudentSetsString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
 					
 					response += TableItemActivity(record, false);
@@ -94,12 +94,12 @@ namespace ScheduleComponent.Modules {
 
 		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task StudentTodayCommand(StudentSetInfo info) {
-			await RespondDay(info, Util.GetDayOfWeekFromString("vandaag"), true);
+			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("vandaag"), true);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task StudentTomorrowCommand(StudentSetInfo info) {
-			await RespondDay(info, Util.GetDayOfWeekFromString("morgen"), true);
+			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("morgen"), true);
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
@@ -134,7 +134,7 @@ namespace ScheduleComponent.Modules {
 
 				int i = 1;
 				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { Util.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
 					i++;
 				}
 				response += Util.FormatTextTable(cells, false);
@@ -166,7 +166,7 @@ namespace ScheduleComponent.Modules {
 					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
 						response += "morgen";
 					} else {
-						response += "op " + Util.GetStringFromDayOfWeek(day);
+						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
 					}
 
 					response += " niets hebt.";
@@ -181,7 +181,7 @@ namespace ScheduleComponent.Modules {
 					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
 						response += "voor morgen";
 					} else {
-						response += "op " + Util.GetStringFromDayOfWeek(day);
+						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
 					}
 					response += "\n";
 
