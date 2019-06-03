@@ -134,7 +134,7 @@ namespace ScheduleComponent.Modules {
 				ret += $":calendar_spiral: {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToString("dd-MM-yyyy")}\n" + ret;
 			}
 
-			ret += $":clock5: {record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+			ret += $":clock5: {record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 			if (record.Start.Date == DateTime.Today && record.Start > DateTime.Now) {
 				TimeSpan timeTillStart = record.Start - DateTime.Now;
 				ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
@@ -154,7 +154,7 @@ namespace ScheduleComponent.Modules {
 
 		protected string TableItemBreak(ScheduleRecord record) {
 			if (record.BreakStart.HasValue) {
-				return $":coffee: {record.BreakStart.Value.ToShortTimeString()} - {record.BreakEnd.Value.ToShortTimeString()}\n";
+				return $":coffee: {record.BreakStart.Value.ToString("HH:mm")} - {record.BreakEnd.Value.ToString("HH:mm")}\n";
 			} else {
 				return "";
 			}
