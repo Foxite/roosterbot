@@ -1,5 +1,5 @@
-﻿using ScheduleComponent.DataTypes;
-using System;
+﻿using System;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleProvider {

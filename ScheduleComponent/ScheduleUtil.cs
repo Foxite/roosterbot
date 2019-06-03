@@ -1,5 +1,5 @@
-﻿using RoosterBot;
-using System;
+﻿using System;
+using RoosterBot;
 
 namespace ScheduleComponent {
 	public static class ScheduleUtil {

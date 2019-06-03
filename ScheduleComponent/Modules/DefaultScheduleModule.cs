@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Modules;
-using RoosterBot.Attributes;
 using RoosterBot;
-using System;
+using RoosterBot.Attributes;
+using RoosterBot.Modules;
 
 namespace ScheduleComponent.Modules {
 	// Provides several "virtual" commands that don't do anything useful, but serve as a single list item for 3 different "versions" of each command
@@ -80,7 +80,7 @@ namespace ScheduleComponent.Modules {
 
 		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
 		public async Task AfterCommand() {
-			await ReplyAsync("Als je dit ziet is er een groot probleemm");
+			await ReplyAsync("Als je dit ziet is er een groot probleem");
 		}
 	}
 }

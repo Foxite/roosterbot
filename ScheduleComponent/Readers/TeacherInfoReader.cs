@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
-using ScheduleComponent.Services;
 using Microsoft.Extensions.DependencyInjection;
 using ScheduleComponent.DataTypes;
+using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Readers {
 	public class TeacherInfoReader : TypeReader {

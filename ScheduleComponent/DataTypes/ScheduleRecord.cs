@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 namespace ScheduleComponent.DataTypes {
 	public class ScheduleRecord {
 		public string Activity { get; set; }

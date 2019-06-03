@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Discord.Commands;
-using ScheduleComponent.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using RoosterBot;
 using ScheduleComponent.DataTypes;
+using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Readers {
 	public class StudentSetInfoReader : TypeReader {

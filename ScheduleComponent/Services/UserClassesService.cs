@@ -1,10 +1,10 @@
-﻿using Discord;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DocumentModel;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System;
+using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DocumentModel;
+using Discord;
 using RoosterBot;
 using ScheduleComponent.DataTypes;
 

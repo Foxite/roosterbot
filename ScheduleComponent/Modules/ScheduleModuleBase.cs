@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using ScheduleComponent.Services;
-using RoosterBot.Modules;
 using RoosterBot;
+using RoosterBot.Modules;
 using ScheduleComponent.DataTypes;
+using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	public class ScheduleModuleBase : EditableCmdModuleBase {

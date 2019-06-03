@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using CsvHelper;
-using System.Runtime.Serialization;
 using RoosterBot;
-using System.Reflection;
-using System.Linq;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
@@ -203,25 +203,6 @@ namespace ScheduleComponent.Services {
 						weekRecords.Add(record);
 					}
 				}
-
-				//if (!inSearchArea && record.Start.Date >= targetFirstDate) {
-				//	inSearchArea = true;
-				//}
-
-				//if (inSearchArea) {
-				//	if (identifier.Matches(record) && record.Start.DayOfWeek > checkingDay) {
-				//		checkingDay = record.Start.DayOfWeek;
-
-				//		sawDays.Add(checkingDay);
-
-				//		if (checkingDay == DayOfWeek.Saturday) {
-				//			break;
-				//		}
-				//	}
-				//	if (record.Start.Date > targetLastDate) {
-				//		break;
-				//	}
-				//}
 			}
 
 			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);

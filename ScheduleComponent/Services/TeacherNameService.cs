@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using RoosterBot;
@@ -9,14 +8,7 @@ using ScheduleComponent.DataTypes;
 namespace ScheduleComponent.Services {
 	public class TeacherNameService {
 		private List<TeacherInfo> m_Records = new List<TeacherInfo>();
-
-		/// <summary>
-		/// Clears all records.
-		/// </summary>
-		public void Reset() {
-			m_Records.Clear();
-		}
-
+		
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
@@ -87,7 +79,7 @@ namespace ScheduleComponent.Services {
 		}
 		
 		public IReadOnlyList<TeacherInfo> GetAllRecords() {
-			return m_Records as IReadOnlyList<TeacherInfo>;
+			return m_Records;
 		}
 	}
 }
