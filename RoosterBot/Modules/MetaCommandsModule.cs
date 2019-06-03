@@ -30,7 +30,7 @@ namespace RoosterBot.Modules {
 
 			await ReplyAsync(response);
 		}
-		
+
 		[Command("help"), Summary("Uitleg over een onderdeel van de bot.")]
 		public async Task HelpCommand([Remainder, Name("hoofdstuk")] string section) {
 			string response = "";
@@ -45,7 +45,7 @@ namespace RoosterBot.Modules {
 		[Command("commands"), Summary("Alle commands, of zoek op een command of categorie.")]
 		public async Task CommandListCommand([Name("zoekterm")] string term = "") {
 			IEnumerable<CommandInfo> commands = CmdService.Commands;
-			
+
 			if (!string.IsNullOrWhiteSpace(term)) {
 				// Filter list
 				term = term.ToLower();

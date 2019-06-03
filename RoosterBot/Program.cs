@@ -30,7 +30,7 @@ namespace RoosterBot {
 
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
-			
+
 			if (File.Exists(indicatorPath)) {
 				Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
 				return 1;
@@ -53,7 +53,7 @@ namespace RoosterBot {
 		private async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 			m_State = ProgramState.BeforeStart;
-			
+
 			#region Load config
 			if (!Directory.Exists(DataPath)) {
 				Logger.Log(LogSeverity.Critical, "Main", "Data folder did not exist.");
@@ -133,7 +133,7 @@ namespace RoosterBot {
 
 			#region Start components
 			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
-			
+
 			// Locate DLL files from a txt file
 			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
 			List<Assembly> assemblies = new List<Assembly>();
@@ -148,9 +148,9 @@ namespace RoosterBot {
 
 			// Look for children of ComponentBase in the loaded assemblies
 			Type[] componentTypes = (from domainAssembly in assemblies
-								 from assemblyType in domainAssembly.GetExportedTypes()
-								 where assemblyType.IsSubclassOf(typeof(ComponentBase))
-								 select assemblyType).ToArray();
+									 from assemblyType in domainAssembly.GetExportedTypes()
+									 where assemblyType.IsSubclassOf(typeof(ComponentBase))
+									 select assemblyType).ToArray();
 
 			m_Components = new Dictionary<Type, ComponentBase>(componentTypes.Length);
 			// Create instances of these classes and call AddServices and then AddModules
@@ -167,7 +167,7 @@ namespace RoosterBot {
 			}
 
 			m_Services = serviceCollection.BuildServiceProvider();
-			
+
 			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
 
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
@@ -231,7 +231,6 @@ namespace RoosterBot {
 										keepRunning = false;
 									}
 								}
-								
 							}
 						})
 					});
@@ -241,7 +240,7 @@ namespace RoosterBot {
 			cts.Cancel();
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-			
+
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
@@ -261,7 +260,7 @@ namespace RoosterBot {
 			// Don't process the command if it was a System Message or came from a bot
 			if (!(command is SocketUserMessage message) || message.Author.IsBot)
 				return;
-			
+
 			int argPos = 0;
 			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				return;
@@ -271,7 +270,7 @@ namespace RoosterBot {
 				// Message looks like a command but it does not actually have a command
 				return;
 			}
-			
+
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
 			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
@@ -286,7 +285,7 @@ namespace RoosterBot {
 
 			await HandleError(context, result);
 		}
-		
+
 		private async Task HandleError(ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
@@ -295,39 +294,39 @@ namespace RoosterBot {
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
-					case CommandError.UnknownCommand:
-						response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
-						break;
-					case CommandError.BadArgCount:
-						response = "Dat zijn te veel of te weinig parameters.";
-						break;
-					case CommandError.UnmetPrecondition:
-						response = result.ErrorReason;
-						break;
-					case CommandError.ParseFailed:
-						response = "Ik begrijp de parameter(s) niet.";
-						break;
-					case CommandError.ObjectNotFound:
-						badReport += "ObjectNotFound";
-						bad = true;
-						break;
-					case CommandError.MultipleMatches:
-						badReport += "MultipleMatches";
-						bad = true;
-						break;
-					case CommandError.Exception:
-						badReport += "Exception\n";
-						badReport += result.ErrorReason;
-						bad = true;
-						break;
-					case CommandError.Unsuccessful:
-						badReport += "Unsuccessful";
-						bad = true;
-						break;
-					default:
-						badReport += "Unknown error: " + result.Error.Value;
-						bad = true;
-						break;
+						case CommandError.UnknownCommand:
+							response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
+							break;
+						case CommandError.BadArgCount:
+							response = "Dat zijn te veel of te weinig parameters.";
+							break;
+						case CommandError.UnmetPrecondition:
+							response = result.ErrorReason;
+							break;
+						case CommandError.ParseFailed:
+							response = "Ik begrijp de parameter(s) niet.";
+							break;
+						case CommandError.ObjectNotFound:
+							badReport += "ObjectNotFound";
+							bad = true;
+							break;
+						case CommandError.MultipleMatches:
+							badReport += "MultipleMatches";
+							bad = true;
+							break;
+						case CommandError.Exception:
+							badReport += "Exception\n";
+							badReport += result.ErrorReason;
+							bad = true;
+							break;
+						case CommandError.Unsuccessful:
+							badReport += "Unsuccessful";
+							bad = true;
+							break;
+						default:
+							badReport += "Unknown error: " + result.Error.Value;
+							bad = true;
+							break;
 					}
 				} else {
 					badReport += "No error reason";
@@ -352,7 +351,7 @@ namespace RoosterBot {
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Shuts down gracefully.
 		/// </summary>

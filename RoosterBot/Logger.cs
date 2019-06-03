@@ -11,7 +11,7 @@ namespace RoosterBot {
 		static Logger() {
 			LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 			Lock = new object();
-			
+
 			// Keep the log from the previous launch as ".old.log"
 			if (File.Exists(LogPath + ".log")) {
 				if (File.Exists(LogPath + ".old.log")) {
@@ -52,7 +52,7 @@ namespace RoosterBot {
 		public static void Log(LogSeverity sev, string tag, string msg, Exception ex = null) {
 			Log(new LogMessage(sev, tag, msg, ex));
 		}
-		
+
 		public static void Log(LogMessage msg) {
 			string loggedMessage = DateTime.Now + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
 			if (msg.Exception != null) {

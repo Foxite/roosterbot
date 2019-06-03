@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
-using Amazon.SimpleNotificationService.Model;
 
 namespace RoosterBot.Services {
 	// Note to self: The reason this class is not internal is because Discord.NET needs to inject this into EditableCmdModuleBase.
@@ -14,7 +13,7 @@ namespace RoosterBot.Services {
 		internal SNSService(ConfigService config) {
 #if !DEBUG
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(Amazon.RegionEndpoint.EUWest3);
-			
+
 			m_ConfigService = config;
 			Program.Instance.ProgramStopping += (o, e) => { Dispose(); };
 #endif
@@ -24,7 +23,7 @@ namespace RoosterBot.Services {
 		internal async Task SendCriticalErrorNotificationAsync(string message) {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (async)");
 			try {
-				await this.m_SNSClient.PublishAsync(m_ConfigService.SNSCriticalFailureARN, message);
+				await m_SNSClient.PublishAsync(m_ConfigService.SNSCriticalFailureARN, message);
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (async)", ex);
 			}
@@ -33,7 +32,7 @@ namespace RoosterBot.Services {
 		internal void SendCriticalErrorNotification(string message) {
 			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (sync)");
 			try {
-				this.m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
+				m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (sync)", ex);
 			}
@@ -72,6 +71,6 @@ namespace RoosterBot.Services {
 			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
 			Dispose(true);
 		}
-#endregion
+		#endregion
 	}
 }

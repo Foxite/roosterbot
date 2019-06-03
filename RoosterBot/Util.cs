@@ -36,12 +36,12 @@ namespace RoosterBot {
 		/// From https://stackoverflow.com/a/4405876/3141917
 		public static string FirstCharToUpper(this string input) {
 			switch (input) {
-			case null:
-				throw new ArgumentNullException(nameof(input));
-			case "":
-				throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-			default:
-				return input.First().ToString().ToUpper() + input.Substring(1);
+				case null:
+					throw new ArgumentNullException(nameof(input));
+				case "":
+					throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+				default:
+					return input.First().ToString().ToUpper() + input.Substring(1);
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace RoosterBot {
 		/// <returns>A string that you can send directly into a chat message.</returns>
 		public static string FormatTextTable(string[][] table, bool includeHeaderSeperation) {
 			int[] columnWidths = new int[table[0].Length];
-			
+
 			for (int column = 0; column < table[0].Length; column++) {
 				columnWidths[column] = 1;
 				for (int row = 0; row < table.Length; row++) {
@@ -306,14 +306,13 @@ namespace RoosterBot {
 				}
 				notFirst = true;
 			}
-			
+
 			string moduleSig = command.Module.GetModuleSignature();
 			if (!string.IsNullOrEmpty(moduleSig)) {
 				ret = moduleSig + " " + ret;
 			}
 
 			return ret;
-			
 		}
 	}
 
