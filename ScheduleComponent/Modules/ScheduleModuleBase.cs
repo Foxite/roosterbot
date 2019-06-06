@@ -99,6 +99,10 @@ namespace ScheduleComponent.Modules {
 		}
 		
 		protected string TableItemStaffMember(ScheduleRecord record) {
+			if (record.StaffMember.Length == 1 && record.StaffMember[0].IsUnknown) {
+				return $":bust_in_silhouette: Onbekende leraar met afkorting {record.StaffMember[0].Abbreviation}\n";
+			}
+
 			string teachers = string.Join(", ", record.StaffMember.Select(teacher => teacher.DisplayText));
 			if (string.IsNullOrWhiteSpace(teachers)) {
 				return "";

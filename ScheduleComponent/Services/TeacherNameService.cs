@@ -63,6 +63,13 @@ namespace ScheduleComponent.Services {
 				TeacherInfo record = GetRecordFromAbbr(abbrs[i]);
 				if (record != null) {
 					records.Add(record);
+				} else {
+					records.Add(new TeacherInfo() {
+						IsUnknown = true,
+						Abbreviation = abbrs[i],
+						FullName = '"' + abbrs[i] + '"',
+						NoLookup = true
+					});
 				}
 			}
 			return records.ToArray();
@@ -91,6 +98,7 @@ namespace ScheduleComponent.Services {
 	}
 
 	public class TeacherInfo : IdentifierInfo {
+		public bool     IsUnknown;
 		public string	Abbreviation;
 		public string	FullName;
 		public string[] AltSpellings;
