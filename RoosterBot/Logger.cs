@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
@@ -54,7 +55,8 @@ namespace RoosterBot {
 		}
 		
 		public static void Log(LogMessage msg) {
-			string loggedMessage = DateTime.Now + " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
+			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
+				+ " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
 			if (msg.Exception != null) {
 				loggedMessage += "\n" + msg.Exception.ToString();
 			}

@@ -153,7 +153,7 @@ namespace ScheduleComponent.Modules {
 						foreach (ScheduleRecord record in records) {
 							cells[recordIndex] = new string[4];
 							cells[recordIndex][0] = record.Activity;
-							cells[recordIndex][1] = $"{record.Start.ToShortTimeString()} - {record.End.ToShortTimeString()}";
+							cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 							cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 
 							string room = record.RoomString;

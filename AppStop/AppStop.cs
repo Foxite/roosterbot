@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 
@@ -22,7 +23,7 @@ namespace RoosterBot.Automation {
 
 		private static void Log(string message) {
 			Console.WriteLine(DateTime.Now + " : " + message);
-			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", Environment.NewLine + DateTime.Now + " AppStop : " + message);
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", Environment.NewLine + DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern) + " AppStop : " + message);
 		}
 	}
 }
