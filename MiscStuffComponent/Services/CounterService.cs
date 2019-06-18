@@ -35,7 +35,7 @@ namespace MiscStuffComponent.Services {
 					throw new FileNotFoundException();
 				}
 			} catch (ArgumentException e) {
-				throw new FileNotFoundException("Counter is invalid", e);
+				throw new ArgumentException("Counter is invalid", e);
 			}
 		}
 
@@ -44,24 +44,28 @@ namespace MiscStuffComponent.Services {
 		/// </summary>
 		/// <returns>True if this reset ended a highscore.</returns>
 		public bool ResetDateCounter(string counterName) {
-			string counterPath = Path.Combine(m_CounterFolder, counterName);
-			if (File.Exists(counterPath)) {
-				string[] contents = File.ReadAllLines(counterPath);
-				if (contents.Length != 3) {
-					throw new InvalidDataException($"File {counterName} does not have 3 lines.");
-				}
-				long oldHighScore = long.Parse(contents[2]);
-				long previousTimespan = (long) (DateTimeOffset.UtcNow - DateTimeOffset.FromUnixTimeSeconds(long.Parse(contents[1]))).TotalSeconds;
-				bool newHighScore = oldHighScore < previousTimespan;
+			try {
+				string counterPath = Path.Combine(m_CounterFolder, counterName);
+				if (File.Exists(counterPath)) {
+					string[] contents = File.ReadAllLines(counterPath);
+					if (contents.Length != 3) {
+						throw new InvalidDataException($"File {counterName} does not have 3 lines.");
+					}
+					long oldHighScore = long.Parse(contents[2]);
+					long previousTimespan = (long) (DateTimeOffset.UtcNow - DateTimeOffset.FromUnixTimeSeconds(long.Parse(contents[1]))).TotalSeconds;
+					bool newHighScore = oldHighScore < previousTimespan;
 
-				File.WriteAllLines(counterPath, new string[] {
+					File.WriteAllLines(counterPath, new string[] {
 					contents[0],
 					DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
 					(newHighScore ? previousTimespan : oldHighScore).ToString()
 				});
-				return newHighScore;
-			} else {
-				throw new FileNotFoundException();
+					return newHighScore;
+				} else {
+					throw new FileNotFoundException();
+				}
+			} catch (ArgumentException e) {
+				throw new ArgumentException("Counter is invalid", e);
 			}
 		}
 

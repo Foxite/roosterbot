@@ -17,12 +17,14 @@ namespace MiscStuffComponent.Modules {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
 				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {Service.FormatTimeSpan(timeSinceReset)}.\n";
-				response += $"(Laatst gereset op {counterData.LastResetDate.ToShortDateString()} om {counterData.LastResetDate.ToShortTimeString()}.)\n";
+				response += $"(Laatst gereset op {counterData.LastResetDate.ToString("dd-MM-yyyy")} om {counterData.LastResetDate.ToString("HH:mm")}.)\n";
 				response += $"De highscore is {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.\n";
 				response += $"Reset de counter met \"!counter reset {counter}\".";
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
 				await MinorError("Die bestaat niet.");
+			} catch (ArgumentException e) {
+				await FatalError("Invalid counter", e);
 			} catch (Exception e) {
 				await FatalError("Uncaught exception", e);
 			}
