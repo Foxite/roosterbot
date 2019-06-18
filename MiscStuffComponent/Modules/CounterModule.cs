@@ -11,7 +11,7 @@ namespace MiscStuffComponent.Modules {
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }
 		
-		[Command("counter"), Priority(0), Summary("Kijk hoever een couter is.")]
+		[Command("counter"), Priority(0), Summary("Kijk hoever een counter is.")]
 		public async Task GetCounterCommand([Remainder] string counter) {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
