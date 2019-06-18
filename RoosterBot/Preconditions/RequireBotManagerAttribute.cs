@@ -11,7 +11,7 @@ namespace RoosterBot.Preconditions {
 		public override string Summary => "Vereist bot controle";
 
 		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			if (context.User.Id == services.GetService<ConfigService>().BotOwnerId) {
+			if (context.User.Id == services.GetService<ConfigService>().BotOwner.Id) {
 				return PreconditionResult.FromSuccess();
 			} else {
 				if (services.GetService<ConfigService>().ErrorReactions) {

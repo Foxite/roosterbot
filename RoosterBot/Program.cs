@@ -110,7 +110,7 @@ namespace RoosterBot {
 				};
 
 #if !DEBUG
-				IDMChannel ownerDM = await m_Client.GetUser(m_ConfigService.BotOwnerId).GetOrCreateDMChannelAsync();
+				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
 #endif
 			};
@@ -342,7 +342,7 @@ namespace RoosterBot {
 					Logger.Log(LogSeverity.Error, "Program", "Error occurred while parsing command " + badReport);
 					Logger.Log(LogSeverity.Error, "Program", result.ErrorReason);
 					if (m_ConfigService.LogChannel != null) {
-						await m_ConfigService.LogChannel.SendMessageAsync(m_Client.GetUser(m_ConfigService.BotOwnerId).Mention + " " + badReport);
+						await m_ConfigService.LogChannel.SendMessageAsync(m_ConfigService.BotOwner.Mention + " " + badReport);
 					}
 					await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(badReport);
 					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
