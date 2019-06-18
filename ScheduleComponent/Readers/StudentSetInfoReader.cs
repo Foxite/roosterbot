@@ -11,7 +11,7 @@ using ScheduleComponent.Services;
 namespace ScheduleComponent.Readers {
 	public class StudentSetInfoReader : TypeReader {
 		private static readonly Regex s_StudentSetRegex = new Regex("^[1-4][Gg][ADad][12]$");
-		private static readonly Regex s_LookupRegex = new Regex("^\\<\\@\\!?[0-9]{1,19}\\>$");
+		internal static readonly Regex s_LookupRegex = new Regex("^\\<\\@\\!?[0-9]{1,19}\\>$");
 
 		public async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			if (s_StudentSetRegex.IsMatch(input)) {

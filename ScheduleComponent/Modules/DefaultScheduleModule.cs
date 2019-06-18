@@ -4,6 +4,7 @@ using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
+using ScheduleComponent.Readers;
 
 namespace ScheduleComponent.Modules {
 	// Provides several "virtual" commands that don't do anything useful, but serve as a single list item for 3 different "versions" of each command
@@ -12,14 +13,21 @@ namespace ScheduleComponent.Modules {
 		Summary("Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt."),
 		Remarks("Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.")]
 	public class DefaultScheduleModule : EditableCmdModuleBase {
-		private const string ErrorMessage = "Ik weet niet of je het over een leraar, klas of lokaal hebt.";
 
 		[Priority(-10), Command("nu", RunMode = RunMode.Sync), Alias("rooster"), Summary("Kijk wat er nu op het rooster staat.")]
 		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "nu ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
+			}
+		}
+
+		private async Task ReplyErrorMessage(string param) {
+			if (StudentSetInfoReader.s_LookupRegex.IsMatch(param)) {
+				await ReplyAsync("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.");
+			} else {
+				await ReplyAsync("Ik weet niet of je het over een leraar, klas of lokaal hebt.");
 			}
 		}
 
@@ -28,7 +36,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "hierna ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
 			}
 		}
 
@@ -47,7 +55,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "morgen ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
 			}
 		}
 
@@ -56,7 +64,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "vandaag ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
 			}
 		}
 
@@ -65,7 +73,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "deze week ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
 			}
 		}
 
@@ -74,7 +82,7 @@ namespace ScheduleComponent.Modules {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "volgende week ik", Context.Message);
 			} else {
-				await ReplyAsync(ErrorMessage);
+				await ReplyErrorMessage(wat);
 			}
 		}
 
