@@ -86,6 +86,15 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
+		[Priority(-10), Command("over", RunMode = RunMode.Async), Summary("Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		public async Task ShowNWeeksWorkingDaysCommand(string aantal_weken, [Remainder] string wat = "") {
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"over {aantal_weken} ik", Context.Message);
+			} else {
+				await ReplyErrorMessage(wat);
+			}
+		}
+
 		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
 		public async Task AfterCommand() {
 			await ReplyAsync("Als je dit ziet is er een groot probleem");

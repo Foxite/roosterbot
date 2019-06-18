@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
+using RoosterBot.Preconditions;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Modules {
@@ -110,6 +111,25 @@ namespace ScheduleComponent.Modules {
 			return Task.CompletedTask;
 		}
 
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, RoomInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			RespondWorkingDays(info, days, weeks);
+			return Task.CompletedTask;
+		}
+
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, RoomInfo info) {
+			// Plurality easter egg
+			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
+				ReplyDeferred(":thinking:");
+			}
+			
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			RespondWorkingDays(info, days, weeks);
+			return Task.CompletedTask;
+		}
+
 		private void RespondWorkingDays(RoomInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
 			string response = info.DisplayText + ": ";
 
@@ -121,7 +141,7 @@ namespace ScheduleComponent.Modules {
 				} else {
 					response += $"Over {weeksFromNow} weken";
 				}
-				response += " op school op \n";
+				response += " in gebruik op \n";
 				
 				string[][] cells = new string[availability.Length + 1][];
 				cells[0] = new[] { "Dag", "Van", "Tot" };
@@ -185,7 +205,7 @@ namespace ScheduleComponent.Modules {
 						cells[recordIndex][0] = record.Activity;
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 						cells[recordIndex][2] = record.StudentSetsString;
-						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);

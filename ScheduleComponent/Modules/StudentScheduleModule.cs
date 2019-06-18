@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
+using RoosterBot.Preconditions;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Modules {
@@ -116,6 +117,25 @@ namespace ScheduleComponent.Modules {
 			return Task.CompletedTask;
 		}
 
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, StudentSetInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			RespondWorkingDays(info, days, weeks);
+			return Task.CompletedTask;
+		}
+
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, StudentSetInfo info) {
+			// Plurality easter egg
+			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
+				ReplyDeferred(":thinking:");
+			}
+
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			RespondWorkingDays(info, days, weeks);
+			return Task.CompletedTask;
+		}
+
 		private void RespondWorkingDays(StudentSetInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
 			string response = info.DisplayText + ": ";
 
@@ -192,7 +212,7 @@ namespace ScheduleComponent.Modules {
 						cells[recordIndex] = new string[4];
 						cells[recordIndex][0] = record.Activity;
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 
 						string room = record.RoomString;
 						if (room.Contains(',')) {

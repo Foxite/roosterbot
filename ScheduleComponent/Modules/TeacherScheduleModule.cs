@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
+using RoosterBot.Preconditions;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Modules {
@@ -76,6 +77,31 @@ namespace ScheduleComponent.Modules {
 				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
 				RespondWorkingDays(info, days, 1);
 			}
+			return Task.CompletedTask;
+		}
+
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, TeacherInfo[] infos) {
+			foreach (var info in infos) {
+				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+				RespondWorkingDays(info, days, weeks);
+			}
+
+			return Task.CompletedTask;
+		}
+
+		[Command("over", RunMode = RunMode.Sync)]
+		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, TeacherInfo[] infos) {
+			// Plurality easter egg
+			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
+				ReplyDeferred(":thinking:");
+			}
+
+			foreach (var info in infos) {
+				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+				RespondWorkingDays(info, days, weeks);
+			}
+
 			return Task.CompletedTask;
 		}
 
@@ -178,7 +204,7 @@ namespace ScheduleComponent.Modules {
 				ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, teacher).GetAwaiter().GetResult();
 
 				if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-					response += "\nHij/zij staat vandaag ook niet op het rooster, en is dus waarschijnlijk afwezig.";
+					response += "\nHij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.";
 				}
 			} else {
 				response = $"{teacher.DisplayText}: Nu\n";
