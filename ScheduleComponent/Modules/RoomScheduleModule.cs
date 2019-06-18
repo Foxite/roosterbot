@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
-using ScheduleComponent.Services;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Modules {
-	[Group("lokaal"), LogTag("RoomSM"), HiddenFromList]
-	public class RoomScheduleModule : ScheduleModuleBase<RoomInfo> {
-		[Command("nu", RunMode = RunMode.Async), Summary("Wat er nu in een lokaal plaatsvindt")]
-		private async Task RoomCurrentCommand(string lokaal) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, new RoomInfo() { Room = lokaal.ToUpper() });
+	[LogTag("RoomSM"), HiddenFromList]
+	public class RoomScheduleModule : ScheduleModuleBase {
+		[Command("nu", RunMode = RunMode.Async)]
+		public async Task RoomCurrentCommand(RoomInfo room) {
+			ReturnValue<ScheduleRecord> result = await GetRecord(false, room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				string response;
@@ -32,21 +32,21 @@ namespace ScheduleComponent.Modules {
 						response += TableItemBreak(record);
 					}
 				}
-				ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, record);
+				ReplyDeferred(response, room, record);
 				
 				if (record?.Activity == "pauze") {
-					await GetAfterCommandFunction();
+					await GetAfterCommand();
 				}
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("Wat er hierna in een lokaal plaatsvindt")]
-		private async Task RoomNextCommand(string lokaal) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, new RoomInfo() { Room = lokaal.ToUpper() });
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		public async Task RoomNextCommand(RoomInfo room) {
+			ReturnValue<ScheduleRecord> result = await GetRecord(true, room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError($"`GetRecord(true, \"Room\", {lokaal})` returned null");
+					await FatalError($"`GetRecord(true, \"Room\", {room.DisplayText})` returned null");
 				} else {
 					bool isToday = record.Start.Date == DateTime.Today;
 					string response;
@@ -54,7 +54,7 @@ namespace ScheduleComponent.Modules {
 					if (isToday) {
 						response = $"{record.RoomString}: Hierna\n";
 					} else {
-						response = $"{record.RoomString}: Als eerste op {Util.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						response = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
 
 					response += TableItemActivity(record, false);
@@ -67,79 +67,131 @@ namespace ScheduleComponent.Modules {
 						response += TableItemBreak(record);
 					}
 
-					ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, record);
+					ReplyDeferred(response, room, record);
 					
 					if (record.Activity == "pauze") {
-						await GetAfterCommandFunction();
+						await GetAfterCommand();
 					}
 				}
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("Welke les er als eerste in een lokaal op een dag")]
-		public async Task RoomWeekdayCommand([Remainder] string lokaal_en_weekdag) {
-			Tuple<bool, DayOfWeek, string, bool> arguments = await GetValuesFromArguments(lokaal_en_weekdag);
+		[Command("dag", RunMode = RunMode.Async)]
+		public async Task RoomWeekdayCommand(RoomInfo info, DayOfWeek day) {
+			await RespondDay(info, day, false);
+		}
 
-			if (arguments.Item1) {
-				DayOfWeek day = arguments.Item2;
-				string lokaal = arguments.Item3.ToUpper();
+		[Command("dag", RunMode = RunMode.Async)]
+		public async Task RoomWeekdayCommand(DayOfWeek day, RoomInfo info) {
+			await RespondDay(info, day, false);
+		}
+		
+		[Command("vandaag", RunMode = RunMode.Async)]
+		public async Task RoomTodayCommand(RoomInfo info) {
+			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("vandaag"), true);
+		}
 
-				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(new RoomInfo() { Room = lokaal.ToUpper() }, day, arguments.Item4);
-				if (result.Success) {
-					ScheduleRecord[] records = result.Value;
-					string response;
-					if (records.Length == 0) {
-						response = "Het ziet ernaar uit dat daar ";
-						if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
-							response += "vandaag";
-						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-							response += "morgen";
-						} else {
-							response += "op " + Util.GetStringFromDayOfWeek(day);
-						}
-						response += " niets is.";
+		[Command("morgen", RunMode = RunMode.Async)]
+		public async Task RoomTomorrowCommand(RoomInfo info) {
+			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("morgen"), false);
+		}
 
-						if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
-							response += " Het is dan ook weekend.";
-						}
-						ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, null);
+		[Command("deze week", RunMode = RunMode.Sync)]
+		public Task ShowThisWeekWorkingDaysCommand(RoomInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
+			RespondWorkingDays(info, days, 0);
+			return Task.CompletedTask;
+		}
+
+		[Command("volgende week", RunMode = RunMode.Sync)]
+		public Task ShowNextWeekWorkingDaysCommand(RoomInfo info) {
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
+			RespondWorkingDays(info, days, 1);
+			return Task.CompletedTask;
+		}
+
+		private void RespondWorkingDays(RoomInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
+			string response = info.DisplayText + ": ";
+
+			if (availability.Length > 0) {
+				if (weeksFromNow == 0) {
+					response += "Deze week";
+				} else if (weeksFromNow == 1) {
+					response += "Volgende week";
+				} else {
+					response += $"Over {weeksFromNow} weken";
+				}
+				response += " op school op \n";
+				
+				string[][] cells = new string[availability.Length + 1][];
+				cells[0] = new[] { "Dag", "Van", "Tot" };
+
+				int i = 1;
+				foreach (AvailabilityInfo item in availability) {
+					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+					i++;
+				}
+				response += Util.FormatTextTable(cells, false);
+			} else {
+				response += "Niet in gebruik ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
+				}
+			}
+
+			ReplyDeferred(response);
+		}
+
+		private async Task RespondDay(RoomInfo info, DayOfWeek day, bool includeToday) {
+			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, includeToday);
+			if (result.Success) {
+				ScheduleRecord[] records = result.Value;
+				string response;
+				if (records.Length == 0) {
+					response = "Het ziet ernaar uit dat daar ";
+					if (DateTime.Today.DayOfWeek == day && includeToday) {
+						response += "vandaag";
+					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+						response += "morgen";
 					} else {
-						response = $"{lokaal.ToUpper()}: Rooster ";
-						if (DateTime.Today.DayOfWeek == day && arguments.Item4) {
-							response += "voor vandaag";
-						} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-							response += "voor morgen";
-						} else {
-							response += "op " + Util.GetStringFromDayOfWeek(day);
-						}
-						response += "\n";
-
-						string[][] cells = new string[records.Length + 1][];
-						cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
-						int recordIndex = 1;
-						foreach (ScheduleRecord record in records) {
-							cells[recordIndex] = new string[4];
-							cells[recordIndex][0] = record.Activity;
-							cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-							cells[recordIndex][2] = record.StudentSetsString;
-							cells[recordIndex][3] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
-							recordIndex++;
-						}
-						response += Util.FormatTextTable(cells, true);
-						ReplyDeferred(response, new RoomInfo() { Room = lokaal.ToUpper() }, records.Last());
+						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
 					}
+					response += " niets is.";
+
+					if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
+						response += " Het is dan ook weekend.";
+					}
+					ReplyDeferred(response, info, null);
+				} else {
+					response = $"{info.DisplayText}: Rooster ";
+					if (DateTime.Today.DayOfWeek == day && includeToday) {
+						response += "voor vandaag";
+					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
+						response += "voor morgen";
+					} else {
+						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
+					}
+					response += "\n";
+
+					string[][] cells = new string[records.Length + 1][];
+					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
+					int recordIndex = 1;
+					foreach (ScheduleRecord record in records) {
+						cells[recordIndex] = new string[4];
+						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
+						cells[recordIndex][2] = record.StudentSetsString;
+						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						recordIndex++;
+					}
+					response += Util.FormatTextTable(cells, true);
+					ReplyDeferred(response, info, records.Last());
 				}
 			}
-		}
-
-		[Command("morgen", RunMode = RunMode.Async), Summary("Welke les er morgen als eerste in een lokaal is")]
-		public async Task RoomTomorrowCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal + " morgen");
-		}
-
-		[Command("vandaag", RunMode = RunMode.Async), Summary("Het rooster voor een lokaal voor vandaag")]
-		public async Task RoomTodayCommand(string lokaal) {
-			await RoomWeekdayCommand(lokaal + " vandaag");
 		}
 	}
 }

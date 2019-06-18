@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
@@ -35,87 +36,12 @@ namespace RoosterBot {
 		/// From https://stackoverflow.com/a/4405876/3141917
 		public static string FirstCharToUpper(this string input) {
 			switch (input) {
-			case null:
-				throw new ArgumentNullException(nameof(input));
-			case "":
-				throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-			default:
-				return input.First().ToString().ToUpper() + input.Substring(1);
-			}
-		}
-
-		/// <summary>
-		/// Get the full name for an activity from its abbreviation.
-		/// </summary>
-		public static string GetActivityFromAbbr(string abbr) {
-			switch (abbr) {
-			case "ned":
-				return "Nederlands";
-			case "eng":
-				return "Engels";
-			case "program":
-				return "Programmeren";
-			case "gamedes":
-				return "Gamedesign";
-			case "ond":
-				return "Onderneming";
-			case "k0072":
-				return "Keuzedeel (k0072)";
-			case "k0821":
-				return "Keuzedeel (k0821)";
-			case "k0901":
-				return "Keuzedeel (k0901)";
-			case "burger":
-				return "Burgerschap";
-			case "rek":
-				return "Rekenen";
-			case "vormg":
-				return "Vormgeving";
-			case "engine":
-				return "Engineering";
-			case "stdag doc":
-				return "Studiedag :tada:";
-			case "to":
-				return "Teamoverleg";
-			case "skc":
-				return "Studiekeuzecheck";
-			case "soll":
-				return "Solliciteren";
-			case "mastercl":
-				return "Masterclass";
-
-			case "3d":
-			case "2d":
-			case "bpv":
-			case "vb bpv":
-			case "vb pvb":
-			case "2d/3d":
-			case "slb":
-			case "avo":
-				return abbr.ToUpper();
-
-			case "pauze":
-			case "gameaudio":
-			case "keuzedeel":
-			case "gametech":
-			case "project":
-			case "rapid":
-			case "gameplay":
-			case "taken":
-			case "stage":
-			case "examen":
-			case "animatie":
-			case "werkveld":
-			case "afstudeer":
-			case "rozosho":
-			case "twinstick":
-				return abbr.FirstCharToUpper();
-
-			case "Sinterklaas":
-				return abbr;
-
-			default:
-				return $"\"{abbr}\"";
+				case null:
+					throw new ArgumentNullException(nameof(input));
+				case "":
+					throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+				default:
+					return input.First().ToString().ToUpper() + input.Substring(1);
 			}
 		}
 		
@@ -143,67 +69,6 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
-		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
-		/// </summary>
-		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
-		public static DayOfWeek GetDayOfWeekFromString(string dayofweek) {
-			switch (dayofweek.ToLower()) {
-			case "ma":
-			case "maandag":
-				return DayOfWeek.Monday;
-			case "di":
-			case "dinsdag":
-				return DayOfWeek.Tuesday;
-			case "wo":
-			case "woensdag":
-				return DayOfWeek.Wednesday;
-			case "do":
-			case "donderdag":
-				return DayOfWeek.Thursday;
-			case "vr":
-			case "vrijdag":
-				return DayOfWeek.Friday;
-			case "za":
-			case "zaterdag":
-				return DayOfWeek.Saturday;
-			case "zo":
-			case "zondag":
-				return DayOfWeek.Sunday;
-			case "vandaag":
-				return DateTime.Today.DayOfWeek;
-			case "morgen":
-				return DateTime.Today.AddDays(1).DayOfWeek;
-			default:
-				throw new ArgumentException(dayofweek + " is not a weekday.");
-			}
-		}
-
-		/// <summary>
-		/// Given a DayOfWeek, this returns the Dutch name of that day.
-		/// </summary>
-		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
-		public static string GetStringFromDayOfWeek(DayOfWeek day) {
-			switch (day) {
-			case DayOfWeek.Monday:
-				return "maandag";
-			case DayOfWeek.Tuesday:
-				return "dinsdag";
-			case DayOfWeek.Wednesday:
-				return "woensdag";
-			case DayOfWeek.Thursday:
-				return "donderdag";
-			case DayOfWeek.Friday:
-				return "vrijdag";
-			case DayOfWeek.Saturday:
-				return "zaterdag";
-			case DayOfWeek.Sunday:
-				return "zondag";
-			default:
-				throw new ArgumentException();
-			}
-		}
-
-		/// <summary>
 		/// Generate a table for use in a Discord message. Output will be formatted into a code block.
 		/// Warning: This will glitch out when the table array is jagged.
 		/// </summary>
@@ -212,7 +77,7 @@ namespace RoosterBot {
 		/// <returns>A string that you can send directly into a chat message.</returns>
 		public static string FormatTextTable(string[][] table, bool includeHeaderSeperation) {
 			int[] columnWidths = new int[table[0].Length];
-			
+
 			for (int column = 0; column < table[0].Length; column++) {
 				columnWidths[column] = 1;
 				for (int row = 0; row < table.Length; row++) {
@@ -415,6 +280,39 @@ namespace RoosterBot {
 				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
 			}
 			return null;
+		}
+
+		private static string GetModuleSignature(this ModuleInfo module) {
+			string ret = module.Name;
+			if (!string.IsNullOrEmpty(module.Group)) {
+				ret = $"{module.Group} {ret}";
+			}
+
+			if (module.IsSubmodule) {
+				return $"{GetModuleSignature(module.Parent)} {ret}";
+			} else {
+				return ret;
+			}
+		}
+
+		public static string GetCommandSignature(this CommandInfo command) {
+			string ret = command.Name;
+
+			bool notFirst = false;
+			foreach (ParameterInfo param in command.Parameters) {
+				ret += param.Type.Name + " " + param.Name;
+				if (notFirst) {
+					ret += ", ";
+				}
+				notFirst = true;
+			}
+
+			string moduleSig = command.Module.GetModuleSignature();
+			if (!string.IsNullOrEmpty(moduleSig)) {
+				ret = moduleSig + " " + ret;
+			}
+
+			return ret;
 		}
 	}
 

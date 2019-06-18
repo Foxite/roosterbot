@@ -15,14 +15,15 @@ namespace WatsonComponent {
 		private DiscordSocketClient m_Client;
 		private ConfigService m_Config;
 
-		public override void AddServices(ref IServiceCollection services, string configPath) {
+		public override Task AddServices(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
 			m_Watson = new WatsonClient(m_Client, jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
+			return Task.CompletedTask;
 		}
 
-		public override void AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			
@@ -41,9 +42,10 @@ namespace WatsonComponent {
 				"dacht dat je \"nu\" bedoelde in plaats van \"straks\".";
 			help.AddHelpSection("taal", helpText);
 
+			return Task.CompletedTask;
 		}
 
-		private Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
+		private async Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
 			if (socketMsg is IUserMessage msg && !msg.Author.IsBot) {
 				int argPos = 0;
 				bool process = false;
@@ -57,11 +59,10 @@ namespace WatsonComponent {
 
 				if (process) {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-					m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
+					await m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
 #pragma warning restore CS4014
 				}
 			}
-			return Task.CompletedTask;
 		}
 	}
 }

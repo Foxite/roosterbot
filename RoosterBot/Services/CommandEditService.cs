@@ -1,10 +1,10 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Discord;
-using Discord.WebSocket;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace RoosterBot.Services {
 	/* The class lets us change our response when a user edits their command (especially after an error occured).
@@ -56,7 +56,7 @@ namespace RoosterBot.Services {
 			IEnumerable<KeyValuePair<ulong, CommandResponsePair>> oldMessages = m_Messages.Where((kvp) => {
 				return kvp.Value.Command.Author.Id == userCommand.Author.Id;
 			});
-			
+
 			if (oldMessages.Count() > 0) {
 				foreach (KeyValuePair<ulong, CommandResponsePair> item in oldMessages) {
 					m_Messages.TryRemove(item.Key, out CommandResponsePair unused);

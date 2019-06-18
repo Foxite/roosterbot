@@ -40,7 +40,7 @@ namespace RoosterBot.Modules {
 
 			m_Response = new StringBuilder();
 		}
-		
+
 		protected override void AfterExecute(CommandInfo command) {
 			if (m_Reaction != null) {
 				Util.AddReaction(Context.Message, m_Reaction).GetAwaiter().GetResult();
@@ -120,7 +120,7 @@ namespace RoosterBot.Modules {
 		protected virtual async Task<bool> AddReactionAsync(string unicode) {
 			return await Util.AddReaction(Context.Message, unicode);
 		}
-		
+
 		/// <summary>
 		/// Removes a reaction immediately.
 		/// </summary>

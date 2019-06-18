@@ -17,10 +17,5 @@ namespace MiscStuffComponent.Modules {
 		public async Task DeleteMessageCommand(ulong channel, ulong msg) {
 			await (await (await Context.Client.GetChannelAsync(channel) as ITextChannel).GetMessageAsync(msg)).DeleteAsync();
 		}
-
-		[Command("test"), RequireBotManager, HiddenFromList]
-		public async Task TestCommand([Remainder] string ignored = "") {
-			await Context.Channel.SendMessageAsync("test ok");
-		}
 	}
 }

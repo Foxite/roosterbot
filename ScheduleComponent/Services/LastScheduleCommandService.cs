@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
@@ -12,8 +13,7 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleCommandInfo GetLastCommandFromUser(IUser user) {
-			ScheduleCommandInfo previous;
-			if (m_SCIs.TryGetValue(user.Id, out previous)) {
+			if (m_SCIs.TryGetValue(user.Id, out ScheduleCommandInfo previous)) {
 				return previous;
 			} else {
 				return default(ScheduleCommandInfo);
@@ -25,14 +25,12 @@ namespace ScheduleComponent.Services {
 				ScheduleCommandInfo ctx = new ScheduleCommandInfo(identifier, record);
 				m_SCIs.AddOrUpdate(user.Id, ctx, (key, existing) => { return ctx; });
 			} else {
-				ScheduleCommandInfo unused;
-				m_SCIs.TryRemove(user.Id, out unused);
+				m_SCIs.TryRemove(user.Id, out ScheduleCommandInfo unused);
 			}
 		}
 
 		public bool RemoveLastQuery(IUser user) {
-			ScheduleCommandInfo unused;
-			return m_SCIs.TryRemove(user.Id, out unused);
+			return m_SCIs.TryRemove(user.Id, out ScheduleCommandInfo unused);
 		}
 	}
 

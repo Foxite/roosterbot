@@ -24,12 +24,11 @@ namespace RoosterBot {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
-
-		public event EventHandler ProgramStopping;
+		private Dictionary<Type, ComponentBase> m_Components;
 
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
-			
+
 			if (File.Exists(indicatorPath)) {
 				Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
 				return 1;
@@ -40,7 +39,8 @@ namespace RoosterBot {
 			try {
 				Instance = new Program();
 				Instance.MainAsync().GetAwaiter().GetResult();
-			} catch {
+			} catch (Exception e) {
+				Logger.Log(LogSeverity.Critical, "Program", "Application has crashed.", e);
 				return 2;
 			} finally {
 				File.Delete(indicatorPath);
@@ -51,7 +51,7 @@ namespace RoosterBot {
 		private async Task MainAsync() {
 			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
 			m_State = ProgramState.BeforeStart;
-			
+
 			#region Load config
 			if (!Directory.Exists(DataPath)) {
 				Logger.Log(LogSeverity.Critical, "Main", "Data folder did not exist.");
@@ -108,11 +108,11 @@ namespace RoosterBot {
 					m_State = ProgramState.BotRunning;
 					return Task.CompletedTask;
 				};
-
-#if !DEBUG
-				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-				await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
-#endif
+				
+				if (m_ConfigService.ReportStartupVersionToOwner) {
+					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
+					await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
+				}
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
@@ -131,7 +131,7 @@ namespace RoosterBot {
 
 			#region Start components
 			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
-			
+
 			// Locate DLL files from a txt file
 			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
 			List<Assembly> assemblies = new List<Assembly>();
@@ -146,37 +146,44 @@ namespace RoosterBot {
 
 			// Look for children of ComponentBase in the loaded assemblies
 			Type[] componentTypes = (from domainAssembly in assemblies
-								 from assemblyType in domainAssembly.GetExportedTypes()
-								 where assemblyType.IsSubclassOf(typeof(ComponentBase))
-								 select assemblyType).ToArray();
+									 from assemblyType in domainAssembly.GetExportedTypes()
+									 where assemblyType.IsSubclassOf(typeof(ComponentBase))
+									 select assemblyType).ToArray();
 
-			ComponentBase[] components = new ComponentBase[componentTypes.Length];
+			m_Components = new Dictionary<Type, ComponentBase>(componentTypes.Length);
+			Task[] servicesLoading = new Task[componentTypes.Length];
 			// Create instances of these classes and call AddServices and then AddModules
 			for (int i = 0; i < componentTypes.Length; i++) {
-				Type type = (Type) componentTypes[i];
+				Type type = componentTypes[i];
 				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
-				components[i] = Activator.CreateInstance(type) as ComponentBase;
+				m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
 				try {
-					components[i].AddServices(ref serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
+					servicesLoading[i] = m_Components[type].AddServices(serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
 					return;
 				}
 			}
+			await Task.WhenAll(servicesLoading);
 
 			m_Services = serviceCollection.BuildServiceProvider();
-			
-			await m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
 
-			foreach (ComponentBase component in components) {
-				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + component.GetType().Name);
+			Task[] modulesLoading = new Task[componentTypes.Length + 1];
+			modulesLoading[0] = m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
+
+			int moduleIndex = 1;
+			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
+				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + componentKVP.Key.Name);
 				try {
-					component.AddModules(m_Services, m_Commands, helpService);
+					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
 				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + component.GetType().Name + " threw an exception during AddModules.", ex);
+					Logger.Log(LogSeverity.Critical, "Main", "Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex);
 					return;
 				}
+				moduleIndex++;
 			}
+
+			await Task.WhenAll(modulesLoading);
 			#endregion Start components
 
 			#region Connect to Discord
@@ -201,7 +208,7 @@ namespace RoosterBot {
 
 				do {
 					keepRunning = true;
-					Task.WaitAny(new Task[] {
+					await Task.WhenAny(new Task[] {
 						Task.Delay(500).ContinueWith((t) => {
 							// Ctrl-Q pressed by user
 							if (Console.KeyAvailable) {
@@ -229,7 +236,6 @@ namespace RoosterBot {
 										keepRunning = false;
 									}
 								}
-								
 							}
 						})
 					});
@@ -239,12 +245,14 @@ namespace RoosterBot {
 			cts.Cancel();
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-			
+
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
-			ProgramStopping?.Invoke(this, null);
-
+			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
+				await componentKVP.Value.OnShutdown();
+			}
+			
 			m_State = ProgramState.BotStopped;
 			#endregion Quit code
 		}
@@ -256,13 +264,11 @@ namespace RoosterBot {
 
 		// This function is called by CommandEditService and the above function.
 		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
-			// Don't process the command if it was a System Message
+			// Don't process the command if it was a System Message or came from a bot
 			if (!(command is SocketUserMessage message) || message.Author.IsBot)
 				return;
 
-			// Create a number to track where the prefix ends and the command begins
 			int argPos = 0;
-			// Determine if the message is a command, based on if it starts with '!'
 			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				return;
 			}
@@ -272,66 +278,62 @@ namespace RoosterBot {
 				return;
 			}
 
-			// Create a Command Context
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
-			// Execute the command. (result does not indicate a return value, 
-			// rather an object stating if the command executed successfully)
+
 			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
 
-			await HandleError(result, message, initialResponse);
+			await HandleError(context, result);
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			EditedCommandService commandService = m_Services.GetService<EditedCommandService>();
-			IResult result = await commandService.ExecuteAsync(context, specificInput, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Services);
 
-			await HandleError(result, message, initialResponse);
+			await HandleError(context, result);
 		}
 
-		private async Task HandleError(IResult result, IUserMessage command, IUserMessage initialResponse = null) {
+		private async Task HandleError(ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
-				string badReport = $"\"{command.Content}\": ";
+				string badReport = $"\"{context.Message}\": ";
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
-					case CommandError.UnknownCommand:
-						response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
-						break;
-					case CommandError.BadArgCount:
-						response = "Dat zijn te veel of te weinig parameters.";
-						break;
-					case CommandError.UnmetPrecondition:
-						response += result.ErrorReason;
-						break;
-					case CommandError.ParseFailed:
-						badReport += "ParseFailed";
-						bad = true;
-						break;
-					case CommandError.ObjectNotFound:
-						badReport += "ObjectNotFound";
-						bad = true;
-						break;
-					case CommandError.MultipleMatches:
-						badReport += "MultipleMatches";
-						bad = true;
-						break;
-					case CommandError.Exception:
-						badReport += "Exception\n";
-						badReport += result.ErrorReason;
-						bad = true;
-						break;
-					case CommandError.Unsuccessful:
-						badReport += "Unsuccessful";
-						bad = true;
-						break;
-					default:
-						badReport += "Unknown error: " + result.Error.Value;
-						bad = true;
-						break;
+						case CommandError.UnknownCommand:
+							response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
+							break;
+						case CommandError.BadArgCount:
+							response = "Dat zijn te veel of te weinig parameters.";
+							break;
+						case CommandError.UnmetPrecondition:
+							response = result.ErrorReason;
+							break;
+						case CommandError.ParseFailed:
+							response = "Ik begrijp de parameter(s) niet.";
+							break;
+						case CommandError.ObjectNotFound:
+							badReport += "ObjectNotFound";
+							bad = true;
+							break;
+						case CommandError.MultipleMatches:
+							badReport += "MultipleMatches";
+							bad = true;
+							break;
+						case CommandError.Exception:
+							badReport += "Exception\n";
+							badReport += result.ErrorReason;
+							bad = true;
+							break;
+						case CommandError.Unsuccessful:
+							badReport += "Unsuccessful";
+							bad = true;
+							break;
+						default:
+							badReport += "Unknown error: " + result.Error.Value;
+							bad = true;
+							break;
 					}
 				} else {
 					badReport += "No error reason";
@@ -348,8 +350,9 @@ namespace RoosterBot {
 					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
 				}
 
+				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;
 				if (initialResponse == null) {
-					this.m_Commands.AddResponse(command, await command.Channel.SendMessageAsync(response));
+					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}

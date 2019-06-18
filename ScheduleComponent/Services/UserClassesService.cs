@@ -1,13 +1,15 @@
-﻿using Discord;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DocumentModel;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System;
+using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DocumentModel;
+using Discord;
+using RoosterBot;
+using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
-	public class UserClassesService {
+	public class UserClassesService : IDisposable {
 		private AmazonDynamoDBClient m_Client;
 		private Regex m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 		private Table m_Table;
@@ -51,5 +53,23 @@ namespace ScheduleComponent.Services {
 		public Task SetClassForDiscordUser(IUser user, string clazz) {
 			return SetClassForDiscordUser(user.Id, clazz);
 		}
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing) {
+			if (!disposedValue) {
+				if (disposing) {
+					m_Client.Dispose();
+				}
+
+				disposedValue = true;
+			}
+		}
+		
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
 	}
 }
