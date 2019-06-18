@@ -191,7 +191,7 @@ namespace ScheduleComponent.Services {
 		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow = 0) {
 			DateTime targetFirstDate =
 				DateTime.Today
-				.AddDays(-(int) DateTime.Today.DayOfWeek) // First date in this week
+				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
 				.AddDays(7 * weeksFromNow); // First date in the week n weeks from now
 			DateTime targetLastDate = targetFirstDate.AddDays(4); // Friday
 
