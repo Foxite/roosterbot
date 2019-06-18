@@ -38,12 +38,15 @@ namespace ScheduleComponent.Services {
 
 						Dictionary<IdentifierInfo[], ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo[], ScheduleRecord>();
 						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name);
+
+						DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
+
 						while (await csv.ReadAsync()) {
 							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
 							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
 							int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
 							DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-							if (start.Date < DateTime.Today) {
+							if (start.Date < lastMonday) {
 								continue;
 							}
 
