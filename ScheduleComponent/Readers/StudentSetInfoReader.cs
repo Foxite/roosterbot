@@ -37,7 +37,7 @@ namespace ScheduleComponent.Readers {
 					} else {
 						message = "Ik weet niet in welke klas jij zit. Gebruik `!ik <jouw klas>` om dit in te stellen.";
 					}
-					return TypeReaderResult.FromError(CommandError.ParseFailed, message); 
+					return TypeReaderResult.FromError(CommandError.ParseFailed, message);
 				} else {
 					return TypeReaderResult.FromSuccess(result);
 				}
