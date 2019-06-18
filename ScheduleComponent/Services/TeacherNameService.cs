@@ -56,7 +56,7 @@ namespace ScheduleComponent.Services {
 				TeacherInfo record = GetRecordFromAbbr(abbrs[i]);
 				if (record != null) {
 					records.Add(record);
-				} else {
+				} else if (!string.IsNullOrWhiteSpace(abbrs[i])) {
 					records.Add(new TeacherInfo() {
 						IsUnknown = true,
 						Abbreviation = abbrs[i],
