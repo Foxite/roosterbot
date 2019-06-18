@@ -15,8 +15,11 @@ namespace ScheduleComponent.Services {
 		private Table m_Table;
 
 		public UserClassesService(string keyId, string secretKey) {
+			Logger.Info("UserClasses", "Connecting to database");
 			m_Client = new AmazonDynamoDBClient(keyId, secretKey, Amazon.RegionEndpoint.EUWest1);
+			Logger.Info("UserClasses", "Loading user table");
 			m_Table = Table.LoadTable(m_Client, "roosterbot-userclasses");
+			Logger.Info("UserClasses", "UserClassesService loaded");
 		}
 
 		public async Task<StudentSetInfo> GetClassForDiscordUser(ulong userId) {
