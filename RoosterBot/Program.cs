@@ -82,8 +82,8 @@ namespace RoosterBot {
 			m_Client.MessageReceived += HandleNewCommand;
 			m_Client.Ready += async () => {
 				m_State = ProgramState.BotRunning;
-				await m_Client.SetGameAsync(m_ConfigService.GameString, type: ActivityType.Watching);
 				await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
+				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				m_Client.Disconnected += (e) => {

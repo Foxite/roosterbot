@@ -8,8 +8,9 @@ namespace RoosterBot.Services {
 	public class ConfigService {
 		public   bool         ErrorReactions { get; }
 		public   string       CommandPrefix { get; }
+		public   ActivityType ActivityType { get; }
 		public   string       GameString { get; }
-		public	 IUser        BotOwner { get; private set; }
+		public   IUser        BotOwner { get; private set; }
 		public   ITextChannel LogChannel { get; private set; }
 
 		internal string       SNSCriticalFailureARN { get; }
@@ -25,6 +26,7 @@ namespace RoosterBot.Services {
 			authToken = jsonConfig["token"].ToObject<string>();
 			ErrorReactions = jsonConfig["errorReactions"].ToObject<bool>();
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
+			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
 			GameString = jsonConfig["gameString"].ToObject<string>();
 			SNSCriticalFailureARN = jsonConfig["snsCF_ARN"].ToObject<string>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
