@@ -26,6 +26,8 @@ namespace ScheduleComponent.Modules {
 		private async Task ReplyErrorMessage(string param) {
 			if (StudentSetInfoReader.s_LookupRegex.IsMatch(param)) {
 				await ReplyAsync("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.");
+			} else if (param == "ik") {
+				await ReplyAsync("Ik weet niet in welke klas jij zit. Je moet `!ik <jouw klas>` gebruiken om dit in te stellen.");
 			} else {
 				await ReplyAsync("Ik weet niet of je het over een leraar, klas of lokaal hebt.");
 			}
