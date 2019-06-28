@@ -116,7 +116,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task GetAfterCommand() {
-			await Program.Instance.ExecuteSpecificCommand(null, "!daarna", Context.Message);
+			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message);
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, IdentifierInfo identifier) {
