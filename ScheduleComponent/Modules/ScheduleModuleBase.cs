@@ -120,6 +120,13 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, IdentifierInfo identifier) {
+			if (!next && ScheduleUtil.IsSummerBreak()) {
+				await MinorError("Het is vakantie, man. Ga naar huis.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			}
+
 			ScheduleRecord record = null;
 			try {
 				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
@@ -144,6 +151,21 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
+			DateTime targetDate;
+			if (includeToday) {
+				// Get the next {day} including today
+				targetDate = DateTime.Today.AddDays(((int)day - (int)DateTime.Today.DayOfWeek + 7) % 7);
+			} else {
+				// Get the next {day} after today
+				targetDate = DateTime.Today.AddDays(1 + ((int)day - (int)DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			}
+			if (ScheduleUtil.IsSummerBreak(targetDate)) {
+				await MinorError("Het is vakantie, man. Ga naar huis.");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			}
+
 			try {
 				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
 				return new ReturnValue<ScheduleRecord[]>() {
