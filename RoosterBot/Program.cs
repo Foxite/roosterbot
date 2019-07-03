@@ -116,7 +116,13 @@ namespace RoosterBot {
 				
 				if (m_ConfigService.ReportStartupVersionToOwner) {
 					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-					await ownerDM.SendMessageAsync("New version deployed: " + Constants.VersionString);
+					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
+					startReport += "Components:\n";
+					foreach (KeyValuePair<Type, ComponentBase> component in m_Components) {
+						startReport += $"- {component.Key.Name}: {component.Value.VersionString}\n";
+					}
+
+					await ownerDM.SendMessageAsync(startReport);
 				}
 			};
 
