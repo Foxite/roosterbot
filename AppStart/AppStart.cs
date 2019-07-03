@@ -7,6 +7,10 @@ using System.Threading;
 namespace RoosterBot.Automation {
 	internal class AppStart {
 		private static int Main(string[] args) {
+			if (args[0] == "delay" && int.TryParse(args[1], out int result)) {
+				Log($"Starting app in {result} milliseconds");
+				Thread.Sleep(result);
+			}
 			Log("Starting app");
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
