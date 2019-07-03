@@ -7,11 +7,12 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace PublicTransitComponent {
 	public class PublicTransitComponent : ComponentBase {
 		private NSAPI m_NSAPI;
+
+		public override string VersionString => "1.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			#region Config

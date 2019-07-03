@@ -6,14 +6,13 @@ using MiscStuffComponent.Modules;
 using System.IO;
 using System;
 using Discord.WebSocket;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MiscStuffComponent
-{
-    public class MiscStuffComponent : ComponentBase
-    {
+namespace MiscStuffComponent {
+	public class MiscStuffComponent : ComponentBase {
 		public string ConfigPath { get; private set; }
+
+		public override string VersionString => "1.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ConfigPath = configPath;

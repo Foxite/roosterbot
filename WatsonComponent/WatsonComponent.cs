@@ -15,6 +15,8 @@ namespace WatsonComponent {
 		private DiscordSocketClient m_Client;
 		private ConfigService m_Config;
 
+		public override string VersionString => "1.0.0";
+
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
