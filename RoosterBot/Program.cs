@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -97,7 +98,11 @@ namespace RoosterBot {
 							} else {
 								report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
 							}
+							report += "\n\nThe bot will attempt to restart in 10 seconds.";
 							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
+
+							Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 10000"));
+							Shutdown();
 						}
 					});
 
