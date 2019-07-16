@@ -1,4 +1,4 @@
-ScheduleComponent.dll
-MiscStuffComponent.dll
-PublicTransitComponent.dll
-WatsonComponent.dll
+Schedule/ScheduleComponent.dll
+MiscStuff/MiscStuffComponent.dll
+PublicTransit/PublicTransitComponent.dll
+Watson/WatsonComponent.dll
