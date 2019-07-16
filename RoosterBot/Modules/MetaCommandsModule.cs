@@ -14,9 +14,7 @@ namespace RoosterBot.Modules {
 
 		[Command("help"), Summary("Uitleg over de bot.")]
 		public async Task HelpCommand() {
-			string response = "Dit is RoosterBot " + Constants.VersionString + ".\n";
-
-			response += $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
+			string response = $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
 			response += "Je kan `!commands` gebruiken om te alle commands te zien, of `!commands <filter>` gebruiken om te zoeken.\n";
 			response += "Gebruik `!help <hoofdstuk>` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:\n";
 
