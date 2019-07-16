@@ -25,7 +25,7 @@ namespace RoosterBot {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private IServiceProvider m_Services;
-		private Dictionary<Type, ComponentBase> m_Components;
+		internal Dictionary<Type, ComponentBase> m_Components;
 
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
