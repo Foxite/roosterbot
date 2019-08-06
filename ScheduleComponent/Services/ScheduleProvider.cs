@@ -1,16 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleProvider {
-		private ScheduleService m_Students;
-		private ScheduleService m_Teachers;
-		private ScheduleService m_Rooms;
+		private Dictionary<Type, ScheduleService> m_Schedules;
 
-		public ScheduleProvider(ScheduleService students, ScheduleService teachers, ScheduleService rooms) {
-			m_Students = students;
-			m_Teachers = teachers;
-			m_Rooms = rooms;
+		public ScheduleProvider() {
+			m_Schedules = new Dictionary<Type, ScheduleService>();
 		}
 
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
@@ -34,15 +31,23 @@ namespace ScheduleComponent.Services {
 		}
 
 		private ScheduleService GetScheduleType(IdentifierInfo info) {
-			if (info is StudentSetInfo) {
-				return m_Students;
-			} else if (info is TeacherInfo) {
-				return m_Teachers;
-			} else if (info is RoomInfo) {
-				return m_Rooms;
+			if (m_Schedules.TryGetValue(info.GetType(), out ScheduleService schedule)) {
+				return schedule;
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
+		}
+
+		public void RegisterSchedule(Type infoType, ScheduleService schedule) {
+			if (!infoType.IsAssignableFrom(typeof(IdentifierInfo))) {
+				throw new ArgumentException($"The given type must be a type of IdentifierInfo.", nameof(infoType));
+			}
+
+			if (m_Schedules.ContainsKey(infoType)) {
+				throw new ArgumentException($"A schedule was already registered for {infoType.Name}.");
+			}
+
+			m_Schedules[infoType] = schedule;
 		}
 	}
 }
