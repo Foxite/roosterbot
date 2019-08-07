@@ -23,12 +23,11 @@ namespace GLUScheduleComponent {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
 
-			m_Schedules = new List<(Type identifierType, string name, string path)>();
-
-			m_Schedules.Add((typeof(StudentSetInfo), nameof(ScheduleRecord.StudentSets), scheduleContainer["studentsets"].ToObject<string>()));
-			m_Schedules.Add((typeof(TeacherInfo),	 nameof(ScheduleRecord.StaffMember), scheduleContainer["staffmember"].ToObject<string>()));
-			m_Schedules.Add((typeof(RoomInfo),		 nameof(ScheduleRecord.Room),		 scheduleContainer["room"].ToObject<string>()));
-
+			m_Schedules = new List<(Type identifierType, string name, string path)> {
+				(typeof(StudentSetInfo), nameof(ScheduleRecord.StudentSets),  Path.Combine(configPath, scheduleContainer["StudentSets"].ToObject<string>())),
+				(typeof(TeacherInfo), nameof(ScheduleRecord.StaffMember),  Path.Combine(configPath, scheduleContainer["StaffMember"].ToObject<string>())),
+				(typeof(RoomInfo), nameof(ScheduleRecord.Room), Path.Combine(configPath, scheduleContainer["Room"].ToObject<string>()))
+			};
 
 			return Task.CompletedTask;
 		}
