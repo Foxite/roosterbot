@@ -42,6 +42,9 @@ namespace RoosterBot {
 				Instance.MainAsync().GetAwaiter().GetResult();
 			} catch (Exception e) {
 				Logger.Log(LogSeverity.Critical, "Program", "Application has crashed.", e);
+#if DEBUG
+				Console.ReadKey();
+#endif
 				return 2;
 			} finally {
 				File.Delete(indicatorPath);
@@ -172,7 +175,7 @@ namespace RoosterBot {
 					servicesLoading[i] = m_Components[type].AddServices(serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
-					return;
+					throw;
 				}
 			}
 			await Task.WhenAll(servicesLoading);
@@ -189,7 +192,7 @@ namespace RoosterBot {
 					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
 				} catch (Exception ex) {
 					Logger.Log(LogSeverity.Critical, "Main", "Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex);
-					return;
+					throw;
 				}
 				moduleIndex++;
 			}
