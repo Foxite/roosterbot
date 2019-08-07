@@ -41,7 +41,7 @@ namespace GLUScheduleComponent {
 					DateTime lastMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
 					schedule = new List<ScheduleRecord>();
-					CultureInfo culture = new CultureInfo("en_US");
+					CultureInfo culture = new CultureInfo("en-US");
 
 					while (await csv.ReadAsync()) {
 						DateTime date = DateTime.ParseExact(csv["StartDate"], "yyyy-MM-dd", culture);
