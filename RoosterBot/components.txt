@@ -1,4 +1,5 @@
 ScheduleComponent.dll
+GLUScheduleComponent.dll
 MiscStuffComponent.dll
 PublicTransitComponent.dll
 WatsonComponent.dll
