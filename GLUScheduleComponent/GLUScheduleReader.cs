@@ -44,14 +44,14 @@ namespace GLUScheduleComponent {
 					CultureInfo culture = new CultureInfo("en-US");
 
 					while (await csv.ReadAsync()) {
-						DateTime date = DateTime.ParseExact(csv["StartDate"], "yyyy-MM-dd", culture);
+						DateTime date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
 
 						if (date < lastMonday) { // Only store past records for this week
 							continue;
 						}
 
-						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], "HH:mm", culture);
-						DateTime end = start + TimeSpan.ParseExact(csv["EndTime"], "HH:mm", culture); // Under the assumption that nobody works overnight
+						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], @"hh\:mm", culture);
+						DateTime end = date + TimeSpan.ParseExact(csv["EndTime"], @"hh\:mm", culture); // Under the assumption that nobody works overnight
 
 						ScheduleRecord record = new ScheduleRecord() {
 							Activity = csv["Activity"],
