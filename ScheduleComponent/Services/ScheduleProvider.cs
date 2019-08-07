@@ -39,7 +39,7 @@ namespace ScheduleComponent.Services {
 		}
 
 		public void RegisterSchedule(Type infoType, ScheduleService schedule) {
-			if (!infoType.IsAssignableFrom(typeof(IdentifierInfo))) {
+			if (!typeof(IdentifierInfo).IsAssignableFrom(infoType)) {
 				throw new ArgumentException($"The given type must be a type of IdentifierInfo.", nameof(infoType));
 			}
 
