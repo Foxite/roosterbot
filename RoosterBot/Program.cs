@@ -116,7 +116,7 @@ namespace RoosterBot {
 					m_State = ProgramState.BotRunning;
 					return Task.CompletedTask;
 				};
-				
+
 				if (m_ConfigService.ReportStartupVersionToOwner) {
 					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
@@ -203,7 +203,7 @@ namespace RoosterBot {
 			#region Connect to Discord
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
-			#endregion Start client
+			#endregion Connect to Discord
 
 			#region Quit code
 			Console.CancelKeyPress += (o, e) => {
@@ -266,7 +266,7 @@ namespace RoosterBot {
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
 				await componentKVP.Value.OnShutdown();
 			}
-			
+
 			m_State = ProgramState.BotStopped;
 			#endregion Quit code
 		}
