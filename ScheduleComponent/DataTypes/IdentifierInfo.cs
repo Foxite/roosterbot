@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace ScheduleComponent.DataTypes {
 	public abstract class IdentifierInfo {
 		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
+		public abstract PropertyInfo RelevantScheduleProperty { get; }
 
 		public abstract bool Matches(ScheduleRecord info);
 
