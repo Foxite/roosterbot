@@ -3,22 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Discord;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleService {
+		private readonly ulong[] m_AllowedGuildIds;
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
-		private ScheduleService() { }
+		private ScheduleService(ulong[] allowedGuilds) {
+			m_AllowedGuildIds = allowedGuilds;
+		}
 
-		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader) {
-			ScheduleService service = new ScheduleService() {
+		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
+			ScheduleService service = new ScheduleService(allowedGuildIds) {
 				m_Name = name,
 				m_Schedule = await reader.GetSchedule(name) // Unfortunately we can't have async constructors (for good reasons), so this'll do.
 			};
 			return service;
 		}
+
+		public bool IsGuildAllowed(ulong guildId) {
+			return m_AllowedGuildIds.Contains(guildId);
+		}
+
+		public bool IsGuildAllowed(IGuild guild) => IsGuildAllowed(guild.Id);
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
