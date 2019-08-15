@@ -52,10 +52,10 @@ namespace ScheduleComponent.Services {
 			return GetAllowedRecordsForGuild(guild).First(record => record.Abbreviation == abbr);
 		}
 
-		public TeacherInfo[] GetRecordsFromAbbrs(string[] abbrs) {
+		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
 			List<TeacherInfo> records = new List<TeacherInfo>();
 			for (int i = 0; i < abbrs.Length; i++) {
-				TeacherInfo record = GetRecordFromAbbr(abbrs[i]);
+				TeacherInfo record = GetRecordFromAbbr(guild, abbrs[i]);
 				if (record != null) {
 					records.Add(record);
 				} else if (!string.IsNullOrWhiteSpace(abbrs[i])) {
