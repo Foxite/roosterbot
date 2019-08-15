@@ -11,6 +11,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace GLUScheduleComponent {
+	// Dear Friday-Me,
+	// I am sorry
+	// Sincerely, Thursday-Me
 	public class GLUScheduleComponent : ComponentBase {
 		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;
@@ -24,13 +27,13 @@ namespace GLUScheduleComponent {
 
 			m_Schedules = new List<ScheduleRegistryInfo>();
 
-			void addSchedule(Type identifierType, string name) {
-				m_Schedules.Add(new ScheduleRegistryInfo(identifierType, name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
+			void addSchedule<T>(string name) where T : IdentifierInfo {
+				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
 			}
 
-			addSchedule(typeof(StudentSetInfo), nameof(ScheduleRecord.StudentSets));
-			addSchedule(typeof(TeacherInfo), nameof(ScheduleRecord.StaffMember));
-			addSchedule(typeof(RoomInfo), nameof(ScheduleRecord.Room));
+			addSchedule<StudentSetInfo>("GLU-StudentSets");
+			addSchedule<TeacherInfo>("GLU-Teachers");
+			addSchedule<RoomInfo>("GLU-Rooms");
 
 			m_AllowedGuilds = jsonConfig["allowedGuilds"].ToObject<JArray>().Select((token) => token.ToObject<ulong>()).ToArray();
 

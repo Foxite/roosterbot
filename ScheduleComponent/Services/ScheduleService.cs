@@ -19,7 +19,7 @@ namespace ScheduleComponent.Services {
 		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
 			ScheduleService service = new ScheduleService(allowedGuildIds) {
 				m_Name = name,
-				m_Schedule = await reader.GetSchedule(name) // Unfortunately we can't have async constructors (for good reasons), so this'll do.
+				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.
 			};
 			return service;
 		}
