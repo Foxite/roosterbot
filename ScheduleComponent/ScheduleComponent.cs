@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,16 +16,13 @@ namespace ScheduleComponent {
 
 		public override string VersionString => "2.0.0";
 
-		public async override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServices(IServiceCollection services, string configPath) {
 			TeacherNameService teachers = new TeacherNameService();
-			Task teacherLoading = teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv"));
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
 			m_UserClasses = new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>());
-
-			await teacherLoading;
 
 			services
 				.AddSingleton(teachers)
@@ -35,6 +31,8 @@ namespace ScheduleComponent {
 				.AddSingleton(m_UserClasses);
 
 			Logger.Debug("ScheduleComponent", "Started services");
+
+			return Task.CompletedTask;
 		}
 
 		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {

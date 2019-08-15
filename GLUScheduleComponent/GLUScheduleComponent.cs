@@ -19,6 +19,7 @@ namespace GLUScheduleComponent {
 		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
+		private string m_TeacherPath;
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -37,15 +38,19 @@ namespace GLUScheduleComponent {
 
 			m_AllowedGuilds = jsonConfig["allowedGuilds"].ToObject<JArray>().Select((token) => token.ToObject<ulong>()).ToArray();
 
+			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
+
 			return Task.CompletedTask;
 		}
 
 		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
+
 			List<(Type identifierType, Task<ScheduleService> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleService> scheduleTask)>();
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, ScheduleService.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers), m_AllowedGuilds)));
+				tasks.Add((sri.IdentifierType, ScheduleService.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0]), m_AllowedGuilds)));
 			}
 
 			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
