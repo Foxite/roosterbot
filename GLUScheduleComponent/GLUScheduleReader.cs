@@ -13,11 +13,13 @@ using System.Threading.Tasks;
 namespace GLUScheduleComponent {
 	public class GLUScheduleReader : ScheduleReaderBase {
 		private readonly string m_Path;
-		private TeacherNameService m_Teachers;
+		private readonly TeacherNameService m_Teachers;
+		private readonly ulong m_Guild;
 
-		public GLUScheduleReader(string path, TeacherNameService teachers) {
+		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild) {
 			m_Path = path;
 			m_Teachers = teachers;
+			m_Guild = guild;
 		}
 
 		/// <summary>
@@ -55,7 +57,7 @@ namespace GLUScheduleComponent {
 
 						ScheduleRecord record = new ScheduleRecord() {
 							Activity = csv["Activity"],
-							StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
+							StaffMember = m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
 							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
 							// Rooms often have " (0)" behind them. unknown reason.
 							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
