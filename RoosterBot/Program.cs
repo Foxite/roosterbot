@@ -90,18 +90,18 @@ namespace RoosterBot {
 				m_Client.Disconnected += (e) => {
 					m_State = ProgramState.BotStopped;
 					Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-						Thread.Sleep(10000);
+						Thread.Sleep(20000);
 						if (m_State != ProgramState.BotRunning) {
-							string report = $"RoosterBot has been disconnected for more than ten seconds. ";
+							string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
 							if (e == null) {
 								report += "No exception is attached.";
 							} else {
 								report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
 							}
-							report += "\n\nThe bot will attempt to restart in 10 seconds.";
+							report += "\n\nThe bot will attempt to restart in 20 seconds.";
 							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
 
-							Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 10000"));
+							Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 							Shutdown();
 						}
 					});
