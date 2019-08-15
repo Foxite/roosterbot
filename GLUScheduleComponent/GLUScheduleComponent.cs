@@ -1,5 +1,4 @@
-﻿using Discord;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
 using RoosterBot.Services;
@@ -12,9 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace GLUScheduleComponent {
-	// Dear Wednesday-Me,
-	// Good luck
-	// Sincerely, Tuesday-Me
 	public class GLUScheduleComponent : ComponentBase {
 		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;
