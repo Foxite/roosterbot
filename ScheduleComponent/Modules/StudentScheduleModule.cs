@@ -129,40 +129,44 @@ namespace ScheduleComponent.Modules {
 		}
 
 		private async Task RespondWorkingDays(StudentSetInfo info, int weeksFromNow) {
-			AvailabilityInfo[] availability = Schedules.GetWeekAvailability(info, weeksFromNow, Context);
-			string response = info.DisplayText + ": ";
+			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailabilityInfo(info, weeksFromNow);
+			if (result.Success) {
+				AvailabilityInfo[] availability = result.Value;
 
-			if (availability.Length > 0) {
-				if (weeksFromNow == 0) {
-					response += "Deze week";
-				} else if (weeksFromNow == 1) {
-					response += "Volgende week";
-				} else {
-					response += $"Over {weeksFromNow} weken";
-				}
-				response += " op school op \n";
-				
-				string[][] cells = new string[availability.Length + 1][];
-				cells[0] = new[] { "Dag", "Van", "Tot" };
+				string response = info.DisplayText + ": ";
 
-				int i = 1;
-				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
-					i++;
-				}
-				response += Util.FormatTextTable(cells, false);
-			} else {
-				response += "Niet op school ";
-				if (weeksFromNow == 0) {
-					response += "deze week";
-				} else if (weeksFromNow == 1) {
-					response += "volgende week";
+				if (availability.Length > 0) {
+					if (weeksFromNow == 0) {
+						response += "Deze week";
+					} else if (weeksFromNow == 1) {
+						response += "Volgende week";
+					} else {
+						response += $"Over {weeksFromNow} weken";
+					}
+					response += " op school op \n";
+
+					string[][] cells = new string[availability.Length + 1][];
+					cells[0] = new[] { "Dag", "Van", "Tot" };
+
+					int i = 1;
+					foreach (AvailabilityInfo item in availability) {
+						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+						i++;
+					}
+					response += Util.FormatTextTable(cells, false);
 				} else {
-					response += $"over {weeksFromNow} weken";
+					response += "Niet op school ";
+					if (weeksFromNow == 0) {
+						response += "deze week";
+					} else if (weeksFromNow == 1) {
+						response += "volgende week";
+					} else {
+						response += $"over {weeksFromNow} weken";
+					}
 				}
+
+				await ReplyAsync(response);
 			}
-
-			await ReplyAsync(response);
 		}
 
 		private async Task RespondDay(StudentSetInfo info, DayOfWeek day, bool includeToday) {

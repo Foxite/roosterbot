@@ -6,6 +6,7 @@ using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Preconditions;
 using ScheduleComponent.DataTypes;
+using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("RoomSM"), HiddenFromList]
@@ -119,41 +120,44 @@ namespace ScheduleComponent.Modules {
 		}
 
 		private async Task RespondWorkingDays(RoomInfo info, int weeksFromNow) {
-			AvailabilityInfo[] availability = Schedules.GetWeekAvailability(info, 0, Context);
+			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailabilityInfo(info, weeksFromNow);
+			if (result.Success) {
+				AvailabilityInfo[] availability = result.Value;
 
-			string response = info.DisplayText + ": ";
+				string response = info.DisplayText + ": ";
 
-			if (availability.Length > 0) {
-				if (weeksFromNow == 0) {
-					response += "Deze week";
-				} else if (weeksFromNow == 1) {
-					response += "Volgende week";
+				if (availability.Length > 0) {
+					if (weeksFromNow == 0) {
+						response += "Deze week";
+					} else if (weeksFromNow == 1) {
+						response += "Volgende week";
+					} else {
+						response += $"Over {weeksFromNow} weken";
+					}
+					response += " in gebruik op \n";
+
+					string[][] cells = new string[availability.Length + 1][];
+					cells[0] = new[] { "Dag", "Van", "Tot" };
+
+					int i = 1;
+					foreach (AvailabilityInfo item in availability) {
+						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+						i++;
+					}
+					response += Util.FormatTextTable(cells, false);
 				} else {
-					response += $"Over {weeksFromNow} weken";
+					response += "Niet in gebruik ";
+					if (weeksFromNow == 0) {
+						response += "deze week";
+					} else if (weeksFromNow == 1) {
+						response += "volgende week";
+					} else {
+						response += $"over {weeksFromNow} weken";
+					}
 				}
-				response += " in gebruik op \n";
-				
-				string[][] cells = new string[availability.Length + 1][];
-				cells[0] = new[] { "Dag", "Van", "Tot" };
 
-				int i = 1;
-				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
-					i++;
-				}
-				response += Util.FormatTextTable(cells, false);
-			} else {
-				response += "Niet in gebruik ";
-				if (weeksFromNow == 0) {
-					response += "deze week";
-				} else if (weeksFromNow == 1) {
-					response += "volgende week";
-				} else {
-					response += $"over {weeksFromNow} weken";
-				}
+				await ReplyAsync(response);
 			}
-
-			await ReplyAsync(response);
 		}
 
 		private async Task RespondDay(RoomInfo info, DayOfWeek day, bool includeToday) {
