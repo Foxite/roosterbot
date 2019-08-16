@@ -9,7 +9,7 @@ namespace ScheduleComponent.Services {
 		private Dictionary<Type, List<ScheduleService>> m_Schedules;
 
 		public ScheduleProvider() {
-			m_Schedules = new Dictionary<Type, List<ScheduleService>>()
+			m_Schedules = new Dictionary<Type, List<ScheduleService>>();
 		}
 
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier, ICommandContext context) {
