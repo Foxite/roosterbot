@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Discord.Commands;
 using ScheduleComponent.DataTypes;
 
@@ -34,7 +35,7 @@ namespace ScheduleComponent.Services {
 
 		private ScheduleService GetScheduleType(IdentifierInfo info, ICommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleService> list)) {
-				return list.First(schedule => schedule.IsGuildAllowed(context.Guild));
+				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoSchedulesAvailableException($"No schedules are allowed for guild {context.Guild}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
@@ -57,5 +58,13 @@ namespace ScheduleComponent.Services {
 				};
 			}
 		}
+	}
+
+	[Serializable]
+	public class NoSchedulesAvailableException : Exception {
+		public NoSchedulesAvailableException() { }
+		public NoSchedulesAvailableException(string message) : base(message) { }
+		public NoSchedulesAvailableException(string message, Exception inner) : base(message, inner) { }
+		protected NoSchedulesAvailableException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
