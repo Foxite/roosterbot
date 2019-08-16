@@ -98,39 +98,29 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public Task ShowThisWeekWorkingDaysCommand(RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0, Context);
-			RespondWorkingDays(info, days, 0);
-			return Task.CompletedTask;
+		public async Task ShowThisWeekWorkingDaysCommand(RoomInfo info) {
+			await RespondWorkingDays(info, 0);
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public Task ShowNextWeekWorkingDaysCommand(RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1, Context);
-			RespondWorkingDays(info, days, 1);
-			return Task.CompletedTask;
+		public async Task ShowNextWeekWorkingDaysCommand(RoomInfo info) {
+			await RespondWorkingDays(info, 1);
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
-			RespondWorkingDays(info, days, weeks);
-			return Task.CompletedTask;
-		}
-
-		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, RoomInfo info) {
+		// TODO: grammarWeeks should be used to identify the time unit (hours, days, weeks)
+		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, RoomInfo info) {
 			// Plurality easter egg
 			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
 				ReplyDeferred(":thinking:");
 			}
 			
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
-			RespondWorkingDays(info, days, weeks);
-			return Task.CompletedTask;
+			await RespondWorkingDays(info, weeks);
 		}
 
-		private void RespondWorkingDays(RoomInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
+		private async Task RespondWorkingDays(RoomInfo info, int weeksFromNow) {
+			AvailabilityInfo[] availability = Schedules.GetWeekAvailability(info, 0, Context);
+
 			string response = info.DisplayText + ": ";
 
 			if (availability.Length > 0) {
@@ -163,7 +153,7 @@ namespace ScheduleComponent.Modules {
 				}
 			}
 
-			ReplyDeferred(response);
+			await ReplyAsync(response);
 		}
 
 		private async Task RespondDay(RoomInfo info, DayOfWeek day, bool includeToday) {

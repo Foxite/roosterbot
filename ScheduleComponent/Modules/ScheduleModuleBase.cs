@@ -72,7 +72,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected string TableItemDuration(ScheduleRecord record) {
-			string ret = $":stopwatch: {(int) record.Duration.TotalHours}:{record.Duration.Minutes.ToString().PadLeft(2, '0')}";
+			string ret = $":stopwatch: {(int)record.Duration.TotalHours}:{record.Duration.Minutes.ToString().PadLeft(2, '0')}";
 			if (record.Start < DateTime.Now && record.End > DateTime.Now) {
 				TimeSpan timeLeft = record.End - DateTime.Now;
 				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
@@ -127,9 +127,8 @@ namespace ScheduleComponent.Modules {
 				};
 			}
 
-			ScheduleRecord record = null;
 			try {
-				record = next ? Schedules.GetNextRecord(identifier, Context) : Schedules.GetCurrentRecord(identifier, Context);
+				ScheduleRecord record = next ? Schedules.GetNextRecord(identifier, Context) : Schedules.GetCurrentRecord(identifier, Context);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
@@ -141,6 +140,11 @@ namespace ScheduleComponent.Modules {
 				};
 			} catch (RecordsOutdatedException) {
 				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (NoSchedulesAvailableException) {
+				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -180,6 +184,39 @@ namespace ScheduleComponent.Modules {
 			} catch (RecordsOutdatedException) {
 				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			} catch (NoSchedulesAvailableException) {
+				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
+				return new ReturnValue<ScheduleRecord[]>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError("Uncaught exception", ex);
+				throw;
+			}
+		}
+
+		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailabilityInfo(IdentifierInfo identifier, int weeksFromNow) {
+			try {
+				AvailabilityInfo[] records = Schedules.GetWeekAvailability(identifier, weeksFromNow, Context);
+				return new ReturnValue<AvailabilityInfo[]>() {
+					Success = true,
+					Value = records
+				};
+			} catch (IdentifierNotFoundException) {
+				await MinorError("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<AvailabilityInfo[]>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				return new ReturnValue<AvailabilityInfo[]>() {
+					Success = false
+				};
+			} catch (NoSchedulesAvailableException) {
+				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
+				return new ReturnValue<AvailabilityInfo[]>() {
 					Success = false
 				};
 			} catch (Exception ex) {

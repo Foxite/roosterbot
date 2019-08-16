@@ -63,49 +63,41 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
-				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0, Context);
-				RespondWorkingDays(info, days, 0);
+				await RespondWorkingDays(info, 0);
 			}
-			return Task.CompletedTask;
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo info in teachers) {
-				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1, Context);
-				RespondWorkingDays(info, days, 1);
+				await RespondWorkingDays(info, 1);
 			}
-			return Task.CompletedTask;
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, TeacherInfo[] infos) {
+		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, TeacherInfo[] infos) {
 			foreach (var info in infos) {
-				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
-				RespondWorkingDays(info, days, weeks);
+				await RespondWorkingDays(info, weeks);
 			}
-
-			return Task.CompletedTask;
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, TeacherInfo[] infos) {
+		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, TeacherInfo[] infos) {
 			// Plurality easter egg
 			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
 				ReplyDeferred(":thinking:");
 			}
 
 			foreach (var info in infos) {
-				AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
-				RespondWorkingDays(info, days, weeks);
+				await RespondWorkingDays(info, weeks);
 			}
-
-			return Task.CompletedTask;
 		}
 
-		private void RespondWorkingDays(TeacherInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
+		private async Task RespondWorkingDays(TeacherInfo info, int weeksFromNow) {
+			AvailabilityInfo[] availability = Schedules.GetWeekAvailability(info, weeksFromNow, Context);
+
 			string response = info.DisplayText + ": ";
 
 			if (availability.Length > 0) {
@@ -138,7 +130,7 @@ namespace ScheduleComponent.Modules {
 				}
 			}
 
-			ReplyDeferred(response);
+			await ReplyAsync(response);
 		}
 
 		private async Task RespondTeacherDay(TeacherInfo[] teachers, DayOfWeek day, bool includeToday) {
