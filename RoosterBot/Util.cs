@@ -314,6 +314,24 @@ namespace RoosterBot {
 
 			return ret;
 		}
+
+		public static string EscapeString(string input) {
+			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
+				("\\", "\\\\"), // Needs to be done first
+				("_", @"\_"),
+				("*", @"\*"), // Also covers **, which need only their *first* side escaped, or all of the asterisks in *both* sides
+				(">", @"\>"),
+				(">>>", @"\>>>"),
+				("<", @"\<"),
+				("`", @"\`")
+			};
+
+			foreach ((string replace, string with) in replacements) {
+				input = input.Replace(replace, with);
+			}
+
+			return input;
+		}
 	}
 
 	public class ReturnValue<T> {

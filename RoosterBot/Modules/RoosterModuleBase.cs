@@ -141,8 +141,7 @@ namespace RoosterBot.Modules {
 			string report = $"Critical error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
 
 			if (exception != null) {
-				report += $"\nAttached exception: {exception.GetType().Name}\n";
-				report += exception.StackTrace;
+				report += $"\nAttached exception: {Util.EscapeString(exception.ToString())}\n";
 			}
 
 			Log.Error(report);
