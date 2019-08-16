@@ -1,23 +1,19 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Services {
 	public class ConfigService {
-		public   bool         ErrorReactions { get; }
-		public   string       CommandPrefix { get; }
+		public   bool		  ErrorReactions { get; }
+		public   string		  CommandPrefix { get; }
 		public   ActivityType ActivityType { get; }
-		public   string       GameString { get; }
-		public   IUser        BotOwner { get; private set; }
-
-		internal string       SNSCriticalFailureARN { get; }
+		public   string		  GameString { get; }
+		public   IUser		  BotOwner { get; private set; }
+		internal string		  SNSCriticalFailureARN { get; }
 		internal bool		  ReportStartupVersionToOwner { get; }
-		
-		[Obsolete("Use " + nameof(BotOwner))]
-		public	 ulong        BotOwnerId => BotOwner.Id;
-		
+		private  ulong		  m_BotOwnerId;
+
 		internal ConfigService(string jsonPath, out string authToken) {
 			string jsonFile = File.ReadAllText(jsonPath);
 			JObject jsonConfig = JObject.Parse(jsonFile);
@@ -29,18 +25,15 @@ namespace RoosterBot.Services {
 			GameString = jsonConfig["gameString"].ToObject<string>();
 			SNSCriticalFailureARN = jsonConfig["snsCF_ARN"].ToObject<string>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
+			m_BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 		}
 		
 		/// <summary>
 		/// Load Discord.NET objects based on config data.
 		/// </summary>
 		internal async Task LoadDiscordInfo(IDiscordClient client, string jsonPath) {
-			string jsonFile = File.ReadAllText(Path.Combine(jsonPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
-
 			// Load IUser belonging to owner
-			ulong ownerId = jsonConfig["botOwnerId"].ToObject<ulong>();
-			BotOwner = await client.GetUserAsync(ownerId);
+			BotOwner = await client.GetUserAsync(m_BotOwnerId);
 		}
 	}
 }
