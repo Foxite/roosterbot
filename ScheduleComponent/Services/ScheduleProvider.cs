@@ -25,8 +25,8 @@ namespace ScheduleComponent.Services {
 			return GetScheduleType(identifier, context).GetRecordAfter(identifier, givenRecord);
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetSchedulesForDay(identifier, day, includeToday);
+		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetSchedulesForDate(identifier, date);
 		}
 
 		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, ICommandContext context) {

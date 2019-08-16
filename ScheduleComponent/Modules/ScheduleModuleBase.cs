@@ -133,13 +133,13 @@ namespace ScheduleComponent.Modules {
 					Success = true,
 					Value = record
 				};
-			} catch (IdentifierNotFoundException) {
+			} catch (IdentifierNotFoundException) { // TODO I smell repetition, get it out of here.
 				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -154,16 +154,8 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
-			DateTime targetDate;
-			if (includeToday) {
-				// Get the next {day} including today
-				targetDate = DateTime.Today.AddDays(((int)day - (int)DateTime.Today.DayOfWeek + 7) % 7);
-			} else {
-				// Get the next {day} after today
-				targetDate = DateTime.Today.AddDays(1 + ((int)day - (int)DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
-			}
-			if (ScheduleUtil.IsSummerBreak(targetDate)) {
+		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
+			if (ScheduleUtil.IsSummerBreak(date)) {
 				await MinorError("Het is vakantie, man. Ga naar huis.");
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = false
@@ -171,7 +163,7 @@ namespace ScheduleComponent.Modules {
 			}
 
 			try {
-				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday, Context);
+				ScheduleRecord[] records = Schedules.GetSchedulesForDate(identifier, date, Context);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records
@@ -182,7 +174,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = false
 				};
@@ -210,7 +202,7 @@ namespace ScheduleComponent.Modules {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar ik heb nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
 				return new ReturnValue<AvailabilityInfo[]>() {
 					Success = false
 				};
@@ -222,6 +214,55 @@ namespace ScheduleComponent.Modules {
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
 				throw;
+			}
+		}
+
+		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
+			try {
+				ScheduleRecord record = Schedules.GetRecordAfterTimeSpan(identifier, span, Context);
+				return new ReturnValue<ScheduleRecord>() {
+					Success = true,
+					Value = record
+				};
+			} catch (IdentifierNotFoundException) {
+				await MinorError("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (NoSchedulesAvailableException) {
+				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
+				return new ReturnValue<ScheduleRecord>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError("Uncaught exception", ex);
+				throw;
+			}
+		}
+
+		protected async Task RespondRecord(IdentifierInfo info, ScheduleRecord record) {
+			string response = "";
+			response += TableItemActivity(record, false);
+
+			if (record.Activity != "stdag doc") {
+				if (record.Activity != "pauze") {
+					response += TableItemStaffMember(record);
+					response += TableItemRoom(record);
+				}
+
+				response += TableItemStartEndTime(record);
+				response += TableItemDuration(record);
+				response += TableItemBreak(record);
+			}
+			ReplyDeferred(response, info, record);
+
+			if (record.Activity == "pauze") {
+				await GetAfterCommand();
 			}
 		}
 	}

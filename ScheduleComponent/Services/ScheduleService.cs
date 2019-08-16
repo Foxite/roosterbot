@@ -112,27 +112,17 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
+		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			DateTime targetDate;
-
-			// https://stackoverflow.com/a/6346190/3141917
-			if (includeToday) {
-				// Get the next {day} including today
-				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
-			} else {
-				// Get the next {day} after today
-				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
-			}
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (record.Start.Date == targetDate) {
+					if (record.Start.Date == date) {
 						records.Add(record);
-					} else if (record.Start.Date > targetDate) {
+					} else if (record.Start.Date > date) {
 						sawRecordAfterTarget = true;
 						break;
 					}

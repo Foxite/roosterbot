@@ -6,7 +6,6 @@ using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Preconditions;
 using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
 	[LogTag("RoomSM"), HiddenFromList]
@@ -16,28 +15,16 @@ namespace ScheduleComponent.Modules {
 			ReturnValue<ScheduleRecord> result = await GetRecord(false, room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-				string response;
 				if (record == null) {
-					response = "Het ziet ernaar uit dat daar nu niets is.";
+					string response = "Het ziet ernaar uit dat daar nu niets is.";
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
+					ReplyDeferred(response, room, record);
 				} else {
-					response = $"{record.RoomString}: Nu\n";
-					response += TableItemActivity(record, false);
+					ReplyDeferred($"{record.RoomString}: Nu\n");
 
-					if (record.Activity != "stdag doc") {
-						response += TableItemStaffMember(record);
-						response += TableItemStudentSets(record);
-						response += TableItemStartEndTime(record);
-						response += TableItemDuration(record);
-						response += TableItemBreak(record);
-					}
-				}
-				ReplyDeferred(response, room, record);
-				
-				if (record?.Activity == "pauze") {
-					await GetAfterCommand();
+					await RespondRecord(room, record);
 				}
 			}
 		}
@@ -79,23 +66,18 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("dag", RunMode = RunMode.Async)]
-		public async Task RoomWeekdayCommand(RoomInfo info, DayOfWeek day) {
-			await RespondDay(info, day, false);
-		}
-
-		[Command("dag", RunMode = RunMode.Async)]
 		public async Task RoomWeekdayCommand(DayOfWeek day, RoomInfo info) {
-			await RespondDay(info, day, false);
+			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 		
 		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task RoomTodayCommand(RoomInfo info) {
-			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("vandaag"), true);
+			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task RoomTomorrowCommand(RoomInfo info) {
-			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("morgen"), false);
+			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
@@ -108,15 +90,51 @@ namespace ScheduleComponent.Modules {
 			await RespondWorkingDays(info, 1);
 		}
 
-		[Command("over", RunMode = RunMode.Sync)]
-		// TODO: grammarWeeks should be used to identify the time unit (hours, days, weeks)
-		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, RoomInfo info) {
-			// Plurality easter egg
-			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
-				ReplyDeferred(":thinking:");
+		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, RoomInfo info) {
+			if (unit == "uur") {
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+				if (result.Success) {
+					await RespondRecord(info, result.Value);
+				}
+			} else if (unit == "dag" || unit == "dagen") {
+				await RespondDay(info, DateTime.Today.AddDays(amount));
+			} else if (unit == "week" || unit == "weken") {
+				await RespondWorkingDays(info, amount);
+			} else {
+				await MinorError("Ik ondersteun alleen uren, dagen, en weken.");
 			}
-			
-			await RespondWorkingDays(info, weeks);
+		}
+
+		private async Task RespondDay(RoomInfo info, DateTime date) {
+			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
+			if (result.Success) {
+				ScheduleRecord[] records = result.Value;
+				string response;
+				if (records.Length == 0) {
+					response = $"Het ziet ernaar uit dat daar {ScheduleUtil.GetRelativeDateReference(date)} niets is.";
+
+					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
+						response += " Het is dan ook weekend.";
+					}
+					ReplyDeferred(response, info, null);
+				} else {
+					response = $"{info.DisplayText}: Rooster van {ScheduleUtil.GetRelativeDateReference(date)}\n";
+
+					string[][] cells = new string[records.Length + 1][];
+					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
+					int recordIndex = 1;
+					foreach (ScheduleRecord record in records) {
+						cells[recordIndex] = new string[4];
+						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
+						cells[recordIndex][2] = record.StudentSetsString;
+						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						recordIndex++;
+					}
+					response += Util.FormatTextTable(cells, true);
+					ReplyDeferred(response, info, records.Last());
+				}
+			}
 		}
 
 		private async Task RespondWorkingDays(RoomInfo info, int weeksFromNow) {
@@ -156,55 +174,7 @@ namespace ScheduleComponent.Modules {
 					}
 				}
 
-				await ReplyAsync(response);
-			}
-		}
-
-		private async Task RespondDay(RoomInfo info, DayOfWeek day, bool includeToday) {
-			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, includeToday);
-			if (result.Success) {
-				ScheduleRecord[] records = result.Value;
-				string response;
-				if (records.Length == 0) {
-					response = "Het ziet ernaar uit dat daar ";
-					if (DateTime.Today.DayOfWeek == day && includeToday) {
-						response += "vandaag";
-					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-						response += "morgen";
-					} else {
-						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
-					}
-					response += " niets is.";
-
-					if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
-						response += " Het is dan ook weekend.";
-					}
-					ReplyDeferred(response, info, null);
-				} else {
-					response = $"{info.DisplayText}: Rooster ";
-					if (DateTime.Today.DayOfWeek == day && includeToday) {
-						response += "voor vandaag";
-					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-						response += "voor morgen";
-					} else {
-						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
-					}
-					response += "\n";
-
-					string[][] cells = new string[records.Length + 1][];
-					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
-					int recordIndex = 1;
-					foreach (ScheduleRecord record in records) {
-						cells[recordIndex] = new string[4];
-						cells[recordIndex][0] = record.Activity;
-						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-						cells[recordIndex][2] = record.StudentSetsString;
-						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
-						recordIndex++;
-					}
-					response += Util.FormatTextTable(cells, true);
-					ReplyDeferred(response, info, records.Last());
-				}
+				ReplyDeferred(response);
 			}
 		}
 	}
