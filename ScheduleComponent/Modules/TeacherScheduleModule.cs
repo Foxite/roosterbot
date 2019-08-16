@@ -14,7 +14,7 @@ namespace ScheduleComponent.Modules {
 		public async Task TeacherCurrentCommand([Remainder] TeacherInfo[] teachers) {
 			if (teachers.Length > 1) {
 				await RespondTeacherMultiple(false, teachers);
-				LSCService.RemoveLastQuery(Context.User);
+				LSCService.RemoveLastQuery(Context);
 			} else {
 				ReturnValue<ScheduleRecord> result = await GetRecord(false, teachers[0]);
 				if (result.Success) {
@@ -28,7 +28,7 @@ namespace ScheduleComponent.Modules {
 		public async Task TeacherNextCommand([Remainder] TeacherInfo[] teachers) {
 			if (teachers.Length > 1) { // There are multiple
 				await RespondTeacherMultiple(true, teachers);
-				LSCService.RemoveLastQuery(Context.User);
+				LSCService.RemoveLastQuery(Context);
 			} else {
 				ReturnValue<ScheduleRecord> result = await GetRecord(true, teachers[0]);
 				if (result.Success) {

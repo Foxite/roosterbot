@@ -93,26 +93,26 @@ namespace ScheduleComponent.Modules {
 		/// </summary>
 		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			LSCService.OnRequestByUser(Context.User, identifier, record);
+			LSCService.OnRequestByUser(Context, identifier, record);
 			return ret;
 		}
 
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord record) {
 			base.ReplyDeferred(message);
-			LSCService.OnRequestByUser(Context.User, identifier, record);
+			LSCService.OnRequestByUser(Context, identifier, record);
 		}
 
 		protected async override Task MinorError(string message) {
 			await base.MinorError(message);
-			LSCService.RemoveLastQuery(Context.User);
+			LSCService.RemoveLastQuery(Context);
 		}
 
 		protected async override Task FatalError(string message, Exception exception = null) {
 			await base.FatalError(message, exception);
-			LSCService.RemoveLastQuery(Context.User);
+			LSCService.RemoveLastQuery(Context);
 		}
 
 		protected async Task GetAfterCommand() {

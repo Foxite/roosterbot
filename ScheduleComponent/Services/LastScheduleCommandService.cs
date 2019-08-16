@@ -1,38 +1,45 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
+using Discord.Commands;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
-		// TODO: This should be specific to channels
-		// ulong: ID of IGuildUser who requested the ScheduleRecord given in the ScheduleQueryContext.
-		// It is used by the !daarna command that looks up the schedule that takes place after the last one the user received.
-		private ConcurrentDictionary<IUser, ScheduleCommandInfo> m_SCIs;
+		private ConcurrentDictionary<IMessageChannel, ConcurrentDictionary<IUser, ScheduleCommandInfo>> m_SCIs;
 
 		public LastScheduleCommandService() {
-			m_SCIs = new ConcurrentDictionary<IUser, ScheduleCommandInfo>();
+			m_SCIs = new ConcurrentDictionary<IMessageChannel, ConcurrentDictionary<IUser, ScheduleCommandInfo>>();
 		}
 
-		public ScheduleCommandInfo GetLastCommandFromUser(IUser user) {
-
-			if (m_SCIs.TryGetValue(user, out ScheduleCommandInfo previous)) {
+		public ScheduleCommandInfo GetLastCommandForContext(ICommandContext context) {
+			if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users) &&
+				users.TryGetValue(context.User, out ScheduleCommandInfo previous)) {
 				return previous;
 			} else {
 				return default(ScheduleCommandInfo);
 			}
 		}
 
-		public void OnRequestByUser(IUser user, IdentifierInfo identifier, ScheduleRecord record) {
+		public void OnRequestByUser(ICommandContext context, IdentifierInfo identifier, ScheduleRecord record) {
 			if (identifier != null) {
-				ScheduleCommandInfo ctx = new ScheduleCommandInfo(identifier, record);
-				m_SCIs.AddOrUpdate(user, ctx, (key, existing) => { return ctx; });
+				ScheduleCommandInfo sci = new ScheduleCommandInfo(identifier, record);
+
+				ConcurrentDictionary<IUser, ScheduleCommandInfo> users = m_SCIs.GetOrAdd(context.Channel, new ConcurrentDictionary<IUser, ScheduleCommandInfo>());
+
+				users.AddOrUpdate(context.User, sci, (key, existing) => { return sci; });
 			} else {
-				m_SCIs.TryRemove(user, out ScheduleCommandInfo unused);
+				if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users)) {
+					users.TryRemove(context.User, out ScheduleCommandInfo unused);
+				}
 			}
 		}
 
-		public bool RemoveLastQuery(IUser user) {
-			return m_SCIs.TryRemove(user, out ScheduleCommandInfo unused);
+		public bool RemoveLastQuery(ICommandContext context) {
+			if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users)) {
+				return users.TryRemove(context.User, out ScheduleCommandInfo unused);
+			} else {
+				return false;
+			}
 		}
 	}
 

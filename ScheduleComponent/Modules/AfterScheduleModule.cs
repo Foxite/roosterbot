@@ -18,7 +18,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task GetAfterCommandInternal(int recursion = 0) {
-			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(Context.User);
+			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
 			} else {
