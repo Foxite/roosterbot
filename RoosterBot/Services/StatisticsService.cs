@@ -6,12 +6,10 @@ using Discord;
 
 namespace RoosterBot.Services {
 	public class StatisticsService {
-		private IDiscordClient m_Client;
 		private ConfigService m_Config;
 		private ConcurrentDictionary<string, int> m_IntegerStats;
 
-		public StatisticsService(IDiscordClient client, ConfigService config) {
-			m_Client = client;
+		public StatisticsService(ConfigService config) {
 			m_Config = config;
 
 			m_IntegerStats = new ConcurrentDictionary<string, int>();
@@ -22,8 +20,8 @@ namespace RoosterBot.Services {
 		/// </summary>
 		/// <returns></returns>
 		public async Task PublishStatistics() {
-			if (m_Config.LogChannel != null) {
-				await m_Config.LogChannel.SendMessageAsync(GenerateReport());
+			if (m_Config.BotOwner != null) {
+				await m_Config.BotOwner.SendMessageAsync(GenerateReport());
 			} else {
 				throw new NullReferenceException("The given ConfigService must have a LogChannel set.");
 			}

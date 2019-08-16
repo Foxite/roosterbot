@@ -11,7 +11,6 @@ namespace RoosterBot.Services {
 		public   ActivityType ActivityType { get; }
 		public   string       GameString { get; }
 		public   IUser        BotOwner { get; private set; }
-		public   ITextChannel LogChannel { get; private set; }
 
 		internal string       SNSCriticalFailureARN { get; }
 		internal bool		  ReportStartupVersionToOwner { get; }
@@ -42,12 +41,6 @@ namespace RoosterBot.Services {
 			// Load IUser belonging to owner
 			ulong ownerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 			BotOwner = await client.GetUserAsync(ownerId);
-
-			// Load LogChannel
-			LogChannel = await client.GetChannelAsync(jsonConfig["logChannelId"].ToObject<ulong>()) as ITextChannel;
-			if (LogChannel == null) {
-				Logger.Log(LogSeverity.Info, "Config", "LogChannel could not be found.");
-			}
 		}
 	}
 }

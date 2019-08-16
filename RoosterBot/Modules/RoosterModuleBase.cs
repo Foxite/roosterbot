@@ -147,8 +147,8 @@ namespace RoosterBot.Modules {
 
 			Log.Error(report);
 			await SNSService.SendCriticalErrorNotificationAsync(report);
-			if (Config.LogChannel != null) {
-				await Config.LogChannel.SendMessageAsync($"{Config.BotOwner.Mention} {report}");
+			if (Config.BotOwner != null) {
+				await Config.BotOwner.SendMessageAsync($"{Config.BotOwner.Mention} {report}");
 			}
 			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
 			if (Config.ErrorReactions) {
