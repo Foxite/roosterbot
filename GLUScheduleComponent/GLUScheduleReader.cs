@@ -21,10 +21,6 @@ namespace GLUScheduleComponent {
 			m_Guild = guild;
 		}
 
-		/// <summary>
-		/// Loads a schedule into memory from a CSV file so that it can be accessed using this service.
-		/// </summary>
-		/// <param name="name">Should be the same as the property you're going to search from.</param>
 		public async override Task<List<ScheduleRecord>> GetSchedule() {
 			Logger.Log(Discord.LogSeverity.Info, "GLUScheduleReader", $"Loading CSV file from {m_Path}");
 
@@ -65,14 +61,12 @@ namespace GLUScheduleComponent {
 							End = end
 						};
 
-						// TODO make sure this is still working
-						// If it's not just revert this attempt at removing the name of the schedule reader. I've done my best. It's a bit hard to test a schedule program
-						//  when it's summer break and there are no schedules.
 						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord lastRecord) &&
 							record.Start.Date == lastRecord.Start.Date &&
 							record.StudentSetsString == lastRecord.StudentSetsString &&
 							record.StaffMemberString == lastRecord.StaffMemberString &&
 							record.RoomString == lastRecord.RoomString) {
+							// Note: This does not support records with multiple breaks. If that happens, it will result in only the last break being displayed.
 							lastRecord.BreakStart = lastRecord.End;
 							lastRecord.BreakEnd = record.Start;
 							lastRecord.End = record.End;

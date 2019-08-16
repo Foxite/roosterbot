@@ -16,6 +16,7 @@ namespace ScheduleComponent.Services {
 			m_AllowedGuildIds = allowedGuilds;
 		}
 
+		/// <param name="name">Used in logging. Does not affect anything else.</param>
 		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
 			ScheduleService service = new ScheduleService(allowedGuildIds) {
 				m_Name = name,

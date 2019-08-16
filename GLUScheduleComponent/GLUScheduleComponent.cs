@@ -11,9 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace GLUScheduleComponent {
-	// Dear Friday-Me,
-	// I am sorry
-	// Sincerely, Thursday-Me
 	public class GLUScheduleComponent : ComponentBase {
 		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;
