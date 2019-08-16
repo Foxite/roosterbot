@@ -4,6 +4,7 @@ using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
+		// TODO: This should be specific to guilds
 		// ulong: ID of IGuildUser who requested the ScheduleRecord given in the ScheduleQueryContext.
 		// It is used by the !daarna command that looks up the schedule that takes place after the last one the user received.
 		private ConcurrentDictionary<ulong, ScheduleCommandInfo> m_SCIs;
