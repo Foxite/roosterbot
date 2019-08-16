@@ -134,7 +134,7 @@ namespace ScheduleComponent.Modules {
 					Success = true,
 					Value = record
 				};
-			} catch (ScheduleNotFoundException) {
+			} catch (IdentifierNotFoundException) {
 				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
@@ -172,7 +172,7 @@ namespace ScheduleComponent.Modules {
 					Success = true,
 					Value = records
 				};
-			} catch (ScheduleNotFoundException) {
+			} catch (IdentifierNotFoundException) {
 				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = false

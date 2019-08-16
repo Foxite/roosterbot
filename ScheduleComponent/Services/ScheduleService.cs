@@ -49,7 +49,7 @@ namespace ScheduleComponent.Services {
 			if (sawRecordForClass) {
 				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace ScheduleComponent.Services {
 			if (sawRecordForClass) {
 				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace ScheduleComponent.Services {
 			if (sawRecordForClass) {
 				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace ScheduleComponent.Services {
 
 			if (records.Count == 0) {
 				if (!sawRecordForClass) {
-					throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+					throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 				} else if (!sawRecordAfterTarget) {
 					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 				}
@@ -165,11 +165,11 @@ namespace ScheduleComponent.Services {
 	}
 
 	[Serializable]
-	public class ScheduleNotFoundException : Exception {
-		public ScheduleNotFoundException() { }
-		public ScheduleNotFoundException(string message) : base(message) { }
-		public ScheduleNotFoundException(string message, Exception innerException) : base(message, innerException) { }
-		protected ScheduleNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	public class IdentifierNotFoundException : Exception {
+		public IdentifierNotFoundException() { }
+		public IdentifierNotFoundException(string message) : base(message) { }
+		public IdentifierNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+		protected IdentifierNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	[Serializable]

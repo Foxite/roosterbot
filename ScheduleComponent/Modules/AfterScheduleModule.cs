@@ -34,7 +34,7 @@ namespace ScheduleComponent.Modules {
 				} catch (RecordsOutdatedException) {
 					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 					return;
-				} catch (ScheduleNotFoundException) {
+				} catch (IdentifierNotFoundException) {
 					string report = $"daarna failed for query {query.Identifier.ScheduleField}:{query.Identifier}";
 					if (nullRecord) {
 						report += " with no record";
