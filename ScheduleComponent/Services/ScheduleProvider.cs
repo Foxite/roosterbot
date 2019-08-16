@@ -33,6 +33,10 @@ namespace ScheduleComponent.Services {
 			return GetScheduleType(identifier, context).GetWeekAvailability(identifier, weeksFromNow);
 		}
 
+		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetRecordAfterTimeSpan(identifier, timespan);
+		}
+
 		private ScheduleService GetScheduleType(IdentifierInfo info, ICommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleService> list)) {
 				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoSchedulesAvailableException($"No schedules are allowed for guild {context.Guild}");

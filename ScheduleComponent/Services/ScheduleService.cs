@@ -53,6 +53,25 @@ namespace ScheduleComponent.Services {
 			}
 		}
 
+		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan) {
+			long targetTicks = (DateTime.Now + timespan).Ticks;
+			bool sawRecordForClass = false;
+
+			foreach (ScheduleRecord record in m_Schedule) {
+				if (identifier.Matches(record)) {
+					sawRecordForClass = true;
+					if (record.Start.Ticks > targetTicks && record.End.Ticks < targetTicks) {
+						return record;
+					}
+				}
+			}
+			if (sawRecordForClass) {
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
+			} else {
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+			}
+		}
+
 		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
 			long ticksNow = DateTime.Now.Ticks;
 			bool sawRecordForClass = false;
