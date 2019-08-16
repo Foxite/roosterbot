@@ -96,7 +96,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HelpService.cs" />
     <Compile Include="Services\SNSService.cs" />
-    <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
