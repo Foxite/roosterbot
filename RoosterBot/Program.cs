@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Services;
 
 namespace RoosterBot {
+	// TODO make this less of a god class
 	public class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
@@ -308,6 +309,9 @@ namespace RoosterBot {
 			await HandleError(context, result);
 		}
 
+		// TODO: Use this from CommandService.CommandExecuted instead
+		// I have discovered that by doing it that way, you will still get the actual result if the command is RunMode.Async
+		// https://discord.foxbot.me/stable/guides/commands/post-execution.html#runtimeresult
 		private async Task HandleError(ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
