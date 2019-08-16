@@ -49,7 +49,7 @@ namespace ScheduleComponent.Services {
 		}
 
 		public TeacherInfo GetRecordFromAbbr(ulong guild, string abbr) {
-			return GetAllowedRecordsForGuild(guild).First(record => record.Abbreviation == abbr);
+			return GetAllowedRecordsForGuild(guild).FirstOrDefault(record => record.Abbreviation == abbr);
 		}
 
 		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
