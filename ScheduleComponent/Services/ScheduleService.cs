@@ -33,6 +33,7 @@ namespace ScheduleComponent.Services {
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
+			// TODO why are we using ticks everywhere? Use DateTime
 			long ticksNow = DateTime.Now.Ticks;
 			bool sawRecordForClass = false;
 
