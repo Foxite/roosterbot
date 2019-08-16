@@ -1,38 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Discord.Commands;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleProvider {
-		private Dictionary<Type, ScheduleService> m_Schedules;
+		private Dictionary<Type, List<ScheduleService>> m_Schedules;
 
 		public ScheduleProvider() {
-			m_Schedules = new Dictionary<Type, ScheduleService>();
+			m_Schedules = new Dictionary<Type, List<ScheduleService>>()
 		}
 
-		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetCurrentRecord(identifier);
+		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetCurrentRecord(identifier);
 		}
 
-		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetNextRecord(identifier);
+		public ScheduleRecord GetNextRecord(IdentifierInfo identifier, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetNextRecord(identifier);
 		}
 
-		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			return GetScheduleType(identifier).GetRecordAfter(identifier, givenRecord);
+		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetRecordAfter(identifier, givenRecord);
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
-			return GetScheduleType(identifier).GetSchedulesForDay(identifier, day, includeToday);
+		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetSchedulesForDay(identifier, day, includeToday);
 		}
 
-		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
-			return GetScheduleType(identifier).GetWeekAvailability(identifier, weeksFromNow);
+		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetWeekAvailability(identifier, weeksFromNow);
 		}
 
-		private ScheduleService GetScheduleType(IdentifierInfo info) {
-			if (m_Schedules.TryGetValue(info.GetType(), out ScheduleService schedule)) {
-				return schedule;
+		private ScheduleService GetScheduleType(IdentifierInfo info, ICommandContext context) {
+			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleService> list)) {
+				return list.First(schedule => schedule.IsGuildAllowed(context.Guild));
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
@@ -47,7 +49,13 @@ namespace ScheduleComponent.Services {
 				throw new ArgumentException($"A schedule was already registered for {infoType.Name}.");
 			}
 
-			m_Schedules[infoType] = schedule;
+			if (m_Schedules.TryGetValue(infoType, out List<ScheduleService> list)) {
+				list.Add(schedule);
+			} else {
+				m_Schedules[infoType] = new List<ScheduleService>() {
+					schedule
+				};
+			}
 		}
 	}
 }
