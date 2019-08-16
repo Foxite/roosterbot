@@ -99,21 +99,21 @@ namespace ScheduleComponent.Modules {
 
 		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0, Context);
 			RespondWorkingDays(info, days, 0);
 			return Task.CompletedTask;
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
 		public Task ShowNextWeekWorkingDaysCommand(RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1, Context);
 			RespondWorkingDays(info, days, 1);
 			return Task.CompletedTask;
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
 		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, RoomInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
 			RespondWorkingDays(info, days, weeks);
 			return Task.CompletedTask;
 		}
@@ -125,7 +125,7 @@ namespace ScheduleComponent.Modules {
 				ReplyDeferred(":thinking:");
 			}
 			
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
+			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks, Context);
 			RespondWorkingDays(info, days, weeks);
 			return Task.CompletedTask;
 		}

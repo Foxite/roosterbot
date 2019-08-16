@@ -129,7 +129,7 @@ namespace ScheduleComponent.Modules {
 
 			ScheduleRecord record = null;
 			try {
-				record = next ? Schedules.GetNextRecord(identifier) : Schedules.GetCurrentRecord(identifier);
+				record = next ? Schedules.GetNextRecord(identifier, Context) : Schedules.GetCurrentRecord(identifier, Context);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
@@ -167,7 +167,7 @@ namespace ScheduleComponent.Modules {
 			}
 
 			try {
-				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday);
+				ScheduleRecord[] records = Schedules.GetSchedulesForDay(identifier, day, includeToday, Context);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records

@@ -27,9 +27,9 @@ namespace ScheduleComponent.Modules {
 				bool nullRecord = record == null;
 				try {
 					if (nullRecord) {
-						record = Schedules.GetNextRecord(query.Identifier);
+						record = Schedules.GetNextRecord(query.Identifier, Context);
 					} else {
-						record = Schedules.GetRecordAfter(query.Identifier, query.Record);
+						record = Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
 					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
