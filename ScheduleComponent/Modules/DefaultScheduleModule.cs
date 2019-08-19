@@ -25,7 +25,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		private async Task ReplyErrorMessage(string param) {
-			if (StudentSetInfoReader.s_LookupRegex.IsMatch(param)) {
+			if (MentionUtils.TryParseUser(param, out ulong unused)) {
 				await ReplyAsync("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen. Als het een leraar is, moet zijn/haar Discord account worden toegevoegd door de bot eigenaar.");
 			} else if (param == "ik") {
 				await ReplyAsync("Ik weet niet in welke klas jij zit. Je moet `!ik <jouw klas>` gebruiken om dit in te stellen.");
