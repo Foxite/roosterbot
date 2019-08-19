@@ -129,22 +129,12 @@ namespace ScheduleComponent.Modules {
 			}
 
 			return await HandleError(() => {
-				ScheduleRecord record = Schedules.GetNextRecord(identifier, Context);
-				return new ReturnValue<ScheduleRecord>() { // TODO still repetition
-					Success = true,
-					Value = record
-				};
+				return Schedules.GetNextRecord(identifier, Context);
 			});
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
-			return await HandleError(() => {
-				ScheduleRecord record =  Schedules.GetCurrentRecord(identifier, Context);
-				return new ReturnValue<ScheduleRecord>() {
-					Success = true,
-					Value = record
-				};
-			});
+			return await HandleError(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
@@ -155,33 +145,15 @@ namespace ScheduleComponent.Modules {
 				};
 			}
 
-			return await HandleError(() => {
-				ScheduleRecord[] records = Schedules.GetSchedulesForDate(identifier, date, Context);
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = true,
-					Value = records
-				};
-			});
+			return await HandleError(() => Schedules.GetSchedulesForDate(identifier, date, Context));
 		}
 
 		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailabilityInfo(IdentifierInfo identifier, int weeksFromNow) {
-			return await HandleError(() => {
-				AvailabilityInfo[] records = Schedules.GetWeekAvailability(identifier, weeksFromNow, Context);
-				return new ReturnValue<AvailabilityInfo[]>() {
-					Success = true,
-					Value = records
-				};
-			});
+			return await HandleError(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
-			return await HandleError(() => {
-				ScheduleRecord record = Schedules.GetRecordAfterTimeSpan(identifier, span, Context);
-				return new ReturnValue<ScheduleRecord>() {
-					Success = true,
-					Value = record
-				};
-			});
+			return await HandleError(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
 		}
 
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record) {
@@ -205,9 +177,12 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		private async Task<ReturnValue<T>> HandleError<T>(Func<ReturnValue<T>> action) {
+		private async Task<ReturnValue<T>> HandleError<T>(Func<T> action) {
 			try {
-				return action();
+				return new ReturnValue<T>() {
+					Success = true,
+					Value = action()
+				};
 			} catch (IdentifierNotFoundException) {
 				await MinorError("Dat item staat niet op mijn rooster.");
 				return new ReturnValue<T>() {
