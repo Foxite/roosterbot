@@ -22,9 +22,7 @@ namespace ScheduleComponent.Modules {
 					}
 					ReplyDeferred(response, room, record);
 				} else {
-					ReplyDeferred($"{record.RoomString}: Nu\n");
-
-					await RespondRecord(room, record);
+					await RespondRecord($"{record.RoomString}: Nu\n", room, record);
 				}
 			}
 		}
@@ -37,30 +35,14 @@ namespace ScheduleComponent.Modules {
 				if (record == null) {
 					await FatalError($"`GetRecord(true, \"Room\", {room.DisplayText})` returned null");
 				} else {
-					bool isToday = record.Start.Date == DateTime.Today;
-					string response;
+					string pretext;
 
-					if (isToday) {
-						response = $"{record.RoomString}: Hierna\n";
+					if (record.Start.Date == DateTime.Today) {
+						pretext = $"{record.RoomString}: Hierna\n";
 					} else {
-						response = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						pretext = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
-
-					response += TableItemActivity(record, false);
-
-					if (record.Activity != "stdag doc") {
-						response += TableItemStaffMember(record);
-						response += TableItemStudentSets(record);
-						response += TableItemStartEndTime(record);
-						response += TableItemDuration(record);
-						response += TableItemBreak(record);
-					}
-
-					ReplyDeferred(response, room, record);
-					
-					if (record.Activity == "pauze") {
-						await GetAfterCommand();
-					}
+					await RespondRecord(pretext, room, record);
 				}
 			}
 		}
@@ -94,7 +76,8 @@ namespace ScheduleComponent.Modules {
 			if (unit == "uur") {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
-					await RespondRecord(info, result.Value);
+					ScheduleRecord record = result.Value;
+					await RespondRecord($"{record.RoomString}: Over {amount} uur", info, record);
 				}
 			} else if (unit == "dag" || unit == "dagen") {
 				await RespondDay(info, DateTime.Today.AddDays(amount));

@@ -174,8 +174,8 @@ namespace ScheduleComponent.Modules {
 			});
 		}
 
-		protected async Task RespondRecord(IdentifierInfo info, ScheduleRecord record) {
-			string response = "";
+		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record) {
+			string response = pretext;
 			response += TableItemActivity(record, false);
 
 			if (record.Activity != "stdag doc") {

@@ -22,8 +22,7 @@ namespace ScheduleComponent.Modules {
 					}
 					await ReplyAsync(response, info, null);
 				} else {
-					ReplyDeferred($"{record.StudentSetsString}: Nu\n");
-					await RespondRecord(info, record);
+					await RespondRecord($"{record.StudentSetsString}: Nu\n", info, record);
 				}
 			}
 		}
@@ -36,12 +35,13 @@ namespace ScheduleComponent.Modules {
 				if (record == null) {
 					await FatalError($"`GetRecord(true, \"StudentSets\", {info.DisplayText})` returned null");
 				} else {
+					string pretext;
 					if (record.Start.Date == DateTime.Today) {
-						ReplyDeferred($"{record.StudentSetsString}: Hierna\n");
+						pretext = $"{record.StudentSetsString}: Hierna\n";
 					} else {
-						ReplyDeferred($"{record.StudentSetsString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n");
+						pretext = $"{record.StudentSetsString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 					}
-					await RespondRecord(info, record);
+					await RespondRecord(pretext, info, record);
 				}
 			}
 		}
@@ -76,7 +76,8 @@ namespace ScheduleComponent.Modules {
 			if (unit == "uur") {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
-					await RespondRecord(info, result.Value);
+					ScheduleRecord record = result.Value;
+					await RespondRecord($"{record.StudentSetsString}: Over {amount} uur", info, record);
 				}
 			} else if (unit == "dag" || unit == "dagen") {
 				await RespondDay(info, DateTime.Today.AddDays(amount));

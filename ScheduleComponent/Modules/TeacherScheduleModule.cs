@@ -26,8 +26,7 @@ namespace ScheduleComponent.Modules {
 
 						ReplyDeferred(response, teacher, record);
 					} else {
-						ReplyDeferred($"{teacher.DisplayText}: Nu\n");
-						await RespondRecord(teacher, record);
+						await RespondRecord($"{teacher.DisplayText}: Nu\n", teacher, record);
 					}
 				}
 			}
@@ -50,13 +49,14 @@ namespace ScheduleComponent.Modules {
 
 						ReplyDeferred(response, teacher, record);
 					} else {
+						string pretext;
 						if (record.Start.Date == DateTime.Today) {
-							ReplyDeferred($"{teacher.DisplayText}: Hierna\n");
+							pretext = $"{teacher.DisplayText}: Hierna\n";
 						} else {
-							ReplyDeferred($"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n");
+							pretext = $"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 						}
 
-						await RespondRecord(teacher, record);
+						await RespondRecord(pretext, teacher, record);
 					}
 				}
 			}
@@ -109,7 +109,7 @@ namespace ScheduleComponent.Modules {
 				foreach (TeacherInfo teacher in teachers) {
 					ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(teacher, TimeSpan.FromHours(amount));
 					if (result.Success) {
-						await RespondRecord(teacher, result.Value);
+						await RespondRecord(string.Join(", ", teachers.Select(t => t.DisplayText)), teacher, result.Value);
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
