@@ -119,22 +119,6 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("info"), Summary("Technische informatie over de bot")]
-		public Task InfoCommand() {
-			ReplyDeferred($"RoosterBot versie: {Constants.VersionString}");
-			ReplyDeferred("Componenten:");
-
-			foreach (KeyValuePair<Type, ComponentBase> kvp in Program.Instance.m_Components) {
-				string componentName = kvp.Key.Name;
-				if (componentName.EndsWith("Component")) {
-					componentName = componentName.Substring(0, kvp.Key.Name.Length - "Component".Length);
-				}
-				ReplyDeferred(componentName + ": " + kvp.Value.VersionString);
-			}
-
-			return Task.CompletedTask;
-		}
-
 		[Command("shutdown"), RequireBotManager, HiddenFromList]
 		public Task ShutdownCommand() {
 			Log.Info("Shutting down");
