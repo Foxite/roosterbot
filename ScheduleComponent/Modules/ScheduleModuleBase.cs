@@ -118,8 +118,7 @@ namespace ScheduleComponent.Modules {
 		protected async Task GetAfterCommand() {
 			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message);
 		}
-
-		// TODO get rid of the next parameter, just use a separate method.
+		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
 			if (ScheduleUtil.IsSummerBreak()) {
 				await MinorError("Het is vakantie, man. Ga naar huis.");
