@@ -50,6 +50,7 @@ namespace RoosterBot {
 			Log(LogSeverity.Critical, tag, msg, e);
 		}
 
+		// TODO stop using this function
 		public static void Log(LogSeverity sev, string tag, string msg, Exception ex = null) {
 			Log(new LogMessage(sev, tag, msg, ex));
 		}
