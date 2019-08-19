@@ -127,13 +127,11 @@ namespace ScheduleComponent.Modules {
 				};
 			}
 
-			return await HandleError(() => {
-				return Schedules.GetNextRecord(identifier, Context);
-			});
+			return await HandleError(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
-			return await HandleError(() => Schedules.GetCurrentRecord(identifier, Context));
+			return await HandleError(() => Schedules.GetNextRecord(identifier, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
