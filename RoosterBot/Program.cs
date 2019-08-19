@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -145,7 +144,7 @@ namespace RoosterBot {
 			m_Client.Ready += OnClientReady;
 			m_Client.Connected += OnClientConnected;
 			m_Client.Disconnected += OnClientDisconnected;
-			m_Client.MessageReceived += (socketMessage) => HandleNewCommand(socketMessage);
+			m_Client.MessageReceived += HandleNewCommand;
 		}
 
 		private IServiceCollection CreateRBServices() {
@@ -154,91 +153,56 @@ namespace RoosterBot {
 			m_Commands.CommandEdited += HandleEditedCommand;
 
 			HelpService helpService = new HelpService();
+			m_SNSService = new SNSService(m_ConfigService);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
-				.AddSingleton(m_Commands)
-				.AddSingleton(m_Client)
+				.AddSingleton(m_SNSService)
 				.AddSingleton(helpService)
-				.AddSingleton(new SNSService(m_ConfigService));
+				.AddSingleton(m_Commands)
+				.AddSingleton(m_Client);
 			return serviceCollection;
 		}
 
-		private Task OnClientConnected() {
-			m_State = ProgramState.BotRunning;
-			return Task.CompletedTask;
-		}
-
-		private Task OnClientDisconnected(Exception ex) {
-			m_State = ProgramState.BotStopped;
-			Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-				Thread.Sleep(20000);
-				if (m_State != ProgramState.BotRunning) {
-					string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
-					if (ex == null) {
-						report += "No exception is attached.";
-					} else {
-						report += $"The following exception is attached: \"{ex.Message}\", stacktrace: {ex.StackTrace}";
-					}
-					report += "\n\nThe bot will attempt to restart in 20 seconds.";
-					m_SNSService.SendCriticalErrorNotification(report);
-
-					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-					Shutdown();
+		private bool IsMessageCommand(IMessage message, out int argPos) {
+			argPos = 0;
+			if (message.Source == MessageSource.User &&
+				message is IUserMessage userMessage &&
+				message.Content.Length > m_ConfigService.CommandPrefix.Length &&
+				userMessage.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
+				// First char after prefix
+				char firstChar = message.Content.Substring(m_ConfigService.CommandPrefix.Length)[0];
+				if ((firstChar < 'A' || firstChar > 'Z') && (firstChar < 'a' || firstChar > 'z')) {
+					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
+					return true;
 				}
-			});
-
-			return Task.CompletedTask;
-		}
-
-		private async Task OnClientReady() {
-			m_State = ProgramState.BotRunning;
-			await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
-			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-			Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
-
-			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
-				m_VersionNotReported = false;
-				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
-				startReport += "Components:\n";
-				foreach (ComponentBase component in m_Components.GetComponents()) {
-					startReport += $"- {component.Name}: {component.VersionString}\n";
-				}
-
-				await ownerDM.SendMessageAsync(startReport);
 			}
+
+			return false;
 		}
 
-		// This function is called by the client.
 		private async Task HandleNewCommand(SocketMessage socketMessage) {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
-			if (socketMessage.Source == MessageSource.User && socketMessage is IUserMessage userMessage) {
-				await HandleEditedCommand(null, userMessage);
+			if (IsMessageCommand(socketMessage, out int argPos)) {
+				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null);
+
+				IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
+
+				await HandleCommandError(context, result);
 			}
 		}
 
-		// This function is called by CommandEditService and the above function.
-		// TODO this function should actually only handle edited commands, not all of them
 		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
-			int argPos = 0;
-			if (!command.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
-				
+			if (IsMessageCommand(command, out int argPos)) {
+				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
 
-				return;
+				IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
+
+				await HandleCommandError(context, result);
+			} else {
+				await ourResponse.DeleteAsync();
 			}
-
-			if (command.Content.Length == m_ConfigService.CommandPrefix.Length) {
-				// Message looks like a command but it does not actually have a command
-				return;
-			}
-
-			EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
-
-			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
-
-			await HandleError(context, result);
 		}
 
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
@@ -246,13 +210,13 @@ namespace RoosterBot {
 
 			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
 
-			await HandleError(context, result);
+			await HandleCommandError(context, result);
 		}
 
 		// TODO: Use this from CommandService.CommandExecuted instead
 		// I have discovered that by doing it that way, you will still get the actual result if the command is RunMode.Async
 		// https://discord.foxbot.me/stable/guides/commands/post-execution.html#runtimeresult
-		private async Task HandleError(ICommandContext context, IResult result) {
+		private async Task HandleCommandError(ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
@@ -315,6 +279,52 @@ namespace RoosterBot {
 				} else {
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
+			}
+		}
+
+		private Task OnClientConnected() {
+			m_State = ProgramState.BotRunning;
+			return Task.CompletedTask;
+		}
+
+		private Task OnClientDisconnected(Exception ex) {
+			m_State = ProgramState.BotStopped;
+			Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
+				Thread.Sleep(20000);
+				if (m_State != ProgramState.BotRunning) {
+					string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
+					if (ex == null) {
+						report += "No exception is attached.";
+					} else {
+						report += $"The following exception is attached: \"{ex.Message}\", stacktrace: {ex.StackTrace}";
+					}
+					report += "\n\nThe bot will attempt to restart in 20 seconds.";
+					m_SNSService.SendCriticalErrorNotification(report);
+
+					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+					Shutdown();
+				}
+			});
+
+			return Task.CompletedTask;
+		}
+
+		private async Task OnClientReady() {
+			m_State = ProgramState.BotRunning;
+			await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
+			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
+			Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+
+			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
+				m_VersionNotReported = false;
+				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
+				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
+				startReport += "Components:\n";
+				foreach (ComponentBase component in m_Components.GetComponents()) {
+					startReport += $"- {component.Name}: {component.VersionString}\n";
+				}
+
+				await ownerDM.SendMessageAsync(startReport);
 			}
 		}
 
