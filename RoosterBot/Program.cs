@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
@@ -26,8 +24,8 @@ namespace RoosterBot {
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
-		private IServiceProvider m_Services;
-		internal Dictionary<Type, ComponentBase> m_Components;
+		private SNSService m_SNSService;
+		private ComponentManager m_Components;
 
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
@@ -55,108 +53,20 @@ namespace RoosterBot {
 		}
 
 		private async Task MainAsync() {
-			Logger.Log(LogSeverity.Info, "Main", "Starting bot");
+			Logger.Log(LogSeverity.Info, "Main", "Starting program");
 			m_State = ProgramState.BeforeStart;
 
-			#region Load config
-			string authToken;
-			try {
-				string configFile = Path.Combine(DataPath, "Config", "Config.json");
-				m_ConfigService = new ConfigService(configFile, out authToken);
-			} catch (Exception ex) {
-				throw new InvalidOperationException("Error occurred while starting ConfigService.", ex);
-			}
-			#endregion Load config
+			string configFile = Path.Combine(DataPath, "Config", "Config.json");
+			m_ConfigService = new ConfigService(configFile, out string authToken);
 
-			#region Start client
-			Logger.Log(LogSeverity.Info, "Main", "Preparing to load components");
-			// Client is needed by CommandService. Don't start it just yet.
-			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = WS4NetProvider.Instance
-			});
-			m_Client.Log += Logger.LogSync;
-			m_Client.Ready += OnClientReady;
-			m_Client.Connected += OnClientConnected;
-			m_Client.Disconnected += OnClientDisconnected;
-			m_Client.MessageReceived += (socketMessage) => HandleNewCommand(socketMessage);
-			
-			m_Commands = new EditedCommandService(m_Client);
-			m_Commands.Log += Logger.LogSync;
-			m_Commands.CommandEdited += HandleEditedCommand;
+			SetupClient();
 
-			HelpService helpService = new HelpService();
+			IServiceCollection serviceCollection = CreateRBServices();
 
-			IServiceCollection serviceCollection = new ServiceCollection()
-				.AddSingleton(m_ConfigService)
-				.AddSingleton(m_Commands)
-				.AddSingleton(m_Client)
-				.AddSingleton(helpService)
-				.AddSingleton(new SNSService(m_ConfigService));
+			m_Components = await ComponentManager.CreateAsync(serviceCollection);
 
-			#endregion
-
-			#region Start components
-			Logger.Log(LogSeverity.Info, "Main", "Loading Components");
-
-			// Locate DLL files from a txt file
-			string[] toLoad = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
-			List<Assembly> assemblies = new List<Assembly>();
-			foreach (string file in toLoad) {
-				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
-				if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".dll") {
-					Logger.Log(LogSeverity.Debug, "Main", "Loading assembly " + file);
-					assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path)));
-				} else {
-					Logger.Log(LogSeverity.Error, "Main", "Component " + file + " does not exist or it is not a DLL file");
-				}
-			}
-
-			// Look for children of ComponentBase in the loaded assemblies
-			Type[] componentTypes = (from domainAssembly in assemblies
-									 from assemblyType in domainAssembly.GetExportedTypes()
-									 where assemblyType.IsSubclassOf(typeof(ComponentBase))
-									 select assemblyType).ToArray();
-
-			m_Components = new Dictionary<Type, ComponentBase>(componentTypes.Length);
-			Task[] servicesLoading = new Task[componentTypes.Length];
-			// Create instances of these classes and call AddServices and then AddModules
-			for (int i = 0; i < componentTypes.Length; i++) {
-				Type type = componentTypes[i];
-				Logger.Log(LogSeverity.Info, "Main", "Adding services from " + type.Name);
-				m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
-				try {
-					servicesLoading[i] = m_Components[type].AddServices(serviceCollection, Path.Combine(DataPath, "Config", type.Namespace));
-				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + type.Name + " threw an exception during AddServices.", ex);
-					throw;
-				}
-			}
-			await Task.WhenAll(servicesLoading);
-
-			m_Services = serviceCollection.BuildServiceProvider();
-
-			Task[] modulesLoading = new Task[componentTypes.Length + 1];
-			modulesLoading[0] = m_Commands.AddModulesAsync(Assembly.GetEntryAssembly(), m_Services);
-
-			int moduleIndex = 1;
-			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				Logger.Log(LogSeverity.Info, "Main", "Adding modules from " + componentKVP.Key.Name);
-				try {
-					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(m_Services, m_Commands, helpService);
-				} catch (Exception ex) {
-					Logger.Log(LogSeverity.Critical, "Main", "Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex);
-					throw;
-				}
-				moduleIndex++;
-			}
-
-			await Task.WhenAll(modulesLoading);
-			#endregion Start components
-
-			#region Connect to Discord
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
-			#endregion Connect to Discord
 
 			#region Quit code
 			Console.CancelKeyPress += (o, e) => {
@@ -165,7 +75,22 @@ namespace RoosterBot {
 					Logger.Log(LogSeverity.Warning, "Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
 				}
 			};
+			await WaitForQuitCondition();
 
+			Logger.Info("Main", "Stopping program");
+
+			await m_Client.StopAsync();
+			await m_Client.LogoutAsync();
+
+			m_State = ProgramState.BotStopped;
+
+			await m_Components.ShutdownComponentsAsync();
+			m_Client.Dispose();
+
+			#endregion Quit code
+		}
+
+		private async Task WaitForQuitCondition() {
 			ConsoleKeyInfo keyPress;
 			bool keepRunning = true;
 
@@ -182,7 +107,7 @@ namespace RoosterBot {
 								keyPress = Console.ReadKey(true);
 								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
 									keepRunning = false;
-									Logger.Log(LogSeverity.Info, "Main", "Ctrl-Q pressed");
+									Logger.Info("Main", "Ctrl-Q pressed");
 								}
 							}
 						}),
@@ -190,7 +115,7 @@ namespace RoosterBot {
 							// Stop flag set by RoosterBot or components
 							if (m_StopFlagSet) {
 								keepRunning = false;
-								Logger.Log(LogSeverity.Info, "Main", "Stop flag set");
+								Logger.Info("Main", "Stop flag set");
 							}
 						}),
 						Task.Delay(500).ContinueWith((t) => {
@@ -199,7 +124,7 @@ namespace RoosterBot {
 								using (StreamReader sr = new StreamReader(pipeServer)) {
 									string input = sr.ReadLine();
 									if (input == "stop") {
-										Console.WriteLine("Stop command received by external process");
+										Logger.Info("Main", "Stop command received from external process");
 										keepRunning = false;
 									}
 								}
@@ -210,18 +135,33 @@ namespace RoosterBot {
 				} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 			}
 			cts.Cancel();
+		}
 
-			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
+		private void SetupClient() {
+			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
+				WebSocketProvider = WS4NetProvider.Instance
+			});
+			m_Client.Log += Logger.LogSync;
+			m_Client.Ready += OnClientReady;
+			m_Client.Connected += OnClientConnected;
+			m_Client.Disconnected += OnClientDisconnected;
+			m_Client.MessageReceived += (socketMessage) => HandleNewCommand(socketMessage);
+		}
 
-			await m_Client.StopAsync();
-			await m_Client.LogoutAsync();
+		private IServiceCollection CreateRBServices() {
+			m_Commands = new EditedCommandService(m_Client);
+			m_Commands.Log += Logger.LogSync;
+			m_Commands.CommandEdited += HandleEditedCommand;
 
-			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				await componentKVP.Value.OnShutdown();
-			}
+			HelpService helpService = new HelpService();
 
-			m_State = ProgramState.BotStopped;
-			#endregion Quit code
+			IServiceCollection serviceCollection = new ServiceCollection()
+				.AddSingleton(m_ConfigService)
+				.AddSingleton(m_Commands)
+				.AddSingleton(m_Client)
+				.AddSingleton(helpService)
+				.AddSingleton(new SNSService(m_ConfigService));
+			return serviceCollection;
 		}
 
 		private Task OnClientConnected() {
@@ -241,7 +181,7 @@ namespace RoosterBot {
 						report += $"The following exception is attached: \"{ex.Message}\", stacktrace: {ex.StackTrace}";
 					}
 					report += "\n\nThe bot will attempt to restart in 20 seconds.";
-					m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
+					m_SNSService.SendCriticalErrorNotification(report);
 
 					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 					Shutdown();
@@ -262,8 +202,8 @@ namespace RoosterBot {
 				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
-				foreach (KeyValuePair<Type, ComponentBase> component in m_Components) {
-					startReport += $"- {component.Key.Name}: {component.Value.VersionString}\n";
+				foreach (ComponentBase component in m_Components.GetComponents()) {
+					startReport += $"- {component.Name}: {component.VersionString}\n";
 				}
 
 				await ownerDM.SendMessageAsync(startReport);
@@ -280,7 +220,7 @@ namespace RoosterBot {
 		}
 
 		// This function is called by CommandEditService and the above function.
-		// TODO split handleedited into separate
+		// TODO this function should actually only handle edited commands, not all of them
 		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
 			int argPos = 0;
 			if (!command.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
@@ -296,7 +236,7 @@ namespace RoosterBot {
 
 			EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
 
-			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
 
 			await HandleError(context, result);
 		}
@@ -304,7 +244,7 @@ namespace RoosterBot {
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Services);
+			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
 
 			await HandleError(context, result);
 		}
@@ -365,7 +305,7 @@ namespace RoosterBot {
 					if (m_ConfigService.BotOwner != null) {
 						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
 					}
-					await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(badReport);
+					await m_SNSService.SendCriticalErrorNotificationAsync(badReport);
 					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
 				}
 
