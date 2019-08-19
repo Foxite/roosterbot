@@ -33,16 +33,15 @@ namespace ScheduleComponent.Services {
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			// TODO why are we using ticks everywhere? Use DateTime
-			long ticksNow = DateTime.Now.Ticks;
+			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (ticksNow > record.Start.Ticks && ticksNow < record.End.Ticks) {
+					if (now > record.Start && now < record.End) {
 						return record;
-					} else if (ticksNow < record.Start.Ticks) {
+					} else if (now < record.Start) {
 						return null;
 					}
 				}
@@ -55,13 +54,13 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan) {
-			long targetTicks = (DateTime.Now + timespan).Ticks;
+			DateTime target = (DateTime.Now + timespan);
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (record.Start.Ticks > targetTicks && record.End.Ticks < targetTicks) {
+					if (record.Start > target && record.End < target) {
 						return record;
 					}
 				}
@@ -74,13 +73,13 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			long ticksNow = DateTime.Now.Ticks;
+			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (ticksNow < record.Start.Ticks) {
+					if (now < record.Start) {
 						return record;
 					}
 				}
@@ -93,15 +92,19 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
-													 //  reuse the code from GetNextRecord().
 			bool sawRecordForClass = false;
+			bool sawGivenRecord = false;
 			
 			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (ticksNow < record.Start.Ticks) {
+				if (sawGivenRecord) {
+					if (identifier.Matches(record)) {
 						return record;
+					}
+				} else {
+					if (identifier.Matches(record)) {
+						sawRecordForClass = true;
+					} else if (ReferenceEquals(givenRecord, record)) {
+						sawGivenRecord = true;
 					}
 				}
 			}
