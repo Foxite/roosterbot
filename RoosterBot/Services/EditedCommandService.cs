@@ -14,7 +14,7 @@ namespace RoosterBot.Services {
 	 * It's easily possible to make this work for all messages a user has sent, but that would cause unlimited rise in memory usage, and we only have 1GB to work with on EC2.
 	 * However, we could periodically remove messages older than a certain age, like five minutes.
 	 */
-	public class EditedCommandService : CommandService {
+	public class EditedCommandService : RoosterCommandService {
 		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private DiscordSocketClient m_Client;
 
