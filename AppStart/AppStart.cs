@@ -22,12 +22,13 @@ namespace RoosterBot.Automation {
 
 			Log("App started");
 
-			Thread.Sleep(7000);
+			// TODO: Move this code to a program/script running in the ValidateService phase, if possible
+			Thread.Sleep(15000);
 			if (process.HasExited) {
-				Log("FAIL: App not running after 7 seconds, with exit code " + process.ExitCode);
+				Log("FAIL: App not running after 15 seconds, with exit code " + process.ExitCode);
 				return process.ExitCode;
 			} else {
-				Log("OK: App running after 7 seconds");
+				Log("OK: App running after 15 seconds");
 				return 0;
 			}
 		}

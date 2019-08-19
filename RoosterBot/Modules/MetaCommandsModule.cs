@@ -15,7 +15,6 @@ namespace RoosterBot.Modules {
 		[Command("help"), Summary("Uitleg over de bot.")]
 		public async Task HelpCommand() {
 			string response = $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
-			response += "Je kan `!commands` gebruiken om te alle commands te zien, of `!commands <filter>` gebruiken om te zoeken.\n";
 			response += "Gebruik `!help <hoofdstuk>` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:\n";
 
 			bool notFirst = false;
@@ -26,6 +25,9 @@ namespace RoosterBot.Modules {
 				response += helpSection;
 				notFirst = true;
 			}
+
+
+			response += "\nJe kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands <onderdeel>` gebruiken om alle commands te zien.\n";
 
 			await ReplyAsync(response);
 		}
@@ -41,93 +43,80 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("commands"), Summary("Alle commands, of zoek op een command of categorie.")]
-		public async Task CommandListCommand([Name("zoekterm")] string term = "") {
-			IEnumerable<CommandInfo> commands = CmdService.Commands;
+		[Command("commands"), Summary("Alle categorieën, of zoek op een categorie.")]
+		public async Task CommandListCommand([Remainder, Name("categorie")] string moduleName) {
+			moduleName = moduleName.ToLower();
+			ModuleInfo module = CmdService.Modules.Where(aModule => aModule.Name.ToLower() == moduleName).SingleOrDefault();
 
-			if (!string.IsNullOrWhiteSpace(term)) {
-				// Filter list
-				term = term.ToLower();
-				commands = commands.Where(command => command.Name.ToLower().Contains(term) || command.Module.Name.ToLower().Contains(term));
-			}
-
-			if (commands.Count() == 0) {
+			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
+				await ReplyAsync("Die categorie bestaat niet.");
+			} else if (module.Commands.Count() == 0) {
 				await ReplyAsync("Geen commands gevonden.");
 			} else {
-				IEnumerable<IGrouping<ModuleInfo, CommandInfo>> groupedCommands = commands.GroupBy(command => command.Module);
-
 				string response = "";
-				Dictionary<string, string> moduleTexts = new Dictionary<string, string>();
-				foreach (IGrouping<ModuleInfo, CommandInfo> group in groupedCommands) {
-					if (group.Key.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
+
+				int addedCommands = 0;
+				// Commands
+				foreach (CommandInfo command in module.Commands) {
+					if (command.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 						continue;
 					}
 
-					string moduleResponse;
-					if (moduleTexts.ContainsKey(group.Key.Name)) {
-						moduleResponse = "";
-					} else {
-						moduleResponse = $"\n**{group.Key.Name}**: {group.Key.Summary}\n";
-					}
+					response += $"`{Config.CommandPrefix}{command.Name}";
 
-					int addedCommands = 0;
-					foreach (CommandInfo command in group) {
-						if (command.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
+					// Parameters
+					foreach (ParameterInfo param in command.Parameters) {
+						if (param.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 							continue;
 						}
 
-						moduleResponse += $"`{Config.CommandPrefix}{command.Name}";
-						foreach (ParameterInfo param in command.Parameters) {
-							if (param.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-								continue;
-							}
+						response += $" <{param.Name.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{(string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {param.Summary}")}>";
+					}
+					response += $"`: {command.Summary}";
 
-							moduleResponse += $" <{param.Name.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{(string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {param.Summary}")}>";
-						}
-						moduleResponse += $"`: {command.Summary}";
+					// Preconditions
+					if (command.Preconditions.Count() != 0) {
+						string preconditionText = " (";
+						int preconditionsAdded = 0;
 
-						if (command.Preconditions.Count() != 0) {
-							string preconditionText = " (";
-							int preconditionsAdded = 0;
-
-							foreach (PreconditionAttribute pc in command.Preconditions) {
-								if (pc is RoosterPreconditionAttribute rpc) {
-									if (preconditionsAdded != 0) {
-										preconditionText += ", ";
-									}
-									preconditionText += rpc.Summary;
-									preconditionsAdded++;
+						foreach (PreconditionAttribute pc in command.Preconditions) {
+							if (pc is RoosterPreconditionAttribute rpc) {
+								if (preconditionsAdded != 0) {
+									preconditionText += ", ";
 								}
-							}
-
-							if (preconditionsAdded != 0) {
-								response += preconditionText + ")";
+								preconditionText += rpc.Summary;
+								preconditionsAdded++;
 							}
 						}
-						moduleResponse += "\n";
-						addedCommands++;
-					}
 
-					if (!string.IsNullOrWhiteSpace(group.Key.Remarks)) {
-						moduleResponse += group.Key.Remarks + "\n";
-					}
-
-					if (addedCommands != 0) {
-						if (moduleTexts.ContainsKey(group.Key.Name)) {
-							moduleTexts[group.Key.Name] += moduleResponse;
-						} else {
-							moduleTexts[group.Key.Name] = moduleResponse;
+						if (preconditionsAdded != 0) {
+							response += preconditionText + ")";
 						}
 					}
+					response += "\n";
+					addedCommands++;
 				}
 
-				foreach (KeyValuePair<string, string> kvp in moduleTexts) {
-					response += kvp.Value;
+				if (!string.IsNullOrWhiteSpace(module.Remarks)) {
+					response += module.Remarks + "\n";
 				}
 
 				response += "Parameters met een `(?)` zijn optioneel.";
 				await ReplyAsync(response);
 			}
+		}
+
+		[Command("commands")]
+		public async Task CommandListCommand() {
+			// List modules with visible commands
+			IEnumerable<string> visibleModules = 
+				from module in CmdService.Modules
+				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
+				select module.Name.ToLower();
+
+			string response = "Beschikbare onderdelen zijn:\n";
+			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
+			await ReplyAsync(response);
 		}
 
 		[Command("info"), Summary("Technische informatie over de bot")]
