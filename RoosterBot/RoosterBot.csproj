@@ -78,6 +78,7 @@
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="ComponentBase.cs" />
+    <Compile Include="ComponentManager.cs" />
     <Compile Include="Constants.gen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,7 +89,7 @@
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
-    <Compile Include="Services\CommandEditService.cs" />
+    <Compile Include="Services\EditedCommandService.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Modules\EditableCmdModuleBase.cs" />
     <Compile Include="Logger.cs" />
