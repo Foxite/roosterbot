@@ -120,8 +120,8 @@ namespace ScheduleComponent.Modules {
 		}
 
 		// TODO get rid of the next parameter, just use a separate method.
-		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, IdentifierInfo identifier) {
-			if (!next && ScheduleUtil.IsSummerBreak()) {
+		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
+			if (ScheduleUtil.IsSummerBreak()) {
 				await MinorError("Het is vakantie, man. Ga naar huis.");
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
@@ -129,7 +129,17 @@ namespace ScheduleComponent.Modules {
 			}
 
 			return await HandleError(() => {
-				ScheduleRecord record = next ? Schedules.GetNextRecord(identifier, Context) : Schedules.GetCurrentRecord(identifier, Context);
+				ScheduleRecord record = Schedules.GetNextRecord(identifier, Context);
+				return new ReturnValue<ScheduleRecord>() { // TODO still repetition
+					Success = true,
+					Value = record
+				};
+			});
+		}
+
+		protected async Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
+			return await HandleError(() => {
+				ScheduleRecord record =  Schedules.GetCurrentRecord(identifier, Context);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record

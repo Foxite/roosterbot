@@ -12,7 +12,7 @@ namespace ScheduleComponent.Modules {
 	public class RoomScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task RoomCurrentCommand(RoomInfo room) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, room);
+			ReturnValue<ScheduleRecord> result = await GetRecord(room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -29,11 +29,11 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
 		public async Task RoomNextCommand(RoomInfo room) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, room);
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(room);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError($"`GetRecord(true, \"Room\", {room.DisplayText})` returned null");
+					await FatalError($"`GetNextRecord(\"Room\", {room.DisplayText})` returned null");
 				} else {
 					string pretext;
 

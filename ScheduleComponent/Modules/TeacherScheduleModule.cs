@@ -13,12 +13,12 @@ namespace ScheduleComponent.Modules {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]
 		public async Task TeacherCurrentCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo teacher in teachers) {
-				ReturnValue<ScheduleRecord> result = await GetRecord(false, teachers[0]);
+				ReturnValue<ScheduleRecord> result = await GetRecord(teachers[0]);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record == null) {
 						string response = $"Het lijkt erop dat {teacher.DisplayText} nu niets heeft.";
-						ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, teacher).GetAwaiter().GetResult();
+						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
 						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
 							response += "\nHij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.";
@@ -35,13 +35,13 @@ namespace ScheduleComponent.Modules {
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
 		public async Task TeacherNextCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo teacher in teachers) {
-				ReturnValue<ScheduleRecord> result = await GetRecord(true, teachers[0]);
+				ReturnValue<ScheduleRecord> result = await GetNextRecord(teachers[0]);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					
 					if (record == null) {
 						string response = $"Het lijkt erop dat {teacher.DisplayText} nu niets heeft.";
-						ReturnValue<ScheduleRecord> nextRecord = GetRecord(true, teacher).GetAwaiter().GetResult();
+						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
 						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
 							response += "\nHij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.";

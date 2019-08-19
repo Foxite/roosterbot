@@ -12,7 +12,7 @@ namespace ScheduleComponent.Modules {
 	public class StudentScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task StudentCurrentCommand(StudentSetInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);
+			ReturnValue<ScheduleRecord> result = await GetRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -29,11 +29,11 @@ namespace ScheduleComponent.Modules {
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
 		public async Task StudentNextCommand(StudentSetInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, info);
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError($"`GetRecord(true, \"StudentSets\", {info.DisplayText})` returned null");
+					await FatalError($"`GetNextRecord(\"StudentSets\", {info.DisplayText})` returned null");
 				} else {
 					string pretext;
 					if (record.Start.Date == DateTime.Today) {
