@@ -58,22 +58,12 @@ namespace RoosterBot {
 			m_State = ProgramState.BeforeStart;
 
 			#region Load config
-			if (!Directory.Exists(DataPath)) {
-				Logger.Log(LogSeverity.Critical, "Main", "Data folder did not exist.");
-				throw new InvalidOperationException("Data folder did not exist.");
-			}
-
-			string configFile = Path.Combine(DataPath, "Config", "Config.json");
-			if (!File.Exists(configFile)) {
-				Logger.Log(LogSeverity.Critical, "Main", "Config file did not exist.");
-				throw new InvalidOperationException("Config file did not exist.");
-			}
 			string authToken;
 			try {
+				string configFile = Path.Combine(DataPath, "Config", "Config.json");
 				m_ConfigService = new ConfigService(configFile, out authToken);
 			} catch (Exception ex) {
-				Logger.Log(LogSeverity.Critical, "Main", "Error occurred while reading Config.json file.", ex);
-				throw;
+				throw new InvalidOperationException("Error occurred while starting ConfigService.", ex);
 			}
 			#endregion Load config
 

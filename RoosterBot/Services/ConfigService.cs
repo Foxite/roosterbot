@@ -15,6 +15,14 @@ namespace RoosterBot.Services {
 		private  ulong		  m_BotOwnerId;
 
 		internal ConfigService(string jsonPath, out string authToken) {
+			if (!Directory.Exists(Program.DataPath)) {
+				throw new DirectoryNotFoundException("Data folder did not exist.");
+			}
+
+			if (!File.Exists(jsonPath)) {
+				throw new FileNotFoundException("Config file did not exist.");
+			}
+
 			string jsonFile = File.ReadAllText(jsonPath);
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
