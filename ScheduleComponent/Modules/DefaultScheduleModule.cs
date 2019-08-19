@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
@@ -24,7 +25,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		private async Task ReplyErrorMessage(string param) {
-			if (StudentSetInfoReader.s_LookupRegex.IsMatch(param)) {
+			if (MentionUtils.TryParseUser(param, out ulong unused)) {
 				await ReplyAsync("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.");
 			} else if (param == "ik") {
 				await ReplyAsync("Ik weet niet in welke klas jij zit. Je moet `!ik <jouw klas>` gebruiken om dit in te stellen.");
