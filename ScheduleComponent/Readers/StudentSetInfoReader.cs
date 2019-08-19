@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot;
 using ScheduleComponent.DataTypes;
 using ScheduleComponent.Services;
 
@@ -21,9 +20,9 @@ namespace ScheduleComponent.Readers {
 			} else {
 				IUser user;
 				bool byMention = false;
-				if (s_LookupRegex.IsMatch(input)) {
+				/*if (s_LookupRegex.IsMatch(input)) {
 					user = await context.Client.GetUserAsync(Util.ExtractIDFromMentionString(input).Value); // Should have a value
-				} else if (input.ToLower() == "ik") {
+				} else*/ if (input.ToLower() == "ik") {
 					user = context.User;
 					byMention = true;
 				} else {
