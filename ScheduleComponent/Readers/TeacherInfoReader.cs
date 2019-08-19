@@ -22,7 +22,7 @@ namespace ScheduleComponent.Readers {
 			if (user == null) {
 				result = tns.Lookup(context.Guild.Id, input);
 			} else {
-				TeacherInfo teacher = tns.GetTeacherByDiscordUser(user); // TODO guild
+				TeacherInfo teacher = tns.GetTeacherByDiscordUser(context.Guild, user);
 				if (teacher != null) {
 					result = new TeacherInfo[] { teacher };
 				}
