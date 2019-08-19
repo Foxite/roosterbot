@@ -119,6 +119,7 @@ namespace ScheduleComponent.Modules {
 			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message);
 		}
 
+		// TODO get rid of the next parameter, just use a separate method.
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(bool next, IdentifierInfo identifier) {
 			if (!next && ScheduleUtil.IsSummerBreak()) {
 				await MinorError("Het is vakantie, man. Ga naar huis.");
@@ -127,31 +128,13 @@ namespace ScheduleComponent.Modules {
 				};
 			}
 
-			try {
+			return await HandleError(() => {
 				ScheduleRecord record = next ? Schedules.GetNextRecord(identifier, Context) : Schedules.GetCurrentRecord(identifier, Context);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
 				};
-			} catch (IdentifierNotFoundException) { // TODO I smell repetition, get it out of here.
-				await MinorError("Dat item staat niet op mijn rooster.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (NoSchedulesAvailableException) {
-				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				throw;
-			}
+			});
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
@@ -162,87 +145,33 @@ namespace ScheduleComponent.Modules {
 				};
 			}
 
-			try {
+			return await HandleError(() => {
 				ScheduleRecord[] records = Schedules.GetSchedulesForDate(identifier, date, Context);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = true,
 					Value = records
 				};
-			} catch (IdentifierNotFoundException) {
-				await MinorError("Dat item staat niet op mijn rooster.");
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			} catch (NoSchedulesAvailableException) {
-				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				throw;
-			}
+			});
 		}
 
 		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailabilityInfo(IdentifierInfo identifier, int weeksFromNow) {
-			try {
+			return await HandleError(() => {
 				AvailabilityInfo[] records = Schedules.GetWeekAvailability(identifier, weeksFromNow, Context);
 				return new ReturnValue<AvailabilityInfo[]>() {
 					Success = true,
 					Value = records
 				};
-			} catch (IdentifierNotFoundException) {
-				await MinorError("Dat item staat niet op mijn rooster.");
-				return new ReturnValue<AvailabilityInfo[]>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
-				return new ReturnValue<AvailabilityInfo[]>() {
-					Success = false
-				};
-			} catch (NoSchedulesAvailableException) {
-				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
-				return new ReturnValue<AvailabilityInfo[]>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				throw;
-			}
+			});
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
-			try {
+			return await HandleError(() => {
 				ScheduleRecord record = Schedules.GetRecordAfterTimeSpan(identifier, span, Context);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = true,
 					Value = record
 				};
-			} catch (IdentifierNotFoundException) {
-				await MinorError("Dat item staat niet op mijn rooster.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (NoSchedulesAvailableException) {
-				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				throw;
-			}
+			});
 		}
 
 		protected async Task RespondRecord(IdentifierInfo info, ScheduleRecord record) {
@@ -263,6 +192,30 @@ namespace ScheduleComponent.Modules {
 
 			if (record.Activity == "pauze") {
 				await GetAfterCommand();
+			}
+		}
+
+		private async Task<ReturnValue<T>> HandleError<T>(Func<ReturnValue<T>> action) {
+			try {
+				return action();
+			} catch (IdentifierNotFoundException) {
+				await MinorError("Dat item staat niet op mijn rooster.");
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (NoSchedulesAvailableException) {
+				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError("Uncaught exception", ex);
+				throw;
 			}
 		}
 	}
