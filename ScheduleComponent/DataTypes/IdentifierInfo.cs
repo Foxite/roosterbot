@@ -42,5 +42,7 @@ namespace ScheduleComponent.DataTypes {
 			return lhs.ScheduleCode != rhs.ScheduleCode
 				|| lhs.ScheduleField != rhs.ScheduleField;
 		}
+
+		public override string ToString() => DisplayText;
 	}
 }

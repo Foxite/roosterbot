@@ -86,6 +86,16 @@ namespace ScheduleComponent.Services {
 			
 			return records.ToArray();
 		}
+
+		public TeacherInfo GetTeacherByDiscordUser(IUser user) {
+			string findDiscordUser = $"{user.Username}#{user.Discriminator}";
+			foreach (TeacherInfo teacher in m_Records) {
+				if (findDiscordUser == teacher.DiscordUser) {
+					return teacher;
+				}
+			}
+			return null;
+		}
 		
 		public IEnumerable<TeacherInfo> GetAllRecords(ulong guild) {
 			return GetAllowedRecordsForGuild(guild);
