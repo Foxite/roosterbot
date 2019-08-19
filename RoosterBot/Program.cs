@@ -21,6 +21,7 @@ namespace RoosterBot {
 
 		private ProgramState m_State;
 		private bool m_StopFlagSet = false;
+		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
@@ -87,34 +88,8 @@ namespace RoosterBot {
 				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
-				m_Client.Disconnected += (e) => {
-					m_State = ProgramState.BotStopped;
-					Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-						Thread.Sleep(20000);
-						if (m_State != ProgramState.BotRunning) {
-							string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
-							if (e == null) {
-								report += "No exception is attached.";
-							} else {
-								report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
-							}
-							report += "\n\nThe bot will attempt to restart in 20 seconds.";
-							m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
-
-							Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-							Shutdown();
-						}
-					});
-
-					return Task.CompletedTask;
-				};
-
-				m_Client.Connected += () => {
-					m_State = ProgramState.BotRunning;
-					return Task.CompletedTask;
-				};
-				
-				if (m_ConfigService.ReportStartupVersionToOwner) {
+				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
+					m_VersionNotReported = false;
 					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 					startReport += "Components:\n";
@@ -124,6 +99,33 @@ namespace RoosterBot {
 
 					await ownerDM.SendMessageAsync(startReport);
 				}
+			};
+
+			m_Client.Disconnected += (e) => {
+				m_State = ProgramState.BotStopped;
+				Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
+					Thread.Sleep(20000);
+					if (m_State != ProgramState.BotRunning) {
+						string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
+						if (e == null) {
+							report += "No exception is attached.";
+						} else {
+							report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
+						}
+						report += "\n\nThe bot will attempt to restart in 20 seconds.";
+						m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
+
+						Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+						Shutdown();
+					}
+				});
+
+				return Task.CompletedTask;
+			};
+
+			m_Client.Connected += () => {
+				m_State = ProgramState.BotRunning;
+				return Task.CompletedTask;
 			};
 
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
