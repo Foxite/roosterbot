@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,13 +18,11 @@ namespace RoosterBot.Services {
 		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private DiscordSocketClient m_Client;
 
-		public delegate Task HandleCommand(IUserMessage ourResponse, SocketUserMessage command);
-		private HandleCommand m_HandleCommandFunction;
+		public event Func<IUserMessage, IUserMessage, Task> CommandEdited;
 
-		public EditedCommandService(DiscordSocketClient client, HandleCommand handleCommandFunction) {
+		public EditedCommandService(DiscordSocketClient client) {
 			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Client = client;
-			m_HandleCommandFunction = handleCommandFunction;
 
 			m_Client.MessageUpdated += OnMessageUpdated;
 			m_Client.MessageDeleted += OnMessageDeleted;
@@ -47,7 +46,7 @@ namespace RoosterBot.Services {
 				return;
 
 			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
-				await m_HandleCommandFunction(crp.Response, socketMessageAfter);
+				await CommandEdited?.Invoke(crp.Response, socketMessageAfter);
 			}
 		}
 

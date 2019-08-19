@@ -75,55 +75,14 @@ namespace RoosterBot {
 				WebSocketProvider = WS4NetProvider.Instance
 			});
 			m_Client.Log += Logger.LogSync;
-			m_Client.MessageReceived += HandleNewCommand;
-			m_Client.Ready += async () => {
-				m_State = ProgramState.BotRunning;
-				await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
-				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-				Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
-
-				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
-					m_VersionNotReported = false;
-					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
-					startReport += "Components:\n";
-					foreach (KeyValuePair<Type, ComponentBase> component in m_Components) {
-						startReport += $"- {component.Key.Name}: {component.Value.VersionString}\n";
-					}
-
-					await ownerDM.SendMessageAsync(startReport);
-				}
-			};
-
-			m_Client.Disconnected += (e) => {
-				m_State = ProgramState.BotStopped;
-				Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-					Thread.Sleep(20000);
-					if (m_State != ProgramState.BotRunning) {
-						string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
-						if (e == null) {
-							report += "No exception is attached.";
-						} else {
-							report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
-						}
-						report += "\n\nThe bot will attempt to restart in 20 seconds.";
-						m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
-
-						Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-						Shutdown();
-					}
-				});
-
-				return Task.CompletedTask;
-			};
-
-			m_Client.Connected += () => {
-				m_State = ProgramState.BotRunning;
-				return Task.CompletedTask;
-			};
+			m_Client.Ready += OnClientReady;
+			m_Client.Connected += OnClientConnected;
+			m_Client.Disconnected += OnClientDisconnected;
+			m_Client.MessageReceived += (socketMessage) => HandleNewCommand(socketMessage);
 			
-			m_Commands = new EditedCommandService(m_Client, HandleCommand);
+			m_Commands = new EditedCommandService(m_Client);
 			m_Commands.Log += Logger.LogSync;
+			m_Commands.CommandEdited += HandleEditedCommand;
 
 			HelpService helpService = new HelpService();
 
@@ -265,28 +224,77 @@ namespace RoosterBot {
 			#endregion Quit code
 		}
 
-		// This function is given to the CommandService.
-		private async Task HandleNewCommand(SocketMessage command) {
-			await HandleCommand(null, command);
+		private Task OnClientConnected() {
+			m_State = ProgramState.BotRunning;
+			return Task.CompletedTask;
+		}
+
+		private Task OnClientDisconnected(Exception ex) {
+			m_State = ProgramState.BotStopped;
+			Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
+				Thread.Sleep(20000);
+				if (m_State != ProgramState.BotRunning) {
+					string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
+					if (ex == null) {
+						report += "No exception is attached.";
+					} else {
+						report += $"The following exception is attached: \"{ex.Message}\", stacktrace: {ex.StackTrace}";
+					}
+					report += "\n\nThe bot will attempt to restart in 20 seconds.";
+					m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
+
+					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+					Shutdown();
+				}
+			});
+
+			return Task.CompletedTask;
+		}
+
+		private async Task OnClientReady() {
+			m_State = ProgramState.BotRunning;
+			await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
+			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
+			Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+
+			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
+				m_VersionNotReported = false;
+				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
+				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
+				startReport += "Components:\n";
+				foreach (KeyValuePair<Type, ComponentBase> component in m_Components) {
+					startReport += $"- {component.Key.Name}: {component.Value.VersionString}\n";
+				}
+
+				await ownerDM.SendMessageAsync(startReport);
+			}
+		}
+
+		// This function is called by the client.
+		private async Task HandleNewCommand(SocketMessage socketMessage) {
+			// Only process commands from users
+			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
+			if (socketMessage.Source == MessageSource.User && socketMessage is IUserMessage userMessage) {
+				await HandleEditedCommand(null, userMessage);
+			}
 		}
 
 		// This function is called by CommandEditService and the above function.
-		public async Task HandleCommand(IUserMessage initialResponse, SocketMessage command) {
-			// Don't process the command if it was a System Message or came from a bot
-			if (!(command is SocketUserMessage message) || message.Author.IsBot)
-				return;
-
+		// TODO split handleedited into separate
+		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
 			int argPos = 0;
-			if (!message.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
+			if (!command.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
+				
+
 				return;
 			}
 
-			if (message.Content.Length == m_ConfigService.CommandPrefix.Length) {
+			if (command.Content.Length == m_ConfigService.CommandPrefix.Length) {
 				// Message looks like a command but it does not actually have a command
 				return;
 			}
 
-			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
+			EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
 
 			IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Services);
 
