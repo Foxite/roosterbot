@@ -150,6 +150,7 @@ namespace RoosterBot {
 			m_Commands = new EditedCommandService(m_Client);
 			m_Commands.Log += Logger.LogSync;
 			m_Commands.CommandEdited += HandleEditedCommand;
+			m_Commands.CommandExecuted += OnCommandExecuted;
 
 			HelpService helpService = new HelpService();
 			m_SNSService = new SNSService(m_ConfigService);
@@ -186,9 +187,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(socketMessage, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null);
 
-				IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
-
-				await HandleCommandError(context, result);
+				await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
 			}
 		}
 
@@ -196,9 +195,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(command, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
 
-				IResult result = await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
-
-				await HandleCommandError(context, result);
+				await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
 			} else {
 				await ourResponse.DeleteAsync();
 			}
@@ -207,15 +204,10 @@ namespace RoosterBot {
 		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
 			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
 
-			IResult result = await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
-
-			await HandleCommandError(context, result);
+			await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
 		}
 
-		// TODO: Use this from CommandService.CommandExecuted instead
-		// I have discovered that by doing it that way, you will still get the actual result if the command is RunMode.Async
-		// https://discord.foxbot.me/stable/guides/commands/post-execution.html#runtimeresult
-		private async Task HandleCommandError(ICommandContext context, IResult result) {
+		private async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;
@@ -249,7 +241,8 @@ namespace RoosterBot {
 							bad = true;
 							break;
 						case CommandError.Unsuccessful:
-							badReport += "Unsuccessful";
+							badReport += "Unsuccessful\n";
+							badReport += result.ErrorReason;
 							bad = true;
 							break;
 						default:
@@ -264,7 +257,6 @@ namespace RoosterBot {
 
 				if (bad) {
 					Logger.Error("Program", "Error occurred while parsing command " + badReport);
-					Logger.Error("Program", result.ErrorReason);
 					if (m_ConfigService.BotOwner != null) {
 						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
 					}
