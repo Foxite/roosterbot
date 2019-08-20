@@ -154,13 +154,20 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record) {
-			string response = pretext;
+			string response = pretext + "\n";
 			response += TableItemActivity(record, false);
 
 			if (record.Activity != "stdag doc") {
 				if (record.Activity != "pauze") {
-					response += TableItemStaffMember(record);
-					response += TableItemRoom(record);
+					if (info.ScheduleField != "StaffMember") {
+						response += TableItemStaffMember(record);
+					}
+					if (info.ScheduleField != "StudentSets") {
+						response += TableItemStudentSets(record);
+					}
+					if (info.ScheduleField != "Room") {
+						response += TableItemRoom(record);
+					}
 				}
 
 				response += TableItemStartEndTime(record);
