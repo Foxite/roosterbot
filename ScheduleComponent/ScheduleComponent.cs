@@ -15,7 +15,7 @@ namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
 		private UserClassesService m_UserClasses;
 
-		public override string VersionString => "1.0.0";
+		public override string VersionString => "1.1.0";
 
 		public async override Task AddServices(IServiceCollection services, string configPath) {
 			TeacherNameService teachers = new TeacherNameService();
