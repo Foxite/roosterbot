@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace ScheduleComponent.DataTypes {
-	public abstract class IdentifierInfo {
+	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
 		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
@@ -15,8 +16,12 @@ namespace ScheduleComponent.DataTypes {
 			if (other == null)
 				return false;
 
-			return otherInfo.ScheduleCode == ScheduleCode
-				&& otherInfo.ScheduleField == ScheduleField;
+			return Equals(otherInfo);
+		}
+
+		public bool Equals(IdentifierInfo other) {
+			return other.ScheduleCode == ScheduleCode
+				&& other.ScheduleField == ScheduleField;
 		}
 
 		public override int GetHashCode() {
