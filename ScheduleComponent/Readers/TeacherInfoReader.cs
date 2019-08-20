@@ -15,17 +15,21 @@ namespace ScheduleComponent.Readers {
 			IUser user = null;
 			if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
 				user = await context.Guild.GetUserAsync(id);
-			} else {
+			} else if (input == "ik") {
 				user = context.User;
 			}
 
-			if (user == null) {
-				result = tns.Lookup(input);
-			} else {
-				TeacherInfo teacher = tns.GetTeacherByDiscordUser(user);
+			TeacherInfo teacher = null;
+
+			if (user != null) {
+				teacher = tns.GetTeacherByDiscordUser(user);
 				if (teacher != null) {
 					result = new TeacherInfo[] { teacher };
 				}
+			}
+			
+			if (teacher == null) {
+				result = tns.Lookup(input);
 			}
 
 			if (result == null || result.Length == 0) {
