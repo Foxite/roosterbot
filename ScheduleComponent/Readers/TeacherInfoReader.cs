@@ -12,11 +12,11 @@ namespace ScheduleComponent.Readers {
 			TeacherNameService tns = services.GetService<TeacherNameService>();
 			TeacherInfo[] result = null;
 			
-			IGuildUser user = null;
+			IUser user = null;
 			if (MentionUtils.TryParseUser(input, out ulong id)) {
-				user = await context.Guild.GetUserAsync(id);
-			} else {
-				user = await context.Guild.GetUserAsync(context.User.Id);
+				user = await context.Client.GetUserAsync(id);
+			} else if (input == "ik") {
+				user = context.User;
 			}
 
 			if (user == null) {
