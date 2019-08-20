@@ -23,16 +23,19 @@ namespace RoosterBot {
 		private async Task ReportDead(Exception e) => await ReportState(CloudWatchState.Dead);
 
 		private async Task ReportState(CloudWatchState state) {
+#if !DEBUG
 			await m_Client.PutMetricDataAsync(new PutMetricDataRequest() {
 				Namespace = "RoosterBotReady",
 				MetricData = new List<MetricDatum>() {
 					new MetricDatum() {
+						MetricName = "BotDead",
 						TimestampUtc = DateTime.UtcNow,
 						Unit = StandardUnit.None,
 						Value = (int) state
 					}
 				}
 			});
+#endif
 		}
 
 		public void Dispose() {
