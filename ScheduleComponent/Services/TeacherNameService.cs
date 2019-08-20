@@ -15,7 +15,7 @@ namespace ScheduleComponent.Services {
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
 		public async Task ReadAbbrCSV(string path, ulong[] allowedGuilds) {
-			Logger.Log(LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
+			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
@@ -45,7 +45,7 @@ namespace ScheduleComponent.Services {
 					}
 				}
 			}
-			Logger.Log(LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
+			Logger.Info("TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
 		}
 
 		public TeacherInfo GetRecordFromAbbr(ulong guild, string abbr) {

@@ -22,7 +22,7 @@ namespace GLUScheduleComponent {
 		}
 
 		public async override Task<List<ScheduleRecord>> GetSchedule() {
-			Logger.Log(Discord.LogSeverity.Info, "GLUScheduleReader", $"Loading CSV file from {m_Path}");
+			Logger.Info("GLUScheduleReader", $"Loading CSV file from {m_Path}");
 
 			int line = 1;
 			try {
@@ -78,7 +78,7 @@ namespace GLUScheduleComponent {
 				}
 				return schedule;
 			} catch (Exception e) {
-				Logger.Log(Discord.LogSeverity.Critical, "GLUScheduleReader", $"The following exception was thrown while loading the CSV at \"{m_Path}\" on line {line}", e);
+				Logger.Critical("GLUScheduleReader", $"The following exception was thrown while loading the CSV at \"{m_Path}\" on line {line}", e);
 				throw;
 			}
 		}

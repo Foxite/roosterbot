@@ -50,16 +50,11 @@ namespace RoosterBot {
 			Log(LogSeverity.Critical, tag, msg, e);
 		}
 
-		// TODO stop using this function
-		public static void Log(LogSeverity sev, string tag, string msg, Exception ex = null) {
-			Log(new LogMessage(sev, tag, msg, ex));
-		}
-
-		public static void Log(LogMessage msg) {
+		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
-				+ " : [" + msg.Severity + "] " + msg.Source + " : " + msg.Message;
-			if (msg.Exception != null) {
-				loggedMessage += "\n" + msg.Exception.ToString();
+								+ " : [" + severity + "] " + tag + " : " + msg;
+			if (exception!= null) {
+				loggedMessage += "\n" + exception.ToString();
 			}
 			Console.WriteLine(loggedMessage);
 			lock (Lock) {
@@ -70,8 +65,8 @@ namespace RoosterBot {
 		/// <summary>
 		/// This is called LogSync because it is not async, but Discord.NET requires a Log function that returns Task. None of the other functions here are async.
 		/// </summary>
-		public static Task LogSync(LogMessage msg) {
-			Log(msg);
+		internal static Task LogSync(LogMessage msg) {
+			Log(msg.Severity, msg.Source, msg.Message, msg.Exception);
 			return Task.CompletedTask;
 		}
 	}

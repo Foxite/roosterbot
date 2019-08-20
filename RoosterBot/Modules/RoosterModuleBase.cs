@@ -27,7 +27,7 @@ namespace RoosterBot.Modules {
 
 			if (LogTag == null) {
 				LogTag = GetType().Name;
-				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
+				Logger.Warning(LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
 			}
 
 			Log = new ModuleLoggerInternal(LogTag);

@@ -39,7 +39,7 @@ namespace RoosterBot {
 				Instance = new Program();
 				Instance.MainAsync().GetAwaiter().GetResult();
 			} catch (Exception e) {
-				Logger.Log(LogSeverity.Critical, "Program", "Application has crashed.", e);
+				Logger.Critical("Program", "Application has crashed.", e);
 #if DEBUG
 				Console.ReadKey();
 #endif
@@ -51,7 +51,7 @@ namespace RoosterBot {
 		}
 
 		private async Task MainAsync() {
-			Logger.Log(LogSeverity.Info, "Main", "Starting program");
+			Logger.Info("Main", "Starting program");
 			m_State = ProgramState.BeforeStart;
 
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
@@ -70,7 +70,7 @@ namespace RoosterBot {
 			Console.CancelKeyPress += (o, e) => {
 				if (m_State != ProgramState.BotStopped) {
 					e.Cancel = true;
-					Logger.Log(LogSeverity.Warning, "Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
+					Logger.Warning("Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
 				}
 			};
 			await WaitForQuitCondition();
@@ -263,8 +263,8 @@ namespace RoosterBot {
 				}
 
 				if (bad) {
-					Logger.Log(LogSeverity.Error, "Program", "Error occurred while parsing command " + badReport);
-					Logger.Log(LogSeverity.Error, "Program", result.ErrorReason);
+					Logger.Error("Program", "Error occurred while parsing command " + badReport);
+					Logger.Error("Program", result.ErrorReason);
 					if (m_ConfigService.BotOwner != null) {
 						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
 					}
@@ -312,7 +312,7 @@ namespace RoosterBot {
 			m_State = ProgramState.BotRunning;
 			await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
 			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-			Logger.Log(LogSeverity.Info, "Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+			Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
 				m_VersionNotReported = false;
