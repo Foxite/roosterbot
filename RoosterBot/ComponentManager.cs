@@ -24,7 +24,6 @@ namespace RoosterBot {
 		/// <summary>
 		/// Runs the full initialization process for components.
 		/// </summary>
-		/// <returns></returns>
 		private async Task SetupComponents(IServiceCollection serviceCollection) {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
