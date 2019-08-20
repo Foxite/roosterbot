@@ -63,9 +63,9 @@ namespace GLUScheduleComponent {
 
 						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord lastRecord) &&
 							record.Start.Date == lastRecord.Start.Date &&
-							record.StudentSetsString == lastRecord.StudentSetsString &&
-							record.StaffMemberString == lastRecord.StaffMemberString &&
-							record.RoomString == lastRecord.RoomString) {
+							record.StudentSets.SequenceEqual(lastRecord.StudentSets) &&
+							record.StaffMember.SequenceEqual(lastRecord.StaffMember) &&
+							record.Room.SequenceEqual(lastRecord.Room)) {
 							// Note: This does not support records with multiple breaks. If that happens, it will result in only the last break being displayed.
 							lastRecord.BreakStart = lastRecord.End;
 							lastRecord.BreakEnd = record.Start;
