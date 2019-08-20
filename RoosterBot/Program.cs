@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Services;
 
 namespace RoosterBot {
-	// TODO make this less of a god class
 	public class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
