@@ -5,6 +5,7 @@ using Discord.Commands;
 using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
+using RoosterBot.Preconditions;
 using ScheduleComponent.Readers;
 
 namespace ScheduleComponent.Modules {
@@ -90,9 +91,9 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Priority(-10), Command("over", RunMode = RunMode.Async), Summary("Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
-		public async Task ShowNWeeksWorkingDaysCommand(string aantal_weken, [Remainder] string wat = "") {
+		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int aantal, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"over {aantal_weken} ik", Context.Message);
+				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"over {aantal} {unit} ik", Context.Message);
 			} else {
 				await ReplyErrorMessage(wat);
 			}
