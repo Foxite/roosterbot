@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 
 namespace RoosterBot.Automation {
@@ -14,12 +15,12 @@ namespace RoosterBot.Automation {
 			Log("Starting app");
 
 			ProcessStartInfo psi = new ProcessStartInfo() {
-				FileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "../RoosterBot/RoosterBot.exe"),
+				FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "../RoosterBot/RoosterBot.exe"),
 				CreateNoWindow = false,
 				UseShellExecute = true,
 			};
 			Process process = Process.Start(psi);
-
+			
 			Log("App started");
 
 			// TODO: Move this code to a program/script running in the ValidateService phase, if possible
@@ -34,8 +35,9 @@ namespace RoosterBot.Automation {
 		}
 		
 		private static void Log(string message) {
-			Console.WriteLine(DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern) + " : " + message);
-			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", Environment.NewLine + DateTime.Now + " AppStart: " + message);
+			string nowString = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern);
+			Console.WriteLine(nowString + " : " + message);
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", nowString + " AppStart: " + message + Environment.NewLine);
 		}
 	}
 }
