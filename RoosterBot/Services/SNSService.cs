@@ -20,11 +20,11 @@ namespace RoosterBot.Services {
 
 		internal async Task SendCriticalErrorNotificationAsync(string message) {
 #if !DEBUG
-			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (async)");
+			Logger.Info("SNSService", "Sending error report to SNS (async)");
 			try {
 				await m_SNSClient.PublishAsync(m_ConfigService.SNSCriticalFailureARN, message);
 			} catch (AmazonSimpleNotificationServiceException ex) {
-				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (async)", ex);
+				Logger.Error("SNSService", "Failed to send error report to SNS (async)", ex);
 			}
 #else
 			await Task.CompletedTask;
@@ -33,11 +33,11 @@ namespace RoosterBot.Services {
 
 		internal void SendCriticalErrorNotification(string message) {
 #if !DEBUG
-			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (sync)");
+			Logger.Info("SNSService", "Sending error report to SNS (sync)");
 			try {
 				m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
 			} catch (AmazonSimpleNotificationServiceException ex) {
-				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (sync)", ex);
+				Logger.Error("SNSService", "Failed to send error report to SNS (sync)", ex);
 			}
 #endif
 		}
