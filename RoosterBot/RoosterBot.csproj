@@ -132,6 +132,9 @@
     <PackageReference Include="AWSSDK.SimpleNotificationService">
       <Version>3.3.101.54</Version>
     </PackageReference>
+    <PackageReference Include="Ben.Demystifier">
+      <Version>0.1.4</Version>
+    </PackageReference>
     <PackageReference Include="Discord.Net">
       <Version>2.1.1</Version>
     </PackageReference>

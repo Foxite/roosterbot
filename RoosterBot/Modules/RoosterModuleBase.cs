@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -140,11 +141,12 @@ namespace RoosterBot.Modules {
 		protected virtual async Task FatalError(string message, Exception exception = null) {
 			string report = $"Critical error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
 
+			Log.Error(report, exception);
+
 			if (exception != null) {
-				report += $"\nAttached exception: {Util.EscapeString(exception.ToString())}\n";
+				report += $"\nAttached exception: {Util.EscapeString(exception.ToStringDemystified())}\n";
 			}
 
-			Log.Error(report);
 			await SNSService.SendCriticalErrorNotificationAsync(report);
 			if (Config.BotOwner != null) {
 				await Config.BotOwner.SendMessageAsync(report);
@@ -160,6 +162,7 @@ namespace RoosterBot.Modules {
 		public abstract class ModuleLogger {
 			protected string m_Tag;
 
+			// TODO add exceptions
 			public void Verbose(string message) {
 				Logger.Verbose(m_Tag, message);
 			}

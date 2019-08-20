@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -53,8 +54,8 @@ namespace RoosterBot {
 		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " : [" + severity + "] " + tag + " : " + msg;
-			if (exception!= null) {
-				loggedMessage += "\n" + exception.ToString();
+			if (exception != null) {
+				loggedMessage += "\n" + exception.ToStringDemystified();
 			}
 			Console.WriteLine(loggedMessage);
 			lock (Lock) {

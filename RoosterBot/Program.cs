@@ -287,7 +287,7 @@ namespace RoosterBot {
 					if (ex == null) {
 						report += "No exception is attached.";
 					} else {
-						report += $"The following exception is attached: \"{ex.Message}\", stacktrace: {ex.StackTrace}";
+						report += $"The following exception is attached: {ex.ToStringDemystified()}";
 					}
 					report += "\n\nThe bot will attempt to restart in 20 seconds.";
 					m_SNSService.SendCriticalErrorNotification(report);
