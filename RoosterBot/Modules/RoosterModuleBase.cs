@@ -162,29 +162,29 @@ namespace RoosterBot.Modules {
 		public abstract class ModuleLogger {
 			protected string m_Tag;
 
-			// TODO add exceptions
-			public void Verbose(string message) {
-				Logger.Verbose(m_Tag, message);
+			// TODO add , Exception e = null
+			public void Verbose(string message, Exception e = null) {
+				Logger.Verbose(m_Tag, message, e);
 			}
 
-			public void Debug(string message) {
-				Logger.Debug(m_Tag, message);
+			public void Debug(string message, Exception e = null) {
+				Logger.Debug(m_Tag, message, e);
 			}
 
-			public void Info(string message) {
-				Logger.Info(m_Tag, message);
+			public void Info(string message, Exception e = null) {
+				Logger.Info(m_Tag, message, e);
 			}
 
-			public void Warning(string message) {
-				Logger.Warning(m_Tag, message);
+			public void Warning(string message, Exception e = null) {
+				Logger.Warning(m_Tag, message, e);
 			}
 
-			public void Error(string message) {
-				Logger.Error(m_Tag, message);
+			public void Error(string message, Exception e = null) {
+				Logger.Error(m_Tag, message, e);
 			}
 
-			public void Critical(string message) {
-				Logger.Critical(m_Tag, message);
+			public void Critical(string message, Exception e = null) {
+				Logger.Critical(m_Tag, message, e);
 			}
 		}
 
