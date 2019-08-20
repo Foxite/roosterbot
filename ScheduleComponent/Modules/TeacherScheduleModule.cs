@@ -26,7 +26,7 @@ namespace ScheduleComponent.Modules {
 
 						ReplyDeferred(response, teacher, record);
 					} else {
-						await RespondRecord($"{teacher.DisplayText}: Nu\n", teacher, record);
+						await RespondRecord($"{teacher.DisplayText}: Nu", teacher, record);
 					}
 				}
 			}
@@ -51,9 +51,9 @@ namespace ScheduleComponent.Modules {
 					} else {
 						string pretext;
 						if (record.Start.Date == DateTime.Today) {
-							pretext = $"{teacher.DisplayText}: Hierna\n";
+							pretext = $"{teacher.DisplayText}: Hierna";
 						} else {
-							pretext = $"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+							pretext = $"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}";
 						}
 
 						await RespondRecord(pretext, teacher, record);
@@ -109,7 +109,12 @@ namespace ScheduleComponent.Modules {
 				foreach (TeacherInfo teacher in teachers) {
 					ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(teacher, TimeSpan.FromHours(amount));
 					if (result.Success) {
-						await RespondRecord(string.Join(", ", teachers.Select(t => t.DisplayText)), teacher, result.Value);
+						ScheduleRecord record = result.Value;
+						if (record != null) {
+							await RespondRecord($"{string.Join(", ", teachers.Select(t => t.DisplayText))}: Over {amount} uur", teacher, record);
+						} else {
+							await ReplyAsync("Er is op dat moment niets.");
+						}
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
@@ -127,39 +132,34 @@ namespace ScheduleComponent.Modules {
 
 		private async Task RespondDay(TeacherInfo teacher, DateTime date) {
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(teacher, date);
-			string response = "";
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
-				if (records.Length != 0) {
-					response += $"{teacher.DisplayText}: Rooster van {ScheduleUtil.GetRelativeDateReference(date)}\n";
-
+				string response;
+				if (records.Length == 0) {
+					response = $"Het lijkt er op dat {teacher.DisplayText} {ScheduleUtil.GetRelativeDateReference(date)} niets heeft.";
+					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
+						response += " Dat is dan ook weekend.";
+					}
+					ReplyDeferred(response, null, null);
+				} else {
+					response = $"{teacher.DisplayText}: Rooster voor {ScheduleUtil.GetRelativeDateReference(date)}\n";
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
-						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][0] = ScheduleUtil.GetActivityFromAbbr(record.Activity);
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 						cells[recordIndex][2] = record.StudentSetsString;
+						cells[recordIndex][3] = record.RoomString;
 
-						string room = record.RoomString;
-						if (room.Contains(',')) {
-							room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
-						}
-						cells[recordIndex][3] = room;
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);
-				} else {
-					response += $"Het lijkt er op dat {teacher.DisplayText} {ScheduleUtil.GetRelativeDateReference(date)} niets heeft.";
-					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
-						response += " Dat is dan ook weekend.";
-					}
-					response += "\n";
+					ReplyDeferred(response, teacher, records.Last());
 				}
 			}
-			ReplyDeferred(response, null, null);
 		}
 
 		private async Task RespondWeek(TeacherInfo info, int weeksFromNow) {
@@ -170,14 +170,15 @@ namespace ScheduleComponent.Modules {
 				string response = info.DisplayText + ": ";
 
 				if (availability.Length > 0) {
+					response += "Rooster ";
 					if (weeksFromNow == 0) {
-						response += "Deze week";
+						response += "deze week";
 					} else if (weeksFromNow == 1) {
-						response += "Volgende week";
+						response += "volgende week";
 					} else {
-						response += $"Over {weeksFromNow} weken";
+						response += $"over {weeksFromNow} weken";
 					}
-					response += " op school op \n";
+					response += "\n";
 
 					string[][] cells = new string[availability.Length + 1][];
 					cells[0] = new[] { "Dag", "Van", "Tot" };

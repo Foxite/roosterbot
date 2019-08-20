@@ -22,7 +22,7 @@ namespace ScheduleComponent.Modules {
 					}
 					ReplyDeferred(response, room, record);
 				} else {
-					await RespondRecord($"{record.RoomString}: Nu\n", room, record);
+					await RespondRecord($"{record.RoomString}: Nu", room, record);
 				}
 			}
 		}
@@ -38,9 +38,9 @@ namespace ScheduleComponent.Modules {
 					string pretext;
 
 					if (record.Start.Date == DateTime.Today) {
-						pretext = $"{record.RoomString}: Hierna\n";
+						pretext = $"{record.RoomString}: Hierna";
 					} else {
-						pretext = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						pretext = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}";
 					}
 					await RespondRecord(pretext, room, record);
 				}
@@ -77,7 +77,11 @@ namespace ScheduleComponent.Modules {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
-					await RespondRecord($"{record.RoomString}: Over {amount} uur", info, record);
+					if (record != null) {
+						await RespondRecord($"{record.RoomString}: Over {amount} uur", info, record);
+					} else {
+						await ReplyAsync("Er is op dat moment niets.");
+					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
 				await RespondDay(info, DateTime.Today.AddDays(amount));
@@ -95,23 +99,23 @@ namespace ScheduleComponent.Modules {
 				string response;
 				if (records.Length == 0) {
 					response = $"Het ziet ernaar uit dat daar {ScheduleUtil.GetRelativeDateReference(date)} niets is.";
-
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
 					ReplyDeferred(response, info, null);
 				} else {
-					response = $"{info.DisplayText}: Rooster van {ScheduleUtil.GetRelativeDateReference(date)}\n";
+					response = $"{info.DisplayText}: Rooster voor {ScheduleUtil.GetRelativeDateReference(date)}\n";
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Leraar" };
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
-						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][0] = ScheduleUtil.GetActivityFromAbbr(record.Activity);
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 						cells[recordIndex][2] = record.StudentSetsString;
-						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						cells[recordIndex][3] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);
@@ -128,14 +132,15 @@ namespace ScheduleComponent.Modules {
 				string response = info.DisplayText + ": ";
 
 				if (availability.Length > 0) {
+					response += "Rooster ";
 					if (weeksFromNow == 0) {
-						response += "Deze week";
+						response += "deze week";
 					} else if (weeksFromNow == 1) {
-						response += "Volgende week";
+						response += "volgende week";
 					} else {
-						response += $"Over {weeksFromNow} weken";
+						response += $"over {weeksFromNow} weken";
 					}
-					response += " in gebruik op \n";
+					response += "\n";
 
 					string[][] cells = new string[availability.Length + 1][];
 					cells[0] = new[] { "Dag", "Van", "Tot" };
