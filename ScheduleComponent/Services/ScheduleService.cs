@@ -105,7 +105,8 @@ namespace ScheduleComponent.Services {
 				} else {
 					if (identifier.Matches(record)) {
 						sawRecordForClass = true;
-					} else if (ReferenceEquals(givenRecord, record)) {
+					}
+					if (givenRecord == record) {
 						sawGivenRecord = true;
 					}
 				}
