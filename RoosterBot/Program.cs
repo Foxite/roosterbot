@@ -18,13 +18,15 @@ namespace RoosterBot {
 	public class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
-
-		private ProgramState m_State;
+		
+		private ProgramState m_State; // TODO can we use m_Client.ConnectionState instead?
 		private bool m_StopFlagSet = false;
 		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
+		private CloudWatchReporter m_CloudWatchReporter;
+		private SNSService m_SNSService;
 		private IServiceProvider m_Services;
 		internal Dictionary<Type, ComponentBase> m_Components;
 
@@ -103,8 +105,9 @@ namespace RoosterBot {
 
 			m_Client.Disconnected += (e) => {
 				m_State = ProgramState.BotStopped;
-				Task task = Task.Run(() => { // Store task in variable. do not await. just suppress the warning.
-					Thread.Sleep(20000);
+
+				Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
+					await Task.Delay(20000);
 					if (m_State != ProgramState.BotRunning) {
 						string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
 						if (e == null) {
@@ -113,7 +116,7 @@ namespace RoosterBot {
 							report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
 						}
 						report += "\n\nThe bot will attempt to restart in 20 seconds.";
-						m_Services.GetService<SNSService>().SendCriticalErrorNotification(report);
+						await m_SNSService.SendCriticalErrorNotificationAsync(report);
 
 						Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 						Shutdown();
@@ -132,14 +135,14 @@ namespace RoosterBot {
 			m_Commands.Log += Logger.LogSync;
 
 			HelpService helpService = new HelpService();
+			m_SNSService = new SNSService(m_ConfigService);
+			m_CloudWatchReporter = new CloudWatchReporter(m_Client);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_Commands)
 				.AddSingleton(m_Client)
-				.AddSingleton(helpService)
-				.AddSingleton(new SNSService(m_ConfigService));
-
+				.AddSingleton(helpService);
 			#endregion
 
 			#region Start components
@@ -258,6 +261,8 @@ namespace RoosterBot {
 			cts.Cancel();
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
+
+			m_CloudWatchReporter.Dispose();
 
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
