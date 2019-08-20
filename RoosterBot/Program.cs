@@ -172,7 +172,7 @@ namespace RoosterBot {
 				userMessage.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
 				// First char after prefix
 				char firstChar = message.Content.Substring(m_ConfigService.CommandPrefix.Length)[0];
-				if ((firstChar < 'A' || firstChar > 'Z') && (firstChar < 'a' || firstChar > 'z')) {
+				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
 					return true;
 				}
