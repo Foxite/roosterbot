@@ -28,15 +28,6 @@ namespace RoosterBot.Services {
 			await Task.CompletedTask;
 		}
 
-		public override void SendCriticalErrorNotification(string message) {
-			Logger.Log(Discord.LogSeverity.Info, "SNSService", "Sending error report to SNS (sync)");
-			try {
-				m_SNSClient.Publish(m_ConfigService.SNSCriticalFailureARN, message);
-			} catch (AmazonSimpleNotificationServiceException ex) {
-				Logger.Log(Discord.LogSeverity.Error, "SNSService", "Failed to send error report to SNS (sync)", ex);
-			}
-		}
-
 		#region IDisposable Support
 		// Everything in this region was added by Visual Studio during code analysis, I don't understand most of it.
 		// I mean, I do, but why would you have a second method for this? Why not just stick with a regular Dispose()? I don't see the reason.
@@ -69,7 +60,6 @@ namespace RoosterBot.Services {
 		public AbstractSNSService(ConfigService config) { }
 #pragma warning restore IDE0060 // Remove unused parameter
 
-		public virtual void SendCriticalErrorNotification(string message) { }
 		public virtual Task SendCriticalErrorNotificationAsync(string message) => Task.CompletedTask;
 	}
 }
