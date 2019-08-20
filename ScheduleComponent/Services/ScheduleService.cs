@@ -54,14 +54,16 @@ namespace ScheduleComponent.Services {
 		}
 
 		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan) {
-			DateTime target = (DateTime.Now + timespan);
+			DateTime target = DateTime.Now + timespan;
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (record.Start > target && record.End < target) {
+					if (record.Start < target && record.End > target) {
 						return record;
+					} else if (record.Start > target) {
+						return null;
 					}
 				}
 			}
