@@ -359,7 +359,6 @@ namespace RoosterBot {
 					if (m_ConfigService.LogChannel != null) {
 						await m_ConfigService.LogChannel.SendMessageAsync(m_ConfigService.BotOwner.Mention + " " + badReport);
 					}
-					await m_Services.GetService<SNSService>().SendCriticalErrorNotificationAsync(badReport);
 					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
 				}
 
