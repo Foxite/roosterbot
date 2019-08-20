@@ -14,7 +14,7 @@ namespace ScheduleComponent.DataTypes {
 
 		public TimeSpan Duration => End - Start;
 		public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ClassName));
-		public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.Abbreviation));
+		public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.DisplayText));
 		public string RoomString => string.Join(", ", Room.Select(info => info.Room));
 
 		public override string ToString() {
