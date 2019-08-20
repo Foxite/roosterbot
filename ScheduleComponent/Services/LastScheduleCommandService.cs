@@ -5,6 +5,7 @@ using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
+		// TODO use tuple key
 		private ConcurrentDictionary<IMessageChannel, ConcurrentDictionary<IUser, ScheduleCommandInfo>> m_SCIs;
 
 		public LastScheduleCommandService() {
