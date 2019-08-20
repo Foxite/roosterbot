@@ -162,7 +162,6 @@ namespace RoosterBot.Modules {
 		public abstract class ModuleLogger {
 			protected string m_Tag;
 
-			// TODO add , Exception e = null
 			public void Verbose(string message, Exception e = null) {
 				Logger.Verbose(m_Tag, message, e);
 			}
