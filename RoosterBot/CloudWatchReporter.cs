@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
+	// TODO move AWS code (this and SNSService) to a new AWSComponent
+	// Use AbstractNotificationService in RoosterBot
 	internal class CloudWatchReporter : IDisposable {
 		private AmazonCloudWatchClient m_Client;
 		private DiscordSocketClient m_Discord;
