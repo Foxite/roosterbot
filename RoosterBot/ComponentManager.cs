@@ -87,12 +87,12 @@ namespace RoosterBot {
 		}
 
 		private async Task<IServiceProvider> AddComponentServicesAsync(IServiceCollection serviceCollection) {
-			List<Task> servicesLoading = new List<Task>(m_Components.Count);
+			Task[] servicesLoading = new Task[m_Components.Count];
 
 			int i = 0;
 			foreach (KeyValuePair<Type, ComponentBase> kvp in m_Components) {
 				Type type = kvp.Key;
-				var component = kvp.Value;
+				ComponentBase component = kvp.Value;
 
 				Logger.Info("ComponentManager", "Adding services from " + type.Name);
 				
