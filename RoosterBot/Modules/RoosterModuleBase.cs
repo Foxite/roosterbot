@@ -9,7 +9,6 @@ using RoosterBot.Services;
 namespace RoosterBot.Modules {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
 		public ConfigService Config { get; set; }
-		public SNSService SNSService { get; set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
@@ -146,7 +145,7 @@ namespace RoosterBot.Modules {
 			}
 
 			Log.Error(report);
-			await SNSService.SendCriticalErrorNotificationAsync(report);
+
 			if (Config.LogChannel != null) {
 				await Config.LogChannel.SendMessageAsync($"{Config.BotOwner.Mention} {report}");
 			}
