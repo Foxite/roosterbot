@@ -98,12 +98,6 @@ namespace ScheduleComponent.Modules {
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, TeacherInfo[] infos) {
-			foreach (var info in infos) {
-				await RespondWeek(info, weeks);
-			}
-		}
-
 		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, TeacherInfo[] teachers) {
 			if (unit == "uur") {
 				foreach (TeacherInfo teacher in teachers) {

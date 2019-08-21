@@ -72,6 +72,7 @@ namespace ScheduleComponent.Modules {
 			await RespondWorkingDays(info, 1);
 		}
 
+		[Command("over", RunMode = RunMode.Sync)]
 		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, RoomInfo info) {
 			if (unit == "uur") {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
