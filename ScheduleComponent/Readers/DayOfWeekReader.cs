@@ -8,7 +8,7 @@ namespace ScheduleComponent.Readers {
 			try {
 				return Task.FromResult(TypeReaderResult.FromSuccess(ScheduleUtil.GetDayOfWeekFromString(input)));
 			} catch (ArgumentException) {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Dat is geen weekdag."));
+				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, Resources.DayOfWeekReader_CheckFailed));
 			}
 		}
 	}

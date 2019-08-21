@@ -26,15 +26,15 @@ namespace ScheduleComponent.Readers {
 					user = context.User;
 					byMention = true;
 				} else {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, "Dat is geen klas.");
+					return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.StudentSetInfoReader_CheckFailed_Direct);
 				}
 				StudentSetInfo result = await services.GetService<UserClassesService>().GetClassForDiscordUser(user);
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = "Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen.";
+						message = Resources.StudentSetInfoReader_CheckFailed_MentionUser;
 					} else {
-						message = "Ik weet niet in welke klas jij zit. Gebruik `!ik <jouw klas>` om dit in te stellen.";
+						message = Resources.StudentSetInfoReader_CheckFailed_MentionSelf;
 					}
 					return TypeReaderResult.FromError(CommandError.ParseFailed, message);
 				} else {

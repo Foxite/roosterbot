@@ -15,7 +15,7 @@ namespace ScheduleComponent.Readers {
 					Room = input.ToUpper()
 				}));
 			} else {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Dat is geen lokaal."));
+				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, Resources.RoomInfoReader_CheckFailed));
 			}
 		}
 	}

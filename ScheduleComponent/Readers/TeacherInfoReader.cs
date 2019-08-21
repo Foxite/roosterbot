@@ -29,7 +29,7 @@ namespace ScheduleComponent.Readers {
 			}
 
 			if (result == null || result.Length == 0) {
-				return TypeReaderResult.FromError(CommandError.ParseFailed, "Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.");
+				return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.TeacherInfoReader_CheckFailed);
 			} else {
 				return TypeReaderResult.FromSuccess(result);
 			}
