@@ -31,18 +31,7 @@ namespace WatsonComponent {
 			
 			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 			
-			string helpText = "Ik gebruik een machine-learning systeem waarmee ik spreektaal kan begrijpen.\n";
-			helpText += "Om dit te gebruiken, mention je me aan het begin van een command en stel je me een vraag.\n";
-			helpText += "Bijvoorbeeld:\n";
-			helpText += "- `@RoosterBot wat heeft 2gd1 morgen?`\n";
-			helpText += "- `@RoosterBot wat is er nu in a224`\n";
-			helpText += "- `@RoosterBot waar is lance straks?`\n";
-			helpText += "- `@RoosterBot wat heb ik hierna`\n";
-			helpText += "- `@RoosterBot en daarna?`\n";
-			helpText += "Dit wordt automatisch omgezet naar de goede command. Als ik je niet begrijp, reageer ik met een vraagteken.\n";
-			helpText += "Dit systeem is nog in de betafase en is soms raar. Lees goed de eerste regel van het antwoord, zodat je zeker weet dat ik niet " +
-				"dacht dat je \"nu\" bedoelde in plaats van \"straks\".";
-			help.AddHelpSection("taal", helpText);
+			help.AddHelpSection("taal", Resources.WatsonComponent_HelpText);
 
 			return Task.CompletedTask;
 		}
