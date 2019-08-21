@@ -197,7 +197,7 @@ namespace ScheduleComponent.Modules {
 				return new ReturnValue<T>() {
 					Success = false
 				};
-			} catch (NoSchedulesAvailableException) {
+			} catch (NoAllowedGuildsException) {
 				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
 				return new ReturnValue<T>() {
 					Success = false

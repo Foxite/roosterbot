@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Discord;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
-	public class ScheduleService {
-		private readonly ulong[] m_AllowedGuildIds;
+	public class ScheduleService : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
-		private ScheduleService(ulong[] allowedGuilds) {
-			m_AllowedGuildIds = allowedGuilds;
-		}
+		private ScheduleService(ulong[] allowedGuilds) : base(allowedGuilds) { }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
 		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
@@ -24,12 +20,6 @@ namespace ScheduleComponent.Services {
 			};
 			return service;
 		}
-
-		public bool IsGuildAllowed(ulong guildId) {
-			return m_AllowedGuildIds.Contains(guildId);
-		}
-
-		public bool IsGuildAllowed(IGuild guild) => IsGuildAllowed(guild.Id);
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {

@@ -105,19 +105,14 @@ namespace ScheduleComponent.Services {
 			return m_Records.Where(gtl => gtl.IsGuildAllowed(guild)).SelectMany(gtl => gtl.Teachers);
 		}
 
-		private class GuildTeacherList {
-			private ulong[] m_AllowedGuilds;
+		private class GuildTeacherList : GuildSpecificInfo {
 			private List<TeacherInfo> m_Teachers;
 
 			public IReadOnlyList<TeacherInfo> Teachers => m_Teachers;
 
-			public GuildTeacherList(ulong[] allowedGuilds, List<TeacherInfo> teachers) {
-				m_AllowedGuilds = allowedGuilds;
+			public GuildTeacherList(ulong[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
 				m_Teachers = teachers;
 			}
-
-			public bool IsGuildAllowed(ulong guildId) => m_AllowedGuilds.Contains(guildId);
-			public bool IsGuildAllowed(IGuild guild) => IsGuildAllowed(guild.Id);
 		}
 	}
 }
