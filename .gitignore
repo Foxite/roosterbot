@@ -270,3 +270,4 @@ Release.dat
 
 # Generated code
 **/*.gen.cs
+**/*.Designer.cs

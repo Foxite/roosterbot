@@ -8,6 +8,7 @@ using RoosterBot.Attributes;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
+	// TODO this class and its children should never use Logger, only the Log property here
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
 		public ConfigService Config { get; set; }
 
@@ -150,7 +151,7 @@ namespace RoosterBot.Modules {
 				await Config.BotOwner.SendMessageAsync(report);
 			}
 
-			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
+			string response = Resources.RoosterBot_FatalError;
 			if (Config.ErrorReactions) {
 				await ReplyAsync(response, "🚫");
 			} else {
@@ -159,7 +160,7 @@ namespace RoosterBot.Modules {
 		}
 
 		public abstract class ModuleLogger {
-			protected string m_Tag;
+			internal string m_Tag;
 
 			public void Verbose(string message, Exception e = null) {
 				Logger.Verbose(m_Tag, message, e);

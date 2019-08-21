@@ -114,6 +114,7 @@ namespace RoosterBot {
 		}
 		#endregion
 
+		// TODO are these really necessary in RoosterBot.Util?
 		#region Levenshtein
 		/// <summary>
 		/// Returns the Levenshtein distance from {source} to {target}.

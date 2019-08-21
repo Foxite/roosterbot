@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -14,8 +13,7 @@ namespace RoosterBot.Modules {
 
 		[Command("help"), Summary("Uitleg over de bot.")]
 		public async Task HelpCommand() {
-			string response = $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
-			response += "Gebruik `!help <hoofdstuk>` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:\n";
+			string response = string.Format(Resources.MetaCommandsModule_HelpCommand_HelpPretext, Config.CommandPrefix);
 
 			bool notFirst = false;
 			foreach (string helpSection in Help.GetSectionNames()) {
@@ -26,8 +24,7 @@ namespace RoosterBot.Modules {
 				notFirst = true;
 			}
 
-
-			response += "\nJe kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands <onderdeel>` gebruiken om alle commands te zien.\n";
+			response += Resources.MetaCommandsModule_HelpCommand_PostText;
 
 			await ReplyAsync(response);
 		}
@@ -38,7 +35,7 @@ namespace RoosterBot.Modules {
 			if (Help.HelpSectionExists(section)) {
 				response += Help.GetHelpSection(section);
 			} else {
-				response += "Sorry, dat hoofdstuk bestaat niet.";
+				response += Resources.MetaCommandsModule_HelpCommand_ChapterDoesNotExist;
 			}
 			await ReplyAsync(response);
 		}
@@ -49,9 +46,9 @@ namespace RoosterBot.Modules {
 			ModuleInfo module = CmdService.Modules.Where(aModule => aModule.Name.ToLower() == moduleName).SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				await ReplyAsync("Die categorie bestaat niet.");
+				await ReplyAsync(Resources.MetaCommandsModule_CommandListCommand_CategoryDoesNotExist);
 			} else if (module.Commands.Count() == 0) {
-				await ReplyAsync("Geen commands gevonden.");
+				await ReplyAsync(Resources.MetaCommandsModule_CommandListCommand_CategoryEmpty);
 			} else {
 				string response = "";
 
@@ -101,7 +98,7 @@ namespace RoosterBot.Modules {
 					response += module.Remarks + "\n";
 				}
 
-				response += "Parameters met een `(?)` zijn optioneel.";
+				response += Resources.MetaCommandsModule_CommandListCommand_OptionalHint;
 				await ReplyAsync(response);
 			}
 		}
@@ -114,14 +111,14 @@ namespace RoosterBot.Modules {
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
 				select module.Name.ToLower();
 
-			string response = "Beschikbare onderdelen zijn:\n";
+			string response = Resources.MetaCommandsModule_CommandListCommand_Pretext;
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
 			await ReplyAsync(response);
 		}
 
 		[Command("shutdown"), RequireBotManager, HiddenFromList]
 		public Task ShutdownCommand() {
-			Log.Info("Shutting down");
+			Log.Info($"Shutdown command used by {Context.User.Username}");
 			Program.Instance.Shutdown();
 			return Task.CompletedTask;
 		}

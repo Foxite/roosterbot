@@ -17,7 +17,7 @@ namespace RoosterBot.Preconditions {
 			if (ret) {
 				return Task.FromResult(PreconditionResult.FromSuccess());
 			} else {
-				return Task.FromResult(PreconditionResult.FromError($"Dat is te hoog of te laag."));
+				return Task.FromResult(PreconditionResult.FromError(Resources.RangeAttribute_CheckFailed));
 			}
 		}
 	}

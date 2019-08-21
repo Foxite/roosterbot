@@ -17,7 +17,7 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 		
 		private ProgramState m_State; // TODO can we use m_Client.ConnectionState instead?
-		private bool m_StopFlagSet = false;
+		private bool m_StopFlagSet;
 		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
@@ -87,7 +87,7 @@ namespace RoosterBot {
 
 			CancellationTokenSource cts = new CancellationTokenSource();
 			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In)) {
-				Task pipeWait = pipeServer.WaitForConnectionAsync(cts.Token);
+				_ = pipeServer.WaitForConnectionAsync(cts.Token);
 
 				do {
 					keepRunning = true;
@@ -126,6 +126,7 @@ namespace RoosterBot {
 				} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 			}
 			cts.Cancel();
+			cts.Dispose();
 		}
 
 		private void SetupClient() {
@@ -215,16 +216,16 @@ namespace RoosterBot {
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 						case CommandError.UnknownCommand:
-							response = "Die command ken ik niet. Gebruik `!help` voor informatie.";
+							response = string.Format(Resources.Program_OnCommandExecuted_UnknownCommand, m_ConfigService.CommandPrefix);
 							break;
 						case CommandError.BadArgCount:
-							response = "Dat zijn te veel of te weinig parameters.";
+							response = Resources.Program_OnCommandExecuted_BadArgCount;
 							break;
 						case CommandError.UnmetPrecondition:
 							response = result.ErrorReason;
 							break;
 						case CommandError.ParseFailed:
-							response = "Ik begrijp de parameter(s) niet.";
+							response = Resources.Program_OnCommandExecuted_ParseFailed;
 							break;
 						case CommandError.ObjectNotFound:
 							badReport += "ObjectNotFound";
@@ -260,7 +261,7 @@ namespace RoosterBot {
 						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
 					}
 
-					response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.";
+					response = Resources.RoosterBot_FatalError;
 				}
 
 				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;
