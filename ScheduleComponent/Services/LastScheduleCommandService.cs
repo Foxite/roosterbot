@@ -5,16 +5,14 @@ using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
-		// TODO use tuple key
-		private ConcurrentDictionary<IMessageChannel, ConcurrentDictionary<IUser, ScheduleCommandInfo>> m_SCIs;
+		private ConcurrentDictionary<SCIKey, ScheduleCommandInfo> m_SCIs;
 
 		public LastScheduleCommandService() {
-			m_SCIs = new ConcurrentDictionary<IMessageChannel, ConcurrentDictionary<IUser, ScheduleCommandInfo>>();
+			m_SCIs = new ConcurrentDictionary<SCIKey, ScheduleCommandInfo>();
 		}
 
 		public ScheduleCommandInfo GetLastCommandForContext(ICommandContext context) {
-			if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users) &&
-				users.TryGetValue(context.User, out ScheduleCommandInfo previous)) {
+			if (m_SCIs.TryGetValue(new SCIKey(context), out ScheduleCommandInfo previous)) {
 				return previous;
 			} else {
 				return default(ScheduleCommandInfo);
@@ -23,23 +21,37 @@ namespace ScheduleComponent.Services {
 
 		public void OnRequestByUser(ICommandContext context, IdentifierInfo identifier, ScheduleRecord record) {
 			if (identifier != null) {
-				ScheduleCommandInfo sci = new ScheduleCommandInfo(identifier, record);
-
-				ConcurrentDictionary<IUser, ScheduleCommandInfo> users = m_SCIs.GetOrAdd(context.Channel, new ConcurrentDictionary<IUser, ScheduleCommandInfo>());
-
-				users.AddOrUpdate(context.User, sci, (key, existing) => { return sci; });
+				m_SCIs[new SCIKey(context)] = new ScheduleCommandInfo(identifier, record);
 			} else {
-				if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users)) {
-					users.TryRemove(context.User, out ScheduleCommandInfo unused);
-				}
+				m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
 			}
 		}
 
 		public bool RemoveLastQuery(ICommandContext context) {
-			if (m_SCIs.TryGetValue(context.Channel, out ConcurrentDictionary<IUser, ScheduleCommandInfo> users)) {
-				return users.TryRemove(context.User, out ScheduleCommandInfo unused);
-			} else {
-				return false;
+			return m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
+		}
+
+		private struct SCIKey {
+			public IMessageChannel Channel { get; }
+			public IUser User { get; }
+
+			public SCIKey(ICommandContext context) {
+				Channel = context.Channel;
+				User = context.User;
+			}
+
+			public override bool Equals(object obj) {
+				return
+					obj is SCIKey key &&
+					key.Channel.Id == Channel.Id &&
+					key.User.Id == User.Id;
+			}
+
+			public override int GetHashCode() {
+				var hashCode = -400689418;
+				hashCode = hashCode * -1521134295 + Channel.Id.GetHashCode(); // It turns out that no Discord entity implements GetHashCode, but SnowflakeEntites can be uniquely identified
+				hashCode = hashCode * -1521134295 + User.Id.GetHashCode();    //  by their ID. The only thing is that the ID is a long, and we must return int. But that's not a real problem.
+				return hashCode;
 			}
 		}
 	}
