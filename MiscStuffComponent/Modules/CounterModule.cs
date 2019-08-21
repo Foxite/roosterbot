@@ -16,13 +16,15 @@ namespace MiscStuffComponent.Modules {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
-				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: {Service.FormatTimeSpan(timeSinceReset)}.\n";
-				response += $"(Laatst gereset op {counterData.LastResetDate.ToString("dd-MM-yyyy")} om {counterData.LastResetDate.ToString("HH:mm")}.)\n";
-				response += $"De highscore is {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.\n";
-				response += $"Reset de counter met \"!counter reset {counter}\".";
+				string response = string.Format(Resources.CounterModule_GetCounterCommand_FullText,
+												Service.GetCounterDescription(counter),
+												Service.FormatTimeSpan(timeSinceReset),
+												counterData.LastResetDate.ToString("dd-MM-yyyy"),
+												counterData.LastResetDate.ToString("HH:mm"),
+												Service.FormatTimeSpan(counterData.HighScoreTimespan));
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
-				await MinorError("Die bestaat niet.");
+				await MinorError(Resources.CounterModule_GetCounterCommand_CounterDoesNotExist);
 			} catch (ArgumentException e) {
 				await FatalError("Invalid counter", e);
 			} catch (Exception e) {
@@ -35,16 +37,19 @@ namespace MiscStuffComponent.Modules {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
-				string response = $"Dagen geleden dat {Service.GetCounterDescription(counter)}: 0 (was {Service.FormatTimeSpan(timeSinceReset)}).\n";
+				
+				string counterDescription = Service.GetCounterDescription(counter);
+				string previousTimespan = Service.FormatTimeSpan(timeSinceReset);
+				string previousHighscore = Service.FormatTimeSpan(counterData.HighScoreTimespan);
+
 				bool newRecord = Service.ResetDateCounter(counter);
-				if (newRecord) {
-					response += $"Dat is een nieuw record! De vorige highscore was {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.";
-				} else {
-					response += $"De highscore is {Service.FormatTimeSpan(counterData.HighScoreTimespan)}.";
-				}
+
+				string response = string.Format(newRecord ? Resources.CounterModule_ResetCounterCommand_ResponseNewHighscore
+														  : Resources.CounterModule_ResetCounterCommand_ResponseNoNewHighscore,
+												counterDescription, previousTimespan, previousHighscore);
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
-				await MinorError("Die bestaat niet.");
+				await MinorError(Resources.CounterModule_GetCounterCommand_CounterDoesNotExist);
 			} catch (Exception e) {
 				await FatalError("Uncaught exception", e);
 			}

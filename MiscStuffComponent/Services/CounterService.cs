@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 namespace MiscStuffComponent.Services {
@@ -56,10 +57,10 @@ namespace MiscStuffComponent.Services {
 					bool newHighScore = oldHighScore < previousTimespan;
 
 					File.WriteAllLines(counterPath, new string[] {
-					contents[0],
-					DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
-					(newHighScore ? previousTimespan : oldHighScore).ToString()
-				});
+						contents[0],
+						DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+						(newHighScore ? previousTimespan : oldHighScore).ToString()
+					});
 					return newHighScore;
 				} else {
 					throw new FileNotFoundException();
@@ -70,11 +71,23 @@ namespace MiscStuffComponent.Services {
 		}
 
 		public string FormatTimeSpan(TimeSpan ts) {
+			string days;
 			if (((long) ts.TotalDays) == 1) {
-				return $"{(long) ts.TotalDays} dag en {ts.Hours} uur";
+				days = string.Format(Resources.CounterService_FormatTimeSpan_DaysSingular, (long) ts.TotalDays);
 			} else {
-				return $"{(long) ts.TotalDays} dagen en {ts.Hours} uur";
+				days = string.Format(Resources.CounterService_FormatTimeSpan_DaysPlural, (long) ts.TotalDays);
 			}
+
+			string separator = Resources.CounterService_FormatTimeSpan_Separator;
+
+			string hours;
+			if (((long) ts.Hours) == 1) {
+				hours = string.Format(Resources.CounterService_FormatTimeSpan_HoursSingular, (long) ts.Hours);
+			} else {
+				hours = string.Format(Resources.CounterService_FormatTimeSpan_HoursPlural, (long) ts.Hours);
+			}
+
+			return string.Format(Resources.CounterService_FormatTimeSpan_Result, days, separator, hours);
 		}
 	}
 
