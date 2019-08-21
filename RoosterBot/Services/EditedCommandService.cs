@@ -75,12 +75,17 @@ namespace RoosterBot.Services {
 	}
 
 	public class EditedCommandContext : CommandContext {
+		// If this is null, we should make a new message.
+		public IUserMessage OriginalResponse { get; }
+		public string CallTag { get; }
+
 		public EditedCommandContext(IDiscordClient client, IUserMessage command, IUserMessage originalResponse) : base(client, command) {
 			OriginalResponse = originalResponse;
 		}
 
-		// If this is null, we should make a new message.
-		public IUserMessage OriginalResponse { get; }
+		public EditedCommandContext(IDiscordClient client, IUserMessage command, IUserMessage originalResponse, string calltag) : this(client, command, originalResponse) {
+			CallTag = calltag;
+		}
 	}
 
 	public class CommandResponsePair {

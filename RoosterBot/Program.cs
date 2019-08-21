@@ -201,8 +201,14 @@ namespace RoosterBot {
 			}
 		}
 
-		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message) {
-			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse);
+		/// <summary>
+		/// Executes a command according to specified string input, regardless of the actual content of the message.
+		/// </summary>
+		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
+		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message, string calltag) {
+			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse, calltag);
+
+			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
 
 			await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
 		}

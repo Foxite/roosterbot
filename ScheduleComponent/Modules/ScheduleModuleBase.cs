@@ -116,7 +116,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task GetAfterCommand() {
-			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message);
+			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message, "SMB daarna");
 		}
 		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
@@ -153,7 +153,7 @@ namespace ScheduleComponent.Modules {
 			return await HandleError(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
 		}
 
-		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record) {
+		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
 			response += TableItemActivity(record, false);
 
@@ -176,7 +176,7 @@ namespace ScheduleComponent.Modules {
 			}
 			ReplyDeferred(response, info, record);
 
-			if (record.Activity == "pauze") {
+			if (callNextIfBreak && record.Activity == "pauze") {
 				await GetAfterCommand();
 			}
 		}
