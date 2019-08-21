@@ -22,7 +22,6 @@ namespace RoosterBot {
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
-		private CloudWatchReporter m_CloudWatchReporter;
 		private SNSService m_SNSService;
 		private ComponentManager m_Components;
 
@@ -67,12 +66,9 @@ namespace RoosterBot {
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
-			#region Quit code
 			Console.CancelKeyPress += (o, e) => {
-				if (m_State != ProgramState.BotStopped) {
-					e.Cancel = true;
-					Logger.Warning("Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
-				}
+				e.Cancel = true;
+				Logger.Warning("Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
 			};
 			await WaitForQuitCondition();
 
@@ -81,14 +77,8 @@ namespace RoosterBot {
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
-			m_State = ProgramState.BotStopped;
-
-			m_CloudWatchReporter.Dispose();
-
 			await m_Components.ShutdownComponentsAsync();
 			m_Client.Dispose();
-
-			#endregion Quit code
 		}
 
 		private async Task WaitForQuitCondition() {
@@ -157,7 +147,6 @@ namespace RoosterBot {
 
 			HelpService helpService = new HelpService();
 			m_SNSService = new SNSService(m_ConfigService);
-			m_CloudWatchReporter = new CloudWatchReporter(m_Client);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
