@@ -9,6 +9,8 @@ using System;
 using System.Threading.Tasks;
 
 namespace PublicTransitComponent {
+	// TODO prevent its use outside specific (Dutch) servers, do not localize
+	// This functionality is only useful in the Netherlands.
 	public class PublicTransitComponent : ComponentBase {
 		private NSAPI m_NSAPI;
 
