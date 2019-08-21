@@ -116,6 +116,7 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task GetAfterCommand() {
+			await SendDeferredResponseAsync();
 			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message, "SMB daarna");
 		}
 		
