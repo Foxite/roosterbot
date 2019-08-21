@@ -17,43 +17,43 @@ namespace ScheduleComponent.Modules {
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record == null) {
-						string response = $"Het lijkt erop dat {teacher.DisplayText} nu niets heeft.";
+						string response = string.Format(Resources.TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord, teacher.DisplayText);
 						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
 						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-							response += "\nHij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.";
+							response += Resources.TeacherScheduleModule_TeacherProbablyAbsent;
 						}
 
 						ReplyDeferred(response, teacher, record);
 					} else {
-						await RespondRecord($"{teacher.DisplayText}: Nu", teacher, record);
+						await RespondRecord(string.Format(Resources.ScheduleModuleBase_PretextNow, teacher.DisplayText), teacher, record);
 					}
 				}
 			}
 		}
-		
+
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
 		public async Task TeacherNextCommand([Remainder] TeacherInfo[] teachers) {
 			foreach (TeacherInfo teacher in teachers) {
 				ReturnValue<ScheduleRecord> result = await GetNextRecord(teachers[0]);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
-					
+
 					if (record == null) {
-						string response = $"Het lijkt erop dat {teacher.DisplayText} nu niets heeft.";
+						string response = string.Format(Resources.TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord, teacher.DisplayText);
 						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
 						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-							response += "\nHij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.";
+							response += Resources.TeacherScheduleModule_TeacherProbablyAbsent;
 						}
 
 						ReplyDeferred(response, teacher, record);
 					} else {
 						string pretext;
 						if (record.Start.Date == DateTime.Today) {
-							pretext = $"{teacher.DisplayText}: Hierna";
+							pretext = string.Format(Resources.ScheduleModuleBase_PretextNext, teacher.DisplayText);
 						} else {
-							pretext = $"{teacher.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}";
+							pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, teacher.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek));
 						}
 
 						await RespondRecord(pretext, teacher, record);
@@ -105,9 +105,9 @@ namespace ScheduleComponent.Modules {
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await RespondRecord($"{string.Join(", ", teachers.Select(t => t.DisplayText))}: Over {amount} uur", teacher, record);
+							await RespondRecord(string.Format(Resources.ScheduleModuleBase_InXHours, string.Join(", ", teachers.Select(t => t.DisplayText)), amount), teacher, record);
 						} else {
-							await ReplyAsync("Er is op dat moment niets.");
+							await ReplyAsync(Resources.ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime);
 						}
 					}
 				}
@@ -120,7 +120,7 @@ namespace ScheduleComponent.Modules {
 					await RespondWeek(teacher, amount);
 				}
 			} else {
-				await MinorError("Ik ondersteun alleen uren, dagen, en weken.");
+				await MinorError(Resources.ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits);
 			}
 		}
 
@@ -130,16 +130,16 @@ namespace ScheduleComponent.Modules {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = $"Het lijkt er op dat {teacher.DisplayText} {ScheduleUtil.GetRelativeDateReference(date)} niets heeft.";
+					response = string.Format(Resources.TeacherScheduleModule_RespondDay_NoRecordRelative, teacher.DisplayText, ScheduleUtil.GetRelativeDateReference(date));
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
-						response += " Dat is dan ook weekend.";
+						response += Resources.ScheduleModuleBase_ThatIsWeekend;
 					}
 					ReplyDeferred(response, null, null);
 				} else {
-					response = $"{teacher.DisplayText}: Rooster voor {ScheduleUtil.GetRelativeDateReference(date)}\n";
+					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, teacher.DisplayText, ScheduleUtil.GetRelativeDateReference(date));
 
 					string[][] cells = new string[records.Length + 1][];
-					cells[0] = new string[] { "Activiteit", "Tijd", "Klas", "Lokaal" };
+					cells[0] = new string[] { Resources.ScheduleModuleBase_RespondDay_ColumnActivity, Resources.ScheduleModuleBase_RespondDay_ColumnTime, "Klas", Resources.ScheduleModuleBase_RespondDay_ColumnRoom };
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
@@ -161,21 +161,23 @@ namespace ScheduleComponent.Modules {
 			if (result.Success) {
 				AvailabilityInfo[] availability = result.Value;
 
-				string response = info.DisplayText + ": ";
 
+				string response;
 				if (availability.Length > 0) {
-					response += "Rooster ";
 					if (weeksFromNow == 0) {
-						response += "deze week";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleThisWeek, info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response += "volgende week";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleNextWeek, info.DisplayText);
 					} else {
-						response += $"over {weeksFromNow} weken";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleInXWeeks, info.DisplayText, weeksFromNow);
 					}
 					response += "\n";
 
 					string[][] cells = new string[availability.Length + 1][];
-					cells[0] = new[] { "Dag", "Van", "Tot" };
+					cells[0] = new[] { Resources.ScheduleModuleBase_RespondWorkingDays_ColumnDay,
+						Resources.ScheduleModuleBase_RespondWorkingDays_ColumnFrom,
+						Resources.ScheduleModuleBase_RespondWorkingDays_ColumnTo
+					};
 
 					int i = 1;
 					foreach (AvailabilityInfo item in availability) {
@@ -184,13 +186,12 @@ namespace ScheduleComponent.Modules {
 					}
 					response += Util.FormatTextTable(cells, false);
 				} else {
-					response += "Niet op school ";
 					if (weeksFromNow == 0) {
-						response += "deze week";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_NotPresentThisWeek, info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response += "volgende week";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_NotPresentNextWeek, info.DisplayText);
 					} else {
-						response += $"over {weeksFromNow} weken";
+						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_NotPresentInXWeeks, info.DisplayText, weeksFromNow);
 					}
 				}
 

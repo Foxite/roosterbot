@@ -123,7 +123,7 @@ namespace ScheduleComponent.Modules {
 		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
 			if (ScheduleUtil.IsSummerBreak()) {
-				await MinorError("Het is vakantie, man. Ga naar huis.");
+				await MinorError(Resources.ScheduleModuleBase_SummerBreakGoHome);
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -138,7 +138,7 @@ namespace ScheduleComponent.Modules {
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
 			if (ScheduleUtil.IsSummerBreak(date)) {
-				await MinorError("Het is vakantie, man. Ga naar huis.");
+				await MinorError(Resources.ScheduleModuleBase_SummerBreakGoHome);
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = false
 				};
@@ -190,17 +190,17 @@ namespace ScheduleComponent.Modules {
 					Value = action()
 				};
 			} catch (IdentifierNotFoundException) {
-				await MinorError("Dat item staat niet op mijn rooster.");
+				await MinorError(Resources.ScheduleModuleBase_HandleError_NotFound);
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError("Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.");
+				await MinorError(Resources.ScheduleModuleBase_HandleError_RecordsOutdated);
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (NoAllowedGuildsException) {
-				await MinorError("Er zijn geen roosters beschikbaar voor deze server.");
+				await MinorError(Resources.ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer);
 				return new ReturnValue<T>() {
 					Success = false
 				};

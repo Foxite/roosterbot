@@ -11,7 +11,7 @@ namespace ScheduleComponent.Modules {
 		[Command("daarna", RunMode = RunMode.Async)]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
-				ReplyDeferred("Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.");
+				ReplyDeferred(Resources.AfterScheduleModule_GetAfterCommand_ParameterHint);
 			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await GetAfterCommandInternal();
@@ -20,7 +20,7 @@ namespace ScheduleComponent.Modules {
 		protected async Task GetAfterCommandInternal(int recursion = 0) {
 			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
 			if (query.Equals(default(ScheduleCommandInfo))) {
-				await MinorError("Na wat?");
+				await MinorError(Resources.AfterScheduleModule_GetAfterCommand_NoContext);
 			} else {
 				ScheduleRecord nextRecord;
 				try {
@@ -30,7 +30,7 @@ namespace ScheduleComponent.Modules {
 						nextRecord = Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
-					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
+					await MinorError(Resources.AfterScheduleModule_GetAfterCommand_RecordsOutdated);
 					return;
 				} catch (IdentifierNotFoundException) {
 					// This catch block scores 9 out of 10 on the "oh shit" scale
@@ -51,9 +51,9 @@ namespace ScheduleComponent.Modules {
 
 				string pretext;
 				if (query.Record == null) {
-					pretext = $"{query.Identifier.DisplayText}: Hierna";
+					pretext = string.Format(Resources.ScheduleModuleBase_PretextNext, query.Identifier.DisplayText);
 				} else {
-					pretext = $"{query.Identifier.DisplayText}: Na de vorige les";
+					pretext = string.Format(Resources.ScheduleModuleBase_PretextAfterPrevious, query.Identifier.DisplayText);
 				}
 
 				// Avoid RespondRecord automatically calling this function again because we do it ourselves

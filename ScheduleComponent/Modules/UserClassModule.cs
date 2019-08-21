@@ -15,11 +15,11 @@ namespace ScheduleComponent.Modules {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User))?.DisplayText;
 			string response;
 			if (clazz == null) {
-				response = "Ik weet niet in welke klas jij zit.";
+				response = Resources.UserClassModule_GetClassForUser_UserNotKnown;
 			} else {
-				response = $"Jij zit in {clazz}.";
+				response = string.Format(Resources.UserClassModule_GetClassForUser_UserIsInClass, clazz);
 			}
-			response += "Gebruik bijvoorbeeld `!ik <jouw klas>` om dit te veranderen.";
+			response += Resources.UserClassModule_GetClassForUser_ChangeHint;
 			await ReplyAsync(response);
 		}
 		
@@ -27,9 +27,9 @@ namespace ScheduleComponent.Modules {
 		public async Task SetClassForUser([Name("jouw klas")] string clazz) {
 			try {
 				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
-				await ReplyAsync("Genoteerd: jij zit in " + clazz.ToUpper() + ".");
+				await ReplyAsync(string.Format(Resources.UserClassModule_SetClassForUser_ConfirmUserIsInClass, clazz.ToUpper()));
 			} catch (ArgumentException) {
-				await ReplyAsync("Dat is geen klas.");
+				await ReplyAsync(Resources.UserClassModule_SetClassForUser_InvalidClass);
 			}
 		}
 	}

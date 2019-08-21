@@ -27,11 +27,11 @@ namespace ScheduleComponent.Modules {
 
 		private async Task ReplyErrorMessage(string param) {
 			if (MentionUtils.TryParseUser(param, out ulong unused)) {
-				await ReplyAsync("Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik <zijn/haar klas>` gebruiken om dit in te stellen. Als het een leraar is, moet zijn/haar Discord account worden toegevoegd door de bot eigenaar.");
+				await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown);
 			} else if (param == "ik") {
-				await ReplyAsync("Ik weet niet in welke klas jij zit. Je moet `!ik <jouw klas>` gebruiken om dit in te stellen.");
+				await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_UserUnknown);
 			} else {
-				await ReplyAsync("Ik weet niet of je het over een leraar, klas of lokaal hebt.");
+				await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier);
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace ScheduleComponent.Modules {
 
 		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]
 		public async Task DefaultWeekdayCommand([Remainder] string wat_en_weekdag = "") {
-			await ReplyAsync("Ik weet niet of je het over een leraar, klas of lokaal hebt, en/of ik begrijp niet welke weekdag je bedoelt.");
+			await ReplyAsync(Resources.DefaultScheduleModule_DefaultWeekdayCommand_UnknownIdentifierOrDayOfWeek);
 		}
 
 		[Priority(-10), Command("morgen", RunMode = RunMode.Sync), Summary("Wat er morgen op het rooster staat.")]
@@ -101,7 +101,7 @@ namespace ScheduleComponent.Modules {
 
 		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
 		public async Task AfterCommand() {
-			await ReplyAsync("Als je dit ziet is er een groot probleem");
+			await ReplyAsync(Resources.DefaultScheduleModule_AfterCommand_BigProblem);
 		}
 	}
 }

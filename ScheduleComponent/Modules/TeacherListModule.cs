@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
+using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using ScheduleComponent.DataTypes;
@@ -25,38 +26,28 @@ namespace ScheduleComponent.Modules {
 
 			if (records.FirstOrDefault() == null) { // Faster than .Count() == 0 because otherwise it would have to actually count it, but we don't care about the count beyond it being 0
 													// Although I would appreciate an .IsEmpty() method
-				await ReplyAsync("Geen leraren gevonden.");
+				await ReplyAsync(Resources.TeacherListModule_TeacherListCommand_NoTeachersFound);
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
 				// https://www.dotnetperls.com/for-foreach
 				// Because of NoLookup, we don't actually know how many times we use the item, but in practice, we almost always have to use it twice and not once.
-				string fullNameHeader = "Volledige naam";
-				int maxNameLength = fullNameHeader.Length;
-				bool discordNamesPresent = false;
+
+				string[][] cells = new string[records.Count() + 1][];
+				cells[0] = new string[] {
+					Resources.TeacherListModule_TeacherListCommand_ColumnFullName,
+					Resources.TeacherListModule_TeacherListCommand_ColumnAbbreviation,
+					Resources.TeacherListModule_TeacherListCommand_DiscordName
+				};
+				int recordIndex = 1;
 				foreach (TeacherInfo record in records) {
-					if (record.NoLookup) {
-						continue;
-					}
-					maxNameLength = Math.Max(maxNameLength, record.FullName.Length);
+					cells[recordIndex] = new string[3];
+					cells[recordIndex][0] = record.FullName;
+					cells[recordIndex][1] = record.Abbreviation;
+					cells[recordIndex][2] = record.DiscordUser;
 
-					if (!string.IsNullOrEmpty(record.DiscordUser)) {
-						discordNamesPresent = true;
-					}
+					recordIndex++;
 				}
-
-				string response = $"`{fullNameHeader.PadRight(maxNameLength)}  Afk.";
-
-				if (discordNamesPresent) {
-					response += " Discord naam";
-				}
-
-				foreach (TeacherInfo record in records) {
-					if (record.NoLookup) {
-						continue;
-					}
-					response += $"\n{record.DisplayText.PadRight(maxNameLength)}  {record.Abbreviation}  {record.DiscordUser}";
-				}
-				response += "`";
+				string response = Util.FormatTextTable(cells, true);
 
 				await ReplyAsync(response);
 			}
