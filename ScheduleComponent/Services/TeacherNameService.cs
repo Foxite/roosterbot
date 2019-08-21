@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using Discord;
@@ -8,13 +9,13 @@ using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class TeacherNameService {
-		private List<TeacherInfo> m_Records = new List<TeacherInfo>();
+		private List<GuildTeacherList> m_Records = new List<GuildTeacherList>();
 		
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
-		public async Task ReadAbbrCSV(string path) {
-			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
+		public async Task ReadAbbrCSV(string path, ulong[] allowedGuilds) {
+			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
@@ -40,21 +41,21 @@ namespace ScheduleComponent.Services {
 					}
 
 					lock (m_Records) {
-						m_Records.AddRange(currentRecords);
+						m_Records.Add(new GuildTeacherList(allowedGuilds, currentRecords));
 					}
 				}
 			}
-			Logger.Log(Discord.LogSeverity.Info, "TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
+			Logger.Info("TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
 		}
 
-		public TeacherInfo GetRecordFromAbbr(string abbr) {
-			return m_Records.Find(record => record.Abbreviation == abbr);
+		public TeacherInfo GetRecordFromAbbr(ulong guild, string abbr) {
+			return GetAllowedRecordsForGuild(guild).FirstOrDefault(record => record.Abbreviation == abbr);
 		}
 
-		public TeacherInfo[] GetRecordsFromAbbrs(string[] abbrs) {
+		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
 			List<TeacherInfo> records = new List<TeacherInfo>();
 			for (int i = 0; i < abbrs.Length; i++) {
-				TeacherInfo record = GetRecordFromAbbr(abbrs[i]);
+				TeacherInfo record = GetRecordFromAbbr(guild, abbrs[i]);
 				if (record != null) {
 					records.Add(record);
 				} else if (!string.IsNullOrWhiteSpace(abbrs[i])) {
@@ -69,12 +70,12 @@ namespace ScheduleComponent.Services {
 			return records.ToArray();
 		}
 		
-		public TeacherInfo[] Lookup(string nameInput, bool skipNoLookup = true) {
+		public TeacherInfo[] Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
 			List<TeacherInfo> records = new List<TeacherInfo>();
 
-			foreach (TeacherInfo record in m_Records) {
+			foreach (TeacherInfo record in GetAllowedRecordsForGuild(guild)) {
 				if (skipNoLookup && record.NoLookup)
 					continue;
 
@@ -86,9 +87,9 @@ namespace ScheduleComponent.Services {
 			return records.ToArray();
 		}
 
-		public TeacherInfo GetTeacherByDiscordUser(IUser user) {
+		public TeacherInfo GetTeacherByDiscordUser(IGuild guild, IUser user) {
 			string findDiscordUser = $"{user.Username}#{user.Discriminator}";
-			foreach (TeacherInfo teacher in m_Records) {
+			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(guild.Id)) {
 				if (findDiscordUser == teacher.DiscordUser) {
 					return teacher;
 				}
@@ -96,8 +97,22 @@ namespace ScheduleComponent.Services {
 			return null;
 		}
 		
-		public IReadOnlyList<TeacherInfo> GetAllRecords() {
-			return m_Records;
+		public IEnumerable<TeacherInfo> GetAllRecords(ulong guild) {
+			return GetAllowedRecordsForGuild(guild);
+		}
+
+		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(ulong guild) {
+			return m_Records.Where(gtl => gtl.IsGuildAllowed(guild)).SelectMany(gtl => gtl.Teachers);
+		}
+
+		private class GuildTeacherList : GuildSpecificInfo {
+			private List<TeacherInfo> m_Teachers;
+
+			public IReadOnlyList<TeacherInfo> Teachers => m_Teachers;
+
+			public GuildTeacherList(ulong[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
+				m_Teachers = teachers;
+			}
 		}
 	}
 }

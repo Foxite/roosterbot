@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,42 +14,26 @@ namespace ScheduleComponent {
 	public class ScheduleComponent : ComponentBase {
 		private UserClassesService m_UserClasses;
 
-		public override string VersionString => "1.1.0";
+		public override string VersionString => "2.0.0";
 
-		public async override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServices(IServiceCollection services, string configPath) {
 			TeacherNameService teachers = new TeacherNameService();
-			Task teacherLoading = teachers.ReadAbbrCSV(Path.Combine(configPath, "leraren-afkortingen.csv"));
-
-			List<Task> concurrentLoading = new List<Task>();
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
-			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
-			Dictionary<string, string> schedules = new Dictionary<string, string>();
-			foreach (KeyValuePair<string, JToken> token in scheduleContainer) {
-				schedules.Add(token.Key, token.Value.ToObject<string>());
-			}
-
-			await teacherLoading;
-
-			ScheduleService schedStudents = new ScheduleService(teachers, nameof(ScheduleRecord.StudentSets));
-			ScheduleService schedTeachers = new ScheduleService(teachers, nameof(ScheduleRecord.StaffMember));
-			ScheduleService schedRooms    = new ScheduleService(teachers, nameof(ScheduleRecord.Room));
-			// Concurrently read schedules.
-			concurrentLoading.Add(schedStudents.ReadScheduleCSV(Path.Combine(configPath, schedules["StudentSets"])));
-			concurrentLoading.Add(schedTeachers.ReadScheduleCSV(Path.Combine(configPath, schedules["StaffMember"])));
-			concurrentLoading.Add(schedRooms   .ReadScheduleCSV(Path.Combine(configPath, schedules["Room"])));
-
+			
 			m_UserClasses = new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>());
+
 			services
 				.AddSingleton(teachers)
-				.AddSingleton(new ScheduleProvider(schedStudents, schedTeachers, schedRooms))
+				.AddSingleton(new ScheduleProvider())
 				.AddSingleton(new LastScheduleCommandService())
+				.AddSingleton(new ActivityNameService())
 				.AddSingleton(m_UserClasses);
 
-			await Task.WhenAll(concurrentLoading);
-
 			Logger.Debug("ScheduleComponent", "Started services");
+
+			return Task.CompletedTask;
 		}
 
 		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {

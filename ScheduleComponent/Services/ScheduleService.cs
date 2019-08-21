@@ -1,174 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using CsvHelper;
-using RoosterBot;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
-	public class ScheduleService {
+	public class ScheduleService : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
-		private TeacherNameService m_Teachers;
-		private PropertyInfo m_SearchProperty;
-		private string Name => m_SearchProperty.Name;
+		private string m_Name;
 
-		public ScheduleService(TeacherNameService teachers, string searchProperty) {
-			m_Schedule = new List<ScheduleRecord>();
-			m_Teachers = teachers;
-			m_SearchProperty = typeof(ScheduleRecord).GetProperty(searchProperty);
+		private ScheduleService(ulong[] allowedGuilds) : base(allowedGuilds) { }
+
+		/// <param name="name">Used in logging. Does not affect anything else.</param>
+		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
+			ScheduleService service = new ScheduleService(allowedGuildIds) {
+				m_Name = name,
+				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.
+			};
+			return service;
 		}
-		
-		/// <summary>
-		/// Loads a schedule into memory from a CSV file so that it can be accessed using this service.
-		/// </summary>
-		/// <param name="name">Should be the same as the property you're going to search from.</param>
-		public async Task ReadScheduleCSV(string path) {
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Schedule for {Name}: Loading CSV file from {path}");
 
-			int line = 1;
-			try {
-				using (StreamReader reader = File.OpenText(path)) {
-					using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
-						await csv.ReadAsync();
-						csv.ReadHeader();
-
-						Dictionary<IdentifierInfo[], ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo[], ScheduleRecord>();
-						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name);
-
-						DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
-
-						while (await csv.ReadAsync()) {
-							int[] startDate = Array.ConvertAll(csv["StartDate"].Split('-'), item => int.Parse(item));
-							int[] startTime = Array.ConvertAll(csv["StartTime"].Split(':'), item => int.Parse(item));
-							int[] endTime = Array.ConvertAll(csv["EndTime"].Split(':'), item => int.Parse(item));
-							DateTime start = new DateTime(startDate[0], startDate[1], startDate[2], startTime[0], startTime[1], 0);
-							if (start.Date < lastMonday) {
-								continue;
-							}
-
-							DateTime end = new DateTime(startDate[0], startDate[1], startDate[2], endTime[0], endTime[1], 0); // Under the assumption that nobody works overnight
-
-							ScheduleRecord record = new ScheduleRecord() {
-								Activity = csv["Activity"],
-								StaffMember = m_Teachers.GetRecordsFromAbbrs(csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-								StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
-								// Rooms often have " (0)" behind them. unknown reason.
-								// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-								Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
-								Start = start,
-								End = end
-							};
-
-							IdentifierInfo[] key = (IdentifierInfo[]) identifier.GetValue(record);
-							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
-								record.Activity == lastRecord.Activity &&
-								record.Start.Date == lastRecord.Start.Date &&
-								record.StudentSetsString == lastRecord.StudentSetsString &&
-								record.StaffMember == lastRecord.StaffMember &&
-								record.RoomString == lastRecord.RoomString) {
-								lastRecord.BreakStart = lastRecord.End;
-								lastRecord.BreakEnd = record.Start;
-								lastRecord.End = record.End;
-							} else {
-								lastRecords[key] = record;
-								m_Schedule.Add(record);
-							}
-						}
-					}
-				}
-			} catch (Exception e) {
-				Logger.Log(Discord.LogSeverity.Critical, "ScheduleService", "The following exception was thrown while loading the CSV at \"" + path + "\" on line " + line, e);
-				throw;
-			}
-			Logger.Log(Discord.LogSeverity.Info, "ScheduleService", $"Successfully loaded CSV file {Path.GetFileName(path)} into schedule for {Name}");
-		}
-		
 		/// <returns>null if the class has no activity currently ongoing.</returns>
 		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			long ticksNow = DateTime.Now.Ticks;
+			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (ticksNow > record.Start.Ticks && ticksNow < record.End.Ticks) {
+					if (now > record.Start && now < record.End) {
 						return record;
-					} else if (ticksNow < record.Start.Ticks) {
+					} else if (now < record.Start) {
 						return null;
 					}
 				}
 			}
 			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+			}
+		}
+
+		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan) {
+			DateTime target = DateTime.Now + timespan;
+			bool sawRecordForClass = false;
+
+			foreach (ScheduleRecord record in m_Schedule) {
+				if (identifier.Matches(record)) {
+					sawRecordForClass = true;
+					if (record.Start < target && record.End > target) {
+						return record;
+					} else if (record.Start > target) {
+						return null;
+					}
+				}
+			}
+			if (sawRecordForClass) {
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
+			} else {
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
 		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			long ticksNow = DateTime.Now.Ticks;
+			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (ticksNow < record.Start.Ticks) {
+					if (now < record.Start) {
 						return record;
 					}
 				}
 			}
 			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
 		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			long ticksNow = givenRecord.Start.Ticks; // This is probably not the best solution, but it should totally work. This allows us to simply
-													 //  reuse the code from GetNextRecord().
 			bool sawRecordForClass = false;
+			bool sawGivenRecord = false;
 			
 			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (ticksNow < record.Start.Ticks) {
+				if (sawGivenRecord) {
+					if (identifier.Matches(record)) {
 						return record;
+					}
+				} else {
+					if (identifier.Matches(record)) {
+						sawRecordForClass = true;
+					}
+					if (givenRecord == record) {
+						sawGivenRecord = true;
 					}
 				}
 			}
 			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
+				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 			} else {
-				throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
+				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
+		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date) {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
-			DateTime targetDate;
-
-			// https://stackoverflow.com/a/6346190/3141917
-			if (includeToday) {
-				// Get the next {day} including today
-				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
-			} else {
-				// Get the next {day} after today
-				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
-			}
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
-					if (record.Start.Date == targetDate) {
+					if (record.Start.Date == date) {
 						records.Add(record);
-					} else if (record.Start.Date > targetDate) {
+					} else if (record.Start.Date > date) {
 						sawRecordAfterTarget = true;
 						break;
 					}
@@ -177,9 +127,9 @@ namespace ScheduleComponent.Services {
 
 			if (records.Count == 0) {
 				if (!sawRecordForClass) {
-					throw new ScheduleNotFoundException($"The class {identifier} does not exist in schedule for {Name}.");
+					throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 				} else if (!sawRecordAfterTarget) {
-					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule for {Name}");
+					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 				}
 			}
 			return records.ToArray();
@@ -221,11 +171,11 @@ namespace ScheduleComponent.Services {
 	}
 
 	[Serializable]
-	public class ScheduleNotFoundException : Exception {
-		public ScheduleNotFoundException() { }
-		public ScheduleNotFoundException(string message) : base(message) { }
-		public ScheduleNotFoundException(string message, Exception innerException) : base(message, innerException) { }
-		protected ScheduleNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	public class IdentifierNotFoundException : Exception {
+		public IdentifierNotFoundException() { }
+		public IdentifierNotFoundException(string message) : base(message) { }
+		public IdentifierNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+		protected IdentifierNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	[Serializable]

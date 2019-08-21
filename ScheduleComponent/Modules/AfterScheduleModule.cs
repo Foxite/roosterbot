@@ -18,25 +18,25 @@ namespace ScheduleComponent.Modules {
 		}
 
 		protected async Task GetAfterCommandInternal(int recursion = 0) {
-			ScheduleCommandInfo query = LSCService.GetLastCommandFromUser(Context.User);
+			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
 			} else {
-				ScheduleRecord record = query.Record;
-				string response;
-				bool nullRecord = record == null;
+				ScheduleRecord nextRecord;
 				try {
-					if (nullRecord) {
-						record = Schedules.GetNextRecord(query.Identifier);
+					if (query.Record == null) {
+						nextRecord = Schedules.GetNextRecord(query.Identifier, Context);
 					} else {
-						record = Schedules.GetRecordAfter(query.Identifier, query.Record);
+						nextRecord = Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
 					await MinorError("Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.");
 					return;
-				} catch (ScheduleNotFoundException) {
+				} catch (IdentifierNotFoundException) {
+					// This catch block scores 9 out of 10 on the "oh shit" scale
+					// It should never happen and it indicates that something has really been messed up somewhere, but it's not quite bad enough for a 10.
 					string report = $"daarna failed for query {query.Identifier.ScheduleField}:{query.Identifier}";
-					if (nullRecord) {
+					if (query.Record == null) {
 						report += " with no record";
 					} else {
 						report += $" with record: {query.Record.ToString()}";
@@ -49,33 +49,18 @@ namespace ScheduleComponent.Modules {
 					throw;
 				}
 
-				if (nullRecord) {
-					response = $"{query.Identifier.DisplayText}: Hierna\n";
+				string pretext;
+				if (query.Record == null) {
+					pretext = $"{query.Identifier.DisplayText}: Hierna";
 				} else {
-					response = $"{query.Identifier.DisplayText}: Na de vorige les\n";
+					pretext = $"{query.Identifier.DisplayText}: Na de vorige les";
 				}
 
-				response += TableItemActivity(record, false);
+				// Avoid RespondRecord automatically calling this function again because we do it ourselves
+				// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
+				await RespondRecord(pretext, query.Identifier, nextRecord, false);
 
-				if (record.Activity != "stdag doc") {
-					if (record.Activity != "pauze") {
-						if (query.Identifier.ScheduleField != "StaffMember") {
-							response += TableItemStaffMember(record);
-						}
-						if (query.Identifier.ScheduleField != "StudentSets") {
-							response += TableItemStudentSets(record);
-						}
-						if (query.Identifier.ScheduleField != "Room") {
-							response += TableItemRoom(record);
-						}
-					}
-					response += TableItemStartEndTime(record);
-					response += TableItemDuration(record);
-					response += TableItemBreak(record);
-				}
-				ReplyDeferred(response, query.Identifier, record);
-
-				if (record.Activity == "pauze" && recursion <= 5) {
+				if (nextRecord.Activity == "pauze" && recursion <= 5) {
 					await GetAfterCommandInternal(recursion + 1);
 				}
 			}

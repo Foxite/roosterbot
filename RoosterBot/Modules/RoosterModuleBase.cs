@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -26,7 +27,7 @@ namespace RoosterBot.Modules {
 
 			if (LogTag == null) {
 				LogTag = GetType().Name;
-				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
+				Logger.Warning(LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
 			}
 
 			Log = new ModuleLoggerInternal(LogTag);
@@ -139,16 +140,16 @@ namespace RoosterBot.Modules {
 		protected virtual async Task FatalError(string message, Exception exception = null) {
 			string report = $"Critical error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
 
+			Log.Error(report, exception);
+
 			if (exception != null) {
-				report += $"\nAttached exception: {exception.GetType().Name}\n";
-				report += exception.StackTrace;
+				report += $"\nAttached exception: {Util.EscapeString(exception.ToStringDemystified())}\n";
+			}
+			
+			if (Config.BotOwner != null) {
+				await Config.BotOwner.SendMessageAsync(report);
 			}
 
-			Log.Error(report);
-
-			if (Config.LogChannel != null) {
-				await Config.LogChannel.SendMessageAsync($"{Config.BotOwner.Mention} {report}");
-			}
 			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
 			if (Config.ErrorReactions) {
 				await ReplyAsync(response, "🚫");
@@ -160,28 +161,28 @@ namespace RoosterBot.Modules {
 		public abstract class ModuleLogger {
 			protected string m_Tag;
 
-			public void Verbose(string message) {
-				Logger.Verbose(m_Tag, message);
+			public void Verbose(string message, Exception e = null) {
+				Logger.Verbose(m_Tag, message, e);
 			}
 
-			public void Debug(string message) {
-				Logger.Debug(m_Tag, message);
+			public void Debug(string message, Exception e = null) {
+				Logger.Debug(m_Tag, message, e);
 			}
 
-			public void Info(string message) {
-				Logger.Info(m_Tag, message);
+			public void Info(string message, Exception e = null) {
+				Logger.Info(m_Tag, message, e);
 			}
 
-			public void Warning(string message) {
-				Logger.Warning(m_Tag, message);
+			public void Warning(string message, Exception e = null) {
+				Logger.Warning(m_Tag, message, e);
 			}
 
-			public void Error(string message) {
-				Logger.Error(m_Tag, message);
+			public void Error(string message, Exception e = null) {
+				Logger.Error(m_Tag, message, e);
 			}
 
-			public void Critical(string message) {
-				Logger.Critical(m_Tag, message);
+			public void Critical(string message, Exception e = null) {
+				Logger.Critical(m_Tag, message, e);
 			}
 		}
 

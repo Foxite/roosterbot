@@ -1,36 +1,58 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
+using Discord.Commands;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class LastScheduleCommandService {
-		// ulong: ID of IGuildUser who requested the ScheduleRecord given in the ScheduleQueryContext.
-		// It is used by the !daarna command that looks up the schedule that takes place after the last one the user received.
-		private ConcurrentDictionary<ulong, ScheduleCommandInfo> m_SCIs;
+		private ConcurrentDictionary<SCIKey, ScheduleCommandInfo> m_SCIs;
 
 		public LastScheduleCommandService() {
-			m_SCIs = new ConcurrentDictionary<ulong, ScheduleCommandInfo>();
+			m_SCIs = new ConcurrentDictionary<SCIKey, ScheduleCommandInfo>();
 		}
 
-		public ScheduleCommandInfo GetLastCommandFromUser(IUser user) {
-			if (m_SCIs.TryGetValue(user.Id, out ScheduleCommandInfo previous)) {
+		public ScheduleCommandInfo GetLastCommandForContext(ICommandContext context) {
+			if (m_SCIs.TryGetValue(new SCIKey(context), out ScheduleCommandInfo previous)) {
 				return previous;
 			} else {
 				return default(ScheduleCommandInfo);
 			}
 		}
 
-		public void OnRequestByUser(IUser user, IdentifierInfo identifier, ScheduleRecord record) {
+		public void OnRequestByUser(ICommandContext context, IdentifierInfo identifier, ScheduleRecord record) {
 			if (identifier != null) {
-				ScheduleCommandInfo ctx = new ScheduleCommandInfo(identifier, record);
-				m_SCIs.AddOrUpdate(user.Id, ctx, (key, existing) => { return ctx; });
+				m_SCIs[new SCIKey(context)] = new ScheduleCommandInfo(identifier, record);
 			} else {
-				m_SCIs.TryRemove(user.Id, out ScheduleCommandInfo unused);
+				m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
 			}
 		}
 
-		public bool RemoveLastQuery(IUser user) {
-			return m_SCIs.TryRemove(user.Id, out ScheduleCommandInfo unused);
+		public bool RemoveLastQuery(ICommandContext context) {
+			return m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
+		}
+
+		private struct SCIKey {
+			public IMessageChannel Channel { get; }
+			public IUser User { get; }
+
+			public SCIKey(ICommandContext context) {
+				Channel = context.Channel;
+				User = context.User;
+			}
+
+			public override bool Equals(object obj) {
+				return
+					obj is SCIKey key &&
+					key.Channel.Id == Channel.Id &&
+					key.User.Id == User.Id;
+			}
+
+			public override int GetHashCode() {
+				var hashCode = -400689418;
+				hashCode = hashCode * -1521134295 + Channel.Id.GetHashCode(); // It turns out that no Discord entity implements GetHashCode, but SnowflakeEntites can be uniquely identified
+				hashCode = hashCode * -1521134295 + User.Id.GetHashCode();    //  by their ID. The only thing is that the ID is a long, and we must return int. But that's not a real problem.
+				return hashCode;
+			}
 		}
 	}
 

@@ -263,25 +263,7 @@ namespace RoosterBot {
 			return sbLcs.ToString();
 		}
 		#endregion
-
-		/// <summary>
-		/// Finds a mention in a string, then returns the ID in that mention.
-		/// </summary>
-		/// <param name="startIndex">The index where the mention starts.</param>
-		/// <param name="endIndex">The index where the mention ends.</param>
-		/// <returns>The ID in the mention, or null if there is no valid mention.</returns>
-		public static ulong? ExtractIDFromMentionString(string search) {
-			int startIndex = search.IndexOf("<@");
-			if (startIndex != -1) {
-				if (search[startIndex + 2] == '!') {
-					startIndex++;
-				}
-				int endIndex = search.IndexOf(">", startIndex);
-				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
-			}
-			return null;
-		}
-
+		
 		private static string GetModuleSignature(this ModuleInfo module) {
 			string ret = module.Name;
 			if (!string.IsNullOrEmpty(module.Group)) {
@@ -313,6 +295,24 @@ namespace RoosterBot {
 			}
 
 			return ret;
+		}
+
+		public static string EscapeString(string input) {
+			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
+				("\\", "\\\\"), // Needs to be done first
+				("_", @"\_"),
+				("*", @"\*"), // Also covers **, which need only their *first* side escaped, or all of the asterisks in *both* sides
+				(">", @"\>"),
+				(">>>", @"\>>>"),
+				("<", @"\<"),
+				("`", @"\`")
+			};
+
+			foreach ((string replace, string with) in replacements) {
+				input = input.Replace(replace, with);
+			}
+
+			return input;
 		}
 	}
 

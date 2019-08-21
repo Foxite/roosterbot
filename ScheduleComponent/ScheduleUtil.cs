@@ -1,84 +1,7 @@
 ﻿using System;
-using RoosterBot;
 
 namespace ScheduleComponent {
 	public static class ScheduleUtil {
-		/// <summary>
-		/// Get the full name for an activity from its abbreviation.
-		/// </summary>
-		public static string GetActivityFromAbbr(string abbr) {
-			switch (abbr) {
-				case "ned":
-					return "Nederlands";
-				case "eng":
-					return "Engels";
-				case "program":
-					return "Programmeren";
-				case "gamedes":
-					return "Gamedesign";
-				case "ond":
-					return "Onderneming";
-				case "k0072":
-					return "Keuzedeel (k0072)";
-				case "k0821":
-					return "Keuzedeel (k0821)";
-				case "k0901":
-					return "Keuzedeel (k0901)";
-				case "burger":
-					return "Burgerschap";
-				case "rek":
-					return "Rekenen";
-				case "vormg":
-					return "Vormgeving";
-				case "engine":
-					return "Engineering";
-				case "stdag doc":
-					return "Studiedag :tada:";
-				case "to":
-					return "Teamoverleg";
-				case "skc":
-					return "Studiekeuzecheck";
-				case "soll":
-					return "Solliciteren";
-				case "mastercl":
-					return "Masterclass";
-
-				case "3d":
-				case "2d":
-				case "bpv":
-				case "vb bpv":
-				case "vb pvb":
-				case "2d/3d":
-				case "slb":
-				case "avo":
-					return abbr.ToUpper();
-
-				case "pauze":
-				case "gameaudio":
-				case "keuzedeel":
-				case "gametech":
-				case "project":
-				case "rapid":
-				case "gameplay":
-				case "taken":
-				case "stage":
-				case "examen":
-				case "animatie":
-				case "werkveld":
-				case "afstudeer":
-				case "rozosho":
-				case "rozosho-i":
-				case "twinstick":
-					return abbr.FirstCharToUpper();
-
-				case "Sinterklaas":
-					return abbr;
-
-				default:
-					return $"\"{abbr}\"";
-			}
-		}
-
 		/// <summary>
 		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
 		/// </summary>
@@ -155,6 +78,43 @@ namespace ScheduleComponent {
 			DateTime startBreak = new DateTime(2019, 07, 20);
 			DateTime endBreak = new DateTime(2019, 09, 01);
 			return dt >= startBreak && dt <= endBreak;
+		}
+
+		/// <summary>
+		/// Returns the first DateTime after today of which the DayOfWeek is equal to <paramref name="day"/>
+		/// </summary>
+		/// <param name="includeToday">If today is suitable: If true, then this will return today. If false, it will return 7 days from now.</param>
+		public static DateTime NextDayOfWeek(DayOfWeek day, bool includeToday) {
+			// https://stackoverflow.com/a/6346190/3141917
+			DateTime targetDate;
+			if (includeToday) {
+				// Get the next {day} including today
+				targetDate = DateTime.Today.AddDays(((int)day - (int)DateTime.Today.DayOfWeek + 7) % 7);
+			} else {
+				// Get the next {day} after today
+				targetDate = DateTime.Today.AddDays(1 + ((int)day - (int)DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+			}
+
+			return targetDate;
+		}
+
+		/// <summary>
+		/// For a given DateTime, this returns the Dutch relative reference for that date.
+		/// For example, today, tomorrow, on Tueday, or if it's 7 or more days away, it will return <code>date.ToStrin("dd-MM")</code>.
+		/// </summary>
+		/// <param name="date"></param>
+		/// <param name="response"></param>
+		/// <returns></returns>
+		public static string GetRelativeDateReference(DateTime date) {
+			if (date == DateTime.Today) {
+				return "vandaag";
+			} else if (date == DateTime.Today.AddDays(1)) {
+				return "morgen";
+			} else if ((date - DateTime.Today).TotalDays < 7) {
+				return "op " + GetStringFromDayOfWeek(date.DayOfWeek);
+			} else {
+				return "op " + date.ToString("dd-MM");
+			}
 		}
 	}
 }

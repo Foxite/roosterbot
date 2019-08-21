@@ -1,47 +1,65 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using Discord.Commands;
 using ScheduleComponent.DataTypes;
 
 namespace ScheduleComponent.Services {
 	public class ScheduleProvider {
-		private ScheduleService m_Students;
-		private ScheduleService m_Teachers;
-		private ScheduleService m_Rooms;
+		private Dictionary<Type, List<ScheduleService>> m_Schedules;
 
-		public ScheduleProvider(ScheduleService students, ScheduleService teachers, ScheduleService rooms) {
-			m_Students = students;
-			m_Teachers = teachers;
-			m_Rooms = rooms;
+		public ScheduleProvider() {
+			m_Schedules = new Dictionary<Type, List<ScheduleService>>();
 		}
 
-		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetCurrentRecord(identifier);
+		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetCurrentRecord(identifier);
 		}
 
-		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
-			return GetScheduleType(identifier).GetNextRecord(identifier);
+		public ScheduleRecord GetNextRecord(IdentifierInfo identifier, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetNextRecord(identifier);
 		}
 
-		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
-			return GetScheduleType(identifier).GetRecordAfter(identifier, givenRecord);
+		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetRecordAfter(identifier, givenRecord);
 		}
 
-		public ScheduleRecord[] GetSchedulesForDay(IdentifierInfo identifier, DayOfWeek day, bool includeToday) {
-			return GetScheduleType(identifier).GetSchedulesForDay(identifier, day, includeToday);
+		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetSchedulesForDate(identifier, date);
 		}
 
-		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
-			return GetScheduleType(identifier).GetWeekAvailability(identifier, weeksFromNow);
+		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetWeekAvailability(identifier, weeksFromNow);
 		}
 
-		private ScheduleService GetScheduleType(IdentifierInfo info) {
-			if (info is StudentSetInfo) {
-				return m_Students;
-			} else if (info is TeacherInfo) {
-				return m_Teachers;
-			} else if (info is RoomInfo) {
-				return m_Rooms;
+		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, ICommandContext context) {
+			return GetScheduleType(identifier, context).GetRecordAfterTimeSpan(identifier, timespan);
+		}
+
+		private ScheduleService GetScheduleType(IdentifierInfo info, ICommandContext context) {
+			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleService> list)) {
+				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {context.Guild.Name}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
+			}
+		}
+
+		public void RegisterSchedule(Type infoType, ScheduleService schedule) {
+			if (!typeof(IdentifierInfo).IsAssignableFrom(infoType)) {
+				throw new ArgumentException($"The given type must be a type of IdentifierInfo.", nameof(infoType));
+			}
+
+			if (m_Schedules.ContainsKey(infoType)) {
+				throw new ArgumentException($"A schedule was already registered for {infoType.Name}.");
+			}
+
+			if (m_Schedules.TryGetValue(infoType, out List<ScheduleService> list)) {
+				list.Add(schedule);
+			} else {
+				m_Schedules[infoType] = new List<ScheduleService>() {
+					schedule
+				};
 			}
 		}
 	}

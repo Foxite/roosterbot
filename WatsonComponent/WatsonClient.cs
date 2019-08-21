@@ -70,7 +70,7 @@ namespace WatsonComponent {
 					string convertedCommand = maxConfidence.Intent + params_;
 
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
-					await Program.Instance.ExecuteSpecificCommand(null, convertedCommand, message);
+					await Program.Instance.ExecuteSpecificCommand(null, convertedCommand, message, "Watson");
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
 					await Util.AddReaction(message, "❓");

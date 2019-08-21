@@ -12,218 +12,157 @@ namespace ScheduleComponent.Modules {
 	public class StudentScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task StudentCurrentCommand(StudentSetInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(false, info);
+			ReturnValue<ScheduleRecord> result = await GetRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-				string response;
 				if (record == null) {
-					response = "Het ziet ernaar uit dat je nu niets hebt.";
+					string response = "Het ziet ernaar uit dat je nu niets hebt.";
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
 					await ReplyAsync(response, info, null);
 				} else {
-					response = $"{record.StudentSetsString}: Nu\n";
-					response += TableItemActivity(record, false);
-
-					if (record.Activity != "stdag doc") {
-						if (record.Activity != "pauze") {
-							response += TableItemStaffMember(record);
-							response += TableItemRoom(record);
-						}
-
-						response += TableItemStartEndTime(record);
-						response += TableItemDuration(record);
-						response += TableItemBreak(record);
-					}
-					ReplyDeferred(response, info, record);
-
-					if (record.Activity == "pauze") {
-						await GetAfterCommand();
-					}
+					await RespondRecord($"{record.StudentSetsString}: Nu", info, record);
 				}
 			}
 		}
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
 		public async Task StudentNextCommand(StudentSetInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(true, info);
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					await FatalError($"`GetRecord(true, \"StudentSets\", {info.DisplayText})` returned null");
+					await FatalError($"`GetNextRecord(\"StudentSets\", {info.DisplayText})` returned null");
 				} else {
-					bool isToday = record.Start.Date == DateTime.Today;
-					string response;
-
-					if (isToday) {
-						response = $"{record.StudentSetsString}: Hierna\n";
+					string pretext;
+					if (record.Start.Date == DateTime.Today) {
+						pretext = $"{record.StudentSetsString}: Hierna";
 					} else {
-						response = $"{record.StudentSetsString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
+						pretext = $"{record.StudentSetsString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}";
 					}
-					
-					response += TableItemActivity(record, false);
-
-					if (record.Activity != "stdag doc") {
-						if (record.Activity != "pauze") {
-							response += TableItemStaffMember(record);
-							response += TableItemRoom(record);
-						}
-						
-						response += TableItemStartEndTime(record);
-						response += TableItemDuration(record);
-						response += TableItemBreak(record);
-					}
-					ReplyDeferred(response, info, record);
-
-					if (record.Activity == "pauze") {
-						await GetAfterCommand();
-					}
+					await RespondRecord(pretext, info, record);
 				}
 			}
 		}
 
 		[Command("dag", RunMode = RunMode.Async)]
-		public async Task StudentWeekdayCommand(StudentSetInfo info, DayOfWeek day) {
-			await RespondDay(info, day, false);
-		}
-		
-		[Command("dag", RunMode = RunMode.Async)]
 		public async Task StudentWeekdayCommand(DayOfWeek day, StudentSetInfo info) {
-			await RespondDay(info, day, false);
+			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task StudentTodayCommand(StudentSetInfo info) {
-			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("vandaag"), true);
+			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task StudentTomorrowCommand(StudentSetInfo info) {
-			await RespondDay(info, ScheduleUtil.GetDayOfWeekFromString("morgen"), true);
+			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public Task ShowThisWeekWorkingDaysCommand(StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
-			RespondWorkingDays(info, days, 0);
-			return Task.CompletedTask;
+		public async Task ShowThisWeekWorkingDaysCommand(StudentSetInfo info) {
+			await RespondWorkingDays(info, 0);
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public Task ShowNextWeekWorkingDaysCommand(StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
-			RespondWorkingDays(info, days, 1);
-			return Task.CompletedTask;
+		public async Task ShowNextWeekWorkingDaysCommand(StudentSetInfo info) {
+			await RespondWorkingDays(info, 1);
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
-			RespondWorkingDays(info, days, weeks);
-			return Task.CompletedTask;
-		}
-
-		[Command("over", RunMode = RunMode.Sync)]
-		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, string grammarWeeks, StudentSetInfo info) {
-			// Plurality easter egg
-			if (grammarWeeks != (weeks > 1 ? "weken" : "week")) {
-				ReplyDeferred(":thinking:");
-			}
-
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
-			RespondWorkingDays(info, days, weeks);
-			return Task.CompletedTask;
-		}
-
-		private void RespondWorkingDays(StudentSetInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
-			string response = info.DisplayText + ": ";
-
-			if (availability.Length > 0) {
-				if (weeksFromNow == 0) {
-					response += "Deze week";
-				} else if (weeksFromNow == 1) {
-					response += "Volgende week";
-				} else {
-					response += $"Over {weeksFromNow} weken";
+		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, StudentSetInfo info) {
+			if (unit == "uur") {
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+				if (result.Success) {
+					ScheduleRecord record = result.Value;
+					if (record != null) {
+						await RespondRecord($"{record.StudentSetsString}: Over {amount} uur", info, record);
+					} else {
+						await ReplyAsync("Er is op dat moment niets.");
+					}
 				}
-				response += " op school op \n";
-				
-				string[][] cells = new string[availability.Length + 1][];
-				cells[0] = new[] { "Dag", "Van", "Tot" };
-
-				int i = 1;
-				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
-					i++;
-				}
-				response += Util.FormatTextTable(cells, false);
+			} else if (unit == "dag" || unit == "dagen") {
+				await RespondDay(info, DateTime.Today.AddDays(amount));
+			} else if (unit == "week" || unit == "weken") {
+				await RespondWorkingDays(info, amount);
 			} else {
-				response += "Niet op school ";
-				if (weeksFromNow == 0) {
-					response += "deze week";
-				} else if (weeksFromNow == 1) {
-					response += "volgende week";
-				} else {
-					response += $"over {weeksFromNow} weken";
-				}
+				await MinorError("Ik ondersteun alleen uren, dagen, en weken.");
 			}
-
-			ReplyDeferred(response);
 		}
 
-		private async Task RespondDay(StudentSetInfo info, DayOfWeek day, bool includeToday) {
-
-			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, includeToday);
+		private async Task RespondDay(StudentSetInfo info, DateTime date) {
+			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = "Het ziet ernaar uit dat je ";
-
-					if (DateTime.Today.DayOfWeek == day && includeToday) {
-						response += "vandaag";
-					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-						response += "morgen";
-					} else {
-						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
-					}
-
-					response += " niets hebt.";
-					if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday) {
+					response = $"Het ziet ernaar uit dat je {ScheduleUtil.GetRelativeDateReference(date)} niets hebt.";
+					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
 						response += " Het is dan ook weekend.";
 					}
 					await ReplyAsync(response, info, null);
 				} else {
-					response = $"{info.DisplayText}: Rooster ";
-					if (DateTime.Today.DayOfWeek == day && includeToday) {
-						response += "voor vandaag";
-					} else if (DateTime.Today.AddDays(1).DayOfWeek == day) {
-						response += "voor morgen";
-					} else {
-						response += "op " + ScheduleUtil.GetStringFromDayOfWeek(day);
-					}
-					response += "\n";
+					response = $"{info.DisplayText}: Rooster voor {ScheduleUtil.GetRelativeDateReference(date)}\n";
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] { "Activiteit", "Tijd", "Leraar", "Lokaal" };
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
-						cells[recordIndex][0] = record.Activity;
+						cells[recordIndex][0] = Activities.GetActivityFromAbbreviation(Context.Guild, record.Activity);
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "---" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+						cells[recordIndex][3] = record.RoomString;
 
-						string room = record.RoomString;
-						if (room.Contains(',')) {
-							room = Util.FormatStringArray(room.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries), " en ");
-						}
-						cells[recordIndex][3] = room;
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells, true);
 					ReplyDeferred(response, info, records.Last());
 				}
+			}
+		}
+
+		private async Task RespondWorkingDays(StudentSetInfo info, int weeksFromNow) {
+			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailabilityInfo(info, weeksFromNow);
+			if (result.Success) {
+				AvailabilityInfo[] availability = result.Value;
+
+				string response = info.DisplayText + ": ";
+
+				if (availability.Length > 0) {
+					response += "Rooster ";
+					if (weeksFromNow == 0) {
+						response += "deze week";
+					} else if (weeksFromNow == 1) {
+						response += "volgende week";
+					} else {
+						response += $"over {weeksFromNow} weken";
+					}
+					response += "\n";
+
+					string[][] cells = new string[availability.Length + 1][];
+					cells[0] = new[] { "Dag", "Van", "Tot" };
+
+					int i = 1;
+					foreach (AvailabilityInfo item in availability) {
+						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+						i++;
+					}
+					response += Util.FormatTextTable(cells, false);
+				} else {
+					response += "Niet op school ";
+					if (weeksFromNow == 0) {
+						response += "deze week";
+					} else if (weeksFromNow == 1) {
+						response += "volgende week";
+					} else {
+						response += $"over {weeksFromNow} weken";
+					}
+				}
+
+				await ReplyAsync(response);
 			}
 		}
 	}
