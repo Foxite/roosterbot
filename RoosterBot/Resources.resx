@@ -166,7 +166,4 @@ Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands 
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
     <value>Je bent niet gemachtigd om dat te doen.</value>
   </data>
-  <data name="WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs" xml:space="preserve">
-	  <value>Er kunnen geen extra regels of tabs in de input zitten.</value>
-  </data>
 </root>
