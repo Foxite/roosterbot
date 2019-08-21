@@ -28,6 +28,7 @@ namespace ScheduleComponent {
 				.AddSingleton(teachers)
 				.AddSingleton(new ScheduleProvider())
 				.AddSingleton(new LastScheduleCommandService())
+				.AddSingleton(new ActivityNameService())
 				.AddSingleton(m_UserClasses);
 
 			Logger.Debug("ScheduleComponent", "Started services");

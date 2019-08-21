@@ -13,9 +13,10 @@ namespace ScheduleComponent.Modules {
 		public TeacherNameService Teachers { get; set; }
 		public ScheduleProvider Schedules { get; set; }
 		public UserClassesService Classes { get; set; }
+		public ActivityNameService Activities { get; set; }
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
-			string ret = $":notepad_spiral: {ScheduleUtil.GetActivityFromAbbr(record.Activity)}";
+			string ret = $":notepad_spiral: {Activities.GetActivityFromAbbreviation(Context.Guild, record.Activity)}";
 			if (isFirstRecord && record.Activity == "pauze") {
 				ret += " :thinking:";
 			}

@@ -56,6 +56,10 @@ namespace GLUScheduleComponent {
 			foreach ((Type identifierType, Task<ScheduleService> scheduleTask) in tasks) {
 				provider.RegisterSchedule(identifierType, await scheduleTask);
 			}
+
+			ActivityNameService activityService = services.GetService<ActivityNameService>();
+			GLUActivities gluActivities = new GLUActivities();
+			activityService.RegisterLookup(m_AllowedGuilds, gluActivities.GetActivityFromAbbr);
 		}
 
 		private class ScheduleRegistryInfo {
