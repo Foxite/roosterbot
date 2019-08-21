@@ -56,7 +56,9 @@ namespace ScheduleComponent.Modules {
 					pretext = $"{query.Identifier.DisplayText}: Na de vorige les";
 				}
 
-				await RespondRecord(pretext, query.Identifier, nextRecord);
+				// Avoid RespondRecord automatically calling this function again because we do it ourselves
+				// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
+				await RespondRecord(pretext, query.Identifier, nextRecord, false);
 
 				if (nextRecord.Activity == "pauze" && recursion <= 5) {
 					await GetAfterCommandInternal(recursion + 1);
