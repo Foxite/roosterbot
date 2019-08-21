@@ -27,10 +27,7 @@ namespace MiscStuffComponent {
 				commandService.AddModuleAsync<MiscModule>(services)
 			);
 
-			string helpText = "Voor de rest zijn er nog deze commands:\n";
-			helpText += "`counter <naam van counter>`\n";
-			helpText += "`counter reset <naam van counter>`\n";
-			helpText += "En nog minstens 4 geheime commands voor de bot owner.";
+			string helpText = Resources.MiscStuffComponent_HelpText;
 			help.AddHelpSection("misc", helpText);
 
 			services.GetService<DiscordSocketClient>().MessageReceived += async (msg) => {
