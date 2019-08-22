@@ -118,46 +118,47 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
-    <value>Die categorie bestaat niet.</value>
+    <value>That category doesn't exist.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoryEmpty" xml:space="preserve">
-    <value>Geen commands gevonden.</value>
+    <value>No commands found.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_ModuleName" xml:space="preserve">
-    <value>categorie</value>
+    <value>category</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
-    <value>Parameters met een `(?)` zijn optioneel.</value>
+    <value>Parameters marked with `(?)` are optional.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_Pretext" xml:space="preserve">
-    <value>Beschikbare categorieën zijn:
+    <value>Available categories are:
 </value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
-    <value>Alle categorieën, of zoek op een categorie.</value>
+    <value>List of categories, or search by category.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_ChapterDoesNotExist" xml:space="preserve">
-    <value>Sorry, dat hoofdstuk bestaat niet.</value>
+    <value>Sorry, that section does not exist.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
-    <value>Al mijn commands beginnen met `{0}`.
-Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:
+    <value>All my commands start with `{0}`. 
+Use `!help &lt;section&gt;` to get a specific explanation.
+Available sections are:
 
 </value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
     <value>
-Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands &lt;onderdeel&gt;` gebruiken om alle commands voor een onderdeel te zien.
+You can use `!commands` to get a list of components, and `!commands &lt;component&gt;` to see all commands for a certain component.
 </value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
-    <value>hoofdstuk</value>
+    <value>section</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Section_Summary" xml:space="preserve">
-    <value>Uitleg over een onderdeel van de bot.</value>
+    <value>Explanation for a part of the bot.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Summary" xml:space="preserve">
-    <value>Uitleg over de bot.</value>
+    <value>Explanation for the bot.</value>
   </data>
   <data name="MetaCommandsModule_Name" xml:space="preserve">
     <value>Meta</value>
