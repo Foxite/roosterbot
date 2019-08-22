@@ -422,5 +422,17 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   </data>
   <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
 	  <value>jouw klas</value>
+	</data>
+  <data name="ScheduleModuleBase_AfterCommand" xml:space="preserve">
+    <value>Kijk wat er gebeurt na het laatste wat je hebt bekeken.</value>
+  </data>
+  <data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
+    <value>Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+  </data>
+  <data name="ScheduleModuleBase_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
+    <value>Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+  </data>
+  <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
+    <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
   </data>
 </root>

@@ -8,8 +8,9 @@ using RoosterBot.Modules;
 using RoosterBot.Preconditions;
 
 namespace ScheduleComponent.Modules {
-	// Provides several "virtual" commands that don't do anything useful, but serve as a single list item for 3 different "versions" of each command
-	// They do provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
+	// Provides several "virtual" commands that don't do much, but serve as a single list item for 3 different "versions" of each command
+	// They also replace missing IdentifierInfo parameters with "ik" and re-execute the command,
+	//  and provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
 	[LogTag("DefaultCommandsModule"), Name("#" + nameof(Resources.DefaultScheduleModule_Name)),
 		Summary("#" + nameof(Resources.DefaultScheduleModule_Summary)),
 		Remarks("#" + nameof(Resources.DefaultScheduleModule_Remarks))]
@@ -70,7 +71,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Priority(-10), Command("deze week", RunMode = RunMode.Async), Summary("Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		[Priority(-10), Command("deze week", RunMode = RunMode.Async), Summary("#" + nameof(Resources.ScheduleModuleBase_ShowThisWeekWorkingDays_Summary))]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "deze week ik", Context.Message, "default deze week");
@@ -79,7 +80,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Priority(-10), Command("volgende week", RunMode = RunMode.Async), Summary("Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		[Priority(-10), Command("volgende week", RunMode = RunMode.Async), Summary("#" + nameof(Resources.ScheduleModuleBase_ShowNextWeekWorkingDays_Summary))]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "volgende week ik", Context.Message, "default volgende week");
@@ -88,7 +89,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Priority(-10), Command("over", RunMode = RunMode.Async), Summary("Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.")]
+		[Priority(-10), Command("over", RunMode = RunMode.Async), Summary("#" + nameof(Resources.ScheduleModuleBase_ShowNWeeksWorkingDays_Summary))]
 		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int aantal, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"over {aantal} {unit} ik", Context.Message, "default over");
@@ -97,7 +98,7 @@ namespace ScheduleComponent.Modules {
 			}
 		}
 
-		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("Kijk wat er gebeurt na het laatste wat je hebt bekeken.")]
+		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("#" + nameof(Resources.ScheduleModuleBase_AfterCommand))]
 		public async Task AfterCommand() {
 			await ReplyAsync(Resources.DefaultScheduleModule_AfterCommand_BigProblem);
 		}
