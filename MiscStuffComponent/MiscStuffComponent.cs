@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using Discord.WebSocket;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace MiscStuffComponent {
 	public class MiscStuffComponent : ComponentBase {
@@ -15,17 +16,19 @@ namespace MiscStuffComponent {
 		public override string VersionString => "1.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
+			ResourcesType = typeof(Resources);
+
 			ConfigPath = configPath;
 
 			services.AddSingleton(new CounterService(Path.Combine(configPath, "counters")));
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			await Task.WhenAll(
+		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<CounterModule>(services),
 				commandService.AddModuleAsync<MiscModule>(services)
-			);
+			));
 
 			string helpText = Resources.MiscStuffComponent_HelpText;
 			help.AddHelpSection("misc", helpText);

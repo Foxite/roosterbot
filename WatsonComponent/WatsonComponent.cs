@@ -18,6 +18,8 @@ namespace WatsonComponent {
 		public override string VersionString => "1.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
+			ResourcesType = typeof(Resources);
+
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
@@ -25,7 +27,7 @@ namespace WatsonComponent {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			

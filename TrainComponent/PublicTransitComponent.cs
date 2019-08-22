@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace PublicTransitComponent {
 	// TODO prevent its use outside specific (Dutch) servers, do not localize
@@ -32,8 +33,8 @@ namespace PublicTransitComponent {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
-			await commandService.AddModuleAsync<PTModule>(services);
+		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+			registerModules(new[] { await commandService.AddModuleAsync<PTModule>(services) });
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";

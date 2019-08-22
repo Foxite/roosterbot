@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot;
@@ -17,6 +18,8 @@ namespace ScheduleComponent {
 		public override string VersionString => "2.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
+			ResourcesType = typeof(Resources);
+
 			TeacherNameService teachers = new TeacherNameService();
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -36,13 +39,13 @@ namespace ScheduleComponent {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
 			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
 			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
-			await Task.WhenAll(
+			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<DefaultScheduleModule>(services),
 				commandService.AddModuleAsync<AfterScheduleModule>(services),
 				commandService.AddModuleAsync<StudentScheduleModule>(services),
@@ -50,7 +53,7 @@ namespace ScheduleComponent {
 				commandService.AddModuleAsync<RoomScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
-			);
+			));
 
 			help.AddHelpSection("rooster", Resources.ScheduleComponent_HelpText_Rooster);
 

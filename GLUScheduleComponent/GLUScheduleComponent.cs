@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace GLUScheduleComponent {
 	public class GLUScheduleComponent : ComponentBase {
@@ -39,7 +40,7 @@ namespace GLUScheduleComponent {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
+		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
 			List<(Type identifierType, Task<ScheduleService> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleService> scheduleTask)>();
