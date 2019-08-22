@@ -118,33 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MiscStuffComponent_HelpText" xml:space="preserve">
-    <value>Voor de rest zijn er nog deze commands:
-`counter &lt;naam van counter&gt;`
-`counter reset &lt;naam van counter&gt;`
-En nog minstens 4 geheime commands voor de bot owner.</value>
-  </data>
-  <data name="CounterService_FormatTimeSpan_XDaysPlural" xml:space="preserve">
-    <value />
-    <comment>0: amount of days</comment>
+    <value>On top of that there are these commands:
+`counter &lt;name of counter&gt;`
+`counter reset &lt;name of counter&gt;`
+And at least 4 secret commands for the bot owner.</value>
   </data>
   <data name="CounterService_FormatTimeSpan_DaysSingular" xml:space="preserve">
-    <value>{0} dag</value>
+    <value>{0} day</value>
     <comment>0: amount of days (always 1 in this case)</comment>
   </data>
   <data name="CounterService_FormatTimeSpan_DaysPlural" xml:space="preserve">
-    <value>{0} dagen</value>
+    <value>{0} days</value>
     <comment>0: amount of days (never 1)</comment>
   </data>
   <data name="CounterService_FormatTimeSpan_HoursSingular" xml:space="preserve">
-    <value>{0} uur</value>
+    <value>{0} hour</value>
     <comment>0: amount of hours (always 1)</comment>
   </data>
   <data name="CounterService_FormatTimeSpan_HoursPlural" xml:space="preserve">
-    <value>{0} uren</value>
+    <value>{0} hours</value>
     <comment>0: amount of hours (never 1)</comment>
   </data>
   <data name="CounterService_FormatTimeSpan_Separator" xml:space="preserve">
-    <value> en </value>
+    <value> and </value>
   </data>
   <data name="CounterService_FormatTimeSpan_Result" xml:space="preserve">
     <value>{0} {1} {2}</value>
@@ -154,10 +150,10 @@ En nog minstens 4 geheime commands voor de bot owner.</value>
 			all localized</comment>
   </data>
   <data name="CounterModule_GetCounterCommand_FullText" xml:space="preserve">
-    <value>Dagen geleden dat {0}: {1}.
-(Laatst gereset op {2} om {3})
-De highscore is {4}.
-Reset de counter met `!counter reset &lt;counter&gt;`.</value>
+    <value>Days since {0}: {1}.
+(Last rest on {2} at {3})
+The highscore is {4}.
+Reset the counter using `!counter reset &lt;counter&gt;`.</value>
     <comment>0: Counter description
 			1: time since reset
 			2: last reset date
@@ -165,15 +161,15 @@ Reset de counter met `!counter reset &lt;counter&gt;`.</value>
 			4: highscore</comment>
   </data>
   <data name="CounterModule_GetCounterCommand_CounterDoesNotExist" xml:space="preserve">
-    <value>Die bestaat niet.</value>
+    <value>That counter doesn't exit.</value>
   </data>
   <data name="CounterModule_ResetCounterCommand_ResponseNoNewHighscore" xml:space="preserve">
-    <value>Dagen geleden dat {0}: 0 (was {1}).
-De highscore is {2}.</value>
+    <value>Days since {0}: 0 (was {1}).
+The highscore is {2}.</value>
   </data>
   <data name="CounterModule_ResetCounterCommand_ResponseNewHighscore" xml:space="preserve">
-    <value>Dagen geleden dat {0}: 0 (was {1}).
-Dat is een nieuw record! De vorige highscore was {2}.</value>
+    <value>Days since {0}: 0 (was {1})
+That's a new record! The previous highscore was {2}.</value>
     <comment>0: description
 			1: time since previous reset (now the highscore)
 			2: previous highscore</comment>
@@ -182,9 +178,9 @@ Dat is een nieuw record! De vorige highscore was {2}.</value>
     <value>Counters</value>
   </data>
   <data name="CounterModule_GetCounterCommand_Summary" xml:space="preserve">
-    <value>Kijk hoever een counter is.</value>
+    <value>See how far a counter is.</value>
   </data>
   <data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
-    <value>Zet een counter weer op nul.</value>
+    <value>Reset a counter back to zero.</value>
   </data>
 </root>
