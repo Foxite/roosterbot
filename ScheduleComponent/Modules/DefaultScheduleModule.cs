@@ -50,7 +50,7 @@ namespace ScheduleComponent.Modules {
 
 		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("#" + nameof(Resources.DefaultScheduleModule_DefaultWeekdayCommand_Summary))]
 		public async Task DefaultWeekdayCommand([Remainder] string wat_en_weekdag = "") {
-			await ReplyAsync(Resources.DefaultScheduleModule_DefaultWeekdayCommand_UnknownIdentifierOrDayOfWeek);
+			await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier);
 		}
 
 		[Priority(-10), Command("morgen", RunMode = RunMode.Sync), Summary("#" + nameof(Resources.DefaultScheduleModule_DefaultTomorrowCommand_Summary))]
