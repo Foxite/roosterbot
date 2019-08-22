@@ -7,11 +7,11 @@ using RoosterBot.Preconditions;
 using RoosterBot.Services;
 
 namespace RoosterBot.Modules {
-	[LogTag("MetaModule"), Name("Meta")]
+	[LogTag("MetaModule"), Name("#" + nameof(Resources.MetaCommandsModule_Name))]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
 
-		[Command("help"), Summary("Uitleg over de bot.")]
+		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Summary))]
 		public async Task HelpCommand() {
 			string response = string.Format(Resources.MetaCommandsModule_HelpCommand_HelpPretext, Config.CommandPrefix);
 
@@ -29,8 +29,8 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("help"), Summary("Uitleg over een onderdeel van de bot.")]
-		public async Task HelpCommand([Remainder, Name("hoofdstuk")] string section) {
+		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section_Summary))]
+		public async Task HelpCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section))] string section) {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
 				response += Help.GetHelpSection(section);
@@ -40,8 +40,8 @@ namespace RoosterBot.Modules {
 			await ReplyAsync(response);
 		}
 
-		[Command("commands"), Summary("Alle categorieën, of zoek op een categorie.")]
-		public async Task CommandListCommand([Remainder, Name("categorie")] string moduleName) {
+		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Summary))]
+		public async Task CommandListCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_ModuleName))] string moduleName) {
 			moduleName = moduleName.ToLower();
 			ModuleInfo module = CmdService.Modules.Where(aModule => aModule.Name.ToLower() == moduleName).SingleOrDefault();
 

@@ -166,4 +166,22 @@ Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands 
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
     <value>Je bent niet gemachtigd om dat te doen.</value>
   </data>
+  <data name="MetaCommandsModule_Name" xml:space="preserve">
+	  <value>Meta</value>
+  </data>
+  <data name="MetaCommandsModule_HelpCommand_Summary" xml:space="preserve">
+	  <value>Uitleg over de bot.</value>
+  </data>
+  <data name="MetaCommandsModule_HelpCommand_Section_Summary" xml:space="preserve">
+	  <value>Uitleg over een onderdeel van de bot.</value>
+  </data>
+  <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
+	  <value>hoofdstuk</value>
+  </data>
+  <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
+	  <value>Alle categorieën, of zoek op een categorie.</value>
+  </data>
+  <data name="MetaCommandsModule_CommandListCommand_ModuleName" xml:space="preserve">
+	  <value>categorie</value>
+  </data>
 </root>
