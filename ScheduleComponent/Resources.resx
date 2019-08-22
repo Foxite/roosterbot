@@ -381,4 +381,46 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
 	  <value>Discord naam</value>
   </data>
+  <data name="DefaultScheduleModule_Remarks" xml:space="preserve">
+	  <value>Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.</value>
+  </data>
+  <data name="DefaultScheduleModule_Summary" xml:space="preserve">
+	  <value>Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt.</value>
+  </data>
+  <data name="DefaultScheduleModule_Name" xml:space="preserve">
+	  <value>Rooster</value>
+  </data>
+  <data name="DefaultScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+	  <value>Kijk wat er nu op het rooster staat.</value>
+  </data>
+  <data name="DefaultScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+	  <value>Kijk wat er hierna op het rooster staat</value>
+  </data>
+  <data name="DefaultScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+	  <value>Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.</value>
+  </data>
+  <data name="DefaultScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+	  <value>Wat er morgen op het rooster staat.</value>
+  </data>
+  <data name="DefaultScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+	  <value>Wat er vandaag op het rooster staat.</value>
+  </data>
+  <data name="TeacherListModule_Name" xml:space="preserve">
+	  <value>Leraren</value>
+  </data>
+  <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
+	  <value>Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.</value>
+  </data>
+  <data name="UserClassModule_Summary" xml:space="preserve">
+	  <value>Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.</value>
+  </data>
+  <data name="UserClassModule_GetClassForUser_Summary" xml:space="preserve">
+	  <value>Kijk in welke klas jij zit, volgens mijn gegevens.</value>
+  </data>
+  <data name="UserClassModule_SetClassForUser_Summary" xml:space="preserve">
+	  <value>Stel in in welke klas jij zit.</value>
+  </data>
+  <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
+	  <value>jouw klas</value>
+  </data>
 </root>

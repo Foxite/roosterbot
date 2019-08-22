@@ -6,11 +6,11 @@ using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("UserClassModule"), Name("Jouw klas"), Summary("Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.")]
+	[LogTag("UserClassModule"), Name("Jouw klas"), Summary("#" + nameof(Resources.UserClassModule_Summary))]
 	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }
 
-		[Command("ik"), Summary("Kijk in welke klas jij zit, volgens mijn gegevens.")]
+		[Command("ik"), Summary("#" + nameof(Resources.UserClassModule_GetClassForUser_Summary))]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User))?.DisplayText;
 			string response;
@@ -23,8 +23,8 @@ namespace ScheduleComponent.Modules {
 			await ReplyAsync(response);
 		}
 		
-		[Command("ik"), Summary("Stel in in welke klas jij zit.")]
-		public async Task SetClassForUser([Name("jouw klas")] string clazz) {
+		[Command("ik"), Summary("#" + nameof(Resources.UserClassModule_SetClassForUser_Summary))]
+		public async Task SetClassForUser([Name("#" + nameof(Resources.UserClassModule_SetClassForUser_class_Name))] string clazz) {
 			try {
 				await Classes.SetClassForDiscordUser(Context.User, clazz.ToUpper());
 				await ReplyAsync(string.Format(Resources.UserClassModule_SetClassForUser_ConfirmUserIsInClass, clazz.ToUpper()));

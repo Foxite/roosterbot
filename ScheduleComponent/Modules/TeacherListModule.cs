@@ -10,14 +10,13 @@ using ScheduleComponent.DataTypes;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("TeacherListModule"), Name("Leraren")]
+	[LogTag("TeacherListModule"), Name("#" + nameof(Resources.TeacherListModule_Name))]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.")]
+		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#" + nameof(Resources.TeacherListModule_TeacherListCommand_Summary))]
 		public async Task TeacherListCommand([Remainder, Name("naam")] string name = "") {
 			IEnumerable<TeacherInfo> records;
-
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords(Context.Guild.Id);
 			} else {
