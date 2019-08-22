@@ -7,15 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using RoosterBot.Modules;
+using Discord.Commands;
 
 namespace RoosterBot {
 	public class ComponentManager {
 		private Dictionary<Type, ComponentBase> m_Components;
-		private ConcurrentDictionary<Type, ComponentBase> m_ComponentsByModule;
+		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
 
 		public IServiceProvider Services { get; private set; }
-
 
 		private ComponentManager() { }
 
@@ -37,6 +36,7 @@ namespace RoosterBot {
 			Type[] types = FindComponentClasses(assemblies);
 
 			m_Components = new Dictionary<Type, ComponentBase>(types.Length);
+			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
 
 			// Start components
 			ConstructComponents(types);
@@ -123,9 +123,10 @@ namespace RoosterBot {
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
 				Logger.Info("ComponentManager", "Adding modules from " + componentKVP.Key.Name);
 				try {
-					async Task registerModule(Type module) {
-						m_ComponentsByModule[module] = componentKVP.Value;
-						await commands.AddModuleAsync(module, services);
+					void registerModule(ModuleInfo[] modules) {
+						foreach (ModuleInfo module in modules) {
+							m_ComponentsByModule[module] = componentKVP.Value;
+						}
 					}
 
 					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(services, commands, help, registerModule);
@@ -148,11 +149,11 @@ namespace RoosterBot {
 			return m_Components.Values;
 		}
 
-		public ComponentBase GetComponentForModule(Type moduleType) {
-			if (m_ComponentsByModule.TryGetValue(moduleType, out ComponentBase result)) {
+		public ComponentBase GetComponentForModule(ModuleInfo module) {
+			if (m_ComponentsByModule.TryGetValue(module, out ComponentBase result)) {
 				return result;
 			} else {
-				throw new ArgumentException($"Module of type {moduleType.Name} is not registered");
+				throw new ArgumentException($"Module of type {module.Name} is not registered");
 			}
 		}
 	}

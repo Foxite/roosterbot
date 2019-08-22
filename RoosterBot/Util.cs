@@ -315,6 +315,14 @@ namespace RoosterBot {
 
 			return input;
 		}
+
+		public static string ResolveString(ComponentBase component, string str) {
+			if (str.StartsWith("#")) {
+				return component.GetStringResource(str.Substring(1));
+			} else {
+				return str;
+			}
+		}
 	}
 
 	public class ReturnValue<T> {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Modules;
 using RoosterBot.Services;
 
 namespace RoosterBot {
@@ -23,7 +23,7 @@ namespace RoosterBot {
 		protected Type ResourcesType { get; set; }
 
 		public abstract Task AddServices(IServiceCollection services, string configPath);
-		public abstract Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Func<Type, Task> addModuleFunction);
+		public abstract Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction);
 		public virtual Task OnShutdown() { return Task.CompletedTask; }
 
 		/// <summary>
@@ -41,9 +41,10 @@ namespace RoosterBot {
 					Logger.Error("ComponentBase", $"No resource named {propertyName} is defined by {Name}");
 					return "ERROR 2";
 				} else {
-					try {
-						return (string) propertyInfo.GetValue(null);
-					} catch (InvalidCastException) {
+					object value = propertyInfo.GetValue(null);
+					if (value is string strValue) {
+						return strValue;
+					} else {
 						Logger.Error("ComponentBase", $"Requested resource {propertyName} defined by {Name} is not a string");
 						return "ERROR 3";
 					}
