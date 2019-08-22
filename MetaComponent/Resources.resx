@@ -123,6 +123,9 @@
   <data name="MetaCommandsModule_CommandListCommand_CategoryEmpty" xml:space="preserve">
     <value>Geen commands gevonden.</value>
   </data>
+  <data name="MetaCommandsModule_CommandListCommand_Category_Summary" xml:space="preserve">
+    <value>Lijst van alle commands in een categorie.</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_ModuleName" xml:space="preserve">
     <value>categorie</value>
   </data>
@@ -134,7 +137,7 @@
 </value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
-    <value>Alle categorieën, of zoek op een categorie.</value>
+    <value>Alle categorieën van commands.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_ChapterDoesNotExist" xml:space="preserve">
     <value>Sorry, dat hoofdstuk bestaat niet.</value>
@@ -142,13 +145,12 @@
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
     <value>Al mijn commands beginnen met `{0}`.
 Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:
-
 </value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
     <value>
-Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands &lt;onderdeel&gt;` gebruiken om alle commands voor een onderdeel te zien.
-</value>
+
+Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands &lt;onderdeel&gt;` gebruiken om alle commands voor een onderdeel te zien.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
     <value>hoofdstuk</value>

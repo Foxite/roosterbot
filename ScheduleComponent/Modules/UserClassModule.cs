@@ -6,7 +6,7 @@ using RoosterBot.Modules;
 using ScheduleComponent.Services;
 
 namespace ScheduleComponent.Modules {
-	[LogTag("UserClassModule"), Name("Jouw klas"), Summary("#" + nameof(Resources.UserClassModule_Summary))]
+	[LogTag("UserClassModule"), Name("#" + nameof(Resources.UserClassModule_Name)), Summary("#" + nameof(Resources.UserClassModule_Summary))]
 	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }
 

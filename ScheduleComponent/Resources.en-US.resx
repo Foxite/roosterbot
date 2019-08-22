@@ -121,7 +121,7 @@
     <value>You can look up what a class or teacher is currently doing, or what is going on in a room.
 I will automatically understand if you're talking about a class, teacher, or room.
 I know the abbreviations, full names, and alternative spellings of all teachers.
-`!nu 1gd2`, `!nu laurence candel`, `!nu` laurens`, `!nu lca`, `!nu a223`
+`!nu 1gd2`, `!nu laurence candel`, `!nu laurens`, `!nu lca`, `!nu a223`
 
 You can also look up what takes place next, or on a certain day of the week.
 `!next 2gd1`, `!day wednesday lance` (you don't have to type the full thing: `!day we lkr` does the same)
@@ -428,5 +428,8 @@ Warning: natural-language commands are not supported yet in English.</value>
   </data>
   <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>See on what days a class or teacher is present, or when a room is in use.</value>
+  </data>
+  <data name="UserClassModule_Name" xml:space="preserve">
+    <value>Your class</value>
   </data>
 </root>

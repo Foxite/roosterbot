@@ -43,6 +43,19 @@ namespace MetaComponent {
 		}
 
 		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Summary))]
+		public async Task CommandListCommand() {
+			// List modules with visible commands
+			IEnumerable<string> visibleModules = 
+				from module in CmdService.Modules
+				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
+				select Util.ResolveString(Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
+
+			string response = Resources.MetaCommandsModule_CommandListCommand_Pretext;
+			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
+			await ReplyAsync(response);
+		}
+
+		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Category_Summary))]
 		public async Task CommandListCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_ModuleName))] string moduleName) {
 			moduleName = moduleName.ToLower();
 			ModuleInfo module = CmdService.Modules
@@ -117,19 +130,6 @@ namespace MetaComponent {
 				response += Resources.MetaCommandsModule_CommandListCommand_OptionalHint;
 				await ReplyAsync(response);
 			}
-		}
-
-		[Command("commands")]
-		public async Task CommandListCommand() {
-			// List modules with visible commands
-			IEnumerable<string> visibleModules = 
-				from module in CmdService.Modules
-				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
-				select Util.ResolveString(Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
-
-			string response = Resources.MetaCommandsModule_CommandListCommand_Pretext;
-			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
-			await ReplyAsync(response);
 		}
 
 		[Command("shutdown"), RequireBotManager, HiddenFromList]

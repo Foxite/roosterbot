@@ -432,4 +432,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
   </data>
+  <data name="UserClassModule_Name" xml:space="preserve">
+    <value>Jouw klas</value>
+  </data>
 </root>
