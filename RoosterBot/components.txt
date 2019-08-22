@@ -1,3 +1,4 @@
+MetaComponent.dll
 ScheduleComponent.dll
 GLUScheduleComponent.dll
 MiscStuffComponent.dll

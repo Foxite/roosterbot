@@ -115,11 +115,9 @@ namespace RoosterBot {
 		private async Task AddComponentModulesAsync(IServiceProvider services) {
 			EditedCommandService commands = services.GetService<EditedCommandService>();
 			HelpService help = services.GetService<HelpService>();
-			Task[] modulesLoading = new Task[m_Components.Count + 1];
+			Task[] modulesLoading = new Task[m_Components.Count];
 
-			modulesLoading[0] = commands.AddModuleAsync<MetaCommandsModule>(services);
-
-			int moduleIndex = 1;
+			int moduleIndex = 0;
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
 				Logger.Info("ComponentManager", "Adding modules from " + componentKVP.Key.Name);
 				try {
