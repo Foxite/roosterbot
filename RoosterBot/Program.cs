@@ -15,7 +15,9 @@ namespace RoosterBot {
 	public class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
-		
+
+		public ComponentManager Components { get; private set; }
+
 		private ProgramState m_State; // TODO can we use m_Client.ConnectionState instead?
 		private bool m_StopFlagSet;
 		private bool m_VersionNotReported = true;
@@ -23,7 +25,6 @@ namespace RoosterBot {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private SNSService m_SNSService;
-		private ComponentManager m_Components;
 
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
@@ -61,7 +62,7 @@ namespace RoosterBot {
 
 			IServiceCollection serviceCollection = CreateRBServices();
 
-			m_Components = await ComponentManager.CreateAsync(serviceCollection);
+			Components = await ComponentManager.CreateAsync(serviceCollection);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
@@ -77,7 +78,7 @@ namespace RoosterBot {
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
-			await m_Components.ShutdownComponentsAsync();
+			await Components.ShutdownComponentsAsync();
 			m_Client.Dispose();
 		}
 
@@ -181,7 +182,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(socketMessage, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null);
 
-				await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
+				await m_Commands.ExecuteAsync(context, argPos, Components.Services);
 			}
 		}
 
@@ -189,7 +190,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(command, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
 
-				await m_Commands.ExecuteAsync(context, argPos, m_Components.Services);
+				await m_Commands.ExecuteAsync(context, argPos, Components.Services);
 			} else {
 				await ourResponse.DeleteAsync();
 			}
@@ -204,7 +205,7 @@ namespace RoosterBot {
 
 			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
 
-			await m_Commands.ExecuteAsync(context, specificInput, m_Components.Services);
+			await m_Commands.ExecuteAsync(context, specificInput, Components.Services);
 		}
 
 		private async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
@@ -311,7 +312,7 @@ namespace RoosterBot {
 				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
-				foreach (ComponentBase component in m_Components.GetComponents()) {
+				foreach (ComponentBase component in Components.GetComponents()) {
 					startReport += $"- {component.Name}: {component.VersionString}\n";
 				}
 

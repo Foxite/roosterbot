@@ -1,17 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Services;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using RoosterBot.Modules;
 
 namespace RoosterBot {
 	public class ComponentManager {
 		private Dictionary<Type, ComponentBase> m_Components;
+		private ConcurrentDictionary<Type, ComponentBase> m_ComponentsByModule;
 
 		public IServiceProvider Services { get; private set; }
+
 
 		private ComponentManager() { }
 
@@ -112,13 +116,19 @@ namespace RoosterBot {
 			EditedCommandService commands = services.GetService<EditedCommandService>();
 			HelpService help = services.GetService<HelpService>();
 			Task[] modulesLoading = new Task[m_Components.Count + 1];
-			modulesLoading[0] = commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+
+			modulesLoading[0] = commands.AddModuleAsync<MetaCommandsModule>(services);
 
 			int moduleIndex = 1;
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
 				Logger.Info("ComponentManager", "Adding modules from " + componentKVP.Key.Name);
 				try {
-					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(services, commands, help);
+					async Task registerModule(Type module) {
+						m_ComponentsByModule[module] = componentKVP.Value;
+						await commands.AddModuleAsync(module, services);
+					}
+
+					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(services, commands, help, registerModule);
 				} catch (Exception ex) {
 					throw new ComponentException("Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex, componentKVP.Key);
 				}
@@ -136,6 +146,14 @@ namespace RoosterBot {
 
 		public IEnumerable<ComponentBase> GetComponents() {
 			return m_Components.Values;
+		}
+
+		public ComponentBase GetComponentForModule(Type moduleType) {
+			if (m_ComponentsByModule.TryGetValue(moduleType, out ComponentBase result)) {
+				return result;
+			} else {
+				throw new ArgumentException($"Module of type {moduleType.Name} is not registered");
+			}
 		}
 	}
 
