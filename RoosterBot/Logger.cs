@@ -55,7 +55,11 @@ namespace RoosterBot {
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " : [" + severity + "] " + tag + " : " + msg;
 			if (exception != null) {
-				loggedMessage += "\n" + exception.ToStringDemystified();
+				if (exception is FileLoadException) {
+					loggedMessage += "\n" + exception.ToString();
+				} else {
+					loggedMessage += "\n" + exception.ToStringDemystified();
+				}
 			}
 			Console.WriteLine(loggedMessage);
 			lock (Lock) {
