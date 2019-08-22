@@ -159,4 +159,13 @@ Dat is een nieuw record! De vorige highscore was {2}.</value>
 			1: time since previous reset (now the highscore)
 			2: previous highscore</comment>
 	</data>
+	<data name="CounterModule_Name" xml:space="preserve">
+		<value>Counters</value>
+	</data>
+	<data name="CounterModule_GetCounterCommand_Summary" xml:space="preserve">
+		<value>Kijk hoever een counter is.</value>
+	</data>
+	<data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
+		<value>Zet een counter weer op nul.</value>
+	</data>
 </root>

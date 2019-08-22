@@ -7,11 +7,11 @@ using RoosterBot.Modules;
 using RoosterBot.Attributes;
 
 namespace MiscStuffComponent.Modules {
-	[LogTag("CounterModule"), Name("Counters")]
+	[LogTag("CounterModule"), Name("#" + nameof(Resources.CounterModule_Name))]
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }
 		
-		[Command("counter"), Priority(0), Summary("Kijk hoever een counter is.")]
+		[Command("counter"), Priority(0), Summary("#" + nameof(Resources.CounterModule_GetCounterCommand_Summary))]
 		public async Task GetCounterCommand([Remainder] string counter) {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
@@ -32,7 +32,7 @@ namespace MiscStuffComponent.Modules {
 			}
 		}
 
-		[Command("counter reset"), Alias("reset counter"), Priority(1), Summary("Zet een counter weer op nul.")]
+		[Command("counter reset"), Alias("reset counter"), Priority(1), Summary("#" + nameof(Resources.CounterModule_ResetCounterCommand_Summary))]
 		public async Task ResetCounterCommand([Remainder] string counter) {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
