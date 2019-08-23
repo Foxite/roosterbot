@@ -1,42 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Discord.Commands;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[LogTag("MetaModule"), Name("#" + nameof(Resources.MetaCommandsModule_Name))]
-	public class MetaCommandsModule : EditableCmdModuleBase {
-		public HelpService Help { get; set; }
-
-		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Summary))]
-		public async Task HelpCommand() {
-			string response = string.Format(Resources.MetaCommandsModule_HelpCommand_HelpPretext, Config.CommandPrefix);
-
-			bool notFirst = false;
-			foreach (string helpSection in Help.GetSectionNames()) {
-				if (notFirst) {
-					response += ", ";
-				}
-				response += helpSection;
-				notFirst = true;
-			}
-
-			response += Resources.MetaCommandsModule_HelpCommand_PostText;
-
-			await ReplyAsync(response);
-		}
-
-		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section_Summary))]
-		public async Task HelpCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section))] string section) {
-			string response = "";
-			if (Help.HelpSectionExists(section)) {
-				response += Help.GetHelpSection(section);
-			} else {
-				response += Resources.MetaCommandsModule_HelpCommand_ChapterDoesNotExist;
-			}
-			await ReplyAsync(response);
-		}
-
+	public class CommandListModule : EditableCmdModuleBase {
 		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Summary))]
 		public async Task CommandListCommand() {
 			// List modules with visible commands
@@ -125,13 +93,6 @@ namespace RoosterBot.Meta {
 				response += Resources.MetaCommandsModule_CommandListCommand_OptionalHint;
 				await ReplyAsync(response);
 			}
-		}
-
-		[Command("shutdown"), RequireBotManager, HiddenFromList]
-		public Task ShutdownCommand() {
-			Log.Info($"Shutdown command used by {Context.User.Username}");
-			Program.Instance.Shutdown();
-			return Task.CompletedTask;
 		}
 	}
 }

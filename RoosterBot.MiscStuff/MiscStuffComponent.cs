@@ -22,8 +22,7 @@ namespace RoosterBot.MiscStuff {
 
 		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			registerModules(await Task.WhenAll(
-				commandService.AddModuleAsync<CounterModule>(services),
-				commandService.AddModuleAsync<MiscModule>(services)
+				commandService.AddModuleAsync<CounterModule>(services)
 			));
 
 			string helpText = Resources.MiscStuffComponent_HelpText;
