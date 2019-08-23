@@ -114,7 +114,7 @@ namespace RoosterBot.Schedule {
 
 		protected async Task GetAfterCommand() {
 			await SendDeferredResponseAsync();
-			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message, "SMB daarna");
+			await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message, "SMB daarna");
 		}
 		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
