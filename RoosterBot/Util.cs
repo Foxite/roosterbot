@@ -75,7 +75,7 @@ namespace RoosterBot {
 		/// <param name="table">An array[row][column]. While it can be jagged, if it is jagged, this will not work properly.</param>
 		/// <param name="includeHeaderSeperation">Include a line of '-'s after the first row.</param>
 		/// <returns>A string that you can send directly into a chat message.</returns>
-		public static string FormatTextTable(string[][] table, bool includeHeaderSeperation) {
+		public static string FormatTextTable(string[][] table) {
 			int[] columnWidths = new int[table[0].Length];
 
 			for (int column = 0; column < table[0].Length; column++) {

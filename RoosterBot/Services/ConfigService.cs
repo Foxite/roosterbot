@@ -39,7 +39,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Load Discord.NET objects based on config data.
 		/// </summary>
-		internal async Task LoadDiscordInfo(IDiscordClient client, string jsonPath) {
+		internal async Task LoadDiscordInfo(IDiscordClient client) {
 			// Load IUser belonging to owner
 			BotOwner = await client.GetUserAsync(m_BotOwnerId);
 		}

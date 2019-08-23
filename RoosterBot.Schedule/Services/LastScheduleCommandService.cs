@@ -22,12 +22,12 @@ namespace RoosterBot.Schedule {
 			if (identifier != null) {
 				m_SCIs[new SCIKey(context)] = new ScheduleCommandInfo(identifier, record);
 			} else {
-				m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
+				m_SCIs.TryRemove(new SCIKey(context), out _);
 			}
 		}
 
 		public bool RemoveLastQuery(ICommandContext context) {
-			return m_SCIs.TryRemove(new SCIKey(context), out ScheduleCommandInfo unused);
+			return m_SCIs.TryRemove(new SCIKey(context), out _);
 		}
 
 		private struct SCIKey {

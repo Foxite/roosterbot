@@ -21,7 +21,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task ReplyErrorMessage(string param) {
-			if (MentionUtils.TryParseUser(param, out ulong unused)) {
+			if (MentionUtils.TryParseUser(param, out _)) {
 				await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown);
 			} else if (param == "ik") {
 				await ReplyAsync(Resources.DefaultScheduleModule_ReplyErrorMessage_UserUnknown);
@@ -41,7 +41,11 @@ namespace RoosterBot.Schedule {
 
 		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("#" + nameof(Resources.DefaultScheduleModule_DefaultWeekdayCommand_Summary))]
 		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
-			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(dag)} ik", Context.Message, "default dag");
+			if (string.IsNullOrWhiteSpace(wat)) {
+				await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(dag)} ik", Context.Message, "default dag");
+			} else {
+				await ReplyErrorMessage(wat);
+			}
 		}
 
 		[Priority(-10), Command("morgen", RunMode = RunMode.Sync), Summary("#" + nameof(Resources.DefaultScheduleModule_DefaultTomorrowCommand_Summary))]

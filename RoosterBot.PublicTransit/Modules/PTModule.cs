@@ -95,7 +95,7 @@ namespace RoosterBot.PublicTransit {
 
 					recordIndex++;
 				}
-				ReplyDeferred(pretext + "\n" + Util.FormatTextTable(cells, true));
+				ReplyDeferred(pretext + "\n" + Util.FormatTextTable(cells));
 			}
 		}
 

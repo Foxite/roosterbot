@@ -40,7 +40,7 @@ namespace RoosterBot.Schedule {
 
 					recordIndex++;
 				}
-				string response = Util.FormatTextTable(cells, true);
+				string response = Util.FormatTextTable(cells);
 
 				await ReplyAsync(response);
 			}

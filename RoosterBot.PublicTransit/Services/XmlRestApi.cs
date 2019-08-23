@@ -7,15 +7,11 @@ using System.Xml;
 namespace RoosterBot.PublicTransit {
 	public class XmlRestApi : IRestApiAsync, IDisposable {
 		private string m_CallDomain;
-		private string m_Username;
-		private string m_Password;
 
 		private WebClient m_Web;
 
 		public XmlRestApi(string callDomain, string username, string password) {
 			m_CallDomain = callDomain;
-			m_Username = username;
-			m_Password = password;
 
 			m_Web = new WebClient();
 			CredentialCache creds = new CredentialCache {

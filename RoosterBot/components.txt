@@ -1,4 +1,4 @@
-MetaComponent.dll
+RoosterBot.Meta.dll
 RoosterBot.Schedule.dll
 RoosterBot.Schedule.GLU.dll
 RoosterBot.MiscStuff.dll

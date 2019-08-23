@@ -21,7 +21,7 @@ namespace RoosterBot.Watson {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
-			m_Watson = new WatsonClient(m_Client, jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
+			m_Watson = new WatsonClient(jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
 			return Task.CompletedTask;
 		}
 

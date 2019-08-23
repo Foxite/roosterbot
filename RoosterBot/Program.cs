@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
@@ -302,7 +303,7 @@ namespace RoosterBot {
 
 		private async Task OnClientReady() {
 			m_State = ProgramState.BotRunning;
-			await m_ConfigService.LoadDiscordInfo(m_Client, Path.Combine(DataPath, "config"));
+			await m_ConfigService.LoadDiscordInfo(m_Client);
 			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 			Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 

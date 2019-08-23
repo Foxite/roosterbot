@@ -120,7 +120,7 @@ namespace RoosterBot.Schedule {
 
 						recordIndex++;
 					}
-					response += Util.FormatTextTable(cells, true);
+					response += Util.FormatTextTable(cells);
 					ReplyDeferred(response, info, records.Last());
 				}
 			}
@@ -155,7 +155,7 @@ namespace RoosterBot.Schedule {
 						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
 						i++;
 					}
-					response += Util.FormatTextTable(cells, false);
+					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
 						response += Resources.StudentScheduleModule_RespondWorkingDays_NotAtSchoolThisWeek;

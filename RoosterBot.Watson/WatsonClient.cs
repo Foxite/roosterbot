@@ -13,16 +13,14 @@ namespace RoosterBot.Watson {
 		private const string LogTag = "Watson";
 		private readonly string AssistantId;
 		private AssistantService m_Assistant;
-		private DiscordSocketClient m_Client;
 
-		public WatsonClient(DiscordSocketClient client, string apiKey, string assistantId) {
+		public WatsonClient(string apiKey, string assistantId) {
 			AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
 			};
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
-			m_Client = client;
 		}
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
