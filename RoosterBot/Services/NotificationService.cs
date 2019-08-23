@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
 
 namespace RoosterBot {
-	internal class SNSService : AbstractSNSService, IDisposable {
+	internal class NotificationService : AbstractSNSService, IDisposable {
 #if DEBUG
-		public SNSService(ConfigService config) : base(config) { }
+		public NotificationService(ConfigService config) : base(config) { }
 
 		public void Dispose() { }
 #else
