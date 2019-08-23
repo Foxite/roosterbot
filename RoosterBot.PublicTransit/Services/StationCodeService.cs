@@ -79,9 +79,9 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		public int Match(string input) {
-			int score = Util.Levenshtein(input, Names[0]);
+			int score = PublicTransitUtil.Levenshtein(input, Names[0]);
 			for (int i = 1; i < Names.Length; i++) {
-				score = Math.Min(score, Util.Levenshtein(input, Names[i]));
+				score = Math.Min(score, PublicTransitUtil.Levenshtein(input, Names[i]));
 			}
 			return score;
 		}
