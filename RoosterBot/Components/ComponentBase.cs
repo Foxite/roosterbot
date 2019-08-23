@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public abstract class ComponentBase {
+		[Obsolete("Use " + nameof(ComponentVersion))]
 		public abstract string VersionString { get; }
+		public abstract Version ComponentVersion { get; }
 		public string Name {
 			get {
 				string longName = GetType().Name;
