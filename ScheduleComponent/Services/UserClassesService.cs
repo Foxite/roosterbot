@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Discord;
-using RoosterBot;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class UserClassesService : IDisposable {
 		private AmazonDynamoDBClient m_Client;
 		private Regex m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");

@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Readers {
+namespace RoosterBot.Schedule {
 	public class TeacherInfoReader : TypeReader {
 		public async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			TeacherNameService tns = services.GetService<TeacherNameService>();

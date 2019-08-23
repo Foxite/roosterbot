@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	[LogTag("AfterScheduleModule"), HiddenFromList]
 	public class AfterScheduleModule : ScheduleModuleBase {
 		[Command("daarna", RunMode = RunMode.Async)]

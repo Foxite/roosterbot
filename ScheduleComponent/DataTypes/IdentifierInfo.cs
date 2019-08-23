@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ScheduleComponent.DataTypes {
+namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
 		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }

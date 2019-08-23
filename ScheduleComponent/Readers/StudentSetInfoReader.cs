@@ -4,11 +4,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Readers {
+namespace RoosterBot.Schedule {
 	public class StudentSetInfoReader : TypeReader {
 		private static readonly Regex s_StudentSetRegex = new Regex("^[1-4][Gg][ADad][12]$");
 

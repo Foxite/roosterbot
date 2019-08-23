@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Modules;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	[LogTag("UserClassModule"), Name("Jouw klas"), Summary("Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.")]
 	public class UserClassModule : EditableCmdModuleBase {
 		public UserClassesService Classes { get; set; }

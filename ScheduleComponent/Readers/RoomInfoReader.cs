@@ -2,10 +2,8 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord.Commands;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Readers {
+namespace RoosterBot.Schedule {
 	public class RoomInfoReader : TypeReader {
 		private static readonly Regex s_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 

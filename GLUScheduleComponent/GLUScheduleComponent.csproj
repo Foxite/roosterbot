@@ -54,9 +54,9 @@
       <Project>{294CD2AF-490F-4432-AC24-17EAA9F0E112}</Project>
       <Name>RoosterBot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ScheduleComponent\ScheduleComponent.csproj">
+    <ProjectReference Include="..\ScheduleComponent\RoosterBot.Schedule.csproj">
       <Project>{0C053E6F-97D0-431D-B4E3-A2B340E60665}</Project>
-      <Name>ScheduleComponent</Name>
+      <Name>RoosterBot.Schedule</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Modules;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	[LogTag("TeacherListModule"), Name("Leraren")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }

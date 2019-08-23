@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-namespace ScheduleComponent.DataTypes {
+namespace RoosterBot.Schedule {
 	public class RoomInfo : IdentifierInfo {
 		private static PropertyInfo s_RoomProperty = typeof(ScheduleRecord).GetProperty("StudentSets");
 		public string Room { get; set; }

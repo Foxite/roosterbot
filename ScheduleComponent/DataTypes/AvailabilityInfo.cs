@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScheduleComponent.DataTypes {
+namespace RoosterBot.Schedule {
 	public struct AvailabilityInfo {
 		public DateTime StartOfAvailability { get; }
 		public DateTime EndOfAvailability { get; }

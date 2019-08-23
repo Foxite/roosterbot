@@ -1,9 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using Discord;
 using Discord.Commands;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class LastScheduleCommandService {
 		private ConcurrentDictionary<SCIKey, ScheduleCommandInfo> m_SCIs;
 

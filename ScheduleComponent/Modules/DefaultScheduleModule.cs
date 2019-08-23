@@ -2,13 +2,8 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot;
-using RoosterBot.Attributes;
-using RoosterBot.Modules;
-using RoosterBot.Preconditions;
-using ScheduleComponent.Readers;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	// Provides several "virtual" commands that don't do anything useful, but serve as a single list item for 3 different "versions" of each command
 	// They do provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
 	[LogTag("DefaultCommandsModule"), Name("Rooster"),

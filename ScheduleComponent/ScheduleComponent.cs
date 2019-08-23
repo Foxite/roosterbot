@@ -3,14 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using RoosterBot;
-using RoosterBot.Services;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Modules;
-using ScheduleComponent.Readers;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent {
+namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
 		private UserClassesService m_UserClasses;
 

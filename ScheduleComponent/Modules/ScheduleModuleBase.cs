@@ -2,12 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using RoosterBot;
-using RoosterBot.Modules;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public TeacherNameService Teachers { get; set; }

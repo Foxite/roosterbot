@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class ScheduleService : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;

@@ -1,8 +1,7 @@
 ﻿using Discord;
-using ScheduleComponent.DataTypes;
 using System.Collections.Generic;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class ActivityNameService {
 		private List<GuildActivityLookup> m_Lookups;
 

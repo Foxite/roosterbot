@@ -2,12 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot;
-using RoosterBot.Attributes;
-using RoosterBot.Preconditions;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Modules {
+namespace RoosterBot.Schedule {
 	[LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]

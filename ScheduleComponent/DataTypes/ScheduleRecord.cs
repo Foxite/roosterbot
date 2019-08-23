@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ScheduleComponent.DataTypes {
+namespace RoosterBot.Schedule {
 	public class ScheduleRecord {
 		public string Activity { get; set; }
 		public DateTime Start { get; set; }

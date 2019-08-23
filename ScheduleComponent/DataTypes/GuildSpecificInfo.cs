@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace ScheduleComponent.DataTypes {
+namespace RoosterBot.Schedule {
 	public abstract class GuildSpecificInfo {
 		private ulong[] m_AllowedGuilds;
 

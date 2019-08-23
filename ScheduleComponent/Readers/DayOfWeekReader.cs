@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 
-namespace ScheduleComponent.Readers {
+namespace RoosterBot.Schedule {
 	public class DayOfWeekReader : TypeReader {
 		public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			try {

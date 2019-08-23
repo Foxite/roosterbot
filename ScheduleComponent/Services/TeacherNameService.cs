@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
 using Discord;
-using RoosterBot;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class TeacherNameService {
 		private List<GuildTeacherList> m_Records = new List<GuildTeacherList>();
 		

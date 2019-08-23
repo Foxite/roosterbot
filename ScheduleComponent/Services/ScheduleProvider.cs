@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Discord.Commands;
-using ScheduleComponent.DataTypes;
 
-namespace ScheduleComponent.Services {
+namespace RoosterBot.Schedule {
 	public class ScheduleProvider {
 		private Dictionary<Type, List<ScheduleService>> m_Schedules;
 

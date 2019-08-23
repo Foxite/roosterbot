@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScheduleComponent {
+namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
 		/// <summary>
 		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
