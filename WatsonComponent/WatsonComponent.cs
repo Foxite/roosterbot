@@ -6,10 +6,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using RoosterBot;
-using RoosterBot.Services;
 
-namespace WatsonComponent {
+namespace RoosterBot.Watson {
 	public class WatsonComponent : ComponentBase {
 		private WatsonClient m_Watson;
 		private DiscordSocketClient m_Client;

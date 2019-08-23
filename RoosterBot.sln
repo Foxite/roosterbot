@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStop", "AppStop\AppStop.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStart", "AppStart\AppStart.csproj", "{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatsonComponent", "WatsonComponent\WatsonComponent.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Watson", "WatsonComponent\RoosterBot.Watson.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLUScheduleComponent", "GLUScheduleComponent\GLUScheduleComponent.csproj", "{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}"
 	ProjectSection(ProjectDependencies) = postProject

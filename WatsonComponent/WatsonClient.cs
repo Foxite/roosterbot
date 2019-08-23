@@ -6,9 +6,8 @@ using Discord.WebSocket;
 using IBM.WatsonDeveloperCloud.Assistant.v2;
 using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
 using IBM.WatsonDeveloperCloud.Util;
-using RoosterBot;
 
-namespace WatsonComponent {
+namespace RoosterBot.Watson {
 	public class WatsonClient {
 		internal static readonly string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
