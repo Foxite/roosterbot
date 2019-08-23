@@ -271,3 +271,6 @@ Release.dat
 # Generated code
 **/*.gen.cs
 **/*.Designer.cs
+
+# RoosterBot.Meta folder exception
+!RoosterBot.Meta
