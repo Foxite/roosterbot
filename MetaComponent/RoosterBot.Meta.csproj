@@ -42,7 +42,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandListModule.cs" />
     <Compile Include="ControlModule.cs" />
     <Compile Include="HelpModule.cs" />
     <Compile Include="MetaComponent.cs" />
