@@ -7,8 +7,8 @@
     <ProjectGuid>{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GLUScheduleComponent</RootNamespace>
-    <AssemblyName>GLUScheduleComponent</AssemblyName>
+    <RootNamespace>RoosterBot.Schedule.GLU</RootNamespace>
+    <AssemblyName>RoosterBot.Schedule.GLU</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

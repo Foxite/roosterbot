@@ -7,8 +7,8 @@
     <ProjectGuid>{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WatsonComponent</RootNamespace>
-    <AssemblyName>WatsonComponent</AssemblyName>
+    <RootNamespace>RoosterBot.Watson</RootNamespace>
+    <AssemblyName>RoosterBot.Watson</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

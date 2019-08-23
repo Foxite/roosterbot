@@ -7,8 +7,8 @@
     <ProjectGuid>{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiscStuffComponent</RootNamespace>
-    <AssemblyName>MiscStuffComponent</AssemblyName>
+    <RootNamespace>RoosterBot.MiscStuff</RootNamespace>
+    <AssemblyName>RoosterBot.MiscStuff</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

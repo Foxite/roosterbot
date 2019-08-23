@@ -7,8 +7,8 @@
     <ProjectGuid>{0D452EB0-1D7F-4D32-B65E-41D5099A130C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PublicTransitComponent</RootNamespace>
-    <AssemblyName>PublicTransitComponent</AssemblyName>
+    <RootNamespace>RoosterBot.PublicTransit</RootNamespace>
+    <AssemblyName>RoosterBot.PublicTransit</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

@@ -7,8 +7,8 @@
     <ProjectGuid>{0C053E6F-97D0-431D-B4E3-A2B340E60665}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScheduleComponent</RootNamespace>
-    <AssemblyName>ScheduleComponent</AssemblyName>
+    <RootNamespace>RoosterBot.Schedule</RootNamespace>
+    <AssemblyName>RoosterBot.Schedule</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
