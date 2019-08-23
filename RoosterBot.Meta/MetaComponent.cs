@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : ComponentBase {
-		public override string VersionString => "1.0.0";
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);

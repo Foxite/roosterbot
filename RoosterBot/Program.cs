@@ -185,7 +185,7 @@ namespace RoosterBot {
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
 				foreach (ComponentBase component in Components.GetComponents()) {
-					startReport += $"- {component.Name}: {component.VersionString}\n";
+					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
 				}
 
 				await ownerDM.SendMessageAsync(startReport);

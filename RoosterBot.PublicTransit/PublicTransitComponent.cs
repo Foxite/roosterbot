@@ -11,7 +11,7 @@ namespace RoosterBot.PublicTransit {
 	public class PublicTransitComponent : ComponentBase {
 		private NSAPI m_NSAPI;
 
-		public override string VersionString => "1.0.0";
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			#region Config

@@ -9,10 +9,11 @@ using Discord.Commands;
 
 namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleComponent : ComponentBase {
-		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
+
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));

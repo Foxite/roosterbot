@@ -13,7 +13,7 @@ namespace RoosterBot.Watson {
 		private DiscordSocketClient m_Client;
 		private ConfigService m_Config;
 
-		public override string VersionString => "1.0.0";
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);

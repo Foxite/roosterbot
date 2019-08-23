@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : ComponentBase {
-		public override string VersionString => "1.0.0";
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		private string m_NotificationARN;
 		private SNSClient m_SNS;

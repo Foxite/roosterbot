@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
 		private UserClassesService m_UserClasses;
 
-		public override string VersionString => "2.0.0";
+		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);
