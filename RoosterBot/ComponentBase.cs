@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Services;
 
 namespace RoosterBot {
 	public abstract class ComponentBase {

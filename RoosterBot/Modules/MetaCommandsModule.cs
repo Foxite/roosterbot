@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Preconditions;
-using RoosterBot.Services;
 
-namespace RoosterBot.Modules {
+namespace RoosterBot {
 	[LogTag("MetaModule"), Name("Meta")]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }

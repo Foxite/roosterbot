@@ -4,10 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Services;
 
-namespace RoosterBot.Modules {
+namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
 		public ConfigService Config { get; set; }
 

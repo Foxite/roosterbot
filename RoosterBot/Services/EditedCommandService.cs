@@ -7,7 +7,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace RoosterBot.Services {
+namespace RoosterBot {
 	/* The class lets us change our response when a user edits their command (especially after an error occured).
 	 * This only works for the last message a user has sent.
 	 * 

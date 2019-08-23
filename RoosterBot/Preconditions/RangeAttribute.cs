@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 
-namespace RoosterBot.Preconditions {
+namespace RoosterBot {
 	public class RangeAttribute : ParameterPreconditionAttribute {
 		public int Min { get; }
 		public int Max { get; }
