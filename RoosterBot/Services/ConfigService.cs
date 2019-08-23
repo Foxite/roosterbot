@@ -10,7 +10,6 @@ namespace RoosterBot {
 		public   ActivityType ActivityType { get; }
 		public   string		  GameString { get; }
 		public   IUser		  BotOwner { get; private set; }
-		internal string		  SNSCriticalFailureARN { get; }
 		internal bool		  ReportStartupVersionToOwner { get; }
 		private  ulong		  m_BotOwnerId;
 
@@ -31,7 +30,6 @@ namespace RoosterBot {
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
 			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
 			GameString = jsonConfig["gameString"].ToObject<string>();
-			SNSCriticalFailureARN = jsonConfig["snsCF_ARN"].ToObject<string>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
 			m_BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 		}
