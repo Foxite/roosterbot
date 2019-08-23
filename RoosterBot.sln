@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.AWS", "RoosterBo
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBotTests", "RoosterBotTests\RoosterBotTests.csproj", "{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
