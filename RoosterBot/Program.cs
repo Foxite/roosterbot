@@ -14,7 +14,7 @@ namespace RoosterBot {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
 
-		private ProgramState m_State; // TODO can we use m_Client.ConnectionState instead?
+		private bool m_BeforeStart;
 		private bool m_StopFlagSet;
 		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
@@ -53,8 +53,7 @@ namespace RoosterBot {
 
 		private async Task MainAsync() {
 			Logger.Info("Main", "Starting program");
-			m_State = ProgramState.BeforeStart;
-
+			
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			m_ConfigService = new ConfigService(configFile, out string authToken);
 
@@ -126,7 +125,7 @@ namespace RoosterBot {
 						})
 					});
 
-				} while (m_State == ProgramState.BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+				} while (m_BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 			}
 			cts.Cancel();
 			cts.Dispose();
@@ -138,7 +137,6 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.Ready += OnClientReady;
-			m_Client.Connected += OnClientConnected;
 			m_Client.Disconnected += OnClientDisconnected;
 		}
 
@@ -154,17 +152,11 @@ namespace RoosterBot {
 			return serviceCollection;
 		}
 
-		private Task OnClientConnected() {
-			m_State = ProgramState.BotRunning;
-			return Task.CompletedTask;
-		}
-
 		private Task OnClientDisconnected(Exception ex) {
-			m_State = ProgramState.BotStopped;
 			Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
-				await Task.Delay(20000);
-				if (m_State != ProgramState.BotRunning) {
-					string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
+				await Task.Delay(30000);
+				if (m_Client.ConnectionState != ConnectionState.Connected) {
+					string report = $"RoosterBot has been disconnected for more than thirty seconds. ";
 					if (ex == null) {
 						report += "No exception is attached.";
 					} else {
@@ -182,7 +174,6 @@ namespace RoosterBot {
 		}
 
 		private async Task OnClientReady() {
-			m_State = ProgramState.BotRunning;
 			await m_ConfigService.LoadDiscordInfo(m_Client);
 			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 			Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
