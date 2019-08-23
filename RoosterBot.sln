@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.GLU", "
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaComponent", "MetaComponent\MetaComponent.csproj", "{D8F8831C-003C-46BF-90E5-7924E48F7E49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Meta", "MetaComponent\RoosterBot.Meta.csproj", "{D8F8831C-003C-46BF-90E5-7924E48F7E49}"
 	ProjectSection(ProjectDependencies) = postProject
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
 	EndProjectSection
