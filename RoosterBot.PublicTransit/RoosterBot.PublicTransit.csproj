@@ -63,6 +63,7 @@
     <Compile Include="Services\XmlRestApi.cs" />
     <Compile Include="PublicTransitComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicTransitUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">

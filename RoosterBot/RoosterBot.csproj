@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
+    <Compile Include="CommandHandler.cs" />
     <Compile Include="ComponentBase.cs" />
     <Compile Include="ComponentManager.cs" />
     <Compile Include="Constants.gen.cs">
