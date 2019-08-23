@@ -1,16 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using RoosterBot;
-using RoosterBot.Services;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
+using RoosterBot.Schedule;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GLUScheduleComponent {
+namespace RoosterBot.GLUSchedule {
 	public class GLUScheduleComponent : ComponentBase {
 		public override string VersionString => "0.1.0";
 		private List<ScheduleRegistryInfo> m_Schedules;

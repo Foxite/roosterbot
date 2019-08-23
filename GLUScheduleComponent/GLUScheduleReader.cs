@@ -1,7 +1,5 @@
 ﻿using CsvHelper;
-using RoosterBot;
-using ScheduleComponent.DataTypes;
-using ScheduleComponent.Services;
+using RoosterBot.Schedule;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GLUScheduleComponent {
+namespace RoosterBot.GLUSchedule {
 	public class GLUScheduleReader : ScheduleReaderBase {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;

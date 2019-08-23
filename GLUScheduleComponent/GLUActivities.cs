@@ -1,6 +1,4 @@
-﻿using RoosterBot;
-
-namespace GLUScheduleComponent {
+﻿namespace RoosterBot.GLUSchedule {
 	public class GLUActivities {
 		public string GetActivityFromAbbr(string abbr) {
 			switch (abbr) {
