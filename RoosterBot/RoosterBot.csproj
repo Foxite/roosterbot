@@ -78,8 +78,8 @@
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="CommandHandler.cs" />
-    <Compile Include="ComponentBase.cs" />
-    <Compile Include="ComponentManager.cs" />
+    <Compile Include="Components\ComponentBase.cs" />
+    <Compile Include="Components\ComponentManager.cs" />
     <Compile Include="Constants.gen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
