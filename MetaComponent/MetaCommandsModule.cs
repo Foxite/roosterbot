@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot;
 
-namespace MetaComponent {
+namespace RoosterBot.Meta {
 	[LogTag("MetaModule"), Name("#" + nameof(Resources.MetaCommandsModule_Name))]
 	public class MetaCommandsModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
