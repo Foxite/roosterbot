@@ -136,12 +136,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.CloudWatch">
-      <Version>3.3.102.20</Version>
-    </PackageReference>
-    <PackageReference Include="AWSSDK.SimpleNotificationService">
-      <Version>3.3.101.54</Version>
-    </PackageReference>
     <PackageReference Include="Ben.Demystifier">
       <Version>0.1.4</Version>
     </PackageReference>
