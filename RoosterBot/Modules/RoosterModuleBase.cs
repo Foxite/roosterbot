@@ -4,11 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Services;
 
-namespace RoosterBot.Modules {
-	// TODO this class and its children should never use Logger, only the Log property here
+namespace RoosterBot {
+	// TODO this class and its children should never use Logger, only the Log property her
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
 		public ConfigService Config { get; set; }
 

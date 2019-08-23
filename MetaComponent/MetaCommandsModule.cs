@@ -3,10 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot;
-using RoosterBot.Attributes;
-using RoosterBot.Modules;
-using RoosterBot.Preconditions;
-using RoosterBot.Services;
 
 namespace MetaComponent {
 	[LogTag("MetaModule"), Name("#" + nameof(Resources.MetaCommandsModule_Name))]

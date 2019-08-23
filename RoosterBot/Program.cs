@@ -9,7 +9,6 @@ using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Services;
 
 namespace RoosterBot {
 	public class Program {

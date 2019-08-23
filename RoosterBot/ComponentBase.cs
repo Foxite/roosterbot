@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Services;
 
 namespace RoosterBot {
 	public abstract class ComponentBase {

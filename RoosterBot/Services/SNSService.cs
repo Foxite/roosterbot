@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
 
-namespace RoosterBot.Services {
+namespace RoosterBot {
 	internal class SNSService : AbstractSNSService, IDisposable {
 #if DEBUG
 		public SNSService(ConfigService config) : base(config) { }

@@ -1,5 +1,4 @@
 ﻿using RoosterBot;
-using RoosterBot.Services;
 using System;
 using System.Threading.Tasks;
 using Discord.Commands;

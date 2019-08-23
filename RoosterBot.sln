@@ -5,19 +5,19 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot", "RoosterBot\RoosterBot.csproj", "{294CD2AF-490F-4432-AC24-17EAA9F0E112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleComponent", "ScheduleComponent\ScheduleComponent.csproj", "{0C053E6F-97D0-431D-B4E3-A2B340E60665}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule", "RoosterBot.Schedule\RoosterBot.Schedule.csproj", "{0C053E6F-97D0-431D-B4E3-A2B340E60665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicTransitComponent", "TrainComponent\PublicTransitComponent.csproj", "{0D452EB0-1D7F-4D32-B65E-41D5099A130C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.PublicTransit", "RoosterBot.PublicTransit\RoosterBot.PublicTransit.csproj", "{0D452EB0-1D7F-4D32-B65E-41D5099A130C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiscStuffComponent", "MiscStuffComponent\MiscStuffComponent.csproj", "{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.MiscStuff", "RoosterBot.MiscStuff\RoosterBot.MiscStuff.csproj", "{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStop", "AppStop\AppStop.csproj", "{EE3B243E-3A2A-408B-985B-77B3C046DB8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStart", "AppStart\AppStart.csproj", "{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatsonComponent", "WatsonComponent\WatsonComponent.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Watson", "RoosterBot.Watson\RoosterBot.Watson.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLUScheduleComponent", "GLUScheduleComponent\GLUScheduleComponent.csproj", "{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.GLU", "RoosterBot.Schedule.GLU\RoosterBot.Schedule.GLU.csproj", "{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0C053E6F-97D0-431D-B4E3-A2B340E60665} = {0C053E6F-97D0-431D-B4E3-A2B340E60665}
 		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}

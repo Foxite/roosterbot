@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace RoosterBot.Services {
+namespace RoosterBot {
 	public class HelpService {
 		private Dictionary<string, string> m_ComponentHelpTexts;
 

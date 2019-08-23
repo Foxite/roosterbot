@@ -4,9 +4,8 @@ using Discord;
 using Discord.Commands;
 using Discord.Net;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.Services;
 
-namespace RoosterBot.Preconditions {
+namespace RoosterBot {
 	public class RequireBotManagerAttribute : RoosterPreconditionAttribute {
 		public override string Summary => Resources.RequireBotManagerAttribute_Summary;
 

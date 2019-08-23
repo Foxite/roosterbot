@@ -1,6 +1,6 @@
 MetaComponent.dll
-ScheduleComponent.dll
-GLUScheduleComponent.dll
-MiscStuffComponent.dll
-PublicTransitComponent.dll
-WatsonComponent.dll
+RoosterBot.Schedule.dll
+RoosterBot.Schedule.GLU.dll
+RoosterBot.MiscStuff.dll
+RoosterBot.PublicTransit.dll
+RoosterBot.Watson.dll

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Newtonsoft.Json.Linq;
 
-namespace RoosterBot.Services {
+namespace RoosterBot {
 	public class ConfigService {
 		public   bool		  ErrorReactions { get; }
 		public   string		  CommandPrefix { get; }
