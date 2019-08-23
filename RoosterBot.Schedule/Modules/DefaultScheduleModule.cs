@@ -7,9 +7,9 @@ namespace RoosterBot.Schedule {
 	// Provides several "virtual" commands that don't do much, but serve as a single list item for 3 different "versions" of each command
 	// They also replace missing IdentifierInfo parameters with "ik" and re-execute the command,
 	//  and provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
-	[LogTag("DefaultCommandsModule"), Name("Rooster"),
-		Summary("Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt."),
-		Remarks("Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.")]
+	[LogTag("DefaultCommandsModule"), Name("#" + nameof(Resources.DefaultScheduleModule_Name)),
+		Summary("#" + nameof(Resources.DefaultScheduleModule_Summary)),
+		Remarks("#" + nameof(Resources.DefaultScheduleModule_Remarks))]
 	public class DefaultScheduleModule : EditableCmdModuleBase {
 		[Priority(-10), Command("nu", RunMode = RunMode.Sync), Alias("rooster"), Summary("#" + nameof(Resources.DefaultScheduleModule_DefaultCurrentCommand_Summary))]
 		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
