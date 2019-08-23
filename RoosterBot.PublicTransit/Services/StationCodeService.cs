@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using RoosterBot;
 
-namespace PublicTransitComponent.Services {
+namespace RoosterBot.PublicTransit {
 	public class StationCodeService {
 		private List<StationInfo> m_Stations;
 

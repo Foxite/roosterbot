@@ -1,14 +1,10 @@
-﻿using RoosterBot;
-using RoosterBot.Services;
-using Microsoft.Extensions.DependencyInjection;
-using PublicTransitComponent.Services;
-using PublicTransitComponent.Modules;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Threading.Tasks;
 
-namespace PublicTransitComponent {
+namespace RoosterBot.PublicTransit {
 	public class PublicTransitComponent : ComponentBase {
 		private NSAPI m_NSAPI;
 

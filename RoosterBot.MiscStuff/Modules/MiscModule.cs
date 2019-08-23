@@ -1,11 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Modules;
-using RoosterBot.Preconditions;
 
-namespace MiscStuffComponent.Modules {
+namespace RoosterBot.MiscStuff {
 	[LogTag("MiscModule")]
 	public class MiscModule : RoosterModuleBase {
 		[Command("send"), RequireBotManager, HiddenFromList]

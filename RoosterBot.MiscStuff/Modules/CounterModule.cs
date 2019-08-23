@@ -2,11 +2,8 @@
 using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
-using MiscStuffComponent.Services;
-using RoosterBot.Modules;
-using RoosterBot.Attributes;
 
-namespace MiscStuffComponent.Modules {
+namespace RoosterBot.MiscStuff {
 	[LogTag("CounterModule"), Name("Counters")]
 	public class CounterModule : EditableCmdModuleBase { // Does not use editable commands
 		public CounterService Service { get; set; }

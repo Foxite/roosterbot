@@ -1,13 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
-using RoosterBot.Modules;
-using PublicTransitComponent.Services;
-using PublicTransitComponent.DataTypes;
-using RoosterBot.Attributes;
-using RoosterBot;
 using System;
 
-namespace PublicTransitComponent.Modules {
+namespace RoosterBot.PublicTransit {
 	[LogTag("PublicTransitModule"), Name("OV")]
 	public class PTModule : RoosterModuleBase {
 		public NSAPI NSAPI { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MiscStuffComponent.Services {
+namespace RoosterBot.MiscStuff {
 	public class CounterService {
 		private string m_CounterFolder;
 

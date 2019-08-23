@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PublicTransitComponent.DataTypes {
+namespace RoosterBot.PublicTransit {
 	/// <summary>
 	/// A trip from one location to another, 
 	/// </summary>

@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace PublicTransitComponent.Services {
+namespace RoosterBot.PublicTransit {
 	public class XmlRestApi : IRestApiAsync, IDisposable {
 		private string m_CallDomain;
 		private string m_Username;

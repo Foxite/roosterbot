@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace PublicTransitComponent.Services {
+namespace RoosterBot.PublicTransit {
 	public interface IRestApi {
 		string GetCallDomain();
 

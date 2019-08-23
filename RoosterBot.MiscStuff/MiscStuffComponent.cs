@@ -1,14 +1,10 @@
-﻿using RoosterBot;
-using RoosterBot.Services;
-using Microsoft.Extensions.DependencyInjection;
-using MiscStuffComponent.Services;
-using MiscStuffComponent.Modules;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace MiscStuffComponent {
+namespace RoosterBot.MiscStuff {
 	public class MiscStuffComponent : ComponentBase {
 		public string ConfigPath { get; private set; }
 

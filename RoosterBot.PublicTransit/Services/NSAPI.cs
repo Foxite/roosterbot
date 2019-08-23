@@ -4,9 +4,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-using PublicTransitComponent.DataTypes;
 
-namespace PublicTransitComponent.Services {
+namespace RoosterBot.PublicTransit {
 	public class NSAPI : IDisposable {
 		// Documentation: https://www.ns.nl/en/travel-information/ns-api/
 		private XmlRestApi m_RestApi;
