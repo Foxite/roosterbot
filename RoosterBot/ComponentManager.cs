@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot {
-	public class ComponentManager {
+	public sealed class ComponentManager {
 		private Dictionary<Type, ComponentBase> m_Components;
 		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
 
@@ -17,7 +17,7 @@ namespace RoosterBot {
 
 		private ComponentManager() { }
 
-		public static async Task<ComponentManager> CreateAsync(IServiceCollection serviceCollection) {
+		internal static async Task<ComponentManager> CreateAsync(IServiceCollection serviceCollection) {
 			ComponentManager cm = new ComponentManager();
 			await cm.SetupComponents(serviceCollection);
 			return cm;

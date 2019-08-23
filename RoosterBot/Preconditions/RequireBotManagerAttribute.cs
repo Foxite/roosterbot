@@ -6,7 +6,7 @@ using Discord.Net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	public class RequireBotManagerAttribute : RoosterPreconditionAttribute {
+	public sealed class RequireBotManagerAttribute : RoosterPreconditionAttribute {
 		public override string Summary => Resources.RequireBotManagerAttribute_Summary;
 
 		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {

@@ -10,7 +10,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	public class Program {
+	public sealed class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
 
@@ -23,6 +23,9 @@ namespace RoosterBot {
 
 		public ComponentManager Components { get; private set; }
 		public CommandHandler CommandHandler { get; set; }
+
+		private Program() { }
+
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
 

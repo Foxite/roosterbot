@@ -4,7 +4,7 @@ using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
-	public class ConfigService {
+	public sealed class ConfigService {
 		public   bool		  ErrorReactions { get; }
 		public   string		  CommandPrefix { get; }
 		public   ActivityType ActivityType { get; }
