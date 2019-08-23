@@ -53,6 +53,7 @@ namespace RoosterBot {
 
 		private async Task MainAsync() {
 			Logger.Info("Main", "Starting program");
+			m_BeforeStart = true;
 			
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			m_ConfigService = new ConfigService(configFile, out string authToken);
@@ -189,6 +190,8 @@ namespace RoosterBot {
 
 				await ownerDM.SendMessageAsync(startReport);
 			}
+
+			m_BeforeStart = false;
 		}
 
 		/// <summary>
@@ -197,9 +200,5 @@ namespace RoosterBot {
 		public void Shutdown() {
 			m_StopFlagSet = true;
 		}
-	}
-
-	public enum ProgramState {
-		BeforeStart, BotRunning, BotStopped
 	}
 }
