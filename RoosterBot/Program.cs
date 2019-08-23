@@ -19,7 +19,7 @@ namespace RoosterBot {
 		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
 		private ConfigService m_ConfigService;
-		private SNSService m_SNSService;
+		private NotificationService m_NotificationService;
 
 		public ComponentManager Components { get; private set; }
 		public CommandHandler CommandHandler { get; set; }
@@ -142,11 +142,11 @@ namespace RoosterBot {
 
 		private IServiceCollection CreateRBServices() {
 			HelpService helpService = new HelpService();
-			m_SNSService = new SNSService(m_ConfigService);
+			m_NotificationService = new NotificationService();
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
-				.AddSingleton(m_SNSService)
+				.AddSingleton(m_NotificationService)
 				.AddSingleton(helpService)
 				.AddSingleton(m_Client);
 			return serviceCollection;
@@ -163,7 +163,7 @@ namespace RoosterBot {
 						report += $"The following exception is attached: {ex.ToStringDemystified()}";
 					}
 					report += "\n\nThe bot will attempt to restart in 20 seconds.";
-					await m_SNSService.SendCriticalErrorNotificationAsync(report);
+					await m_NotificationService.AddNotificationAsync(report);
 
 					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 					Shutdown();
