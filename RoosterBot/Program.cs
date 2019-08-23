@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,16 +14,15 @@ namespace RoosterBot {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 		public static Program Instance { get; private set; }
 
-		public ComponentManager Components { get; private set; }
-
 		private ProgramState m_State; // TODO can we use m_Client.ConnectionState instead?
 		private bool m_StopFlagSet;
 		private bool m_VersionNotReported = true;
 		private DiscordSocketClient m_Client;
-		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private SNSService m_SNSService;
 
+		public ComponentManager Components { get; private set; }
+		public CommandHandler CommandHandler { get; set; }
 		private static int Main(string[] args) {
 			string indicatorPath = Path.Combine(DataPath, "running");
 
@@ -61,6 +58,8 @@ namespace RoosterBot {
 			SetupClient();
 
 			IServiceCollection serviceCollection = CreateRBServices();
+
+			CommandHandler = new CommandHandler(serviceCollection, m_ConfigService, m_Client);
 
 			Components = await ComponentManager.CreateAsync(serviceCollection);
 
@@ -138,15 +137,9 @@ namespace RoosterBot {
 			m_Client.Ready += OnClientReady;
 			m_Client.Connected += OnClientConnected;
 			m_Client.Disconnected += OnClientDisconnected;
-			m_Client.MessageReceived += HandleNewCommand;
 		}
 
 		private IServiceCollection CreateRBServices() {
-			m_Commands = new EditedCommandService(m_Client);
-			m_Commands.Log += Logger.LogSync;
-			m_Commands.CommandEdited += HandleEditedCommand;
-			m_Commands.CommandExecuted += OnCommandExecuted;
-
 			HelpService helpService = new HelpService();
 			m_SNSService = new SNSService(m_ConfigService);
 
@@ -154,124 +147,8 @@ namespace RoosterBot {
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_SNSService)
 				.AddSingleton(helpService)
-				.AddSingleton(m_Commands)
 				.AddSingleton(m_Client);
 			return serviceCollection;
-		}
-
-		private bool IsMessageCommand(IMessage message, out int argPos) {
-			argPos = 0;
-			if (message.Source == MessageSource.User &&
-				message is IUserMessage userMessage &&
-				message.Content.Length > m_ConfigService.CommandPrefix.Length &&
-				userMessage.HasStringPrefix(m_ConfigService.CommandPrefix, ref argPos)) {
-				// First char after prefix
-				char firstChar = message.Content.Substring(m_ConfigService.CommandPrefix.Length)[0];
-				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
-					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private async Task HandleNewCommand(SocketMessage socketMessage) {
-			// Only process commands from users
-			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
-			if (IsMessageCommand(socketMessage, out int argPos)) {
-				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null);
-
-				await m_Commands.ExecuteAsync(context, argPos, Components.Services);
-			}
-		}
-
-		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
-			if (IsMessageCommand(command, out int argPos)) {
-				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
-
-				await m_Commands.ExecuteAsync(context, argPos, Components.Services);
-			} else {
-				await ourResponse.DeleteAsync();
-			}
-		}
-
-		/// <summary>
-		/// Executes a command according to specified string input, regardless of the actual content of the message.
-		/// </summary>
-		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
-		public async Task ExecuteSpecificCommand(IUserMessage initialResponse, string specificInput, IUserMessage message, string calltag) {
-			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse, calltag);
-
-			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
-
-			await m_Commands.ExecuteAsync(context, specificInput, Components.Services);
-		}
-
-		private async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
-			if (!result.IsSuccess) {
-				string response = null;
-				bool bad = false;
-				string badReport = $"\"{context.Message}\": ";
-
-				if (result.Error.HasValue) {
-					switch (result.Error.Value) {
-						case CommandError.UnknownCommand:
-							response = string.Format(Resources.Program_OnCommandExecuted_UnknownCommand, m_ConfigService.CommandPrefix);
-							break;
-						case CommandError.BadArgCount:
-							response = Resources.Program_OnCommandExecuted_BadArgCount;
-							break;
-						case CommandError.UnmetPrecondition:
-							response = result.ErrorReason;
-							break;
-						case CommandError.ParseFailed:
-							response = Resources.Program_OnCommandExecuted_ParseFailed;
-							break;
-						case CommandError.ObjectNotFound:
-							badReport += "ObjectNotFound";
-							bad = true;
-							break;
-						case CommandError.MultipleMatches:
-							badReport += "MultipleMatches";
-							bad = true;
-							break;
-						case CommandError.Exception:
-							badReport += "Exception\n";
-							badReport += result.ErrorReason;
-							bad = true;
-							break;
-						case CommandError.Unsuccessful:
-							badReport += "Unsuccessful\n";
-							badReport += result.ErrorReason;
-							bad = true;
-							break;
-						default:
-							badReport += "Unknown error: " + result.Error.Value;
-							bad = true;
-							break;
-					}
-				} else {
-					badReport += "No error reason";
-					bad = true;
-				}
-
-				if (bad) {
-					Logger.Error("Program", "Error occurred while parsing command " + badReport);
-					if (m_ConfigService.BotOwner != null) {
-						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
-					}
-
-					response = Resources.RoosterBot_FatalError;
-				}
-
-				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;
-				if (initialResponse == null) {
-					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
-				} else {
-					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
-				}
-			}
 		}
 
 		private Task OnClientConnected() {
