@@ -44,6 +44,7 @@ namespace RoosterBot {
 		}
 
 		private async Task<List<string>> ReadComponentsFileAsync(string path) {
+			// TODO move components.txt into DataPath rather than git
 			List<string> assemblyPaths = new List<string>();
 			using (StreamReader fs = File.OpenText(path)) {
 				while (!fs.EndOfStream) {
