@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 
-namespace ScheduleComponent {
+namespace RoosterBot.Schedule {
 	[LogTag("TeacherListModule"), Name("#" + nameof(Resources.TeacherListModule_Name))]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
