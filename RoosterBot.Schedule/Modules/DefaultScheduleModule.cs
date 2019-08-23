@@ -39,14 +39,9 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Priority(-9), Command("dag", RunMode = RunMode.Sync), HiddenFromList]
-		public async Task DefaultWeekdayCommand(DayOfWeek day) {
-			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(day)} ik", Context.Message, "default dag");
-		}
-
 		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.")]
-		public async Task DefaultWeekdayCommand([Remainder] string wat_en_weekdag = "") {
-			await ReplyAsync("Ik weet niet of je het over een leraar, klas of lokaal hebt, en/of ik begrijp niet welke weekdag je bedoelt.");
+		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
+			await Program.Instance.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(dag)} ik", Context.Message, "default dag");
 		}
 
 		[Priority(-10), Command("morgen", RunMode = RunMode.Sync), Summary("Wat er morgen op het rooster staat.")]
