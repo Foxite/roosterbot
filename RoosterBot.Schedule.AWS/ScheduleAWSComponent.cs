@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule.AWS {
 			string         dbKeyId     = jsonConfig["ucdb"]["keyId"    ].ToObject<string>();
 			string	       dbSecretKey = jsonConfig["ucdb"]["secretKey"].ToObject<string>();
 			string         tableName   = jsonConfig["ucdb"]["tableName"].ToObject<string>();
-			RegionEndpoint dbEndpoint  = jsonConfig["ucdb"]["endpoint" ].ToObject<RegionEndpoint>();
+			RegionEndpoint dbEndpoint  = RegionEndpoint.GetBySystemName(jsonConfig["ucdb"]["endpoint"].ToObject<string>());
 			m_UserClasses = new DynamoDBUserClassesService(dbKeyId, dbSecretKey, dbEndpoint, tableName);
 
 			services.AddSingleton(m_UserClasses);

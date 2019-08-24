@@ -19,8 +19,7 @@ namespace RoosterBot.AWS {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
 			m_NotificationARN = jsonConfig["sns"]["arn"].ToObject<string>();
-			m_SNSEndpoint = jsonConfig["sns"]["endpoint"].ToObject<RegionEndpoint>();
-
+			m_SNSEndpoint = RegionEndpoint.GetBySystemName(jsonConfig["sns"]["endpoint"].ToObject<string>());
 
 			return Task.CompletedTask;
 		}
