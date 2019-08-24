@@ -3,30 +3,20 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
-		private UserClassesService m_UserClasses;
 
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);
 
-			TeacherNameService teachers = new TeacherNameService();
-
-			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
-			
-			m_UserClasses = new UserClassesService(jsonConfig["databaseKeyId"].ToObject<string>(), jsonConfig["databaseSecretKey"].ToObject<string>());
-
 			services
-				.AddSingleton(teachers)
+				.AddSingleton(new TeacherNameService())
 				.AddSingleton(new ScheduleProvider())
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new ActivityNameService())
-				.AddSingleton(m_UserClasses);
+				.AddSingleton(new ActivityNameService());
 
 			Logger.Debug("ScheduleComponent", "Started services");
 
@@ -52,11 +42,6 @@ namespace RoosterBot.Schedule {
 			help.AddHelpSection("rooster", Resources.ScheduleComponent_HelpText_Rooster);
 
 			help.AddHelpSection("klas", Resources.ScheduleComponent_HelpText_Class);
-		}
-
-		public override Task OnShutdown() {
-			m_UserClasses.Dispose();
-			return Task.CompletedTask;
 		}
 	}
 }

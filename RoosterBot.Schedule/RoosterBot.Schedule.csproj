@@ -87,9 +87,9 @@
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="ScheduleUtil.cs" />
     <Compile Include="Services\ActivityNameService.cs" />
+    <Compile Include="Services\IUserClassesService.cs" />
     <Compile Include="Services\ScheduleProvider.cs" />
     <Compile Include="Services\ScheduleReaderBase.cs" />
-    <Compile Include="Services\UserClassesService.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />

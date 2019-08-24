@@ -25,7 +25,7 @@ namespace RoosterBot.Schedule {
 				} else {
 					return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.StudentSetInfoReader_CheckFailed_Direct);
 				}
-				StudentSetInfo result = await services.GetService<UserClassesService>().GetClassForDiscordUser(user);
+				StudentSetInfo result = await services.GetService<IUserClassesService>().GetClassForDiscordUserAsync(context, user);
 				if (result is null) {
 					string message;
 					if (byMention) {
