@@ -22,7 +22,7 @@ namespace RoosterBot.Schedule.AWS {
 			RegionEndpoint dbEndpoint  = RegionEndpoint.GetBySystemName(jsonConfig["ucdb"]["endpoint"].ToObject<string>());
 			m_UserClasses = new DynamoDBUserClassesService(dbKeyId, dbSecretKey, dbEndpoint, tableName);
 
-			services.AddSingleton(m_UserClasses);
+			services.AddSingleton(typeof(IUserClassesService), m_UserClasses);
 
 			return Task.CompletedTask;
 		}
