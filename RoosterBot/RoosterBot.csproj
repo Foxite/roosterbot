@@ -112,9 +112,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="components.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Constants.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Constants.gen.cs</LastGenOutput>

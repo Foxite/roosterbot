@@ -1,7 +1,0 @@
-RoosterBot.Meta.dll
-RoosterBot.AWS.dll
-RoosterBot.Schedule.dll
-RoosterBot.Schedule.GLU.dll
-RoosterBot.MiscStuff.dll
-RoosterBot.PublicTransit.dll
-RoosterBot.Watson.dll

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {
@@ -30,7 +32,7 @@ namespace RoosterBot {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
-			List<string> assemblyPaths = await ReadComponentsFileAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "components.txt"));
+			IEnumerable<string> assemblyPaths = ReadComponentsFile();
 			List<Assembly> assemblies = LoadAssemblies(assemblyPaths);
 			Type[] types = FindComponentClasses(assemblies);
 
@@ -43,15 +45,26 @@ namespace RoosterBot {
 			await AddComponentModulesAsync(Services);
 		}
 
-		private async Task<List<string>> ReadComponentsFileAsync(string path) {
-			// TODO move components.txt into DataPath rather than git
+		private IEnumerable<string> ReadComponentsFile() {
 			List<string> assemblyPaths = new List<string>();
-			using (StreamReader fs = File.OpenText(path)) {
-				while (!fs.EndOfStream) {
-					assemblyPaths.Add(await fs.ReadLineAsync());
-				}
+			string filePath = Path.Combine(Program.DataPath, "Config", "Components.json");
+
+			if (!File.Exists(filePath)) {
+				throw new FileNotFoundException("Components.json was not found in the DataPath.");
 			}
-			return assemblyPaths;
+
+			JObject json = null;
+			try {
+				json = JObject.Parse(File.ReadAllText(filePath));
+			} catch (JsonReaderException e) {
+				throw new FormatException("Components.json contains invalid JSON.", e);
+			}
+
+			try {
+				return json["components"].ToObject<JArray>().Select(jt => jt.ToObject<string>() + ".dll");
+			} catch (Exception e) {
+				throw new FormatException("Components.json contains invalid data.", e);
+			}
 		}
 
 		private List<Assembly> LoadAssemblies(IEnumerable<string> assemblyPaths) {
