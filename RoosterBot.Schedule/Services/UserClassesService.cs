@@ -7,6 +7,8 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Discord;
 
 namespace RoosterBot.Schedule {
+	// TODO split this into an abstract class (in this assembly) and an implementation (in another)
+	// This will allow us to easily switch to a new cloud hosting in the near future
 	public class UserClassesService : IDisposable {
 		private AmazonDynamoDBClient m_Client;
 		private Regex m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");

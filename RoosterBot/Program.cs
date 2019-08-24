@@ -9,6 +9,7 @@ using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
+// TODO write a readme on each component
 namespace RoosterBot {
 	public sealed class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
