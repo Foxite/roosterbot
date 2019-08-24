@@ -5,6 +5,8 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
+	// TODO using IServiceProvider directly is apparently considered an anti-pattern, and should be done in framework using DI
+	// https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/
 	public abstract class ComponentBase {
 		public abstract Version ComponentVersion { get; }
 		public string Name {
