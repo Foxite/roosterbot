@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
@@ -30,8 +31,12 @@ namespace RoosterBot {
 			string indicatorPath = Path.Combine(DataPath, "running");
 
 			if (File.Exists(indicatorPath)) {
-				Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
-				return 1;
+				if (args.Contains("--override-running")) {
+					Console.WriteLine("The bot appears to be already running, but a command line argument has overridden this. This may lead to log file corruption.");
+				} else {
+					Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
+					return 1;
+				}
 			} else {
 				File.Create(indicatorPath).Dispose();
 			}
