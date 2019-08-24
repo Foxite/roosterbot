@@ -86,6 +86,7 @@ namespace RoosterBot {
 			await m_Client.LogoutAsync();
 
 			await Components.ShutdownComponentsAsync();
+			CommandHandler.Dispose();
 			m_Client.Dispose();
 		}
 

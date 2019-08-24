@@ -2,10 +2,11 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
-	public sealed class CommandHandler {
+	public sealed class CommandHandler : IDisposable {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
 		private DiscordSocketClient m_Client;
@@ -138,5 +139,26 @@ namespace RoosterBot {
 				}
 			}
 		}
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		void Dispose(bool disposing) {
+			if (!disposedValue) {
+				if (disposing) {
+					((IDisposable) m_Commands).Dispose();
+				}
+
+				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+				// TODO: set large fields to null.
+
+				disposedValue = true;
+			}
+		}
+
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
 	}
 }
