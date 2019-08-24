@@ -1,5 +1,5 @@
 # RoosterBot
 
-RoosterBot is a Discord bot written in C# that allows users to see information on any schedule.
+RoosterBot is a foundation for a multi-purpose Discord bot written in C#. It uses [Discord.NET](https://github.com/discord-net/Discord.Net), [NewtonSoft.Json](https://www.newtonsoft.com/json)	and [Ben.Demystifier](https://github.com/benaadams/Ben.Demystifier).
 
-It uses [Discord.NET](https://github.com/discord-net/Discord.Net), [CsvHelper](https://github.com/JoshClose/CsvHelper), and [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json). It has some features designed for deployment to Amazon AWS.
+It has no functionality on its own, but it loads external assemblies known as Components. Refer to the folders in this repository for more documentation on each component.
