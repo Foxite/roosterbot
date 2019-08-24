@@ -4,11 +4,11 @@ using System;
 using System.Threading.Tasks;
 
 namespace RoosterBot.AWS {
-	public class SNSClient : IDisposable {
+	public class SNSNotificationHandler : IDisposable {
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private string m_ARN;
 
-		public SNSClient(NotificationService notificationService, string arn, RegionEndpoint endpoint) {
+		public SNSNotificationHandler(NotificationService notificationService, string arn, RegionEndpoint endpoint) {
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(endpoint);
 			m_ARN = arn;
 
@@ -30,7 +30,9 @@ namespace RoosterBot.AWS {
 		protected virtual void Dispose(bool disposing) {
 			if (!m_Disposed) {
 				if (disposing) {
-					m_SNSClient?.Dispose();
+					if (m_SNSClient != null) {
+						m_SNSClient.Dispose();
+					}
 				}
 				m_Disposed = true;
 			}

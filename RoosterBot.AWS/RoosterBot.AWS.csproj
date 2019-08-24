@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="AWSComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SNSClient.cs" />
+    <Compile Include="SNSNotificationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
