@@ -56,6 +56,23 @@ namespace RoosterBot {
 			}
 		}
 
+		public static Version FromString(string input) {
+			if (input is null) {
+				throw new ArgumentNullException(nameof(input));
+			}
+
+			var split = input.Split('.');
+			if (split.Length != 3) {
+				throw new FormatException($"{nameof(input)} does not contain exactly 3 version terms.");
+			}
+
+			try {
+				return new Version(uint.Parse(split[0]), uint.Parse(split[1]), uint.Parse(split[2]));
+			} catch (Exception e) {
+				throw new FormatException("One of the version terms is not a valid uint.", e);
+			}
+		}
+
 		public static bool operator ==(Version left, Version right) {
 			return left.Major   == right.Major
 				&& left.Feature == right.Feature
