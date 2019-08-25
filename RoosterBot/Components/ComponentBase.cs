@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	// TODO using IServiceProvider directly is apparently considered an anti-pattern, and should be done in framework using DI
-	// https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/
 	public abstract class ComponentBase {
 		public abstract Version ComponentVersion { get; }
+		public virtual IEnumerable<DependencyChecker> Dependencies { get; }
 		public string Name {
 			get {
 				string longName = GetType().Name;
@@ -54,6 +54,18 @@ namespace RoosterBot {
 					}
 				}
 			}
+		}
+	}
+
+	public delegate DependencyResult DependencyChecker(ComponentBase component);
+
+	public class DependencyResult {
+		public bool OK { get; }
+		public string ErrorMessage { get; }
+
+		public DependencyResult(bool ok, string errorMessage) {
+			OK = ok;
+			ErrorMessage = errorMessage;
 		}
 	}
 }
