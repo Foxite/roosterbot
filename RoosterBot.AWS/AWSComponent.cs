@@ -1,5 +1,6 @@
 ﻿#if DEBUG
 #pragma warning disable IDE0052 // Private member assigned but never used
+#pragma warning disable CS0649 // Field never assigned to
 #endif
 
 using System;
