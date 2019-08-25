@@ -181,23 +181,26 @@ namespace RoosterBot {
 		}
 
 		private async Task OnClientReady() {
-			await m_ConfigService.LoadDiscordInfo(m_Client);
-			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-			Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+			try {
+				await m_ConfigService.LoadDiscordInfo(m_Client);
+				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
+				Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
-			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
-				m_VersionNotReported = false;
-				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
-				startReport += "Components:\n";
-				foreach (ComponentBase component in Components.GetComponents()) {
-					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
+				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
+					m_VersionNotReported = false;
+					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
+					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
+					startReport += "Components:\n";
+					foreach (ComponentBase component in Components.GetComponents()) {
+						startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
+					}
+
+					await ownerDM.SendMessageAsync(startReport);
 				}
-
-				await ownerDM.SendMessageAsync(startReport);
+			} finally {
+				// Make sure the program can be stopped gracefully regardless of any exceptions that occur here
+				m_BeforeStart = false;
 			}
-
-			m_BeforeStart = false;
 		}
 
 		/// <summary>
