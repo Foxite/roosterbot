@@ -98,7 +98,7 @@ namespace RoosterBot {
 				try {
 					m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
 				} catch (Exception ex) {
-					throw new ComponentException("Component " + type.Name + " threw an exception during construction.", ex, type);
+					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", ex, type);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ namespace RoosterBot {
 				try {
 					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", type.Name));
 				} catch (Exception ex) {
-					throw new ComponentException("Component " + type.Name + " threw an exception during AddServices.", ex, type);
+					throw new ComponentServiceException("Component " + type.Name + " threw an exception during AddServices.", ex, type);
 				}
 				i++;
 			}
@@ -142,7 +142,7 @@ namespace RoosterBot {
 
 					modulesLoading[moduleIndex] = componentKVP.Value.AddModulesAsync(services, commands, help, registerModule);
 				} catch (Exception ex) {
-					throw new ComponentException("Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex, componentKVP.Key);
+					throw new ComponentModuleException("Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex, componentKVP.Key);
 				}
 				moduleIndex++;
 			}
@@ -170,19 +170,4 @@ namespace RoosterBot {
 	}
 
 
-	/// <summary>
-	/// Thrown by ComponentManager when a component throws an exception. Always has a message and an inner exception.
-	/// </summary>
-	[Serializable]
-	public class ComponentException : Exception {
-		public Type CausingComponent { get; }
-
-		public ComponentException(string message, Exception inner, Type causingComponent) : base(message, inner) {
-			CausingComponent = causingComponent;
-		}
-
-		protected ComponentException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
 }
