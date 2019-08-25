@@ -28,6 +28,11 @@ namespace RoosterBot {
 		private Program() { }
 
 		private static int Main(string[] args) {
+			Console.CancelKeyPress += (o, e) => {
+				e.Cancel = true;
+				Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
+			};
+
 			string indicatorPath = Path.Combine(DataPath, "running");
 
 			if (File.Exists(indicatorPath)) {
@@ -74,10 +79,6 @@ namespace RoosterBot {
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
-			Console.CancelKeyPress += (o, e) => {
-				e.Cancel = true;
-				Logger.Warning("Main", "Bot is still running. Use Ctrl-Q to stop it, or force-quit this window if it is not responding.");
-			};
 			await WaitForQuitCondition();
 
 			Logger.Info("Main", "Stopping program");
