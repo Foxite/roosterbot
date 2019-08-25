@@ -1,4 +1,8 @@
-﻿using System;
+﻿#if DEBUG
+#pragma warning disable IDE0052 // Private member assigned but never used
+#endif
+
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Amazon;
@@ -25,7 +29,6 @@ namespace RoosterBot.AWS {
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
-			m_SNS = null;
 #if !DEBUG
 			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), m_NotificationARN, m_SNSEndpoint);
 #endif
