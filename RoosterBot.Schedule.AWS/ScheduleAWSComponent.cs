@@ -27,10 +27,6 @@ namespace RoosterBot.Schedule.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
-			return Task.CompletedTask;
-		}
-
 		public override Task ShutdownAsync() {
 			m_UserClasses.Dispose();
 			return Task.CompletedTask;
