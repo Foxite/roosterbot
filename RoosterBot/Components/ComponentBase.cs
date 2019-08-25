@@ -23,9 +23,9 @@ namespace RoosterBot {
 
 		protected Type ResourcesType { get; set; }
 
-		public abstract Task AddServices(IServiceCollection services, string configPath);
-		public abstract Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction);
-		public virtual Task OnShutdown() { return Task.CompletedTask; }
+		public abstract Task AddServicesAsync(IServiceCollection services, string configPath);
+		public abstract Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction);
+		public virtual Task ShutdownAsync() { return Task.CompletedTask; }
 
 		/// <summary>
 		/// Returns a string resource for this component.

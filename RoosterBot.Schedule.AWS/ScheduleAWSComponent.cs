@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule.AWS {
 
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
@@ -27,11 +27,11 @@ namespace RoosterBot.Schedule.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
+		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
 			return Task.CompletedTask;
 		}
 
-		public override Task OnShutdown() {
+		public override Task ShutdownAsync() {
 			m_UserClasses.Dispose();
 			return Task.CompletedTask;
 		}

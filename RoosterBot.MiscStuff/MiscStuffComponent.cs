@@ -11,7 +11,7 @@ namespace RoosterBot.MiscStuff {
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);
 
 			ConfigPath = configPath;
@@ -20,7 +20,7 @@ namespace RoosterBot.MiscStuff {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public override async Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<CounterModule>(services)
 			));

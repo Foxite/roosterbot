@@ -15,7 +15,7 @@ namespace RoosterBot.Schedule.GLU {
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
@@ -37,7 +37,7 @@ namespace RoosterBot.Schedule.GLU {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public override async Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
 			List<(Type identifierType, Task<ScheduleService> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleService> scheduleTask)>();

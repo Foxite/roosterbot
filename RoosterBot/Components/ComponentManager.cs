@@ -114,7 +114,7 @@ namespace RoosterBot {
 				Logger.Info("ComponentManager", "Adding services from " + type.Name);
 				
 				try {
-					servicesLoading[i] = component.AddServices(serviceCollection, Path.Combine(Program.DataPath, "Config", type.Name));
+					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", type.Name));
 				} catch (Exception ex) {
 					throw new ComponentException("Component " + type.Name + " threw an exception during AddServices.", ex, type);
 				}
@@ -140,7 +140,7 @@ namespace RoosterBot {
 						}
 					}
 
-					modulesLoading[moduleIndex] = componentKVP.Value.AddModules(services, commands, help, registerModule);
+					modulesLoading[moduleIndex] = componentKVP.Value.AddModulesAsync(services, commands, help, registerModule);
 				} catch (Exception ex) {
 					throw new ComponentException("Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex, componentKVP.Key);
 				}
@@ -152,7 +152,7 @@ namespace RoosterBot {
 
 		internal async Task ShutdownComponentsAsync() {
 			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				await componentKVP.Value.OnShutdown();
+				await componentKVP.Value.ShutdownAsync();
 			}
 		}
 

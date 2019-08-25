@@ -13,7 +13,7 @@ namespace RoosterBot.PublicTransit {
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			#region Config
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
@@ -29,7 +29,7 @@ namespace RoosterBot.PublicTransit {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			registerModules(new[] { await commandService.AddModuleAsync<PTModule>(services) });
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";
@@ -43,7 +43,7 @@ namespace RoosterBot.PublicTransit {
 			help.AddHelpSection("trein", helpText);
 		}
 
-		public override Task OnShutdown() {
+		public override Task ShutdownAsync() {
 			m_NSAPI.Dispose();
 
 			return Task.CompletedTask;

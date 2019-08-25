@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);
 
 			services
@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
 			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
 			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());

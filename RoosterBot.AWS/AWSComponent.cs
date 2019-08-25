@@ -14,7 +14,7 @@ namespace RoosterBot.AWS {
 		private RegionEndpoint m_SNSEndpoint;
 		private SNSNotificationHandler m_SNS;
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
@@ -24,7 +24,7 @@ namespace RoosterBot.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 			m_SNS = null;
 #if !DEBUG
 			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), m_NotificationARN, m_SNSEndpoint);
@@ -32,7 +32,7 @@ namespace RoosterBot.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task OnShutdown() {
+		public override Task ShutdownAsync() {
 			m_SNS?.Dispose();
 			return Task.CompletedTask;
 		}

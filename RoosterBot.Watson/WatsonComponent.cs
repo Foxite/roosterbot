@@ -15,7 +15,7 @@ namespace RoosterBot.Watson {
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		public override Task AddServices(IServiceCollection services, string configPath) {
+		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			ResourcesType = typeof(Resources);
 
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -25,7 +25,7 @@ namespace RoosterBot.Watson {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			
