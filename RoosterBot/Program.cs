@@ -91,7 +91,6 @@ namespace RoosterBot {
 		}
 
 		private async Task WaitForQuitCondition() {
-			ConsoleKeyInfo keyPress;
 			bool keepRunning = true;
 
 			CancellationTokenSource cts = new CancellationTokenSource();
@@ -104,7 +103,7 @@ namespace RoosterBot {
 						Task.Delay(500).ContinueWith((t) => {
 							// Ctrl-Q pressed by user
 							if (Console.KeyAvailable) {
-								keyPress = Console.ReadKey(true);
+								ConsoleKeyInfo keyPress = Console.ReadKey(true);
 								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
 									keepRunning = false;
 									Logger.Info("Main", "Ctrl-Q pressed");
