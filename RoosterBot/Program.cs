@@ -150,7 +150,17 @@ namespace RoosterBot {
 			HelpService helpService = new HelpService();
 			m_NotificationService = new NotificationService();
 			
+			// I don't know what to do with this.
 			RestartHandler restartHandler = new RestartHandler(m_Client, m_NotificationService, 5);
+			// We construct a class that fully takes care of itself, does everything it needs to in its constructor (ie subscribing events)
+			//  and has no other methods that need to be called, at all.
+			// We have a few options with it:
+			// - Call the constructor without assigning it to a variable (seems bad form)
+			// - Assigning it to a variable without ever using the variable (emits compiler warning)
+			// - Adding the object to the ServiceCollection (never used, and nothing you could possibly do with it)
+			// I don't know what is the least bad of these options.
+			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
+			//  that use the object's fields.
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
@@ -189,6 +199,11 @@ namespace RoosterBot {
 		/// </summary>
 		public void Shutdown() {
 			m_StopFlagSet = true;
+		}
+
+		internal void Restart() {
+			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+			Shutdown();
 		}
 	}
 }

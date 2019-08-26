@@ -42,13 +42,13 @@ namespace RoosterBot {
 		private async Task Restart(Exception e) {
 			string report = $"RoosterBot has failed to reconnect after {m_Attempts} attempts.\n\n";
 			if (m_InitialException != null) {
-				report += $"The initial exception is: {m_InitialException.ToString()}"; // TODO demystify after merge staging
+				report += $"The initial exception is: {m_InitialException.ToStringDemystified()}";
 			} else {
 				report += "No initial exception was attached.\n\n";
 			}
 
 			if (e == null) {
-				report += $"The last exception is: {e.ToString()}"; // This too
+				report += $"The last exception is: {e.ToStringDemystified()}";
 			} else {
 				report += "No last exception was attached.\n\n";
 			}
@@ -56,8 +56,7 @@ namespace RoosterBot {
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
 			await m_Notifications.AddNotificationAsync(report);
 
-			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-			Program.Instance.Shutdown();
+			Program.Instance.Restart();
 		}
 	}
 }
