@@ -25,7 +25,6 @@ namespace RoosterBot {
 		private DiscordSocketClient m_Client;
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
-		private CloudWatchReporter m_CloudWatchReporter;
 		private SNSService m_SNSService;
 		private IServiceProvider m_Services;
 		internal Dictionary<Type, ComponentBase> m_Components;
@@ -103,40 +102,13 @@ namespace RoosterBot {
 				}
 			};
 
-			m_Client.Disconnected += (e) => {
-				m_State = ProgramState.BotStopped;
-
-				Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
-					await Task.Delay(20000);
-					if (m_State != ProgramState.BotRunning) {
-						string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
-						if (e == null) {
-							report += "No exception is attached.";
-						} else {
-							report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
-						}
-						report += "\n\nThe bot will attempt to restart in 20 seconds.";
-						await m_SNSService.SendCriticalErrorNotificationAsync(report);
-
-						Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-						Shutdown();
-					}
-				});
-
-				return Task.CompletedTask;
-			};
-
-			m_Client.Connected += () => {
-				m_State = ProgramState.BotRunning;
-				return Task.CompletedTask;
-			};
-
 			m_Commands = new EditedCommandService(m_Client, HandleCommand);
 			m_Commands.Log += Logger.LogSync;
 
 			HelpService helpService = new HelpService();
 			m_SNSService = new SNSService(m_ConfigService);
-			m_CloudWatchReporter = new CloudWatchReporter(m_Client);
+
+			RestartHandler restartHandler = new RestartHandler(m_Client, m_SNSService, m_ConfigService, 3);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
@@ -261,8 +233,6 @@ namespace RoosterBot {
 			cts.Cancel();
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
-
-			m_CloudWatchReporter.Dispose();
 
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();

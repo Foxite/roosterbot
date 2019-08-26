@@ -88,7 +88,7 @@
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
-    <Compile Include="CloudWatchReporter.cs" />
+    <Compile Include="RestartHandler.cs" />
     <Compile Include="Services\CommandEditService.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Modules\EditableCmdModuleBase.cs" />
