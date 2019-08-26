@@ -108,7 +108,7 @@ namespace RoosterBot {
 			HelpService helpService = new HelpService();
 			m_SNSService = new SNSService(m_ConfigService);
 
-			RestartHandler restartHandler = new RestartHandler(m_Client, m_SNSService, m_ConfigService, 3);
+			RestartHandler restartHandler = new RestartHandler(m_Client, m_SNSService, m_ConfigService, 5);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
