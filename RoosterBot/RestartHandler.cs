@@ -16,7 +16,8 @@ namespace RoosterBot {
 		public int MaxAttempts { get; }
 
 		public RestartHandler(DiscordSocketClient discord, SNSService sns, ConfigService config, int maxAttempts) {
-			m_Attempts = maxAttempts;
+			m_Attempts = 0;
+			MaxAttempts = maxAttempts;
 			m_SNS = sns;
 
 			discord.Disconnected += async (e) => {
