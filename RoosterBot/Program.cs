@@ -144,7 +144,6 @@ namespace RoosterBot {
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.Ready += OnClientReady;
-			m_Client.Disconnected += OnClientDisconnected;
 		}
 
 		private IServiceCollection CreateRBServices() {
@@ -160,27 +159,6 @@ namespace RoosterBot {
 				.AddSingleton(restartHandler)
 				.AddSingleton(m_Client);
 			return serviceCollection;
-		}
-
-		private Task OnClientDisconnected(Exception ex) {
-			Task task = Task.Run(async () => { // Store task in variable. do not await. just suppress the warning.
-				await Task.Delay(30000);
-				if (m_Client.ConnectionState != ConnectionState.Connected) {
-					string report = $"RoosterBot has been disconnected for more than thirty seconds. ";
-					if (ex == null) {
-						report += "No exception is attached.";
-					} else {
-						report += $"The following exception is attached: {ex.ToStringDemystified()}";
-					}
-					report += "\n\nThe bot will attempt to restart in 20 seconds.";
-					await m_NotificationService.AddNotificationAsync(report);
-
-					Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-					Shutdown();
-				}
-			});
-
-			return Task.CompletedTask;
 		}
 
 		private async Task OnClientReady() {
