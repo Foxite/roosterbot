@@ -11,8 +11,8 @@ namespace RoosterBot.Schedule {
 			TeacherInfo[] result = null;
 			
 			IUser user = null;
-			if (MentionUtils.TryParseUser(input, out ulong id)) {
-				user = await context.Client.GetUserAsync(id);
+			if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
+				user = await context.Guild.GetUserAsync(id);
 			} else if (input == "ik") {
 				user = context.User;
 			}

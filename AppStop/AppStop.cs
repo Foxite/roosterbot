@@ -30,8 +30,9 @@ namespace RoosterBot.Automation {
 		}
 
 		private static void Log(string message) {
-			Console.WriteLine(DateTime.Now + " : " + message);
-			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", Environment.NewLine + DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern) + " AppStop : " + message);
+			string nowString = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern);
+			Console.WriteLine(nowString + " : " + message);
+			File.AppendAllText("C:/ProgramData/RoosterBot/install.log", nowString + " AppStop : " + message + Environment.NewLine);
 		}
 	}
 }

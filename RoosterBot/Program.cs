@@ -150,11 +150,14 @@ namespace RoosterBot {
 		private IServiceCollection CreateRBServices() {
 			HelpService helpService = new HelpService();
 			m_NotificationService = new NotificationService();
+			
+			RestartHandler restartHandler = new RestartHandler(m_Client, m_NotificationService, 5);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_NotificationService)
 				.AddSingleton(helpService)
+				.AddSingleton(restartHandler)
 				.AddSingleton(m_Client);
 			return serviceCollection;
 		}

@@ -27,20 +27,6 @@ namespace RoosterBot.MiscStuff {
 
 			string helpText = Resources.MiscStuffComponent_HelpText;
 			help.AddHelpSection("misc", helpText);
-
-			services.GetService<DiscordSocketClient>().MessageReceived += async (msg) => {
-				string getNameIfApplicable(ulong userId) {
-					switch (userId) {
-						case 244147515375484928: return "Kevin";
-						case 368317619838779393: return "Lars";
-						default: return null;
-					}
-				}
-				string snapUserName = getNameIfApplicable(msg.Author.Id);
-				if (snapUserName != null && msg.Content.Contains("snap")) {
-					await msg.Channel.SendMessageAsync($"Ja {snapUserName}, leuke pun.");
-				}
-			};
 		}
 	}
 }
