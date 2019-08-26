@@ -12,15 +12,20 @@ namespace RoosterBot {
 	internal sealed class RestartHandler {
 		private int m_Attempts;
 		private SNSService m_SNS;
+		private Exception m_InitialException;
 
 		public int MaxAttempts { get; }
 
-		public RestartHandler(DiscordSocketClient discord, SNSService sns, ConfigService config, int maxAttempts) {
+		public RestartHandler(DiscordSocketClient discord, SNSService sns, int maxAttempts) {
 			m_Attempts = 0;
 			MaxAttempts = maxAttempts;
 			m_SNS = sns;
 
 			discord.Disconnected += async (e) => {
+				if (m_Attempts == 0) {
+					m_InitialException = e;
+				}
+
 				m_Attempts++;
 
 				if (m_Attempts > MaxAttempts) {
@@ -28,20 +33,27 @@ namespace RoosterBot {
 				}
 			};
 
-			discord.Connected += async () => {
-				await config.BotOwner.SendMessageAsync($"Reconnected after {m_Attempts} attempts");
-
+			discord.Connected += () => {
 				m_Attempts = 0;
+				m_InitialException = null;
+				return Task.CompletedTask;
 			};
 		}
 
 		private async Task Restart(Exception e) {
-			string report = $"RoosterBot has been disconnected for more than twenty seconds. ";
-			if (e == null) {
-				report += "No exception is attached.";
+			string report = $"RoosterBot has failed to reconnect after {m_Attempts} attempts.\n\n";
+			if (m_InitialException != null) {
+				report += $"The initial exception is: {m_InitialException.ToString()}"; // TODO demystify after merge staging
 			} else {
-				report += $"The following exception is attached: \"{e.Message}\", stacktrace: {e.StackTrace}";
+				report += "No initial exception was attached.\n\n";
 			}
+
+			if (e == null) {
+				report += $"The last exception is: {e.ToString()}"; // This too
+			} else {
+				report += "No last exception was attached.\n\n";
+			}
+
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
 			await m_SNS.SendCriticalErrorNotificationAsync(report);
 
