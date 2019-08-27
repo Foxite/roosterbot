@@ -46,7 +46,8 @@ namespace RoosterBot {
 				return;
 
 			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
-				await CommandEdited?.Invoke(crp.Response, socketMessageAfter);
+				//await CommandEdited?.Invoke(crp.Response, socketMessageAfter);
+				await Util.InvokeAsyncEventConcurrent(CommandEdited, crp.Response, socketMessageAfter);
 			}
 		}
 
