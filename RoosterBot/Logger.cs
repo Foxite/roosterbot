@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace RoosterBot {
 				if (exception is FileLoadException) {
 					loggedMessage += "\n" + exception.ToString();
 				} else {
-					loggedMessage += "\n" + exception.ToStringDemystified();
+					loggedMessage += "\n" + exception.ToStringDemystified(); // If this line causes an error, `using System.Diagnostics`
 				}
 			}
 			Console.WriteLine(loggedMessage);
