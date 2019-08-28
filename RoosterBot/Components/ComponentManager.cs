@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {
-		private Dictionary<Type, ComponentBase> m_Components;
+		private List<ComponentBase> m_Components;
 		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
 
 		public IServiceProvider Services { get; private set; }
@@ -36,7 +36,7 @@ namespace RoosterBot {
 			List<Assembly> assemblies = LoadAssemblies(assemblyPaths);
 			Type[] types = FindComponentClasses(assemblies);
 
-			m_Components = new Dictionary<Type, ComponentBase>(types.Length);
+			m_Components = new List<ComponentBase>(types.Length);
 			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
 
 			// Start components
@@ -96,7 +96,7 @@ namespace RoosterBot {
 			foreach (Type type in componentTypes) {
 				Logger.Debug("ComponentManager", "Constructing component " + type.Name);
 				try {
-					m_Components[type] = Activator.CreateInstance(type) as ComponentBase;
+					m_Components.Add(Activator.CreateInstance(type) as ComponentBase);
 				} catch (Exception ex) {
 					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", ex, type);
 				}
@@ -107,16 +107,13 @@ namespace RoosterBot {
 			Task[] servicesLoading = new Task[m_Components.Count];
 
 			int i = 0;
-			foreach (KeyValuePair<Type, ComponentBase> kvp in m_Components) {
-				Type type = kvp.Key;
-				ComponentBase component = kvp.Value;
-
-				Logger.Info("ComponentManager", "Adding services from " + type.Name);
+			foreach (ComponentBase component in m_Components) {
+				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
 				
 				try {
-					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", type.Name));
+					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
-					throw new ComponentServiceException("Component " + type.Name + " threw an exception during AddServices.", ex, type);
+					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", ex, component.GetType());
 				}
 				i++;
 			}
@@ -131,18 +128,18 @@ namespace RoosterBot {
 			Task[] modulesLoading = new Task[m_Components.Count];
 
 			int moduleIndex = 0;
-			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				Logger.Info("ComponentManager", "Adding modules from " + componentKVP.Key.Name);
+			foreach (ComponentBase component in m_Components) {
+				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
 					void registerModule(ModuleInfo[] modules) {
 						foreach (ModuleInfo module in modules) {
-							m_ComponentsByModule[module] = componentKVP.Value;
+							m_ComponentsByModule[module] = component;
 						}
 					}
 
-					modulesLoading[moduleIndex] = componentKVP.Value.AddModulesAsync(services, commands, help, registerModule);
+					modulesLoading[moduleIndex] = component.AddModulesAsync(services, commands, help, registerModule);
 				} catch (Exception ex) {
-					throw new ComponentModuleException("Component " + componentKVP.Key.Name + " threw an exception during AddModules.", ex, componentKVP.Key);
+					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", ex, component.GetType());
 				}
 				moduleIndex++;
 			}
@@ -151,13 +148,13 @@ namespace RoosterBot {
 		}
 
 		internal async Task ShutdownComponentsAsync() {
-			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				await componentKVP.Value.ShutdownAsync();
+			foreach (ComponentBase component in m_Components) {
+				await component.ShutdownAsync();
 			}
 		}
 
-		public IEnumerable<ComponentBase> GetComponents() {
-			return m_Components.Values;
+		public IReadOnlyList<ComponentBase> GetComponents() {
+			return m_Components.AsReadOnly();
 		}
 
 		public ComponentBase GetComponentForModule(ModuleInfo module) {
