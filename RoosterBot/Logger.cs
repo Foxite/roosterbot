@@ -7,12 +7,14 @@ using Discord;
 
 namespace RoosterBot {
 	public static class Logger {
+		private static readonly object s_Lock;
+		private static readonly int s_LongestSeverity;
+
 		public static readonly string LogPath;
-		private static readonly object Lock;
 
 		static Logger() {
 			LogPath = Path.Combine(Program.DataPath, "RoosterBot");
-			Lock = new object();
+			s_Lock = new object();
 
 			// Keep the log from the previous launch as ".old.log"
 			if (File.Exists(LogPath + ".log")) {
@@ -24,6 +26,20 @@ namespace RoosterBot {
 				File.Create(LogPath).Dispose(); // File.Create automatically opens a stream to it, but we don't need that.
 			} else {
 				LogPath += ".log";
+			}
+
+			// Non-generic array
+			// Can't use a nice linq one-liner, unfortunately.
+			// Not even indexers. Has to be difficult, obviously.
+			Array severities = typeof(LogSeverity).GetEnumValues();
+			bool first = true;
+			foreach (object severity in severities) {
+				if (first) {
+					first = false;
+					continue;
+				} else {
+					s_LongestSeverity = Math.Max(s_LongestSeverity, severity.ToString().Length);
+				}
 			}
 		}
 
@@ -52,8 +68,10 @@ namespace RoosterBot {
 		}
 
 		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
+			string severityStr = severity.ToString().PadLeft(s_LongestSeverity);
+
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
-								+ " : [" + severity + "] " + tag + " : " + msg;
+								+ " [" + severityStr + "] " + tag + " : " + msg;
 			if (exception != null) {
 				if (exception is FileLoadException) {
 					loggedMessage += "\n" + exception.ToString();
@@ -62,7 +80,7 @@ namespace RoosterBot {
 				}
 			}
 			Console.WriteLine(loggedMessage);
-			lock (Lock) {
+			lock (s_Lock) {
 				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
 			}
 		}
