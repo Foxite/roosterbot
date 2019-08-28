@@ -46,19 +46,6 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="DataTypes\AvailabilityInfo.cs" />
     <Compile Include="DataTypes\IdentifierInfo.cs" />
     <Compile Include="DataTypes\RoomInfo.cs" />
@@ -105,9 +92,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2">
-      <Version>3.3.101.56</Version>
-    </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>12.1.2</Version>
     </PackageReference>
