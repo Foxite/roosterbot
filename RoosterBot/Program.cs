@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -139,9 +138,7 @@ namespace RoosterBot {
 		}
 
 		private void SetupClient() {
-			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = WS4NetProvider.Instance
-			});
+			m_Client = new DiscordSocketClient();
 			m_Client.Log += Logger.LogSync;
 			m_Client.Ready += OnClientReady;
 		}
