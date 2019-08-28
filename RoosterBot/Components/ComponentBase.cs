@@ -8,6 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RoosterBot {
 	public abstract class ComponentBase {
 		public abstract Version ComponentVersion { get; }
+
+		// TODO Components should be able to define dependencies in the following ways:
+		// Another component must be newer, older, or between than a Version
+		// Another component must match a VersionPredicate
+		// There must be one (or more) components that has a "tag" (TODO tag system) (for example Schedule requires at least 1 schedule providing component, Schedule.GLU is such a component)
+		// Another component (matching any of these dependencies) must load before or after this component
+		// The proposed way to do this is to keep the DependencyChecker idea and provide helper methods to test for common dependencies
 		public virtual IEnumerable<DependencyChecker> Dependencies { get; }
 		public string Name {
 			get {
