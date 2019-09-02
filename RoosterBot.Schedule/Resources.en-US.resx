@@ -432,4 +432,7 @@ Warning: natural-language commands are not supported yet in English.</value>
   <data name="UserClassModule_Name" xml:space="preserve">
     <value>Your class</value>
   </data>
+  <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
+    <value>That does not match anything.</value>
+  </data>
 </root>

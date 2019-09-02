@@ -435,4 +435,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="UserClassModule_Name" xml:space="preserve">
     <value>Jouw klas</value>
   </data>
+  <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
+    <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
+  </data>
 </root>

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
-
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
