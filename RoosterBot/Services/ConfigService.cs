@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ConfigService {
-		public   bool		  ErrorReactions { get; }
 		public   string		  CommandPrefix { get; }
 		public   ActivityType ActivityType { get; }
 		public   string		  GameString { get; }
@@ -26,7 +25,6 @@ namespace RoosterBot {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
 			authToken = jsonConfig["token"].ToObject<string>();
-			ErrorReactions = jsonConfig["errorReactions"].ToObject<bool>();
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
 			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
 			GameString = jsonConfig["gameString"].ToObject<string>();

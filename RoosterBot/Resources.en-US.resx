@@ -128,7 +128,7 @@
     <value>I don't understand the parameters.</value>
   </data>
   <data name="RoosterBot_FatalError" xml:space="preserve">
-    <value>I don't know what, but something went horribly wrong. Try again later? My creator has me say that, but I don't think it will work until he fixes it. Sorry.</value>
+    <value>🚫 Something has gone horribly wrong.</value>
   </data>
   <data name="RangeAttribute_CheckFailed" xml:space="preserve">
     <value>That's too high or too low.</value>
@@ -137,6 +137,6 @@
     <value>Requires bot control</value>
   </data>
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
-    <value>You are not authorized to do that.</value>
+    <value>⛔ You are not authorized to do that.</value>
   </data>
 </root>

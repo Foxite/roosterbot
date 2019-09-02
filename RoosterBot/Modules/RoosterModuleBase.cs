@@ -128,15 +128,12 @@ namespace RoosterBot {
 
 		protected virtual async Task MinorError(string message) {
 			Log.Info($"Command failed: {message}");
-			if (Config.ErrorReactions) {
-				await ReplyAsync(message, "❌");
-			} else {
-				await ReplyAsync(message);
-			}
+
+			await ReplyAsync("❌" + message);
 		}
 
 		protected virtual async Task FatalError(string message, Exception exception = null) {
-			string report = $"Critical error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
+			string report = $"Fatal error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
 
 			Log.Error(report, exception);
 
@@ -149,11 +146,6 @@ namespace RoosterBot {
 			}
 
 			string response = Resources.RoosterBot_FatalError;
-			if (Config.ErrorReactions) {
-				await ReplyAsync(response, "🚫");
-			} else {
-				await ReplyAsync(response);
-			}
 		}
 
 		public abstract class ModuleLogger {
