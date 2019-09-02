@@ -48,7 +48,7 @@ namespace RoosterBot {
 				return this;
 			}
 
-			public Builder MinimumRoosterBotVersion(Version version) {
+			public Builder RequireMinimumRoosterBotVersion(Version version) {
 				if (Constants.RoosterBotVersion < version) {
 					m_Ok = false;
 					m_ErrorMessage += $"RoosterBot version must be at least {version.ToString()}";
