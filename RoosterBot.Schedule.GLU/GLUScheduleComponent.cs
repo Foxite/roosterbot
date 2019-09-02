@@ -50,18 +50,18 @@ namespace RoosterBot.Schedule.GLU {
 			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
 			#region Read schedules
-			List<(Type identifierType, Task<ScheduleService> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleService> scheduleTask)>();
+			List<(Type identifierType, Task<ScheduleProvider> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleProvider> scheduleTask)>();
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, ScheduleService.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0]), m_AllowedGuilds)));
+				tasks.Add((sri.IdentifierType, ScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0]), m_AllowedGuilds)));
 			}
 
 			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
 
-			ScheduleProvider provider = services.GetService<ScheduleProvider>();
+			ScheduleService provider = services.GetService<ScheduleService>();
 
-			foreach ((Type identifierType, Task<ScheduleService> scheduleTask) in tasks) {
+			foreach ((Type identifierType, Task<ScheduleProvider> scheduleTask) in tasks) {
 				provider.RegisterSchedule(identifierType, await scheduleTask);
 			}
 			#endregion

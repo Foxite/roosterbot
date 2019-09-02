@@ -6,7 +6,7 @@ using Discord;
 namespace RoosterBot.Schedule {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
-		public ScheduleProvider Schedules { get; set; }
+		public ScheduleService Schedules { get; set; }
 		public ActivityNameService Activities { get; set; }
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
