@@ -42,12 +42,12 @@ namespace RoosterBot {
 			//  class to edit their response instead of making a new one.
 			// This class is designed to work with EditableCmdModuleBase in that aspect. It can simply be replaced as ModuleBase in existing modules and they will
 			//  automatically adopt this functionality without needing additional work.
-			if (!(messageAfter is SocketUserMessage socketMessageAfter))
+			if (!(messageAfter is SocketUserMessage userMessageAfter))
 				return;
 
 			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
 				//await CommandEdited?.Invoke(crp.Response, socketMessageAfter);
-				await Util.InvokeAsyncEventConcurrent(CommandEdited, crp.Response, socketMessageAfter);
+				await Util.InvokeAsyncEventConcurrent(CommandEdited, crp.Response, userMessageAfter);
 			}
 		}
 
