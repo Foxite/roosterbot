@@ -356,7 +356,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
     <comment>0: user's student set</comment>
   </data>
   <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
-    <value>Gebruik bijvoorbeeld `!ik &lt;jouw klas&gt;` om dit te veranderen.</value>
+    <value> Gebruik `!ik &lt;jouw klas&gt;` om dit te veranderen.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}.</value>
