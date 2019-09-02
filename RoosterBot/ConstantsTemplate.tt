@@ -5,12 +5,8 @@
 using System;
 
 namespace RoosterBot {
-	public static class Constants {
+	public partial static class Constants {
 		public static readonly DateTime CurrentReleaseDate = new DateTime(<#= DateTime.Today.Year #>, <#= DateTime.Today.Month #>, <#= DateTime.Today.Day #>);
 		public static readonly int ReleasesToday = <#= File.ReadAllLines(Host.ResolvePath("../Release.dat"))[1] #>;
-		
-		public static readonly DateTime FirstReleaseDate = new DateTime(2018, 10, 1);
-		public static readonly int DaysSinceV1 = (int) (CurrentReleaseDate - FirstReleaseDate).TotalDays;
-		public static readonly string VersionString = DaysSinceV1.ToString() + "." + ReleasesToday;
 	}
 }
