@@ -62,7 +62,7 @@ namespace RoosterBot.Schedule.GLU {
 			ScheduleService provider = services.GetService<ScheduleService>();
 
 			foreach ((Type identifierType, Task<ScheduleProvider> scheduleTask) in tasks) {
-				provider.RegisterSchedule(identifierType, await scheduleTask);
+				provider.RegisterProvider(identifierType, await scheduleTask);
 			}
 			#endregion
 
