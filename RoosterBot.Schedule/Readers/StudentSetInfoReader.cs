@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
-	public class StudentSetInfoReader : TypeReader {
-		private static readonly Regex s_StudentSetRegex = new Regex("^[1-4][Gg][ADad][12]$");
-
+	public class StudentSetInfoReader : IdentifierInfoReaderBase<StudentSetInfo> {
 		public async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
-			if (s_StudentSetRegex.IsMatch(input)) {
-				return TypeReaderResult.FromSuccess(new StudentSetInfo() {
-					ClassName = input.ToUpper()
-				});
+			TypeReaderResult baseResult = await base.ReadAsync(context, input, services);
+			if (baseResult.IsSuccess) {
+				return baseResult;
 			} else {
 				IUser user;
 				bool byMention = false;

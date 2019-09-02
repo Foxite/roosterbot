@@ -14,11 +14,13 @@ namespace RoosterBot.Schedule.GLU {
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
 		private Regex m_StudentSetRegex;
+		private Regex m_RoomRegex;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public GLUScheduleComponent() {
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
+			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
@@ -75,6 +77,18 @@ namespace RoosterBot.Schedule.GLU {
 				if (m_AllowedGuilds.Contains(context.Guild.Id) && m_StudentSetRegex.IsMatch(input)) {
 					return new StudentSetInfo() {
 						ClassName = input
+					};
+				} else {
+					return null;
+				}
+			});
+
+			// Rooms
+			services.GetService<IdentifierValidationService>().RegisterValidator((context, input) => {
+				input = input.ToUpper();
+				if (m_AllowedGuilds.Contains(context.Guild.Id) && m_RoomRegex.IsMatch(input)) {
+					return new RoomInfo() {
+						Room = input
 					};
 				} else {
 					return null;

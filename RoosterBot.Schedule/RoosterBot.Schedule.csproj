@@ -57,6 +57,7 @@
     <Compile Include="Modules\UserClassModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\DayOfWeekReader.cs" />
+    <Compile Include="Readers\IdentifierInfoReaderBase.cs" />
     <Compile Include="Readers\RoomInfoReader.cs" />
     <Compile Include="Readers\StudentSetInfoReader.cs" />
     <Compile Include="Readers\TeacherInfoReader.cs" />
