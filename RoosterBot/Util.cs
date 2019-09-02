@@ -188,7 +188,6 @@ namespace RoosterBot {
 		/// <summary>
 		/// Invokes an async delegate in such a way that the invocations run at the same time.
 		/// </summary>
-		// TODO find all async events and replace their invocations with this
 		public static async Task InvokeAsyncEventConcurrent(Delegate asyncEvent, params object[] parameters) {
 			CheckAsyncTelegate(asyncEvent, parameters);
 
