@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Amazon;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,14 @@ namespace RoosterBot.Schedule.AWS {
 	public class ScheduleAWSComponent : ComponentBase {
 		private DynamoDBUserClassesService m_UserClasses;
 
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override string[] Tags => new[] { "UserClassesService" };
+
+		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+			return DependencyResult.Build(components)
+				.RequireMinimumVersion<ScheduleComponent>(new Version(2, 0, 0))
+				.Check();
+		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));

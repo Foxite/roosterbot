@@ -17,10 +17,17 @@ namespace RoosterBot.Schedule.GLU {
 		private Regex m_RoomRegex;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override string[] Tags => new[] { "ScheduleProvider" };
 
 		public GLUScheduleComponent() {
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
+		}
+
+		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+			return DependencyResult.Build(components)
+				.RequireMinimumVersion<ScheduleComponent>(new Version(2, 0, 0))
+				.Check();
 		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,8 +8,13 @@ namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
-		public override bool CheckDependencies(IEnumerable<ComponentBase> otherComponents) {
-			return otherComponents.Any(comp => Tags.Contains("ScheduleProvider"));
+		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+			//UserClassesService
+			//ScheduleProvider
+			return DependencyResult.Build(components)
+				.RequireTag("ScheduleProvider")
+				.RequireTag("UserClassesService")
+				.Check();
 		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
