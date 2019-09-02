@@ -42,24 +42,20 @@ namespace RoosterBot {
 		/// <param name="propertyName"></param>
 		/// <returns></returns>
 		public string GetStringResource(string propertyName) {
-			// TODO actually throw exceptions instead of error strings like its the 90s
-			if (ResourcesType == null) {
-				Logger.Error("ComponentBase", $"String resource requested for component {Name} but no ResourcesType was set for its component");
-				return "ERROR 1";
-			} else {
+			if (ResourcesType != null) {
 				PropertyInfo propertyInfo = ResourcesType.GetProperty(propertyName);
-				if (propertyInfo == null) {
-					Logger.Error("ComponentBase", $"No resource named {propertyName} is defined by {Name}");
-					return "ERROR 2";
-				} else {
+				if (propertyInfo != null) {
 					object value = propertyInfo.GetValue(null);
 					if (value is string strValue) {
 						return strValue;
 					} else {
-						Logger.Error("ComponentBase", $"Requested resource {propertyName} defined by {Name} is not a string");
-						return "ERROR 3";
+						throw new ArgumentException($"Requested resource {propertyName} defined by {Name} is not a string");
 					}
+				} else {
+					throw new ArgumentException($"No resource named {propertyName} is defined by {Name}");
 				}
+			} else {
+				throw new ArgumentException($"String resource requested for component {Name} but no ResourcesType was set for its component");
 			}
 		}
 	}
