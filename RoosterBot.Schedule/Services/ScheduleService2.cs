@@ -5,15 +5,15 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
-	public class ScheduleService : GuildSpecificInfo {
+	public class ScheduleService_ : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
-		private ScheduleService(ulong[] allowedGuilds) : base(allowedGuilds) { }
+		private ScheduleService_(ulong[] allowedGuilds) : base(allowedGuilds) { }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public static async Task<ScheduleService> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
-			ScheduleService service = new ScheduleService(allowedGuildIds) {
+		public static async Task<ScheduleService_> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
+			ScheduleService_ service = new ScheduleService_(allowedGuildIds) {
 				m_Name = name,
 				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.
 			};
