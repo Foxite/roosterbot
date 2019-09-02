@@ -179,7 +179,7 @@ namespace RoosterBot {
 
 			System.Reflection.ParameterInfo[] delegateParams = asyncEvent.Method.GetParameters();
 			for (int i = 0; i < delegateParams.Length; i++) {
-				if (delegateParams[i].ParameterType.IsAssignableFrom(parameters[i].GetType())) {
+				if (!delegateParams[i].ParameterType.IsAssignableFrom(parameters[i].GetType())) {
 					throw new ArgumentException($"Given parameter {i} must be assignable to the equivalent delegate parameter.", nameof(parameters));
 				}
 			}
