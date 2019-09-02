@@ -36,8 +36,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";
 			helpText += "Dit is hoe je de command gebruikt: `!ov <naam van vertrekstation>, <naam van aankomststation>`\n";
 			helpText += "Als ik niet het goede station heb gevonden, kun een code invullen die je met `!stations` kan vinden. (Hieronder meer.) Gebruik dan `!ov $CODE`.\n";
-			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n";
-			helpText += "De maker heeft een paar maanden geleden cooldowns uitgezet, maar als met !ov gespammed wordt, gaat de cooldown voor dat command op 5 seconden (vanwege API regels).\n\n";
+			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.";
 
 			helpText += "Je kunt stations opzoeken met `!stations <naam van station>`";
 			help.AddHelpSection("trein", helpText);
