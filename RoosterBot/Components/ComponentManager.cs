@@ -41,6 +41,7 @@ namespace RoosterBot {
 
 			// Start components
 			ConstructComponents(types);
+			CheckDependencies(m_Components);
 			Services = await AddComponentServicesAsync(serviceCollection);
 			await AddComponentModulesAsync(Services);
 		}
@@ -98,7 +99,16 @@ namespace RoosterBot {
 				try {
 					m_Components.Add(Activator.CreateInstance(type) as ComponentBase);
 				} catch (Exception ex) {
-					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", ex, type);
+					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", type, ex);
+				}
+			}
+		}
+
+		private void CheckDependencies(IEnumerable<ComponentBase> components) {
+			foreach (ComponentBase component in components) {
+				DependencyResult dependencyResult = component.CheckDependencies(components);
+				if (!dependencyResult.OK) {
+					throw new ComponentDependencyException($"{component.Name} cannot satisfy dependencies:\n{dependencyResult.ErrorMessage}", component.GetType());
 				}
 			}
 		}
@@ -113,7 +123,7 @@ namespace RoosterBot {
 				try {
 					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
-					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", ex, component.GetType());
+					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", component.GetType(), ex);
 				}
 				i++;
 			}
@@ -139,7 +149,7 @@ namespace RoosterBot {
 
 					modulesLoading[moduleIndex] = component.AddModulesAsync(services, commands, help, registerModule);
 				} catch (Exception ex) {
-					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", ex, component.GetType());
+					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
 				moduleIndex++;
 			}

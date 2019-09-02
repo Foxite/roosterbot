@@ -7,9 +7,12 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public abstract class ComponentException : Exception {
-		public ComponentException() { }
-		public ComponentException(string message) : base(message) { }
-		public ComponentException(string message, Exception inner) : base(message, inner) { }
+		public Type CausingComponent { get; }
+
+		public ComponentException(string message, Type causingComponent, Exception inner = null) : base(message, inner) {
+			CausingComponent = causingComponent;
+		}
+
 		protected ComponentException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
@@ -18,23 +21,16 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public class ComponentDependencyException : ComponentException {
-		public ComponentDependencyException() { }
-		public ComponentDependencyException(string message) : base(message) { }
-		public ComponentDependencyException(string message, Exception inner) : base(message, inner) { }
+		public ComponentDependencyException(string message, Type causingComponent) : base(message, causingComponent) { }
 		protected ComponentDependencyException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	/// <summary>
-	/// Thrown by ComponentManager when a component throws an exception. Always has a message and an inner exception.
+	/// Thrown by ComponentManager when a component throws an exception. Always has an inner exception.
 	/// </summary>
 	[Serializable]
 	public abstract class OuterComponentException : ComponentException {
-		public Type CausingComponent { get; }
-
-		public OuterComponentException(string message, Exception inner, Type causingComponent) : base(message, inner) {
-			CausingComponent = causingComponent;
-		}
-
+		public OuterComponentException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected OuterComponentException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
@@ -43,7 +39,7 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public class ComponentConstructionException : OuterComponentException {
-		public ComponentConstructionException(string message, Exception inner, Type causingComponent) : base(message, inner, causingComponent) { }
+		public ComponentConstructionException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected ComponentConstructionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
@@ -52,7 +48,7 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public class ComponentServiceException : OuterComponentException {
-		public ComponentServiceException(string message, Exception inner, Type causingComponent) : base(message, inner, causingComponent) { }
+		public ComponentServiceException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected ComponentServiceException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
@@ -61,7 +57,7 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public class ComponentModuleException : OuterComponentException {
-		public ComponentModuleException(string message, Exception inner, Type causingComponent) : base(message, inner, causingComponent) { }
+		public ComponentModuleException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected ComponentModuleException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
