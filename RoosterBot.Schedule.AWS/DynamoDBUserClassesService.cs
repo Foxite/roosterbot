@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
@@ -11,7 +10,6 @@ using Discord.Commands;
 namespace RoosterBot.Schedule.AWS {
 	public class DynamoDBUserClassesService : IUserClassesService, IDisposable {
 		private AmazonDynamoDBClient m_Client;
-		private Regex m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$"); // TODO components should be able to add their own student set patterns
 		private Table m_Table;
 
 		public DynamoDBUserClassesService(string keyId, string secretKey, RegionEndpoint endpoint, string tableName) {
@@ -31,34 +29,30 @@ namespace RoosterBot.Schedule.AWS {
 			}
 		}
 
-		public async Task SetClassForDiscordUserAsync(ICommandContext context, IUser user, string clazz) {
-			if (m_StudentSetRegex.IsMatch(clazz)) {
-				Document document = await m_Table.GetItemAsync(user.Id);
-				if (document is null) {
-					document = new Document(new Dictionary<string, DynamoDBEntry>() {
+		public async Task SetClassForDiscordUserAsync(ICommandContext context, IUser user, StudentSetInfo ssi) {
+			Document document = await m_Table.GetItemAsync(user.Id);
+			if (document is null) {
+				document = new Document(new Dictionary<string, DynamoDBEntry>() {
 						{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(user.Id) },
-						{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(clazz.ToUpper()) }
+						{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(ssi.ScheduleCode) }
 					});
-					await m_Table.PutItemAsync(document);
-				} else {
-					document["class"] = clazz;
-					await m_Table.UpdateItemAsync(document);
-				}
+				await m_Table.PutItemAsync(document);
 			} else {
-				throw new ArgumentException(clazz + " is not a valid StudentSet.");
+				document["class"] = ssi.ScheduleCode;
+				await m_Table.UpdateItemAsync(document);
 			}
 		}
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool m_DisposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing) {
-			if (!disposedValue) {
+			if (!m_DisposedValue) {
 				if (disposing) {
 					m_Client.Dispose();
 				}
 
-				disposedValue = true;
+				m_DisposedValue = true;
 			}
 		}
 

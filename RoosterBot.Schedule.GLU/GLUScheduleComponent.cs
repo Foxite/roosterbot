@@ -1,19 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleComponent : ComponentBase {
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
+		private Regex m_StudentSetRegex;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
+
+		public GLUScheduleComponent() {
+			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
+		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -38,8 +44,10 @@ namespace RoosterBot.Schedule.GLU {
 		}
 
 		public override async Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+			// Teachers
 			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
+			#region Read schedules
 			List<(Type identifierType, Task<ScheduleService> scheduleTask)> tasks = new List<(Type identifierType, Task<ScheduleService> scheduleTask)>();
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
@@ -54,10 +62,24 @@ namespace RoosterBot.Schedule.GLU {
 			foreach ((Type identifierType, Task<ScheduleService> scheduleTask) in tasks) {
 				provider.RegisterSchedule(identifierType, await scheduleTask);
 			}
+			#endregion
 
+			// Activities
 			ActivityNameService activityService = services.GetService<ActivityNameService>();
 			GLUActivities gluActivities = new GLUActivities();
 			activityService.RegisterLookup(m_AllowedGuilds, gluActivities.GetActivityFromAbbr);
+
+			// Student sets
+			services.GetService<IdentifierValidationService>().RegisterValidator((context, input) => {
+				input = input.ToUpper();
+				if (m_AllowedGuilds.Contains(context.Guild.Id) && m_StudentSetRegex.IsMatch(input)) {
+					return new StudentSetInfo() {
+						ClassName = input
+					};
+				} else {
+					return null;
+				}
+			});
 		}
 
 		private class ScheduleRegistryInfo {
