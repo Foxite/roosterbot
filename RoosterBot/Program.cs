@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
@@ -94,7 +95,8 @@ namespace RoosterBot {
 			bool keepRunning = true;
 
 			CancellationTokenSource cts = new CancellationTokenSource();
-			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In)) {
+			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
+			using (StreamReader sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
 				_ = pipeServer.WaitForConnectionAsync(cts.Token);
 
 				do {
@@ -120,17 +122,14 @@ namespace RoosterBot {
 						Task.Delay(500).ContinueWith((t) => {
 							// Pipe connection by stop executable
 							if (pipeServer.IsConnected) {
-								using (StreamReader sr = new StreamReader(pipeServer)) {
-									string input = sr.ReadLine();
-									if (input == "stop") {
-										Logger.Info("Main", "Stop command received from external process");
-										keepRunning = false;
-									}
+								string input = sr.ReadLine();
+								if (input == "stop") {
+									Logger.Info("Main", "Stop command received from external process");
+									keepRunning = false;
 								}
 							}
 						})
 					});
-
 				} while (m_BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
 			}
 			cts.Cancel();
