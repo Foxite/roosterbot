@@ -1,5 +1,4 @@
-﻿using Amazon;
-using Amazon.SimpleNotificationService;
+﻿using Amazon.SimpleNotificationService;
 using System;
 using System.Threading.Tasks;
 
@@ -8,8 +7,11 @@ namespace RoosterBot.AWS {
 		private AmazonSimpleNotificationServiceClient m_SNSClient;
 		private string m_ARN;
 
-		public SNSNotificationHandler(NotificationService notificationService, string arn, RegionEndpoint endpoint) {
-			m_SNSClient = new AmazonSimpleNotificationServiceClient(endpoint);
+		public SNSNotificationHandler(NotificationService notificationService, AWSConfigService config, string arn) {
+			m_SNSClient = new AmazonSimpleNotificationServiceClient(config.Credentials, new AmazonSimpleNotificationServiceConfig() {
+				RegionEndpoint = config.Region,
+				EndpointDiscoveryEnabled = true
+			});
 			m_ARN = arn;
 
 			notificationService.NotificationAdded += SendCriticalErrorNotificationAsync;

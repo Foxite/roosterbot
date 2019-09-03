@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Discord;
 using Discord.Commands;
+using RoosterBot.AWS;
 
 namespace RoosterBot.Schedule.AWS {
 	public class DynamoDBUserClassesService : IUserClassesService, IDisposable {
 		private AmazonDynamoDBClient m_Client;
 		private Table m_Table;
 
-		public DynamoDBUserClassesService(string keyId, string secretKey, RegionEndpoint endpoint, string tableName) {
+		public DynamoDBUserClassesService() { }
+
+		public void Initialize(AWSConfigService config, string tableName) {
 			Logger.Info("UserClasses", "Connecting to database");
-			m_Client = new AmazonDynamoDBClient(keyId, secretKey, endpoint);
+			m_Client = new AmazonDynamoDBClient(config.Credentials, new AmazonDynamoDBConfig() {
+				EndpointDiscoveryEnabled = true,
+				RegionEndpoint = config.Region
+			});
 			Logger.Info("UserClasses", "Loading user table");
 			m_Table = Table.LoadTable(m_Client, tableName);
 			Logger.Info("UserClasses", "UserClassesService loaded");

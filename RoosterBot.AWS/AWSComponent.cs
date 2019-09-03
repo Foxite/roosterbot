@@ -16,22 +16,28 @@ namespace RoosterBot.AWS {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		private string m_NotificationARN;
-		private RegionEndpoint m_SNSEndpoint;
+		private AWSConfigService m_AWSConfig;
 		private SNSNotificationHandler m_SNS;
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
-			m_NotificationARN = jsonConfig["sns"]["arn"].ToObject<string>();
-			m_SNSEndpoint = RegionEndpoint.GetBySystemName(jsonConfig["sns"]["endpoint"].ToObject<string>());
+			m_NotificationARN = jsonConfig["sns_arn"].ToObject<string>();
+
+			string accessKey = jsonConfig["accessKey"].ToObject<string>();
+			string secretKey = jsonConfig["secretKey"].ToObject<string>();
+			RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
+
+			m_AWSConfig = new AWSConfigService(accessKey, secretKey, endpoint);
+			services.AddSingleton(m_AWSConfig);
 
 			return Task.CompletedTask;
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 #if !DEBUG
-			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), m_NotificationARN, m_SNSEndpoint);
+			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), m_AWSConfig, m_NotificationARN);
 #endif
 			return Task.CompletedTask;
 		}

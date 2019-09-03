@@ -36,6 +36,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RoosterBot.AWS\RoosterBot.AWS.csproj">
+      <Project>{A6DDD117-C18D-4E94-B85A-CCA214FE8238}</Project>
+      <Name>RoosterBot.AWS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
       <Project>{0c053e6f-97d0-431d-b4e3-a2b340e60665}</Project>
       <Name>RoosterBot.Schedule</Name>
