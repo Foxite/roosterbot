@@ -185,6 +185,24 @@ namespace RoosterBot {
 
 					await ownerDM.SendMessageAsync(startReport);
 				}
+
+				// Find an open Ready pipe and report
+				NamedPipeClientStream pipeClient = null;
+
+				try {
+					pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
+					await pipeClient.ConnectAsync(1);
+					using (StreamWriter sw = new StreamWriter(pipeClient)) {
+						pipeClient = null;
+						sw.WriteLine("ready");
+					}
+				} catch (TimeoutException) {
+					// Pass
+				} finally {
+					if (pipeClient != null) {
+						pipeClient.Dispose();
+					}
+				}
 			} finally {
 				// Make sure the program can be stopped gracefully regardless of any exceptions that occur here
 				m_BeforeStart = false;
