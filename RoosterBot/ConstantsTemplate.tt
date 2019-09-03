@@ -5,7 +5,7 @@
 using System;
 
 namespace RoosterBot {
-	public partial static class Constants {
+	public static partial class Constants {
 		public static readonly DateTime CurrentReleaseDate = new DateTime(<#= DateTime.Today.Year #>, <#= DateTime.Today.Month #>, <#= DateTime.Today.Day #>);
 		public static readonly int ReleasesToday = <#= File.ReadAllLines(Host.ResolvePath("../Release.dat"))[1] #>;
 	}
