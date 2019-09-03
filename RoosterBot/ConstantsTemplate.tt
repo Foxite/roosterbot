@@ -1,6 +1,6 @@
 ﻿// This file is auto-generated.
 <#@ template hostspecific="true" language="C#" #>
-<#@ output extension=".cs" #>
+<#@ output extension=".gen.cs" #>
 <#@ import namespace="System.IO" #>
 using System;
 

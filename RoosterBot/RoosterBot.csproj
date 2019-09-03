@@ -51,12 +51,14 @@
     <Compile Include="Components\ComponentBase.cs" />
     <Compile Include="Components\ComponentException.cs" />
     <Compile Include="Components\ComponentManager.cs" />
+    <Compile Include="Components\DependencyResult.cs" />
     <Compile Include="Components\Version.cs" />
     <Compile Include="Components\VersionPredicate.cs" />
-    <Compile Include="Constants.gen.cs">
+    <Compile Include="Constants.cs" />
+    <Compile Include="ConstantsTemplate.gen.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Constants.tt</DependentUpon>
+      <DependentUpon>ConstantsTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
@@ -84,9 +86,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Constants.tt">
+    <Content Include="ConstantsTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Constants.gen.cs</LastGenOutput>
+      <LastGenOutput>ConstantsTemplate.gen.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
