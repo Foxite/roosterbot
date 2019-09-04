@@ -43,7 +43,7 @@ namespace RoosterBot.Schedule {
 					return;
 				} catch (Exception ex) {
 					await FatalError("Uncaught exception", ex);
-					throw;
+					return;
 				}
 
 				string pretext;

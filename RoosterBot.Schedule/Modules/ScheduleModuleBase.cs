@@ -200,7 +200,9 @@ namespace RoosterBot.Schedule {
 				};
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
-				throw;
+				return new ReturnValue<T>() {
+					Success = false
+				};
 			}
 		}
 	}
