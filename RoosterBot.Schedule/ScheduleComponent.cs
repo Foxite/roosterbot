@@ -9,8 +9,6 @@ namespace RoosterBot.Schedule {
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
-			//UserClassesService
-			//ScheduleProvider
 			return DependencyResult.Build(components)
 				.RequireTag("ScheduleProvider")
 				.RequireTag("UserClassesService")
