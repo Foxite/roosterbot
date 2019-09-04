@@ -22,9 +22,9 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord nextRecord;
 				try {
 					if (query.Record == null) {
-						nextRecord = Schedules.GetNextRecord(query.Identifier, Context);
+						nextRecord = await Schedules.GetNextRecord(query.Identifier, Context);
 					} else {
-						nextRecord = Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
+						nextRecord = await Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
 					await MinorError(Resources.AfterScheduleModule_GetAfterCommand_RecordsOutdated);

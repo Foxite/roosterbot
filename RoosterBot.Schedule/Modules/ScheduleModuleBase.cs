@@ -126,11 +126,11 @@ namespace RoosterBot.Schedule {
 				};
 			}
 
-			return await HandleError(() => Schedules.GetCurrentRecord(identifier, Context));
+			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
-			return await HandleError(() => Schedules.GetNextRecord(identifier, Context));
+			return await HandleErrorAsync(() => Schedules.GetNextRecord(identifier, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
@@ -141,15 +141,15 @@ namespace RoosterBot.Schedule {
 				};
 			}
 
-			return await HandleError(() => Schedules.GetSchedulesForDate(identifier, date, Context));
+			return await HandleErrorAsync(() => Schedules.GetSchedulesForDate(identifier, date, Context));
 		}
 
 		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailabilityInfo(IdentifierInfo identifier, int weeksFromNow) {
-			return await HandleError(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
+			return await HandleErrorAsync(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
-			return await HandleError(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
+			return await HandleErrorAsync(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
 		}
 
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
@@ -185,6 +185,35 @@ namespace RoosterBot.Schedule {
 				return new ReturnValue<T>() {
 					Success = true,
 					Value = action()
+				};
+			} catch (IdentifierNotFoundException) {
+				await MinorError(Resources.ScheduleModuleBase_HandleError_NotFound);
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (RecordsOutdatedException) {
+				await MinorError(Resources.ScheduleModuleBase_HandleError_RecordsOutdated);
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (NoAllowedGuildsException) {
+				await MinorError(Resources.ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer);
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			} catch (Exception ex) {
+				await FatalError("Uncaught exception", ex);
+				return new ReturnValue<T>() {
+					Success = false
+				};
+			}
+		}
+
+		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
+			try {
+				return new ReturnValue<T>() {
+					Success = true,
+					Value = await action()
 				};
 			} catch (IdentifierNotFoundException) {
 				await MinorError(Resources.ScheduleModuleBase_HandleError_NotFound);

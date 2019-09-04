@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
@@ -11,33 +13,34 @@ namespace RoosterBot.Schedule {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();
 		}
 
-		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetCurrentRecord(identifier);
+		public async Task<ScheduleRecord> GetCurrentRecord(IdentifierInfo identifier, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetCurrentRecord(identifier);
 		}
 
-		public ScheduleRecord GetNextRecord(IdentifierInfo identifier, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetNextRecord(identifier);
+		public async Task<ScheduleRecord> GetNextRecord(IdentifierInfo identifier, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetNextRecord(identifier);
 		}
 
-		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetRecordAfter(identifier, givenRecord);
+		public async Task<ScheduleRecord> GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetRecordAfter(identifier, givenRecord);
 		}
 
-		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetSchedulesForDate(identifier, date);
+		public async Task<ScheduleRecord[]> GetSchedulesForDate(IdentifierInfo identifier, DateTime date, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetSchedulesForDate(identifier, date);
 		}
 
-		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetWeekAvailability(identifier, weeksFromNow);
+		public async Task<AvailabilityInfo[]> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetWeekAvailability(identifier, weeksFromNow);
 		}
 
-		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, ICommandContext context) {
-			return GetScheduleType(identifier, context).GetRecordAfterTimeSpan(identifier, timespan);
+		public async Task<ScheduleRecord> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, RoosterCommandContext context) {
+			return (await GetScheduleTypeAsync(identifier, context)).GetRecordAfterTimeSpan(identifier, timespan);
 		}
 
-		private ScheduleProvider GetScheduleType(IdentifierInfo info, ICommandContext context) {
+		private async Task<ScheduleProvider> GetScheduleTypeAsync(IdentifierInfo info, RoosterCommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider> list)) {
-				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {context.Guild.Name}");
+				IGuild guild = context.Guild ?? await context.GetDMGuildAsync();
+				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {guild.Name}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
