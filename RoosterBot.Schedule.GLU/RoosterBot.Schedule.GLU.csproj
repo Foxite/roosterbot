@@ -35,6 +35,7 @@
     <Compile Include="GLUActivities.cs" />
     <Compile Include="GLUScheduleComponent.cs" />
     <Compile Include="GLUScheduleReader.cs" />
+    <Compile Include="GLUScheduleRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

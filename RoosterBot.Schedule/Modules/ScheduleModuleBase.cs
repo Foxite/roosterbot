@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 
@@ -8,84 +7,6 @@ namespace RoosterBot.Schedule {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
 		public ActivityNameService Activities { get; set; }
-		
-		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
-			string result = Activities.GetActivityFromAbbreviation(Context, record.Activity).GetAwaiter().GetResult(); // Take care of the todo item below and make sure to make it an async method
-			string ret = $":notepad_spiral: {result}";
-			// TODO this kind of behaviour needs to be per-guild
-			// We can probably make ScheduleRecord abstract, add a Present function that does what RespondRecord does now, and add the implementation in external components
-			// Doing this would open up all kinds of Reader-side features, so it may be very worthwhile
-			if (isFirstRecord && record.Activity == "pauze") {
-				ret += " :thinking:";
-			}
-			return ret + "\n";
-		}
-
-		protected string TableItemStaffMember(ScheduleRecord record) {
-			if (record.StaffMember.Length == 1 && record.StaffMember[0].IsUnknown) {
-				return $":bust_in_silhouette: Onbekende leraar met afkorting {record.StaffMember[0].Abbreviation}\n";
-			}
-
-			string teachers = string.Join(", ", record.StaffMember.Select(teacher => teacher.DisplayText));
-			if (string.IsNullOrWhiteSpace(teachers)) {
-				return "";
-			} else {
-				if (record.StaffMember.Length == 1 && record.StaffMember[0].Abbreviation == "JWO") {
-					return $"<:VRjoram:392762653367336960> {teachers}\n";
-				} else {
-					return $":bust_in_silhouette: {teachers}\n";
-				}
-			}
-		}
-
-		protected string TableItemStudentSets(ScheduleRecord record) {
-			if (!string.IsNullOrWhiteSpace(record.StudentSetsString)) {
-				return $":busts_in_silhouette: {record.StudentSetsString}\n";
-			} else {
-				return "";
-			}
-		}
-
-		protected string TableItemRoom(ScheduleRecord record) {
-			if (!string.IsNullOrWhiteSpace(record.RoomString)) {
-				return $":round_pushpin: {record.RoomString}\n";
-			} else {
-				return "";
-			}
-		}
-
-		protected string TableItemStartEndTime(ScheduleRecord record) {
-			string ret = "";
-
-			if (record.Start.Date != DateTime.Today) {
-				ret += $":calendar_spiral: {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)} {record.Start.ToString("dd-MM-yyyy")}\n" + ret;
-			}
-
-			ret += $":clock5: {record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-			if (record.Start.Date == DateTime.Today && record.Start > DateTime.Now) {
-				TimeSpan timeTillStart = record.Start - DateTime.Now;
-				ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
-			}
-
-			return ret + "\n";
-		}
-
-		protected string TableItemDuration(ScheduleRecord record) {
-			string ret = $":stopwatch: {(int)record.Duration.TotalHours}:{record.Duration.Minutes.ToString().PadLeft(2, '0')}";
-			if (record.Start < DateTime.Now && record.End > DateTime.Now) {
-				TimeSpan timeLeft = record.End - DateTime.Now;
-				ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
-			}
-			return ret + "\n";
-		}
-
-		protected string TableItemBreak(ScheduleRecord record) {
-			if (record.BreakStart.HasValue) {
-				return $":coffee: {record.BreakStart.Value.ToString("HH:mm")} - {record.BreakEnd.Value.ToString("HH:mm")}\n";
-			} else {
-				return "";
-			}
-		}
 		
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
@@ -155,25 +76,7 @@ namespace RoosterBot.Schedule {
 
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
-			response += TableItemActivity(record, false);
-
-			if (record.Activity != "stdag doc") {
-				if (record.Activity != "pauze") {
-					if (info.ScheduleField != "StaffMember") {
-						response += TableItemStaffMember(record);
-					}
-					if (info.ScheduleField != "StudentSets") {
-						response += TableItemStudentSets(record);
-					}
-					if (info.ScheduleField != "Room") {
-						response += TableItemRoom(record);
-					}
-				}
-
-				response += TableItemStartEndTime(record);
-				response += TableItemDuration(record);
-				response += TableItemBreak(record);
-			}
+			response += await record.PresentAsync();
 			ReplyDeferred(response, info, record);
 
 			if (callNextIfBreak && record.Activity == "pauze") {
