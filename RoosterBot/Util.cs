@@ -224,7 +224,7 @@ namespace RoosterBot {
 
 			foreach (IGuild guild in allGuilds) {
 				IReadOnlyCollection<IGuildUser> guildUsers = await guild.GetUsersAsync();
-				if (guildUsers.Contains(user)) {
+				if (guildUsers.Any(guilduser => guilduser.Id == user.Id)) {
 					commonGuilds.Add(guild);
 				}
 			}
