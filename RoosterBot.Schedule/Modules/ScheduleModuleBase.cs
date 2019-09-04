@@ -11,6 +11,9 @@ namespace RoosterBot.Schedule {
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
 			string ret = $":notepad_spiral: {Activities.GetActivityFromAbbreviation(Context.Guild, record.Activity)}";
+			// TODO this kind of behaviour needs to be per-provider
+			// We can probably make ScheduleRecord abstract, add a Present function that does what RespondRecord does now, and add the implementation in external components
+			// Doing this would open up all kinds of Provider-side features, so it may be very worthwhile
 			if (isFirstRecord && record.Activity == "pauze") {
 				ret += " :thinking:";
 			}
