@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (user == null) {
-					IGuild guild = context.Guild ?? await (context as RoosterCommandContext)?.GetDMGuild();
+					IGuild guild = context.Guild ?? await (context as RoosterCommandContext)?.GetDMGuildAsync();
 					if (guild != null) {
 						result = tns.Lookup(guild.Id, input);
 					}

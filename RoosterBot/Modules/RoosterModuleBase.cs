@@ -200,7 +200,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// If Guild is null because this is a DM channel, then this will provide a Guild to use when looking up guild-specific information.
 		/// </summary>
-		public async Task<IGuild> GetDMGuild() {
+		public async Task<IGuild> GetDMGuildAsync() {
 			if (!m_DMGuild.IsKnown) {
 				m_DMGuild.Value = await ResolveDMGuild();
 			}
