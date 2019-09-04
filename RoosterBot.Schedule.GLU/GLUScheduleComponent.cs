@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -83,8 +82,9 @@ namespace RoosterBot.Schedule.GLU {
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 		}
 
-		private Task<IdentifierInfo> ValidateIdentifier(ICommandContext context, string input, IGuild contextGuild) {
-			if (m_AllowedGuilds.Contains(contextGuild.Id)) {
+		private async Task<IdentifierInfo> ValidateIdentifier(RoosterCommandContext context, string input) {
+			ulong? guildId = (context.Guild ?? await context.GetDMGuild())?.Id;
+			if (guildId.HasValue && m_AllowedGuilds.Contains(guildId.Value)) {
 				input = input.ToUpper();
 				IdentifierInfo result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {
@@ -96,7 +96,7 @@ namespace RoosterBot.Schedule.GLU {
 						Room = input
 					};
 				}
-				return Task.FromResult(result);
+				return result;
 			}
 			return null;
 		}
