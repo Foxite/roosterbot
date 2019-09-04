@@ -41,7 +41,7 @@ namespace RoosterBot {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			if (IsMessageCommand(socketMessage, out int argPos)) {
-				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null);
+				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null, "NewCommand");
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services);
 			}
@@ -49,7 +49,7 @@ namespace RoosterBot {
 
 		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
 			if (IsMessageCommand(command, out int argPos)) {
-				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse);
+				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse, "EditedCommand");
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services);
 			} else {
@@ -141,15 +141,15 @@ namespace RoosterBot {
 		}
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool m_DisposedValue = false; // To detect redundant calls
 
 		void Dispose(bool disposing) {
-			if (!disposedValue) {
+			if (!m_DisposedValue) {
 				if (disposing) {
 					((IDisposable) m_Commands).Dispose();
 				}
 
-				disposedValue = true;
+				m_DisposedValue = true;
 			}
 		}
 

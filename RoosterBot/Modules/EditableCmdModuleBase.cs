@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
@@ -47,6 +46,15 @@ namespace RoosterBot {
 			}
 
 			return ret;
+		}
+	}
+
+	public class EditedCommandContext : RoosterCommandContext {
+		// If this is null, we should make a new message.
+		public IUserMessage OriginalResponse { get; }
+
+		public EditedCommandContext(IDiscordClient client, IUserMessage command, IUserMessage originalResponse, string calltag) : base(client, command, calltag) {
+			OriginalResponse = originalResponse;
 		}
 	}
 }

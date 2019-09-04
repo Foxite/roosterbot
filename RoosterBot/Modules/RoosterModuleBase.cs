@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
 namespace RoosterBot {
-	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
+	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
 
-		protected internal StringBuilder m_Response;
-		protected internal string m_Reaction;
+		private StringBuilder m_Response;
+		private string m_Reaction;
 
 		protected override void BeforeExecute(CommandInfo command) {
 			LogTag = null;
@@ -183,5 +185,37 @@ namespace RoosterBot {
 		}
 	}
 
-	public abstract class RoosterModuleBase : RoosterModuleBase<CommandContext> { }
+	public abstract class RoosterModuleBase : RoosterModuleBase<RoosterCommandContext> { }
+
+	public class RoosterCommandContext : CommandContext {
+		private CachedData<IGuild> m_DMGuild;
+
+		public string CallTag { get; }
+
+		public RoosterCommandContext(IDiscordClient client, IUserMessage command, string calltag) : base(client, command) {
+			CallTag = calltag;
+			m_DMGuild = new CachedData<IGuild>();
+		}
+
+		/// <summary>
+		/// If Guild is null because this is a DM channel, then this will provide a Guild to use when looking up guild-specific information.
+		/// </summary>
+		public async Task<IGuild> GetDMGuild() {
+			if (!m_DMGuild.IsKnown) {
+				m_DMGuild.Value = await ResolveDMGuild();
+			}
+			return m_DMGuild.Value;
+		}
+
+		private async Task<IGuild> ResolveDMGuild() {
+			if (Guild is null) {
+				// Get common guilds with the user, select the first one
+				// What to do if there's multiple?
+				IReadOnlyCollection<IGuild> commonGuilds = await Util.GetCommonGuildsAsync(Client, User);
+				return commonGuilds.FirstOrDefault();
+			} else {
+				throw new InvalidOperationException("DMGuild can only be used when Guild is null");
+			}
+		}
+	}
 }
