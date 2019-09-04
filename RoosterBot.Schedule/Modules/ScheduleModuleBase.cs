@@ -10,7 +10,8 @@ namespace RoosterBot.Schedule {
 		public ActivityNameService Activities { get; set; }
 		
 		protected string TableItemActivity(ScheduleRecord record, bool isFirstRecord) {
-			string ret = $":notepad_spiral: {Activities.GetActivityFromAbbreviation(Context.Guild, record.Activity)}";
+			string result = Activities.GetActivityFromAbbreviation(Context, record.Activity).GetAwaiter().GetResult(); // Take care of the todo item below and make sure to make it an async method
+			string ret = $":notepad_spiral: {result}";
 			// TODO this kind of behaviour needs to be per-guild
 			// We can probably make ScheduleRecord abstract, add a Present function that does what RespondRecord does now, and add the implementation in external components
 			// Doing this would open up all kinds of Reader-side features, so it may be very worthwhile

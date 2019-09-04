@@ -1,5 +1,6 @@
 ﻿using Discord;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public class ActivityNameService {
@@ -15,7 +16,8 @@ namespace RoosterBot.Schedule {
 			m_Lookups.Add(new GuildActivityLookup(guilds, lookup));
 		}
 
-		public string GetActivityFromAbbreviation(IGuild guild, string abbreviation) {
+		public async Task<string> GetActivityFromAbbreviation(RoosterCommandContext context, string abbreviation) {
+			IGuild guild = context.Guild ?? await context.GetDMGuildAsync();
 			foreach (GuildActivityLookup gal in m_Lookups) {
 				if (gal.IsGuildAllowed(guild)) {
 					return gal.LookupFunction(abbreviation);

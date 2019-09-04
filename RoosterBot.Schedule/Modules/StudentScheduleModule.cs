@@ -99,7 +99,7 @@ namespace RoosterBot.Schedule {
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
 						response += Resources.ScheduleModuleBase_ItIsWeekend;
 					}
-					await ReplyAsync(response, info, null);
+					ReplyDeferred(response, info, null);
 				} else {
 					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(date));
 
@@ -113,7 +113,7 @@ namespace RoosterBot.Schedule {
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
-						cells[recordIndex][0] = Activities.GetActivityFromAbbreviation(Context.Guild, record.Activity);
+						cells[recordIndex][0] = await Activities.GetActivityFromAbbreviation(Context, record.Activity);
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
 						cells[recordIndex][3] = record.RoomString;
