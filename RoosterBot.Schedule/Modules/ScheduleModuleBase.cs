@@ -6,7 +6,6 @@ namespace RoosterBot.Schedule {
 	public class ScheduleModuleBase : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
-		public ActivityNameService Activities { get; set; }
 		
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
@@ -76,40 +75,11 @@ namespace RoosterBot.Schedule {
 
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
-			response += await record.PresentAsync();
+			response += await record.PresentAsync(info);
 			ReplyDeferred(response, info, record);
 
-			if (callNextIfBreak && record.Activity == "pauze") {
+			if (callNextIfBreak && record.ShouldCallNextCommand) {
 				await GetAfterCommand();
-			}
-		}
-
-		private async Task<ReturnValue<T>> HandleError<T>(Func<T> action) {
-			try {
-				return new ReturnValue<T>() {
-					Success = true,
-					Value = action()
-				};
-			} catch (IdentifierNotFoundException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_NotFound);
-				return new ReturnValue<T>() {
-					Success = false
-				};
-			} catch (RecordsOutdatedException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_RecordsOutdated);
-				return new ReturnValue<T>() {
-					Success = false
-				};
-			} catch (NoAllowedGuildsException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer);
-				return new ReturnValue<T>() {
-					Success = false
-				};
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
-				return new ReturnValue<T>() {
-					Success = false
-				};
 			}
 		}
 

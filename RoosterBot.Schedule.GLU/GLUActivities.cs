@@ -1,6 +1,6 @@
 ﻿namespace RoosterBot.Schedule.GLU {
-	public class GLUActivities {
-		public string GetActivityFromAbbr(string abbr) {
+	public static class GLUActivities {
+		public static string GetActivityFromAbbr(string abbr) {
 			switch (abbr) {
 				// Specific expansions
 				case "ned":

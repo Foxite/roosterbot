@@ -73,11 +73,6 @@ namespace RoosterBot.Schedule.GLU {
 			}
 			#endregion
 
-			// Activities
-			ActivityNameService activityService = services.GetService<ActivityNameService>();
-			GLUActivities gluActivities = new GLUActivities();
-			activityService.RegisterLookup(m_AllowedGuilds, gluActivities.GetActivityFromAbbr);
-
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 		}

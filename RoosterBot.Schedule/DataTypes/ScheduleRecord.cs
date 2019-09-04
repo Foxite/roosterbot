@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public abstract class ScheduleRecord {
-		public string Activity { get; set; }
+		public ActivityInfo Activity { get; set; }
 		public DateTime Start { get; set; }
 		public DateTime End { get; set; }
 		public StudentSetInfo[] StudentSets { get; set; }
@@ -20,13 +20,13 @@ namespace RoosterBot.Schedule {
 		public abstract bool ShouldCallNextCommand { get; }
 
 		public override string ToString() {
-			return $"{StudentSetsString}: {Activity} in {RoomString} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
+			return $"{StudentSetsString}: {Activity.ScheduleCode} in {RoomString} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
 				$"{(BreakStart.HasValue ? "no break" : ("a break from " + BreakStart.Value.ToString() + " to " + BreakEnd.Value.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 
 		/// <summary>
 		/// Convert this instance to a string that can be sent to Discord.
 		/// </summary>
-		public abstract Task<string> PresentAsync(RoosterCommandContext context, ActivityNameService ans, IdentifierInfo relevantIdentifier);
+		public abstract Task<string> PresentAsync(IdentifierInfo relevantIdentifier);
 	}
 }

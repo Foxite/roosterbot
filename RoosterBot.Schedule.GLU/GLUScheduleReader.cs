@@ -29,9 +29,9 @@ namespace RoosterBot.Schedule.GLU {
 					await csv.ReadAsync();
 					csv.ReadHeader();
 
-					Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+					Dictionary<ActivityInfo, ScheduleRecord> lastRecords = new Dictionary<ActivityInfo, ScheduleRecord>();
 
-					DateTime lastMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
+					DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
 					schedule = new List<ScheduleRecord>();
 					CultureInfo culture = new CultureInfo("en-US");
@@ -47,8 +47,8 @@ namespace RoosterBot.Schedule.GLU {
 						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], @"hh\:mm", culture);
 						DateTime end = date + TimeSpan.ParseExact(csv["EndTime"], @"hh\:mm", culture); // Under the assumption that nobody works overnight
 
-						ScheduleRecord record = new ScheduleRecord() {
-							Activity = csv["Activity"],
+						ScheduleRecord record = new GLUScheduleRecord() {
+							Activity = new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
 							StaffMember = m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
 							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
 							// Rooms often have " (0)" behind them. unknown reason.

@@ -24,8 +24,7 @@ namespace RoosterBot.Schedule {
 				.AddSingleton(new TeacherNameService())
 				.AddSingleton(new ScheduleService())
 				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new IdentifierValidationService())
-				.AddSingleton(new ActivityNameService());
+				.AddSingleton(new IdentifierValidationService());
 
 			Logger.Debug("ScheduleComponent", "Started services");
 

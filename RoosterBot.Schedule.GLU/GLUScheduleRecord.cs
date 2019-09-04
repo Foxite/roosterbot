@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
-		public override bool ShouldCallNextCommand => Activity == "pauze";
+		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
-		public async override Task<string> PresentAsync(RoosterCommandContext context, ActivityNameService ans, IdentifierInfo info) {
-			string ret = $":notepad_spiral: {await ans.GetActivityFromAbbreviation(context, Activity)}\n";
+		public override Task<string> PresentAsync(IdentifierInfo info) {
+			string ret = $":notepad_spiral: {Activity.DisplayText}\n";
 
-			if (Activity != "stdag doc") {
-				if (Activity != "pauze") {
+			if (Activity.ScheduleCode != "stdag doc") {
+				if (Activity.ScheduleCode != "pauze") {
 					if (info.ScheduleField != "StaffMember") {
 						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
 							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
@@ -54,7 +54,7 @@ namespace RoosterBot.Schedule.GLU {
 				}
 			}
 
-			return ret;
+			return Task.FromResult(ret);
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace RoosterBot.Schedule {
 				// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
 				await RespondRecord(pretext, query.Identifier, nextRecord, false);
 
-				if (nextRecord.Activity == "pauze" && recursion <= 5) {
+				if (nextRecord.ShouldCallNextCommand && recursion <= 5) {
 					await GetAfterCommandInternal(recursion + 1);
 				}
 			}
