@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace RoosterBot.Schedule {
 	public class TeacherInfo : IdentifierInfo {
-		private static PropertyInfo s_TeacherProperty = typeof(ScheduleRecord).GetProperty("StudentSets");
-
 		public bool     IsUnknown;
 		public string   Abbreviation;
 		public string   FullName;
@@ -35,7 +32,6 @@ namespace RoosterBot.Schedule {
 		public override string ScheduleField => "StaffMember";
 		public override string ScheduleCode => Abbreviation;
 		public override string DisplayText => FullName;
-		public override PropertyInfo RelevantScheduleProperty => s_TeacherProperty;
 
 		public override bool Matches(ScheduleRecord record) {
 			return record.StaffMember.Contains(this);

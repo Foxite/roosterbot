@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
 		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
-		public abstract PropertyInfo RelevantScheduleProperty { get; }
 
 		public abstract bool Matches(ScheduleRecord info);
 
