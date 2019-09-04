@@ -9,8 +9,7 @@ namespace RoosterBot.AWS {
 
 		public SNSNotificationHandler(NotificationService notificationService, AWSConfigService config, string arn) {
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(config.Credentials, new AmazonSimpleNotificationServiceConfig() {
-				RegionEndpoint = config.Region,
-				EndpointDiscoveryEnabled = true
+				RegionEndpoint = config.Region
 			});
 			m_ARN = arn;
 

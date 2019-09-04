@@ -17,7 +17,6 @@ namespace RoosterBot.Schedule.AWS {
 		public void Initialize(AWSConfigService config, string tableName) {
 			Logger.Info("UserClasses", "Connecting to database");
 			m_Client = new AmazonDynamoDBClient(config.Credentials, new AmazonDynamoDBConfig() {
-				EndpointDiscoveryEnabled = true,
 				RegionEndpoint = config.Region
 			});
 			Logger.Info("UserClasses", "Loading user table");
@@ -38,9 +37,9 @@ namespace RoosterBot.Schedule.AWS {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document is null) {
 				document = new Document(new Dictionary<string, DynamoDBEntry>() {
-						{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(user.Id) },
-						{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(ssi.ScheduleCode) }
-					});
+					{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(user.Id) },
+					{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(ssi.ScheduleCode) }
+				});
 				await m_Table.PutItemAsync(document);
 			} else {
 				document["class"] = ssi.ScheduleCode;
