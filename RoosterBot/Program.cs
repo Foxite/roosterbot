@@ -208,14 +208,11 @@ namespace RoosterBot {
 			}
 		}
 
-		/// <summary>
-		/// Shuts down gracefully.
-		/// </summary>
 		public void Shutdown() {
 			m_StopFlagSet = true;
 		}
 
-		internal void Restart() {
+		public void Restart() {
 			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 			Shutdown();
 		}
