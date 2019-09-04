@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
+	// TODO async everything
 	public class ScheduleProvider : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
