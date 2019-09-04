@@ -5,12 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class IdentifierInfoReaderBase<T> : TypeReader where T : IdentifierInfo {
-		public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
-			T result = services.GetService<IdentifierValidationService>().Validate<T>(context, input);
+		public async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
+			T result = await services.GetService<IdentifierValidationService>().ValidateAsync<T>(context, input);
 			if (result is null) {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, Resources.IdentifierInfoReaderBase_ErrorMessage));
+				return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.IdentifierInfoReaderBase_ErrorMessage);
 			} else {
-				return Task.FromResult(TypeReaderResult.FromSuccess(result));
+				return TypeReaderResult.FromSuccess(result);
 			}
 		}
 	}

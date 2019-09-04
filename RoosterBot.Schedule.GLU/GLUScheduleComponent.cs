@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -78,29 +79,26 @@ namespace RoosterBot.Schedule.GLU {
 			GLUActivities gluActivities = new GLUActivities();
 			activityService.RegisterLookup(m_AllowedGuilds, gluActivities.GetActivityFromAbbr);
 
-			// Student sets
-			services.GetService<IdentifierValidationService>().RegisterValidator((context, input) => {
+			// Student sets and Rooms validator
+			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
+		}
+
+		private Task<IdentifierInfo> ValidateIdentifier(ICommandContext context, string input, IGuild contextGuild) {
+			if (m_AllowedGuilds.Contains(contextGuild.Id)) {
 				input = input.ToUpper();
-				if (m_AllowedGuilds.Contains(context.Guild.Id) && m_StudentSetRegex.IsMatch(input)) {
-					return new StudentSetInfo() {
+				IdentifierInfo result = null;
+				if (m_StudentSetRegex.IsMatch(input)) {
+					result = new StudentSetInfo() {
 						ClassName = input
 					};
-				} else {
-					return null;
-				}
-			});
-
-			// Rooms
-			services.GetService<IdentifierValidationService>().RegisterValidator((context, input) => {
-				input = input.ToUpper();
-				if (m_AllowedGuilds.Contains(context.Guild.Id) && m_RoomRegex.IsMatch(input)) {
-					return new RoomInfo() {
+				} else if (m_RoomRegex.IsMatch(input)) {
+					result = new RoomInfo() {
 						Room = input
 					};
-				} else {
-					return null;
 				}
-			});
+				return Task.FromResult(result);
+			}
+			return null;
 		}
 
 		private class ScheduleRegistryInfo {

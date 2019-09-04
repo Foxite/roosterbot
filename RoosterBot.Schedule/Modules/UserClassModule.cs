@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 		
 		[Command("ik"), Summary("#" + nameof(Resources.UserClassModule_SetClassForUser_Summary))]
 		public async Task SetClassForUser([Name("#" + nameof(Resources.UserClassModule_SetClassForUser_class_Name))] string clazz) {
-			StudentSetInfo studentSet = Validation.Validate<StudentSetInfo>(Context, clazz);
+			StudentSetInfo studentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazz);
 			if (studentSet != null) {
 				await Classes.SetClassForDiscordUserAsync(Context, Context.User, studentSet);
 				await ReplyAsync(string.Format(Resources.UserClassModule_SetClassForUser_ConfirmUserIsInClass, studentSet.DisplayText));
