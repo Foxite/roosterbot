@@ -23,7 +23,10 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (user == null) {
-					result = tns.Lookup(context.Guild.Id, input);
+					IGuild guild = context.Guild ?? await (context as RoosterCommandContext)?.GetDMGuild();
+					if (guild != null) {
+						result = tns.Lookup(guild.Id, input);
+					}
 				} else {
 					TeacherInfo teacher = tns.GetTeacherByDiscordUser(context.Guild, user);
 					if (teacher != null) {
