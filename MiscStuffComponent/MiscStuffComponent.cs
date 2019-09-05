@@ -38,14 +38,16 @@ namespace MiscStuffComponent {
 		}
 
 		private async Task WelcomeUser(SocketGuildUser user) {
+			// TODO only in specific guilds
 			if (user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
-				string text = $"Welkom {user.Mention},\n";
-				text += "Je ben bijna klaar je hoeft alleen het volgende nog te doen.\n";
-				text += "- Geef je naam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
-				text += "- Voer in bot-commands het command `?rank developer` of `?rank artist` in om een rang te krijgen\n\n";
-
 				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel).Mention;
+
+				string text = $"Welkom {user.Mention},\n";
+				text += "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
+				text += "- Geef je naam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
+				text += $"- Voer in {botCommandsMention} het command `?rank developer` of `?rank artist` in om een rang te krijgen\n\n";
 				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}";
+
 
 				await welcomeChannel.SendMessageAsync(text);
 			}
