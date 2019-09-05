@@ -46,7 +46,8 @@ namespace MiscStuffComponent {
 				text += "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
 				text += "- Geef je naam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
 				text += $"- Voer in {botCommandsMention} het command `?rank developer` of `?rank artist` in om een rang te krijgen\n\n";
-				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}";
+				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}\n";
+				text += "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik !help of !commands om te zien hoe ik werk.";
 
 
 				await welcomeChannel.SendMessageAsync(text);
