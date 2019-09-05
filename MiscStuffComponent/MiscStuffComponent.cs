@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using Discord.WebSocket;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MiscStuffComponent {
 	public class MiscStuffComponent : ComponentBase {
@@ -32,6 +33,22 @@ namespace MiscStuffComponent {
 			helpText += "`counter reset <naam van counter>`\n";
 			helpText += "En nog minstens 4 geheime commands voor de bot owner.";
 			help.AddHelpSection("misc", helpText);
+
+			services.GetService<DiscordSocketClient>().UserJoined += WelcomeUser;
+		}
+
+		private async Task WelcomeUser(SocketGuildUser user) {
+			if (user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
+				string text = $"Welkom {user.Mention},\n";
+				text += "Je ben bijna klaar je hoeft alleen het volgende nog te doen.\n";
+				text += "- Geef je naam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
+				text += "- Voer in bot-commands het command `?rank developer` of `?rank artist` in om een rang te krijgen\n\n";
+
+				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel).Mention;
+				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}";
+
+				await welcomeChannel.SendMessageAsync(text);
+			}
 		}
 	}
 }
