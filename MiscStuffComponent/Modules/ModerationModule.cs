@@ -25,7 +25,7 @@ namespace MiscStuffComponent.Modules {
 					response += "\n**Unknown**\n";
 				}
 				foreach (IGuildUser item in group) {
-					response += $"@{item.Username}#{item.Discriminator}";
+					response += $"@{item.Username}#{item.Discriminator}\n";
 				}
 			}
 			await ReplyAsync(response);
