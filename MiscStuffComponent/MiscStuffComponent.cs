@@ -25,7 +25,8 @@ namespace MiscStuffComponent {
 		public override async Task AddModules(IServiceProvider services, EditedCommandService commandService, HelpService help) {
 			await Task.WhenAll(
 				commandService.AddModuleAsync<CounterModule>(services),
-				commandService.AddModuleAsync<MiscModule>(services)
+				commandService.AddModuleAsync<MiscModule>(services),
+				commandService.AddModuleAsync<ModerationModule>(services)
 			);
 
 			string helpText = "Voor de rest zijn er nog deze commands:\n";
