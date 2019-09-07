@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Newtonsoft.Json.Linq;
@@ -12,6 +14,7 @@ namespace RoosterBot.Services {
 		public   string       GameString { get; }
 		public   IUser        BotOwner { get; private set; }
 		public   ITextChannel LogChannel { get; private set; }
+		public   IReadOnlyCollection<ulong> StaffRoles { get; set; }
 
 		internal string       SNSCriticalFailureARN { get; }
 		internal bool		  ReportStartupVersionToOwner { get; }
@@ -30,6 +33,7 @@ namespace RoosterBot.Services {
 			GameString = jsonConfig["gameString"].ToObject<string>();
 			SNSCriticalFailureARN = jsonConfig["snsCF_ARN"].ToObject<string>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
+			StaffRoles = jsonConfig["staffRoles"].ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
 		}
 		
 		/// <summary>
