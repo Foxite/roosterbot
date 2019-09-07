@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MiscStuffComponent.Modules {
 	public class ModerationModule : RoosterModuleBase {
-		[Command("users unnamed"), RequireBotManager] // TODO there should be a "RequireModerator" precondition, this will do for now
+		[Command("users unnamed"), UserIsModerator]
 		public async Task GetUnnamedUsers() {
 			IEnumerable<IGrouping<DateTime?, IGuildUser>> unnamedUsers =
 				from user in await Context.Guild.GetUsersAsync()
