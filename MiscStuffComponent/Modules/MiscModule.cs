@@ -17,16 +17,5 @@ namespace MiscStuffComponent.Modules {
 		public async Task DeleteMessageCommand(ulong channel, ulong msg) {
 			await (await (await Context.Client.GetChannelAsync(channel) as ITextChannel).GetMessageAsync(msg)).DeleteAsync();
 		}
-
-		[Command("role ids"), RequireBotManager, HiddenFromList]
-		public async Task GetAllRoleIds() {
-			string response = "";
-
-			foreach (IRole role in Context.Guild.Roles) {
-				response += $"{role.Name} : {role.Id}\n";
-			}
-
-			await ReplyAsync(response);
-		}
 	}
 }
