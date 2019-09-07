@@ -15,6 +15,7 @@ namespace MiscStuffComponent.Modules {
 				from user in await Context.Guild.GetUsersAsync()
 				where !user.IsBot && user.Nickname == null
 				group user by user.JoinedAt?.Date into groups
+				orderby groups.Key.Value
 				select groups;
 
 			string response = "Users with no set nickname (excluding bots, grouped by join date):\n";
