@@ -6,46 +6,37 @@ namespace RoosterBot.Schedule {
 		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
 		/// </summary>
 		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
-		// TODO localize by doing this:
-		// - Have a way of getting the CultureInfo for an IGuild (seperate TODO item in its own right)
-		// - Look through CultureInfo.DateTimeFormat.DayNames and find the only (!) name that starts with the input
-		// - Return the corresponding DayOfWeek item
-		public static DayOfWeek GetDayOfWeekFromString(string dayofweek) {
-			switch (dayofweek.ToLower()) {
-				case "ma":
-				case "maandag":
-					return DayOfWeek.Monday;
-				case "di":
-				case "dinsdag":
-					return DayOfWeek.Tuesday;
-				case "wo":
-				case "woensdag":
-					return DayOfWeek.Wednesday;
-				case "do":
-				case "donderdag":
-					return DayOfWeek.Thursday;
-				case "vr":
-				case "vrijdag":
-					return DayOfWeek.Friday;
-				case "za":
-				case "zaterdag":
-					return DayOfWeek.Saturday;
-				case "zo":
-				case "zondag":
-					return DayOfWeek.Sunday;
-				case "vandaag":
-					return DateTime.Today.DayOfWeek;
-				case "morgen":
-					return DateTime.Today.AddDays(1).DayOfWeek;
-				default:
-					throw new ArgumentException(dayofweek + " is not a weekday.");
+		public static DayOfWeek GetDayOfWeekFromInput(RoosterCommandContext context, GuildCultureService culture, string input) {
+			if (input == "vandaag") {
+				return DateTime.Today.DayOfWeek;
+			} else if (input == "morgen") {
+				return DateTime.Today.AddDays(1).DayOfWeek;
+			}
+
+			string[] weekdays = culture.GetCultureForGuild(context.Guild).DateTimeFormat.DayNames;
+
+			int? result = null;
+			for (int i = 0; i < weekdays.Length; i++) {
+				if (weekdays[i].StartsWith(input)) {
+					if (result == null) {
+						result = i;
+					} else {
+						throw new ArgumentException($"Multiple matches for {input}");
+					}
+				}
+			}
+
+			if (result.HasValue) {
+				return ((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value];
+			} else {
+				throw new ArgumentException($"No matches for {input}"); // Note to Tomorrow-Me: this line is throwing a NullReferenceException. Godspeed
 			}
 		}
 
 		/// <summary>
 		/// Given a DayOfWeek, this returns the Dutch name of that day.
 		/// </summary>
-		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
+		[Obsolete("Use CultureInfo.DateTimeFormat.DayNames")]
 		public static string GetStringFromDayOfWeek(DayOfWeek day) {
 			switch (day) {
 				case DayOfWeek.Monday:
