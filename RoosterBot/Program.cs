@@ -146,6 +146,7 @@ namespace RoosterBot {
 
 		private IServiceCollection CreateRBServices() {
 			HelpService helpService = new HelpService();
+			GuildCultureService gcs = new GuildCultureService();
 			m_NotificationService = new NotificationService();
 			
 			// I don't know what to do with this.

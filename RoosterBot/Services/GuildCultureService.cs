@@ -1,27 +1,25 @@
 ﻿using Discord;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RoosterBot.Services {
+namespace RoosterBot {
 	public class GuildCultureService {
 		private Dictionary<ulong, CultureInfo> m_GuildCultures; // Maps guild IDs to CultureInfo
 		private CultureInfo m_DefaultCulture;
 
-		internal GuildCultureService(CultureInfo defaultCulture) {
-			string culturesPath = Path.Combine(Program.DataPath, "Cultures.json");
+		internal GuildCultureService() {
+			string culturesPath = Path.Combine(Program.DataPath, "Config", "Cultures.json");
 			JObject jsonCultures = JObject.Parse(File.ReadAllText(culturesPath));
+
+			m_DefaultCulture = new CultureInfo(jsonCultures["default"].ToObject<string>());
+
 			m_GuildCultures = jsonCultures["cultures"].ToObject<JObject>().Properties().ToDictionary(
 				/* Select key   */ prop => ulong.Parse(prop.Name),
 				/* Select value */ prop => new CultureInfo(prop.Value.ToObject<string>())
 			);
-
-			m_DefaultCulture = defaultCulture;
 		}
 
 		public CultureInfo GetCultureForGuild(ulong guildId) {
