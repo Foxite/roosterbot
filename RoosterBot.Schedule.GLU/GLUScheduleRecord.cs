@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule.GLU {
 				if (Activity.ScheduleCode != "pauze") {
 					if (info.ScheduleField != "StaffMember") {
 						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
-							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
+							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n"; // TODO localize
 						}
 
 						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
