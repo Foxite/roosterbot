@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 
@@ -28,19 +29,8 @@ namespace RoosterBot {
 				LogPath += ".log";
 			}
 
-			// Non-generic array
-			// Can't use a nice linq one-liner, unfortunately.
-			// Not even indexers. Has to be difficult, obviously.
-			Array severities = typeof(LogSeverity).GetEnumValues();
-			bool first = true;
-			foreach (object severity in severities) {
-				if (first) {
-					first = false;
-					continue;
-				} else {
-					s_LongestSeverity = Math.Max(s_LongestSeverity, severity.ToString().Length);
-				}
-			}
+			LogSeverity[] severities = (LogSeverity[]) typeof(LogSeverity).GetEnumValues();
+			s_LongestSeverity = severities.Max(sev => sev.ToString().Length);
 		}
 
 		public static void Verbose(string tag, string msg, Exception e = null) {
@@ -69,7 +59,6 @@ namespace RoosterBot {
 
 		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
 			string severityStr = severity.ToString().PadLeft(s_LongestSeverity);
-
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " [" + severityStr + "] " + tag + " : " + msg;
 			if (exception != null) {
