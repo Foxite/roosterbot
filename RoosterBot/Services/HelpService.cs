@@ -5,7 +5,7 @@ namespace RoosterBot {
 	public class HelpService {
 		private Dictionary<string, string> m_ComponentHelpTexts;
 
-		public HelpService() {
+		internal HelpService() {
 			m_ComponentHelpTexts = new Dictionary<string, string>();
 		}
 

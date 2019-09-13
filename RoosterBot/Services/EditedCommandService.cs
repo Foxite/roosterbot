@@ -20,7 +20,7 @@ namespace RoosterBot {
 
 		public event Func<IUserMessage, IUserMessage, Task> CommandEdited;
 
-		public EditedCommandService(DiscordSocketClient client) {
+		internal EditedCommandService(DiscordSocketClient client) {
 			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Client = client;
 
