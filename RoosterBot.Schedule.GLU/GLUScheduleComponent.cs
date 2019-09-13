@@ -77,9 +77,9 @@ namespace RoosterBot.Schedule.GLU {
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 		}
 
-		private async Task<IdentifierInfo> ValidateIdentifier(RoosterCommandContext context, string input) {
-			ulong? guildId = (context.Guild ?? await context.GetDMGuildAsync())?.Id;
-			if (guildId.HasValue && m_AllowedGuilds.Contains(guildId.Value)) {
+		private Task<IdentifierInfo> ValidateIdentifier(RoosterCommandContext context, string input) {
+			ulong guildId = context.Guild.Id;
+			if (m_AllowedGuilds.Contains(guildId)) {
 				input = input.ToUpper();
 				IdentifierInfo result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {
@@ -91,9 +91,9 @@ namespace RoosterBot.Schedule.GLU {
 						Room = input
 					};
 				}
-				return result;
+				return Task.FromResult(result);
 			}
-			return null;
+			return Task.FromResult((IdentifierInfo) null);
 		}
 
 		private class ScheduleRegistryInfo {

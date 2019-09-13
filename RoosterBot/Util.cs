@@ -214,23 +214,6 @@ namespace RoosterBot {
 				await (Task) invocationList[i].DynamicInvoke(parameters);
 			}
 		}
-
-		/// <summary>
-		/// Gets all guilds that the Bot user is in, that the given IUser is also in.
-		/// </summary>
-		public static async Task<IReadOnlyCollection<IGuild>> GetCommonGuildsAsync(IDiscordClient client, IUser user) {
-			IReadOnlyCollection<IGuild> allGuilds = await client.GetGuildsAsync();
-			List<IGuild> commonGuilds = new List<IGuild>();
-
-			foreach (IGuild guild in allGuilds) {
-				IReadOnlyCollection<IGuildUser> guildUsers = await guild.GetUsersAsync();
-				if (guildUsers.Any(guilduser => guilduser.Id == user.Id)) {
-					commonGuilds.Add(guild);
-				}
-			}
-
-			return commonGuilds.AsReadOnly();
-		}
 	}
 
 	public class ReturnValue<T> {

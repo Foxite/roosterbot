@@ -22,13 +22,12 @@ namespace RoosterBot.Schedule {
 					user = context.User;
 				}
 
-				IGuild guild = context.Guild ?? await context.GetDMGuildAsync();
 				if (user == null) {
-					if (guild != null) {
-						result = tns.Lookup(guild.Id, input);
+					if (context.Guild != null) {
+						result = tns.Lookup(context.Guild.Id, input);
 					}
 				} else {
-					TeacherInfo teacher = tns.GetTeacherByDiscordUser(guild, user);
+					TeacherInfo teacher = tns.GetTeacherByDiscordUser(context.Guild, user);
 					if (teacher != null) {
 						result = new TeacherInfo[] { teacher };
 					}

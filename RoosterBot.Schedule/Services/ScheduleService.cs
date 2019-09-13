@@ -37,10 +37,10 @@ namespace RoosterBot.Schedule {
 			return (await GetScheduleTypeAsync(identifier, context)).GetRecordAfterTimeSpan(identifier, timespan);
 		}
 
-		private async Task<ScheduleProvider> GetScheduleTypeAsync(IdentifierInfo info, RoosterCommandContext context) {
+		private Task<ScheduleProvider> GetScheduleTypeAsync(IdentifierInfo info, RoosterCommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider> list)) {
-				IGuild guild = context.Guild ?? await context.GetDMGuildAsync();
-				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {guild.Name}");
+				return Task.FromResult(list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild))
+					?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {context.Guild.Name}"));
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
