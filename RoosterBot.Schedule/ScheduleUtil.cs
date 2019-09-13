@@ -6,7 +6,10 @@ namespace RoosterBot.Schedule {
 		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
 		/// </summary>
 		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
-		// TODO localize, probably through an external assembly such as RoosterBot.Schedule.Language.NL
+		// TODO localize by doing this:
+		// - Have a way of getting the CultureInfo for an IGuild (seperate TODO item in its own right)
+		// - Look through CultureInfo.DateTimeFormat.DayNames and find the only (!) name that starts with the input
+		// - Return the corresponding DayOfWeek item
 		public static DayOfWeek GetDayOfWeekFromString(string dayofweek) {
 			switch (dayofweek.ToLower()) {
 				case "ma":
