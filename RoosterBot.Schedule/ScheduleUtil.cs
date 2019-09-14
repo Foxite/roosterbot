@@ -4,37 +4,6 @@ using System.Globalization;
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
 		/// <summary>
-		/// Given either the name of a weekdag in Dutch, or the first two letters, this returns a DayOfWeek corresponding to the input.
-		/// </summary>
-		/// <exception cref="ArgumentException">When the input is not the full name or the first two letters of a weekday in Dutch.</exception>
-		public static DayOfWeek GetDayOfWeekFromInput(RoosterCommandContext context, GuildCultureService culture, string input) {
-			if (input == "vandaag") {
-				return DateTime.Today.DayOfWeek;
-			} else if (input == "morgen") {
-				return DateTime.Today.AddDays(1).DayOfWeek;
-			}
-
-			string[] weekdays = culture.GetCultureForGuild(context.Guild).DateTimeFormat.DayNames;
-
-			int? result = null;
-			for (int i = 0; i < weekdays.Length; i++) {
-				if (weekdays[i].StartsWith(input)) {
-					if (result == null) {
-						result = i;
-					} else {
-						throw new ArgumentException($"Multiple matches for {input}");
-					}
-				}
-			}
-
-			if (result.HasValue) {
-				return ((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value];
-			} else {
-				throw new ArgumentException($"No matches for {input}"); // Note to Tomorrow-Me: this line is throwing a NullReferenceException. Godspeed
-			}
-		}
-
-		/// <summary>
 		/// Given a DayOfWeek, this returns the Dutch name of that day.
 		/// </summary>
 		public static string GetStringFromDayOfWeek(CultureInfo culture, DayOfWeek day) {
