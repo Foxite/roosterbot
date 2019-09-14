@@ -68,21 +68,22 @@ namespace RoosterBot.Schedule {
 			return records.ToArray();
 		}
 		
-		public TeacherInfo[] Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
+		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
-			List<TeacherInfo> records = new List<TeacherInfo>();
+			List<TeacherMatch> records = new List<TeacherMatch>();
 
 			foreach (TeacherInfo record in GetAllowedRecordsForGuild(guild)) {
 				if (skipNoLookup && record.NoLookup)
 					continue;
 
-				if (record.MatchName(nameInput)) {
-					records.Add(record);
+				float score = record.MatchName(nameInput);
+				if (score > 0) {
+					records.Add(new TeacherMatch(record, score));
 				}
 			}
 			
-			return records.ToArray();
+			return records.AsReadOnly();
 		}
 
 		public TeacherInfo GetTeacherByDiscordUser(IGuild guild, IUser user) {
@@ -110,6 +111,16 @@ namespace RoosterBot.Schedule {
 
 			public GuildTeacherList(ulong[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
 				m_Teachers = teachers;
+			}
+		}
+
+		public class TeacherMatch {
+			public TeacherInfo Teacher { get; }
+			public float Score { get; }
+
+			public TeacherMatch(TeacherInfo teacher, float score) {
+				Teacher = teacher;
+				Score = score;
 			}
 		}
 	}

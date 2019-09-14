@@ -10,23 +10,23 @@ namespace RoosterBot.Schedule {
 		public bool     NoLookup;
 		public string   DiscordUser;
 
-		public bool MatchName(string nameInput) {
+		public float MatchName(string nameInput) {
 			// We match the input by first checking if their full name starts with the input (case insensitive),
 			//  and then by checking if the *input* starts with one of the alternative spellings (also case insensitive).
 
 			// Check start of full name or exact match with abbreviation
 			if (Abbreviation.ToLower() == nameInput ||
 				FullName.ToLower().StartsWith(nameInput)) {
-				return true;
+				return (float) nameInput.Length / FullName.Length;
 			} else if (AltSpellings != null) {
 				// Check alternative spellings
 				foreach (string altSpelling in AltSpellings) {
 					if (nameInput.StartsWith(altSpelling)) {
-						return true;
+						return (float) nameInput.Length / altSpelling.Length;
 					}
 				}
 			}
-			return false;
+			return 0;
 		}
 
 		public override string ScheduleField => "StaffMember";

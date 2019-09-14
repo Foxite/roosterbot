@@ -31,7 +31,7 @@ namespace RoosterBot.Schedule {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
-			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
+			commandService.AddTypeReader<TeacherInfo>(new TeacherInfoReader());
 			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 

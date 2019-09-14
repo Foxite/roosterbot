@@ -7,114 +7,94 @@ namespace RoosterBot.Schedule {
 	[LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherCurrentCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo teacher in teachers) {
-				ReturnValue<ScheduleRecord> result = await GetRecord(teachers[0]);
-				if (result.Success) {
-					ScheduleRecord record = result.Value;
-					if (record == null) {
-						string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
-						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
+		public async Task TeacherCurrentCommand([Remainder] TeacherInfo teacher) {
+			ReturnValue<ScheduleRecord> result = await GetRecord(teacher);
+			if (result.Success) {
+				ScheduleRecord record = result.Value;
+				if (record == null) {
+					string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
+					ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
-						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-							response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
-						}
-
-						ReplyDeferred(response, teacher, record);
-					} else {
-						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), teacher.DisplayText), teacher, record);
+					if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
+						response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
 					}
+
+					ReplyDeferred(response, teacher, record);
+				} else {
+					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), teacher.DisplayText), teacher, record);
 				}
 			}
 		}
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
-		public async Task TeacherNextCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo teacher in teachers) {
-				ReturnValue<ScheduleRecord> result = await GetNextRecord(teachers[0]);
-				if (result.Success) {
-					ScheduleRecord record = result.Value;
+		public async Task TeacherNextCommand([Remainder] TeacherInfo teacher) {
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(teacher);
+			if (result.Success) {
+				ScheduleRecord record = result.Value;
 
-					if (record == null) {
-						string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
-						ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
+				if (record == null) {
+					string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
+					ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
 
-						if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-							response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
-						}
-
-						ReplyDeferred(response, teacher, record);
-					} else {
-						string pretext;
-						if (record.Start.Date == DateTime.Today) {
-							pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), teacher.DisplayText);
-						} else {
-							pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), teacher.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
-						}
-
-						await RespondRecord(pretext, teacher, record);
+					if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
+						response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
 					}
+
+					ReplyDeferred(response, teacher, record);
+				} else {
+					string pretext;
+					if (record.Start.Date == DateTime.Today) {
+						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), teacher.DisplayText);
+					} else {
+						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), teacher.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
+					}
+
+					await RespondRecord(pretext, teacher, record);
 				}
 			}
 		}
 
 		[Command("dag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo teacher in teachers) {
-				await RespondDay(teacher, ScheduleUtil.NextDayOfWeek(day, false));
-			}
+		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo teacher) {
+			await RespondDay(teacher, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTodayCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo teacher in teachers) {
-				await RespondDay(teacher, DateTime.Today);
-			}
+		public async Task TeacherTodayCommand([Remainder] TeacherInfo teacher) {
+			await RespondDay(teacher, DateTime.Today);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo teacher in teachers) {
-				await RespondDay(teacher, DateTime.Today.AddDays(1));
-			}
+		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo teacher) {
+			await RespondDay(teacher, DateTime.Today.AddDays(1));
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo info in teachers) {
-				await RespondWeek(info, 0);
-			}
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
+			await RespondWeek(teacher, 0);
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo[] teachers) {
-			foreach (TeacherInfo info in teachers) {
-				await RespondWeek(info, 1);
-			}
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
+			await RespondWeek(teacher, 1);
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, TeacherInfo[] teachers) {
+		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, TeacherInfo teacher) {
 			if (unit == "uur") {
-				foreach (TeacherInfo teacher in teachers) {
-					ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(teacher, TimeSpan.FromHours(amount));
-					if (result.Success) {
-						ScheduleRecord record = result.Value;
-						if (record != null) {
-							await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), string.Join(", ", teachers.Select(t => t.DisplayText)), amount), teacher, record);
-						} else {
-							await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
-						}
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(teacher, TimeSpan.FromHours(amount));
+				if (result.Success) {
+					ScheduleRecord record = result.Value;
+					if (record != null) {
+						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), teacher.DisplayText, amount), teacher, record);
+					} else {
+						await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
-				foreach (TeacherInfo teacher in teachers) {
-					await RespondDay(teacher, DateTime.Today.AddDays(amount));
-				}
+				await RespondDay(teacher, DateTime.Today.AddDays(amount));
 			} else if (unit == "week" || unit == "weken") {
-				foreach (TeacherInfo teacher in teachers) {
-					await RespondWeek(teacher, amount);
-				}
+				await RespondWeek(teacher, amount);
 			} else {
 				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 			}
