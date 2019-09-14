@@ -166,6 +166,7 @@ namespace RoosterBot {
 				.AddSingleton(m_NotificationService)
 				.AddSingleton(helpService)
 				.AddSingleton(restartHandler)
+				.AddSingleton(gcs)
 				.AddSingleton(m_Client);
 			return serviceCollection;
 		}
