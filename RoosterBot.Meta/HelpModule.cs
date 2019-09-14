@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[LogTag("MetaModule"), Name("#" + nameof(Resources.MetaCommandsModule_Name))]
+	[LogTag("MetaModule"), Name("#MetaCommandsModule_Name")]
 	public class HelpModule : EditableCmdModuleBase {
 		public HelpService Help { get; set; }
 
-		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Summary))]
+		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Summary")]
 		public async Task HelpCommand() {
-			string response = string.Format(Resources.MetaCommandsModule_HelpCommand_HelpPretext, Config.CommandPrefix);
+			string response = string.Format(ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_HelpPretext"), Config.CommandPrefix);
 
 			bool notFirst = false;
 			foreach (string helpSection in Help.GetSectionNames()) {
@@ -21,46 +21,47 @@ namespace RoosterBot.Meta {
 				notFirst = true;
 			}
 
-			response += Resources.MetaCommandsModule_HelpCommand_PostText;
+			response += ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_PostText");
 
 			await ReplyAsync(response);
 		}
 
-		[Command("help"), Summary("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section_Summary))]
-		public async Task HelpCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_HelpCommand_Section))] string section) {
+		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Section_Summary")]
+		public async Task HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
-				response += Help.GetHelpSection(section);
+				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
+				response += Util.ResolveString(Culture, helpSection.Item1, helpSection.Item2);
 			} else {
-				response += Resources.MetaCommandsModule_HelpCommand_ChapterDoesNotExist;
+				response += ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_ChapterDoesNotExist");
 			}
 			await ReplyAsync(response);
 		}
 
-		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Summary))]
+		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Summary")]
 		public async Task CommandListCommand() {
 			// List modules with visible commands
 			IEnumerable<string> visibleModules = 
 				from module in CmdService.Modules
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
-				select Util.ResolveString(Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
+				select Util.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
-			string response = Resources.MetaCommandsModule_CommandListCommand_Pretext;
+			string response = ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_Pretext");
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
 			await ReplyAsync(response);
 		}
 
-		[Command("commands"), Summary("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_Category_Summary))]
-		public async Task CommandListCommand([Remainder, Name("#" + nameof(Resources.MetaCommandsModule_CommandListCommand_ModuleName))] string moduleName) {
+		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Category_Summary")]
+		public async Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string moduleName) {
 			moduleName = moduleName.ToLower();
 			ModuleInfo module = CmdService.Modules
-				.Where(aModule => Util.ResolveString(Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
+				.Where(aModule => Util.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
 				.SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				await ReplyAsync(Resources.MetaCommandsModule_CommandListCommand_CategoryDoesNotExist);
+				await ReplyAsync(ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_CategoryDoesNotExist"));
 			} else if (module.Commands.Count() == 0) {
-				await ReplyAsync(Resources.MetaCommandsModule_CommandListCommand_CategoryEmpty);
+				await ReplyAsync(ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_CategoryEmpty"));
 			} else {
 				string response = "";
 
@@ -74,7 +75,7 @@ namespace RoosterBot.Meta {
 					}
 
 					response += $"`{Config.CommandPrefix}";
-					response += Util.ResolveString(component, command.Name);
+					response += Util.ResolveString(Culture, component, command.Name);
 
 					// Parameters
 					foreach (ParameterInfo param in command.Parameters) {
@@ -82,8 +83,8 @@ namespace RoosterBot.Meta {
 							continue;
 						}
 
-						string paramName = Util.ResolveString(component, param.Name);
-						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {Util.ResolveString(component, param.Summary)}";
+						string paramName = Util.ResolveString(Culture, component, param.Name);
+						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {Util.ResolveString(Culture, component, param.Summary)}";
 						
 						response += $" <{paramName.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{paramSummary}>";
 					}
@@ -91,7 +92,7 @@ namespace RoosterBot.Meta {
 					if (string.IsNullOrWhiteSpace(command.Summary)) {
 						response += "`";
 					} else {
-						string commandSummary = Util.ResolveString(component, command.Summary);
+						string commandSummary = Util.ResolveString(Culture, component, command.Summary);
 						response += $"`: {commandSummary}";
 					}
 
@@ -105,7 +106,7 @@ namespace RoosterBot.Meta {
 								if (preconditionsAdded != 0) {
 									preconditionText += ", ";
 								}
-								preconditionText += Util.ResolveString(component, rpc.Summary);
+								preconditionText += Util.ResolveString(Culture, component, rpc.Summary);
 								preconditionsAdded++;
 							}
 						}
@@ -119,10 +120,10 @@ namespace RoosterBot.Meta {
 				}
 
 				if (!string.IsNullOrWhiteSpace(module.Remarks)) {
-					response += Util.ResolveString(component, module.Remarks) + "\n";
+					response += Util.ResolveString(Culture, component, module.Remarks) + "\n";
 				}
 
-				response += Resources.MetaCommandsModule_CommandListCommand_OptionalHint;
+				response += ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_OptionalHint");
 				await ReplyAsync(response);
 			}
 		}

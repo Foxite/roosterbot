@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Net;
-using Discord.WebSocket;
+using ParameterInfo = Discord.Commands.ParameterInfo;
 
 namespace RoosterBot {
 	public static class Util {
@@ -165,9 +167,15 @@ namespace RoosterBot {
 			return input;
 		}
 
-		public static string ResolveString(ComponentBase component, string str) {
+		public static string ResolveString(CultureInfo culture, ComponentBase component, string str) {
 			if (str.StartsWith("#")) {
-				return component.GetStringResource(str.Substring(1));
+				Assembly assembly = null;
+				if (component == null) {
+					assembly = Assembly.GetExecutingAssembly();
+				} else {
+					assembly = component.GetType().Assembly;
+				}
+				return Program.Instance.ResourceService.GetString(assembly, culture, str.Substring(1));
 			} else {
 				return str;
 			}

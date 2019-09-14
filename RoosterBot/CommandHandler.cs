@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -80,19 +81,21 @@ namespace RoosterBot {
 				bool bad = false;
 				string badReport = $"\"{context.Message}\": ";
 
+				CultureInfo culture = Program.Instance.Components.Services.GetService<GuildCultureService>().GetCultureForGuild(context.Guild);
+
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 						case CommandError.UnknownCommand:
-							response = string.Format(Resources.Program_OnCommandExecuted_UnknownCommand, m_ConfigService.CommandPrefix);
+							response = string.Format(Program.Instance.ResourceService.GetString(culture, "Program_OnCommandExecuted_UnknownCommand"), m_ConfigService.CommandPrefix);
 							break;
 						case CommandError.BadArgCount:
-							response = Resources.Program_OnCommandExecuted_BadArgCount;
+							response = Program.Instance.ResourceService.GetString(culture, "Program_OnCommandExecuted_BadArgCount");
 							break;
 						case CommandError.UnmetPrecondition:
-							response = result.ErrorReason;
+							response = Util.ResolveString(culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
 							break;
 						case CommandError.ParseFailed:
-							response = Resources.Program_OnCommandExecuted_ParseFailed;
+							response = Program.Instance.ResourceService.GetString(culture, "Program_OnCommandExecuted_ParseFailed");
 							break;
 						case CommandError.ObjectNotFound:
 							badReport += "ObjectNotFound";
@@ -128,7 +131,7 @@ namespace RoosterBot {
 						await m_ConfigService.BotOwner.SendMessageAsync(badReport);
 					}
 
-					response = Resources.RoosterBot_FatalError;
+					response = Program.Instance.ResourceService.GetString(culture, "RoosterBot_FatalError");
 				}
 
 				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;

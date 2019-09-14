@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -13,20 +15,27 @@ namespace RoosterBot.Watson {
 		private const string LogTag = "Watson";
 		private readonly string AssistantId;
 		private AssistantService m_Assistant;
+		private GuildCultureService m_GCS;
+		private ResourceService m_Resources;
 
-		public WatsonClient(string apiKey, string assistantId) {
+		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources) {
 			AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
 			};
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
+
+			m_GCS = gcs;
+			m_Resources = resources;
 		}
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
 			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
 				await Util.AddReaction(message, "❌");
-				await message.Channel.SendMessageAsync(Resources.WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs);
+				IGuild guild = (message.Author as SocketUser)?.MutualGuilds.First() ?? (message.Channel as IGuildChannel).Guild;
+				CultureInfo culture = m_GCS.GetCultureForGuild(guild);
+				await message.Channel.SendMessageAsync(m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
 				return;
 			}
 

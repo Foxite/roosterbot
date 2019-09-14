@@ -12,26 +12,31 @@ namespace RoosterBot.Watson {
 		private WatsonClient m_Watson;
 		private DiscordSocketClient m_Client;
 		private ConfigService m_Config;
+		private string m_WatsonID;
+		private string m_WatsonKey;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			ResourcesType = typeof(Resources);
-
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
-			m_Watson = new WatsonClient(jsonConfig["watsonkey"].ToObject<string>(), jsonConfig["watsonid"].ToObject<string>());
+			m_WatsonID = jsonConfig["watsonid"].ToObject<string>();
+			m_WatsonKey = jsonConfig["watsonkey"].ToObject<string>();
 			return Task.CompletedTask;
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+			services.GetService<ResourceService>().RegisterResources("RoosterBot.Watson.Resources");
+
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			
+			m_Watson = new WatsonClient(m_WatsonKey, m_WatsonID, services.GetService<GuildCultureService>(), services.GetService<ResourceService>());
+
 			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 			
-			help.AddHelpSection("taal", Resources.WatsonComponent_HelpText);
+			help.AddHelpSection(this, "taal", "#WatsonComponent_HelpText");
 
 			return Task.CompletedTask;
 		}

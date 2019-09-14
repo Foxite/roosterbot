@@ -16,8 +16,6 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			ResourcesType = typeof(Resources);
-
 			services
 				.AddSingleton(new TeacherNameService())
 				.AddSingleton(new ScheduleService())
@@ -30,6 +28,8 @@ namespace RoosterBot.Schedule {
 		}
 
 		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
+
 			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
 			commandService.AddTypeReader<TeacherInfo[]>(new TeacherInfoReader());
 			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
@@ -45,9 +45,9 @@ namespace RoosterBot.Schedule {
 				commandService.AddModuleAsync<UserClassModule>(services)
 			));
 
-			help.AddHelpSection("rooster", Resources.ScheduleComponent_HelpText_Rooster);
+			help.AddHelpSection(this, "rooster", "#ScheduleComponent_HelpText_Rooster");
 
-			help.AddHelpSection("klas", Resources.ScheduleComponent_HelpText_Class);
+			help.AddHelpSection(this, "klas", "#ScheduleComponent_HelpText_Class");
 		}
 	}
 }

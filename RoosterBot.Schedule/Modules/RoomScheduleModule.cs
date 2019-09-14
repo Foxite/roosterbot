@@ -18,13 +18,13 @@ namespace RoosterBot.Schedule {
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					string response = Resources.RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord;
+					string response = ResourcesService.GetString(Culture, "RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord");
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
-						response += Resources.ScheduleModuleBase_ItIsWeekend;
+						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
 					ReplyDeferred(response, room, record);
 				} else {
-					await RespondRecord(string.Format(Resources.ScheduleModuleBase_PretextNow, record.RoomString), room, record);
+					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), record.RoomString), room, record);
 				}
 			}
 		}
@@ -40,9 +40,9 @@ namespace RoosterBot.Schedule {
 					string pretext;
 
 					if (record.Start.Date == DateTime.Today) {
-						pretext = string.Format(Resources.ScheduleModuleBase_PretextNext, record.RoomString);
+						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), record.RoomString);
 					} else {
-						pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, record.RoomString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
+						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), record.RoomString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 					}
 					await RespondRecord(pretext, room, record);
 				}
@@ -81,9 +81,9 @@ namespace RoosterBot.Schedule {
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record != null) {
-						await RespondRecord(string.Format(Resources.ScheduleModuleBase_InXHours, record.RoomString, amount), info, record);
+						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), record.RoomString, amount), info, record);
 					} else {
-						await ReplyAsync(Resources.ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime);
+						await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
@@ -91,7 +91,7 @@ namespace RoosterBot.Schedule {
 			} else if (unit == "week" || unit == "weken") {
 				await RespondWorkingDays(info, amount);
 			} else {
-				await MinorError(Resources.ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 			}
 		}
 
@@ -101,20 +101,20 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = string.Format(Resources.RoomScheduleModule_RespondDay_NoRecordRelative, ScheduleUtil.GetRelativeDateReference(Culture, date));
+					response = string.Format(ResourcesService.GetString(Culture, "RoomScheduleModule_RespondDay_NoRecordRelative"), ScheduleUtil.GetRelativeDateReference(Culture, date));
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
-						response += Resources.ScheduleModuleBase_ItIsWeekend;
+						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
 					ReplyDeferred(response, info, null);
 				} else {
-					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
+					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] {
-						Resources.ScheduleModuleBase_RespondDay_ColumnActivity,
-						Resources.ScheduleModuleBase_RespondDay_ColumnTime,
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnActivity"),
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTime"),
 						"Klas", // TODO localize
-						Resources.ScheduleModuleBase_RespondDay_ColumnTeacher
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTeacher")
 					};
 
 					int recordIndex = 1;
@@ -142,19 +142,19 @@ namespace RoosterBot.Schedule {
 
 				if (availability.Length > 0) {
 					if (weeksFromNow == 0) {
-						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleThisWeek, info.DisplayText);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleThisWeek"), info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleNextWeek, info.DisplayText);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleNextWeek"), info.DisplayText);
 					} else {
-						response = string.Format(Resources.ScheduleModuleBase_RespondWeek_ScheduleInXWeeks, info.DisplayText, weeksFromNow);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleInXWeeks"), info.DisplayText, weeksFromNow);
 					}
 					response += "\n";
 
 					string[][] cells = new string[availability.Length + 1][];
 					cells[0] = new[] {
-						Resources.ScheduleModuleBase_RespondWorkingDays_ColumnDay,
-						Resources.ScheduleModuleBase_RespondWorkingDays_ColumnFrom,
-						Resources.ScheduleModuleBase_RespondWorkingDays_ColumnTo
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnDay"),
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnFrom"),
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnTo")
 					};
 
 					int i = 1;
@@ -169,11 +169,11 @@ namespace RoosterBot.Schedule {
 					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
-						response = string.Format(Resources.RoomScheduleModule_RespondWorkingDays_NotInUseThisWeek, info.DisplayText);
+						response = string.Format(ResourcesService.GetString(Culture, "RoomScheduleModule_RespondWorkingDays_NotInUseThisWeek"), info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response = string.Format(Resources.RoomScheduleModule_RespondWorkingDays_NotInUseNextWeek, info.DisplayText);
+						response = string.Format(ResourcesService.GetString(Culture, "RoomScheduleModule_RespondWorkingDays_NotInUseNextWeek"), info.DisplayText);
 					} else {
-						response = string.Format(Resources.RoomScheduleModule_RespondWorkingDays_NotInUseInXWeeks, info.DisplayText, weeksFromNow);
+						response = string.Format(ResourcesService.GetString(Culture, "RoomScheduleModule_RespondWorkingDays_NotInUseInXWeeks"), info.DisplayText, weeksFromNow);
 					}
 				}
 

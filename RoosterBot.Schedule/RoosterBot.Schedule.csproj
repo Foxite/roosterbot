@@ -62,11 +62,6 @@
     <Compile Include="Readers\RoomInfoReader.cs" />
     <Compile Include="Readers\StudentSetInfoReader.cs" />
     <Compile Include="Readers\TeacherInfoReader.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="ScheduleUtil.cs" />
     <Compile Include="Services\IUserClassesService.cs" />
@@ -103,7 +98,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>

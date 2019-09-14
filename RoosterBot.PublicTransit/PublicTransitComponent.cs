@@ -39,7 +39,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.";
 
 			helpText += "Je kunt stations opzoeken met `!stations <naam van station>`";
-			help.AddHelpSection("trein", helpText);
+			help.AddHelpSection(this, "trein", helpText);
 		}
 
 		public override Task ShutdownAsync() {

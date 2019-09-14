@@ -16,12 +16,13 @@ namespace RoosterBot.Schedule {
 			string[] weekdays = services.GetService<GuildCultureService>().GetCultureForGuild(context.Guild).DateTimeFormat.DayNames;
 
 			int? result = null;
+			ResourceService resources = services.GetService<ResourceService>();
 			for (int i = 0; i < weekdays.Length; i++) {
 				if (weekdays[i].ToLower().StartsWith(input)) {
 					if (result == null) {
 						result = i;
 					} else {
-						return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, Resources.DayOfWeekReader_CheckFailed));
+						return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context, "DayOfWeekReader_CheckFailed")));
 					}
 				}
 			}
@@ -29,7 +30,7 @@ namespace RoosterBot.Schedule {
 			if (result.HasValue) {
 				return Task.FromResult(TypeReaderResult.FromSuccess(((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value]));
 			} else {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, Resources.DayOfWeekReader_CheckFailed));
+				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context, "DayOfWeekReader_CheckFailed")));
 			}
 		}
 	}

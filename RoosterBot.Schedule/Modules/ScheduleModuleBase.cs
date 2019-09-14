@@ -41,7 +41,7 @@ namespace RoosterBot.Schedule {
 		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
 			if (ScheduleUtil.IsSummerBreak()) {
-				await MinorError(Resources.ScheduleModuleBase_SummerBreakGoHome);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_SummerBreakGoHome"));
 				return new ReturnValue<ScheduleRecord>() {
 					Success = false
 				};
@@ -56,7 +56,7 @@ namespace RoosterBot.Schedule {
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
 			if (ScheduleUtil.IsSummerBreak(date)) {
-				await MinorError(Resources.ScheduleModuleBase_SummerBreakGoHome);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_SummerBreakGoHome"));
 				return new ReturnValue<ScheduleRecord[]>() {
 					Success = false
 				};
@@ -90,17 +90,17 @@ namespace RoosterBot.Schedule {
 					Value = await action()
 				};
 			} catch (IdentifierNotFoundException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_NotFound);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_NotFound"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_RecordsOutdated);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_RecordsOutdated"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (NoAllowedGuildsException) {
-				await MinorError(Resources.ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer);
+				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer"));
 				return new ReturnValue<T>() {
 					Success = false
 				};

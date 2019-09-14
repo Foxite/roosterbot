@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (result == null || result.Length == 0) {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.TeacherInfoReader_CheckFailed);
+					return TypeReaderResult.FromError(CommandError.ParseFailed, services.GetService<ResourceService>().GetString(context, "TeacherInfoReader_CheckFailed"));
 				} else {
 					return TypeReaderResult.FromSuccess(result);
 				}

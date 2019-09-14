@@ -11,6 +11,7 @@ namespace RoosterBot.Schedule {
 			if (baseResult.IsSuccess) {
 				return baseResult;
 			} else {
+				ResourceService resources = services.GetService<ResourceService>();
 				IUser user;
 				bool byMention = false;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
@@ -19,15 +20,15 @@ namespace RoosterBot.Schedule {
 					user = context.User;
 					byMention = true;
 				} else {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, Resources.StudentSetInfoReader_CheckFailed_Direct);
+					return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context, "StudentSetInfoReader_CheckFailed_Direct"));
 				}
 				StudentSetInfo result = await services.GetService<IUserClassesService>().GetClassForDiscordUserAsync(context, user);
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = Resources.StudentSetInfoReader_CheckFailed_MentionUser;
+						message = resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionUser");
 					} else {
-						message = Resources.StudentSetInfoReader_CheckFailed_MentionSelf;
+						message = resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionSelf");
 					}
 					return TypeReaderResult.FromError(CommandError.ParseFailed, message);
 				} else {

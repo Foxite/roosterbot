@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	[LogTag("TeacherListModule"), Name("#" + nameof(Resources.TeacherListModule_Name))]
+	[LogTag("TeacherListModule"), Name("#TeacherListModule_Name")]
 	public class TeacherListModule : EditableCmdModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#" + nameof(Resources.TeacherListModule_TeacherListCommand_Summary))]
+		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
 		public async Task TeacherListCommand([Remainder, Name("naam")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 
 			if (records.FirstOrDefault() == null) { // Faster than .Count() == 0 because otherwise it would have to actually count it, but we don't care about the count beyond it being 0
 													// Although I would appreciate an .IsEmpty() method
-				await ReplyAsync(Resources.TeacherListModule_TeacherListCommand_NoTeachersFound);
+				await ReplyAsync(ResourcesService.GetString(Culture, "TeacherListModule_TeacherListCommand_NoTeachersFound"));
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
 				// https://www.dotnetperls.com/for-foreach
@@ -27,9 +27,9 @@ namespace RoosterBot.Schedule {
 
 				string[][] cells = new string[records.Count() + 1][];
 				cells[0] = new string[] {
-					Resources.TeacherListModule_TeacherListCommand_ColumnFullName,
-					Resources.TeacherListModule_TeacherListCommand_ColumnAbbreviation,
-					Resources.TeacherListModule_TeacherListCommand_DiscordName
+					ResourcesService.GetString(Culture, "TeacherListModule_TeacherListCommand_ColumnFullName"),
+					ResourcesService.GetString(Culture, "TeacherListModule_TeacherListCommand_ColumnAbbreviation"),
+					ResourcesService.GetString(Culture, "TeacherListModule_TeacherListCommand_DiscordName")
 				};
 				int recordIndex = 1;
 				foreach (TeacherInfo record in records) {

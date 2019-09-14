@@ -8,12 +8,12 @@ namespace RoosterBot.Meta {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			ResourcesType = typeof(Resources);
-
 			return Task.CompletedTask;
 		}
 
 		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
+
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<HelpModule>(services),
 				commandService.AddModuleAsync<ControlModule>(services)

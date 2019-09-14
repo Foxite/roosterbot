@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public sealed class RangeAttribute : ParameterPreconditionAttribute {
@@ -17,7 +18,7 @@ namespace RoosterBot {
 			if (ret) {
 				return Task.FromResult(PreconditionResult.FromSuccess());
 			} else {
-				return Task.FromResult(PreconditionResult.FromError(Resources.RangeAttribute_CheckFailed));
+				return Task.FromResult(PreconditionResult.FromError(services.GetService<ResourceService>().GetString(context, "RangeAttribute_CheckFailed")));
 			}
 		}
 	}

@@ -22,6 +22,8 @@ namespace RoosterBot {
 		private ConfigService m_ConfigService;
 		private NotificationService m_NotificationService;
 
+		internal ResourceService ResourceService { get; private set; }
+
 		public ComponentManager Components { get; private set; }
 		public CommandHandler CommandHandler { get; set; }
 
@@ -148,6 +150,9 @@ namespace RoosterBot {
 			HelpService helpService = new HelpService();
 			GuildCultureService gcs = new GuildCultureService();
 			m_NotificationService = new NotificationService();
+
+			ResourceService = new ResourceService(gcs);
+			ResourceService.RegisterResources("RoosterBot.Resources");
 			
 			// I don't know what to do with this.
 			RestartHandler restartHandler = new RestartHandler(m_Client, m_NotificationService, 5);
@@ -164,6 +169,7 @@ namespace RoosterBot {
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_NotificationService)
+				.AddSingleton(ResourceService)
 				.AddSingleton(helpService)
 				.AddSingleton(restartHandler)
 				.AddSingleton(gcs)

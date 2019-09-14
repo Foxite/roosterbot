@@ -12,6 +12,7 @@ namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
 		public GuildCultureService Cultures { get; set; }
+		public ResourceService ResourcesService { get; set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
@@ -157,8 +158,8 @@ namespace RoosterBot {
 			if (Config.BotOwner != null) {
 				await Config.BotOwner.SendMessageAsync(report);
 			}
-
-			string response = Resources.RoosterBot_FatalError;
+			
+			string response = ResourcesService.GetString(Culture, "RoosterBot_FatalError");
 		}
 
 		public abstract class ModuleLogger {

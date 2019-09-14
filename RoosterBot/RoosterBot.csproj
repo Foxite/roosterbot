@@ -65,11 +65,6 @@
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
     <Compile Include="Readers\RoosterTypeReaderBase.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="RestartHandler.cs" />
     <Compile Include="Services\EditedCommandService.cs" />
     <Compile Include="Services\ConfigService.cs" />
@@ -80,6 +75,7 @@
     <Compile Include="Services\GuildCultureService.cs" />
     <Compile Include="Services\HelpService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\ResourceService.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,9 +114,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
