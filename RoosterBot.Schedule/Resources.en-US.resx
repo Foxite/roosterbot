@@ -435,4 +435,13 @@ Warning: natural-language commands are not supported yet in English.</value>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>That does not match anything.</value>
   </data>
+  <data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="DayOfWeekReader_Today" xml:space="preserve">
+    <value>today</value>
+  </data>
+  <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
+    <value>tomorrow</value>
+  </data>
 </root>

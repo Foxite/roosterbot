@@ -438,4 +438,13 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
   </data>
+  <data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
+    <value>Klas</value>
+  </data>
+  <data name="DayOfWeekReader_Today" xml:space="preserve">
+    <value>vandaag</value>
+  </data>
+  <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
+    <value>tomorrow</value>
+  </data>
 </root>

@@ -113,7 +113,7 @@ namespace RoosterBot.Schedule {
 					cells[0] = new string[] {
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnActivity"),
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTime"),
-						"Klas", // TODO localize
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnStudentSets"),
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTeacher")
 					};
 

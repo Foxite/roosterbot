@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
-using System;
 
 namespace RoosterBot.PublicTransit {
 	[LogTag("PublicTransitModule"), Name("OV")]

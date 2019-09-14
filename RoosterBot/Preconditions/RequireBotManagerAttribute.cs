@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public sealed class RequireBotManagerAttribute : RoosterPreconditionAttribute {
-		public override string Summary => "#RequireBotManagerAttribute_Summary"; // TODO summaries should be resolved
+		public override string Summary => "#RequireBotManagerAttribute_Summary";
 
 		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
 			if (context.User.Id == services.GetService<ConfigService>().BotOwner.Id) {
