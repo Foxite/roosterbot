@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +11,20 @@ using Discord.WebSocket;
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
+		public GuildCultureService Cultures { get; set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
+		protected CultureInfo Culture {
+			get {
+				if (m_Culture == null) {
+					m_Culture = Cultures.GetCultureForGuild(Context.Guild);
+				}
+				return m_Culture;
+			}
+		}
 
+		private CultureInfo m_Culture = null;
 		private StringBuilder m_Response;
 		private string m_Reaction;
 
