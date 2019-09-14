@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace RoosterBot.Schedule.GLU {
 				if (Activity.ScheduleCode != "pauze") {
 					if (info.ScheduleField != "StaffMember") {
 						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
-							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n"; // TODO localize
+							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
 						}
 
 						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
@@ -34,7 +35,7 @@ namespace RoosterBot.Schedule.GLU {
 				}
 
 				if (Start.Date != DateTime.Today) {
-					ret += $":calendar_spiral: {ScheduleUtil.GetStringFromDayOfWeek(Start.DayOfWeek)} {Start.ToString("dd-MM-yyyy")}\n";
+					ret += $":calendar_spiral: {ScheduleUtil.GetStringFromDayOfWeek(CultureInfo.GetCultureInfo("nl-NL"), Start.DayOfWeek)} {Start.ToString("dd-MM-yyyy")}\n";
 				}
 
 				ret += $":clock5: {Start.ToString("HH:mm")} - {End.ToString("HH:mm")}";

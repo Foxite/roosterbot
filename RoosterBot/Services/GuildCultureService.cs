@@ -14,11 +14,11 @@ namespace RoosterBot {
 			string culturesPath = Path.Combine(Program.DataPath, "Config", "Cultures.json");
 			JObject jsonCultures = JObject.Parse(File.ReadAllText(culturesPath));
 
-			m_DefaultCulture = new CultureInfo(jsonCultures["default"].ToObject<string>());
+			m_DefaultCulture = CultureInfo.GetCultureInfo(jsonCultures["default"].ToObject<string>());
 
 			m_GuildCultures = jsonCultures["cultures"].ToObject<JObject>().Properties().ToDictionary(
 				/* Select key   */ prop => ulong.Parse(prop.Name),
-				/* Select value */ prop => new CultureInfo(prop.Value.ToObject<string>())
+				/* Select value */ prop => CultureInfo.GetCultureInfo(prop.Value.ToObject<string>())
 			);
 		}
 
