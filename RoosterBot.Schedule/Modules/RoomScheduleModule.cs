@@ -42,8 +42,7 @@ namespace RoosterBot.Schedule {
 					if (record.Start.Date == DateTime.Today) {
 						pretext = string.Format(Resources.ScheduleModuleBase_PretextNext, record.RoomString);
 					} else {
-						pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, record.RoomString, ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek));
-						// pretext = $"{record.RoomString}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}";
+						pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, record.RoomString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 					}
 					await RespondRecord(pretext, room, record);
 				}
@@ -102,16 +101,22 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = string.Format(Resources.RoomScheduleModule_RespondDay_NoRecordRelative, ScheduleUtil.GetRelativeDateReference(date));
+					response = string.Format(Resources.RoomScheduleModule_RespondDay_NoRecordRelative, ScheduleUtil.GetRelativeDateReference(Culture, date));
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
 						response += Resources.ScheduleModuleBase_ItIsWeekend;
 					}
 					ReplyDeferred(response, info, null);
 				} else {
-					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(date));
+					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
 
 					string[][] cells = new string[records.Length + 1][];
-					cells[0] = new string[] { Resources.ScheduleModuleBase_RespondDay_ColumnActivity, Resources.ScheduleModuleBase_RespondDay_ColumnTime, "Klas", Resources.ScheduleModuleBase_RespondDay_ColumnTeacher };
+					cells[0] = new string[] {
+						Resources.ScheduleModuleBase_RespondDay_ColumnActivity,
+						Resources.ScheduleModuleBase_RespondDay_ColumnTime,
+						"Klas", // TODO localize
+						Resources.ScheduleModuleBase_RespondDay_ColumnTeacher
+					};
+
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
@@ -154,7 +159,11 @@ namespace RoosterBot.Schedule {
 
 					int i = 1;
 					foreach (AvailabilityInfo item in availability) {
-						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+						cells[i] = new[] {
+							ScheduleUtil.GetStringFromDayOfWeek(Culture, item.StartOfAvailability.DayOfWeek).FirstCharToUpper(),
+							item.StartOfAvailability.ToShortTimeString(),
+							item.EndOfAvailability.ToShortTimeString()
+						};
 						i++;
 					}
 					response += Util.FormatTextTable(cells);

@@ -32,11 +32,10 @@ namespace RoosterBot.Schedule {
 					await FatalError($"`GetNextRecord(\"StudentSets\", {info.DisplayText})` returned null");
 				} else {
 					string pretext;
-					if (record.Start.Date == DateTime.Today)
-					{
+					if (record.Start.Date == DateTime.Today) {
 						pretext = string.Format(Resources.ScheduleModuleBase_PretextNext, record.StudentSetsString);
 					} else {
-						pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, record.StudentSetsString, ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek));
+						pretext = string.Format(Resources.ScheduleModuleBase_Pretext_FirstOn, record.StudentSetsString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 					}
 					await RespondRecord(pretext, info, record);
 				}
@@ -95,13 +94,13 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = string.Format(Resources.StudentScheduleModule_RespondDay_NoRecordAtRelattive, ScheduleUtil.GetRelativeDateReference(date));
+					response = string.Format(Resources.StudentScheduleModule_RespondDay_NoRecordAtRelattive, ScheduleUtil.GetRelativeDateReference(Culture, date));
 					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
 						response += Resources.ScheduleModuleBase_ItIsWeekend;
 					}
 					ReplyDeferred(response, info, null);
 				} else {
-					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(date));
+					response = string.Format(Resources.ScheduleModuleBase_ResondDay_ScheduleForRelative, info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] {
@@ -152,7 +151,11 @@ namespace RoosterBot.Schedule {
 
 					int i = 1;
 					foreach (AvailabilityInfo item in availability) {
-						cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+						cells[i] = new[] {
+							ScheduleUtil.GetStringFromDayOfWeek(Culture, item.StartOfAvailability.DayOfWeek).FirstCharToUpper(),
+							item.StartOfAvailability.ToShortTimeString(),
+							item.EndOfAvailability.ToShortTimeString()
+						};
 						i++;
 					}
 					response += Util.FormatTextTable(cells);

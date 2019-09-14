@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
@@ -36,26 +37,8 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Given a DayOfWeek, this returns the Dutch name of that day.
 		/// </summary>
-		[Obsolete("Use CultureInfo.DateTimeFormat.DayNames")]
-		public static string GetStringFromDayOfWeek(DayOfWeek day) {
-			switch (day) {
-				case DayOfWeek.Monday:
-					return "maandag";
-				case DayOfWeek.Tuesday:
-					return "dinsdag";
-				case DayOfWeek.Wednesday:
-					return "woensdag";
-				case DayOfWeek.Thursday:
-					return "donderdag";
-				case DayOfWeek.Friday:
-					return "vrijdag";
-				case DayOfWeek.Saturday:
-					return "zaterdag";
-				case DayOfWeek.Sunday:
-					return "zondag";
-				default:
-					throw new ArgumentException();
-			}
+		public static string GetStringFromDayOfWeek(CultureInfo culture, DayOfWeek day) {
+			return culture.DateTimeFormat.DayNames[(int) day];
 		}
 
 		/// <summary>
@@ -95,18 +78,19 @@ namespace RoosterBot.Schedule {
 
 		/// <summary>
 		/// For a given DateTime, this returns the Dutch relative reference for that date.
-		/// For example, today, tomorrow, on Tueday, or if it's 7 or more days away, it will return <code>date.ToStrin("dd-MM")</code>.
+		/// For example, today, tomorrow, on Tueday, or if it's 7 or more days away, it will return <code>date.ToString("dd-MM")</code>.
 		/// </summary>
 		/// <param name="date"></param>
 		/// <param name="response"></param>
 		/// <returns></returns>
-		public static string GetRelativeDateReference(DateTime date) {
+		// TODO localize relative date reference
+		public static string GetRelativeDateReference(CultureInfo culture, DateTime date) {
 			if (date == DateTime.Today) {
 				return "vandaag";
 			} else if (date == DateTime.Today.AddDays(1)) {
 				return "morgen";
 			} else if ((date - DateTime.Today).TotalDays < 7) {
-				return "op " + GetStringFromDayOfWeek(date.DayOfWeek);
+				return "op " + GetStringFromDayOfWeek(culture, date.DayOfWeek);
 			} else {
 				return "op " + date.ToString("dd-MM");
 			}
