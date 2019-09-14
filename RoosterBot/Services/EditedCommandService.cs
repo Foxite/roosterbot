@@ -14,13 +14,16 @@ namespace RoosterBot {
 	 * It's easily possible to make this work for all messages a user has sent, but that would cause unlimited rise in memory usage, and we only have 1GB to work with on EC2.
 	 * However, we could periodically remove messages older than a certain age, like five minutes.
 	 */
+	// TODO all responses should be deleted when the command is deleted, even if the module does not derive from EditableCmdModuleBase
 	public class EditedCommandService : CommandService {
 		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private DiscordSocketClient m_Client;
 
 		public event Func<IUserMessage, IUserMessage, Task> CommandEdited;
 
-		internal EditedCommandService(DiscordSocketClient client) {
+		internal EditedCommandService(DiscordSocketClient client) : this(client, new CommandServiceConfig()) { }
+
+		internal EditedCommandService(DiscordSocketClient client, CommandServiceConfig config) : base(config) {
 			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Client = client;
 

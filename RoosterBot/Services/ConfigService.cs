@@ -1,15 +1,18 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ConfigService {
-		public   string		  CommandPrefix { get; }
-		public   ActivityType ActivityType { get; }
-		public   string		  GameString { get; }
-		public   IUser		  BotOwner { get; private set; }
-		internal bool		  ReportStartupVersionToOwner { get; }
+		public   string		        CommandPrefix { get; }
+		public   string		        GameString { get; }
+		public   ActivityType       ActivityType { get; }
+		public   MultiMatchHandling MultiMatchHandling { get; private set; }
+		public   IUser		        BotOwner { get; private set; }
+		internal bool		        ReportStartupVersionToOwner { get; }
+
 		private  ulong		  m_BotOwnerId;
 
 		internal ConfigService(string jsonPath, out string authToken) {
@@ -26,8 +29,9 @@ namespace RoosterBot {
 			
 			authToken = jsonConfig["token"].ToObject<string>();
 			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
-			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
 			GameString = jsonConfig["gameString"].ToObject<string>();
+			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
+			MultiMatchHandling = jsonConfig["multiMatchHandling"].ToObject<MultiMatchHandling>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
 			m_BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
 		}

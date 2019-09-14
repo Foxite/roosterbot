@@ -44,7 +44,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(socketMessage, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, socketMessage as IUserMessage, null, "NewCommand");
 
-				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services);
+				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace RoosterBot {
 			if (IsMessageCommand(command, out int argPos)) {
 				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse, "EditedCommand");
 
-				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services);
+				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			} else {
 				await ourResponse.DeleteAsync();
 			}
