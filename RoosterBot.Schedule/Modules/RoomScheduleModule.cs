@@ -4,27 +4,23 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO merge all children of ScheduleModuleBase
-	// Be honest, these files are pretty big messes, and it doesn't help that there are 3 of them.
-	// The biggest problem is that one of the modules takes an array, which is because it's the only TypeReader that can return multiple matches.
-	// Proposed solutions:
-	// - All IdentifierInfo return arrays
-	// - TeacherInfo returns a single one and informs the user in case of multiple matches (either by returning one of them or returning an error)
 	[LogTag("RoomSM"), HiddenFromList]
 	public class RoomScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async)]
-		public async Task RoomCurrentCommand(RoomInfo room) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(room);
+		public async Task RoomCurrentCommand(RoomInfo info) {
+			ReturnValue<ScheduleRecord> result = await GetRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					string response = ResourcesService.GetString(Culture, "RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord");
+					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_CurrentCommand_NoCurrentRecord"), info.DisplayText);
+
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
-					ReplyDeferred(response, room, record);
+
+					ReplyDeferred(response, info, record);
 				} else {
-					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), record.RoomString), room, record);
+					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), info.DisplayText), info, record);
 				}
 			}
 		}

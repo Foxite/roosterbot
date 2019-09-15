@@ -12,13 +12,15 @@ namespace RoosterBot.Schedule {
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					string response = ResourcesService.GetString(Culture, "StudentScheduleModule_StudentCurrentCommand_NoCurrentRecord");
+					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_CurrentCommand_NoCurrentRecord"), info.DisplayText);
+
 					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
 						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
-					await ReplyAsync(response, info, null);
+
+					ReplyDeferred(response, info, record);
 				} else {
-					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), record.StudentSetsString), info, record);
+					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), info.DisplayText), info, record);
 				}
 			}
 		}

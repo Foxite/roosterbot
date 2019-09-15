@@ -191,9 +191,6 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="DefaultScheduleModule_AfterCommand_BigProblem" xml:space="preserve">
     <value>If you see this, there is a big problem</value>
   </data>
-	<data name="RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>It looks like there's nothing going on there right now.</value>
-  </data>
 	<data name="RoomScheduleModule_RoomCurrentCommand__Het_is_dan_ook_weekend_" xml:space="preserve">
     <value>It is weekend after all.</value>
   </data>
@@ -274,12 +271,8 @@ Warning: natural-language commands are not supported yet in English.</value>
     <comment>0: Identifier display text
 		  1: relative date reference</comment>
   </data>
-	<data name="StudentScheduleModule_StudentCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>It looks like there's nothing on your schedule right now.</value>
-  </data>
-	<data name="TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>It looks like {0} has nothing right now.</value>
-    <comment>0: teacher display text</comment>
+	<data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
+    <value>Not on schedule right now</value>
   </data>
 	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
     <value>He/she is not on schedule today (anymore), and is probably absent.</value>

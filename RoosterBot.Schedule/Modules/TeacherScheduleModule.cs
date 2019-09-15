@@ -7,21 +7,20 @@ namespace RoosterBot.Schedule {
 	[LogTag("TeacherSM"), HiddenFromList]
 	public class TeacherScheduleModule : ScheduleModuleBase {
 		[Command("nu", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherCurrentCommand([Remainder] TeacherInfo teacher) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(teacher);
+		public async Task TeacherCurrentCommand([Remainder] TeacherInfo info) {
+			ReturnValue<ScheduleRecord> result = await GetRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
-					ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
+					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_CurrentCommand_NoCurrentRecord"), info.DisplayText);
 
-					if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-						response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
+					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
+						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
 
-					ReplyDeferred(response, teacher, record);
+					ReplyDeferred(response, info, record);
 				} else {
-					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), teacher.DisplayText), teacher, record);
+					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), info.DisplayText), info, record);
 				}
 			}
 		}

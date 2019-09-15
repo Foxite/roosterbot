@@ -189,9 +189,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="DefaultScheduleModule_AfterCommand_BigProblem" xml:space="preserve">
     <value>Als je dit ziet is er een groot probleem</value>
   </data>
-	<data name="RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>Het ziet ernaar uit dat daar nu niets is.</value>
-  </data>
 	<data name="RoomScheduleModule_RoomCurrentCommand__Het_is_dan_ook_weekend_" xml:space="preserve">
     <value> Het is dan ook weekend.</value>
   </data>
@@ -273,12 +270,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: Identifier display text
 		  1: relative date reference</comment>
   </data>
-	<data name="StudentScheduleModule_StudentCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>Het ziet ernaar uit dat je nu niets hebt.</value>
-  </data>
-	<data name="TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>Het lijkt erop dat {0} nu niets heeft.</value>
-    <comment>0: teacher display text</comment>
+	<data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
+    <value>Niet op het rooster op dit moment</value>
   </data>
 	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
     <value>
