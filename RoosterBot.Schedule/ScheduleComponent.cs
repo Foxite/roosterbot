@@ -30,9 +30,12 @@ namespace RoosterBot.Schedule {
 		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
-			commandService.AddTypeReader<IdentifierInfo>(new TeacherInfoReader());
-			commandService.AddTypeReader<IdentifierInfo>(new StudentSetInfoReader()); // This doesn't work
-			commandService.AddTypeReader<IdentifierInfo>(new RoomInfoReader());
+			commandService.AddTypeReader<IdentifierInfo>(new MultiReader(new RoosterTypeReaderBase[] {
+				new TeacherInfoReader(),
+				new StudentSetInfoReader(),
+				new RoomInfoReader()
+			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this));
+
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModules(await Task.WhenAll(
