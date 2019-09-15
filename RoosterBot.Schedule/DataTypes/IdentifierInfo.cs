@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
@@ -23,7 +22,10 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override int GetHashCode() {
-			return 53717137 + EqualityComparer<string>.Default.GetHashCode(ScheduleCode);
+			var hashCode = 120372121;
+			hashCode = hashCode * -1521134295 + ScheduleField.GetHashCode();
+			hashCode = hashCode * -1521134295 + ScheduleCode.GetHashCode();
+			return hashCode;
 		}
 
 		public static bool operator ==(IdentifierInfo lhs, IdentifierInfo rhs) {
