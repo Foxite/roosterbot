@@ -221,7 +221,7 @@ Warning: natural-language commands are not supported yet in English.</value>
     <value>{0}: Now</value>
   </data>
 	<data name="ScheduleModuleBase_InXHours" xml:space="preserve">
-    <value>{0}: In {1} hour</value>
+    <value>{0}: In {1} hours</value>
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
   </data>
@@ -231,8 +231,8 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
     <value>I only support hours, days, and weeks.</value>
   </data>
-	<data name="StudentScheduleModule_RespondDay_NoRecordAtRelattive" xml:space="preserve">
-    <value>It looks like there's nothing on your schedule {0}.</value>
+	<data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
+    <value>Not on schedule {0}.</value>
     <comment>0: relative date reference</comment>
   </data>
 	<data name="ScheduleModuleBase_ScheduleThisWeek" xml:space="preserve">
@@ -287,11 +287,6 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
     <value> That is in the weekend after all.</value>
   </data>
-	<data name="TeacherScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
-    <value>It looks like {0} has nothing {1}</value>
-    <comment>0: teacher display text
-		  1: relative date reference</comment>
-  </data>
 	<data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>{0}: Rooster deze week</value>
     <comment>0: identifier display text</comment>
@@ -317,10 +312,6 @@ Warning: natural-language commands are not supported yet in English.</value>
     <value>{0}: Not present in {1} weeks</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
-  </data>
-	<data name="RoomScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
-    <value>It looks like that there's nothing there {0}.</value>
-    <comment>0: relative date reference</comment>
   </data>
 	<data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>

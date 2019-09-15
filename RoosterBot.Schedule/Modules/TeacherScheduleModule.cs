@@ -100,39 +100,46 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		private async Task RespondDay(TeacherInfo teacher, DateTime date) {
-			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(teacher, date);
+		private async Task RespondDay(TeacherInfo info, DateTime date) {
+			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_RespondDay_NoRecordRelative"), teacher.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
-					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
-						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ThatIsWeekend");
+					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_NoRecordAtRelative"), ScheduleUtil.GetRelativeDateReference(Culture, date));
+					if (ScheduleUtil.IsWeekend(date)) {
+						if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
+							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
+						} else {
+							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ThatIsWeekend");
+						}
 					}
-					ReplyDeferred(response, null, null);
+					ReplyDeferred(response, info, null);
 				} else {
-					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), teacher.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
+					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] {
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnActivity"),
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTime"),
-						"Klas",
+						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnStudentSets"),
+
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnRoom")
 					};
+
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
 						cells[recordIndex][0] = record.Activity.DisplayText;
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
 						cells[recordIndex][2] = record.StudentSetsString;
+
 						cells[recordIndex][3] = record.RoomString;
 
 						recordIndex++;
 					}
 					response += Util.FormatTextTable(cells);
-					ReplyDeferred(response, teacher, records.Last());
+					ReplyDeferred(response, info, records.Last());
 				}
 			}
 		}

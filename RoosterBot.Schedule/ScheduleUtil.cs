@@ -64,5 +64,13 @@ namespace RoosterBot.Schedule {
 				return "op " + date.ToString("dd-MM");
 			}
 		}
+
+		public static bool IsWeekend(DateTime date) {
+			return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+		}
+
+		public static bool IsWithinSameWeekend(DateTime left, DateTime right) {
+			return IsWeekend(left) && IsWeekend(right) && Math.Abs((left.Date - right.Date).TotalDays) <= 2;
+		}
 	}
 }

@@ -94,9 +94,13 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] records = result.Value;
 				string response;
 				if (records.Length == 0) {
-					response = string.Format(ResourcesService.GetString(Culture, "StudentScheduleModule_RespondDay_NoRecordAtRelattive"), ScheduleUtil.GetRelativeDateReference(Culture, date));
-					if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) {
-						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
+					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_NoRecordAtRelative"), ScheduleUtil.GetRelativeDateReference(Culture, date));
+					if (ScheduleUtil.IsWeekend(date)) {
+						if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
+							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
+						} else {
+							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ThatIsWeekend");
+						}
 					}
 					ReplyDeferred(response, info, null);
 				} else {
@@ -106,15 +110,18 @@ namespace RoosterBot.Schedule {
 					cells[0] = new string[] {
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnActivity"),
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTime"),
+
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTeacher"),
 						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnRoom")
 					};
+
 					int recordIndex = 1;
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[4];
 						cells[recordIndex][0] = record.Activity.DisplayText;
 						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
-						cells[recordIndex][2] = record.StaffMember.Length == 0 ? "" : string.Join(", ", record.StaffMember.Select(t => t.DisplayText));
+
+						cells[recordIndex][2] = record.StaffMemberString;
 						cells[recordIndex][3] = record.RoomString;
 
 						recordIndex++;

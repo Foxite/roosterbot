@@ -229,8 +229,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
     <value>Ik ondersteun alleen uren, dagen, en weken.</value>
   </data>
-	<data name="StudentScheduleModule_RespondDay_NoRecordAtRelattive" xml:space="preserve">
-    <value>Het ziet ernaar uit dat je {0} niets hebt.</value>
+	<data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
+    <value>Niet op het rooster {0}.</value>
     <comment>0: relative date reference</comment>
   </data>
 	<data name="ScheduleModuleBase_ScheduleThisWeek" xml:space="preserve">
@@ -287,11 +287,6 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
 	<data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
     <value> Dat is dan ook weekend.</value>
   </data>
-	<data name="TeacherScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
-    <value>Het lijkt er op dat {0} {1} niets heeft.</value>
-    <comment>0: teacher display text
-		  1: relative date reference</comment>
-  </data>
 	<data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>{0}: Rooster deze week</value>
     <comment>0: identifier display text</comment>
@@ -317,10 +312,6 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
     <value>{0}: Niet op school over {1} weken</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
-  </data>
-	<data name="RoomScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
-    <value>Het ziet ernaar uit dat daar {0} niets is.</value>
-    <comment>0: relative date reference</comment>
   </data>
 	<data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit.</value>
