@@ -7,6 +7,7 @@ namespace RoosterBot.Schedule {
 	// Provides several "virtual" commands that don't do much, but serve as a single list item for 3 different "versions" of each command
 	// They also replace missing IdentifierInfo parameters with "ik" and re-execute the command,
 	//  and provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
+	// TODO this class is probably obsolete now
 	[LogTag("DefaultCommandsModule"), Name("#DefaultScheduleModule_Name"),
 		Summary("#DefaultScheduleModule_Summary"),
 		Remarks("#DefaultScheduleModule_Remarks")]

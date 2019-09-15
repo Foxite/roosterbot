@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ namespace RoosterBot.Schedule {
 		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
+			// TODO allow other components to use their own IdentifierInfo
+			// Currently the codebase *probably* allows this, but I haven't really looked into it.
+			// In any case there needs to be a way to add custom TypeReaders to this MultiReader.
 			commandService.AddTypeReader<IdentifierInfo>(new MultiReader(new RoosterTypeReaderBase[] {
 				new TeacherInfoReader(),
 				new StudentSetInfoReader(),

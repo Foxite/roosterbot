@@ -5,6 +5,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
+	// TODO reduce the size of this file
 	public class ScheduleModule : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
