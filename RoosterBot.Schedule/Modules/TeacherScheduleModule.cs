@@ -71,30 +71,30 @@ namespace RoosterBot.Schedule {
 
 		[Command("deze week", RunMode = RunMode.Sync)]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
-			await RespondWeek(teacher, 0);
+			await RespondWorkingDays(teacher, 0);
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
-			await RespondWeek(teacher, 1);
+			await RespondWorkingDays(teacher, 1);
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
-		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, TeacherInfo teacher) {
+		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, TeacherInfo info) {
 			if (unit == "uur") {
-				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(teacher, TimeSpan.FromHours(amount));
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record != null) {
-						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), teacher.DisplayText, amount), teacher, record);
+						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), info.DisplayText, amount), info, record);
 					} else {
 						await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
-				await RespondDay(teacher, DateTime.Today.AddDays(amount));
+				await RespondDay(info, DateTime.Today.AddDays(amount));
 			} else if (unit == "week" || unit == "weken") {
-				await RespondWeek(teacher, amount);
+				await RespondWorkingDays(info, amount);
 			} else {
 				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 			}
@@ -144,7 +144,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		private async Task RespondWeek(TeacherInfo info, int weeksFromNow) {
+		private async Task RespondWorkingDays(TeacherInfo info, int weeksFromNow) {
 			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailabilityInfo(info, weeksFromNow);
 			if (result.Success) {
 				AvailabilityInfo[] availability = result.Value;

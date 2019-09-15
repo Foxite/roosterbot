@@ -81,7 +81,7 @@ namespace RoosterBot.Schedule {
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record != null) {
-						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), record.RoomString, amount), info, record);
+						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), info.DisplayText, amount), info, record);
 					} else {
 						await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
