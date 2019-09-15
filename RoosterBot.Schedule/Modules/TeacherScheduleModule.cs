@@ -55,28 +55,28 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("dag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo teacher) {
-			await RespondDay(teacher, ScheduleUtil.NextDayOfWeek(day, false));
+		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo info) {
+			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTodayCommand([Remainder] TeacherInfo teacher) {
-			await RespondDay(teacher, DateTime.Today);
+		public async Task TeacherTodayCommand([Remainder] TeacherInfo info) {
+			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
-		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo teacher) {
-			await RespondDay(teacher, DateTime.Today.AddDays(1));
+		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo info) {
+			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
 		[Command("deze week", RunMode = RunMode.Sync)]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
-			await RespondWorkingDays(teacher, 0);
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] TeacherInfo info) {
+			await RespondWorkingDays(info, 0);
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo teacher) {
-			await RespondWorkingDays(teacher, 1);
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] TeacherInfo info) {
+			await RespondWorkingDays(info, 1);
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
