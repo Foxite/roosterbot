@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
+	<!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,65 +59,65 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
     <value>You can look up what a class or teacher is currently doing, or what is going on in a room.
 I will automatically understand if you're talking about a class, teacher, or room.
 I know the abbreviations, full names, and alternative spellings of all teachers.
@@ -134,7 +134,7 @@ If you are in a break, I will automatically show you what comes after the break.
 You can request a list of all teachers, including their abbreviations and Discord names: `!teachers`
 You can also filter this list: `!teachers martin` shows you all teachers with the first name Martin.</value>
   </data>
-  <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
+	<data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
     <value>I can remember in what class you are, so you won't have to tell me every time.
 To set your class: `!me &lt;class&gt;`, for example `!me 2gd1`.
 After that you won't have to put your class in commands. So you can just type `!now` and I will know what to search for.
@@ -143,305 +143,291 @@ You can always check what class I think you're in by just typing `!me`, to check
 This also works with natural-language commands: `@RoosterBot what's up now?`
 Warning: natural-language commands are not supported yet in English.</value>
   </data>
-  <data name="DayOfWeekReader_CheckFailed" xml:space="preserve">
+	<data name="DayOfWeekReader_CheckFailed" xml:space="preserve">
     <value>That's not a weekday.</value>
   </data>
-  <data name="RoomInfoReader_CheckFailed" xml:space="preserve">
+	<data name="RoomInfoReader_CheckFailed" xml:space="preserve">
     <value>That's no room.</value>
   </data>
-  <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
+	<data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
     <value>Is that a teacher? :thinking: If they are new, they need to be added by the bot owner.</value>
   </data>
-  <data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
+	<data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
     <value>Thats not a class.</value>
   </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
+	<data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
     <value>I don't know in what class that person is. He/she needs to use `!me &lt;his/her class&gt;` to change this.</value>
   </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
+	<data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>I don't know in what class you are. Use `!me &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="AfterScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
+	<data name="AfterScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
     <value>Hint: To use !daarna, you don't need to specify parameters.</value>
   </data>
-  <data name="AfterScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
+	<data name="AfterScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>After what?</value>
   </data>
-  <data name="AfterScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
+	<data name="AfterScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
     <value>I don't have access to the latest schedule tables, so I can't see anything.</value>
   </data>
-  <data name="ScheduleModuleBase_PretextNext" xml:space="preserve">
+	<data name="ScheduleModuleBase_PretextNext" xml:space="preserve">
     <value>{0}: Next</value>
     <comment>0: Identifier display text</comment>
   </data>
-  <data name="ScheduleModuleBase_PretextAfterPrevious" xml:space="preserve">
+	<data name="ScheduleModuleBase_PretextAfterPrevious" xml:space="preserve">
     <value>{0}: After previous class</value>
     <comment>0: Identifier display text
 		</comment>
   </data>
-  <data name="DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown" xml:space="preserve">
+	<data name="DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown" xml:space="preserve">
     <value>I don't know in what class that person is. He or she needs to use `!me &lt;their class&gt;` to change this. If it's a teacher, his or her Discord account needs to be added by the bot owner.</value>
   </data>
-  <data name="DefaultScheduleModule_ReplyErrorMessage_UserUnknown" xml:space="preserve">
+	<data name="DefaultScheduleModule_ReplyErrorMessage_UserUnknown" xml:space="preserve">
     <value>I don't know what class you're in. Use `!me &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
+	<data name="DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>I don't understand if you're talking about a class, teacher, or room.</value>
   </data>
-  <data name="DefaultScheduleModule_AfterCommand_BigProblem" xml:space="preserve">
+	<data name="DefaultScheduleModule_AfterCommand_BigProblem" xml:space="preserve">
     <value>If you see this, there is a big problem</value>
   </data>
-  <data name="RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord" xml:space="preserve">
+	<data name="RoomScheduleModule_RoomCurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>It looks like there's nothing going on there right now.</value>
   </data>
-  <data name="RoomScheduleModule_RoomCurrentCommand__Het_is_dan_ook_weekend_" xml:space="preserve">
+	<data name="RoomScheduleModule_RoomCurrentCommand__Het_is_dan_ook_weekend_" xml:space="preserve">
     <value>It is weekend after all.</value>
   </data>
-  <data name="ScheduleModuleBase_ItIsWeekend" xml:space="preserve">
+	<data name="ScheduleModuleBase_ItIsWeekend" xml:space="preserve">
     <value>It is weekend after all.</value>
   </data>
-  <data name="ScheduleModuleBase_Pretext_FirstOn" xml:space="preserve">
+	<data name="ScheduleModuleBase_Pretext_FirstOn" xml:space="preserve">
     <value>{0}: First on {1}</value>
     <comment>0: Identifier display text
 		  1: Relative date reference</comment>
   </data>
-  <data name="ScheduleModuleBase_SummerBreakGoHome" xml:space="preserve">
+	<data name="ScheduleModuleBase_SummerBreakGoHome" xml:space="preserve">
     <value>It's summer break, man. Go home.</value>
   </data>
-  <data name="ScheduleModuleBase_HandleError_NotFound" xml:space="preserve">
+	<data name="ScheduleModuleBase_HandleError_NotFound" xml:space="preserve">
     <value>That item is not on my schedules.</value>
   </data>
-  <data name="ScheduleModuleBase_HandleError_RecordsOutdated" xml:space="preserve">
+	<data name="ScheduleModuleBase_HandleError_RecordsOutdated" xml:space="preserve">
     <value>I found that item on my schedules, but there is nothing on the schedule yet for that moment.</value>
   </data>
-  <data name="ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
+	<data name="ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
     <value>There are no schedules available for this server.</value>
   </data>
-  <data name="ScheduleModuleBase_PretextNow" xml:space="preserve">
+	<data name="ScheduleModuleBase_PretextNow" xml:space="preserve">
     <value>{0}: Now</value>
   </data>
-  <data name="ScheduleModuleBase_InXHours" xml:space="preserve">
+	<data name="ScheduleModuleBase_InXHours" xml:space="preserve">
     <value>{0}: In {1} hour</value>
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
   </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
+	<data name="ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
     <value>There is nothing at that time.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
+	<data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
     <value>I only support hours, days, and weeks.</value>
   </data>
-  <data name="StudentScheduleModule_RespondDay_NoRecordAtRelattive" xml:space="preserve">
+	<data name="StudentScheduleModule_RespondDay_NoRecordAtRelattive" xml:space="preserve">
     <value>It looks like there's nothing on your schedule {0}.</value>
     <comment>0: relative date reference</comment>
   </data>
-  <data name="ScheduleModuleBase_ScheduleThisWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_ScheduleThisWeek" xml:space="preserve">
     <value>Rooster deze week</value>
   </data>
-  <data name="ScheduleModuleBase_ScheduleNextWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_ScheduleNextWeek" xml:space="preserve">
     <value>Schedule next week</value>
   </data>
-  <data name="ScheduleModuleBase_ScheduleInXWeeks" xml:space="preserve">
+	<data name="ScheduleModuleBase_ScheduleInXWeeks" xml:space="preserve">
     <value>Schedule in {0} weeks</value>
     <comment>0: amount of weeks</comment>
   </data>
-  <data name="StudentScheduleModule_RespondWorkingDays_NotAtSchoolThisWeek" xml:space="preserve">
-    <value>Not present this week</value>
-  </data>
-  <data name="StudentScheduleModule_RespondWorkingDays_NotAtSchoolNextWeek" xml:space="preserve">
-    <value>Not present next week</value>
-  </data>
-  <data name="StudentScheduleModule_RespondWorkingDays_NotAtSchoolInXWeeks" xml:space="preserve">
-    <value>Not present in {0} weeks</value>
-    <comment>0: amount of weeks</comment>
-  </data>
-  <data name="StudentScheduleModule_RespondWorkingDays_ColumnDay" xml:space="preserve">
+	<data name="StudentScheduleModule_RespondWorkingDays_ColumnDay" xml:space="preserve">
     <value>Day</value>
   </data>
-  <data name="ScheduleModuleBase_RespondWorkingDays_ColumnDay" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnDay" xml:space="preserve">
     <value>Day</value>
   </data>
-  <data name="ScheduleModuleBase_RespondWorkingDays_ColumnFrom" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnFrom" xml:space="preserve">
     <value>From</value>
   </data>
-  <data name="ScheduleModuleBase_RespondWorkingDays_ColumnTo" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnTo" xml:space="preserve">
     <value>To</value>
   </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnActivity" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondDay_ColumnActivity" xml:space="preserve">
     <value>Activity</value>
   </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTime" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondDay_ColumnTime" xml:space="preserve">
     <value>Time</value>
   </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTeacher" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondDay_ColumnTeacher" xml:space="preserve">
     <value>Teacher</value>
   </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Room</value>
   </data>
-  <data name="ScheduleModuleBase_ResondDay_ScheduleForRelative" xml:space="preserve">
+	<data name="ScheduleModuleBase_ResondDay_ScheduleForRelative" xml:space="preserve">
     <value>{0}: Schedule for {1}</value>
     <comment>0: Identifier display text
 		  1: relative date reference</comment>
   </data>
-  <data name="StudentScheduleModule_StudentCurrentCommand_NoCurrentRecord" xml:space="preserve">
+	<data name="StudentScheduleModule_StudentCurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>It looks like there's nothing on your schedule right now.</value>
   </data>
-  <data name="TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord" xml:space="preserve">
+	<data name="TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>It looks like {0} has nothing right now.</value>
     <comment>0: teacher display text</comment>
   </data>
-  <data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
+	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
     <value>He/she is not on schedule today (anymore), and is probably absent.</value>
   </data>
-  <data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
-    <value>That is in the weekend after all.</value>
+	<data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
+    <value> That is in the weekend after all.</value>
   </data>
-  <data name="TeacherScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
+	<data name="TeacherScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
     <value>It looks like {0} has nothing {1}</value>
     <comment>0: teacher display text
 		  1: relative date reference</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>{0}: Rooster deze week</value>
     <comment>0: identifier display text</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleNextWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_ScheduleNextWeek" xml:space="preserve">
     <value>{0}: Schedule for next week</value>
     <comment>0: identifier display text</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
     <value>{0}: Schedule in {1} weeks</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_NotPresentThisWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_NotPresentThisWeek" xml:space="preserve">
     <value>{0}: Not present this week</value>
     <comment>0: identifier display text</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_NotPresentNextWeek" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_NotPresentNextWeek" xml:space="preserve">
     <value>{0}: Not present next week</value>
     <comment>0: identifier display text</comment>
   </data>
-  <data name="ScheduleModuleBase_RespondWeek_NotPresentInXWeeks" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondWeek_NotPresentInXWeeks" xml:space="preserve">
     <value>{0}: Not present in {1} weeks</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
   </data>
-  <data name="RoomScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
+	<data name="RoomScheduleModule_RespondDay_NoRecordRelative" xml:space="preserve">
     <value>It looks like that there's nothing there {0}.</value>
     <comment>0: relative date reference</comment>
   </data>
-  <data name="RoomScheduleModule_RespondWorkingDays_NotInUseThisWeek" xml:space="preserve">
-    <value>{0}: Not in use this week</value>
-    <comment>0: room display info</comment>
-  </data>
-  <data name="RoomScheduleModule_RespondWorkingDays_NotInUseNextWeek" xml:space="preserve">
-    <value>{0}: Not in use next week</value>
-    <comment>0: room display info</comment>
-  </data>
-  <data name="RoomScheduleModule_RespondWorkingDays_NotInUseInXWeeks" xml:space="preserve">
-    <value>{0}: Not in use in {1} weeks</value>
-    <comment>0: room display info
-		  1: amount of weeks</comment>
-  </data>
-  <data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
+	<data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_UserIsInClass" xml:space="preserve">
+	<data name="UserClassModule_GetClassForUser_UserIsInClass" xml:space="preserve">
     <value>You are in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
+	<data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
     <value>Use `!me &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
+	<data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
     <value>Noted: you are in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
+	<data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
     <value>That's not a class.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
+	<data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
     <value>No teachers found.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnFullName" xml:space="preserve">
+	<data name="TeacherListModule_TeacherListCommand_ColumnFullName" xml:space="preserve">
     <value>Full name</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnAbbreviation" xml:space="preserve">
+	<data name="TeacherListModule_TeacherListCommand_ColumnAbbreviation" xml:space="preserve">
     <value>Abbr</value>
     <comment>Needs to be very short, recommend 4 characters max, because it will stretch up the column</comment>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
+	<data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
     <value>Discord name</value>
   </data>
-  <data name="DefaultScheduleModule_Remarks" xml:space="preserve">
+	<data name="DefaultScheduleModule_Remarks" xml:space="preserve">
     <value>You can use `!me` to tell me what class you are in, so you don't have to tell me every time.</value>
   </data>
-  <data name="DefaultScheduleModule_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_Summary" xml:space="preserve">
     <value>Automatically understands if you're talking about a class, teacher, or room.</value>
   </data>
-  <data name="DefaultScheduleModule_Name" xml:space="preserve">
+	<data name="DefaultScheduleModule_Name" xml:space="preserve">
     <value>Schedule</value>
   </data>
-  <data name="DefaultScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
     <value>See the current schedule item.</value>
   </data>
-  <data name="DefaultScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
     <value>See the next schedule item.</value>
   </data>
-  <data name="DefaultScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
     <value>The schedule for a certain day. If you use today, then I will show you next week. !today does not do this.</value>
   </data>
-  <data name="DefaultScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
     <value>See the schedule for tomorrow.</value>
   </data>
-  <data name="DefaultScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+	<data name="DefaultScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
     <value>See the schedule for today.</value>
   </data>
-  <data name="TeacherListModule_Name" xml:space="preserve">
+	<data name="TeacherListModule_Name" xml:space="preserve">
     <value>Teachers</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
+	<data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
     <value>A list of all teachers, their abbreviations, and their Discord names (if known). You can filter by name.</value>
   </data>
-  <data name="UserClassModule_Summary" xml:space="preserve">
+	<data name="UserClassModule_Summary" xml:space="preserve">
     <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_Summary" xml:space="preserve">
+	<data name="UserClassModule_GetClassForUser_Summary" xml:space="preserve">
     <value>See what class you are in, according to my records.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_Summary" xml:space="preserve">
+	<data name="UserClassModule_SetClassForUser_Summary" xml:space="preserve">
     <value>Change what class you are in.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
+	<data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
     <value>your class</value>
   </data>
-  <data name="ScheduleModuleBase_AfterCommand" xml:space="preserve">
+	<data name="ScheduleModuleBase_AfterCommand" xml:space="preserve">
     <value>See what happens after the last thing you looked up.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
+	<data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
     <value>See when a class or teacher is present next week, or when a room is in use.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
+	<data name="ScheduleModuleBase_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
     <value>See when a class or teacher is present in *x* weeks, or when a room is in use.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
+	<data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>See on what days a class or teacher is present, or when a room is in use.</value>
   </data>
-  <data name="UserClassModule_Name" xml:space="preserve">
+	<data name="UserClassModule_Name" xml:space="preserve">
     <value>Your class</value>
   </data>
-  <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
+	<data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>That does not match anything.</value>
   </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
+	<data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
     <value>Class</value>
   </data>
-  <data name="DayOfWeekReader_Today" xml:space="preserve">
+	<data name="DayOfWeekReader_Today" xml:space="preserve">
     <value>today</value>
   </data>
-  <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
+	<data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
   </data>
+	<data name="ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek" xml:space="preserve">
+		<value>Not on schedule this week</value>
+	</data>
+	<data name="ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek" xml:space="preserve">
+		<value>Not on schedule next week</value>
+	</data>
+	<data name="ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks" xml:space="preserve">
+		<value>Not on schedule in {0} weeks</value>
+	</data>
 </root>

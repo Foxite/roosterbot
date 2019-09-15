@@ -161,15 +161,15 @@ namespace RoosterBot.Schedule {
 					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
-						response += ResourcesService.GetString(Culture, "StudentScheduleModule_RespondWorkingDays_NotAtSchoolThisWeek");
+						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek");
 					} else if (weeksFromNow == 1) {
-						response += ResourcesService.GetString(Culture, "StudentScheduleModule_RespondWorkingDays_NotAtSchoolNextWeek");
+						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek");
 					} else {
-						response += string.Format(ResourcesService.GetString(Culture, "StudentScheduleModule_RespondWorkingDays_NotAtSchoolInXWeeks"), weeksFromNow);
+						response += string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks"), weeksFromNow);
 					}
 				}
 
-				await ReplyAsync(response);
+				ReplyDeferred(response);
 			}
 		}
 	}

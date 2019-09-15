@@ -142,15 +142,15 @@ namespace RoosterBot.Schedule {
 			if (result.Success) {
 				AvailabilityInfo[] availability = result.Value;
 
+				string response = info.DisplayText + ": ";
 
-				string response;
 				if (availability.Length > 0) {
 					if (weeksFromNow == 0) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleThisWeek"), info.DisplayText);
+						response = ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleThisWeek");
 					} else if (weeksFromNow == 1) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleNextWeek"), info.DisplayText);
+						response = ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleNextWeek");
 					} else {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_ScheduleInXWeeks"), info.DisplayText, weeksFromNow);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleInXWeeks"), weeksFromNow);
 					}
 					response += "\n";
 
@@ -173,15 +173,15 @@ namespace RoosterBot.Schedule {
 					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_NotPresentThisWeek"), info.DisplayText);
+						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek");
 					} else if (weeksFromNow == 1) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_NotPresentNextWeek"), info.DisplayText);
+						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek");
 					} else {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWeek_NotPresentInXWeeks"), info.DisplayText, weeksFromNow);
+						response += string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks"), weeksFromNow);
 					}
 				}
 
-				await ReplyAsync(response);
+				ReplyDeferred(response);
 			}
 		}
 	}
