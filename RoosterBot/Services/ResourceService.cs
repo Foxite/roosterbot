@@ -24,7 +24,7 @@ namespace RoosterBot {
 		}
 
 		public string GetString(ICommandContext context, string name) {
-			return GetString(m_GCS.GetCultureForGuild(context.Guild), name);
+			return m_ResourceManagers[Assembly.GetCallingAssembly()].GetString(name, m_GCS.GetCultureForGuild(context.Guild));
 		}
 
 		public string GetString(Assembly assembly, CultureInfo culture, string name) {
