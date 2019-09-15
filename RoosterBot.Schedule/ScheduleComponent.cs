@@ -30,17 +30,14 @@ namespace RoosterBot.Schedule {
 		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
-			commandService.AddTypeReader<StudentSetInfo>(new StudentSetInfoReader());
-			commandService.AddTypeReader<TeacherInfo>(new TeacherInfoReader());
-			commandService.AddTypeReader<RoomInfo>(new RoomInfoReader());
+			commandService.AddTypeReader<IdentifierInfo>(new TeacherInfoReader());
+			commandService.AddTypeReader<IdentifierInfo>(new StudentSetInfoReader()); // This doesn't work
+			commandService.AddTypeReader<IdentifierInfo>(new RoomInfoReader());
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<DefaultScheduleModule>(services),
-				commandService.AddModuleAsync<AfterScheduleModule>(services),
-				commandService.AddModuleAsync<StudentScheduleModule>(services),
-				commandService.AddModuleAsync<TeacherScheduleModule>(services),
-				commandService.AddModuleAsync<RoomScheduleModule>(services),
+				commandService.AddModuleAsync<ScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
 			));

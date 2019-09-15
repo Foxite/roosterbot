@@ -48,13 +48,9 @@
     <Compile Include="DataTypes\StudentSetInfo.cs" />
     <Compile Include="DataTypes\TeacherInfo.cs" />
     <Compile Include="DataTypes\GuildSpecificInfo.cs" />
-    <Compile Include="Modules\AfterScheduleModule.cs" />
     <Compile Include="Modules\DefaultScheduleModule.cs" />
-    <Compile Include="Modules\RoomScheduleModule.cs" />
-    <Compile Include="Modules\ScheduleModuleBase.cs" />
-    <Compile Include="Modules\StudentScheduleModule.cs" />
+    <Compile Include="Modules\ScheduleModule.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
-    <Compile Include="Modules\TeacherScheduleModule.cs" />
     <Compile Include="Modules\UserClassModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Readers\DayOfWeekReader.cs" />
