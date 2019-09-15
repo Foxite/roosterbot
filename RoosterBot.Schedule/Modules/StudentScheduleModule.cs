@@ -28,17 +28,13 @@ namespace RoosterBot.Schedule {
 			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-				if (record == null) {
-					await FatalError($"`GetNextRecord(\"StudentSets\", {info.DisplayText})` returned null");
+				string pretext;
+				if (record.Start.Date == DateTime.Today) {
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), info.DisplayText);
 				} else {
-					string pretext;
-					if (record.Start.Date == DateTime.Today) {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), record.StudentSetsString);
-					} else {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), record.StudentSetsString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
-					}
-					await RespondRecord(pretext, info, record);
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 				}
+				await RespondRecord(pretext, info, record);
 			}
 		}
 

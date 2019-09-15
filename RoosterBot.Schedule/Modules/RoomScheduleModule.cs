@@ -30,22 +30,17 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
-		public async Task RoomNextCommand(RoomInfo room) {
-			ReturnValue<ScheduleRecord> result = await GetNextRecord(room);
+		public async Task RoomNextCommand(RoomInfo info) {
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-				if (record == null) {
-					await FatalError($"`GetNextRecord(\"Room\", {room.DisplayText})` returned null");
+				string pretext;
+				if (record.Start.Date == DateTime.Today) {
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), info.DisplayText);
 				} else {
-					string pretext;
-
-					if (record.Start.Date == DateTime.Today) {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), record.RoomString);
-					} else {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), record.RoomString, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
-					}
-					await RespondRecord(pretext, room, record);
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 				}
+				await RespondRecord(pretext, info, record);
 			}
 		}
 

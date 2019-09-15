@@ -26,45 +26,32 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Priority(1)]
-		public async Task TeacherNextCommand([Remainder] TeacherInfo teacher) {
-			ReturnValue<ScheduleRecord> result = await GetNextRecord(teacher);
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		public async Task TeacherNextCommand([Remainder] TeacherInfo info) {
+			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
-
-				if (record == null) {
-					string response = string.Format(ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherCurrentCommand_NoCurrentRecord"), teacher.DisplayText);
-					ReturnValue<ScheduleRecord> nextRecord = GetNextRecord(teacher).GetAwaiter().GetResult();
-
-					if (nextRecord.Success && nextRecord.Value.Start.Date != DateTime.Today) {
-						response += ResourcesService.GetString(Culture, "TeacherScheduleModule_TeacherProbablyAbsent");
-					}
-
-					ReplyDeferred(response, teacher, record);
+				string pretext;
+				if (record.Start.Date == DateTime.Today) {
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), info.DisplayText);
 				} else {
-					string pretext;
-					if (record.Start.Date == DateTime.Today) {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), teacher.DisplayText);
-					} else {
-						pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), teacher.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
-					}
-
-					await RespondRecord(pretext, teacher, record);
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
 				}
+				await RespondRecord(pretext, info, record);
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Priority(1)]
+		[Command("dag", RunMode = RunMode.Async)]
 		public async Task TeacherWeekdayCommand(DayOfWeek day, [Remainder] TeacherInfo info) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async), Priority(1)]
+		[Command("vandaag", RunMode = RunMode.Async)]
 		public async Task TeacherTodayCommand([Remainder] TeacherInfo info) {
 			await RespondDay(info, DateTime.Today);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Priority(1)]
+		[Command("morgen", RunMode = RunMode.Async)]
 		public async Task TeacherTomorrowCommand([Remainder] TeacherInfo info) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
