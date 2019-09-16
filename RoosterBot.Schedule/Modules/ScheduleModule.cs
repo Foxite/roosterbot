@@ -274,12 +274,6 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Convenience
-		[Obsolete]
-		protected async Task GetAfterCommand() {
-			await SendDeferredResponseAsync();
-			await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "daarna", Context.Message, "SMB daarna");
-		}
-		
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
 			if (ScheduleUtil.IsSummerBreak()) {
 				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_SummerBreakGoHome"));
@@ -320,7 +314,7 @@ namespace RoosterBot.Schedule {
 			ReplyDeferred(response, info, record);
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
-				await GetAfterCommand();
+				await RespondAfter(0);
 			}
 		}
 
