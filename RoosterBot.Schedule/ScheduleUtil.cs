@@ -10,21 +10,6 @@ namespace RoosterBot.Schedule {
 			return culture.DateTimeFormat.DayNames[(int) day];
 		}
 
-		/// <summary>
-		/// Tests if the given DateTime is within the summer break (between july 20 and september 1 of any year, inclusive)
-		/// </summary>
-		/// <param name="dateTime">If null, will use today.</param>
-		/// <returns></returns>
-		public static bool IsSummerBreak(DateTime? dateTime = null) {
-			DateTime dt;
-			if (dateTime.HasValue) {
-				dt = dateTime.Value;
-			} else {
-				dt = DateTime.Today;
-			}
-			DateTime startBreak = new DateTime(2019, 07, 20);
-			DateTime endBreak = new DateTime(2019, 09, 01);
-			return dt >= startBreak && dt <= endBreak;
 		}
 
 		/// <summary>

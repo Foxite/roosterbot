@@ -275,13 +275,6 @@ namespace RoosterBot.Schedule {
 
 		#region Convenience
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
-			if (ScheduleUtil.IsSummerBreak()) {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_SummerBreakGoHome"));
-				return new ReturnValue<ScheduleRecord>() {
-					Success = false
-				};
-			}
-
 			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
@@ -290,13 +283,6 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
-			if (ScheduleUtil.IsSummerBreak(date)) {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_SummerBreakGoHome"));
-				return new ReturnValue<ScheduleRecord[]>() {
-					Success = false
-				};
-			}
-
 			return await HandleErrorAsync(() => Schedules.GetSchedulesForDate(identifier, date, Context));
 		}
 
