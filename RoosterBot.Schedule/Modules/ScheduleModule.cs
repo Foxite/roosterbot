@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -131,6 +132,16 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Record response functions
+		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
+			string response = pretext + "\n";
+			response += await record.PresentAsync(info);
+			ReplyDeferred(response, info, record);
+
+			if (callNextIfBreak && record.ShouldCallNextCommand) {
+				await RespondAfter(0);
+			}
+		}
+
 		private async Task RespondDay(IdentifierInfo info, DateTime date) {
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
 			if (result.Success) {
@@ -176,7 +187,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task RespondWorkingDays(IdentifierInfo info, int weeksFromNow) {
-			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailabilityInfo(info, weeksFromNow);
+			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailability(info, weeksFromNow);
 			if (result.Success) {
 				AvailabilityInfo[] availability = result.Value;
 
@@ -274,7 +285,7 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Convenience
-		protected async Task<ReturnValue<ScheduleRecord>> GetRecord(IdentifierInfo identifier) {
+		protected async Task<ReturnValue<ScheduleRecord>> GetCurrentRecord(IdentifierInfo identifier) {
 			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
@@ -286,22 +297,12 @@ namespace RoosterBot.Schedule {
 			return await HandleErrorAsync(() => Schedules.GetSchedulesForDate(identifier, date, Context));
 		}
 
-		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailabilityInfo(IdentifierInfo identifier, int weeksFromNow) {
+		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
 			return await HandleErrorAsync(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
 		}
 
 		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
 			return await HandleErrorAsync(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
-		}
-
-		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
-			string response = pretext + "\n";
-			response += await record.PresentAsync(info);
-			ReplyDeferred(response, info, record);
-
-			if (callNextIfBreak && record.ShouldCallNextCommand) {
-				await RespondAfter(0);
-			}
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
