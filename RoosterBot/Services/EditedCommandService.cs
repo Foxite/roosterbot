@@ -16,10 +16,13 @@ namespace RoosterBot {
 	 */
 	// TODO all responses should be deleted when the command is deleted, even if the module does not derive from EditableCmdModuleBase
 	public class EditedCommandService : CommandService {
+		/// <summary>
+		/// Maps message IDs to CommandResponsePairs
+		/// </summary>
 		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private DiscordSocketClient m_Client;
 
-		public event Func<IUserMessage, IUserMessage, Task> CommandEdited;
+		public event Func<CommandResponsePair, Task> CommandEdited;
 
 		internal EditedCommandService(DiscordSocketClient client) : this(client, new CommandServiceConfig()) { }
 
@@ -31,9 +34,17 @@ namespace RoosterBot {
 			m_Client.MessageDeleted += OnMessageDeleted;
 		}
 
-		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, ISocketMessageChannel channel) {
+		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, IMessageChannel channel) {
 			if (m_Messages.TryRemove(message.Id, out CommandResponsePair crp)) {
-				await crp.Response.DeleteAsync();
+				if (channel is ITextChannel textChannel) {
+					// Bulk delete responses
+					await textChannel.DeleteMessagesAsync(crp.Responses);
+				} else {
+					// Manually delete all responses
+					foreach (IUserMessage response in crp.Responses) {
+						await response.DeleteAsync();
+					}
+				}
 			}
 		}
 
@@ -49,8 +60,7 @@ namespace RoosterBot {
 				return;
 
 			if (m_Messages.TryGetValue(messageAfter.Id, out CommandResponsePair crp)) {
-				//await CommandEdited?.Invoke(crp.Response, socketMessageAfter);
-				await Util.InvokeAsyncEventConcurrent(CommandEdited, crp.Response, userMessageAfter);
+				await Util.InvokeAsyncEventConcurrent(CommandEdited, crp, userMessageAfter);
 			}
 		}
 
@@ -66,26 +76,30 @@ namespace RoosterBot {
 				}
 			}
 
-			m_Messages.TryAdd(userCommand.Id, new CommandResponsePair(userCommand, botResponse, reactionUnicode));
+			List<IUserMessage> newValue = new List<IUserMessage>() { botResponse };
+			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newValue, reactionUnicode), (key, crp) => {
+				crp.Responses = newValue;
+				return crp;
+			});
 		}
 
 		public CommandResponsePair GetResponse(IUserMessage userCommand) {
 			if (m_Messages.TryGetValue(userCommand.Id, out CommandResponsePair ret)) {
 				return ret;
 			} else {
-				return default(CommandResponsePair);
+				return null;
 			}
 		}
 	}
 
 	public class CommandResponsePair {
 		public IUserMessage Command;
-		public IUserMessage Response;
+		public List<IUserMessage> Responses;
 		public string ReactionUnicode;
 
-		public CommandResponsePair(IUserMessage command, IUserMessage response, string reactionUnicode = null) {
+		public CommandResponsePair(IUserMessage command, List<IUserMessage> responses, string reactionUnicode = null) {
 			Command = command;
-			Response = response;
+			Responses = responses;
 			ReactionUnicode = reactionUnicode;
 		}
 	}

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
@@ -7,7 +9,7 @@ namespace RoosterBot {
 		// There's a few other ways to get the services with the injection system, but this is the easiest way.
 		public EditedCommandService CmdService { get; set; }
 
-		private bool m_ResponseWasModified;
+		private bool m_Replied;
 
 		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			return await ReplyAsync(message, null, isTTS, embed, options);
@@ -15,7 +17,8 @@ namespace RoosterBot {
 
 		protected override async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode = null, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			IUserMessage ret;
-			if (Context.OriginalResponse == null) {
+			if (Context.Responses == null) {
+				// The command was not edited, or the command somehow did not invoke a reply.
 				if (reactionUnicode != null) {
 					await AddReactionAsync(reactionUnicode);
 				}
@@ -23,15 +26,34 @@ namespace RoosterBot {
 				CmdService.AddResponse(Context.Message, response, reactionUnicode);
 				ret = response;
 			} else {
-				await Context.OriginalResponse.ModifyAsync((msgProps) => {
-					if (m_ResponseWasModified) {
+				// The command was edited.
+				if (!m_Replied) {
+					// This module has not yet replied to the command.
+					// Delete any extra messages that may have been sent by another command.
+					IEnumerable<IUserMessage> extraMessages = Context.Responses.Skip(1);
+					if (extraMessages.Any()) {
+						if (Context.Channel is ITextChannel textChannel) {
+							await textChannel.DeleteMessagesAsync(extraMessages);
+						} else {
+							// No idea what kind of non-text MessageChannel there are, but at least they support non-bulk deletion.
+							foreach (IUserMessage extraMessage in extraMessages) {
+								await extraMessage.DeleteAsync();
+							}
+						}
+					}
+				}
+
+				ret = Context.Responses.First();
+				await ret.ModifyAsync((msgProps) => {
+					// Edit the command:
+					if (m_Replied) {
+						// If we have replied already, make sure there remains only one reply message.
 						msgProps.Content += "\n\n" + message;
 					} else {
-						m_ResponseWasModified = true;
+						m_Replied = true;
 						msgProps.Content = message;
 					}
 				});
-				ret = Context.OriginalResponse;
 
 				CommandResponsePair crp = CmdService.GetResponse(Context.Message);
 				if (crp.ReactionUnicode != reactionUnicode) {
@@ -51,10 +73,10 @@ namespace RoosterBot {
 
 	public class EditedCommandContext : RoosterCommandContext {
 		// If this is null, we should make a new message.
-		public IUserMessage OriginalResponse { get; }
+		public IUserMessage[] Responses { get; }
 
-		public EditedCommandContext(IDiscordClient client, IUserMessage command, IUserMessage originalResponse, string calltag) : base(client, command, calltag) {
-			OriginalResponse = originalResponse;
+		public EditedCommandContext(IDiscordClient client, IUserMessage command, IUserMessage[] originalResponses, string calltag) : base(client, command, calltag) {
+			Responses = originalResponses;
 		}
 	}
 }
