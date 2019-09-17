@@ -140,6 +140,7 @@ namespace RoosterBot {
 			return await Util.RemoveReaction(Context.Message, unicode, Context.Client.CurrentUser);
 		}
 
+		// TODO Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError
 		protected virtual async Task MinorError(string message) {
 			Log.Info($"Command failed: {message}");
 
@@ -163,7 +164,7 @@ namespace RoosterBot {
 		}
 
 		public abstract class ModuleLogger {
-			internal string m_Tag;
+			protected internal string m_Tag;
 
 			public void Verbose(string message, Exception e = null) {
 				Logger.Verbose(m_Tag, message, e);
