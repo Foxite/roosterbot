@@ -71,7 +71,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("over", RunMode = RunMode.Async)]
-		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, [Remainder] IdentifierInfo info) {
+		public async Task ShowFutureCommand(int amount, string unit, [Remainder] IdentifierInfo info) {
 			if (unit == "uur") { // TODO units need to be localized
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {

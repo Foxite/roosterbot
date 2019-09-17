@@ -83,7 +83,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Priority(-10), Command("over", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
-		public async Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int aantal, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] string wat = "") {
+		public async Task ShowNWeeksWorkingDaysCommand(int aantal, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, $"over {aantal} {unit} ik", Context.Message, "default over");
 			} else {
