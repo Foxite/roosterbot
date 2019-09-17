@@ -222,41 +222,21 @@ namespace RoosterBot {
 				await (Task) invocationList[i].DynamicInvoke(parameters);
 			}
 		}
+
+		public static async Task DeleteAll(IMessageChannel channel, IEnumerable<IUserMessage> messages) {
+			if (channel is ITextChannel textChannel) {
+				await textChannel.DeleteMessagesAsync(messages);
+			} else {
+				// No idea what kind of non-text MessageChannel there are, but at least they support non-bulk deletion.
+				foreach (IUserMessage message in messages) {
+					await message.DeleteAsync();
+				}
+			}
+		}
 	}
 
 	public class ReturnValue<T> {
 		public bool Success;
 		public T Value;
-	}
-
-	public class CachedData<T> {
-		private T m_Value = default(T);
-		private bool m_IsKnown = false;
-
-		public bool IsKnown {
-			get {
-				return m_IsKnown;
-			}
-			set {
-				m_IsKnown = value;
-				if (!m_IsKnown) {
-					m_Value = default(T);
-				}
-			}
-		}
-
-		public T Value {
-			get {
-				if (IsKnown) {
-					return m_Value;
-				} else {
-					throw new InvalidOperationException("Cached data is not known.");
-				}
-			}
-			set {
-				m_Value = value;
-				IsKnown = true;
-			}
-		}
 	}
 }

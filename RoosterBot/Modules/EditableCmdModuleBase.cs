@@ -32,14 +32,7 @@ namespace RoosterBot {
 					// Delete any extra messages that may have been sent by another command.
 					IEnumerable<IUserMessage> extraMessages = Context.Responses.Skip(1);
 					if (extraMessages.Any()) {
-						if (Context.Channel is ITextChannel textChannel) {
-							await textChannel.DeleteMessagesAsync(extraMessages);
-						} else {
-							// No idea what kind of non-text MessageChannel there are, but at least they support non-bulk deletion.
-							foreach (IUserMessage extraMessage in extraMessages) {
-								await extraMessage.DeleteAsync();
-							}
-						}
+						await Util.DeleteAll(Context.Channel, extraMessages);
 					}
 				}
 

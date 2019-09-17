@@ -48,13 +48,13 @@ namespace RoosterBot {
 			}
 		}
 
-		private async Task HandleEditedCommand(IUserMessage ourResponse, IUserMessage command) {
-			if (IsMessageCommand(command, out int argPos)) {
-				EditedCommandContext context = new EditedCommandContext(m_Client, command, ourResponse, "EditedCommand");
+		private async Task HandleEditedCommand(CommandResponsePair crp) {
+			if (IsMessageCommand(crp.Command, out int argPos)) {
+				EditedCommandContext context = new EditedCommandContext(m_Client, crp.Command, crp.Responses, "EditedCommand");
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			} else {
-				await ourResponse.DeleteAsync();
+				await crp.Responses.DeleteAsync();
 			}
 		}
 

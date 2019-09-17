@@ -34,17 +34,10 @@ namespace RoosterBot {
 			m_Client.MessageDeleted += OnMessageDeleted;
 		}
 
+		// Delete responses when commands are deleted
 		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, IMessageChannel channel) {
 			if (m_Messages.TryRemove(message.Id, out CommandResponsePair crp)) {
-				if (channel is ITextChannel textChannel) {
-					// Bulk delete responses
-					await textChannel.DeleteMessagesAsync(crp.Responses);
-				} else {
-					// Manually delete all responses
-					foreach (IUserMessage response in crp.Responses) {
-						await response.DeleteAsync();
-					}
-				}
+				await Util.DeleteAll(channel, crp.Responses);
 			}
 		}
 
@@ -70,17 +63,11 @@ namespace RoosterBot {
 				return kvp.Value.Command.Author.Id == userCommand.Author.Id;
 			});
 
-			if (oldMessages.Count() > 0) {
-				foreach (KeyValuePair<ulong, CommandResponsePair> item in oldMessages) {
-					m_Messages.TryRemove(item.Key, out CommandResponsePair unused);
-				}
+			foreach (KeyValuePair<ulong, CommandResponsePair> item in oldMessages) {
+				m_Messages.TryRemove(item.Key, out CommandResponsePair unused);
 			}
 
-			List<IUserMessage> newValue = new List<IUserMessage>() { botResponse };
-			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newValue, reactionUnicode), (key, crp) => {
-				crp.Responses = newValue;
-				return crp;
-			});
+			m_Messages[userCommand.Id] = new CommandResponsePair(userCommand, new List<IUserMessage>() { botResponse }, reactionUnicode);
 		}
 
 		public CommandResponsePair GetResponse(IUserMessage userCommand) {
