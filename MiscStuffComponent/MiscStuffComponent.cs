@@ -44,11 +44,11 @@ namespace MiscStuffComponent {
 				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel).Mention;
 
 				string text = $"Welkom {user.Mention},\n";
-				text += "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
-				text += "- Geef je naam en achternaam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
-				text += $"- Voer in {botCommandsMention} het command `?rank developer` of `?rank artist` in om een rang te krijgen\n\n";
+				text +=  "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
+				text +=  "- Geef je naam en achternaam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
+				text += $"- Stel in {botCommandsMention} jouw klas in door `!ik <jouw klas>` te sturen: bijvoorbeeld `!ik 2gd1` of `!ik 1ga2`\n";
 				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}\n";
-				text += "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik !help of !commands om te zien hoe ik werk.";
+				text +=  "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik `!help rooster` of `!commands rooster` om te zien hoe ik werk.";
 
 
 				await welcomeChannel.SendMessageAsync(text);

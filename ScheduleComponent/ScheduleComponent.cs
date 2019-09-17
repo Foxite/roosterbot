@@ -45,6 +45,7 @@ namespace ScheduleComponent {
 			services
 				.AddSingleton(teachers)
 				.AddSingleton(new ScheduleProvider(schedStudents, schedTeachers, schedRooms))
+				.AddSingleton(new UserClassRoleService())
 				.AddSingleton(new LastScheduleCommandService())
 				.AddSingleton(m_UserClasses);
 

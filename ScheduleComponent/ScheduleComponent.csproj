@@ -85,6 +85,7 @@
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />
+    <Compile Include="Services\UserClassRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
