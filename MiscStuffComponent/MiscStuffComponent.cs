@@ -46,7 +46,7 @@ namespace MiscStuffComponent {
 				string text = $"Welkom {user.Mention},\n";
 				text +=  "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
 				text +=  "- Geef je naam en achternaam door in de welcome chat zodat een admin of mod je naam kan veranderen\n";
-				text += $"- Stel in {botCommandsMention} jouw klas in door `!ik <jouw klas>` te sturen: bijvoorbeeld `!ik 2gd1` of `!ik 1ga2`\n";
+				text += $"- Stel in {botCommandsMention} jouw klas in door `!ik <jouw klas>` te sturen: bijvoorbeeld `!ik 2gd1` of `!ik 1ga2` Je krijgt dan automatisch een rang die jouw klas aangeeft.\n";
 				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}\n";
 				text +=  "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik `!help rooster` of `!commands rooster` om te zien hoe ik werk.";
 
