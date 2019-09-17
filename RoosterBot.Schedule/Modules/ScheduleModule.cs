@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 				if (record == null) {
 					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_CurrentCommand_NoCurrentRecord"), info.DisplayText);
 
-					if (DateTime.Today.DayOfWeek == DayOfWeek.Saturday || DateTime.Today.DayOfWeek == DayOfWeek.Sunday) {
+					if (ScheduleUtil.IsWeekend(DateTime.Today)) {
 						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
 					}
 
