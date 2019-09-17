@@ -6,7 +6,7 @@ using RoosterBot.Modules;
 using RoosterBot.Preconditions;
 
 namespace MiscStuffComponent.Modules {
-	[LogTag("MiscModule")]
+	[LogTag("MiscModule"), HiddenFromList]
 	public class MiscModule : RoosterModuleBase {
 		[Command("send"), RequireBotManager, HiddenFromList]
 		public async Task SendMessageCommand(ulong channel, [Remainder] string message) {

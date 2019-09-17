@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using RoosterBot.Preconditions;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MiscStuffComponent.Modules {
+	[HiddenFromList]
 	public class ModerationModule : RoosterModuleBase {
 		[Command("users unnamed"), UserIsModerator]
 		public async Task GetUnnamedUsers() {
