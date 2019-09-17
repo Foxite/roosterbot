@@ -60,17 +60,17 @@ namespace RoosterBot.Schedule {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
-		[Command("deze week", RunMode = RunMode.Sync)]
+		[Command("deze week", RunMode = RunMode.Async)]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 0);
 		}
 
-		[Command("volgende week", RunMode = RunMode.Sync)]
+		[Command("volgende week", RunMode = RunMode.Async)]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 1);
 		}
 
-		[Command("over", RunMode = RunMode.Sync)]
+		[Command("over", RunMode = RunMode.Async)]
 		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, [Remainder] IdentifierInfo info) {
 			if (unit == "uur") { // TODO units need to be localized
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
