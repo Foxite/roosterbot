@@ -28,16 +28,6 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		private async Task ReplyErrorMessage(string param) {
-			if (MentionUtils.TryParseUser(param, out _)) {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
-			} else if (param == "ik") {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
-			} else {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
-			}
-		}
-
 		[Priority(-10), Command("hierna", RunMode = RunMode.Sync), Alias("later", "straks", "zometeen"), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
 		public async Task DefaultNextCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
@@ -104,6 +94,16 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("daarna", RunMode = RunMode.Sync), Summary("#ScheduleModuleBase_AfterCommand")]
 		public async Task AfterCommand() {
 			await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_AfterCommand_BigProblem"));
+		}
+
+		private async Task ReplyErrorMessage(string param) {
+			if (MentionUtils.TryParseUser(param, out _)) {
+				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
+			} else if (param == "ik") {
+				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
+			} else {
+				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
+			}
 		}
 	}
 }
