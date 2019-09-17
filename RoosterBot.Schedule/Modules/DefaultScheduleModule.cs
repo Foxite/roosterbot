@@ -4,10 +4,17 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// Provides several "virtual" commands that don't do much, but serve as a single list item for 3 different "versions" of each command
-	// They also replace missing IdentifierInfo parameters with "ik" and re-execute the command,
-	//  and provide an error message in case they are invoked and no TypeReader could figure out which version was to be used.
-	// TODO this class is probably obsolete now
+	// This class has 3 purposes:
+	// - Provide a single set of commands for the 3 separate modules
+	// - Make it possible for a missing parameter to be resolved to "ik"
+	// - Provide a more useful error message in case a parameter is not understood
+	// 
+	// The first one is obsolete since there is now only one module for the commands.
+	// The second one can conceivably be accomplished by providing a default value, however, this is hard because default parameter types have to be compile-time constants.
+	// The third one is still valid, but in theory, there needs to be a way to do this without having a separate module.
+	// 
+	// None of these necessities are the result of writing good code, so there is a long-standing todo item:
+	// TODO: make this class obsolete.
 	[LogTag("DefaultCommandsModule"), Name("#DefaultScheduleModule_Name"),
 		Summary("#DefaultScheduleModule_Summary"),
 		Remarks("#DefaultScheduleModule_Remarks")]
