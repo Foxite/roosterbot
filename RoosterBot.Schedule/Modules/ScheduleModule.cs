@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 		#region Commands
 		[Command("nu", RunMode = RunMode.Async)]
 		public async Task CurrentCommand([Remainder] IdentifierInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetRecord(info);
+			ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
@@ -39,7 +39,7 @@ namespace RoosterBot.Schedule {
 				if (record.Start.Date == DateTime.Today) {
 					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), info.DisplayText);
 				} else {
-					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, ScheduleUtil.GetStringFromDayOfWeek(Culture, record.Start.DayOfWeek));
+					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
 				}
 				await RespondRecord(pretext, info, record);
 			}
@@ -162,7 +162,7 @@ namespace RoosterBot.Schedule {
 					foreach (ScheduleRecord record in records) {
 						cells[recordIndex] = new string[5];
 						cells[recordIndex][0] = record.Activity.DisplayText;
-						cells[recordIndex][1] = $"{record.Start.ToString("HH:mm")} - {record.End.ToString("HH:mm")}";
+						cells[recordIndex][1] = $"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}";
 						cells[recordIndex][2] = record.StudentSetsString;
 						cells[recordIndex][3] = record.StaffMemberString;
 						cells[recordIndex][4] = record.RoomString;
@@ -202,9 +202,9 @@ namespace RoosterBot.Schedule {
 					int i = 1;
 					foreach (AvailabilityInfo item in availability) {
 						cells[i] = new[] {
-							ScheduleUtil.GetStringFromDayOfWeek(Culture, item.StartOfAvailability.DayOfWeek).FirstCharToUpper(),
-							item.StartOfAvailability.ToShortTimeString(),
-							item.EndOfAvailability.ToShortTimeString()
+							item.StartOfAvailability.DayOfWeek.GetName(Culture),
+							item.StartOfAvailability.ToShortTimeString(Culture),
+							item.EndOfAvailability.ToShortTimeString(Culture)
 						};
 						i++;
 					}

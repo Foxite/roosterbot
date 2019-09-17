@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule.GLU {
 
 			if (Activity.ScheduleCode != "stdag doc") {
 				if (Activity.ScheduleCode != "pauze") {
-					if (info.ScheduleField != "StaffMember") {
+					if (!(info is TeacherInfo)) {
 						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
 							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
 						}
@@ -26,16 +26,16 @@ namespace RoosterBot.Schedule.GLU {
 							}
 						}
 					}
-					if (info.ScheduleField != "StudentSets" && !string.IsNullOrWhiteSpace(StudentSetsString)) {
+					if (!(info is StudentSetInfo) && !string.IsNullOrWhiteSpace(StudentSetsString)) {
 						ret += $":busts_in_silhouette: {StudentSetsString}\n";
 					}
-					if (info.ScheduleField != "Room" && !string.IsNullOrWhiteSpace(RoomString)) {
+					if (!(info is RoomInfo) && !string.IsNullOrWhiteSpace(RoomString)) {
 						ret += $":round_pushpin: {RoomString}\n";
 					}
 				}
 
 				if (Start.Date != DateTime.Today) {
-					ret += $":calendar_spiral: {ScheduleUtil.GetStringFromDayOfWeek(CultureInfo.GetCultureInfo("nl-NL"), Start.DayOfWeek)} {Start.ToString("dd-MM-yyyy")}\n";
+					ret += $":calendar_spiral: {Start.DayOfWeek.GetName(CultureInfo.GetCultureInfo("nl-NL"))} {Start.ToString("dd-MM-yyyy")}\n";
 				}
 
 				ret += $":clock5: {Start.ToString("HH:mm")} - {End.ToString("HH:mm")}";

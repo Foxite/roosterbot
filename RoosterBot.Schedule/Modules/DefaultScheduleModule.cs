@@ -40,7 +40,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("dag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(Culture, dag)} ik", Context.Message, "default dag");
+				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {dag.GetName(Culture)} ik", Context.Message, "default dag");
 			} else {
 				await ReplyErrorMessage(wat);
 			}

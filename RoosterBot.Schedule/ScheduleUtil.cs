@@ -10,6 +10,8 @@ namespace RoosterBot.Schedule {
 			return culture.DateTimeFormat.DayNames[(int) day];
 		}
 
+		public static string GetName(this DayOfWeek day, CultureInfo culture) {
+			return culture.DateTimeFormat.DayNames[(int) day];
 		}
 
 		/// <summary>
@@ -44,7 +46,7 @@ namespace RoosterBot.Schedule {
 			} else if (date == DateTime.Today.AddDays(1)) {
 				return "morgen";
 			} else if ((date - DateTime.Today).TotalDays < 7) {
-				return "op " + GetStringFromDayOfWeek(culture, date.DayOfWeek);
+				return "op " + date.DayOfWeek.GetName(culture);
 			} else {
 				return "op " + date.ToString("dd-MM");
 			}
@@ -56,6 +58,22 @@ namespace RoosterBot.Schedule {
 
 		public static bool IsWithinSameWeekend(DateTime left, DateTime right) {
 			return IsWeekend(left) && IsWeekend(right) && Math.Abs((left.Date - right.Date).TotalDays) <= 2;
+		}
+
+		public static string ToShortTimeString(this DateTime datetime, CultureInfo culture) {
+			return datetime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
+		}
+
+		public static string ToLongTimeString(this DateTime datetime, CultureInfo culture) {
+			return datetime.ToString(culture.DateTimeFormat.LongTimePattern, culture);
+		}
+
+		public static string ToShortDateString(this DateTime datetime, CultureInfo culture) {
+			return datetime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
+		}
+
+		public static string ToLongDateString(this DateTime datetime, CultureInfo culture) {
+			return datetime.ToString(culture.DateTimeFormat.LongDatePattern, culture);
 		}
 	}
 }
