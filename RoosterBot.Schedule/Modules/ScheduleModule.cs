@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule {
 
 		#region Commands
 		[Command("nu", RunMode = RunMode.Async)]
-		public async Task StudentCurrentCommand([Remainder] IdentifierInfo info) {
+		public async Task CurrentCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -31,7 +31,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
-		public async Task StudentNextCommand([Remainder] IdentifierInfo info) {
+		public async Task NextCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
@@ -46,17 +46,17 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("dag", RunMode = RunMode.Async)]
-		public async Task StudentWeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info) {
+		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("vandaag", RunMode = RunMode.Async)]
-		public async Task StudentTodayCommand([Remainder] IdentifierInfo info) {
+		public async Task TodayCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("morgen", RunMode = RunMode.Async)]
-		public async Task StudentTomorrowCommand([Remainder] IdentifierInfo info) {
+		public async Task TomorrowCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
