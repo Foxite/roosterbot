@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 		Summary("#DefaultScheduleModule_Summary"),
 		Remarks("#DefaultScheduleModule_Remarks")]
 	public class DefaultScheduleModule : EditableCmdModuleBase {
-		[Priority(-10), Command("nu", RunMode = RunMode.Sync), Alias("rooster"), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
+		[Priority(-10), Command("nu", RunMode = RunMode.Async), Alias("rooster"), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "nu ik", Context.Message, "default nu");
@@ -28,7 +28,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Priority(-10), Command("hierna", RunMode = RunMode.Sync), Alias("later", "straks", "zometeen"), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
+		[Priority(-10), Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
 		public async Task DefaultNextCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "hierna ik", Context.Message, "default hierna");
@@ -37,7 +37,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Priority(-10), Command("dag", RunMode = RunMode.Sync), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Priority(-10), Command("dag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, $"dag {ScheduleUtil.GetStringFromDayOfWeek(Culture, dag)} ik", Context.Message, "default dag");
@@ -46,7 +46,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Priority(-10), Command("morgen", RunMode = RunMode.Sync), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Priority(-10), Command("morgen", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task DefaultTomorrowCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "morgen ik", Context.Message, "default morgen");
@@ -55,7 +55,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Priority(-10), Command("vandaag", RunMode = RunMode.Sync), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
+		[Priority(-10), Command("vandaag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task DefaultTodayCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
 				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.OriginalResponse, "vandaag ik", Context.Message, "default vandaag");
