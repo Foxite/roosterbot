@@ -5,7 +5,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO reduce the size of this file
+	// TODO reduce the size of this file (it has 352 lines right now)
 	public class ScheduleModule : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
@@ -72,7 +72,7 @@ namespace RoosterBot.Schedule {
 
 		[Command("over", RunMode = RunMode.Sync)]
 		public async Task ShowFutureCommand([Range(1, 52)] int amount, string unit, [Remainder] IdentifierInfo info) {
-			if (unit == "uur") {
+			if (unit == "uur") { // TODO units need to be localized
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
