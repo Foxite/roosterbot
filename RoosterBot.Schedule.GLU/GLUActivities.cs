@@ -27,8 +27,6 @@
 					return "Vormgeving";
 				case "engine":
 					return "Engineering";
-				case "stdag doc":
-					return "Studiedag :tada:";
 				case "to":
 					return "Teamoverleg";
 				case "skc":
@@ -37,6 +35,11 @@
 					return "Solliciteren";
 				case "mastercl":
 					return "Masterclass";
+
+				// Day off
+				case "studiedag":
+				case "stdag doc":
+					return "Studiedag :tada:";
 
 				// Display as abbreviation
 				case "3d":
