@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 		private ScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public static async Task<ScheduleProvider> CreateAsync(string name, ScheduleReaderBase reader, ulong[] allowedGuildIds) {
+		public static async Task<ScheduleProvider> CreateAsync(string name, ScheduleReader reader, ulong[] allowedGuildIds) {
 			ScheduleProvider service = new ScheduleProvider(allowedGuildIds) {
 				m_Name = name,
 				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.

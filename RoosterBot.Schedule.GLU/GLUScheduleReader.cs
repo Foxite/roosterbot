@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule.GLU {
-	public class GLUScheduleReader : ScheduleReaderBase {
+	public class GLUScheduleReader : ScheduleReader {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;
 		private readonly ulong m_Guild;
