@@ -13,7 +13,7 @@ namespace RoosterBot.MiscStuff {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
-				string response = string.Format(ResourcesService.GetString(Culture, "CounterModule_GetCounterCommand_FullText"),
+				string response = GetString("CounterModule_GetCounterCommand_FullText",
 												Service.GetCounterDescription(counter),
 												FormatTimeSpan(timeSinceReset),
 												counterData.LastResetDate.ToString("dd-MM-yyyy"),
@@ -21,7 +21,7 @@ namespace RoosterBot.MiscStuff {
 												FormatTimeSpan(counterData.HighScoreTimespan));
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
-				await MinorError(ResourcesService.GetString(Culture, "CounterModule_GetCounterCommand_CounterDoesNotExist"));
+				await MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
 			} catch (ArgumentException e) {
 				await FatalError("Invalid counter", e);
 			} catch (Exception e) {
@@ -41,12 +41,12 @@ namespace RoosterBot.MiscStuff {
 
 				bool newRecord = Service.ResetDateCounter(counter);
 
-				string response = string.Format(newRecord ? ResourcesService.GetString(Culture, "CounterModule_ResetCounterCommand_ResponseNewHighscore")
-														  : ResourcesService.GetString(Culture, "CounterModule_ResetCounterCommand_ResponseNoNewHighscore"),
+				string response = string.Format(newRecord ? GetString("CounterModule_ResetCounterCommand_ResponseNewHighscore")
+														  : GetString("CounterModule_ResetCounterCommand_ResponseNoNewHighscore"),
 												counterDescription, previousTimespan, previousHighscore);
 				await ReplyAsync(response);
 			} catch (FileNotFoundException) {
-				await MinorError(ResourcesService.GetString(Culture, "CounterModule_GetCounterCommand_CounterDoesNotExist"));
+				await MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
 			} catch (Exception e) {
 				await FatalError("Uncaught exception", e);
 			}
@@ -55,21 +55,21 @@ namespace RoosterBot.MiscStuff {
 		public string FormatTimeSpan(TimeSpan ts) {
 			string days;
 			if (((long) ts.TotalDays) == 1) {
-				days = string.Format(ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_DaysSingular"), (long) ts.TotalDays);
+				days = GetString("CounterService_FormatTimeSpan_DaysSingular", (long) ts.TotalDays);
 			} else {
-				days = string.Format(ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_DaysPlural"), (long) ts.TotalDays);
+				days = GetString("CounterService_FormatTimeSpan_DaysPlural", (long) ts.TotalDays);
 			}
 
-			string separator = ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_Separator");
+			string separator = GetString("CounterService_FormatTimeSpan_Separator");
 
 			string hours;
 			if (((long) ts.Hours) == 1) {
-				hours = string.Format(ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_HoursSingular"), (long) ts.Hours);
+				hours = GetString("CounterService_FormatTimeSpan_HoursSingular", (long) ts.Hours);
 			} else {
-				hours = string.Format(ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_HoursPlural"), (long) ts.Hours);
+				hours = GetString("CounterService_FormatTimeSpan_HoursPlural", (long) ts.Hours);
 			}
 
-			return string.Format(ResourcesService.GetString(Culture, "CounterService_FormatTimeSpan_Result"), days, separator, hours);
+			return GetString("CounterService_FormatTimeSpan_Result", days, separator, hours);
 		}
 	}
 }

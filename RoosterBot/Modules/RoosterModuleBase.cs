@@ -158,8 +158,17 @@ namespace RoosterBot {
 				await Config.BotOwner.SendMessageAsync(report);
 			}
 			
-			string response = Util.ErrorPrefix + ResourcesService.GetString(Culture, "RoosterBot_FatalError");
+			string response = Util.ErrorPrefix + GetString("RoosterBot_FatalError");
 			await ReplyAsync(response);
+		}
+
+		// TODO replace all manual retrievals with this
+		protected string GetString(string name) {
+			return ResourcesService.GetString(Culture, name);
+		}
+
+		protected string GetString(string name, params object[] args) {
+			return string.Format(ResourcesService.GetString(Culture, name), args);
 		}
 
 		public abstract class ModuleLogger {

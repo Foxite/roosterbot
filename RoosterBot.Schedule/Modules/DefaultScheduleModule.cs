@@ -89,11 +89,11 @@ namespace RoosterBot.Schedule {
 
 		private async Task ReplyErrorMessage(string param) {
 			if (MentionUtils.TryParseUser(param, out _)) {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
+				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
 			} else if (param == "ik") {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
+				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
 			} else {
-				await ReplyAsync(ResourcesService.GetString(Culture, "DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
+				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
 			}
 		}
 	}

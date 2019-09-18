@@ -10,7 +10,7 @@ namespace RoosterBot.Meta {
 
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Summary")]
 		public async Task HelpCommand() {
-			string response = string.Format(ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_HelpPretext"), Config.CommandPrefix);
+			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", Config.CommandPrefix);
 
 			bool notFirst = false;
 			foreach (string helpSection in Help.GetSectionNames()) {
@@ -21,7 +21,7 @@ namespace RoosterBot.Meta {
 				notFirst = true;
 			}
 
-			response += ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_PostText");
+			response += GetString("MetaCommandsModule_HelpCommand_PostText");
 
 			await ReplyAsync(response);
 		}
@@ -33,7 +33,7 @@ namespace RoosterBot.Meta {
 				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
 				response += Util.ResolveString(Culture, helpSection.Item1, helpSection.Item2);
 			} else {
-				response += ResourcesService.GetString(Culture, "MetaCommandsModule_HelpCommand_ChapterDoesNotExist");
+				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist");
 			}
 			await ReplyAsync(response);
 		}
@@ -46,7 +46,7 @@ namespace RoosterBot.Meta {
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
 				select Util.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
-			string response = ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_Pretext");
+			string response = GetString("MetaCommandsModule_CommandListCommand_Pretext");
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
 			await ReplyAsync(response);
 		}
@@ -59,9 +59,9 @@ namespace RoosterBot.Meta {
 				.SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				await ReplyAsync(ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_CategoryDoesNotExist"));
+				await ReplyAsync(GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist"));
 			} else if (module.Commands.Count() == 0) {
-				await ReplyAsync(ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_CategoryEmpty"));
+				await ReplyAsync(GetString("MetaCommandsModule_CommandListCommand_CategoryEmpty"));
 			} else {
 				string response = "";
 
@@ -123,7 +123,7 @@ namespace RoosterBot.Meta {
 					response += Util.ResolveString(Culture, component, module.Remarks) + "\n";
 				}
 
-				response += ResourcesService.GetString(Culture, "MetaCommandsModule_CommandListCommand_OptionalHint");
+				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
 				await ReplyAsync(response);
 			}
 		}

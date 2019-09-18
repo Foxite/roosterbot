@@ -13,11 +13,11 @@ namespace RoosterBot.Schedule {
 			string clazz = (await Classes.GetClassForDiscordUserAsync(Context, Context.User))?.DisplayText;
 			string response;
 			if (clazz == null) {
-				response = ResourcesService.GetString(Culture, "UserClassModule_GetClassForUser_UserNotKnown");
+				response = GetString("UserClassModule_GetClassForUser_UserNotKnown");
 			} else {
-				response = string.Format(ResourcesService.GetString(Culture, "UserClassModule_GetClassForUser_UserIsInClass"), clazz);
+				response = GetString("UserClassModule_GetClassForUser_UserIsInClass", clazz);
 			}
-			response += ResourcesService.GetString(Culture, "UserClassModule_GetClassForUser_ChangeHint");
+			response += GetString("UserClassModule_GetClassForUser_ChangeHint");
 			await ReplyAsync(response);
 		}
 		
@@ -26,10 +26,10 @@ namespace RoosterBot.Schedule {
 			StudentSetInfo studentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazz);
 			if (studentSet != null) {
 				await Classes.SetClassForDiscordUserAsync(Context, Context.User, studentSet);
-				await ReplyAsync(string.Format(ResourcesService.GetString(Culture, "UserClassModule_SetClassForUser_ConfirmUserIsInClass"), studentSet.DisplayText));
+				await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", studentSet.DisplayText));
 
 			} else {
-				await ReplyAsync(ResourcesService.GetString(Culture, "UserClassModule_SetClassForUser_InvalidClass"));
+				await ReplyAsync(GetString("UserClassModule_SetClassForUser_InvalidClass"));
 			}
 		}
 	}

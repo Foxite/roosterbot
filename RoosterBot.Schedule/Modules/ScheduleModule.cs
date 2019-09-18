@@ -21,15 +21,15 @@ namespace RoosterBot.Schedule {
 			if (result.Success) {
 				ScheduleRecord record = result.Value;
 				if (record == null) {
-					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_CurrentCommand_NoCurrentRecord"), info.DisplayText);
+					string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
 
 					if (ScheduleUtil.IsWeekend(DateTime.Today)) {
-						response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
+						response += GetString("ScheduleModuleBase_ItIsWeekend");
 					}
 
 					ReplyDeferred(response, info, record);
 				} else {
-					await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNow"), info.DisplayText), info, record);
+					await RespondRecord(GetString("ScheduleModuleBase_PretextNow", info.DisplayText), info, record);
 				}
 			}
 		}
@@ -41,9 +41,9 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord record = result.Value;
 				string pretext;
 				if (record.Start.Date == DateTime.Today) {
-					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), info.DisplayText);
+					pretext = GetString("ScheduleModuleBase_PretextNext", info.DisplayText);
 				} else {
-					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_Pretext_FirstOn"), info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
+					pretext = GetString("ScheduleModuleBase_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
 				}
 				await RespondRecord(pretext, info, record);
 			}
@@ -82,9 +82,9 @@ namespace RoosterBot.Schedule {
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record != null) {
-						await RespondRecord(string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_InXHours"), info.DisplayText, amount), info, record);
+						await RespondRecord(GetString("ScheduleModuleBase_InXHours", info.DisplayText, amount), info, record);
 					} else {
-						await ReplyAsync(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
+						await ReplyAsync(GetString("ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
 				}
 			} else if (unit == "dag" || unit == "dagen") {
@@ -92,14 +92,14 @@ namespace RoosterBot.Schedule {
 			} else if (unit == "week" || unit == "weken") {
 				await RespondWorkingDays(info, amount);
 			} else {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
+				await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 			}
 		}
 
 		[Command("daarna", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_AfterCommand")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
-				ReplyDeferred(ResourcesService.GetString(Culture, "AfterScheduleModule_GetAfterCommand_ParameterHint"));
+				ReplyDeferred(GetString("AfterScheduleModule_GetAfterCommand_ParameterHint"));
 			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();
@@ -152,28 +152,28 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] records = result.Value;
 				string relativeDateReference = ScheduleUtil.GetRelativeDateReference(Culture, date);
 				if (records.Length == 0) {
-					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_NoRecordAtRelative"), info.DisplayText, relativeDateReference);
+					string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
 					if (ScheduleUtil.IsWeekend(date)) {
 						if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
-							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
+							response += GetString("ScheduleModuleBase_ItIsWeekend");
 						} else {
-							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ThatIsWeekend");
+							response += GetString("ScheduleModuleBase_ThatIsWeekend");
 						}
 					}
 					ReplyDeferred(response, info, null);
 				} else if (records.Length == 1) {
-					string pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_OnlyRecordForDay"), info.DisplayText, relativeDateReference);
+					string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 					await RespondRecord(pretext, info, records[0]);
 				} else {
-					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), info.DisplayText, relativeDateReference);
+					string response = GetString("ScheduleModuleBase_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] {
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnActivity"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTime"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnStudentSets"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnTeacher"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondDay_ColumnRoom")
+						GetString("ScheduleModuleBase_RespondDay_ColumnActivity"),
+						GetString("ScheduleModuleBase_RespondDay_ColumnTime"),
+						GetString("ScheduleModuleBase_RespondDay_ColumnStudentSets"),
+						GetString("ScheduleModuleBase_RespondDay_ColumnTeacher"),
+						GetString("ScheduleModuleBase_RespondDay_ColumnRoom")
 					};
 
 					int recordIndex = 1;
@@ -202,19 +202,19 @@ namespace RoosterBot.Schedule {
 
 				if (availability.Length > 1) {
 					if (weeksFromNow == 0) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleThisWeek"), info.DisplayText);
+						response = GetString("ScheduleModuleBase_ScheduleThisWeek", info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleNextWeek"), info.DisplayText);
+						response = GetString("ScheduleModuleBase_ScheduleNextWeek", info.DisplayText);
 					} else {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleInXWeeks"), info.DisplayText, weeksFromNow);
+						response = GetString("ScheduleModuleBase_ScheduleInXWeeks", info.DisplayText, weeksFromNow);
 					}
 					response += "\n";
 
 					string[][] cells = new string[availability.Length + 1][];
 					cells[0] = new[] {
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnDay"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnFrom"),
-						ResourcesService.GetString(Culture, "ScheduleModuleBase_RespondWorkingDays_ColumnTo")
+						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnDay"),
+						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnFrom"),
+						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnTo")
 					};
 
 					int i = 1;
@@ -229,11 +229,11 @@ namespace RoosterBot.Schedule {
 					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek"), info.DisplayText);
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek"), info.DisplayText);
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info.DisplayText);
 					} else {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks"), info.DisplayText, weeksFromNow);
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info.DisplayText, weeksFromNow);
 					}
 				}
 
@@ -244,7 +244,7 @@ namespace RoosterBot.Schedule {
 		protected async Task RespondAfter(int recursion = 0) {
 			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
 			if (query.Equals(default(ScheduleCommandInfo))) {
-				await MinorError(ResourcesService.GetString(Culture, "AfterScheduleModule_GetAfterCommand_NoContext"));
+				await MinorError(GetString("AfterScheduleModule_GetAfterCommand_NoContext"));
 			} else {
 				ScheduleRecord nextRecord;
 				try {
@@ -254,7 +254,7 @@ namespace RoosterBot.Schedule {
 						nextRecord = await Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
-					await MinorError(ResourcesService.GetString(Culture, "AfterScheduleModule_GetAfterCommand_RecordsOutdated"));
+					await MinorError(GetString("AfterScheduleModule_GetAfterCommand_RecordsOutdated"));
 					return;
 				} catch (IdentifierNotFoundException) {
 					// This catch block scores 9 out of 10 on the "oh shit" scale
@@ -275,9 +275,9 @@ namespace RoosterBot.Schedule {
 
 				string pretext;
 				if (query.Record == null) {
-					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextNext"), query.Identifier.DisplayText);
+					pretext = GetString("ScheduleModuleBase_PretextNext", query.Identifier.DisplayText);
 				} else {
-					pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_PretextAfterPrevious"), query.Identifier.DisplayText);
+					pretext = GetString("ScheduleModuleBase_PretextAfterPrevious", query.Identifier.DisplayText);
 				}
 
 				// Avoid RespondRecord automatically calling this function again because we do it ourselves
@@ -319,17 +319,17 @@ namespace RoosterBot.Schedule {
 					Value = await action()
 				};
 			} catch (IdentifierNotFoundException) {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_NotFound"));
+				await MinorError(GetString("ScheduleModuleBase_HandleError_NotFound"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_RecordsOutdated"));
+				await MinorError(GetString("ScheduleModuleBase_HandleError_RecordsOutdated"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (NoAllowedGuildsException) {
-				await MinorError(ResourcesService.GetString(Culture, "ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer"));
+				await MinorError(GetString("ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
