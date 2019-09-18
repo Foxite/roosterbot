@@ -26,7 +26,7 @@ namespace RoosterBot.Watson {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Watson.Resources");
 
 			m_Config = services.GetService<ConfigService>();

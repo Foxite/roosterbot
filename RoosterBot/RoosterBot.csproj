@@ -47,7 +47,8 @@
   <ItemGroup>
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
-    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Handlers\DeletedCommandHandler.cs" />
+    <Compile Include="Handlers\NewCommandHandler.cs" />
     <Compile Include="Components\ComponentBase.cs" />
     <Compile Include="Components\ComponentException.cs" />
     <Compile Include="Components\ComponentManager.cs" />
@@ -60,13 +61,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConstantsTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\PostCommandHandler.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
     <Compile Include="Readers\RoosterTypeReaderBase.cs" />
-    <Compile Include="RestartHandler.cs" />
-    <Compile Include="Services\EditedCommandService.cs" />
+    <Compile Include="Handlers\RestartHandler.cs" />
+    <Compile Include="Handlers\EditedCommandHandler.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Modules\EditableCmdModuleBase.cs" />
     <Compile Include="Logger.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Services\HelpService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ResourceService.cs" />
+    <Compile Include="Services\RoosterCommandService.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

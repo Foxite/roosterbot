@@ -28,7 +28,7 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			// TODO allow other components to use their own IdentifierInfo

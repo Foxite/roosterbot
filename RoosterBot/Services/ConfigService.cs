@@ -12,6 +12,7 @@ namespace RoosterBot {
 		public   MultiMatchHandling MultiMatchHandling { get; private set; }
 		public   IUser		        BotOwner { get; private set; }
 		internal bool		        ReportStartupVersionToOwner { get; }
+		internal int				MinimumMemorySeconds { get; }
 
 		private  ulong		  m_BotOwnerId;
 
@@ -34,6 +35,7 @@ namespace RoosterBot {
 			MultiMatchHandling = jsonConfig["multiMatchHandling"].ToObject<MultiMatchHandling>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
 			m_BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
+			MinimumMemorySeconds = jsonConfig["minimumMemorySeconds"].ToObject<int>();
 		}
 		
 		/// <summary>

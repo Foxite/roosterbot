@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
 	public abstract class EditableCmdModuleBase : RoosterModuleBase<EditedCommandContext> {
 		// These should actually be protected, but they're here because Discord.NET injects these services when a command is called.
 		// There's a few other ways to get the services with the injection system, but this is the easiest way.
-		public EditedCommandService CmdService { get; set; }
+		public RoosterCommandService CmdService { get; set; }
 
 		private bool m_Replied;
 

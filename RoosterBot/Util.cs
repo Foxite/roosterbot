@@ -168,6 +168,9 @@ namespace RoosterBot {
 			return input;
 		}
 
+		// TODO tomorrow-me: Move this into ResourceService
+		// Seriously it will solve everything, just do it
+		// Sincerely, 2AM-me
 		public static string ResolveString(CultureInfo culture, ComponentBase component, string str) {
 			if (str.StartsWith("#")) {
 				Assembly assembly = null;
@@ -258,6 +261,13 @@ namespace RoosterBot {
 				}
 			});
 			return singleResponse;
+		}
+		
+		public static IEnumerable<T> Add<T>(this IEnumerable<T> source, T item) {
+			foreach (T current in source) {
+				yield return current;
+			}
+			yield return item;
 		}
 	}
 

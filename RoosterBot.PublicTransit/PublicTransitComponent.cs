@@ -29,7 +29,7 @@ namespace RoosterBot.PublicTransit {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			registerModules(new[] { await commandService.AddModuleAsync<PTModule>(services) });
 
 			string helpText = "Met `!ov` kan je informatie opzoeken via de NS reisplanner.\n";

@@ -17,7 +17,7 @@ namespace RoosterBot.MiscStuff {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModulesAsync(IServiceProvider services, EditedCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.MiscStuff.Resources");
 
 			registerModules(await Task.WhenAll(

@@ -22,10 +22,7 @@ namespace RoosterBot {
 		private ConfigService m_ConfigService;
 		private NotificationService m_NotificationService;
 
-		internal ResourceService ResourceService { get; private set; }
-
 		public ComponentManager Components { get; private set; }
-		public CommandHandler CommandHandler { get; set; }
 
 		private Program() { }
 
@@ -74,8 +71,6 @@ namespace RoosterBot {
 
 			IServiceCollection serviceCollection = CreateRBServices();
 
-			CommandHandler = new CommandHandler(serviceCollection, m_ConfigService, m_Client);
-
 			Components = await ComponentManager.CreateAsync(serviceCollection);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
@@ -89,7 +84,6 @@ namespace RoosterBot {
 			await m_Client.LogoutAsync();
 
 			await Components.ShutdownComponentsAsync();
-			CommandHandler.Dispose();
 			m_Client.Dispose();
 		}
 
@@ -147,12 +141,15 @@ namespace RoosterBot {
 		}
 
 		private IServiceCollection CreateRBServices() {
+			RoosterCommandService commands = new RoosterCommandService(m_ConfigService);
+			commands.Log += Logger.LogSync;
+
+			m_NotificationService = new NotificationService();
 			HelpService helpService = new HelpService();
 			GuildCultureService gcs = new GuildCultureService();
-			m_NotificationService = new NotificationService();
 
-			ResourceService = new ResourceService(gcs);
-			ResourceService.RegisterResources("RoosterBot.Resources");
+			ResourceService resourceService = new ResourceService(gcs);
+			resourceService.RegisterResources("RoosterBot.Resources");
 			
 			// I don't know what to do with this.
 			RestartHandler restartHandler = new RestartHandler(m_Client, m_NotificationService, 5);
@@ -169,9 +166,9 @@ namespace RoosterBot {
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_NotificationService)
-				.AddSingleton(ResourceService)
+				.AddSingleton(commands)
+				.AddSingleton(resourceService)
 				.AddSingleton(helpService)
-				.AddSingleton(restartHandler)
 				.AddSingleton(gcs)
 				.AddSingleton(m_Client);
 			return serviceCollection;

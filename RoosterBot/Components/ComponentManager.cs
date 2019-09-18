@@ -133,7 +133,7 @@ namespace RoosterBot {
 		}
 
 		private async Task AddComponentModulesAsync(IServiceProvider services) {
-			EditedCommandService commands = services.GetService<EditedCommandService>();
+			RoosterCommandService commands = services.GetService<RoosterCommandService>();
 			HelpService help = services.GetService<HelpService>();
 			Task[] modulesLoading = new Task[m_Components.Count];
 
