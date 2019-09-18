@@ -8,8 +8,8 @@ namespace RoosterBot.Schedule {
 	// - Make it possible for a missing parameter to be resolved to "ik"
 	// - Provide a more useful error message in case a parameter is not understood
 	// 
-	// The second one can conceivably be accomplished by providing a default value, however, this is hard because default parameter types have to be compile-time constants.
-	// The third one is still valid, but in theory, there needs to be a way to do this without having a separate module.
+	// The first one can conceivably be accomplished by providing a default value, however, this is hard because default parameter types have to be compile-time constants.
+	// The second one is still valid, but in theory, there needs to be a way to do this without having a separate module.
 	// 
 	// Neither of these necessities are the result of writing good code, so there is a long-standing todo item:
 	// TODO: make this class obsolete.
