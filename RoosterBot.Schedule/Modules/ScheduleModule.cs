@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -7,12 +6,16 @@ using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	// TODO reduce the size of this file (it has 352 lines right now)
+	[LogTag("ScheduleModule")]
+	[Name("#DefaultScheduleModule_Name")]
+	[Summary("#DefaultScheduleModule_Summary")]
+	[Remarks("#DefaultScheduleModule_Remarks")]
 	public class ScheduleModule : EditableCmdModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
 
 		#region Commands
-		[Command("nu", RunMode = RunMode.Async)]
+		[Command("nu", RunMode = RunMode.Async), Alias("rooster"), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task CurrentCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
 			if (result.Success) {
@@ -31,7 +34,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen")]
+		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
 		public async Task NextCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
@@ -46,33 +49,33 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async)]
+		[Command("dag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async)]
+		[Command("vandaag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task TodayCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async)]
+		[Command("morgen", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task TomorrowCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
-		[Command("deze week", RunMode = RunMode.Async)]
+		[Command("deze week", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 0);
 		}
 
-		[Command("volgende week", RunMode = RunMode.Async)]
+		[Command("volgende week", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 1);
 		}
 
-		[Command("over", RunMode = RunMode.Async)]
-		public async Task ShowFutureCommand(int amount, string unit, [Remainder] IdentifierInfo info) {
+		[Command("over", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
+		public async Task ShowFutureCommand(int amount, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] IdentifierInfo info) {
 			if (unit == "uur") { // TODO units need to be localized
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
@@ -92,7 +95,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("daarna", RunMode = RunMode.Async)]
+		[Command("daarna", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_AfterCommand")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
 				ReplyDeferred(ResourcesService.GetString(Culture, "AfterScheduleModule_GetAfterCommand_ParameterHint"));
