@@ -135,11 +135,10 @@ namespace RoosterBot {
 				}
 
 				IUserMessage[] initialResponses = (context as EditedCommandContext)?.Responses;
-				if (initialResponse == null) {
+				if (initialResponses == null) {
 					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {
-					
-					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
+					await Util.ModifyResponsesIntoSingle(response, initialResponses, false);
 				}
 			}
 		}
