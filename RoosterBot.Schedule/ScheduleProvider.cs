@@ -5,7 +5,10 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
-	public class ScheduleProvider : GuildSpecificInfo {
+	/// <summary>
+	/// A schedule provider that loads all records into memory from a schedule reader.
+	/// </summary>
+	public class ScheduleProvider : AbstractScheduleProvider {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
@@ -21,7 +24,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
-		public Task<ScheduleRecord> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
 			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
@@ -42,7 +45,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public Task<ScheduleRecord> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
 			DateTime target = DateTime.Now + timespan;
 			bool sawRecordForClass = false;
 
@@ -63,7 +66,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
 			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
@@ -82,7 +85,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public Task<ScheduleRecord> GetRecordAfterOtherAsync(IdentifierInfo identifier, ScheduleRecord givenRecord) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetRecordAfterOtherAsync(IdentifierInfo identifier, ScheduleRecord givenRecord) => Task.Run(() => {
 			bool sawRecordForClass = false;
 			bool sawGivenRecord = false;
 
@@ -107,7 +110,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
+		public override Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
@@ -137,7 +140,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Gets all the days in a week that have at least 1 record on those days.
 		/// </summary>
-		public Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
+		public override Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
 			DateTime targetFirstDate =
 				DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
