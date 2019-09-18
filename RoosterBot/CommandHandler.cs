@@ -7,6 +7,8 @@ using System.Globalization;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
+	// TODO find a way to localize command and group names and aliases
+	// We can't define an alias for every language, I don't think I have to explain why.
 	public sealed class CommandHandler : IDisposable {
 		private EditedCommandService m_Commands;
 		private ConfigService m_ConfigService;
