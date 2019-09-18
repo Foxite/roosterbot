@@ -75,6 +75,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("over", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
+		// TODO localize unit parameter name
 		public async Task ShowFutureCommand(int amount, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] IdentifierInfo info) {
 			if (unit == "uur") { // TODO units need to be localized
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));

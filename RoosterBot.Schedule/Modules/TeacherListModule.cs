@@ -9,6 +9,7 @@ namespace RoosterBot.Schedule {
 		public TeacherNameService Teachers { get; set; }
 		
 		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
+		// TODO localize parameter name
 		public async Task TeacherListCommand([Remainder, Name("naam")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
