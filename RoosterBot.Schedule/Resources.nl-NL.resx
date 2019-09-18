@@ -442,4 +442,22 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="IdentifierInfoReader_Self" xml:space="preserve">
     <value>ik</value>
   </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitDays" xml:space="preserve">
+    <value>dag|dagen</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitHours" xml:space="preserve">
+    <value>uur</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitParameterName" xml:space="preserve">
+    <value>eenheid (uur, dagen, of weken)</value>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitWeeks" xml:space="preserve">
+    <value>week|weken</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
+    <value>naam</value>
+  </data>
 </root>

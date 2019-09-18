@@ -75,10 +75,10 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("over", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
-		// TODO localize unit parameter name
-		public async Task ShowFutureCommand(int amount, [Name("eenheid (uur, dagen, of weken)")] string unit, [Remainder] IdentifierInfo info) {
-			if (unit == "uur") { // TODO units need to be localized
-				ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info) {
+			unit = unit.ToLower();
+			if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
+				ReturnValue <ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					if (record != null) {
@@ -87,9 +87,9 @@ namespace RoosterBot.Schedule {
 						await ReplyAsync(GetString("ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
 					}
 				}
-			} else if (unit == "dag" || unit == "dagen") {
+			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
 				await RespondDay(info, DateTime.Today.AddDays(amount));
-			} else if (unit == "week" || unit == "weken") {
+			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
 				await RespondWorkingDays(info, amount);
 			} else {
 				await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));

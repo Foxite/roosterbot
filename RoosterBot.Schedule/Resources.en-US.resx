@@ -445,4 +445,22 @@ He/she is not on schedule today (anymore), and is probably absent.</value>
   <data name="IdentifierInfoReader_Self" xml:space="preserve">
     <value>me</value>
   </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitDays" xml:space="preserve">
+    <value>day|days</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitHours" xml:space="preserve">
+    <value>hour|hours</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitParameterName" xml:space="preserve">
+    <value>unit (hours, days, or weeks)</value>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitWeeks" xml:space="preserve">
+    <value>week|weeks</value>
+    <comment>Separate possible values with |</comment>
+  </data>
+  <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
+    <value>name</value>
+  </data>
 </root>
