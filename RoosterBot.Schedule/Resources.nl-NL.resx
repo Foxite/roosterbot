@@ -271,7 +271,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 		  1: relative date reference</comment>
   </data>
 	<data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>Niet op het rooster op dit moment</value>
+    <value>{0}: Niet op het rooster op dit moment</value>
+    <comment>0: identifier info display text</comment>
   </data>
 	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
     <value>

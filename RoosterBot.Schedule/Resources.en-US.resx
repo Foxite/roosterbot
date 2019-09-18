@@ -272,7 +272,8 @@ Warning: natural-language commands are not supported yet in English.</value>
 		  1: relative date reference</comment>
   </data>
 	<data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>Not on schedule right now</value>
+    <value>{0}: Not on schedule right now</value>
+    <comment>0: identifier info display text</comment>
   </data>
 	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
     <value>He/she is not on schedule today (anymore), and is probably absent.</value>
