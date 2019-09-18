@@ -26,7 +26,6 @@ namespace RoosterBot {
 			if (m_GuildCultures.TryGetValue(guildId, out CultureInfo value)) {
 				return value;
 			} else {
-				Logger.Warning("GuildCultureService", "Guild with ID " + guildId + " has no culture assigned");
 				return m_DefaultCulture;
 			}
 		}
