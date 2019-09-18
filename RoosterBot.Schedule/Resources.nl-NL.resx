@@ -425,4 +425,18 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
     <comment>0: identifier display text
 1: relative date reference</comment>
   </data>
+  <data name="ScheduleUtil_RelativeDateReference_Date" xml:space="preserve">
+    <value>op {0}</value>
+    <comment>0: localized short date string (day and month)</comment>
+  </data>
+  <data name="ScheduleUtil_RelativeDateReference_DayName" xml:space="preserve">
+    <value>op {0}</value>
+    <comment>0: localized day name</comment>
+  </data>
+  <data name="ScheduleUtil_RelativeDateReference_Today" xml:space="preserve">
+    <value>vandaag</value>
+  </data>
+  <data name="ScheduleUtil_RelativeDateReference_Tomorrow" xml:space="preserve">
+    <value>morgen</value>
+  </data>
 </root>

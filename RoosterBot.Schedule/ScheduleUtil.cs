@@ -32,26 +32,6 @@ namespace RoosterBot.Schedule {
 			return targetDate;
 		}
 
-		/// <summary>
-		/// For a given DateTime, this returns the Dutch relative reference for that date.
-		/// For example, today, tomorrow, on Tueday, or if it's 7 or more days away, it will return <code>date.ToString("dd-MM")</code>.
-		/// </summary>
-		/// <param name="date"></param>
-		/// <param name="response"></param>
-		/// <returns></returns>
-		// TODO localize relative date reference
-		public static string GetRelativeDateReference(CultureInfo culture, DateTime date) {
-			if (date == DateTime.Today) {
-				return "vandaag";
-			} else if (date == DateTime.Today.AddDays(1)) {
-				return "morgen";
-			} else if ((date - DateTime.Today).TotalDays < 7) {
-				return "op " + date.DayOfWeek.GetName(culture);
-			} else {
-				return "op " + date.ToString("dd-MM");
-			}
-		}
-
 		public static bool IsWeekend(DateTime date) {
 			return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
 		}

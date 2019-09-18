@@ -150,7 +150,19 @@ namespace RoosterBot.Schedule {
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
-				string relativeDateReference = ScheduleUtil.GetRelativeDateReference(Culture, date);
+
+				string relativeDateReference;
+
+				if (date == DateTime.Today) {
+					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Today");
+				} else if (date == DateTime.Today.AddDays(1)) {
+					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Tomorrow");
+				} else if ((date - DateTime.Today).TotalDays < 7) {
+					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_DayName", date.DayOfWeek.GetName(Culture));
+				} else {
+					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Date", date.ToShortDateString(Culture));
+				}
+
 				if (records.Length == 0) {
 					string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
 					if (ScheduleUtil.IsWeekend(date)) {
