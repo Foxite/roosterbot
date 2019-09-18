@@ -36,8 +36,8 @@ namespace ScheduleComponent.Services {
 						await csv.ReadAsync();
 						csv.ReadHeader();
 
-						Dictionary<IdentifierInfo[], ScheduleRecord> lastRecords = new Dictionary<IdentifierInfo[], ScheduleRecord>();
-						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name);
+						Dictionary<string, ScheduleRecord> lastRecords = new Dictionary<string, ScheduleRecord>();
+						PropertyInfo identifier = typeof(ScheduleRecord).GetProperty(m_SearchProperty.Name + "String");
 
 						DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
@@ -63,12 +63,12 @@ namespace ScheduleComponent.Services {
 								End = end
 							};
 
-							IdentifierInfo[] key = (IdentifierInfo[]) identifier.GetValue(record);
+							string key = (string) identifier.GetValue(record);
 							if (lastRecords.TryGetValue(key, out ScheduleRecord lastRecord) &&
 								record.Activity == lastRecord.Activity &&
 								record.Start.Date == lastRecord.Start.Date &&
 								record.StudentSetsString == lastRecord.StudentSetsString &&
-								record.StaffMember == lastRecord.StaffMember &&
+								record.StaffMemberString == lastRecord.StaffMemberString &&
 								record.RoomString == lastRecord.RoomString) {
 								lastRecord.BreakStart = lastRecord.End;
 								lastRecord.BreakEnd = record.Start;
