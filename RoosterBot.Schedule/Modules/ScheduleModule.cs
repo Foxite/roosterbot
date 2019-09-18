@@ -161,8 +161,11 @@ namespace RoosterBot.Schedule {
 						}
 					}
 					ReplyDeferred(response, info, null);
+				} else if (records.Length == 1) {
+					string pretext = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_OnlyRecordForDay"), info.DisplayText, relativeDateReference);
+					await RespondRecord(pretext, info, records[0]);
 				} else {
-					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), info.DisplayText, ScheduleUtil.GetRelativeDateReference(Culture, date));
+					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ResondDay_ScheduleForRelative"), info.DisplayText, relativeDateReference);
 
 					string[][] cells = new string[records.Length + 1][];
 					cells[0] = new string[] {
