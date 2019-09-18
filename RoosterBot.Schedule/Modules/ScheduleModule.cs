@@ -150,9 +150,9 @@ namespace RoosterBot.Schedule {
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;
-				string response;
+				string relativeDateReference = ScheduleUtil.GetRelativeDateReference(Culture, date);
 				if (records.Length == 0) {
-					response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_NoRecordAtRelative"), ScheduleUtil.GetRelativeDateReference(Culture, date));
+					string response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondDay_NoRecordAtRelative"), info.DisplayText, relativeDateReference);
 					if (ScheduleUtil.IsWeekend(date)) {
 						if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
 							response += ResourcesService.GetString(Culture, "ScheduleModuleBase_ItIsWeekend");
@@ -195,15 +195,15 @@ namespace RoosterBot.Schedule {
 			if (result.Success) {
 				AvailabilityInfo[] availability = result.Value;
 
-				string response = info.DisplayText + ": ";
+				string response;
 
-				if (availability.Length > 0) {
+				if (availability.Length > 1) {
 					if (weeksFromNow == 0) {
-						response = ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleThisWeek");
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleThisWeek"), info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response = ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleNextWeek");
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleNextWeek"), info.DisplayText);
 					} else {
-						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleInXWeeks"), weeksFromNow);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModuleBase_ScheduleInXWeeks"), info.DisplayText, weeksFromNow);
 					}
 					response += "\n";
 
@@ -226,11 +226,11 @@ namespace RoosterBot.Schedule {
 					response += Util.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
-						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek");
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek"), info.DisplayText);
 					} else if (weeksFromNow == 1) {
-						response += ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek");
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek"), info.DisplayText);
 					} else {
-						response += string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks"), weeksFromNow);
+						response = string.Format(ResourcesService.GetString(Culture, "ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks"), info.DisplayText, weeksFromNow);
 					}
 				}
 
