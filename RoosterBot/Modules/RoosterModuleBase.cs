@@ -162,7 +162,6 @@ namespace RoosterBot {
 			await ReplyAsync(response);
 		}
 
-		// TODO replace all manual retrievals with this
 		protected string GetString(string name) {
 			return ResourcesService.GetString(Culture, name);
 		}
