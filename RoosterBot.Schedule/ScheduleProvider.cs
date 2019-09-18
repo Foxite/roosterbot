@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
-	// TODO async everything
 	public class ScheduleProvider : GuildSpecificInfo {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
@@ -22,7 +21,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
-		public ScheduleRecord GetCurrentRecord(IdentifierInfo identifier) {
+		public Task<ScheduleRecord> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
 			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
@@ -41,9 +40,9 @@ namespace RoosterBot.Schedule {
 			} else {
 				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
-		}
+		});
 
-		public ScheduleRecord GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan) {
+		public Task<ScheduleRecord> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
 			DateTime target = DateTime.Now + timespan;
 			bool sawRecordForClass = false;
 
@@ -62,9 +61,9 @@ namespace RoosterBot.Schedule {
 			} else {
 				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
-		}
+		});
 
-		public ScheduleRecord GetNextRecord(IdentifierInfo identifier) {
+		public Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
 			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
@@ -81,12 +80,12 @@ namespace RoosterBot.Schedule {
 			} else {
 				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
-		}
+		});
 
-		public ScheduleRecord GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord) {
+		public Task<ScheduleRecord> GetRecordAfterOtherAsync(IdentifierInfo identifier, ScheduleRecord givenRecord) => Task.Run(() => {
 			bool sawRecordForClass = false;
 			bool sawGivenRecord = false;
-			
+
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (sawGivenRecord) {
 					if (identifier.Matches(record)) {
@@ -106,9 +105,9 @@ namespace RoosterBot.Schedule {
 			} else {
 				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
 			}
-		}
+		});
 
-		public ScheduleRecord[] GetSchedulesForDate(IdentifierInfo identifier, DateTime date) {
+		public Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
 			List<ScheduleRecord> records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
@@ -133,12 +132,12 @@ namespace RoosterBot.Schedule {
 				}
 			}
 			return records.ToArray();
-		}
+		});
 
 		/// <summary>
 		/// Gets all the days in a week that have at least 1 record on those days.
 		/// </summary>
-		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow = 0) {
+		public Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
 			DateTime targetFirstDate =
 				DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
@@ -165,9 +164,9 @@ namespace RoosterBot.Schedule {
 				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
 				i++;
 			}
-			
+
 			return ret;
-		}
+		});
 	}
 
 	[Serializable]
