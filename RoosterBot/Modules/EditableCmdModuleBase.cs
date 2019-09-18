@@ -27,26 +27,7 @@ namespace RoosterBot {
 				ret = response;
 			} else {
 				// The command was edited.
-				if (!m_Replied) {
-					// This module has not yet replied to the command.
-					// Delete any extra messages that may have been sent by another command.
-					IEnumerable<IUserMessage> extraMessages = Context.Responses.Skip(1);
-					if (extraMessages.Any()) {
-						await Util.DeleteAll(Context.Channel, extraMessages);
-					}
-				}
-
-				ret = Context.Responses.First();
-				await ret.ModifyAsync((msgProps) => {
-					// Edit the command:
-					if (m_Replied) {
-						// If we have replied already, make sure there remains only one reply message.
-						msgProps.Content += "\n\n" + message;
-					} else {
-						m_Replied = true;
-						msgProps.Content = message;
-					}
-				});
+				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
 
 				CommandResponsePair crp = CmdService.GetResponse(Context.Message);
 				if (crp.ReactionUnicode != reactionUnicode) {
@@ -59,6 +40,8 @@ namespace RoosterBot {
 					crp.ReactionUnicode = reactionUnicode;
 				}
 			}
+
+			m_Replied = true;
 
 			return ret;
 		}

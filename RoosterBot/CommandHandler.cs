@@ -54,7 +54,7 @@ namespace RoosterBot {
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			} else {
-				await crp.Responses.DeleteAsync();
+				await Util.DeleteAll(crp.Command.Channel, crp.Responses);
 			}
 		}
 
@@ -134,10 +134,11 @@ namespace RoosterBot {
 					response = Program.Instance.ResourceService.GetString(culture, "RoosterBot_FatalError");
 				}
 
-				IUserMessage initialResponse = (context as EditedCommandContext)?.OriginalResponse;
+				IUserMessage[] initialResponses = (context as EditedCommandContext)?.Responses;
 				if (initialResponse == null) {
 					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {
+					
 					await initialResponse.ModifyAsync((msgProps) => { msgProps.Content = response; });
 				}
 			}

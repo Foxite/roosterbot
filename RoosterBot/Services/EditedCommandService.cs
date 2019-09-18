@@ -67,7 +67,7 @@ namespace RoosterBot {
 				m_Messages.TryRemove(item.Key, out CommandResponsePair unused);
 			}
 
-			m_Messages[userCommand.Id] = new CommandResponsePair(userCommand, new List<IUserMessage>() { botResponse }, reactionUnicode);
+			m_Messages[userCommand.Id] = new CommandResponsePair(userCommand, new IUserMessage[] { botResponse }, reactionUnicode);
 		}
 
 		public CommandResponsePair GetResponse(IUserMessage userCommand) {
@@ -81,10 +81,10 @@ namespace RoosterBot {
 
 	public class CommandResponsePair {
 		public IUserMessage Command;
-		public List<IUserMessage> Responses;
+		public IUserMessage[] Responses;
 		public string ReactionUnicode;
 
-		public CommandResponsePair(IUserMessage command, List<IUserMessage> responses, string reactionUnicode = null) {
+		public CommandResponsePair(IUserMessage command, IUserMessage[] responses, string reactionUnicode = null) {
 			Command = command;
 			Responses = responses;
 			ReactionUnicode = reactionUnicode;

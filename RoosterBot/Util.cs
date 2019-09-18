@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -232,6 +233,31 @@ namespace RoosterBot {
 					await message.DeleteAsync();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Given a set of messages that we sent, this will delete all messages except the first, and modify the first according to <paramref name="message"/>.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="responses"></param>
+		/// <param name="append">If true, this will append <paramref name="message"/> to the first response, otherwise this will overwrite the contents of that message.</param>
+		/// <returns></returns>
+		public static async Task<IUserMessage> ModifyResponsesIntoSingle(string message, IUserMessage[] responses, bool append) {
+			IUserMessage singleResponse = responses.First();
+			IEnumerable<IUserMessage> extraMessages = responses.Skip(1);
+
+			if (extraMessages.Any()) {
+				await DeleteAll(singleResponse.Channel, extraMessages);
+			}
+
+			await singleResponse.ModifyAsync((msgProps) => {
+				if (append) {
+					msgProps.Content += "\n\n" + message;
+				} else {
+					msgProps.Content = message;
+				}
+			});
+			return singleResponse;
 		}
 	}
 
