@@ -128,7 +128,7 @@
     <value>Ik begrijp de parameter(s) niet.</value>
   </data>
   <data name="RoosterBot_FatalError" xml:space="preserve">
-    <value>🚫 Er is iets heel erg misgegaan.</value>
+    <value>Er is iets heel erg misgegaan.</value>
   </data>
   <data name="RangeAttribute_CheckFailed" xml:space="preserve">
     <value>Dat is te hoog of te laag.</value>
@@ -137,6 +137,6 @@
     <value>Vereist bot controle</value>
   </data>
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
-    <value>⛔ Je bent niet gemachtigd om dat te doen.</value>
+    <value>Je bent niet gemachtigd om dat te doen.</value>
   </data>
 </root>

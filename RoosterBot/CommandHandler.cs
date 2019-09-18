@@ -132,6 +132,8 @@ namespace RoosterBot {
 					}
 
 					response = Program.Instance.ResourceService.GetString(culture, "RoosterBot_FatalError");
+				} else {
+					response = Util.ErrorPrefix + response;
 				}
 
 				IUserMessage[] initialResponses = (context as EditedCommandContext)?.Responses;

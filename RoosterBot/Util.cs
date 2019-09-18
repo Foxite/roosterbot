@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,6 +11,7 @@ using ParameterInfo = Discord.Commands.ParameterInfo;
 
 namespace RoosterBot {
 	public static class Util {
+		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
 		public static readonly Random RNG = new Random();
 
 		/// <summary>
