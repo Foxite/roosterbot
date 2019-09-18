@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 				IUser user = null;
 				if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
 					user = await context.Guild.GetUserAsync(id);
-				} else if (input == "ik") { // TODO localize
+				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(context, "IdentifierInfoReader_Self")) {
 					user = context.User;
 				}
 

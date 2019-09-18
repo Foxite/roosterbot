@@ -439,4 +439,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="ScheduleUtil_RelativeDateReference_Tomorrow" xml:space="preserve">
     <value>morgen</value>
   </data>
+  <data name="IdentifierInfoReader_Self" xml:space="preserve">
+    <value>ik</value>
+  </data>
 </root>

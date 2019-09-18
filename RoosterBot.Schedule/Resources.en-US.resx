@@ -442,4 +442,7 @@ He/she is not on schedule today (anymore), and is probably absent.</value>
   <data name="ScheduleUtil_RelativeDateReference_Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
   </data>
+  <data name="IdentifierInfoReader_Self" xml:space="preserve">
+    <value>me</value>
+  </data>
 </root>
