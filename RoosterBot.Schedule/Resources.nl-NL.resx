@@ -460,4 +460,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
     <value>naam</value>
   </data>
+  <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
+    <value>Te veel resultaten. Voeg een specifieker filter toe.</value>
+  </data>
 </root>

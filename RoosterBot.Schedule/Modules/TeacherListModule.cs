@@ -17,9 +17,10 @@ namespace RoosterBot.Schedule {
 				records = Teachers.Lookup(Context.Guild.Id, name).Select(match => match.Teacher);
 			}
 
-			if (records.FirstOrDefault() == null) { // Faster than .Count() == 0 because otherwise it would have to actually count it, but we don't care about the count beyond it being 0
-													// Although I would appreciate an .IsEmpty() method
+			if (!records.Any()) {
 				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
+			} else if (records.Count() > 25) {
+				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
 				// https://www.dotnetperls.com/for-foreach

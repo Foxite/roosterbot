@@ -463,4 +463,7 @@ He/she is not on schedule today (anymore), and is probably absent.</value>
   <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
     <value>name</value>
   </data>
+  <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
+    <value>Too many results. Please refine your search.</value>
+  </data>
 </root>
