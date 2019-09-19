@@ -28,8 +28,11 @@ namespace RoosterBot {
 
 			discord.Connected += () => {
 				m_TimerRunning = false;
-				m_Timer.Dispose();
-				m_Timer = null;
+				if (m_Timer != null) {
+					m_Timer.Dispose();
+					m_Timer = null;
+				}
+
 				return Task.CompletedTask;
 			};
 		}
