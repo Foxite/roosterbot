@@ -19,16 +19,25 @@ namespace RoosterBot {
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
 				CommandResponsePair crp = m_Commands.GetResponse(userMessageAfter);
-				if (crp != null) {
-					crp.Command = userMessageAfter;
-
-					if (m_Commands.IsMessageCommand(crp.Command, out int argPos)) {
-						RoosterCommandContext context = new RoosterCommandContext(m_Client, crp.Command, crp.Responses, "EditedCommand");
-
-						await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
+				if (m_Commands.IsMessageCommand(userMessageAfter, out int argPos)) {
+					IUserMessage[] responses;
+					if (crp != null) {
+						// Was previously a command
+						responses = crp.Responses;
+						crp.Command = userMessageAfter;
 					} else {
-						await Util.DeleteAll(crp.Command.Channel, crp.Responses);
+						// Was previously not a command
+						responses = null;
 					}
+
+					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses, "EditedCommand");
+					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
+				} else {
+					if (crp != null) {
+						// No longer a command
+						m_Commands.RemoveCommand(userMessageAfter, out _);
+						await Util.DeleteAll(crp.Command.Channel, crp.Responses);
+					} // else: was not a command, is not a command
 				}
 			}
 		}

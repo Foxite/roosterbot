@@ -55,7 +55,7 @@ namespace RoosterBot {
 			return m_Messages.TryRemove(commandId, out crp);
 		}
 
-		internal CommandResponsePair GetResponse(IUserMessage userCommand) => GetResponse(userCommand);
+		internal CommandResponsePair GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
 		internal bool RemoveCommand(IUserMessage command, out CommandResponsePair crp) => RemoveCommand(command.Id, out crp);
 		internal void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 
