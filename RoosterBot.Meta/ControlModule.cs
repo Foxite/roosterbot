@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
@@ -12,6 +11,11 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 
+		[Command("restart"), RequireBotManager]
+		public Task RestartCommand() {
+			Log.Info($"Restart command used by {Context.User.Username}");
+			Program.Instance.Restart();
+			return Task.CompletedTask;
 		}
 	}
 }
