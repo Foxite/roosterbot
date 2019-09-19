@@ -122,6 +122,7 @@ namespace RoosterBot {
 			new EditedCommandHandler(m_Client, commands, m_ConfigService);
 			new PostCommandHandler(commands, m_ConfigService, gcs, resources);
 			new DeletedCommandHandler(m_Client, commands);
+			new DeadlockHandler(m_Client, m_NotificationService, 60000);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)

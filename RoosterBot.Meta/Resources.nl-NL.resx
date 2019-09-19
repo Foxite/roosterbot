@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
+    <value>Beschikbare categorieën zijn:</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
     <value>Die categorie bestaat niet.</value>
   </data>
@@ -132,10 +135,6 @@
   <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
     <value>Parameters met een `(?)` zijn optioneel.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_Pretext" xml:space="preserve">
-    <value>Beschikbare categorieën zijn:
-</value>
-  </data>
   <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
     <value>Alle categorieën van commands.</value>
   </data>
@@ -144,13 +143,14 @@
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
     <value>Al mijn commands beginnen met `{0}`.
-Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:
-</value>
+
+Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
+  </data>
+  <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
+    <value>Beschikbare hoofdstukken zijn:</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
-    <value>
-
-Je kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands &lt;onderdeel&gt;` gebruiken om alle commands voor een onderdeel te zien.</value>
+    <value>Je kunt ook `!commands` gebruiken om een lijst van categorieën te zien, en `!commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
     <value>hoofdstuk</value>

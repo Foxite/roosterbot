@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Modules\CounterModule.cs" />
     <Compile Include="MiscStuffComponent.cs" />
+    <Compile Include="Modules\ModerationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CounterService.cs" />
   </ItemGroup>

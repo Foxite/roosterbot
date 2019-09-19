@@ -69,6 +69,7 @@
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\IdentifierValidationService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />
+    <Compile Include="Services\UserClassRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">

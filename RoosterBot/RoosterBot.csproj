@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LogTagAttribute.cs" />
+    <Compile Include="Handlers\DeadlockHandler.cs" />
     <Compile Include="Handlers\DeletedCommandHandler.cs" />
     <Compile Include="Handlers\NewCommandHandler.cs" />
     <Compile Include="Components\ComponentBase.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
+    <Compile Include="Preconditions\UserIsModeratorAttribute.cs" />
     <Compile Include="Readers\RoosterTypeReaderBase.cs" />
     <Compile Include="Handlers\RestartHandler.cs" />
     <Compile Include="Handlers\EditedCommandHandler.cs" />
