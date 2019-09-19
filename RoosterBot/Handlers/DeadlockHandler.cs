@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 
 namespace RoosterBot {
-	internal class DeadlockHandler {
+	internal sealed class DeadlockHandler {
 		private NotificationService m_Notificationervice;
 		private Timer m_Timer;
 		private bool m_TimerRunning;
