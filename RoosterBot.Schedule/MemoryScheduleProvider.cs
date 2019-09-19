@@ -8,7 +8,7 @@ namespace RoosterBot.Schedule {
 	/// <summary>
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
-	public class MemoryScheduleProvider : AbstractScheduleProvider {
+	public class MemoryScheduleProvider : ScheduleProvider {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
