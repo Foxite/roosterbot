@@ -50,7 +50,15 @@ namespace RoosterBot.Modules {
 			ModuleInfo module = CmdService.Modules.Where(aModule => aModule.Name.ToLower() == moduleName).SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				await ReplyAsync("Die categorie bestaat niet.");
+				string response = "Die categorie bestaat niet.\n\n";
+				response += "Beschikbare onderdelen zijn:\n";
+
+				IEnumerable<string> visibleModules =
+					from forModule in CmdService.Modules
+					where !forModule.Attributes.Any(attr => attr is HiddenFromListAttribute)
+					select forModule.Name.ToLower();
+				response += string.Join(", ", visibleModules);
+				await ReplyAsync(response);
 			} else if (module.Commands.Count() == 0) {
 				await ReplyAsync("Geen commands gevonden.");
 			} else {
@@ -116,7 +124,7 @@ namespace RoosterBot.Modules {
 				select module.Name.ToLower();
 
 			string response = "Beschikbare onderdelen zijn:\n";
-			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
+			response += string.Join(", ", visibleModules);
 
 			response += "\n\nGebruik `!commands <onderdeel>` voor een lijst van commands in dat onderdeel.";
 			await ReplyAsync(response);
