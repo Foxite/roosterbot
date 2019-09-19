@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 		public TeacherNameService Teachers { get; set; }
 		
 		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
-		public async Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
+		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords(Context.Guild.Id);
@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 
 			if (records.FirstOrDefault() == null) { // Faster than .Count() == 0 because otherwise it would have to actually count it, but we don't care about the count beyond it being 0
 													// Although I would appreciate an .IsEmpty() method
-				await ReplyAsync(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
+				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
 			} else {
 				// A foreach loop is faster than a for loop if you have to use the item more than once.
 				// https://www.dotnetperls.com/for-foreach
@@ -42,8 +42,10 @@ namespace RoosterBot.Schedule {
 				}
 				string response = Util.FormatTextTable(cells);
 
-				await ReplyAsync(response);
+				ReplyDeferred(response);
 			}
+
+			return Task.CompletedTask;
 		}
 	}
 }

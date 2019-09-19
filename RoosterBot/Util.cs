@@ -48,8 +48,7 @@ namespace RoosterBot {
 			}
 		}
 
-		/// <summary>Adds a reaction to an IUserMessage. Only supports Emoji, not server-specific emotes.</summary>
-		/// <returns>Success. It can fail if the bot does not have permission to add reactions.</returns>
+		[Obsolete]
 		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
 			try {
 				await message.AddReactionAsync(new Emoji(unicode));
@@ -59,9 +58,7 @@ namespace RoosterBot {
 			}
 		}
 
-		/// <summary>Removes our own reaction to an IUserMessage. If we have not added this reaction, nothing will happen. Only supports Emoji, not server-specific emotes.</summary>
-		/// <param name="botUser">The bot's user.</param>
-		/// <returns>Success. It can fail if the bot does not have permission to add reactions.</returns>
+		[Obsolete]
 		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
 			try {
 				await message.RemoveReactionAsync(new Emoji(unicode), botUser);

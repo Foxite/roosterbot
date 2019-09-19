@@ -9,7 +9,7 @@ namespace RoosterBot.MiscStuff {
 		public CounterService Service { get; set; }
 		
 		[Command("counter"), Priority(0), Summary("#CounterModule_GetCounterCommand_Summary")]
-		public async Task GetCounterCommand([Remainder] string counter) {
+		public Task GetCounterCommand([Remainder] string counter) {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
@@ -19,18 +19,19 @@ namespace RoosterBot.MiscStuff {
 												counterData.LastResetDate.ToString("dd-MM-yyyy"),
 												counterData.LastResetDate.ToString("HH:mm"),
 												FormatTimeSpan(counterData.HighScoreTimespan));
-				await ReplyAsync(response);
+				ReplyDeferred(response);
+				return Task.CompletedTask;
 			} catch (FileNotFoundException) {
-				await MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
+				return MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
 			} catch (ArgumentException e) {
-				await FatalError("Invalid counter", e);
+				return FatalError("Invalid counter", e);
 			} catch (Exception e) {
-				await FatalError("Uncaught exception", e);
+				return FatalError("Uncaught exception", e);
 			}
 		}
 
 		[Command("counter reset"), Alias("reset counter"), Priority(1), Summary("#CounterModule_ResetCounterCommand_Summary")]
-		public async Task ResetCounterCommand([Remainder] string counter) {
+		public Task ResetCounterCommand([Remainder] string counter) {
 			try {
 				CounterData counterData = Service.GetDateCounter(counter);
 				TimeSpan timeSinceReset = DateTime.UtcNow - counterData.LastResetDate;
@@ -44,11 +45,12 @@ namespace RoosterBot.MiscStuff {
 				string response = string.Format(newRecord ? GetString("CounterModule_ResetCounterCommand_ResponseNewHighscore")
 														  : GetString("CounterModule_ResetCounterCommand_ResponseNoNewHighscore"),
 												counterDescription, previousTimespan, previousHighscore);
-				await ReplyAsync(response);
+				ReplyDeferred(response);
+				return Task.CompletedTask;
 			} catch (FileNotFoundException) {
-				await MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
+				return MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
 			} catch (Exception e) {
-				await FatalError("Uncaught exception", e);
+				return FatalError("Uncaught exception", e);
 			}
 		}
 

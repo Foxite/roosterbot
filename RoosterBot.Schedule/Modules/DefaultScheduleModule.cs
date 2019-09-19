@@ -16,84 +16,92 @@ namespace RoosterBot.Schedule {
 	[LogTag("DefaultCommandsModule"), HiddenFromList]
 	public class DefaultScheduleModule : EditableCmdModuleBase {
 		[Priority(-10), Command("nu", RunMode = RunMode.Async)]
-		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
+		public Task DefaultCurrentCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "nu ik", "default nu");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "nu ik", "default nu");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("hierna", RunMode = RunMode.Async)]
-		public async Task DefaultNextCommand([Remainder] string wat = "") {
+		public Task DefaultNextCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "hierna ik", "default hierna");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "hierna ik", "default hierna");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("dag", RunMode = RunMode.Async)]
-		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
+		public Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, $"dag {dag.GetName(Culture)} ik", "default dag");
+				return Util.ExecuteSpecificCommand(CmdService, Context, $"dag {dag.GetName(Culture)} ik", "default dag");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("morgen", RunMode = RunMode.Async)]
-		public async Task DefaultTomorrowCommand([Remainder] string wat = "") {
+		public Task DefaultTomorrowCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "morgen ik", "default morgen");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "morgen ik", "default morgen");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("vandaag", RunMode = RunMode.Async)]
-		public async Task DefaultTodayCommand([Remainder] string wat = "") {
+		public Task DefaultTodayCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "vandaag ik", "default vandaag");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "vandaag ik", "default vandaag");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("deze week", RunMode = RunMode.Async)]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] string wat = "") {
+		public Task ShowThisWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "deze week ik", "default deze week");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "deze week ik", "default deze week");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("volgende week", RunMode = RunMode.Async)]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
+		public Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, "volgende week ik", "default volgende week");
+				return Util.ExecuteSpecificCommand(CmdService, Context, "volgende week ik", "default volgende week");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
 		[Priority(-10), Command("over", RunMode = RunMode.Async)]
-		public async Task ShowNWeeksWorkingDaysCommand(int aantal, string unit, [Remainder] string wat = "") {
+		public Task ShowNWeeksWorkingDaysCommand(int aantal, string unit, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Util.ExecuteSpecificCommand(CmdService, Context, $"over {aantal} {unit} ik", "default over");
+				return Util.ExecuteSpecificCommand(CmdService, Context, $"over {aantal} {unit} ik", "default over");
 			} else {
-				await ReplyErrorMessage(wat);
+				ReplyErrorMessage(wat);
+				return Task.CompletedTask;
 			}
 		}
 
-		private async Task ReplyErrorMessage(string param) {
+		private void ReplyErrorMessage(string param) {
 			if (MentionUtils.TryParseUser(param, out _)) {
-				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
-			} else if (param == "ik") {
-				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
+				ReplyDeferred(GetString("DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));
+			} else if (param == "IdentifierInfoReader_Self") {
+				ReplyDeferred(GetString("DefaultScheduleModule_ReplyErrorMessage_UserUnknown"));
 			} else {
-				await ReplyAsync(GetString("DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
+				ReplyDeferred(GetString("DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier"));
 			}
 		}
 	}

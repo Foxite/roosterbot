@@ -9,7 +9,7 @@ namespace RoosterBot.Meta {
 		public HelpService Help { get; set; }
 
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Summary")]
-		public async Task HelpCommand() {
+		public Task HelpCommand() {
 			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", Config.CommandPrefix);
 
 			bool notFirst = false;
@@ -23,11 +23,13 @@ namespace RoosterBot.Meta {
 
 			response += GetString("MetaCommandsModule_HelpCommand_PostText");
 
-			await ReplyAsync(response);
+			ReplyDeferred(response);
+
+			return Task.CompletedTask;
 		}
 
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Section_Summary")]
-		public async Task HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
+		public Task HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
 				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
@@ -35,11 +37,13 @@ namespace RoosterBot.Meta {
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist");
 			}
-			await ReplyAsync(response);
+			ReplyDeferred(response);
+
+			return Task.CompletedTask;
 		}
 
 		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Summary")]
-		public async Task CommandListCommand() {
+		public Task CommandListCommand() {
 			// List modules with visible commands
 			IEnumerable<string> visibleModules = 
 				from module in CmdService.Modules
@@ -48,20 +52,23 @@ namespace RoosterBot.Meta {
 
 			string response = GetString("MetaCommandsModule_CommandListCommand_Pretext");
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
-			await ReplyAsync(response);
+
+			ReplyDeferred(response);
+
+			return Task.CompletedTask;
 		}
 
 		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Category_Summary")]
-		public async Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string moduleName) {
+		public Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string moduleName) {
 			moduleName = moduleName.ToLower();
 			ModuleInfo module = CmdService.Modules
 				.Where(aModule => ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
 				.SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				await ReplyAsync(GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist"));
+				ReplyDeferred(GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist"));
 			} else if (module.Commands.Count() == 0) {
-				await ReplyAsync(GetString("MetaCommandsModule_CommandListCommand_CategoryEmpty"));
+				ReplyDeferred(GetString("MetaCommandsModule_CommandListCommand_CategoryEmpty"));
 			} else {
 				string response = "";
 
@@ -124,8 +131,10 @@ namespace RoosterBot.Meta {
 				}
 
 				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
-				await ReplyAsync(response);
+				ReplyDeferred(response);
 			}
+
+			return Task.CompletedTask;
 		}
 	}
 }

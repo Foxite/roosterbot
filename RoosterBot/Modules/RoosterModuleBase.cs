@@ -28,7 +28,6 @@ namespace RoosterBot {
 
 		private CultureInfo m_Culture = null;
 		private StringBuilder m_Response;
-		private string m_Reaction;
 
 		protected override void BeforeExecute(CommandInfo command) {
 			LogTag = null;
@@ -55,25 +54,11 @@ namespace RoosterBot {
 		}
 
 		protected override void AfterExecute(CommandInfo command) {
-			if (m_Reaction != null) {
-				Util.AddReaction(Context.Message, m_Reaction).GetAwaiter().GetResult();
-			}
-
 			if (m_Response.Length != 0) {
 				string message = m_Response.ToString();
 				m_Response.Clear();
 				ReplyAsync(message).GetAwaiter().GetResult();
 			}
-		}
-
-		/// <summary>
-		/// Queues a message to be sent after the command has finished executing, as well as a reaction to be added.
-		/// </summary>
-		protected virtual void ReplyDeferred(string message, string reactionUnicode) {
-			lock (m_Response) {
-				m_Response.AppendLine(message);
-			}
-			SetReactionDeferred(reactionUnicode);
 		}
 
 		/// <summary>
@@ -85,60 +70,24 @@ namespace RoosterBot {
 			}
 		}
 
-		/// <summary>
-		/// Sets a reaction to be added after the command has finished executing. Set null to not add a reaction.
-		/// </summary>
-		protected virtual void SetReactionDeferred(string unicode) {
-			m_Reaction = unicode;
-		}
-
-		protected async virtual Task<IUserMessage> SendDeferredResponseAsync() {
+		protected virtual Task<IUserMessage> SendDeferredResponseAsync() {
 			if (m_Response.Length != 0) {
 				string message = m_Response.ToString();
 				m_Response.Clear();
-				return await ReplyAsync(message);
+				return ReplyAsync(message);
 			} else {
 				return null;
 			}
 		}
 
-		protected async virtual Task SendDeferredReactionsAsync() {
-			if (m_Reaction != null) {
-				await Util.AddReaction(Context.Message, m_Reaction);
-				m_Reaction = null;
-			}
-		}
-
-		/// <summary>
-		/// Sends a response and reaction immediately.
-		/// </summary>
-		protected virtual async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
-			await AddReactionAsync(reactionUnicode);
-			return await ReplyAsync(message, isTTS, embed, options);
-		}
-
-		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
 					.ToString();
 				m_Response.Clear();
 			}
-			return await base.ReplyAsync(message);
-		}
-
-		/// <summary>
-		/// Sends a reaction immediately.
-		/// </summary>
-		protected virtual async Task<bool> AddReactionAsync(string unicode) {
-			return await Util.AddReaction(Context.Message, unicode);
-		}
-
-		/// <summary>
-		/// Removes a reaction immediately.
-		/// </summary>
-		protected virtual async Task<bool> RemoveReactionAsync(string unicode) {
-			return await Util.RemoveReaction(Context.Message, unicode, Context.Client.CurrentUser);
+			return base.ReplyAsync(message);
 		}
 
 		// Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError

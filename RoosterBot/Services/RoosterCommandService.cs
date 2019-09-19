@@ -19,7 +19,7 @@ namespace RoosterBot {
 			m_Config = config;
 		}
 
-		internal void AddResponse(IUserMessage userCommand, IUserMessage botResponse, string reactionUnicode = null) {
+		internal void AddResponse(IUserMessage userCommand, IUserMessage botResponse) {
 			// Remove previous commands from this user if they are older than the minimum memory
 			IEnumerable<ulong> oldCommandIds = m_Messages.Where((kvp) => {
 				return (DateTime.Now - kvp.Value.Command.Timestamp.UtcDateTime).TotalSeconds > m_Config.MinimumMemorySeconds && kvp.Value.Command.Author.Id == userCommand.Author.Id;
@@ -30,7 +30,7 @@ namespace RoosterBot {
 			}
 
 			IUserMessage[] newSequence = new IUserMessage[] { botResponse };
-			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newSequence, reactionUnicode), (key, crp) => {
+			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newSequence), (key, crp) => {
 				crp.Responses = crp.Responses.Concat(newSequence).ToArray();
 				return crp;
 			});
@@ -69,12 +69,10 @@ namespace RoosterBot {
 	internal class CommandResponsePair {
 		public IUserMessage Command;
 		public IUserMessage[] Responses;
-		public string ReactionUnicode;
 
-		public CommandResponsePair(IUserMessage command, IUserMessage[] responses, string reactionUnicode = null) {
+		public CommandResponsePair(IUserMessage command, IUserMessage[] responses) {
 			Command = command;
 			Responses = responses;
-			ReactionUnicode = reactionUnicode;
 		}
 	}
 }

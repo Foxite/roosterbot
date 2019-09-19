@@ -27,7 +27,6 @@ namespace RoosterBot.Schedule {
 			if (studentSet != null) {
 				await Classes.SetClassForDiscordUserAsync(Context, Context.User, studentSet);
 				await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", studentSet.DisplayText));
-
 			} else {
 				await ReplyAsync(GetString("UserClassModule_SetClassForUser_InvalidClass"));
 			}
