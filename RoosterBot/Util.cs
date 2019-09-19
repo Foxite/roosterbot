@@ -48,7 +48,6 @@ namespace RoosterBot {
 			}
 		}
 
-		[Obsolete]
 		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
 			try {
 				await message.AddReactionAsync(new Emoji(unicode));
@@ -58,7 +57,6 @@ namespace RoosterBot {
 			}
 		}
 
-		[Obsolete]
 		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
 			try {
 				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
