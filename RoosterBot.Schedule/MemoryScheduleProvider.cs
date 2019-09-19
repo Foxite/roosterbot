@@ -8,15 +8,15 @@ namespace RoosterBot.Schedule {
 	/// <summary>
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
-	public class ScheduleProvider : AbstractScheduleProvider {
+	public class MemoryScheduleProvider : AbstractScheduleProvider {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
-		private ScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
+		private MemoryScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public static async Task<ScheduleProvider> CreateAsync(string name, ScheduleReader reader, ulong[] allowedGuildIds) {
-			ScheduleProvider service = new ScheduleProvider(allowedGuildIds) {
+		public static async Task<MemoryScheduleProvider> CreateAsync(string name, ScheduleReader reader, ulong[] allowedGuildIds) {
+			MemoryScheduleProvider service = new MemoryScheduleProvider(allowedGuildIds) {
 				m_Name = name,
 				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.
 			};
