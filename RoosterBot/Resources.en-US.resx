@@ -139,4 +139,13 @@
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
     <value>You are not authorized to do that.</value>
   </data>
+  <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
+    <value>:no_entry: You need moderator privileges to do this.</value>
+  </data>
+  <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
+    <value>:x: This command only works in a server.</value>
+  </data>
+  <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
+    <value>You need to be a moderator to do this.</value>
+  </data>
 </root>

@@ -139,4 +139,13 @@
   <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
     <value>Je bent niet gemachtigd om dat te doen.</value>
   </data>
+  <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
+    <value>:no_entry: Je moet moderator privileges hebben om dat te doen.</value>
+  </data>
+  <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
+    <value>:x: Dit werkt alleen in een server.</value>
+  </data>
+  <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
+    <value>Je moet moderator zijn om dit te doen.</value>
+  </data>
 </root>
