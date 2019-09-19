@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
@@ -163,11 +164,11 @@ namespace RoosterBot {
 		}
 
 		protected string GetString(string name) {
-			return ResourcesService.GetString(Culture, name);
+			return ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name);
 		}
 
 		protected string GetString(string name, params object[] args) {
-			return string.Format(ResourcesService.GetString(Culture, name), args);
+			return string.Format(ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
 		}
 
 		public abstract class ModuleLogger {

@@ -87,51 +87,6 @@ namespace RoosterBot {
 			m_Client.Dispose();
 		}
 
-		private async Task WaitForQuitCondition() {
-			bool keepRunning = true;
-
-			CancellationTokenSource cts = new CancellationTokenSource();
-			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
-			using (StreamReader sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
-				_ = pipeServer.WaitForConnectionAsync(cts.Token);
-
-				do {
-					keepRunning = true;
-					await Task.WhenAny(new Task[] {
-						Task.Delay(500).ContinueWith((t) => {
-							// Ctrl-Q pressed by user
-							if (Console.KeyAvailable) {
-								ConsoleKeyInfo keyPress = Console.ReadKey(true);
-								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-									keepRunning = false;
-									Logger.Info("Main", "Ctrl-Q pressed");
-								}
-							}
-						}),
-						Task.Delay(500).ContinueWith((t) => {
-							// Stop flag set by RoosterBot or components
-							if (m_StopFlagSet) {
-								keepRunning = false;
-								Logger.Info("Main", "Stop flag set");
-							}
-						}),
-						Task.Delay(500).ContinueWith((t) => {
-							// Pipe connection by stop executable
-							if (pipeServer.IsConnected) {
-								string input = sr.ReadLine();
-								if (input == "stop") {
-									Logger.Info("Main", "Stop command received from external process");
-									keepRunning = false;
-								}
-							}
-						})
-					});
-				} while (m_BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
-			}
-			cts.Cancel();
-			cts.Dispose();
-		}
-
 		private void SetupClient() {
 			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
 				WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
@@ -148,11 +103,11 @@ namespace RoosterBot {
 			HelpService helpService = new HelpService();
 			GuildCultureService gcs = new GuildCultureService();
 
-			ResourceService resourceService = new ResourceService(gcs);
-			resourceService.RegisterResources("RoosterBot.Resources");
-			
+			ResourceService resources = new ResourceService(gcs);
+			resources.RegisterResources("RoosterBot.Resources");
+
+			// Create handlers
 			// I don't know what to do with this.
-			RestartHandler restartHandler = new RestartHandler(m_Client, m_NotificationService, 5);
 			// We construct a class that fully takes care of itself, does everything it needs to in its constructor (ie subscribing events)
 			//  and has no other methods that need to be called, at all.
 			// We have a few options with it:
@@ -162,12 +117,17 @@ namespace RoosterBot {
 			// I don't know what is the least bad of these options.
 			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
 			//  that use the object's fields.
+			new RestartHandler(m_Client, m_NotificationService, 5);
+			new NewCommandHandler(m_Client, commands, m_ConfigService);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService);
+			new PostCommandHandler(commands, m_ConfigService, gcs, resources);
+			new DeletedCommandHandler(m_Client, commands);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_NotificationService)
 				.AddSingleton(commands)
-				.AddSingleton(resourceService)
+				.AddSingleton(resources)
 				.AddSingleton(helpService)
 				.AddSingleton(gcs)
 				.AddSingleton(m_Client);
@@ -213,6 +173,51 @@ namespace RoosterBot {
 				// Make sure the program can be stopped gracefully regardless of any exceptions that occur here
 				m_BeforeStart = false;
 			}
+		}
+
+		private async Task WaitForQuitCondition() {
+			bool keepRunning = true;
+
+			CancellationTokenSource cts = new CancellationTokenSource();
+			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
+			using (StreamReader sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
+				_ = pipeServer.WaitForConnectionAsync(cts.Token);
+
+				do {
+					keepRunning = true;
+					await Task.WhenAny(new Task[] {
+						Task.Delay(500).ContinueWith((t) => {
+							// Ctrl-Q pressed by user
+							if (Console.KeyAvailable) {
+								ConsoleKeyInfo keyPress = Console.ReadKey(true);
+								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+									keepRunning = false;
+									Logger.Info("Main", "Ctrl-Q pressed");
+								}
+							}
+						}),
+						Task.Delay(500).ContinueWith((t) => {
+							// Stop flag set by RoosterBot or components
+							if (m_StopFlagSet) {
+								keepRunning = false;
+								Logger.Info("Main", "Stop flag set");
+							}
+						}),
+						Task.Delay(500).ContinueWith((t) => {
+							// Pipe connection by stop executable
+							if (pipeServer.IsConnected) {
+								string input = sr.ReadLine();
+								if (input == "stop") {
+									Logger.Info("Main", "Stop command received from external process");
+									keepRunning = false;
+								}
+							}
+						})
+					});
+				} while (m_BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+			}
+			cts.Cancel();
+			cts.Dispose();
 		}
 
 		public void Shutdown() {

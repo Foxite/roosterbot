@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public abstract class RoosterTypeReaderBase : TypeReader {

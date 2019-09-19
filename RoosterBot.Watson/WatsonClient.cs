@@ -83,7 +83,6 @@ namespace RoosterBot.Watson {
 					RoosterCommandContext context = new RoosterCommandContext(m_DiscordClient, message, LogTag);
 
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
-					//await Util.ExecuteSpecificCommand(m_CommandService, context, convertedCommand, "Watson");
 					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");

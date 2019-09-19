@@ -10,10 +10,10 @@ namespace RoosterBot {
 		private ConfigService m_ConfigService;
 		private DiscordSocketClient m_Client;
 
-		internal NewCommandHandler(ConfigService configService, DiscordSocketClient client, RoosterCommandService commands) {
-			m_ConfigService = configService;
+		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService configService) {
 			m_Client = client;
 			m_Commands = commands;
+			m_ConfigService = configService;
 
 			m_Client.MessageReceived += HandleNewCommand;
 		}
