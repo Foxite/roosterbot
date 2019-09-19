@@ -109,6 +109,7 @@ namespace RoosterBot {
 			m_SNSService = new SNSService(m_ConfigService);
 
 			RestartHandler restartHandler = new RestartHandler(m_Client, m_SNSService, 5);
+			DeadlockHandler deadlockHandler = new DeadlockHandler(m_Client, m_SNSService, 60000);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
@@ -234,13 +235,18 @@ namespace RoosterBot {
 
 			Logger.Log(LogSeverity.Info, "Main", "Stopping bot");
 
-			await m_Client.StopAsync();
-			await m_Client.LogoutAsync();
+			// Make sure that in case of a deadlock, the bot will stop ten seconds after the stop condition was met
+			using (CancellationTokenSource stopCts = new CancellationTokenSource(10000)) {
+				await Task.Run(async () => {
+					await m_Client.StopAsync();
+					await m_Client.LogoutAsync();
 
-			foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
-				await componentKVP.Value.OnShutdown();
+					foreach (KeyValuePair<Type, ComponentBase> componentKVP in m_Components) {
+						await componentKVP.Value.OnShutdown();
+					}
+				}, stopCts.Token);
 			}
-			
+
 			m_State = ProgramState.BotStopped;
 			#endregion Quit code
 		}

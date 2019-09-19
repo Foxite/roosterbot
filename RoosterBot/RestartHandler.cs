@@ -48,7 +48,7 @@ namespace RoosterBot {
 				report += "No initial exception was attached.\n\n";
 			}
 
-			if (e == null) {
+			if (e != null) {
 				report += $"The last exception is: {e.ToString()}"; // This too
 			} else {
 				report += "No last exception was attached.\n\n";
