@@ -19,6 +19,8 @@ namespace RoosterBot {
 			} else {
 				// The command was edited.
 				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
+
+				CmdService.ModifyResponse(Context.Message, new[] { ret });
 			}
 
 			m_Replied = true;

@@ -6,11 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace RoosterBot {
+	/// <summary>
+	/// RoosterCommandService keeps track of executed commands and their replies.
+	/// </summary>
 	public sealed class RoosterCommandService : CommandService {
 		/// <summary>
-		/// Maps message IDs to CommandResponsePairs
+		/// Maps command IDs to CommandResponsePairs
 		/// </summary>
-		private ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
+		private readonly ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private readonly ConfigService m_Config;
 
 		/// <param name="minimumMemorySeconds">How long it takes at least before old commands are deleted. Old commands are not deleted until a new one from the same user comes in.</param>
@@ -36,8 +39,12 @@ namespace RoosterBot {
 			});
 		}
 
-		internal CommandResponsePair GetResponse(IUserMessage userCommand) {
-			if (m_Messages.TryGetValue(userCommand.Id, out CommandResponsePair ret)) {
+		internal void ModifyResponse(ulong commandId, IUserMessage[] responses) {
+			GetResponse(commandId).Responses = responses;
+		}
+
+		internal CommandResponsePair GetResponse(ulong userCommandId) {
+			if (m_Messages.TryGetValue(userCommandId, out CommandResponsePair ret)) {
 				return ret;
 			} else {
 				return null;
@@ -47,6 +54,10 @@ namespace RoosterBot {
 		internal bool RemoveCommand(ulong commandId, out CommandResponsePair crp) {
 			return m_Messages.TryRemove(commandId, out crp);
 		}
+
+		internal CommandResponsePair GetResponse(IUserMessage userCommand) => GetResponse(userCommand);
+		internal bool RemoveCommand(IUserMessage command, out CommandResponsePair crp) => RemoveCommand(command.Id, out crp);
+		internal void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 
 		internal bool IsMessageCommand(IMessage message, out int argPos) {
 			argPos = 0;
