@@ -14,6 +14,7 @@ namespace RoosterBot {
 		public ConfigService Config { get; set; }
 		public GuildCultureService Cultures { get; set; }
 		public ResourceService ResourcesService { get; set; }
+		public RoosterCommandService CmdService { get; set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
@@ -28,6 +29,7 @@ namespace RoosterBot {
 
 		private CultureInfo m_Culture = null;
 		private StringBuilder m_Response;
+		private bool m_Replied = false;
 
 		protected override void BeforeExecute(CommandInfo command) {
 			LogTag = null;
@@ -80,14 +82,31 @@ namespace RoosterBot {
 			}
 		}
 
-		protected override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
 					.ToString();
 				m_Response.Clear();
 			}
-			return base.ReplyAsync(message);
+
+			IUserMessage ret;
+			if (Context.Responses == null) {
+				// The command was not edited, or the command somehow did not invoke a reply.
+				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
+				CmdService.AddResponse(Context.Message, response);
+				ret = response;
+			} else {
+				// The command was edited.
+				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
+
+				CmdService.ModifyResponse(Context.Message, new[] { ret });
+			}
+
+			m_Replied = true;
+
+			CmdService.AddResponse(Context.Message, ret);
+			return ret;
 		}
 
 		// Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError
@@ -165,14 +184,17 @@ namespace RoosterBot {
 		public IGuild Guild { get; }
 		public bool IsPrivate { get; }
 		public string CallTag { get; }
-
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, string calltag) {
+		// If this is null, we should make a new message.
+		public IUserMessage[] Responses { get; }
+		
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage[] originalResponses, string calltag) {
 			Client = client;
 			Message = message;
 			User = message.Author;
 			Channel = message.Channel;
 			IsPrivate = Channel is IPrivateChannel;
 			Guild = IsPrivate ? (User as SocketUser)?.MutualGuilds.First() : (Channel as IGuildChannel).Guild;
+			Responses = originalResponses;
 			CallTag = calltag;
 		}
 	}

@@ -80,7 +80,7 @@ namespace RoosterBot {
 					response = Util.ErrorPrefix + response;
 				}
 
-				IUserMessage[] initialResponses = (context as EditedCommandContext)?.Responses;
+				IUserMessage[] initialResponses = (context as RoosterCommandContext)?.Responses;
 				if (initialResponses == null) {
 					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Net;
-using ParameterInfo = Discord.Commands.ParameterInfo;
 
 namespace RoosterBot {
 	public static class Util {
+		// TODO before deploying 2.0 make sure the bot can access this emote!
 		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
 		public static readonly Random RNG = new Random();
 
@@ -220,7 +218,7 @@ namespace RoosterBot {
 		/// </summary>
 		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
 		public static async Task ExecuteSpecificCommand(CommandService commandService, RoosterCommandContext context, string specificInput, string calltag) {
-			RoosterCommandContext newContext = new EditedCommandContext(context.Client, context.Message, (context as EditedCommandContext)?.Responses, calltag);
+			RoosterCommandContext newContext = new RoosterCommandContext(context.Client, context.Message, (context as RoosterCommandContext)?.Responses, calltag);
 
 			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
 

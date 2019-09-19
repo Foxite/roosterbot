@@ -23,7 +23,7 @@ namespace RoosterBot {
 					crp.Command = userMessageAfter;
 
 					if (m_Commands.IsMessageCommand(crp.Command, out int argPos)) {
-						EditedCommandContext context = new EditedCommandContext(m_Client, crp.Command, crp.Responses, "EditedCommand");
+						RoosterCommandContext context = new RoosterCommandContext(m_Client, crp.Command, crp.Responses, "EditedCommand");
 
 						await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
 					} else {

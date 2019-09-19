@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	[LogTag("UserClassModule"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
-	public class UserClassModule : EditableCmdModuleBase {
+	public class UserClassModule : RoosterCommandContext {
 		public IUserClassesService Classes { get; set; }
 		public IdentifierValidationService Validation { get; set; }
 

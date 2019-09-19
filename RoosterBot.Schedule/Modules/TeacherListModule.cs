@@ -5,7 +5,7 @@ using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	[LogTag("TeacherListModule"), Name("#TeacherListModule_Name")]
-	public class TeacherListModule : EditableCmdModuleBase {
+	public class TeacherListModule : RoosterCommandContext {
 		public TeacherNameService Teachers { get; set; }
 		
 		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
