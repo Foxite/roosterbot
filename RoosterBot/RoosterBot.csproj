@@ -83,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Constants.tt</DependentUpon>
     </Compile>
+    <Compile Include="DeadlockHandler.cs" />
     <Compile Include="Modules\MetaCommandsModule.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
