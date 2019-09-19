@@ -46,13 +46,6 @@
     <Compile Include="Services\CounterService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-      <Project>{294CD2AF-490F-4432-AC24-17EAA9F0E112}</Project>
-      <Name>RoosterBot</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +61,12 @@
     <EmbeddedResource Include="Resources.nl-NL.resx">
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+      <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
+      <Name>RoosterBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

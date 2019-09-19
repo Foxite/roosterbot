@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -27,7 +28,7 @@ namespace RoosterBot.Schedule {
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] string clazzName) {
 			StudentSetInfo studentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
 			if (studentSet != null) {
-				StudentSetInfo oldStudentSet = await Classes.GetClassForDiscordUser(Context.User);
+				StudentSetInfo oldStudentSet = await Classes.GetClassForDiscordUserAsync(Context, Context.User);
 				StudentSetInfo newStudentSet = new StudentSetInfo() { ClassName = clazzName };
 
 				await Classes.SetClassForDiscordUserAsync(Context, Context.User, newStudentSet);

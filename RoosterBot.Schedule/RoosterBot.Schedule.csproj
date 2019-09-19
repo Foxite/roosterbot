@@ -72,13 +72,6 @@
     <Compile Include="Services\UserClassRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-      <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
-      <Name>RoosterBot</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +93,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+      <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
+      <Name>RoosterBot</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
+using System.Linq;
 
 namespace RoosterBot.MiscStuff {
 	public class MiscStuffComponent : ComponentBase {
