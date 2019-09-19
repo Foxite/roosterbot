@@ -5,7 +5,7 @@ using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
 	[LogTag("CounterModule"), Name("#CounterModule_Name")]
-	public class CounterModule : RoosterCommandContext { // Does not use editable commands
+	public class CounterModule : RoosterModuleBase {
 		public CounterService Service { get; set; }
 		
 		[Command("counter"), Priority(0), Summary("#CounterModule_GetCounterCommand_Summary")]

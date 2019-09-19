@@ -10,7 +10,7 @@ namespace RoosterBot.Schedule {
 	[Name("#DefaultScheduleModule_Name")]
 	[Summary("#DefaultScheduleModule_Summary")]
 	[Remarks("#DefaultScheduleModule_Remarks")]
-	public class ScheduleModule : RoosterCommandContext {
+	public class ScheduleModule : RoosterModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
 

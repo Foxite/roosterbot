@@ -80,7 +80,7 @@ namespace RoosterBot.Watson {
 					}
 					string convertedCommand = maxConfidence.Intent + params_;
 
-					RoosterCommandContext context = new RoosterCommandContext(m_DiscordClient, message, LogTag);
+					RoosterCommandContext context = new RoosterCommandContext(m_DiscordClient, message, null, LogTag); // TODO properly support command editing/deletion with Watson
 
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
 					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);
