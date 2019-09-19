@@ -113,40 +113,7 @@ namespace RoosterBot {
 			return GetRange(source, start, source.Length - start);
 		}
 		#endregion
-
-		private static string GetModuleSignature(this ModuleInfo module) {
-			string ret = module.Name;
-			if (!string.IsNullOrEmpty(module.Group)) {
-				ret = $"{module.Group} {ret}";
-			}
-
-			if (module.IsSubmodule) {
-				return $"{GetModuleSignature(module.Parent)} {ret}";
-			} else {
-				return ret;
-			}
-		}
-
-		public static string GetCommandSignature(this CommandInfo command) {
-			string ret = command.Name;
-
-			bool notFirst = false;
-			foreach (ParameterInfo param in command.Parameters) {
-				ret += param.Type.Name + " " + param.Name;
-				if (notFirst) {
-					ret += ", ";
-				}
-				notFirst = true;
-			}
-
-			string moduleSig = command.Module.GetModuleSignature();
-			if (!string.IsNullOrEmpty(moduleSig)) {
-				ret = moduleSig + " " + ret;
-			}
-
-			return ret;
-		}
-
+		
 		public static string EscapeString(string input) {
 			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
 				("\\", "\\\\"), // Needs to be done first
@@ -165,7 +132,7 @@ namespace RoosterBot {
 			return input;
 		}
 
-		private static void CheckAsyncTelegate(Delegate asyncEvent, object[] parameters) {
+		private static void CheckAsyncDelegate(Delegate asyncEvent, object[] parameters) {
 			if (asyncEvent.Method.ReturnType != typeof(Task)) {
 				throw new ArgumentException($"{nameof(asyncEvent)} must return Task", nameof(asyncEvent));
 			}
@@ -182,7 +149,7 @@ namespace RoosterBot {
 		/// Invokes an async delegate in such a way that the invocations run at the same time.
 		/// </summary>
 		public static async Task InvokeAsyncEventConcurrent(Delegate asyncEvent, params object[] parameters) {
-			CheckAsyncTelegate(asyncEvent, parameters);
+			CheckAsyncDelegate(asyncEvent, parameters);
 
 			Delegate[] invocationList = asyncEvent.GetInvocationList();
 			Task[] invocationTasks = new Task[invocationList.Length];
@@ -198,7 +165,7 @@ namespace RoosterBot {
 		/// Invokes an async delegate in such a way that the invocations run one by one.
 		/// </summary>
 		public static async Task InvokeAsyncEventSequential(Delegate asyncEvent, params object[] parameters) {
-			CheckAsyncTelegate(asyncEvent, parameters);
+			CheckAsyncDelegate(asyncEvent, parameters);
 
 			Delegate[] invocationList = asyncEvent.GetInvocationList();
 
@@ -225,7 +192,7 @@ namespace RoosterBot {
 		/// <param name="responses"></param>
 		/// <param name="append">If true, this will append <paramref name="message"/> to the first response, otherwise this will overwrite the contents of that message.</param>
 		/// <returns></returns>
-		public static async Task<IUserMessage> ModifyResponsesIntoSingle(string message, IUserMessage[] responses, bool append) {
+		public static async Task<IUserMessage> ModifyResponsesIntoSingle(string message, IEnumerable<IUserMessage> responses, bool append) {
 			IUserMessage singleResponse = responses.First();
 			IEnumerable<IUserMessage> extraMessages = responses.Skip(1);
 
