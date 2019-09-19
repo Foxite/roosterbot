@@ -14,7 +14,7 @@ namespace RoosterBot.Modules {
 
 		[Command("help"), Summary("Uitleg over de bot.")]
 		public async Task HelpCommand() {
-			string response = $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n";
+			string response = $"Al mijn commands beginnen met `{Config.CommandPrefix}`. Hierdoor raken andere bots niet in de war.\n\n";
 			response += "Gebruik `!help <hoofdstuk>` om specifieke uitleg te krijgen. Beschikbare hoofdstukken zijn:\n";
 
 			bool notFirst = false;
@@ -27,7 +27,7 @@ namespace RoosterBot.Modules {
 			}
 
 
-			response += "\nJe kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands <onderdeel>` gebruiken om alle commands te zien.\n";
+			response += "\n\nJe kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands <onderdeel>` gebruiken om alle commands te zien.";
 
 			await ReplyAsync(response);
 		}
@@ -38,7 +38,8 @@ namespace RoosterBot.Modules {
 			if (Help.HelpSectionExists(section)) {
 				response += Help.GetHelpSection(section);
 			} else {
-				response += "Sorry, dat hoofdstuk bestaat niet.";
+				response += "Sorry, dat hoofdstuk bestaat niet.\n\nBeschikbare hoofdstukken zijn:\n";
+				response += string.Join(", ", Help.GetSectionNames());
 			}
 			await ReplyAsync(response);
 		}
@@ -116,6 +117,8 @@ namespace RoosterBot.Modules {
 
 			string response = "Beschikbare onderdelen zijn:\n";
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
+
+			response += "\n\nGebruik `!commands <onderdeel>` voor een lijst van commands in dat onderdeel.";
 			await ReplyAsync(response);
 		}
 
