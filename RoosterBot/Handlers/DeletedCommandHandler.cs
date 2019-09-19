@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
-	// TODO all responses should be deleted when the command is deleted, even if the module does not derive from RoosterCommandContext
 	internal sealed class DeletedCommandHandler {
 		private readonly RoosterCommandService m_Commands;
 
