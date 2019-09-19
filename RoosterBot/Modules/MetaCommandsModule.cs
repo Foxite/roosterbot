@@ -27,7 +27,7 @@ namespace RoosterBot.Modules {
 			}
 
 
-			response += "\n\nJe kan `!commands` gebruiken om een lijst van onderdelen te zien, en `!commands <onderdeel>` gebruiken om alle commands te zien.";
+			response += "\n\nJe kan ook `!commands` gebruiken om een lijst van categorieën te zien, en `!commands <categorie>` gebruiken om alle commands te zien in die categorie.";
 
 			await ReplyAsync(response);
 		}
@@ -51,7 +51,7 @@ namespace RoosterBot.Modules {
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 				string response = "Die categorie bestaat niet.\n\n";
-				response += "Beschikbare onderdelen zijn:\n";
+				response += "Beschikbare categorieën zijn:\n";
 
 				IEnumerable<string> visibleModules =
 					from forModule in CmdService.Modules
@@ -123,10 +123,10 @@ namespace RoosterBot.Modules {
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
 				select module.Name.ToLower();
 
-			string response = "Beschikbare onderdelen zijn:\n";
+			string response = "Beschikbare categorieën zijn:\n";
 			response += string.Join(", ", visibleModules);
 
-			response += "\n\nGebruik `!commands <onderdeel>` voor een lijst van commands in dat onderdeel.";
+			response += "\n\nGebruik `!commands <categorie>` voor een lijst van commands in die categorie.";
 			await ReplyAsync(response);
 		}
 
