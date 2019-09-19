@@ -48,7 +48,7 @@
     <Compile Include="DataTypes\StudentSetInfo.cs" />
     <Compile Include="DataTypes\TeacherInfo.cs" />
     <Compile Include="DataTypes\GuildSpecificInfo.cs" />
-    <Compile Include="IScheduleProvider.cs" />
+    <Compile Include="ScheduleProvider.cs" />
     <Compile Include="Modules\DefaultScheduleModule.cs" />
     <Compile Include="Modules\ScheduleModule.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
@@ -63,13 +63,12 @@
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="ScheduleUtil.cs" />
     <Compile Include="Services\IUserClassesService.cs" />
-    <Compile Include="ScheduleProvider.cs" />
+    <Compile Include="MemoryScheduleProvider.cs" />
     <Compile Include="ScheduleReader.cs" />
     <Compile Include="Services\LastScheduleCommandService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\IdentifierValidationService.cs" />
     <Compile Include="Services\TeacherNameService.cs" />
-    <Compile Include="Services\UserClassRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
