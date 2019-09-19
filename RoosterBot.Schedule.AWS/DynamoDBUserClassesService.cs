@@ -12,6 +12,8 @@ namespace RoosterBot.Schedule.AWS {
 		private AmazonDynamoDBClient m_Client;
 		private Table m_Table;
 
+		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+
 		public DynamoDBUserClassesService() { }
 
 		public void Initialize(AWSConfigService config, string tableName) {
@@ -33,7 +35,7 @@ namespace RoosterBot.Schedule.AWS {
 			}
 		}
 
-		public async Task SetClassForDiscordUserAsync(ICommandContext context, IUser user, StudentSetInfo ssi) {
+		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IUser user, StudentSetInfo ssi) {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document is null) {
 				document = new Document(new Dictionary<string, DynamoDBEntry>() {
@@ -41,9 +43,15 @@ namespace RoosterBot.Schedule.AWS {
 					{ "class", DynamoDBEntryConversion.V2.ConvertToEntry(ssi.ScheduleCode) }
 				});
 				await m_Table.PutItemAsync(document);
+				if (UserChangedClass != null && user is IGuildUser guildUser) {
+					UserChangedClass(guildUser, null, ssi);
+				}
+				return null;
 			} else {
+				StudentSetInfo old = new StudentSetInfo() { ClassName = document["class"] };
 				document["class"] = ssi.ScheduleCode;
 				await m_Table.UpdateItemAsync(document);
+				return old;
 			}
 		}
 

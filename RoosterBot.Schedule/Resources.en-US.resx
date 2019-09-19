@@ -322,6 +322,11 @@ He/she is not on schedule today (anymore), and is probably absent.</value>
     <value>Noted: you are in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
+  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld" xml:space="preserve">
+    <value>Noted: you are in {0}, and not in {1} anymore.</value>
+    <comment>0: user's new student set
+	1: user's previous student set</comment>
+  </data>
   <data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
     <value>That's not a class.</value>
   </data>

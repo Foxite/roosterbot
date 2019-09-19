@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Discord;
+
+namespace RoosterBot.Schedule.GLU {
+	public class RoleAssignmentHandler {
+		private IReadOnlyDictionary<string, ulong[]> m_Roles;
+		public RoleAssignmentHandler(string configPath, IUserClassesService ucs) {
+			// TODO replace with config file
+			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
+
+			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();
+
+			ulong dev = 278587815271464970;
+			ulong art = 278587928173740032;
+
+			void setupYearRoles(ulong courseRole) {
+				for (int i = 0; i < yearRoles.Length; i++) {
+					string key = (i + 1).ToString() + "G" + (courseRole == dev ? "D" : "A");
+					roles[key] = new[] { yearRoles[i], courseRole };
+				}
+			}
+
+			setupYearRoles(dev);
+			setupYearRoles(art);
+
+			m_Roles = roles;
+
+			ucs.UserChangedClass += OnUserChangedClass;
+		}
+
+		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
+			// Assign roles
+			try {
+				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
+				if (oldSSI != null) {
+					IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+					IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
+
+					oldRoles = oldRoles.Except(keptRoles);
+					newRoles = newRoles.Except(keptRoles);
+
+					if (oldRoles.Any()) {
+						await user.RemoveRolesAsync(oldRoles);
+					}
+				}
+
+				if (newRoles.Any()) {
+					await user.AddRolesAsync(newRoles);
+				}
+			} catch (Exception) {
+				// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
+			}
+		}
+
+		public IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
+			return m_Roles[info.ClassName.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
+		}
+	}
+}

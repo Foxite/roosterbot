@@ -322,6 +322,11 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
     <value>Genoteerd: jij zit in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
+  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld" xml:space="preserve">
+    <value>Genoteerd: jij zit in {0}, en niet meer in {1}.</value>
+    <comment>0: user's new student set
+	1: user's previous student set</comment>
+  </data>
   <data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
     <value>Dat is geen klas.</value>
   </data>

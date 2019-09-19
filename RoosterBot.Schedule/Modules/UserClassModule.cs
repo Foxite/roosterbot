@@ -8,7 +8,6 @@ namespace RoosterBot.Schedule {
 	[LogTag("UserClassModule"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
 	public class UserClassModule : EditableCmdModuleBase {
 		public IUserClassesService Classes { get; set; }
-		public UserClassRoleService Roles { get; set; }
 		public IdentifierValidationService Validation { get; set; }
 
 		[Command("ik"), Summary("#UserClassModule_GetClassForUser_Summary")]
@@ -26,27 +25,11 @@ namespace RoosterBot.Schedule {
 		
 		[Command("ik"), Summary("#UserClassModule_SetClassForUser_Summary")]
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] string clazzName) {
-			StudentSetInfo studentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
-			if (studentSet != null) {
-				StudentSetInfo oldStudentSet = await Classes.GetClassForDiscordUserAsync(Context, Context.User);
-				StudentSetInfo newStudentSet = new StudentSetInfo() { ClassName = clazzName };
-
-				await Classes.SetClassForDiscordUserAsync(Context, Context.User, newStudentSet);
-				await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", studentSet.DisplayText));
-
-				// Assign roles
-				// TODO move out
-				IGuildUser guildUser = Context.User as IGuildUser;
-
-				try {
-					IRole[] oldRoles = Roles.GetRolesForStudentSet(Context.Guild, oldStudentSet).ToArray();
-					IRole[] newRoles = Roles.GetRolesForStudentSet(Context.Guild, newStudentSet).ToArray();
-
-					await guildUser.RemoveRolesAsync(oldRoles);
-					await guildUser.AddRolesAsync(newRoles);
-				} catch (Exception) {
-					// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
-				}
+			StudentSetInfo newStudentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
+			if (newStudentSet != null) {
+				//await Classes.GetClassForDiscordUserAsync(Context, Context.User);
+				StudentSetInfo oldStudentSet = await Classes.SetClassForDiscordUserAsync(Context, Context.User, newStudentSet);
+				await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 			} else {
 				await ReplyAsync(GetString("UserClassModule_SetClassForUser_InvalidClass"));
 			}
