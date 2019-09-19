@@ -30,5 +30,23 @@ namespace RoosterBot {
 		public string GetString(Assembly assembly, CultureInfo culture, string name) {
 			return m_ResourceManagers[assembly].GetString(name, culture);
 		}
+
+		public string ResolveString(ICommandContext context, ComponentBase component, string str) {
+			return ResolveString(m_GCS.GetCultureForGuild(context.Guild), component, str);
+		}
+
+		public string ResolveString(CultureInfo culture, ComponentBase component, string str) {
+			if (str.StartsWith("#")) {
+				Assembly assembly = null;
+				if (component == null) {
+					assembly = Assembly.GetExecutingAssembly();
+				} else {
+					assembly = component.GetType().Assembly;
+				}
+				return GetString(assembly, culture, str.Substring(1));
+			} else {
+				return str;
+			}
+		}
 	}
 }

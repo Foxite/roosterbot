@@ -36,7 +36,7 @@ namespace RoosterBot {
 							response = m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_BadArgCount");
 							break;
 						case CommandError.UnmetPrecondition:
-							response = Util.ResolveString(culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+							response = m_ResourcesService.ResolveString(culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
 							break;
 						case CommandError.ParseFailed:
 							response = m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_ParseFailed");

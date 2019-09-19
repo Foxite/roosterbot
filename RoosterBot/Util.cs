@@ -168,23 +168,6 @@ namespace RoosterBot {
 			return input;
 		}
 
-		// TODO tomorrow-me: Move this into ResourceService
-		// Seriously it will solve everything, just do it
-		// Sincerely, 2AM-me
-		public static string ResolveString(CultureInfo culture, ComponentBase component, string str) {
-			if (str.StartsWith("#")) {
-				Assembly assembly = null;
-				if (component == null) {
-					assembly = Assembly.GetExecutingAssembly();
-				} else {
-					assembly = component.GetType().Assembly;
-				}
-				return Program.Instance.ResourceService.GetString(assembly, culture, str.Substring(1));
-			} else {
-				return str;
-			}
-		}
-
 		private static void CheckAsyncTelegate(Delegate asyncEvent, object[] parameters) {
 			if (asyncEvent.Method.ReturnType != typeof(Task)) {
 				throw new ArgumentException($"{nameof(asyncEvent)} must return Task", nameof(asyncEvent));
@@ -268,6 +251,18 @@ namespace RoosterBot {
 				yield return current;
 			}
 			yield return item;
+		}
+
+		/// <summary>
+		/// Executes a command according to specified string input, regardless of the actual content of the message.
+		/// </summary>
+		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
+		public static async Task ExecuteSpecificCommand(CommandService commandService, RoosterCommandContext context, string specificInput, string calltag) {
+			RoosterCommandContext newContext = new EditedCommandContext(context.Client, context.Message, (context as EditedCommandContext)?.Responses, calltag);
+
+			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
+
+			await commandService.ExecuteAsync(newContext, specificInput, Program.Instance.Components.Services);
 		}
 	}
 

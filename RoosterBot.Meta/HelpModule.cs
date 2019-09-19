@@ -31,7 +31,7 @@ namespace RoosterBot.Meta {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
 				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
-				response += Util.ResolveString(Culture, helpSection.Item1, helpSection.Item2);
+				response += ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2);
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist");
 			}
@@ -44,7 +44,7 @@ namespace RoosterBot.Meta {
 			IEnumerable<string> visibleModules = 
 				from module in CmdService.Modules
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
-				select Util.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
+				select ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
 			string response = GetString("MetaCommandsModule_CommandListCommand_Pretext");
 			response += visibleModules.Aggregate((workingString, next) => workingString + ", " + next);
@@ -55,7 +55,7 @@ namespace RoosterBot.Meta {
 		public async Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string moduleName) {
 			moduleName = moduleName.ToLower();
 			ModuleInfo module = CmdService.Modules
-				.Where(aModule => Util.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
+				.Where(aModule => ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
 				.SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
@@ -75,7 +75,7 @@ namespace RoosterBot.Meta {
 					}
 
 					response += $"`{Config.CommandPrefix}";
-					response += Util.ResolveString(Culture, component, command.Name);
+					response += ResourcesService.ResolveString(Culture, component, command.Name);
 
 					// Parameters
 					foreach (ParameterInfo param in command.Parameters) {
@@ -83,8 +83,8 @@ namespace RoosterBot.Meta {
 							continue;
 						}
 
-						string paramName = Util.ResolveString(Culture, component, param.Name);
-						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {Util.ResolveString(Culture, component, param.Summary)}";
+						string paramName = ResourcesService.ResolveString(Culture, component, param.Name);
+						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {ResourcesService.ResolveString(Culture, component, param.Summary)}";
 						
 						response += $" <{paramName.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{paramSummary}>";
 					}
@@ -92,7 +92,7 @@ namespace RoosterBot.Meta {
 					if (string.IsNullOrWhiteSpace(command.Summary)) {
 						response += "`";
 					} else {
-						string commandSummary = Util.ResolveString(Culture, component, command.Summary);
+						string commandSummary = ResourcesService.ResolveString(Culture, component, command.Summary);
 						response += $"`: {commandSummary}";
 					}
 
@@ -106,7 +106,7 @@ namespace RoosterBot.Meta {
 								if (preconditionsAdded != 0) {
 									preconditionText += ", ";
 								}
-								preconditionText += Util.ResolveString(Culture, component, rpc.Summary);
+								preconditionText += ResourcesService.ResolveString(Culture, component, rpc.Summary);
 								preconditionsAdded++;
 							}
 						}
@@ -120,7 +120,7 @@ namespace RoosterBot.Meta {
 				}
 
 				if (!string.IsNullOrWhiteSpace(module.Remarks)) {
-					response += Util.ResolveString(Culture, component, module.Remarks) + "\n";
+					response += ResourcesService.ResolveString(Culture, component, module.Remarks) + "\n";
 				}
 
 				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");

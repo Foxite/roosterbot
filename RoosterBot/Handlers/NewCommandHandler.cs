@@ -18,19 +18,6 @@ namespace RoosterBot {
 			m_Client.MessageReceived += HandleNewCommand;
 		}
 
-		/// <summary>
-		/// Executes a command according to specified string input, regardless of the actual content of the message.
-		/// </summary>
-		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
-		// TODO move this out
-		public async Task ExecuteSpecificCommand(IUserMessage[] initialResponse, string specificInput, IUserMessage message, string calltag) {
-			EditedCommandContext context = new EditedCommandContext(m_Client, message, initialResponse, calltag);
-
-			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
-
-			await m_Commands.ExecuteAsync(context, specificInput, Program.Instance.Components.Services);
-		}
-
 		private async Task HandleNewCommand(SocketMessage socketMessage) {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)

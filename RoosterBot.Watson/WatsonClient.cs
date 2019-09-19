@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using IBM.WatsonDeveloperCloud.Assistant.v2;
 using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
@@ -13,13 +14,15 @@ namespace RoosterBot.Watson {
 	public class WatsonClient {
 		internal static readonly string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
-		private readonly string AssistantId;
-		private AssistantService m_Assistant;
-		private GuildCultureService m_GCS;
-		private ResourceService m_Resources;
+		private readonly string m_AssistantId;
+		private readonly AssistantService m_Assistant;
+		private readonly GuildCultureService m_GCS;
+		private readonly ResourceService m_Resources;
+		private readonly IDiscordClient m_DiscordClient;
+		private readonly CommandService m_CommandService;
 
-		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources) {
-			AssistantId = assistantId;
+		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, CommandService commandService) {
+			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
@@ -28,6 +31,8 @@ namespace RoosterBot.Watson {
 
 			m_GCS = gcs;
 			m_Resources = resources;
+			m_DiscordClient = discord;
+			m_CommandService = commandService;
 		}
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
@@ -43,9 +48,9 @@ namespace RoosterBot.Watson {
 			IDisposable typingState = null;
 			try {
 				typingState = message.Channel.EnterTypingState();
-				sessionId = m_Assistant.CreateSession(AssistantId).SessionId;
+				sessionId = m_Assistant.CreateSession(m_AssistantId).SessionId;
 
-				MessageResponse result = m_Assistant.Message(AssistantId, sessionId, new MessageRequest() { Input = new MessageInput() { Text = input } });
+				MessageResponse result = m_Assistant.Message(m_AssistantId, sessionId, new MessageRequest() { Input = new MessageInput() { Text = input } });
 
 				List<RuntimeIntent> intents = result.Output.Intents;
 				if (intents.Count != 0) {
@@ -75,8 +80,11 @@ namespace RoosterBot.Watson {
 					}
 					string convertedCommand = maxConfidence.Intent + params_;
 
+					RoosterCommandContext context = new RoosterCommandContext(m_DiscordClient, message, LogTag);
+
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
-					await Program.Instance.CommandHandler.ExecuteSpecificCommand(null, convertedCommand, message, "Watson");
+					//await Util.ExecuteSpecificCommand(m_CommandService, context, convertedCommand, "Watson");
+					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
 					await Util.AddReaction(message, "❓");
@@ -85,7 +93,7 @@ namespace RoosterBot.Watson {
 				Logger.Error(LogTag, "That didn't work.", e);
 			} finally {
 				if (sessionId != null) {
-					m_Assistant.DeleteSession(AssistantId, sessionId);
+					m_Assistant.DeleteSession(m_AssistantId, sessionId);
 				}
 				if (typingState != null) {
 					typingState.Dispose();

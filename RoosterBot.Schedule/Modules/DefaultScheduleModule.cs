@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("nu", RunMode = RunMode.Async)]
 		public async Task DefaultCurrentCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "nu ik", Context.Message, "default nu");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "nu ik", "default nu");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -27,7 +27,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("hierna", RunMode = RunMode.Async)]
 		public async Task DefaultNextCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "hierna ik", Context.Message, "default hierna");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "hierna ik", "default hierna");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -36,7 +36,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("dag", RunMode = RunMode.Async)]
 		public async Task DefaultWeekdayCommand(DayOfWeek dag, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, $"dag {dag.GetName(Culture)} ik", Context.Message, "default dag");
+				await Util.ExecuteSpecificCommand(CmdService, Context, $"dag {dag.GetName(Culture)} ik", "default dag");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -45,7 +45,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("morgen", RunMode = RunMode.Async)]
 		public async Task DefaultTomorrowCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "morgen ik", Context.Message, "default morgen");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "morgen ik", "default morgen");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -54,7 +54,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("vandaag", RunMode = RunMode.Async)]
 		public async Task DefaultTodayCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "vandaag ik", Context.Message, "default vandaag");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "vandaag ik", "default vandaag");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -63,7 +63,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("deze week", RunMode = RunMode.Async)]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "deze week ik", Context.Message, "default deze week");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "deze week ik", "default deze week");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -72,7 +72,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("volgende week", RunMode = RunMode.Async)]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, "volgende week ik", Context.Message, "default volgende week");
+				await Util.ExecuteSpecificCommand(CmdService, Context, "volgende week ik", "default volgende week");
 			} else {
 				await ReplyErrorMessage(wat);
 			}
@@ -81,7 +81,7 @@ namespace RoosterBot.Schedule {
 		[Priority(-10), Command("over", RunMode = RunMode.Async)]
 		public async Task ShowNWeeksWorkingDaysCommand(int aantal, string unit, [Remainder] string wat = "") {
 			if (string.IsNullOrWhiteSpace(wat)) {
-				await Program.Instance.CommandHandler.ExecuteSpecificCommand(Context.Responses, $"over {aantal} {unit} ik", Context.Message, "default over");
+				await Util.ExecuteSpecificCommand(CmdService, Context, $"over {aantal} {unit} ik", "default over");
 			} else {
 				await ReplyErrorMessage(wat);
 			}

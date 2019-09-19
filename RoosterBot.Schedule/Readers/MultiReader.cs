@@ -28,8 +28,8 @@ namespace RoosterBot.Schedule {
 					return result;
 				}
 			}
-			GuildCultureService gcs = services.GetService<GuildCultureService>();
-			return TypeReaderResult.FromError(CommandError.ParseFailed, Util.ResolveString(gcs.GetCultureForGuild(context.Guild), m_ResourcesComponent, m_ErrorMessage));
+			ResourceService resources = services.GetService<ResourceService>();
+			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(context, m_ResourcesComponent, m_ErrorMessage));
 		}
 	}
 }
