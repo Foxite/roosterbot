@@ -36,6 +36,10 @@ namespace RoosterBot {
 		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
 
 		protected override void BeforeExecute(CommandInfo command) {
+			if (Context == null) {
+				Context = base.Context;
+			}
+			
 			LogTag = null;
 			foreach (Attribute attr in command.Module.Attributes) {
 				if (attr is LogTagAttribute logTagAttribute) {
