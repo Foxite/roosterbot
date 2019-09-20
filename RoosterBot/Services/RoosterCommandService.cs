@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using ParameterInfo = System.Reflection.ParameterInfo;
 
 namespace RoosterBot {
 	/// <summary>
@@ -82,7 +83,7 @@ namespace RoosterBot {
 		}
 
 		private async Task<ModuleInfo[]> AddLocalizedModuleInternalAsync(Type module, Assembly assembly) {
-			// TODO: for each culture supported by the component, create a ModuleInfo from the type with resolved strings
+			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
 			if (module.IsSubclassOf(typeof(RoosterModuleBase<>))) {
 				throw new ArgumentException(module.Name + " must derive from RoosterModuleBase to support localization.");
 
@@ -106,6 +107,7 @@ namespace RoosterBot {
 				}
 
 				localizedModules[i] = await CreateModuleAsync("", moduleBuilder => {
+					// Module creation
 					moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
 
 					string name = module.GetCustomAttribute<NameAttribute>()?.Text;
@@ -136,8 +138,8 @@ namespace RoosterBot {
 					foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
 						moduleBuilder.AddCommand(
 							m_ResourceService.ResolveString(culture, component, attribute.Text),
-							// command.ExecuteAsync(context, parameters, null, commandServices), // TODO what is the difference between the 2 lists?
 							async (context, parameters, commandServices, command) => {
+								// Command execution
 								PropertyInfo[] properties = module.GetProperties();
 								IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
 								foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
@@ -160,6 +162,7 @@ namespace RoosterBot {
 								}
 							},
 							(commandBuilder) => {
+								// Command creation
 								AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
 								if (aliasAttribute != null) {
 									string[] commandAliases = aliasAttribute.Aliases
@@ -169,11 +172,25 @@ namespace RoosterBot {
 
 								commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
 
-								// Using var because this is a System.Reflection.ParameterInfo[], and Discord already defines a ParameterInfo class
-								// I don't want to write the fully qualified name all over the place
-								var parameters = method.GetParameters();
+								IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
+								foreach (PreconditionAttribute precondition in commandPreconditions) {
+									commandBuilder.AddPrecondition(precondition);
+								}
 
+								int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
+								if (priority != null) {
+									commandBuilder.WithPriority(priority.Value);
+								}
+
+								commandBuilder
+									.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
+									.WithRunMode(attribute.RunMode)
+									.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
+									.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
+
+								ParameterInfo[] parameters = method.GetParameters();
 								foreach (var parameter in parameters) {
+									// Parameter creation
 									string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
 									if (paramName == null) {
 										paramName = parameter.Name;
@@ -200,29 +217,12 @@ namespace RoosterBot {
 											// TODO do we need to set TypeReader?
 										}
 									);
-								}
-
-								IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
-								foreach (PreconditionAttribute precondition in commandPreconditions) {
-									commandBuilder.AddPrecondition(precondition);
-								}
-
-								int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
-								if (priority != null) {
-									commandBuilder.WithPriority(priority.Value);
-								}
-
-
-								commandBuilder
-									.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
-									.WithRunMode(attribute.RunMode)
-									.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
-									.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
+								} // End parameter creation
 							}
-						);
+						); // End command creation
 					}
-				});
-			}
+				}); // End module creation
+			} // End locales loop
 
 			return localizedModules;
 		}
