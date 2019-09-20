@@ -106,6 +106,8 @@ namespace RoosterBot {
 				}
 
 				localizedModules[i] = await CreateModuleAsync("", moduleBuilder => {
+					moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale));
+
 					string name = module.GetCustomAttribute<NameAttribute>()?.Text;
 					if (name == null) {
 						name = module.Name;
