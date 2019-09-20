@@ -2,6 +2,7 @@
 using Discord.Commands;
 
 namespace RoosterBot.PublicTransit {
+	[RequireCulture("nl-NL", false)]
 	[LogTag("PublicTransitModule"), Name("OV")]
 	public class PTModule : RoosterModuleBase {
 		public NSAPI NSAPI { get; set; }
