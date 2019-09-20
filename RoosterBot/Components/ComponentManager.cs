@@ -14,21 +14,16 @@ namespace RoosterBot {
 	public sealed class ComponentManager {
 		private List<ComponentBase> m_Components;
 		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
+		private ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
 
 		public IServiceProvider Services { get; private set; }
 
-		private ComponentManager() { }
-
-		internal static async Task<ComponentManager> CreateAsync(IServiceCollection serviceCollection) {
-			ComponentManager cm = new ComponentManager();
-			await cm.SetupComponents(serviceCollection);
-			return cm;
-		}
+		internal ComponentManager() { }
 
 		/// <summary>
 		/// Runs the full initialization process for components.
 		/// </summary>
-		private async Task SetupComponents(IServiceCollection serviceCollection) {
+		internal async Task SetupComponents(IServiceCollection serviceCollection) {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
@@ -38,6 +33,7 @@ namespace RoosterBot {
 
 			m_Components = new List<ComponentBase>(types.Length);
 			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
+			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
 
 			// Start components
 			ConstructComponents(types);
@@ -97,7 +93,9 @@ namespace RoosterBot {
 			foreach (Type type in componentTypes) {
 				Logger.Debug("ComponentManager", "Constructing component " + type.Name);
 				try {
-					m_Components.Add(Activator.CreateInstance(type) as ComponentBase);
+					ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
+					m_Components.Add(component);
+					m_ComponentsByAssembly[type.Assembly] = component;
 				} catch (Exception ex) {
 					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", type, ex);
 				}
@@ -172,6 +170,14 @@ namespace RoosterBot {
 				return result;
 			} else {
 				throw new ArgumentException($"Module of type {module.Name} is not registered");
+			}
+		}
+
+		internal ComponentBase GetComponentFromAssembly(Assembly assembly) {
+			if (m_ComponentsByAssembly.TryGetValue(assembly, out ComponentBase result)) {
+				return result;
+			} else {
+				throw new ArgumentException($"Assembly {assembly.FullName} does not have a ComponentBase");
 			}
 		}
 	}

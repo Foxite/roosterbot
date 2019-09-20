@@ -10,11 +10,12 @@ using Discord.Commands;
 using Discord.WebSocket;
 
 namespace RoosterBot {
-	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
+	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
 		public GuildCultureService Cultures { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
+		public new T Context { get; internal set; }
 
 		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
@@ -30,6 +31,9 @@ namespace RoosterBot {
 		private CultureInfo m_Culture = null;
 		private StringBuilder m_Response;
 		private bool m_Replied = false;
+		
+		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
+		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
 
 		protected override void BeforeExecute(CommandInfo command) {
 			LogTag = null;
@@ -93,7 +97,7 @@ namespace RoosterBot {
 			IUserMessage ret;
 			if (Context.Responses == null) {
 				// The command was not edited, or the command somehow did not invoke a reply.
-				IUserMessage response = await base.ReplyAsync(message, isTTS, embed, options);
+				IUserMessage response = await Context.Channel.SendMessageAsync(message, isTTS, embed, options);
 				CmdService.AddResponse(Context.Message, response);
 				ret = response;
 			} else {
@@ -197,5 +201,10 @@ namespace RoosterBot {
 			Responses = originalResponses;
 			CallTag = calltag;
 		}
+	}
+
+	internal interface IRoosterModuleBase {
+		void BeforeExecuteInternal(CommandInfo command);
+		void AfterExecuteInternal(CommandInfo command);
 	}
 }

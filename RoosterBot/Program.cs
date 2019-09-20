@@ -71,7 +71,8 @@ namespace RoosterBot {
 
 			IServiceCollection serviceCollection = CreateRBServices();
 
-			Components = await ComponentManager.CreateAsync(serviceCollection);
+			Components = new ComponentManager();
+			await Components.SetupComponents(serviceCollection);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
@@ -96,15 +97,15 @@ namespace RoosterBot {
 		}
 
 		private IServiceCollection CreateRBServices() {
-			RoosterCommandService commands = new RoosterCommandService(m_ConfigService);
-			commands.Log += Logger.LogSync;
-
-			m_NotificationService = new NotificationService();
 			HelpService helpService = new HelpService();
-			GuildCultureService gcs = new GuildCultureService();
+			m_NotificationService = new NotificationService();
 
+			GuildCultureService gcs = new GuildCultureService();
 			ResourceService resources = new ResourceService(gcs);
 			resources.RegisterResources("RoosterBot.Resources");
+
+			RoosterCommandService commands = new RoosterCommandService(m_ConfigService, resources);
+			commands.Log += Logger.LogSync;
 
 			// Create handlers
 			// I don't know what to do with this.
