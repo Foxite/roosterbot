@@ -67,6 +67,7 @@
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
+    <Compile Include="Preconditions\RequireCultureAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
     <Compile Include="Preconditions\UserIsModeratorAttribute.cs" />
     <Compile Include="Readers\RoosterTypeReaderBase.cs" />
