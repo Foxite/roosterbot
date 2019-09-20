@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -11,6 +12,21 @@ namespace RoosterBot {
 		// TODO before deploying 2.0 make sure the bot can access this emote!
 		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
 		public static readonly Random RNG = new Random();
+
+		/// <summary>
+		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
+		/// </summary>
+		private static Dictionary<(string, string), string> m_CultureNamesTable;
+
+		static Util() {
+			m_CultureNamesTable = new Dictionary<(string, string), string>();
+			
+			m_CultureNamesTable[("nl-NL", "nl-NL")] = "nederlands";
+			m_CultureNamesTable[("nl-NL", "en-US")] = "Dutch";
+
+			m_CultureNamesTable[("en-US", "nl-NL")] = "engels";
+			m_CultureNamesTable[("en-US", "en-US")] = "English";
+		}
 
 		/// <summary>
 		/// Format a string array nicely, with commas and an optional "and" between the last two items.
@@ -223,6 +239,22 @@ namespace RoosterBot {
 			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
 
 			await commandService.ExecuteAsync(newContext, specificInput, Program.Instance.Components.Services);
+		}
+
+		/// <summary>
+		/// Gets the name of one CultureInfo in the language specified by another CultureInfo.
+		/// </summary>
+		// TODO move this into a service and let components add their own values
+		public static string GetLocalizedName(this CultureInfo getNameOf, CultureInfo inLanguage) {
+			if (getNameOf == inLanguage) {
+				return getNameOf.DisplayName;
+			}
+			
+			if (m_CultureNamesTable.TryGetValue((getNameOf.Name, inLanguage.Name), out string ret)) {
+				return ret;
+			} else {
+				throw new ArgumentException($"The name of {getNameOf.EnglishName} in {inLanguage.EnglishName} is not known.");
+			}
 		}
 	}
 

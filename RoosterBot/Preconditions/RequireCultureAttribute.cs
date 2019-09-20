@@ -18,8 +18,7 @@ namespace RoosterBot {
 		}
 
 		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			GuildCultureService gcs = services.GetService<GuildCultureService>();
-			CultureInfo contextCulture = gcs.GetCultureForGuild(context.Guild);
+			CultureInfo contextCulture = services.GetService<GuildCultureService>().GetCultureForGuild(context.Guild);
 			if (Culture == contextCulture) {
 				return Task.FromResult(PreconditionResult.FromSuccess());
 			} else {
@@ -28,7 +27,7 @@ namespace RoosterBot {
 				if (Hide) {
 					reason = string.Format(resources.GetString(contextCulture, "Program_OnCommandExecuted_UnknownCommand"), services.GetService<ConfigService>().CommandPrefix);
 				} else {
-					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), Culture.NativeName);
+					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), Culture.GetLocalizedName(contextCulture));
 				}
 				return Task.FromResult(PreconditionResult.FromError(reason));
 			}
