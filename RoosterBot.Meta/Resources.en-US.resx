@@ -164,4 +164,7 @@ Use `!help &lt;section&gt;` to get a specific explanation.</value>
   <data name="MetaCommandsModule_Name" xml:space="preserve">
     <value>Meta</value>
   </data>
+  <data name="TestModule_TestCommand_Name" xml:space="preserve">
+    <value>testEnglish</value>
+  </data>
 </root>

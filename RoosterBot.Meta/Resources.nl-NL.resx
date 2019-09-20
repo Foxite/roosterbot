@@ -164,4 +164,7 @@ Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
   <data name="MetaCommandsModule_Name" xml:space="preserve">
     <value>Meta</value>
   </data>
+  <data name="TestModule_TestCommand_Name" xml:space="preserve">
+    <value>testNederlands</value>
+  </data>
 </root>

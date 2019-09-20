@@ -18,6 +18,8 @@ namespace RoosterBot.Meta {
 				commandService.AddModuleAsync<HelpModule>(services),
 				commandService.AddModuleAsync<ControlModule>(services)
 			));
+
+			registerModules(await commandService.AddLocalizedModuleAsync<TestModule>());
 		}
 	}
 }
