@@ -7,19 +7,30 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RoosterBot {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 	public sealed class RequireCultureAttribute : RoosterPreconditionAttribute {
-		public override string Summary => "Requires a {0}-speaking server."; // TODO Localize
+		public override string Summary => "#RequireCultureAttribute_Summary";
 		public CultureInfo Culture { get; }
+		public bool Hide { get; }
 
-		public RequireCultureAttribute(string cultureName) {
+		/// <param name="hide">If the precondition fails, this will hide the existence of the command if this is true.</param>
+		public RequireCultureAttribute(string cultureName, bool hide) {
 			Culture = CultureInfo.GetCultureInfo(cultureName);
+			Hide = hide;
 		}
 
 		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			var gcs = services.GetService<GuildCultureService>();
-			if (gcs.GetCultureForGuild(context.Guild) == Culture) {
+			GuildCultureService gcs = services.GetService<GuildCultureService>();
+			CultureInfo contextCulture = gcs.GetCultureForGuild(context.Guild);
+			if (Culture == contextCulture) {
 				return Task.FromResult(PreconditionResult.FromSuccess());
 			} else {
-				return Task.FromResult(PreconditionResult.FromError("This command only works in {0}-speaking servers.")); // TODO localize
+				ResourceService resources = services.GetService<ResourceService>();
+				string reason;
+				if (Hide) {
+					reason = string.Format(resources.GetString(contextCulture, "Program_OnCommandExecuted_UnknownCommand"), services.GetService<ConfigService>().CommandPrefix);
+				} else {
+					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), contextCulture.NativeName);
+				}
+				return Task.FromResult(PreconditionResult.FromError(reason));
 			}
 		}
 	}

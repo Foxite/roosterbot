@@ -122,7 +122,7 @@
     <comment>0: Command prefix</comment>
   </data>
   <data name="Program_OnCommandExecuted_BadArgCount" xml:space="preserve">
-    <value>That's too much or not enough parameters.</value>
+    <value>That's too many or not enough parameters.</value>
   </data>
   <data name="Program_OnCommandExecuted_ParseFailed" xml:space="preserve">
     <value>I don't understand the parameters.</value>
@@ -147,5 +147,13 @@
   </data>
   <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
     <value>You need to be a moderator to do this.</value>
+  </data>
+  <data name="RequireCultureAttribute_CheckFailed" xml:space="preserve">
+    <value>This command only works in {0}-speaking servers.</value>
+    <comment>{0}: localized language name</comment>
+  </data>
+  <data name="RequireCultureAttribute_Summary" xml:space="preserve">
+    <value>Requires a {0}-speaking server.</value>
+    <comment>{0}: localized language name</comment>
   </data>
 </root>
