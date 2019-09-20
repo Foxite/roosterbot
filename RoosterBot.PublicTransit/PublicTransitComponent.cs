@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.PublicTransit {
-	// TODO prevent its use outside specific (Dutch) servers, do not localize
+	// TODO restrict help text from this component to Dutch guilds
 	// This functionality is only useful in the Netherlands.
 	public class PublicTransitComponent : ComponentBase {
 		private NSAPI m_NSAPI;
