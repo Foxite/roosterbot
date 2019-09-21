@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Commands.Builders;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -94,8 +95,14 @@ namespace RoosterBot {
 
 			for (int i = 0; i < locales.Count; i++) {
 				string locale = locales[i];
-				CultureInfo culture = CultureInfo.GetCultureInfo(locale);
+				localizedModules[i] = await CreateModuleAsync("", GetModuleBuilder(module, component, locale));
+			}
 
+			return localizedModules;
+		}
+
+		private Action<ModuleBuilder> GetModuleBuilder(Type module, ComponentBase component, string locale) {
+			return (moduleBuilder) => {
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
 					.Select(method => (method: method, attribute: method.GetCustomAttribute<CommandAttribute>(false)))
@@ -105,130 +112,138 @@ namespace RoosterBot {
 					throw new ArgumentException(module.Name + " does not have any suitable command methods.");
 				}
 
-				localizedModules[i] = await CreateModuleAsync("", moduleBuilder => {
-					// Module creation
-					moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
+				CultureInfo culture = CultureInfo.GetCultureInfo(locale);
+				// Module creation
+				moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
 
-					string name = module.GetCustomAttribute<NameAttribute>()?.Text;
-					if (name == null) {
-						name = module.Name;
-					} else {
-						name = m_ResourceService.ResolveString(culture, component, name);
-					}
-					moduleBuilder.WithName(name);
+				string name = module.GetCustomAttribute<NameAttribute>()?.Text;
+				if (name == null) {
+					name = module.Name;
+				} else {
+					name = m_ResourceService.ResolveString(culture, component, name);
+				}
+				moduleBuilder.WithName(name);
 
-					string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
-					if (aliases != null) {
-						moduleBuilder.AddAliases(aliases);
-					}
+				string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
+				if (aliases != null) {
+					moduleBuilder.AddAliases(aliases);
+				}
 
-					string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
-					if (remarks != null) {
-						moduleBuilder.WithRemarks(remarks);
-					}
+				string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
+				if (remarks != null) {
+					moduleBuilder.WithRemarks(remarks);
+				}
 
-					string summary = module.GetCustomAttribute<SummaryAttribute>()?.Text;
-					if (summary != null) {
-						moduleBuilder.WithSummary(summary);
-					}
+				string summary = module.GetCustomAttribute<SummaryAttribute>()?.Text;
+				if (summary != null) {
+					moduleBuilder.WithSummary(summary);
+				}
 
-					moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
+				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
 
-					foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
-						moduleBuilder.AddCommand(
-							m_ResourceService.ResolveString(culture, component, attribute.Text),
-							async (context, parameters, commandServices, command) => {
-								// Command execution
-								PropertyInfo[] properties = module.GetProperties();
-								IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
-								foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
-									object service = commandServices.GetService(prop.PropertyType);
-									prop.SetValue(moduleInstance, service);
-								}
-
-								module.GetProperty("Context").SetValue(moduleInstance, context);
-
-								try {
-									moduleInstance.BeforeExecuteInternal(command);
-
-									Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.Delay(0);
-									await task;
-								} finally {
-									moduleInstance.AfterExecuteInternal(command);
-									if (moduleInstance is IDisposable disposableModuleInstance) {
-										disposableModuleInstance.Dispose();
-									}
-								}
-							},
-							(commandBuilder) => {
-								// Command creation
-								AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
-								if (aliasAttribute != null) {
-									string[] commandAliases = aliasAttribute.Aliases
-										.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
-									commandBuilder.AddAliases(commandAliases);
-								}
-
-								commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
-
-								IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
-								foreach (PreconditionAttribute precondition in commandPreconditions) {
-									commandBuilder.AddPrecondition(precondition);
-								}
-
-								int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
-								if (priority != null) {
-									commandBuilder.WithPriority(priority.Value);
-								}
-
-								commandBuilder
-									.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
-									.WithRunMode(attribute.RunMode)
-									.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
-									.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
-
-								ParameterInfo[] parameters = method.GetParameters();
-								foreach (var parameter in parameters) {
-									// Parameter creation
-									string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
-									if (paramName == null) {
-										paramName = parameter.Name;
-									} else {
-										paramName = m_ResourceService.ResolveString(culture, component, paramName);
-									}
-
-									commandBuilder.AddParameter(
-										m_ResourceService.ResolveString(culture, component, paramName),
-										parameter.ParameterType,
-										(paramBuilder) => {
-											paramBuilder
-												.AddAttributes(parameter.GetCustomAttributes().ToArray())
-												.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>()?.Text)
-												.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
-												.WithIsMultiple(parameter.GetCustomAttribute<ParamArrayAttribute>() != null)
-												.WithDefault(parameter.DefaultValue)
-												.WithIsOptional(parameter.HasDefaultValue);
-
-											IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
-											foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
-												paramBuilder.AddPrecondition(paramPrecondition);
-											}
-
-											if (paramBuilder.TypeReader == null) {
-												paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
-											}
-										}
-									);
-								} // End parameter creation
+				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
+					moduleBuilder.AddCommand(
+						m_ResourceService.ResolveString(culture, component, attribute.Text),
+						async (context, parameters, commandServices, command) => {
+							// Command execution
+							PropertyInfo[] properties = module.GetProperties();
+							IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
+							foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
+								object service = commandServices.GetService(prop.PropertyType);
+								prop.SetValue(moduleInstance, service);
 							}
-						); // End command creation
-					}
-				}); // End module creation
-			} // End locales loop
 
-			return localizedModules;
+							module.GetProperty("Context").SetValue(moduleInstance, context);
+
+							try {
+								moduleInstance.BeforeExecuteInternal(command);
+
+								Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.Delay(0);
+								await task;
+							} finally {
+								moduleInstance.AfterExecuteInternal(command);
+								if (moduleInstance is IDisposable disposableModuleInstance) {
+									disposableModuleInstance.Dispose();
+								}
+							}
+						},
+						(commandBuilder) => {
+							// Command creation
+							AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
+							if (aliasAttribute != null) {
+								string[] commandAliases = aliasAttribute.Aliases
+									.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
+								commandBuilder.AddAliases(commandAliases);
+							}
+
+							commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
+
+							IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
+							foreach (PreconditionAttribute precondition in commandPreconditions) {
+								commandBuilder.AddPrecondition(precondition);
+							}
+
+							int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
+							if (priority != null) {
+								commandBuilder.WithPriority(priority.Value);
+							}
+
+							commandBuilder
+								.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
+								.WithRunMode(attribute.RunMode)
+								.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
+								.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
+
+							ParameterInfo[] parameters = method.GetParameters();
+							foreach (var parameter in parameters) {
+								// Parameter creation
+								string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
+								if (paramName == null) {
+									paramName = parameter.Name;
+								} else {
+									paramName = m_ResourceService.ResolveString(culture, component, paramName);
+								}
+
+								commandBuilder.AddParameter(
+									m_ResourceService.ResolveString(culture, component, paramName),
+									parameter.ParameterType,
+									(paramBuilder) => {
+										paramBuilder
+											.AddAttributes(parameter.GetCustomAttributes().ToArray())
+											.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>()?.Text)
+											.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
+											.WithIsMultiple(parameter.GetCustomAttribute<ParamArrayAttribute>() != null)
+											.WithDefault(parameter.DefaultValue)
+											.WithIsOptional(parameter.HasDefaultValue);
+
+										IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
+										foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
+											paramBuilder.AddPrecondition(paramPrecondition);
+										}
+
+										if (paramBuilder.TypeReader == null) {
+											paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
+										}
+									}
+								);
+							} // End parameter creation
+						}
+					); // End command creation
+				}
+
+				// Submodule creation
+				IEnumerable<Type> submodules = module.GetNestedTypes().Where(nestedClass => nestedClass.IsSubclassOf(typeof(ModuleBase<>)));
+
+				foreach (Type submodule in submodules) {
+					if (submodule.GetCustomAttribute<LocalizedModuleAttribute>() != null) {
+						throw new ArgumentException("Submodules of localized modules can not be localized. They are always localized in the same culture as their parent.");
+					}
+
+					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuilder(submodule, component, locale));
+				}
+			}; // End module creation
 		}
-		
+
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleInternalAsync(typeof(T), Assembly.GetCallingAssembly());
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync(Type type) => AddLocalizedModuleInternalAsync(type, Assembly.GetCallingAssembly());
 	}
