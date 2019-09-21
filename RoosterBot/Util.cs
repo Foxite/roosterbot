@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -13,40 +12,7 @@ namespace RoosterBot {
 		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
 		public static readonly Random RNG = new Random();
 
-		/// <summary>
-		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
-		/// </summary>
-		private static Dictionary<(string, string), string> m_CultureNamesTable;
-
-		static Util() {
-			m_CultureNamesTable = new Dictionary<(string, string), string>();
-			
-			m_CultureNamesTable[("nl-NL", "nl-NL")] = "nederlands";
-			m_CultureNamesTable[("nl-NL", "en-US")] = "Dutch";
-
-			m_CultureNamesTable[("en-US", "nl-NL")] = "engels";
-			m_CultureNamesTable[("en-US", "en-US")] = "English";
-		}
-
-		/// <summary>
-		/// Format a string array nicely, with commas and an optional "and" between the last two items.
-		/// </summary>
-		/// <param name="finalDelimiter">Should include a comma and a trailing space.</param>
-		public static string FormatStringArray(this string[] array, string finalDelimiter = ", ") {
-			if (array.Length > 0) {
-				string ret = array[0];
-				for (int i = 1; i < array.Length - 1; i++) {
-					ret += ", " + array[i];
-				}
-				if (array.Length > 1) {
-					ret += finalDelimiter + array[array.Length - 1];
-				}
-				return ret;
-			} else {
-				return null;
-			}
-		}
-
+		#region String utils
 		/// <summary>
 		/// Capitalize the first character in a string.
 		/// </summary>
@@ -59,24 +25,6 @@ namespace RoosterBot {
 					throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
 				default:
 					return input.First().ToString().ToUpper() + input.Substring(1);
-			}
-		}
-
-		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
-			try {
-				await message.AddReactionAsync(new Emoji(unicode));
-				return true;
-			} catch (HttpException) { // Permission denied
-				return false;
-			}
-		}
-
-		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
-			try {
-				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
-				return true;
-			} catch (HttpException) { // Permission denied
-				return false;
 			}
 		}
 
@@ -114,18 +62,6 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		#region GetRange(T[])
-		public static T[] GetRange<T>(this T[] source, int start, int count) {
-			T[] ret = new T[count];
-			Array.Copy(source, start, ret, 0, count);
-			return ret;
-		}
-
-		public static T[] GetRange<T>(this T[] source, int start) {
-			return GetRange(source, start, source.Length - start);
-		}
-		#endregion
-		
 		public static string EscapeString(string input) {
 			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
 				("\\", "\\\\"), // Needs to be done first
@@ -143,7 +79,9 @@ namespace RoosterBot {
 
 			return input;
 		}
+		#endregion
 
+		#region Async delegate
 		private static void CheckAsyncDelegate(Delegate asyncEvent, object[] parameters) {
 			if (asyncEvent.Method.ReturnType != typeof(Task)) {
 				throw new ArgumentException($"{nameof(asyncEvent)} must return Task", nameof(asyncEvent));
@@ -185,6 +123,26 @@ namespace RoosterBot {
 				await (Task) invocationList[i].DynamicInvoke(parameters);
 			}
 		}
+		#endregion
+
+		#region Discord utils
+		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
+			try {
+				await message.AddReactionAsync(new Emoji(unicode));
+				return true;
+			} catch (HttpException) { // Permission denied
+				return false;
+			}
+		}
+
+		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
+			try {
+				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
+				return true;
+			} catch (HttpException) { // Permission denied
+				return false;
+			}
+		}
 
 		public static async Task DeleteAll(IMessageChannel channel, IEnumerable<IUserMessage> messages) {
 			if (channel is ITextChannel textChannel) {
@@ -221,13 +179,6 @@ namespace RoosterBot {
 			});
 			return singleResponse;
 		}
-		
-		public static IEnumerable<T> Add<T>(this IEnumerable<T> source, T item) {
-			foreach (T current in source) {
-				yield return current;
-			}
-			yield return item;
-		}
 
 		/// <summary>
 		/// Executes a command according to specified string input, regardless of the actual content of the message.
@@ -240,22 +191,36 @@ namespace RoosterBot {
 
 			await commandService.ExecuteAsync(newContext, specificInput, Program.Instance.Components.Services);
 		}
+		#endregion
+
+		#region LINQ
+		public static IEnumerable<T> Add<T>(this IEnumerable<T> source, T item) {
+			foreach (T current in source) {
+				yield return current;
+			}
+			yield return item;
+		}
 
 		/// <summary>
-		/// Gets the name of one CultureInfo in the language specified by another CultureInfo.
+		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
 		/// </summary>
-		// TODO move this into a service and let components add their own values
-		public static string GetLocalizedName(this CultureInfo getNameOf, CultureInfo inLanguage) {
-			if (getNameOf == inLanguage) {
-				return getNameOf.DisplayName;
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="moveInto"></param>
+		/// <param name="predicate"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
+			List<T> outA = new List<T>();
+			List<T> outB = new List<T>();
+
+			foreach (T item in source) {
+				List<T> outInto = predicate(item) ? outB : outA;
+				outInto.Add(item);
 			}
-			
-			if (m_CultureNamesTable.TryGetValue((getNameOf.Name, inLanguage.Name), out string ret)) {
-				return ret;
-			} else {
-				throw new ArgumentException($"The name of {getNameOf.EnglishName} in {inLanguage.EnglishName} is not known.");
-			}
+			moveInto = outB;
+			return outA;
 		}
+		#endregion
 	}
 
 	public class ReturnValue<T> {

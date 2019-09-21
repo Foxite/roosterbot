@@ -27,7 +27,9 @@ namespace RoosterBot {
 				if (Hide) {
 					reason = string.Format(resources.GetString(contextCulture, "Program_OnCommandExecuted_UnknownCommand"), services.GetService<ConfigService>().CommandPrefix);
 				} else {
-					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), Culture.GetLocalizedName(contextCulture));
+					CultureNameService cns = services.GetService<CultureNameService>();
+					string localizedName = cns.GetLocalizedName(Culture, contextCulture);
+					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), localizedName);
 				}
 				return Task.FromResult(PreconditionResult.FromError(reason));
 			}
