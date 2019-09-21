@@ -36,6 +36,7 @@
     <Compile Include="GLUScheduleComponent.cs" />
     <Compile Include="GLUScheduleReader.cs" />
     <Compile Include="GLUScheduleRecord.cs" />
+    <Compile Include="NewUserHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleAssignmentHandler.cs" />
   </ItemGroup>
