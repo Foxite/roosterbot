@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
-	[LogTag("CounterModule"), Name("#CounterModule_Name")]
+	[Name("#CounterModule_Name")]
 	public class CounterModule : RoosterModuleBase {
 		public CounterService Service { get; set; }
 		

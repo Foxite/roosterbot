@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	[LogTag("TeacherListModule"), Name("#TeacherListModule_Name")]
+	[Name("#TeacherListModule_Name")]
 	public class TeacherListModule : RoosterModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		

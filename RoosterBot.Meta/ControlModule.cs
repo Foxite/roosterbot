@@ -2,7 +2,7 @@
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[LogTag("ControlModule"), HiddenFromList]
+	[HiddenFromList]
 	public class ControlModule : RoosterModuleBase {
 		[Command("shutdown"), RequireBotManager]
 		public Task ShutdownCommand() {

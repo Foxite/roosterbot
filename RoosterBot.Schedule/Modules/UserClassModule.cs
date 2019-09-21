@@ -2,7 +2,7 @@
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	[LogTag("UserClassModule"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
+	[Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
 	public class UserClassModule : RoosterModuleBase {
 		public IUserClassesService Classes { get; set; }
 		public IdentifierValidationService Validation { get; set; }
