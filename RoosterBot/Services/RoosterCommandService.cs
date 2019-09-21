@@ -86,7 +86,6 @@ namespace RoosterBot {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
 			if (module.IsSubclassOf(typeof(RoosterModuleBase<>))) {
 				throw new ArgumentException(module.Name + " must derive from RoosterModuleBase to support localization.");
-
 			}
 
 			IReadOnlyList<string> locales = module.GetCustomAttributes().OfType<LocalizedModuleAttribute>().Single().Locales;
@@ -203,18 +202,21 @@ namespace RoosterBot {
 										parameter.ParameterType,
 										(paramBuilder) => {
 											paramBuilder
-												.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>().Text)
+												.AddAttributes(parameter.GetCustomAttributes().ToArray())
+												.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>()?.Text)
 												.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
-												// TODO what is .WithIsMultiple ?
+												.WithIsMultiple(parameter.GetCustomAttribute<ParamArrayAttribute>() != null)
 												.WithDefault(parameter.DefaultValue)
-												.WithIsOptional(parameter.HasDefaultValue)
-												.AddAttributes(parameter.GetCustomAttributes().ToArray());
+												.WithIsOptional(parameter.HasDefaultValue);
 
 											IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
 											foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
 												paramBuilder.AddPrecondition(paramPrecondition);
 											}
-											// TODO do we need to set TypeReader?
+
+											if (paramBuilder.TypeReader == null) {
+												paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
+											}
 										}
 									);
 								} // End parameter creation
