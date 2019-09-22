@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[LogTag("MetaModule"), Name("#MetaCommandsModule_Name")]
+	[Name("#MetaCommandsModule_Name")]
 	public class HelpModule : RoosterModuleBase {
 		public HelpService Help { get; set; }
 

@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule.GLU {
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
 		private readonly IDiscordClient m_Client;
 
-		// TODO actually start using this
+		// TODO this would benefit from having a config file
 		// The problem is that it needs both a service and a config path, which are mutually incompatible given the component initialization process.
 		// We probably need to load the config during AddServices and then get the UCS during AddModules, but that's for Tomorrow-Me to program.
 		public RoleAssignmentHandler(IDiscordClient client, IUserClassesService ucs) {
@@ -40,7 +40,7 @@ namespace RoosterBot.Schedule.GLU {
 		private async void OnUserChangedClass(IUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
 			// Assign roles
 			try {
-				SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == 278586698877894657).Single();
+				SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == 278586698877894657).SingleOrDefault();
 				if (guild != null) {
 					IGuildUser guildUser = guild.GetUser(user.Id);
 					IEnumerable<IRole> newRoles = GetRolesForStudentSet(guild, newSSI);

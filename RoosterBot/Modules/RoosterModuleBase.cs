@@ -17,7 +17,6 @@ namespace RoosterBot {
 		public RoosterCommandService CmdService { get; set; }
 		public new T Context { get; internal set; }
 
-		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
 		protected CultureInfo Culture {
 			get {
@@ -36,25 +35,23 @@ namespace RoosterBot {
 		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
 
 		protected override void BeforeExecute(CommandInfo command) {
-			LogTag = null;
-			foreach (Attribute attr in command.Module.Attributes) {
-				if (attr is LogTagAttribute logTagAttribute) {
-					LogTag = logTagAttribute.LogTag;
+			if (Context == null) {
+				Context = base.Context;
+			}
+			
+			Log = new ModuleLoggerInternal(GetType().Name);
+
+			string logMessage = $"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in ";
+			if (Context.IsPrivate) {
+				if (Context.Channel is IDMChannel) {
+					logMessage += "DM";
+				} else {
+					logMessage = $"group {Context.Channel.Name}";
 				}
-			}
-
-			if (LogTag == null) {
-				LogTag = GetType().Name;
-				Logger.Warning(LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
-			}
-
-			Log = new ModuleLoggerInternal(LogTag);
-
-			if (Context.Guild == null) {
-				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in PM channel {Context.Channel.Name}");
 			} else {
-				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in {Context.Guild.Name} channel {Context.Channel.Name}");
+				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}");
 			}
+			Log.Debug(logMessage);
 
 			m_Response = new StringBuilder();
 		}

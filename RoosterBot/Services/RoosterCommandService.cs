@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Commands.Builders;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using ParameterInfo = System.Reflection.ParameterInfo;
 
 namespace RoosterBot {
 	/// <summary>
@@ -82,10 +84,9 @@ namespace RoosterBot {
 		}
 
 		private async Task<ModuleInfo[]> AddLocalizedModuleInternalAsync(Type module, Assembly assembly) {
-			// TODO: for each culture supported by the component, create a ModuleInfo from the type with resolved strings
+			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
 			if (module.IsSubclassOf(typeof(RoosterModuleBase<>))) {
 				throw new ArgumentException(module.Name + " must derive from RoosterModuleBase to support localization.");
-
 			}
 
 			IReadOnlyList<string> locales = module.GetCustomAttributes().OfType<LocalizedModuleAttribute>().Single().Locales;
@@ -94,8 +95,14 @@ namespace RoosterBot {
 
 			for (int i = 0; i < locales.Count; i++) {
 				string locale = locales[i];
-				CultureInfo culture = CultureInfo.GetCultureInfo(locale);
+				localizedModules[i] = await CreateModuleAsync("", GetModuleBuilder(module, component, locale));
+			}
 
+			return localizedModules;
+		}
+
+		private Action<ModuleBuilder> GetModuleBuilder(Type module, ComponentBase component, string locale) {
+			return (moduleBuilder) => {
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
 					.Select(method => (method: method, attribute: method.GetCustomAttribute<CommandAttribute>(false)))
@@ -105,128 +112,138 @@ namespace RoosterBot {
 					throw new ArgumentException(module.Name + " does not have any suitable command methods.");
 				}
 
-				localizedModules[i] = await CreateModuleAsync("", moduleBuilder => {
-					moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
+				CultureInfo culture = CultureInfo.GetCultureInfo(locale);
+				// Module creation
+				moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
 
-					string name = module.GetCustomAttribute<NameAttribute>()?.Text;
-					if (name == null) {
-						name = module.Name;
-					} else {
-						name = m_ResourceService.ResolveString(culture, component, name);
-					}
-					moduleBuilder.WithName(name);
+				string name = module.GetCustomAttribute<NameAttribute>()?.Text;
+				if (name == null) {
+					name = module.Name;
+				} else {
+					name = m_ResourceService.ResolveString(culture, component, name);
+				}
+				moduleBuilder.WithName(name);
 
-					string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
-					if (aliases != null) {
-						moduleBuilder.AddAliases(aliases);
-					}
+				string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
+				if (aliases != null) {
+					moduleBuilder.AddAliases(aliases);
+				}
 
-					string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
-					if (remarks != null) {
-						moduleBuilder.WithRemarks(remarks);
-					}
+				string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
+				if (remarks != null) {
+					moduleBuilder.WithRemarks(remarks);
+				}
 
-					string summary = module.GetCustomAttribute<SummaryAttribute>()?.Text;
-					if (summary != null) {
-						moduleBuilder.WithSummary(summary);
-					}
+				string summary = module.GetCustomAttribute<SummaryAttribute>()?.Text;
+				if (summary != null) {
+					moduleBuilder.WithSummary(summary);
+				}
 
-					moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
+				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
 
-					foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
-						moduleBuilder.AddCommand(
-							m_ResourceService.ResolveString(culture, component, attribute.Text),
-							// command.ExecuteAsync(context, parameters, null, commandServices), // TODO what is the difference between the 2 lists?
-							async (context, parameters, commandServices, command) => {
-								PropertyInfo[] properties = module.GetProperties();
-								IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
-								foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
-									object service = commandServices.GetService(prop.PropertyType);
-									prop.SetValue(moduleInstance, service);
-								}
-
-								module.GetProperty("Context").SetValue(moduleInstance, context);
-
-								try {
-									moduleInstance.BeforeExecuteInternal(command);
-
-									Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.Delay(0);
-									await task;
-								} finally {
-									moduleInstance.AfterExecuteInternal(command);
-									if (moduleInstance is IDisposable disposableModuleInstance) {
-										disposableModuleInstance.Dispose();
-									}
-								}
-							},
-							(commandBuilder) => {
-								AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
-								if (aliasAttribute != null) {
-									string[] commandAliases = aliasAttribute.Aliases
-										.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
-									commandBuilder.AddAliases(commandAliases);
-								}
-
-								commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
-
-								// Using var because this is a System.Reflection.ParameterInfo[], and Discord already defines a ParameterInfo class
-								// I don't want to write the fully qualified name all over the place
-								var parameters = method.GetParameters();
-
-								foreach (var parameter in parameters) {
-									string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
-									if (paramName == null) {
-										paramName = parameter.Name;
-									} else {
-										paramName = m_ResourceService.ResolveString(culture, component, paramName);
-									}
-
-									commandBuilder.AddParameter(
-										m_ResourceService.ResolveString(culture, component, paramName),
-										parameter.ParameterType,
-										(paramBuilder) => {
-											paramBuilder
-												.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>().Text)
-												.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
-												// TODO what is .WithIsMultiple ?
-												.WithDefault(parameter.DefaultValue)
-												.WithIsOptional(parameter.HasDefaultValue)
-												.AddAttributes(parameter.GetCustomAttributes().ToArray());
-
-											IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
-											foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
-												paramBuilder.AddPrecondition(paramPrecondition);
-											}
-											// TODO do we need to set TypeReader?
-										}
-									);
-								}
-
-								IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
-								foreach (PreconditionAttribute precondition in commandPreconditions) {
-									commandBuilder.AddPrecondition(precondition);
-								}
-
-								int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
-								if (priority != null) {
-									commandBuilder.WithPriority(priority.Value);
-								}
-
-
-								commandBuilder
-									.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
-									.WithRunMode(attribute.RunMode)
-									.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
-									.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
+				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
+					moduleBuilder.AddCommand(
+						m_ResourceService.ResolveString(culture, component, attribute.Text),
+						async (context, parameters, commandServices, command) => {
+							// Command execution
+							PropertyInfo[] properties = module.GetProperties();
+							IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
+							foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
+								object service = commandServices.GetService(prop.PropertyType);
+								prop.SetValue(moduleInstance, service);
 							}
-						);
-					}
-				});
-			}
 
-			return localizedModules;
+							module.GetProperty("Context").SetValue(moduleInstance, context);
+
+							try {
+								moduleInstance.BeforeExecuteInternal(command);
+
+								Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.Delay(0);
+								await task;
+							} finally {
+								moduleInstance.AfterExecuteInternal(command);
+								if (moduleInstance is IDisposable disposableModuleInstance) {
+									disposableModuleInstance.Dispose();
+								}
+							}
+						},
+						(commandBuilder) => {
+							// Command creation
+							AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
+							if (aliasAttribute != null) {
+								string[] commandAliases = aliasAttribute.Aliases
+									.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
+								commandBuilder.AddAliases(commandAliases);
+							}
+
+							commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
+
+							IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
+							foreach (PreconditionAttribute precondition in commandPreconditions) {
+								commandBuilder.AddPrecondition(precondition);
+							}
+
+							int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
+							if (priority != null) {
+								commandBuilder.WithPriority(priority.Value);
+							}
+
+							commandBuilder
+								.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
+								.WithRunMode(attribute.RunMode)
+								.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
+								.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
+
+							ParameterInfo[] parameters = method.GetParameters();
+							foreach (var parameter in parameters) {
+								// Parameter creation
+								string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
+								if (paramName == null) {
+									paramName = parameter.Name;
+								} else {
+									paramName = m_ResourceService.ResolveString(culture, component, paramName);
+								}
+
+								commandBuilder.AddParameter(
+									m_ResourceService.ResolveString(culture, component, paramName),
+									parameter.ParameterType,
+									(paramBuilder) => {
+										paramBuilder
+											.AddAttributes(parameter.GetCustomAttributes().ToArray())
+											.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>()?.Text)
+											.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
+											.WithIsMultiple(parameter.GetCustomAttribute<ParamArrayAttribute>() != null)
+											.WithDefault(parameter.DefaultValue)
+											.WithIsOptional(parameter.HasDefaultValue);
+
+										IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
+										foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
+											paramBuilder.AddPrecondition(paramPrecondition);
+										}
+
+										if (paramBuilder.TypeReader == null) {
+											paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
+										}
+									}
+								);
+							} // End parameter creation
+						}
+					); // End command creation
+				}
+
+				// Submodule creation
+				IEnumerable<Type> submodules = module.GetNestedTypes().Where(nestedClass => nestedClass.IsSubclassOf(typeof(ModuleBase<>)));
+
+				foreach (Type submodule in submodules) {
+					if (submodule.GetCustomAttribute<LocalizedModuleAttribute>() != null) {
+						throw new ArgumentException("Submodules of localized modules can not be localized. They are always localized in the same culture as their parent.");
+					}
+
+					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuilder(submodule, component, locale));
+				}
+			}; // End module creation
 		}
-		
+
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleInternalAsync(typeof(T), Assembly.GetCallingAssembly());
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync(Type type) => AddLocalizedModuleInternalAsync(type, Assembly.GetCallingAssembly());
 	}

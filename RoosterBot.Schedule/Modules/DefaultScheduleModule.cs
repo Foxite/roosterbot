@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 	// 
 	// Neither of these necessities are the result of writing good code, so there is a long-standing todo item:
 	// TODO: make this class obsolete.
-	[LogTag("DefaultCommandsModule"), HiddenFromList]
+	[HiddenFromList]
 	public class DefaultScheduleModule : RoosterModuleBase {
 		[Priority(-10), Command("nu", RunMode = RunMode.Async)]
 		public Task DefaultCurrentCommand([Remainder] string wat = "") {

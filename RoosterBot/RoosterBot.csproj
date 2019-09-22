@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Attributes\HiddenFromListAttribute.cs" />
     <Compile Include="Attributes\LocalizedModuleAttribute.cs" />
-    <Compile Include="Attributes\LogTagAttribute.cs" />
     <Compile Include="Handlers\DeadlockHandler.cs" />
     <Compile Include="Handlers\DeletedCommandHandler.cs" />
     <Compile Include="Handlers\NewCommandHandler.cs" />
@@ -77,6 +76,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CultureNameService.cs" />
     <Compile Include="Services\GuildCultureService.cs" />
     <Compile Include="Services\HelpService.cs" />
     <Compile Include="Services\NotificationService.cs" />

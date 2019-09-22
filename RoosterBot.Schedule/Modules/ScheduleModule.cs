@@ -6,7 +6,6 @@ using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	// TODO reduce the size of this file (it has 352 lines right now)
-	[LogTag("ScheduleModule")]
 	[Name("#DefaultScheduleModule_Name")]
 	[Summary("#DefaultScheduleModule_Summary")]
 	[Remarks("#DefaultScheduleModule_Remarks")]

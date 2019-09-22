@@ -2,7 +2,7 @@
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	[LogTag("UserClassModule"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
+	[Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
 	public class UserClassModule : RoosterModuleBase {
 		public IUserClassesService Classes { get; set; }
 		public IdentifierValidationService Validation { get; set; }
@@ -26,7 +26,11 @@ namespace RoosterBot.Schedule {
 			if (newStudentSet != null) {
 				//await Classes.GetClassForDiscordUserAsync(Context, Context.User);
 				StudentSetInfo oldStudentSet = await Classes.SetClassForDiscordUserAsync(Context, Context.User, newStudentSet);
-				await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText, oldStudentSet.DisplayText));
+				if (oldStudentSet == null) {
+					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
+				} else {
+					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
+				}
 			} else {
 				await ReplyAsync(GetString("UserClassModule_SetClassForUser_InvalidClass"));
 			}
