@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.AWS", "
 		{0C053E6F-97D0-431D-B4E3-A2B340E60665} = {0C053E6F-97D0-431D-B4E3-A2B340E60665}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.SQL", "RoosterBot.Schedule.SQL\RoosterBot.Schedule.SQL.csproj", "{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{4D56894F-4487-46D2-9CC2-261F557B7400}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D56894F-4487-46D2-9CC2-261F557B7400}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D56894F-4487-46D2-9CC2-261F557B7400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
