@@ -7,12 +7,11 @@ using Discord.WebSocket;
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
-		private readonly IDiscordClient m_Client;
 
 		// TODO this would benefit from having a config file
 		// The problem is that it needs both a service and a config path, which are mutually incompatible given the component initialization process.
 		// We probably need to load the config during AddServices and then get the UCS during AddModules, but that's for Tomorrow-Me to program.
-		public RoleAssignmentHandler(IDiscordClient client, IUserClassesService ucs) {
+		public RoleAssignmentHandler(IUserClassesService ucs) {
 			// TODO replace with config file
 			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
 
@@ -34,7 +33,6 @@ namespace RoosterBot.Schedule.GLU {
 			m_Roles = roles;
 
 			ucs.UserChangedClass += OnUserChangedClass;
-			m_Client = client;
 		}
 
 		private async void OnUserChangedClass(IUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {

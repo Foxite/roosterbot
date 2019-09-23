@@ -15,7 +15,7 @@ namespace RoosterBot.Schedule.MockUCS {
 			m_UserClasses = new ConcurrentDictionary<IUser, StudentSetInfo>();
 		}
 
-		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+		public event Action<IUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
 
 		public Task<StudentSetInfo> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
 			m_UserClasses.TryGetValue(user, out StudentSetInfo ssi);
