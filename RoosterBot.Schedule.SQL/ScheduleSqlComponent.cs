@@ -12,6 +12,7 @@ namespace RoosterBot.Schedule.SQL {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			m_UCS = new SqlDatabaseUserClassesService(Path.Combine(configPath, "Config.json"));
+			services.AddSingleton<IUserClassesService>(m_UCS);
 			return Task.CompletedTask;
 		}
 
