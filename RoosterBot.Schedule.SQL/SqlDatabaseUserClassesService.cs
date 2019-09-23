@@ -11,7 +11,8 @@ namespace RoosterBot.Schedule.SQL {
 	public class SqlDatabaseUserClassesService : IUserClassesService, IDisposable {
 		private readonly SqlConnection m_SQL;
 		private readonly SqlCommand m_GetClassCommand;
-		private readonly SqlCommand m_SetClassCommand;
+		private readonly SqlCommand m_UpdateClassCommand;
+		private readonly SqlCommand m_InsertClassCommand;
 
 		public SqlDatabaseUserClassesService(string configFile) {
 			JObject jsonConfig = JObject.Parse(File.ReadAllText(configFile));
@@ -25,15 +26,15 @@ namespace RoosterBot.Schedule.SQL {
 
 			m_SQL = new SqlConnection(builder.ConnectionString);
 
-			m_GetClassCommand = new SqlCommand("SELECT UserClass FROM DiscordUsers WHERE UserId = @UserId LIMIT 1", m_SQL);
-			m_SetClassCommand = new SqlCommand("UPDATE DiscordUsers SET UserClass = @UserClass WHERE UserId = @UserId LIMIT 1", m_SQL);
+			m_GetClassCommand = new SqlCommand("SELECT TOP (1) UserClass FROM DiscordUsers WHERE UserId = @UserId", m_SQL);
+			m_UpdateClassCommand = new SqlCommand("UPDATE TOP (1) DiscordUsers SET UserClass = @UserClass WHERE UserId = @UserId", m_SQL);
+			m_InsertClassCommand = new SqlCommand("INSERT INTO DiscordUsers (UserId, UserClass) VALUES (@UserId, @UserClass)", m_SQL);
 			
 			m_GetClassCommand.Parameters.Add("@UserId",    SqlDbType.BigInt);
-			m_SetClassCommand.Parameters.Add("@UserId",    SqlDbType.BigInt);
-			m_SetClassCommand.Parameters.Add("@UserClass", SqlDbType.VarChar, 5);
-
-			m_GetClassCommand.Prepare();
-			m_SetClassCommand.Prepare();
+			m_UpdateClassCommand.Parameters.Add("@UserId",    SqlDbType.BigInt);
+			m_UpdateClassCommand.Parameters.Add("@UserClass", SqlDbType.VarChar, 5);
+			m_InsertClassCommand.Parameters.Add("@UserId",    SqlDbType.BigInt);
+			m_InsertClassCommand.Parameters.Add("@UserClass", SqlDbType.VarChar, 5);
 		}
 
 		public event Action<IUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
@@ -53,16 +54,21 @@ namespace RoosterBot.Schedule.SQL {
 		}
 
 		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IUser user, StudentSetInfo ssi) {
-			Task open = m_SQL.OpenAsync();
+			await m_SQL.OpenAsync();
 			
-			m_GetClassCommand.Parameters["@UserId"]   .Value = user.Id;
-			m_SetClassCommand.Parameters["@UserId"]   .Value = user.Id;
-			m_SetClassCommand.Parameters["@UserClass"].Value = ssi.ClassName;
-
-			await open;
+			m_GetClassCommand.Parameters["@UserId"].Value = user.Id;
 
 			string old = (string) await m_GetClassCommand.ExecuteScalarAsync();
-			await m_SetClassCommand.ExecuteNonQueryAsync();
+
+			SqlCommand command;
+			if (old == null) {
+				command = m_InsertClassCommand;
+			} else {
+				command = m_UpdateClassCommand;
+			}
+			command.Parameters["@UserId"]   .Value = user.Id;
+			command.Parameters["@UserClass"].Value = ssi.ClassName;
+			await command.ExecuteNonQueryAsync();
 
 			m_SQL.Close();
 
@@ -83,7 +89,7 @@ namespace RoosterBot.Schedule.SQL {
 		}
 
 		public void Dispose() {
-			m_SetClassCommand.Dispose();
+			m_UpdateClassCommand.Dispose();
 			m_GetClassCommand.Dispose();
 			m_SQL.Dispose();
 		}
