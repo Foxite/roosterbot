@@ -7,8 +7,8 @@
     <ProjectGuid>{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RoosterBot.Schedule.Azure</RootNamespace>
-    <AssemblyName>RoosterBot.Schedule.Azure</AssemblyName>
+    <RootNamespace>RoosterBot.Schedule.SQL</RootNamespace>
+    <AssemblyName>RoosterBot.Schedule.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -46,9 +46,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <Version>2.2.0</Version>
-    </PackageReference>
     <PackageReference Include="System.Data.SqlClient">
       <Version>4.6.1</Version>
     </PackageReference>

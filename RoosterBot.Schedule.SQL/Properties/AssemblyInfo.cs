@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RoosterBot.Schedule.Azure")]
+[assembly: AssemblyTitle("RoosterBot.Schedule.SQL")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
-[assembly: AssemblyProduct("RoosterBot.Schedule.Azure")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2019")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("RoosterBot.Schedule.SQL")]
+[assembly: AssemblyCopyright("Copyright © Dirk Kok 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
