@@ -7,7 +7,7 @@ namespace RoosterBot.Schedule {
 		public IUserClassesService Classes { get; set; }
 		public IdentifierValidationService Validation { get; set; }
 
-		[Command("ik"), Summary("#UserClassModule_GetClassForUser_Summary")]
+		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_GetClassForUser_Summary")]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUserAsync(Context, Context.User))?.DisplayText;
 			string response;
@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 			await ReplyAsync(response);
 		}
 		
-		[Command("ik"), Summary("#UserClassModule_SetClassForUser_Summary")]
+		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_SetClassForUser_Summary")]
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] string clazzName) {
 			StudentSetInfo newStudentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
 			if (newStudentSet != null) {
