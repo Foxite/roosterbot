@@ -83,6 +83,8 @@ namespace RoosterBot.Schedule.SQL {
 		}
 
 		public void Dispose() {
+			m_SetClassCommand.Dispose();
+			m_GetClassCommand.Dispose();
 			m_SQL.Dispose();
 		}
 	}
