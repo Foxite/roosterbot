@@ -63,7 +63,7 @@ namespace RoosterBot.Schedule.GLU {
 			}
 		}
 
-		public IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
+		private IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
 			return m_Roles[info.ClassName.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
 		}
 	}
