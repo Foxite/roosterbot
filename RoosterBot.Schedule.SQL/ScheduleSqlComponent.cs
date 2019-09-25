@@ -7,7 +7,6 @@ namespace RoosterBot.Schedule.SQL {
 		private SqlDatabaseUserClassesService m_UCS;
 
 		public override Version ComponentVersion => new Version(0, 1, 0);
-
 		public override string[] Tags => new[] { "UserClassesService" };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
