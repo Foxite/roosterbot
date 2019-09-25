@@ -99,7 +99,7 @@ namespace RoosterBot.PublicTransit {
 			}
 		}
 
-		[Command("stations", RunMode = RunMode.Async), Summary("Zoek een station op in de lijst.")]
+		[Command("stations"), Summary("Zoek een station op in de lijst.")]
 		public async Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
 			StationMatchInfo[] matches = Stations.Lookup(input.ToLower(), 5);
 			string response = "Gevonden stations zijn (beste match eerst):\n\n";

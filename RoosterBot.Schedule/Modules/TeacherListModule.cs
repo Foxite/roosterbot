@@ -8,7 +8,7 @@ namespace RoosterBot.Schedule {
 	public class TeacherListModule : RoosterModuleBase {
 		public TeacherNameService Teachers { get; set; }
 		
-		[Command("leraren", RunMode = RunMode.Async), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
+		[Command("leraren"), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
 		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
