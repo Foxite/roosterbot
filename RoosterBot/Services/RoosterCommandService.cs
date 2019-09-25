@@ -53,13 +53,13 @@ namespace RoosterBot {
 
 			for (int i = 0; i < locales.Count; i++) {
 				string locale = locales[i];
-				localizedModules[i] = await CreateModuleAsync("", GetModuleBuilder(module, component, locale));
+				localizedModules[i] = await CreateModuleAsync("", GetModuleBuildFunction(module, component, locale));
 			}
 
 			return localizedModules;
 		}
 
-		private Action<ModuleBuilder> GetModuleBuilder(Type module, ComponentBase component, string locale) {
+		private Action<ModuleBuilder> GetModuleBuildFunction(Type module, ComponentBase component, string locale) {
 			return (moduleBuilder) => {
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
@@ -197,7 +197,7 @@ namespace RoosterBot {
 						throw new ArgumentException("Submodules of localized modules can not be localized. They are always localized in the same culture as their parent.");
 					}
 
-					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuilder(submodule, component, locale));
+					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuildFunction(submodule, component, locale));
 				}
 			}; // End module creation
 		}
