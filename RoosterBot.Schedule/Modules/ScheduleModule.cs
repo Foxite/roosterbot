@@ -9,12 +9,13 @@ namespace RoosterBot.Schedule {
 	[Name("#DefaultScheduleModule_Name")]
 	[Summary("#DefaultScheduleModule_Summary")]
 	[Remarks("#DefaultScheduleModule_Remarks")]
+	[LocalizedModule("nl-NL", "en-US")] // TODO RCS should automatically add aliases
 	public class ScheduleModule : RoosterModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
 
 		#region Commands
-		[Command("nu", RunMode = RunMode.Async), Alias("rooster"), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
+		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task CurrentCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
 			if (result.Success) {
@@ -33,7 +34,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("hierna", RunMode = RunMode.Async), Alias("later", "straks", "zometeen"), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
+		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
 		public async Task NextCommand([Remainder] IdentifierInfo info) {
 			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
 			if (result.Success) {
@@ -48,32 +49,32 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("dag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("vandaag", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task TodayCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today);
 		}
 
-		[Command("morgen", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task TomorrowCommand([Remainder] IdentifierInfo info) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
-		[Command("deze week", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 0);
 		}
 
-		[Command("volgende week", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
 			await RespondWorkingDays(info, 1);
 		}
 
-		[Command("over", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
+		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
 		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info) {
 			unit = unit.ToLower();
 			if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
@@ -95,7 +96,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("daarna", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_AfterCommand")]
+		[Command("#ScheduleModule_AfterCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_AfterCommand")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
 				ReplyDeferred(GetString("AfterScheduleModule_GetAfterCommand_ParameterHint"));

@@ -468,4 +468,60 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
     <value>Te veel resultaten. Voeg een specifieker filter toe.</value>
   </data>
+  <data name="ScheduleModule_AfterCommand" xml:space="preserve">
+    <value>daarna</value>
+  </data>
+  <data name="ScheduleModule_AfterCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_DayCommand" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="ScheduleModule_DayCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_FutureCommand" xml:space="preserve">
+    <value>over</value>
+  </data>
+  <data name="ScheduleModule_FutureCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_NextCommand" xml:space="preserve">
+    <value>hierna</value>
+  </data>
+  <data name="ScheduleModule_NextCommand_Aliases" xml:space="preserve">
+    <value>later|straks|zometeen</value>
+    <comment>Separate aliases with |</comment>
+  </data>
+  <data name="ScheduleModule_NextWeekCommand" xml:space="preserve">
+    <value>volgende week</value>
+  </data>
+  <data name="ScheduleModule_NextWeekCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_NowCommand" xml:space="preserve">
+    <value>nu</value>
+  </data>
+  <data name="ScheduleModule_NowCommand_Aliases" xml:space="preserve">
+    <value>rooster</value>
+    <comment>Separate aliases with |</comment>
+  </data>
+  <data name="ScheduleModule_ThisWeekCommand" xml:space="preserve">
+    <value>deze week</value>
+  </data>
+  <data name="ScheduleModule_ThisWeekCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_TodayCommand" xml:space="preserve">
+    <value>vandaag</value>
+  </data>
+  <data name="ScheduleModule_TodayCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduleModule_TomorrowCommand" xml:space="preserve">
+    <value>morgen</value>
+  </data>
+  <data name="ScheduleModule_TomorrowCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
 </root>
