@@ -5,7 +5,7 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	public abstract class ComponentBase {
+	public abstract class ComponentBase : IDisposable {
 		public abstract Version ComponentVersion { get; }
 		public virtual string[] Tags { get; } = new string[] { };
 
@@ -28,6 +28,13 @@ namespace RoosterBot {
 		};
 		public virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
 		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) => Task.CompletedTask;
-		public virtual Task ShutdownAsync() => Task.CompletedTask;
+
+		#region IDisposable Support
+		protected virtual void Dispose(bool disposing) { }
+
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
 	}
 }

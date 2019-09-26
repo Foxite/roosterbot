@@ -42,10 +42,8 @@ namespace RoosterBot.PublicTransit {
 			help.AddHelpSection(this, "trein", helpText);
 		}
 
-		public override Task ShutdownAsync() {
+		protected override void Dispose(bool disposing) {
 			m_NSAPI.Dispose();
-
-			return Task.CompletedTask;
 		}
 	}
 }

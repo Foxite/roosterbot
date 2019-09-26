@@ -84,7 +84,7 @@ namespace RoosterBot {
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
-			await Components.ShutdownComponentsAsync();
+			Components.ShutdownComponents();
 			m_Client.Dispose();
 		}
 

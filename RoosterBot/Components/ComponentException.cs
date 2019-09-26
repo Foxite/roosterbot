@@ -7,13 +7,21 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public abstract class ComponentException : Exception {
+		private const string CausingComponentSerializedName = "CausingComponent"; // Never ever change this. Otherwise, exisiting serialized instances of this class will break.
+
 		public Type CausingComponent { get; }
 
 		public ComponentException(string message, Type causingComponent, Exception inner = null) : base(message, inner) {
 			CausingComponent = causingComponent;
 		}
 
-		protected ComponentException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+		protected ComponentException(SerializationInfo info, StreamingContext context) : base(info, context) {
+			CausingComponent = (Type) info.GetValue(CausingComponentSerializedName, typeof(Type));
+		}
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+			info.AddValue(CausingComponentSerializedName, CausingComponent); // Idk but Type is not serializable, I'm not sure if this is supposed to work. /shrug
+		}
 	}
 
 	/// <summary>

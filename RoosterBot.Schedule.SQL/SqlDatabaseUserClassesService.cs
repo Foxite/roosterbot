@@ -88,10 +88,26 @@ namespace RoosterBot.Schedule.SQL {
 			}
 		}
 
-		public void Dispose() {
-			m_UpdateClassCommand.Dispose();
-			m_GetClassCommand.Dispose();
-			m_SQL.Dispose();
+		#region IDisposable Support
+		private bool m_Disposed = false;
+
+		protected virtual void Dispose(bool disposing) {
+			if (!m_Disposed) {
+				if (disposing) {
+					m_GetClassCommand.Dispose();
+					m_UpdateClassCommand.Dispose();
+					m_InsertClassCommand.Dispose();
+					m_SQL.Dispose();
+				}
+
+				m_Disposed = true;
+			}
 		}
+
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
+
 	}
 }

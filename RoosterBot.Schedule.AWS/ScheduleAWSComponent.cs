@@ -40,9 +40,8 @@ namespace RoosterBot.Schedule.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task ShutdownAsync() {
+		protected override void Dispose(bool disposing) {
 			m_UserClasses.Dispose();
-			return Task.CompletedTask;
 		}
 	}
 }

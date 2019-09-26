@@ -155,9 +155,9 @@ namespace RoosterBot {
 			await Task.WhenAll(modulesLoading);
 		}
 
-		internal async Task ShutdownComponentsAsync() {
+		internal void ShutdownComponents() {
 			foreach (ComponentBase component in m_Components) {
-				await component.ShutdownAsync();
+				component.Dispose();
 			}
 		}
 

@@ -15,9 +15,8 @@ namespace RoosterBot.Schedule.SQL {
 			return Task.CompletedTask;
 		}
 
-		public override Task ShutdownAsync() {
+		protected override void Dispose(bool disposing) {
 			m_UCS.Dispose();
-			return Task.CompletedTask;
 		}
 	}
 }

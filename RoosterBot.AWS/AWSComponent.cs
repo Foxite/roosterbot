@@ -42,9 +42,8 @@ namespace RoosterBot.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task ShutdownAsync() {
+		protected override void Dispose(bool disposing) {
 			m_SNS?.Dispose();
-			return Task.CompletedTask;
 		}
 	}
 }
