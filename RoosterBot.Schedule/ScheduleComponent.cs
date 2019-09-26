@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
+		internal static MultiReader s_IdentifierReaders; // Experiment, flesh out before pushing
+
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
@@ -33,16 +35,17 @@ namespace RoosterBot.Schedule {
 			// TODO allow other components to use their own IdentifierInfo
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
 			// In any case there needs to be a way to add custom TypeReaders to this MultiReader.
-			commandService.AddTypeReader<IdentifierInfo>(new MultiReader(new RoosterTypeReaderBase[] {
+			s_IdentifierReaders = new MultiReader(new RoosterTypeReaderBase[] {
 				new TeacherInfoReader(),
 				new StudentSetInfoReader(),
 				new RoomInfoReader()
-			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this));
+			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
+			commandService.AddTypeReader<IdentifierInfo>(s_IdentifierReaders);
 
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModules(await Task.WhenAll(
-				commandService.AddModuleAsync<DefaultScheduleModule>(services),
+				//commandService.AddModuleAsync<DefaultScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
 			));

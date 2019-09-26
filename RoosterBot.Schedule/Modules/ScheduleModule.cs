@@ -16,83 +16,92 @@ namespace RoosterBot.Schedule {
 
 		#region Commands
 		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
-		public async Task CurrentCommand([Remainder] IdentifierInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
-			if (result.Success) {
-				ScheduleRecord record = result.Value;
-				if (record == null) {
-					string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
+		public async Task CurrentCommand([Remainder] IdentifierInfo info = null) {
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
+				if (result.Success) {
+					ScheduleRecord record = result.Value;
+					if (record == null) {
+						string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
 
-					if (ScheduleUtil.IsWeekend(DateTime.Today)) {
-						response += GetString("ScheduleModuleBase_ItIsWeekend");
+						if (ScheduleUtil.IsWeekend(DateTime.Today)) {
+							response += GetString("ScheduleModuleBase_ItIsWeekend");
+						}
+
+						ReplyDeferred(response, info, record);
+					} else {
+						await RespondRecord(GetString("ScheduleModuleBase_PretextNow", info.DisplayText), info, record);
 					}
-
-					ReplyDeferred(response, info, record);
-				} else {
-					await RespondRecord(GetString("ScheduleModuleBase_PretextNow", info.DisplayText), info, record);
 				}
 			}
 		}
 
 		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
-		public async Task NextCommand([Remainder] IdentifierInfo info) {
-			ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
-			if (result.Success) {
-				ScheduleRecord record = result.Value;
-				string pretext;
-				if (record.Start.Date == DateTime.Today) {
-					pretext = GetString("ScheduleModuleBase_PretextNext", info.DisplayText);
-				} else {
-					pretext = GetString("ScheduleModuleBase_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
+		public async Task NextCommand([Remainder] IdentifierInfo info = null) {
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
+				if (result.Success) {
+					ScheduleRecord record = result.Value;
+					string pretext;
+					if (record.Start.Date == DateTime.Today) {
+						pretext = GetString("ScheduleModuleBase_PretextNext", info.DisplayText);
+					} else {
+						pretext = GetString("ScheduleModuleBase_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
+					}
+					await RespondRecord(pretext, info, record);
 				}
-				await RespondRecord(pretext, info, record);
 			}
 		}
 
 		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
-		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info) {
+		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
-		public async Task TodayCommand([Remainder] IdentifierInfo info) {
+		public async Task TodayCommand([Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
-		public async Task TomorrowCommand([Remainder] IdentifierInfo info) {
+		public async Task TomorrowCommand([Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
 		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
 			await RespondWorkingDays(info, 0);
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info) {
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
 			await RespondWorkingDays(info, 1);
 		}
 
 		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
-		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info) {
-			unit = unit.ToLower();
-			if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
-				ReturnValue <ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
-				if (result.Success) {
-					ScheduleRecord record = result.Value;
-					if (record != null) {
-						await RespondRecord(GetString("ScheduleModuleBase_InXHours", info.DisplayText, amount), info, record);
-					} else {
-						await ReplyAsync(GetString("ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
+		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info = null) {
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				unit = unit.ToLower();
+				if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
+					ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+					if (result.Success) {
+						ScheduleRecord record = result.Value;
+						if (record != null) {
+							await RespondRecord(GetString("ScheduleModuleBase_InXHours", info.DisplayText, amount), info, record);
+						} else {
+							await ReplyAsync(GetString("ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
+						}
 					}
+				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
+					await RespondDay(info, DateTime.Today.AddDays(amount));
+				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
+					await RespondWorkingDays(info, amount);
+				} else {
+					await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 				}
-			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
-				await RespondDay(info, DateTime.Today.AddDays(amount));
-			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
-				await RespondWorkingDays(info, amount);
-			} else {
-				await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 			}
 		}
 
@@ -147,40 +156,42 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task RespondDay(IdentifierInfo info, DateTime date) {
-			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
-			if (result.Success) {
-				ScheduleRecord[] records = result.Value;
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
+				if (result.Success) {
+					ScheduleRecord[] records = result.Value;
 
-				string relativeDateReference;
+					string relativeDateReference;
 
-				if (date == DateTime.Today) {
-					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Today");
-				} else if (date == DateTime.Today.AddDays(1)) {
-					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Tomorrow");
-				} else if ((date - DateTime.Today).TotalDays < 7) {
-					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_DayName", date.DayOfWeek.GetName(Culture));
-				} else {
-					relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Date", date.ToShortDateString(Culture));
-				}
-
-				if (records.Length == 0) {
-					string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
-					if (ScheduleUtil.IsWeekend(date)) {
-						if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
-							response += GetString("ScheduleModuleBase_ItIsWeekend");
-						} else {
-							response += GetString("ScheduleModuleBase_ThatIsWeekend");
-						}
+					if (date == DateTime.Today) {
+						relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Today");
+					} else if (date == DateTime.Today.AddDays(1)) {
+						relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Tomorrow");
+					} else if ((date - DateTime.Today).TotalDays < 7) {
+						relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_DayName", date.DayOfWeek.GetName(Culture));
+					} else {
+						relativeDateReference = GetString("ScheduleUtil_RelativeDateReference_Date", date.ToShortDateString(Culture));
 					}
-					ReplyDeferred(response, info, null);
-				} else if (records.Length == 1) {
-					string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
-					await RespondRecord(pretext, info, records[0]);
-				} else {
-					string response = GetString("ScheduleModuleBase_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
-					string[][] cells = new string[records.Length + 1][];
-					cells[0] = new string[] {
+					if (records.Length == 0) {
+						string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
+						if (ScheduleUtil.IsWeekend(date)) {
+							if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
+								response += GetString("ScheduleModuleBase_ItIsWeekend");
+							} else {
+								response += GetString("ScheduleModuleBase_ThatIsWeekend");
+							}
+						}
+						ReplyDeferred(response, info, null);
+					} else if (records.Length == 1) {
+						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
+						await RespondRecord(pretext, info, records[0]);
+					} else {
+						string response = GetString("ScheduleModuleBase_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
+
+						string[][] cells = new string[records.Length + 1][];
+						cells[0] = new string[] {
 						GetString("ScheduleModuleBase_RespondDay_ColumnActivity"),
 						GetString("ScheduleModuleBase_RespondDay_ColumnTime"),
 						GetString("ScheduleModuleBase_RespondDay_ColumnStudentSets"),
@@ -188,68 +199,72 @@ namespace RoosterBot.Schedule {
 						GetString("ScheduleModuleBase_RespondDay_ColumnRoom")
 					};
 
-					int recordIndex = 1;
-					foreach (ScheduleRecord record in records) {
-						cells[recordIndex] = new string[5];
-						cells[recordIndex][0] = record.Activity.DisplayText;
-						cells[recordIndex][1] = $"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}";
-						cells[recordIndex][2] = record.StudentSetsString;
-						cells[recordIndex][3] = record.StaffMemberString;
-						cells[recordIndex][4] = record.RoomString;
+						int recordIndex = 1;
+						foreach (ScheduleRecord record in records) {
+							cells[recordIndex] = new string[5];
+							cells[recordIndex][0] = record.Activity.DisplayText;
+							cells[recordIndex][1] = $"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}";
+							cells[recordIndex][2] = record.StudentSetsString;
+							cells[recordIndex][3] = record.StaffMemberString;
+							cells[recordIndex][4] = record.RoomString;
 
-						recordIndex++;
+							recordIndex++;
+						}
+						response += Util.FormatTextTable(cells);
+						ReplyDeferred(response, info, records.Last());
 					}
-					response += Util.FormatTextTable(cells);
-					ReplyDeferred(response, info, records.Last());
 				}
 			}
 		}
 
 		private async Task RespondWorkingDays(IdentifierInfo info, int weeksFromNow) {
-			ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailability(info, weeksFromNow);
-			if (result.Success) {
-				AvailabilityInfo[] availability = result.Value;
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailability(info, weeksFromNow);
+				if (result.Success) {
+					AvailabilityInfo[] availability = result.Value;
 
-				string response;
+					string response;
 
-				if (availability.Length > 1) {
-					if (weeksFromNow == 0) {
-						response = GetString("ScheduleModuleBase_ScheduleThisWeek", info.DisplayText);
-					} else if (weeksFromNow == 1) {
-						response = GetString("ScheduleModuleBase_ScheduleNextWeek", info.DisplayText);
-					} else {
-						response = GetString("ScheduleModuleBase_ScheduleInXWeeks", info.DisplayText, weeksFromNow);
-					}
-					response += "\n";
+					if (availability.Length > 1) {
+						if (weeksFromNow == 0) {
+							response = GetString("ScheduleModuleBase_ScheduleThisWeek", info.DisplayText);
+						} else if (weeksFromNow == 1) {
+							response = GetString("ScheduleModuleBase_ScheduleNextWeek", info.DisplayText);
+						} else {
+							response = GetString("ScheduleModuleBase_ScheduleInXWeeks", info.DisplayText, weeksFromNow);
+						}
+						response += "\n";
 
-					string[][] cells = new string[availability.Length + 1][];
-					cells[0] = new[] {
+						string[][] cells = new string[availability.Length + 1][];
+						cells[0] = new[] {
 						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnDay"),
 						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnFrom"),
 						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnTo")
 					};
 
-					int i = 1;
-					foreach (AvailabilityInfo item in availability) {
-						cells[i] = new[] {
+						int i = 1;
+						foreach (AvailabilityInfo item in availability) {
+							cells[i] = new[] {
 							item.StartOfAvailability.DayOfWeek.GetName(Culture),
 							item.StartOfAvailability.ToShortTimeString(Culture),
 							item.EndOfAvailability.ToShortTimeString(Culture)
 						};
-						i++;
-					}
-					response += Util.FormatTextTable(cells);
-				} else {
-					if (weeksFromNow == 0) {
-						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info.DisplayText);
-					} else if (weeksFromNow == 1) {
-						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info.DisplayText);
+							i++;
+						}
+						response += Util.FormatTextTable(cells);
 					} else {
-						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info.DisplayText, weeksFromNow);
+						if (weeksFromNow == 0) {
+							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info.DisplayText);
+						} else if (weeksFromNow == 1) {
+							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info.DisplayText);
+						} else {
+							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info.DisplayText, weeksFromNow);
+						}
 					}
-				}
 
-				ReplyDeferred(response);
+					ReplyDeferred(response);
+				}
 			}
 		}
 
@@ -304,6 +319,20 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Convenience
+		private async Task<IdentifierInfo> ResolveNullInfo(IdentifierInfo info) {
+			if (info == null) {
+				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
+				if (infoResult.IsSuccess) {
+					return (IdentifierInfo) infoResult.BestMatch;
+				} else {
+					ReplyDeferred(infoResult.ErrorReason);
+					return null;
+				}
+			} else {
+				return info;
+			}
+		}
+
 		protected async Task<ReturnValue<ScheduleRecord>> GetCurrentRecord(IdentifierInfo identifier) {
 			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
