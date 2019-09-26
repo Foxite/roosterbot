@@ -35,7 +35,11 @@ namespace RoosterBot.Schedule {
 		private Task ExecuteDefaultCommand(params string[] parameters) {
 			string last = parameters.Last();
 			if (string.IsNullOrWhiteSpace(last)) {
-				return Util.ExecuteSpecificCommand(CmdService, Context, Context.Message.Content + " ik", "default schedule");
+				string message = Context.Message.Content;
+				if (message.StartsWith(Config.CommandPrefix)) {
+					message = message.Substring(Config.CommandPrefix.Length);
+				}
+				return Util.ExecuteSpecificCommand(CmdService, Context, message + " ik", "default schedule");
 			} else {
 				if (MentionUtils.TryParseUser(last, out _)) {
 					ReplyDeferred(GetString("DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown"));

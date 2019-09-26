@@ -43,10 +43,11 @@ namespace RoosterBot.Schedule {
 
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<DefaultScheduleModule>(services),
-				commandService.AddModuleAsync<ScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
 			));
+
+			registerModules(await commandService.AddLocalizedModuleAsync<ScheduleModule>());
 
 			// TODO rewrite documentation everywhere, it is outdated, unclear, and possibly wrong since updates
 			help.AddHelpSection(this, "rooster", "#ScheduleComponent_HelpText_Rooster");

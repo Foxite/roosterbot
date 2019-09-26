@@ -85,6 +85,8 @@ namespace RoosterBot {
 				string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
 				if (aliases != null) {
 					moduleBuilder.AddAliases(aliases);
+				} else if (name.StartsWith("#")) {
+					aliases = m_ResourceService.ResolveString(culture, component, name + "_Aliases").Split('|');
 				}
 
 				string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
@@ -100,8 +102,9 @@ namespace RoosterBot {
 				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
 
 				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
+					string primaryAlias = m_ResourceService.ResolveString(culture, component, attribute.Text);
 					moduleBuilder.AddCommand(
-						m_ResourceService.ResolveString(culture, component, attribute.Text),
+						primaryAlias,
 						async (context, parameters, commandServices, command) => {
 							// Command execution
 							PropertyInfo[] properties = module.GetProperties();
@@ -128,9 +131,13 @@ namespace RoosterBot {
 						(commandBuilder) => {
 							// Command creation
 							AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
+							string[] commandAliases;
 							if (aliasAttribute != null) {
-								string[] commandAliases = aliasAttribute.Aliases
+								commandAliases = aliasAttribute.Aliases
 									.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
+								commandBuilder.AddAliases(commandAliases);
+							} else if (name.StartsWith("#")) {
+								commandAliases = m_ResourceService.ResolveString(culture, component, name + "_Aliases").Split('|');
 								commandBuilder.AddAliases(commandAliases);
 							}
 
