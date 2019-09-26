@@ -124,9 +124,6 @@
   <data name="Program_OnCommandExecuted_BadArgCount" xml:space="preserve">
     <value>Dat zijn te veel of te weinig parameters.</value>
   </data>
-  <data name="Program_OnCommandExecuted_ParseFailed" xml:space="preserve">
-    <value>Ik begrijp de parameter(s) niet.</value>
-  </data>
   <data name="RoosterBot_FatalError" xml:space="preserve">
     <value>Er is iets heel erg misgegaan.</value>
   </data>

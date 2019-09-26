@@ -39,7 +39,7 @@ namespace RoosterBot {
 							response = m_ResourcesService.ResolveString(culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
 							break;
 						case CommandError.ParseFailed:
-							response = m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_ParseFailed");
+							response = result.ErrorReason;
 							break;
 						case CommandError.ObjectNotFound:
 							badReport += "ObjectNotFound";
