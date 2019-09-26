@@ -179,18 +179,6 @@ namespace RoosterBot {
 			});
 			return singleResponse;
 		}
-
-		/// <summary>
-		/// Executes a command according to specified string input, regardless of the actual content of the message.
-		/// </summary>
-		/// <param name="calltag">Used for debugging. This identifies where this call originated.</param>
-		public static async Task ExecuteSpecificCommand(CommandService commandService, RoosterCommandContext context, string specificInput, string calltag) {
-			RoosterCommandContext newContext = new RoosterCommandContext(context.Client, context.Message, (context as RoosterCommandContext)?.Responses, calltag);
-
-			Logger.Debug("Main", $"Executing specific input `{specificInput}` with calltag `{calltag}`");
-
-			await commandService.ExecuteAsync(newContext, specificInput, Program.Instance.Components.Services);
-		}
 		#endregion
 
 		#region LINQ
