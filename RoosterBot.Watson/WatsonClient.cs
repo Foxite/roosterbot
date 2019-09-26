@@ -19,8 +19,9 @@ namespace RoosterBot.Watson {
 		private readonly ResourceService m_Resources;
 		private readonly IDiscordClient m_DiscordClient;
 		private readonly RoosterCommandService m_CommandService;
+		private readonly CommandResponseService m_CRS;
 
-		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService) {
+		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
@@ -32,6 +33,7 @@ namespace RoosterBot.Watson {
 			m_Resources = resources;
 			m_DiscordClient = discord;
 			m_CommandService = commandService;
+			m_CRS = crs;
 		}
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
@@ -79,7 +81,7 @@ namespace RoosterBot.Watson {
 					string convertedCommand = maxConfidence.Intent + params_;
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
 
-					RoosterCommandService.CommandResponsePair crp = m_CommandService.GetResponse(message);
+					CommandResponsePair crp = m_CRS.GetResponse(message);
 					RoosterCommandContext context;
 					// TODO properly support command editing/deletion with Watson
 					if (crp != null) {

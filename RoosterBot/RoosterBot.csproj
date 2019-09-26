@@ -72,6 +72,7 @@
     <Compile Include="Readers\RoosterTypeReaderBase.cs" />
     <Compile Include="Handlers\RestartHandler.cs" />
     <Compile Include="Handlers\EditedCommandHandler.cs" />
+    <Compile Include="Services\CommandResponseService.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />

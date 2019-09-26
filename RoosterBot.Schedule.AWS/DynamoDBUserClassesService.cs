@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule.AWS {
 		private AmazonDynamoDBClient m_Client;
 		private Table m_Table;
 
-		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+		public event Action<IUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
 
 		public DynamoDBUserClassesService() { }
 

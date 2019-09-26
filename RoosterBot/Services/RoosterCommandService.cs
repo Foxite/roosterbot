@@ -15,56 +15,14 @@ namespace RoosterBot {
 	/// RoosterCommandService keeps track of executed commands and their replies.
 	/// </summary>
 	public sealed class RoosterCommandService : CommandService {
-		/// <summary>
-		/// Maps command IDs to CommandResponsePairs
-		/// </summary>
-		private readonly ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private readonly ConfigService m_Config;
 		private readonly ResourceService m_ResourceService;
 
 		/// <param name="minimumMemorySeconds">How long it takes at least before old commands are deleted. Old commands are not deleted until a new one from the same user comes in.</param>
 		internal RoosterCommandService(ConfigService config, ResourceService resourceService) {
-			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Config = config;
 			m_ResourceService = resourceService;
 		}
-
-		public void AddResponse(IUserMessage userCommand, IUserMessage botResponse) {
-			// Remove previous commands from this user if they are older than the minimum memory
-			IEnumerable<ulong> oldCommandIds = m_Messages
-				.Where((kvp) => (DateTime.Now - kvp.Value.Command.Timestamp.UtcDateTime).TotalSeconds > m_Config.MinimumMemorySeconds && kvp.Value.Command.Author.Id == userCommand.Author.Id)
-				.Select(kvp => kvp.Key);
-
-			foreach (ulong commandId in oldCommandIds) {
-				m_Messages.TryRemove(commandId, out CommandResponsePair unused);
-			}
-
-			IUserMessage[] newSequence = new IUserMessage[] { botResponse };
-			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newSequence), (key, crp) => {
-				((ICommandResponsePair) crp).Responses = crp.Responses.Concat(newSequence).ToArray();
-				return crp;
-			});
-		}
-
-		public void ModifyResponse(ulong commandId, IUserMessage[] responses) {
-			((ICommandResponsePair) GetResponse(commandId)).Responses = responses;
-		}
-
-		public CommandResponsePair GetResponse(ulong userCommandId) {
-			if (m_Messages.TryGetValue(userCommandId, out CommandResponsePair ret)) {
-				return ret;
-			} else {
-				return null;
-			}
-		}
-
-		public bool RemoveCommand(ulong commandId, out CommandResponsePair crp) {
-			return m_Messages.TryRemove(commandId, out crp);
-		}
-
-		public CommandResponsePair GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
-		public bool RemoveCommand(IUserMessage command, out CommandResponsePair crp) => RemoveCommand(command.Id, out crp);
-		public void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 
 		internal bool IsMessageCommand(IMessage message, out int argPos) {
 			argPos = 0;
@@ -74,7 +32,7 @@ namespace RoosterBot {
 				userMessage.HasStringPrefix(m_Config.CommandPrefix, ref argPos)) {
 				// First char after prefix
 				char firstChar = message.Content.Substring(m_Config.CommandPrefix.Length)[0];
-				if (firstChar >= 'A' && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z') {
+				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
 					return true;
 				}
@@ -95,13 +53,13 @@ namespace RoosterBot {
 
 			for (int i = 0; i < locales.Count; i++) {
 				string locale = locales[i];
-				localizedModules[i] = await CreateModuleAsync("", GetModuleBuilder(module, component, locale));
+				localizedModules[i] = await CreateModuleAsync("", GetModuleBuildFunction(module, component, locale));
 			}
 
 			return localizedModules;
 		}
 
-		private Action<ModuleBuilder> GetModuleBuilder(Type module, ComponentBase component, string locale) {
+		private Action<ModuleBuilder> GetModuleBuildFunction(Type module, ComponentBase component, string locale) {
 			return (moduleBuilder) => {
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
@@ -239,31 +197,12 @@ namespace RoosterBot {
 						throw new ArgumentException("Submodules of localized modules can not be localized. They are always localized in the same culture as their parent.");
 					}
 
-					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuilder(submodule, component, locale));
+					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuildFunction(submodule, component, locale));
 				}
 			}; // End module creation
 		}
 
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleInternalAsync(typeof(T), Assembly.GetCallingAssembly());
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync(Type type) => AddLocalizedModuleInternalAsync(type, Assembly.GetCallingAssembly());
-
-		private interface ICommandResponsePair {
-			IUserMessage Command { set; }
-			IUserMessage[] Responses { set; }
-		}
-
-		public class CommandResponsePair : ICommandResponsePair {
-			public IUserMessage Command { get; private set; }
-			public IUserMessage[] Responses { get; private set; }
-
-			// Set accessor only accessible from RoosterCommandService
-			IUserMessage ICommandResponsePair.Command { set => Command = value; }
-			IUserMessage[] ICommandResponsePair.Responses { set => Responses = value; }
-
-			public CommandResponsePair(IUserMessage command, IUserMessage[] responses) {
-				Command = command;
-				Responses = responses;
-			}
-		}
 	}
 }

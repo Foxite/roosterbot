@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace RoosterBot {
 	internal sealed class PostCommandHandler {
-		private readonly RoosterCommandService m_Commands;
+		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
 		private readonly GuildCultureService m_GCS;
 		private readonly ResourceService m_ResourcesService;
 
-		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, GuildCultureService gcs, ResourceService resources) {
-			m_Commands = commands;
+		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, GuildCultureService gcs, ResourceService resources, CommandResponseService crs) {
 			m_Config = config;
 			m_ResourcesService = resources;
 			m_GCS = gcs;
+			m_CRS = crs;
 
-			m_Commands.CommandExecuted += OnCommandExecuted;
+			commands.CommandExecuted += OnCommandExecuted;
 		}
 
 		private async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
@@ -82,7 +82,7 @@ namespace RoosterBot {
 
 				IUserMessage[] initialResponses = (context as RoosterCommandContext)?.Responses;
 				if (initialResponses == null) {
-					m_Commands.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
+					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {
 					await Util.ModifyResponsesIntoSingle(response, initialResponses, false);
 				}

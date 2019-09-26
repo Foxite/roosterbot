@@ -6,19 +6,21 @@ namespace RoosterBot {
 	internal sealed class EditedCommandHandler {
 		private readonly DiscordSocketClient m_Client;
 		private readonly RoosterCommandService m_Commands;
+		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
 
-		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config) {
+		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, CommandResponseService crs) {
 			m_Client = client;
 			m_Commands = commands;
 			m_Config = config;
+			m_CRS = crs;
 
 			m_Client.MessageUpdated += OnMessageUpdated;
 		}
 
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
-				RoosterCommandService.CommandResponsePair crp = m_Commands.GetResponse(userMessageAfter);
+				CommandResponsePair crp = m_CRS.GetResponse(userMessageAfter);
 				if (m_Commands.IsMessageCommand(userMessageAfter, out int argPos)) {
 					IUserMessage[] responses;
 					if (crp != null) {
@@ -34,7 +36,7 @@ namespace RoosterBot {
 				} else {
 					if (crp != null) {
 						// No longer a command
-						m_Commands.RemoveCommand(userMessageAfter, out _);
+						m_CRS.RemoveCommand(userMessageAfter, out _);
 						await Util.DeleteAll(crp.Command.Channel, crp.Responses);
 					} // else: was not a command, is not a command
 				}

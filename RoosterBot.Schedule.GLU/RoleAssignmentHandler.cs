@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Discord;
+using Discord.WebSocket;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
@@ -34,33 +35,35 @@ namespace RoosterBot.Schedule.GLU {
 			ucs.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
-			if (user.Guild.Id == 278586698877894657) {
-				// Assign roles
-				try {
-					IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
+		private async void OnUserChangedClass(IUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
+			// Assign roles
+			try {
+				SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == 278586698877894657).SingleOrDefault();
+				if (guild != null) {
+					IGuildUser guildUser = guild.GetUser(user.Id);
+					IEnumerable<IRole> newRoles = GetRolesForStudentSet(guild, newSSI);
 					if (oldSSI != null) {
-						IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+						IEnumerable<IRole> oldRoles = GetRolesForStudentSet(guild, oldSSI);
 						IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
 
 						oldRoles = oldRoles.Except(keptRoles);
 						newRoles = newRoles.Except(keptRoles);
 
 						if (oldRoles.Any()) {
-							await user.RemoveRolesAsync(oldRoles);
+							await guildUser.RemoveRolesAsync(oldRoles);
 						}
 					}
 
 					if (newRoles.Any()) {
-						await user.AddRolesAsync(newRoles);
+						await guildUser.AddRolesAsync(newRoles);
 					}
-				} catch (Exception) {
-					// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
 				}
+			} catch (Exception) {
+				// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
 			}
 		}
 
-		public IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
+		private IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
 			return m_Roles[info.ClassName.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
 		}
 	}

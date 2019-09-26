@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19FC649C-54BB-4051-9D45-37D2A87DFD80}</ProjectGuid>
+    <ProjectGuid>{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>RoosterBot.Schedule.MockUCS</RootNamespace>
-    <AssemblyName>RoosterBot.Schedule.MockUCS</AssemblyName>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RoosterBot.Schedule.SQL</RootNamespace>
+    <AssemblyName>RoosterBot.Schedule.SQL</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\RoosterBot\bin\Release\</OutputPath>
@@ -32,19 +30,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MockUCSComponent.cs" />
-    <Compile Include="MockUserClassesService.cs" />
+    <Compile Include="SqlDatabaseUserClassesService.cs" />
+    <Compile Include="ScheduleSqlComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
@@ -55,6 +44,11 @@
       <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
       <Name>RoosterBot</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient">
+      <Version>4.6.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

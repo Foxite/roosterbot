@@ -100,6 +100,7 @@ namespace RoosterBot {
 			m_NotificationService = new NotificationService();
 			HelpService helpService = new HelpService();
 			GuildCultureService gcs = new GuildCultureService();
+			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
 			ResourceService resources = new ResourceService(gcs);
 			resources.RegisterResources("RoosterBot.Resources");
@@ -126,9 +127,9 @@ namespace RoosterBot {
 			//  that use the object's fields.
 			new RestartHandler(m_Client, m_NotificationService, 5);
 			new NewCommandHandler(m_Client, commands, m_ConfigService);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService);
-			new PostCommandHandler(commands, m_ConfigService, gcs, resources);
-			new DeletedCommandHandler(m_Client, commands);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs);
+			new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
+			new DeletedCommandHandler(m_Client, crs);
 			new DeadlockHandler(m_Client, m_NotificationService, 60000);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
@@ -138,6 +139,7 @@ namespace RoosterBot {
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
 				.AddSingleton(gcs)
+				.AddSingleton(crs)
 				.AddSingleton(m_Client);
 			return serviceCollection;
 		}

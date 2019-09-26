@@ -11,10 +11,11 @@ using Discord.WebSocket;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
-		public ConfigService Config { get; set; }
-		public GuildCultureService Cultures { get; set; }
+		public ConfigService Config { get; set; } // TODO a lot of these dependencies aren't supposed to be used by actual modules.
+		public GuildCultureService Cultures { get; set; } // We could/should use constructor DI instead of public settable properties.
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
+		public CommandResponseService CommandResponses { get; set; }
 		public new T Context { get; internal set; }
 
 		protected ModuleLogger Log { get; private set; }
@@ -95,18 +96,18 @@ namespace RoosterBot {
 			if (Context.Responses == null) {
 				// The command was not edited, or the command somehow did not invoke a reply.
 				IUserMessage response = await Context.Channel.SendMessageAsync(message, isTTS, embed, options);
-				CmdService.AddResponse(Context.Message, response);
+				CommandResponses.AddResponse(Context.Message, response);
 				ret = response;
 			} else {
 				// The command was edited.
 				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
 
-				CmdService.ModifyResponse(Context.Message, new[] { ret });
+				CommandResponses.ModifyResponse(Context.Message, new[] { ret });
 			}
 
 			m_Replied = true;
 
-			CmdService.AddResponse(Context.Message, ret);
+			CommandResponses.AddResponse(Context.Message, ret);
 			return ret;
 		}
 

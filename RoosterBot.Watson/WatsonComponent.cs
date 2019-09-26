@@ -32,7 +32,12 @@ namespace RoosterBot.Watson {
 			m_Config = services.GetService<ConfigService>();
 			m_Client = services.GetService<DiscordSocketClient>();
 			
-			m_Watson = new WatsonClient(m_WatsonKey, m_WatsonID, services.GetService<GuildCultureService>(), services.GetService<ResourceService>(), m_Client, commandService);
+			m_Watson = new WatsonClient(m_WatsonKey, m_WatsonID,
+				services.GetService<GuildCultureService>(),
+				services.GetService<ResourceService>(),
+				m_Client,
+				commandService,
+				services.GetService<CommandResponseService>());
 
 			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
 			
