@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using IBM.WatsonDeveloperCloud.Assistant.v2;
 using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
@@ -19,9 +18,9 @@ namespace RoosterBot.Watson {
 		private readonly GuildCultureService m_GCS;
 		private readonly ResourceService m_Resources;
 		private readonly IDiscordClient m_DiscordClient;
-		private readonly CommandService m_CommandService;
+		private readonly RoosterCommandService m_CommandService;
 
-		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, CommandService commandService) {
+		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
@@ -37,10 +36,9 @@ namespace RoosterBot.Watson {
 
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
 			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
-				await Util.AddReaction(message, "❌");
 				IGuild guild = (message.Author as SocketUser)?.MutualGuilds.First() ?? (message.Channel as IGuildChannel).Guild;
 				CultureInfo culture = m_GCS.GetCultureForGuild(guild);
-				await message.Channel.SendMessageAsync(m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
+				await message.Channel.SendMessageAsync(Util.ErrorPrefix + " " + m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
 				return;
 			}
 
@@ -79,14 +77,22 @@ namespace RoosterBot.Watson {
 						}
 					}
 					string convertedCommand = maxConfidence.Intent + params_;
-
-					RoosterCommandContext context = new RoosterCommandContext(m_DiscordClient, message, null, LogTag); // TODO properly support command editing/deletion with Watson
-
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
+
+					RoosterCommandService.CommandResponsePair crp = m_CommandService.GetResponse(message);
+					RoosterCommandContext context;
+					// TODO properly support command editing/deletion with Watson
+					if (crp != null) {
+						context = new RoosterCommandContext(m_DiscordClient, message, crp.Responses, LogTag);
+					} else {
+						context = new RoosterCommandContext(m_DiscordClient, message, null, LogTag);
+					}
+					
 					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);
+					// AddResponse will be handled by PostCommandHandler.
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
-					await Util.AddReaction(message, "❓");
+					await Util.AddReaction(message, "❓"); // TODO stop using reactions
 				}
 			} catch (Exception e) {
 				Logger.Error(LogTag, "That didn't work.", e);

@@ -14,7 +14,7 @@ namespace RoosterBot {
 
 		// Delete responses when commands are deleted
 		private async Task OnMessageDeleted(Cacheable<IMessage, ulong> message, IMessageChannel channel) {
-			if (m_Commands.RemoveCommand(message.Id, out CommandResponsePair crp)) {
+			if (m_Commands.RemoveCommand(message.Id, out RoosterCommandService.CommandResponsePair crp)) {
 				await Util.DeleteAll(channel, crp.Responses);
 			}
 		}

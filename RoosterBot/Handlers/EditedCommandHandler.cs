@@ -18,13 +18,12 @@ namespace RoosterBot {
 
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
-				CommandResponsePair crp = m_Commands.GetResponse(userMessageAfter);
+				RoosterCommandService.CommandResponsePair crp = m_Commands.GetResponse(userMessageAfter);
 				if (m_Commands.IsMessageCommand(userMessageAfter, out int argPos)) {
 					IUserMessage[] responses;
 					if (crp != null) {
 						// Was previously a command
 						responses = crp.Responses;
-						crp.Command = userMessageAfter;
 					} else {
 						// Was previously not a command
 						responses = null;
