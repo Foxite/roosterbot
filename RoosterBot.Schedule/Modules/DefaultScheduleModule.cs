@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 	public class DefaultScheduleModule : RoosterModuleBase {
 		[Priority(-10), Command("nu", RunMode = RunMode.Async)]
 		[Alias("hierna", "morgen", "vandaag", "deze week", "volgende week")]
-		public Task ShowNextWeekWorkingDaysCommand([Remainder] string wat = "") {
+		public Task DefaultSingleParameterCommand([Remainder] string wat = "") {
 			return ExecuteDefaultCommand(wat);
 		}
 
