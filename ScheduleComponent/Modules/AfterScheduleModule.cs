@@ -22,9 +22,9 @@ namespace ScheduleComponent.Modules {
 			if (query.Equals(default(ScheduleCommandInfo))) {
 				await MinorError("Na wat?");
 			} else {
-				ScheduleRecord record = query.Record;
+				ScheduleRecord record;
 				string response;
-				bool nullRecord = record == null;
+				bool nullRecord = query.Record == null;
 				try {
 					if (nullRecord) {
 						record = Schedules.GetNextRecord(query.Identifier);
@@ -49,13 +49,17 @@ namespace ScheduleComponent.Modules {
 					throw;
 				}
 
-				if (nullRecord) {
-					response = $"{query.Identifier.DisplayText}: Hierna\n";
+				bool isFirstOnDay = query.Record.Start.Date != record.Start.Date;
+				if (isFirstOnDay) {
+					response = $"{query.Identifier.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(record.Start.DayOfWeek)}\n";
 				} else {
-					response = $"{query.Identifier.DisplayText}: Na de vorige les\n";
+					if (nullRecord) {
+						response = $"{query.Identifier.DisplayText}: Hierna\n";
+					} else {
+						response = $"{query.Identifier.DisplayText}: Na de vorige les\n";
+					}
 				}
-
-				response += TableItemActivity(record, false);
+				response += TableItemActivity(record, isFirstOnDay);
 
 				if (record.Activity != "stdag doc") {
 					if (record.Activity != "pauze") {
