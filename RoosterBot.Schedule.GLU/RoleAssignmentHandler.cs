@@ -12,7 +12,6 @@ namespace RoosterBot.Schedule.GLU {
 		// The problem is that it needs both a service and a config path, which are mutually incompatible given the component initialization process.
 		// We probably need to load the config during AddServices and then get the UCS during AddModules, but that's for Tomorrow-Me to program.
 		public RoleAssignmentHandler(IUserClassesService ucs) {
-			// TODO replace with config file
 			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
 
 			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();

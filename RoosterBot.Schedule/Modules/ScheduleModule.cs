@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 	[Name("#DefaultScheduleModule_Name")]
 	[Summary("#DefaultScheduleModule_Summary")]
 	[Remarks("#DefaultScheduleModule_Remarks")]
-	[LocalizedModule("nl-NL", "en-US")] // TODO RCS should automatically add aliases
+	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }

@@ -32,9 +32,8 @@ namespace RoosterBot.Schedule {
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
-			// TODO allow other components to use their own IdentifierInfo
+			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			// In any case there needs to be a way to add custom TypeReaders to this MultiReader.
 			s_IdentifierReaders = new MultiReader(new RoosterTypeReaderBase[] {
 				new TeacherInfoReader(),
 				new StudentSetInfoReader(),
