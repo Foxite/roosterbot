@@ -49,7 +49,6 @@
     <Compile Include="DataTypes\TeacherInfo.cs" />
     <Compile Include="DataTypes\GuildSpecificInfo.cs" />
     <Compile Include="ScheduleProvider.cs" />
-    <Compile Include="Modules\DefaultScheduleModule.cs" />
     <Compile Include="Modules\ScheduleModule.cs" />
     <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Modules\UserClassModule.cs" />
@@ -62,6 +61,7 @@
     <Compile Include="Readers\TeacherInfoReader.cs" />
     <Compile Include="ScheduleComponent.cs" />
     <Compile Include="ScheduleUtil.cs" />
+    <Compile Include="Services\IdentifierReaderService.cs" />
     <Compile Include="Services\IUserClassesService.cs" />
     <Compile Include="MemoryScheduleProvider.cs" />
     <Compile Include="ScheduleReader.cs" />
