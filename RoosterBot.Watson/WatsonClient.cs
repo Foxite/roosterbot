@@ -40,7 +40,7 @@ namespace RoosterBot.Watson {
 			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
 				IGuild guild = (message.Author as SocketUser)?.MutualGuilds.First() ?? (message.Channel as IGuildChannel).Guild;
 				CultureInfo culture = m_GCS.GetCultureForGuild(guild);
-				await message.Channel.SendMessageAsync(Util.ErrorPrefix + " " + m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
+				await message.Channel.SendMessageAsync(Util.ErrorPrefix + m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
 				return;
 			}
 

@@ -325,7 +325,7 @@ namespace RoosterBot.Schedule {
 				if (infoResult.IsSuccess) {
 					return (IdentifierInfo) infoResult.BestMatch;
 				} else {
-					ReplyDeferred(infoResult.ErrorReason);
+					ReplyDeferred(Util.ErrorPrefix + infoResult.ErrorReason);
 					return null;
 				}
 			} else {

@@ -75,7 +75,7 @@ namespace RoosterBot {
 						await m_Config.BotOwner.SendMessageAsync(badReport);
 					}
 
-					response = m_ResourcesService.GetString(culture, "RoosterBot_FatalError");
+					response = Util.ErrorPrefix + m_ResourcesService.GetString(culture, "RoosterBot_FatalError");
 				} else {
 					response = Util.ErrorPrefix + response;
 				}
