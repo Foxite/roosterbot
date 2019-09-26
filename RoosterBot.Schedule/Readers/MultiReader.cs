@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Allows multiple type readers to be used for a single type.
 		/// </summary>
-		/// <param name="errorMessage">Error reason to be returned if none of the readers are successful.</param>
+		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
 		public MultiReader(IEnumerable<RoosterTypeReaderBase> readers, string errorMessage, ComponentBase resourcesComponent) {
 			m_Readers = readers;
@@ -26,6 +26,8 @@ namespace RoosterBot.Schedule {
 				TypeReaderResult result = await reader.ReadAsync(context, input, services);
 				if (result.IsSuccess) {
 					return result;
+				} else if (result.Error != CommandError.ParseFailed) {
+					return TypeReaderResult.FromError(CommandError.ParseFailed, result.ErrorReason);
 				}
 			}
 			ResourceService resources = services.GetService<ResourceService>();

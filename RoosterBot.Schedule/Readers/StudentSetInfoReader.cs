@@ -30,7 +30,7 @@ namespace RoosterBot.Schedule {
 					} else {
 						message = resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionSelf");
 					}
-					return TypeReaderResult.FromError(CommandError.ParseFailed, message);
+					return TypeReaderResult.FromError(CommandError.Unsuccessful, message);
 				} else {
 					return TypeReaderResult.FromSuccess(result);
 				}
