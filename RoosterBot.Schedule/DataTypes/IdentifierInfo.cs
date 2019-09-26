@@ -2,7 +2,6 @@
 
 namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
-		public abstract string ScheduleField { get; }
 		public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
 
@@ -17,13 +16,11 @@ namespace RoosterBot.Schedule {
 		}
 
 		public bool Equals(IdentifierInfo other) {
-			return other.ScheduleCode == ScheduleCode
-				&& other.ScheduleField == ScheduleField;
+			return other.GetType() == GetType() && other.ScheduleCode == ScheduleCode;
 		}
 
 		public override int GetHashCode() {
 			var hashCode = 120372121;
-			hashCode = hashCode * -1521134295 + ScheduleField.GetHashCode();
 			hashCode = hashCode * -1521134295 + ScheduleCode.GetHashCode();
 			return hashCode;
 		}
@@ -34,8 +31,7 @@ namespace RoosterBot.Schedule {
 			if (lhs is null && rhs is null)
 				return true;
 
-			return lhs.ScheduleCode == rhs.ScheduleCode
-				&& lhs.ScheduleField == rhs.ScheduleField;
+			return lhs.Equals(rhs);
 		}
 
 		public static bool operator !=(IdentifierInfo lhs, IdentifierInfo rhs) {
@@ -44,8 +40,7 @@ namespace RoosterBot.Schedule {
 			if (lhs is null && rhs is null)
 				return false;
 
-			return lhs.ScheduleCode != rhs.ScheduleCode
-				|| lhs.ScheduleField != rhs.ScheduleField;
+			return !lhs.Equals(rhs);
 		}
 
 		public override string ToString() => DisplayText;

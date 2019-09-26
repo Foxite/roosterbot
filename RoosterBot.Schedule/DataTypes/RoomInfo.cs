@@ -8,7 +8,6 @@ namespace RoosterBot.Schedule {
 			return record.Room.Contains(this);
 		}
 
-		public override string ScheduleField => "Room";
 		public override string ScheduleCode => Room;
 		public override string DisplayText => Room;
 	}

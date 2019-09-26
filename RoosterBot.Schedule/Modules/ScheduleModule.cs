@@ -271,7 +271,7 @@ namespace RoosterBot.Schedule {
 				} catch (IdentifierNotFoundException) {
 					// This catch block scores 9 out of 10 on the "oh shit" scale
 					// It should never happen and it indicates that something has really been messed up somewhere, but it's not quite bad enough for a 10.
-					string report = $"daarna failed for query {query.Identifier.ScheduleField}:{query.Identifier}";
+					string report = $"daarna failed for query {query.Identifier}";
 					if (query.Record == null) {
 						report += " with no record";
 					} else {

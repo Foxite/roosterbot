@@ -5,7 +5,6 @@
 			DisplayText = displayText;
 		}
 
-		public override string ScheduleField => "Activity";
 		public override string DisplayText { get; }
 		public override string ScheduleCode { get; }
 

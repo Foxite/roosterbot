@@ -29,7 +29,6 @@ namespace RoosterBot.Schedule {
 			return 0;
 		}
 
-		public override string ScheduleField => "StaffMember";
 		public override string ScheduleCode => Abbreviation;
 		public override string DisplayText => FullName;
 
