@@ -49,7 +49,7 @@ namespace RoosterBot {
 					logMessage = $"group {Context.Channel.Name}";
 				}
 			} else {
-				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}");
+				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}";
 			}
 			Log.Debug(logMessage);
 
