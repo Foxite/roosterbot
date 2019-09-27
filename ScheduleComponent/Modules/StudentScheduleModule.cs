@@ -154,7 +154,7 @@ namespace ScheduleComponent.Modules {
 
 				int i = 1;
 				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToShortTimeString(), item.EndOfAvailability.ToShortTimeString() };
+					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToString("HH:mm"), item.EndOfAvailability.ToString("HH:mm") };
 					i++;
 				}
 				response += Util.FormatTextTable(cells, false);
