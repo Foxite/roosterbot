@@ -221,7 +221,7 @@ namespace RoosterBot {
 								using (StreamReader sr = new StreamReader(pipeServer)) {
 									string input = sr.ReadLine();
 									if (input == "stop") {
-										Console.WriteLine("Stop command received by external process");
+										Logger.Info("Main", "Stop command received by external process");
 										keepRunning = false;
 									}
 								}
