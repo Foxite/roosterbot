@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace RoosterBot {
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
 			await m_SNS.SendCriticalErrorNotificationAsync(report);
 
-			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+			Process.Start(new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\AppStart\AppStart.exe"), "delay 20000"));
 			Program.Instance.Shutdown();
 		}
 	}

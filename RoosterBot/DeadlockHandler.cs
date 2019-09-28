@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -55,7 +56,7 @@ namespace RoosterBot {
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
 			await m_SNS.SendCriticalErrorNotificationAsync(report);
 
-			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
+			Process.Start(new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\AppStart\AppStart.exe"), "delay 20000"));
 			Program.Instance.Shutdown();
 		}
 	}
