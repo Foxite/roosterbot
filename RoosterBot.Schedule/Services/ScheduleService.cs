@@ -37,7 +37,7 @@ namespace RoosterBot.Schedule {
 			return GetSchedule(identifier, context).GetRecordAfterTimeSpanAsync(identifier, timespan);
 		}
 		
-		public ScheduleRecord[] GetWeekRecords(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
+		public Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetWeekRecordsAsync(identifier, weeksFromNow);
 		}
 

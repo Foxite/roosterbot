@@ -73,12 +73,12 @@ namespace RoosterBot.Schedule {
 
 		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
-			await RespondWorkingDays(info, 0);
+			await RespondWeek(info, 0);
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
-			await RespondWorkingDays(info, 1);
+			await RespondWeek(info, 1);
 		}
 
 		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
@@ -99,7 +99,7 @@ namespace RoosterBot.Schedule {
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
 					await RespondDay(info, DateTime.Today.AddDays(amount));
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
-					await RespondWorkingDays(info, amount);
+					await RespondWeek(info, amount);
 				} else {
 					await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 				}
@@ -218,10 +218,10 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected void RespondWorkingDays(IdentifierInfo info, int weeksFromNow) {
+		protected async Task RespondWeek(IdentifierInfo info, int weeksFromNow) {
 			// TODO localize this whole thing
 			string response = info.DisplayText + ": ";
-			ScheduleRecord[] weekRecords = Schedules.GetWeekRecords(info, weeksFromNow,	Context);
+			ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 			if (weekRecords.Length > 0) {
 				response += "Rooster ";
 				if (weeksFromNow == 0) {
