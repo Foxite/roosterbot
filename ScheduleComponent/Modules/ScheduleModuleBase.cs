@@ -208,7 +208,7 @@ namespace ScheduleComponent.Modules {
 				int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
 				
 				// Header
-				string[][] cells = new string[longestColumn + 1][];
+				string[][] cells = new string[longestColumn + 2][];
 				cells[0] = new[] { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag" };
 
 				// Initialize cells to empty strings
@@ -218,16 +218,28 @@ namespace ScheduleComponent.Modules {
 						cells[i][j] = "";
 					}
 				}
-				// Set first cell in column to "---" if the column is empty
-				for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
-					if (!dayRecords.ContainsKey(dow)) {
-						cells[1][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
-					}
-				}
 
 				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
 					for (int i = 0; i < kvp.Value.Length; i++) {
-						cells[i + 1][(int) kvp.Key - 1] = ScheduleUtil.GetActivityFromAbbr(kvp.Value[i].Activity);
+						cells[i + 2][(int) kvp.Key - 1] = ScheduleUtil.GetActivityFromAbbr(kvp.Value[i].Activity);
+					}
+				}
+
+				AvailabilityInfo[] availabilities;
+				{
+					availabilities = new AvailabilityInfo[5];
+					foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+						availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
+					}
+				}
+
+				// Time of day start/end, and set to "---" if empty
+				for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
+					if (!dayRecords.ContainsKey(dow)) {
+						cells[2][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
+					} else {
+						AvailabilityInfo dayAvailability = availabilities[(int) dow - 1];
+						cells[1][(int) dow - 1] = dayAvailability.StartOfAvailability.ToString("HH:mm") + " - " + dayAvailability.EndOfAvailability.ToString("HH:mm");
 					}
 				}
 
