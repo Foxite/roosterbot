@@ -226,11 +226,9 @@ namespace ScheduleComponent.Modules {
 				}
 
 				AvailabilityInfo[] availabilities;
-				{
-					availabilities = new AvailabilityInfo[5];
-					foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
-						availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
-					}
+				availabilities = new AvailabilityInfo[5];
+				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+					availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
 				}
 
 				// Time of day start/end, and set to "---" if empty
