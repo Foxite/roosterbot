@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -186,6 +187,63 @@ namespace ScheduleComponent.Modules {
 				await FatalError("Uncaught exception", ex);
 				throw;
 			}
+		}
+
+		protected void RespondWeek(IdentifierInfo info, ScheduleRecord[] weekRecords, int weeksFromNow) {
+			string response = info.DisplayText + ": ";
+			if (weekRecords.Length > 0) {
+				response += "Rooster ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
+				}
+
+				Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
+					/* Key select */ group => group.Key,
+					/* Val select */ group => group.ToArray()
+				);
+				int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
+				
+				// Header
+				string[][] cells = new string[longestColumn + 1][];
+				cells[0] = new[] { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag" };
+
+				// Initialize cells to empty strings
+				for (int i = 1; i < cells.Length; i++) {
+					cells[i] = new string[5];
+					for (int j = 0; j < cells[i].Length; j++) {
+						cells[i][j] = "";
+					}
+				}
+				// Set first cell in column to "---" if the column is empty
+				for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
+					if (!dayRecords.ContainsKey(dow)) {
+						cells[1][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
+					}
+				}
+
+				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+					for (int i = 0; i < kvp.Value.Length; i++) {
+						cells[i + 1][(int) kvp.Key - 1] = ScheduleUtil.GetActivityFromAbbr(kvp.Value[i].Activity);
+					}
+				}
+
+				response += Util.FormatTextTable(cells, false);
+			} else {
+				response += "Niet op het rooster ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
+				}
+			}
+
+			ReplyDeferred(response);
 		}
 	}
 }

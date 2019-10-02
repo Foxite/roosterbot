@@ -33,6 +33,10 @@ namespace ScheduleComponent.Services {
 			return GetScheduleType(identifier).GetWeekAvailability(identifier, weeksFromNow);
 		}
 
+		public ScheduleRecord[] GetWeekRecords(IdentifierInfo identifier, int weeksFromNow) {
+			return GetScheduleType(identifier).GetWeekRecords(identifier, weeksFromNow);
+		}
+
 		private ScheduleService GetScheduleType(IdentifierInfo info) {
 			if (info is StudentSetInfo) {
 				return m_Students;

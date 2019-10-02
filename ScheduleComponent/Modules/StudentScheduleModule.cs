@@ -105,22 +105,22 @@ namespace ScheduleComponent.Modules {
 
 		[Command("deze week", RunMode = RunMode.Sync)]
 		public Task ShowThisWeekWorkingDaysCommand(StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 0);
-			RespondWorkingDays(info, days, 0);
+			ScheduleRecord[] days = Schedules.GetWeekRecords(info, 0);
+			RespondWeek(info, days, 0);
 			return Task.CompletedTask;
 		}
 
 		[Command("volgende week", RunMode = RunMode.Sync)]
 		public Task ShowNextWeekWorkingDaysCommand(StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, 1);
-			RespondWorkingDays(info, days, 1);
+			ScheduleRecord[] days = Schedules.GetWeekRecords(info, 1);
+			RespondWeek(info, days, 1);
 			return Task.CompletedTask;
 		}
 
 		[Command("over", RunMode = RunMode.Sync)]
 		public Task ShowNWeeksWorkingDaysCommand([Range(1, 52)] int weeks, StudentSetInfo info) {
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
-			RespondWorkingDays(info, days, weeks);
+			ScheduleRecord[] days = Schedules.GetWeekRecords(info, weeks);
+			RespondWeek(info, days, weeks);
 			return Task.CompletedTask;
 		}
 
@@ -131,49 +131,12 @@ namespace ScheduleComponent.Modules {
 				ReplyDeferred(":thinking:");
 			}
 
-			AvailabilityInfo[] days = Schedules.GetWeekAvailability(info, weeks);
-			RespondWorkingDays(info, days, weeks);
+			ScheduleRecord[] days = Schedules.GetWeekRecords(info, weeks);
+			RespondWeek(info, days, weeks);
 			return Task.CompletedTask;
 		}
 
-		private void RespondWorkingDays(StudentSetInfo info, AvailabilityInfo[] availability, int weeksFromNow) {
-			string response = info.DisplayText + ": ";
-
-			if (availability.Length > 0) {
-				if (weeksFromNow == 0) {
-					response += "Deze week";
-				} else if (weeksFromNow == 1) {
-					response += "Volgende week";
-				} else {
-					response += $"Over {weeksFromNow} weken";
-				}
-				response += " op school op \n";
-				
-				string[][] cells = new string[availability.Length + 1][];
-				cells[0] = new[] { "Dag", "Van", "Tot" };
-
-				int i = 1;
-				foreach (AvailabilityInfo item in availability) {
-					cells[i] = new[] { ScheduleUtil.GetStringFromDayOfWeek(item.StartOfAvailability.DayOfWeek).FirstCharToUpper(), item.StartOfAvailability.ToString("HH:mm"), item.EndOfAvailability.ToString("HH:mm") };
-					i++;
-				}
-				response += Util.FormatTextTable(cells, false);
-			} else {
-				response += "Niet op school ";
-				if (weeksFromNow == 0) {
-					response += "deze week";
-				} else if (weeksFromNow == 1) {
-					response += "volgende week";
-				} else {
-					response += $"over {weeksFromNow} weken";
-				}
-			}
-
-			ReplyDeferred(response);
-		}
-
 		private async Task RespondDay(StudentSetInfo info, DayOfWeek day, bool includeToday) {
-
 			ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, day, includeToday);
 			if (result.Success) {
 				ScheduleRecord[] records = result.Value;

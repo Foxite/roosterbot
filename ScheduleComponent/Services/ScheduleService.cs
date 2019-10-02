@@ -189,6 +189,19 @@ namespace ScheduleComponent.Services {
 		/// Gets all the days in a week that have at least 1 record on those days.
 		/// </summary>
 		public AvailabilityInfo[] GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow = 0) {
+			ScheduleRecord[] weekRecords = GetWeekRecords(identifier, weeksFromNow);
+			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
+			var ret = new AvailabilityInfo[recordsByDay.Count()];
+			int i = 0;
+			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
+				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
+				i++;
+			}
+			
+			return ret;
+		}
+
+		public ScheduleRecord[] GetWeekRecords(IdentifierInfo identifier, int weeksFromNow = 0) {
 			DateTime targetFirstDate =
 				DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
@@ -207,16 +220,7 @@ namespace ScheduleComponent.Services {
 					}
 				}
 			}
-
-			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
-			var ret = new AvailabilityInfo[recordsByDay.Count()];
-			int i = 0;
-			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
-				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
-				i++;
-			}
-			
-			return ret;
+			return weekRecords.ToArray();
 		}
 	}
 
