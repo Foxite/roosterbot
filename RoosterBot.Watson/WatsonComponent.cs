@@ -26,7 +26,7 @@ namespace RoosterBot.Watson {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> unused) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Watson.Resources");
 
 			m_Config = services.GetService<ConfigService>();
@@ -39,7 +39,11 @@ namespace RoosterBot.Watson {
 				commandService,
 				services.GetService<CommandResponseService>());
 
-			m_Client.MessageReceived += ProcessNaturalLanguageCommandsAsync;
+			m_Client.MessageReceived += (SocketMessage msg) => {
+				// Do not await this task on the gateway thread because it can take very long.
+				_ = ProcessNaturalLanguageCommandsAsync(msg);
+				return Task.CompletedTask;
+			};
 			
 			help.AddHelpSection(this, "taal", "#WatsonComponent_HelpText");
 
@@ -59,9 +63,7 @@ namespace RoosterBot.Watson {
 				}
 
 				if (process) {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 					await m_Watson.ProcessCommandAsync(msg, msg.Content.Substring(argPos));
-#pragma warning restore CS4014
 				}
 			}
 		}

@@ -17,7 +17,7 @@ namespace RoosterBot.Schedule.GLU {
 			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();
 
 			ulong dev = 278587815271464970;
-			ulong art = 278587928173740032;
+			ulong art = 278587791141765121;
 
 			void setupYearRoles(ulong courseRole) {
 				for (int i = 0; i < yearRoles.Length; i++) {
