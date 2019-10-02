@@ -219,9 +219,9 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected void RespondWorkingDays(IdentifierInfo info, int weeksFromNow) {
+			// TODO localize this whole thing
 			string response = info.DisplayText + ": ";
-
-			ScheduleRecord[] weekRecords = null; // TODO FIX AFTER MERGE!
+			ScheduleRecord[] weekRecords = Schedules.GetWeekRecords(info, weeksFromNow,	Context);
 			if (weekRecords.Length > 0) {
 				response += "Rooster ";
 				if (weeksFromNow == 0) {
