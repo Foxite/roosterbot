@@ -30,10 +30,5 @@ namespace MiscStuffComponent.Modules {
 
 			await ReplyAsync(responses[Util.RNG.Next(0, responses.Length)]);
 		}
-
-		[Command("test")]
-		public async Task TestCommand() {
-			await ReplyAsync("Working! :tada:");
-		}
 	}
 }
