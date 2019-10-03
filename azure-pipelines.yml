@@ -33,6 +33,11 @@ steps:
     configuration: '$(buildConfiguration)'
 - task: CopyFiles@2
   inputs:
+    Contents: 'deploy.ps1'
+    TargetFolder: '$(Build.BinariesDirectory)'
+    OverWrite: true
+- task: CopyFiles@2
+  inputs:
     SourceFolder: 'RoosterBot/bin/Release'
     Contents: '**'
     TargetFolder: '$(Build.BinariesDirectory)/RoosterBot'
@@ -52,13 +57,6 @@ steps:
     TargetFolder: '$(Build.BinariesDirectory)/AppStart'
     CleanTargetFolder: true
     OverWrite: true
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.BinariesDirectory)'
