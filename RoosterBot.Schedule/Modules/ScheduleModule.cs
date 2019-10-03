@@ -219,17 +219,15 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task RespondWeek(IdentifierInfo info, int weeksFromNow) {
-			// TODO localize this whole thing
-			string response = info.DisplayText + ": ";
+			string response;
 			ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 			if (weekRecords.Length > 0) {
-				response += "Rooster ";
 				if (weeksFromNow == 0) {
-					response += "deze week";
+					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleThisWeek", info);
 				} else if (weeksFromNow == 1) {
-					response += "volgende week";
+					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleNextWeek", info);
 				} else {
-					response += $"over {weeksFromNow} weken";
+					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
 				}
 
 				Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
@@ -240,7 +238,7 @@ namespace RoosterBot.Schedule {
 				
 				// Header
 				string[][] cells = new string[longestColumn + 2][];
-				cells[0] = new[] { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag" };
+				cells[0] = Enumerable.Range(1, 5).Select(dow => ((DayOfWeek) dow).GetName(Culture)).ToArray(); // Outputs day names of Monday through Friday
 
 				// Initialize cells to empty strings
 				for (int i = 1; i < cells.Length; i++) {
@@ -274,13 +272,12 @@ namespace RoosterBot.Schedule {
 
 				response += Util.FormatTextTable(cells);
 			} else {
-				response += "Niet op het rooster ";
 				if (weeksFromNow == 0) {
-					response += "deze week";
+					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentThisWeek", info);
 				} else if (weeksFromNow == 1) {
-					response += "volgende week";
+					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentNextWeek", info);
 				} else {
-					response += $"over {weeksFromNow} weken";
+					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentInXWeeks", info, weeksFromNow);
 				}
 			}
 
