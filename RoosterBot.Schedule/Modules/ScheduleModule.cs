@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -72,12 +73,12 @@ namespace RoosterBot.Schedule {
 
 		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
-			await RespondWorkingDays(info, 0);
+			await RespondWeek(info, 0);
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
-			await RespondWorkingDays(info, 1);
+			await RespondWeek(info, 1);
 		}
 
 		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
@@ -98,7 +99,7 @@ namespace RoosterBot.Schedule {
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
 					await RespondDay(info, DateTime.Today.AddDays(amount));
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
-					await RespondWorkingDays(info, amount);
+					await RespondWeek(info, amount);
 				} else {
 					await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
 				}
@@ -217,55 +218,73 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		private async Task RespondWorkingDays(IdentifierInfo info, int weeksFromNow) {
-			info = await ResolveNullInfo(info);
-			if (info != null) {
-				ReturnValue<AvailabilityInfo[]> result = await GetWeekAvailability(info, weeksFromNow);
-				if (result.Success) {
-					AvailabilityInfo[] availability = result.Value;
+		protected async Task RespondWeek(IdentifierInfo info, int weeksFromNow) {
+			// TODO localize this whole thing
+			string response = info.DisplayText + ": ";
+			ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
+			if (weekRecords.Length > 0) {
+				response += "Rooster ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
+				}
 
-					string response;
+				Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
+					/* Key select */ group => group.Key,
+					/* Val select */ group => group.ToArray()
+				);
+				int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
+				
+				// Header
+				string[][] cells = new string[longestColumn + 2][];
+				cells[0] = new[] { "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag" };
 
-					if (availability.Length > 1) {
-						if (weeksFromNow == 0) {
-							response = GetString("ScheduleModuleBase_ScheduleThisWeek", info.DisplayText);
-						} else if (weeksFromNow == 1) {
-							response = GetString("ScheduleModuleBase_ScheduleNextWeek", info.DisplayText);
-						} else {
-							response = GetString("ScheduleModuleBase_ScheduleInXWeeks", info.DisplayText, weeksFromNow);
-						}
-						response += "\n";
-
-						string[][] cells = new string[availability.Length + 1][];
-						cells[0] = new[] {
-						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnDay"),
-						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnFrom"),
-						GetString("ScheduleModuleBase_RespondWorkingDays_ColumnTo")
-					};
-
-						int i = 1;
-						foreach (AvailabilityInfo item in availability) {
-							cells[i] = new[] {
-							item.StartOfAvailability.DayOfWeek.GetName(Culture),
-							item.StartOfAvailability.ToShortTimeString(Culture),
-							item.EndOfAvailability.ToShortTimeString(Culture)
-						};
-							i++;
-						}
-						response += Util.FormatTextTable(cells);
-					} else {
-						if (weeksFromNow == 0) {
-							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info.DisplayText);
-						} else if (weeksFromNow == 1) {
-							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info.DisplayText);
-						} else {
-							response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info.DisplayText, weeksFromNow);
-						}
+				// Initialize cells to empty strings
+				for (int i = 1; i < cells.Length; i++) {
+					cells[i] = new string[5];
+					for (int j = 0; j < cells[i].Length; j++) {
+						cells[i][j] = "";
 					}
+				}
 
-					ReplyDeferred(response);
+				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+					for (int i = 0; i < kvp.Value.Length; i++) {
+						cells[i + 2][(int) kvp.Key - 1] = kvp.Value[i].Activity.DisplayText;
+					}
+				}
+
+				AvailabilityInfo[] availabilities;
+				availabilities = new AvailabilityInfo[5];
+				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+					availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
+				}
+
+				// Time of day start/end, and set to "---" if empty
+				for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
+					if (!dayRecords.ContainsKey(dow)) {
+						cells[2][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
+					} else {
+						AvailabilityInfo dayAvailability = availabilities[(int) dow - 1];
+						cells[1][(int) dow - 1] = dayAvailability.StartOfAvailability.ToString("HH:mm") + " - " + dayAvailability.EndOfAvailability.ToString("HH:mm");
+					}
+				}
+
+				response += Util.FormatTextTable(cells);
+			} else {
+				response += "Niet op het rooster ";
+				if (weeksFromNow == 0) {
+					response += "deze week";
+				} else if (weeksFromNow == 1) {
+					response += "volgende week";
+				} else {
+					response += $"over {weeksFromNow} weken";
 				}
 			}
+
+			ReplyDeferred(response);
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
@@ -303,10 +322,12 @@ namespace RoosterBot.Schedule {
 				string pretext;
 				if (query.Record == null) {
 					pretext = GetString("ScheduleModuleBase_PretextNext", query.Identifier.DisplayText);
+				} else if (query.Record.Start.Date != nextRecord.Start.Date) {
+					pretext = $"{query.Identifier.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek)}\n";
 				} else {
 					pretext = GetString("ScheduleModuleBase_PretextAfterPrevious", query.Identifier.DisplayText);
 				}
-
+				
 				// Avoid RespondRecord automatically calling this function again because we do it ourselves
 				// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
 				await RespondRecord(pretext, query.Identifier, nextRecord, false);

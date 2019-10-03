@@ -140,7 +140,20 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Gets all the days in a week that have at least 1 record on those days.
 		/// </summary>
-		public override Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
+		public async override Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) {
+			ScheduleRecord[] weekRecords = await GetWeekRecordsAsync(identifier, weeksFromNow);
+			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
+			var ret = new AvailabilityInfo[recordsByDay.Count()];
+			int i = 0;
+			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
+				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
+				i++;
+			}
+
+			return ret;
+		}
+
+		public override Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
 			DateTime targetFirstDate =
 				DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
@@ -159,16 +172,7 @@ namespace RoosterBot.Schedule {
 					}
 				}
 			}
-
-			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
-			var ret = new AvailabilityInfo[recordsByDay.Count()];
-			int i = 0;
-			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
-				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
-				i++;
-			}
-
-			return ret;
+			return weekRecords.ToArray();
 		});
 	}
 
