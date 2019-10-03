@@ -15,7 +15,10 @@ namespace RoosterBot.Schedule {
 				IUser user;
 				bool byMention = false;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
-					user = await context.Client.GetUserAsync(id); // Should have a value
+					user = await context.Client.GetUserAsync(id);
+					if (user == null) {
+						return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context, "StudentSetInfoReader_CheckFailed_InaccessibleUser"));
+					}
 					byMention = true;
 				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(context, "IdentifierInfoReader_Self")) {
 					user = context.User;
