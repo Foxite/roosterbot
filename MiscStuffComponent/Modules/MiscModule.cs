@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using RoosterBot.Preconditions;
@@ -20,7 +21,14 @@ namespace MiscStuffComponent.Modules {
 
 		[Command("dank u"), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "thanks", "thx")]
 		public async Task ThankYouCommand() {
-			await ReplyAsync(":smile:");
+			string[] responses = new[] {
+				":smile:",
+				":thumbsup:",
+				"<:wsjoram:629327051723243551>", // This probably can't make it into 2.0
+				":blush:"
+			};
+
+			await ReplyAsync(responses[Util.RNG.Next(0, responses.Length)]);
 		}
 	}
 }
