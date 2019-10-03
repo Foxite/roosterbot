@@ -7,16 +7,16 @@ using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	// TODO reduce the size of this file (it has 352 lines right now)
-	[Name("#DefaultScheduleModule_Name")]
-	[Summary("#DefaultScheduleModule_Summary")]
-	[Remarks("#DefaultScheduleModule_Remarks")]
+	[Name("#ScheduleModule_Name")]
+	[Summary("#ScheduleModule_Summary")]
+	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
 		public LastScheduleCommandService LSCService { get; set; }
 		public ScheduleService Schedules { get; set; }
 
 		#region Commands
-		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultCurrentCommand_Summary")]
+		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task CurrentCommand([Remainder] IdentifierInfo info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -27,18 +27,18 @@ namespace RoosterBot.Schedule {
 						string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
 
 						if (ScheduleUtil.IsWeekend(DateTime.Today)) {
-							response += GetString("ScheduleModuleBase_ItIsWeekend");
+							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
 						ReplyDeferred(response, info, record);
 					} else {
-						await RespondRecord(GetString("ScheduleModuleBase_PretextNow", info.DisplayText), info, record);
+						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
 					}
 				}
 			}
 		}
 
-		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultNextCommand_Summary")]
+		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultNextCommand_Summary")]
 		public async Task NextCommand([Remainder] IdentifierInfo info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -47,41 +47,41 @@ namespace RoosterBot.Schedule {
 					ScheduleRecord record = result.Value;
 					string pretext;
 					if (record.Start.Date == DateTime.Today) {
-						pretext = GetString("ScheduleModuleBase_PretextNext", info.DisplayText);
+						pretext = GetString("ScheduleModule_PretextNext", info.DisplayText);
 					} else {
-						pretext = GetString("ScheduleModuleBase_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
+						pretext = GetString("ScheduleModule_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
 					}
 					await RespondRecord(pretext, info, record);
 				}
 			}
 		}
 
-		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task TodayCommand([Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, DateTime.Today);
 		}
 
-		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#DefaultScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task TomorrowCommand([Remainder] IdentifierInfo info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
-		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowThisWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
 			await RespondWeek(info, 0);
 		}
 
-		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNextWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
 			await RespondWeek(info, 1);
 		}
 
-		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_ShowNWeeksWorkingDays_Summary")]
+		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
 		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -91,9 +91,9 @@ namespace RoosterBot.Schedule {
 					if (result.Success) {
 						ScheduleRecord record = result.Value;
 						if (record != null) {
-							await RespondRecord(GetString("ScheduleModuleBase_InXHours", info.DisplayText, amount), info, record);
+							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
-							await ReplyAsync(GetString("ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime"));
+							await ReplyAsync(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"));
 						}
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
@@ -101,15 +101,15 @@ namespace RoosterBot.Schedule {
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
 					await RespondWeek(info, amount);
 				} else {
-					await MinorError(GetString("ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits"));
+					await MinorError(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits"));
 				}
 			}
 		}
 
-		[Command("#ScheduleModule_AfterCommand", RunMode = RunMode.Async), Summary("#ScheduleModuleBase_AfterCommand")]
+		[Command("#ScheduleModule_AfterCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_AfterCommand_Summary")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
-				ReplyDeferred(GetString("AfterScheduleModule_GetAfterCommand_ParameterHint"));
+				ReplyDeferred(GetString("ScheduleModule_GetAfterCommand_ParameterHint"));
 			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();
@@ -179,9 +179,9 @@ namespace RoosterBot.Schedule {
 						string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
 						if (ScheduleUtil.IsWeekend(date)) {
 							if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
-								response += GetString("ScheduleModuleBase_ItIsWeekend");
+								response += GetString("ScheduleModule_ItIsWeekend");
 							} else {
-								response += GetString("ScheduleModuleBase_ThatIsWeekend");
+								response += GetString("ScheduleModule_ThatIsWeekend");
 							}
 						}
 						ReplyDeferred(response, info, null);
@@ -189,15 +189,15 @@ namespace RoosterBot.Schedule {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
 					} else {
-						string response = GetString("ScheduleModuleBase_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
+						string response = GetString("ScheduleModule_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
 						string[][] cells = new string[records.Length + 1][];
 						cells[0] = new string[] {
-						GetString("ScheduleModuleBase_RespondDay_ColumnActivity"),
-						GetString("ScheduleModuleBase_RespondDay_ColumnTime"),
-						GetString("ScheduleModuleBase_RespondDay_ColumnStudentSets"),
-						GetString("ScheduleModuleBase_RespondDay_ColumnTeacher"),
-						GetString("ScheduleModuleBase_RespondDay_ColumnRoom")
+						GetString("ScheduleModule_RespondDay_ColumnActivity"),
+						GetString("ScheduleModule_RespondDay_ColumnTime"),
+						GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
+						GetString("ScheduleModule_RespondDay_ColumnTeacher"),
+						GetString("ScheduleModule_RespondDay_ColumnRoom")
 					};
 
 						int recordIndex = 1;
@@ -223,11 +223,11 @@ namespace RoosterBot.Schedule {
 			ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 			if (weekRecords.Length > 0) {
 				if (weeksFromNow == 0) {
-					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleThisWeek", info);
+					response = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
 				} else if (weeksFromNow == 1) {
-					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleNextWeek", info);
+					response = GetString("ScheduleModule_RespondWeek_ScheduleNextWeek", info);
 				} else {
-					response = GetString("ScheduleModuleBase_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
+					response = GetString("ScheduleModule_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
 				}
 
 				Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
@@ -287,7 +287,7 @@ namespace RoosterBot.Schedule {
 		protected async Task RespondAfter(int recursion = 0) {
 			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
 			if (query.Equals(default(ScheduleCommandInfo))) {
-				await MinorError(GetString("AfterScheduleModule_GetAfterCommand_NoContext"));
+				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
 				ScheduleRecord nextRecord;
 				try {
@@ -297,7 +297,7 @@ namespace RoosterBot.Schedule {
 						nextRecord = await Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
 					}
 				} catch (RecordsOutdatedException) {
-					await MinorError(GetString("AfterScheduleModule_GetAfterCommand_RecordsOutdated"));
+					await MinorError(GetString("ScheduleModule_GetAfterCommand_RecordsOutdated"));
 					return;
 				} catch (IdentifierNotFoundException) {
 					// This catch block scores 9 out of 10 on the "oh shit" scale
@@ -318,11 +318,11 @@ namespace RoosterBot.Schedule {
 
 				string pretext;
 				if (query.Record == null) {
-					pretext = GetString("ScheduleModuleBase_PretextNext", query.Identifier.DisplayText);
+					pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
 				} else if (query.Record.Start.Date != nextRecord.Start.Date) {
 					pretext = $"{query.Identifier.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek)}\n";
 				} else {
-					pretext = GetString("ScheduleModuleBase_PretextAfterPrevious", query.Identifier.DisplayText);
+					pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
 				}
 				
 				// Avoid RespondRecord automatically calling this function again because we do it ourselves
@@ -378,17 +378,17 @@ namespace RoosterBot.Schedule {
 					Value = await action()
 				};
 			} catch (IdentifierNotFoundException) {
-				await MinorError(GetString("ScheduleModuleBase_HandleError_NotFound"));
+				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (RecordsOutdatedException) {
-				await MinorError(GetString("ScheduleModuleBase_HandleError_RecordsOutdated"));
+				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
 				return new ReturnValue<T>() {
 					Success = false
 				};
 			} catch (NoAllowedGuildsException) {
-				await MinorError(GetString("ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer"));
+				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
 				return new ReturnValue<T>() {
 					Success = false
 				};

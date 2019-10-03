@@ -158,47 +158,47 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>I don't know in what class you are. Use `!me &lt;your class&gt;` to change this.</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
     <value>Hint: To use !daarna, you don't need to specify parameters.</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>After what?</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
     <value>I don't have access to the latest schedule tables, so I can't see anything.</value>
   </data>
-	<data name="ScheduleModuleBase_PretextNext" xml:space="preserve">
+	<data name="ScheduleModule_PretextNext" xml:space="preserve">
     <value>{0}: Next</value>
     <comment>0: Identifier display text</comment>
   </data>
-	<data name="ScheduleModuleBase_PretextAfterPrevious" xml:space="preserve">
+	<data name="ScheduleModule_PretextAfterPrevious" xml:space="preserve">
     <value>{0}: After previous class</value>
     <comment>0: Identifier display text</comment>
   </data>
-	<data name="DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
+	<data name="ScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>I don't understand if you're talking about a class, teacher, or room.</value>
   </data>
-	<data name="ScheduleModuleBase_ItIsWeekend" xml:space="preserve">
+	<data name="ScheduleModule_ItIsWeekend" xml:space="preserve">
     <value>It is weekend after all.</value>
   </data>
-	<data name="ScheduleModuleBase_Pretext_FirstOn" xml:space="preserve">
+	<data name="ScheduleModule_Pretext_FirstOn" xml:space="preserve">
     <value>{0}: First on {1}</value>
     <comment>0: Identifier display text
 		  1: Relative date reference</comment>
   </data>
-	<data name="ScheduleModuleBase_HandleError_NotFound" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_NotFound" xml:space="preserve">
     <value>That item is not on my schedules.</value>
   </data>
-	<data name="ScheduleModuleBase_HandleError_RecordsOutdated" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_RecordsOutdated" xml:space="preserve">
     <value>I found that item on my schedules, but there is nothing on the schedule yet for that moment.</value>
   </data>
-	<data name="ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
     <value>There are no schedules available for this server.</value>
   </data>
-	<data name="ScheduleModuleBase_PretextNow" xml:space="preserve">
+	<data name="ScheduleModule_PretextNow" xml:space="preserve">
     <value>{0}: Now</value>
   </data>
-	<data name="ScheduleModuleBase_InXHours" xml:space="preserve">
+	<data name="ScheduleModule_InXHours" xml:space="preserve">
     <value>{0}: In {1} hours</value>
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
@@ -226,7 +226,7 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Room</value>
   </data>
-	<data name="ScheduleModuleBase_ResondDay_ScheduleForRelative" xml:space="preserve">
+	<data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
     <value>{0}: Schedule for {1}</value>
     <comment>0: Identifier display text
 		  1: relative date reference</comment>
@@ -286,28 +286,28 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
     <value>Discord name</value>
   </data>
-	<data name="DefaultScheduleModule_Remarks" xml:space="preserve">
+	<data name="ScheduleModule_Remarks" xml:space="preserve">
     <value>You can use `!me` to tell me what class you are in, so you don't have to tell me every time.</value>
   </data>
-	<data name="DefaultScheduleModule_Summary" xml:space="preserve">
+	<data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Automatically understands if you're talking about a class, teacher, or room.</value>
   </data>
-	<data name="DefaultScheduleModule_Name" xml:space="preserve">
+	<data name="ScheduleModule_Name" xml:space="preserve">
     <value>Schedule</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
     <value>See the current schedule item.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
     <value>See the next schedule item.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
     <value>The schedule for a certain day. If you use today, then I will show you next week. !today does not do this.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
     <value>See the schedule for tomorrow.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
     <value>See the schedule for today.</value>
   </data>
 	<data name="TeacherListModule_Name" xml:space="preserve">
@@ -328,7 +328,7 @@ Warning: natural-language commands are not supported yet in English.</value>
 	<data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
     <value>your class</value>
   </data>
-	<data name="ScheduleModuleBase_AfterCommand" xml:space="preserve">
+	<data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>See what happens after the last thing you looked up.</value>
   </data>
 	<data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
@@ -468,5 +468,44 @@ Warning: natural-language commands are not supported yet in English.</value>
   </data>
 	<data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
 		<value>I don't know that user.</value>
+	</data>
+	<data name="ScheduleModule_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
+		<value>There is nothing at that time.</value>
+	</data>
+	<data name="ScheduleModule_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
+		<value>I only support hours, days, and weeks.</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
+		<value>Activity</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
+		<value>Time</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnTeacher" xml:space="preserve">
+		<value>Teacher</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
+		<value>Room</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
+		<value>{0}: Rooster deze week</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
+		<value>{0}: Schedule for next week</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
+		<value>{0}: Schedule in {1} weeks</value>
+	</data>
+	<data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
+		<value>See when a class or teacher is present next week, or when a room is in use.</value>
+	</data>
+	<data name="ScheduleModule_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
+		<value>See when a class or teacher is present in *x* weeks, or when a room is in use.</value>
+	</data>
+	<data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
+		<value>See on what days a class or teacher is present, or when a room is in use.</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
+		<value>Class</value>
 	</data>
 </root>

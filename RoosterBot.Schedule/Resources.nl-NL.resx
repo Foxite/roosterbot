@@ -156,48 +156,48 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit. Gebruik `!ik &lt;jouw klas&gt;` om dit in te stellen.</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
     <value>Hint: om !daarna te gebruiken hoef je geen parameters mee te geven.</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>Na wat?</value>
   </data>
-	<data name="AfterScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
+	<data name="ScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
     <value>Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.</value>
   </data>
-	<data name="ScheduleModuleBase_PretextNext" xml:space="preserve">
+	<data name="ScheduleModule_PretextNext" xml:space="preserve">
     <value>{0}: Hierna</value>
     <comment>0: Identifier display text</comment>
   </data>
-	<data name="ScheduleModuleBase_PretextAfterPrevious" xml:space="preserve">
+	<data name="ScheduleModule_PretextAfterPrevious" xml:space="preserve">
     <value>{0}: Na de vorige les</value>
     <comment>0: Identifier display text
 		</comment>
   </data>
-	<data name="DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
+	<data name="ScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>Ik weet niet of je het over een leraar, klas of lokaal hebt.</value>
   </data>
-	<data name="ScheduleModuleBase_ItIsWeekend" xml:space="preserve">
+	<data name="ScheduleModule_ItIsWeekend" xml:space="preserve">
     <value> Het is dan ook weekend.</value>
   </data>
-	<data name="ScheduleModuleBase_Pretext_FirstOn" xml:space="preserve">
+	<data name="ScheduleModule_Pretext_FirstOn" xml:space="preserve">
     <value>{0}: Als eerste op {1}</value>
     <comment>0: Identifier display text
 		  1: Relative date reference</comment>
   </data>
-	<data name="ScheduleModuleBase_HandleError_NotFound" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_NotFound" xml:space="preserve">
     <value>Dat item staat niet op mijn rooster.</value>
   </data>
-	<data name="ScheduleModuleBase_HandleError_RecordsOutdated" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_RecordsOutdated" xml:space="preserve">
     <value>Ik heb dat item gevonden in mijn rooster, maar er staat nog niets op het rooster op dat moment.</value>
   </data>
-	<data name="ScheduleModuleBase_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
+	<data name="ScheduleModule_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
     <value>Er zijn geen roosters beschikbaar voor deze server.</value>
   </data>
-	<data name="ScheduleModuleBase_PretextNow" xml:space="preserve">
+	<data name="ScheduleModule_PretextNow" xml:space="preserve">
     <value>{0}: Nu</value>
   </data>
-	<data name="ScheduleModuleBase_InXHours" xml:space="preserve">
+	<data name="ScheduleModule_InXHours" xml:space="preserve">
     <value>{0}: Over {1} uur</value>
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
@@ -225,7 +225,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Lokaal</value>
   </data>
-	<data name="ScheduleModuleBase_ResondDay_ScheduleForRelative" xml:space="preserve">
+	<data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
     <value>{0}: Rooster voor {1}
 </value>
     <comment>0: Identifier display text
@@ -286,28 +286,28 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
     <value>Discord naam</value>
   </data>
-	<data name="DefaultScheduleModule_Remarks" xml:space="preserve">
+	<data name="ScheduleModule_Remarks" xml:space="preserve">
     <value>Met `!ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.</value>
   </data>
-	<data name="DefaultScheduleModule_Summary" xml:space="preserve">
+	<data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt.</value>
   </data>
-	<data name="DefaultScheduleModule_Name" xml:space="preserve">
+	<data name="ScheduleModule_Name" xml:space="preserve">
     <value>Rooster</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
     <value>Kijk wat er nu op het rooster staat.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
     <value>Kijk wat er hierna op het rooster staat</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
     <value>Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `!vandaag` doet dit niet.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
     <value>Wat er morgen op het rooster staat.</value>
   </data>
-	<data name="DefaultScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+	<data name="ScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
     <value>Wat er vandaag op het rooster staat.</value>
   </data>
 	<data name="TeacherListModule_Name" xml:space="preserve">
@@ -328,7 +328,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
     <value>jouw klas</value>
   </data>
-	<data name="ScheduleModuleBase_AfterCommand" xml:space="preserve">
+	<data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>Kijk wat er gebeurt na het laatste wat je hebt bekeken.</value>
   </data>
 	<data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
@@ -469,5 +469,44 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   </data>
 	<data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
 		<value>Ik ken die gebruiker niet.</value>
+	</data>
+	<data name="ScheduleModule_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
+		<value>Er is op dat moment niets.</value>
+	</data>
+	<data name="ScheduleModule_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
+		<value>Ik ondersteun alleen uren, dagen, en weken.</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
+		<value>Activiteit</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
+		<value>Tijd</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnTeacher" xml:space="preserve">
+		<value>Leraar</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
+		<value>Lokaal</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
+		<value>{0}: Rooster deze week</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
+		<value>{0}: Rooster volgende week</value>
+	</data>
+	<data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
+		<value>{0}: Rooster over {1} weken</value>
+	</data>
+	<data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
+		<value>Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+	</data>
+	<data name="ScheduleModule_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
+		<value>Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+	</data>
+	<data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
+		<value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+	</data>
+	<data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
+		<value>Klas</value>
 	</data>
 </root>
