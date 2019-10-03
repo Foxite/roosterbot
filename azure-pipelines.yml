@@ -52,13 +52,6 @@ steps:
     TargetFolder: '$(Build.BinariesDirectory)/AppStart'
     CleanTargetFolder: true
     OverWrite: true
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.BinariesDirectory)'
