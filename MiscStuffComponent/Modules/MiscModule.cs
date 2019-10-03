@@ -17,5 +17,10 @@ namespace MiscStuffComponent.Modules {
 		public async Task DeleteMessageCommand(ulong channel, ulong msg) {
 			await (await (await Context.Client.GetChannelAsync(channel) as ITextChannel).GetMessageAsync(msg)).DeleteAsync();
 		}
+
+		[Command("dank u"), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je")]
+		public async Task ThankYouCommand() {
+			await ReplyAsync(":smile:");
+		}
 	}
 }
