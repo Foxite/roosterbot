@@ -19,7 +19,7 @@ namespace RoosterBot.Automation {
 				pipeClient = new NamedPipeClientStream(".", "roosterbotStopPipe", PipeDirection.Out);
 				pipeClient.Connect(1);
 
-				Process[] processes = Process.GetProcessesByName("RoosterBot.exe");
+				Process[] processes = Process.GetProcessesByName("RoosterBot");
 				using (StreamWriter sw = new StreamWriter(pipeClient)) {
 					pipeClient = null;
 					sw.WriteLine("stop");
