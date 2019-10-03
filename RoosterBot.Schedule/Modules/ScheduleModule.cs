@@ -273,11 +273,11 @@ namespace RoosterBot.Schedule {
 				response += Util.FormatTextTable(cells);
 			} else {
 				if (weeksFromNow == 0) {
-					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentThisWeek", info);
+					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info);
 				} else if (weeksFromNow == 1) {
-					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentNextWeek", info);
+					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info);
 				} else {
-					response = GetString("ScheduleModuleBase_RespondWeek_NotPresentInXWeeks", info, weeksFromNow);
+					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info, weeksFromNow);
 				}
 			}
 

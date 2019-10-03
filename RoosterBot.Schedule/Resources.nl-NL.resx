@@ -144,9 +144,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 	<data name="DayOfWeekReader_CheckFailed" xml:space="preserve">
     <value>Dat is geen weekdag.</value>
   </data>
-	<data name="RoomInfoReader_CheckFailed" xml:space="preserve">
-    <value>Dat is geen lokaal.</value>
-  </data>
 	<data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
     <value>Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.</value>
   </data>
@@ -177,20 +174,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: Identifier display text
 		</comment>
   </data>
-	<data name="DefaultScheduleModule_ReplyErrorMessage_MentionUserUnknown" xml:space="preserve">
-    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `!ik &lt;zijn/haar klas&gt;` gebruiken om dit in te stellen. Als het een leraar is, moet zijn/haar Discord account worden toegevoegd door de bot eigenaar.</value>
-  </data>
-	<data name="DefaultScheduleModule_ReplyErrorMessage_UserUnknown" xml:space="preserve">
-    <value>Ik weet niet in welke klas jij zit. Je moet `!ik &lt;jouw klas&gt;` gebruiken om dit in te stellen.</value>
-  </data>
 	<data name="DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>Ik weet niet of je het over een leraar, klas of lokaal hebt.</value>
-  </data>
-	<data name="DefaultScheduleModule_AfterCommand_BigProblem" xml:space="preserve">
-    <value>Als je dit ziet is er een groot probleem</value>
-  </data>
-	<data name="RoomScheduleModule_RoomCurrentCommand__Het_is_dan_ook_weekend_" xml:space="preserve">
-    <value> Het is dan ook weekend.</value>
   </data>
 	<data name="ScheduleModuleBase_ItIsWeekend" xml:space="preserve">
     <value> Het is dan ook weekend.</value>
@@ -199,9 +184,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>{0}: Als eerste op {1}</value>
     <comment>0: Identifier display text
 		  1: Relative date reference</comment>
-  </data>
-	<data name="ScheduleModuleBase_SummerBreakGoHome" xml:space="preserve">
-    <value>Het is vakantie, man. Ga naar huis.</value>
   </data>
 	<data name="ScheduleModuleBase_HandleError_NotFound" xml:space="preserve">
     <value>Dat item staat niet op mijn rooster.</value>
@@ -231,28 +213,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: identifier display text
 		1: relative date reference</comment>
   </data>
-	<data name="ScheduleModuleBase_ScheduleThisWeek" xml:space="preserve">
-    <value>Rooster deze week</value>
-  </data>
-	<data name="ScheduleModuleBase_ScheduleNextWeek" xml:space="preserve">
-    <value>Rooster volgende week</value>
-  </data>
-	<data name="ScheduleModuleBase_ScheduleInXWeeks" xml:space="preserve">
-    <value>Rooster over {0} weken</value>
-    <comment>0: amount of weeks</comment>
-  </data>
-	<data name="StudentScheduleModule_RespondWorkingDays_ColumnDay" xml:space="preserve">
-    <value>Dag</value>
-  </data>
-	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnDay" xml:space="preserve">
-    <value>Dag</value>
-  </data>
-	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnFrom" xml:space="preserve">
-    <value>Van</value>
-  </data>
-	<data name="ScheduleModuleBase_RespondWorkingDays_ColumnTo" xml:space="preserve">
-    <value>Tot</value>
-  </data>
 	<data name="ScheduleModuleBase_RespondDay_ColumnActivity" xml:space="preserve">
     <value>Activiteit</value>
   </data>
@@ -275,10 +235,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>{0}: Niet op het rooster op dit moment</value>
     <comment>0: identifier info display text</comment>
   </data>
-	<data name="TeacherScheduleModule_TeacherProbablyAbsent" xml:space="preserve">
-    <value>
-Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk afwezig.</value>
-  </data>
 	<data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
     <value> Dat is dan ook weekend.</value>
   </data>
@@ -292,19 +248,6 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
   </data>
 	<data name="ScheduleModuleBase_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
     <value>{0}: Rooster over {1} weken</value>
-    <comment>0: identifier display text
-		  1: amount of weeks</comment>
-  </data>
-	<data name="ScheduleModuleBase_RespondWeek_NotPresentThisWeek" xml:space="preserve">
-    <value>{0}: Niet op school deze week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-	<data name="ScheduleModuleBase_RespondWeek_NotPresentNextWeek" xml:space="preserve">
-    <value>{0}: Niet op school volgende week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-	<data name="ScheduleModuleBase_RespondWeek_NotPresentInXWeeks" xml:space="preserve">
-    <value>{0}: Niet op school over {1} weken</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
   </data>
@@ -524,4 +467,7 @@ Hij/zij staat vandaag ook niet (meer) op het rooster, en is dus waarschijnlijk a
 	<data name="ScheduleModule_TomorrowCommand_Aliases" xml:space="preserve">
     <value />
   </data>
+	<data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
+		<value>Ik ken die gebruiker niet.</value>
+	</data>
 </root>

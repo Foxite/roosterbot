@@ -123,10 +123,6 @@
 `counter reset &lt;naam van counter&gt;`
 En nog minstens 4 geheime commands voor de bot owner.</value>
   </data>
-  <data name="CounterService_FormatTimeSpan_XDaysPlural" xml:space="preserve">
-    <value />
-    <comment>0: amount of days</comment>
-  </data>
   <data name="CounterService_FormatTimeSpan_DaysSingular" xml:space="preserve">
     <value>{0} dag</value>
     <comment>0: amount of days (always 1 in this case)</comment>
