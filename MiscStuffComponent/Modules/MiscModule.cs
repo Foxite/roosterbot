@@ -24,7 +24,7 @@ namespace MiscStuffComponent.Modules {
 			string[] responses = new[] {
 				":smile:",
 				":thumbsup:",
-				"<:wsjoram:629327051723243551>", // This probably can't make it into 2.0
+				"<:wsjoram:629666853354078231>", // This probably can't make it into 2.0
 				":blush:"
 			};
 
