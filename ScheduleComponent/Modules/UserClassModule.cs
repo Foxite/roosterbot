@@ -41,7 +41,12 @@ namespace ScheduleComponent.Modules {
 				IGuildUser guildUser = Context.User as IGuildUser;
 
 				try {
-					IRole[] oldRoles = Roles.GetRolesForStudentSet(Context.Guild, oldStudentSet).ToArray();
+					IRole[] oldRoles;
+					if (oldStudentSet == null) {
+						oldRoles = new[] { Context.Guild.GetRole(278937741478330389) };
+					} else {
+						oldRoles = Roles.GetRolesForStudentSet(Context.Guild, oldStudentSet).ToArray();
+					}
 					IRole[] newRoles = Roles.GetRolesForStudentSet(Context.Guild, newStudentSet).ToArray();
 
 					await guildUser.RemoveRolesAsync(oldRoles);
