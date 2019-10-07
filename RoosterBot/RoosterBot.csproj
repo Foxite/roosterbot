@@ -57,11 +57,6 @@
     <Compile Include="Components\Version.cs" />
     <Compile Include="Components\VersionPredicate.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="ConstantsTemplate.gen.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConstantsTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Handlers\PostCommandHandler.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
@@ -89,12 +84,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConstantsTemplate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConstantsTemplate.gen.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
