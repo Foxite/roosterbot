@@ -37,6 +37,7 @@
     <Compile Include="DataTypes\CityInfo.cs" />
     <Compile Include="Readers\CityInfoReader.cs" />
     <Compile Include="Services\CityService.cs" />
+    <Compile Include="DataTypes\WeatherInfo.cs" />
     <Compile Include="WeatherComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\WeatherModule.cs" />
@@ -47,6 +48,11 @@
       <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
       <Name>RoosterBot</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper">
+      <Version>12.1.2</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
