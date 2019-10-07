@@ -14,7 +14,7 @@ namespace RoosterBot.Weather {
 			CityService cityService = new CityService(configPath);
 			await cityService.ReadCityCSVAsync();
 
-			JObject jsonConfig = JObject.Parse(Path.Combine(configPath, "Config.json"));
+			JObject jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
 			string weatherBitKey = jsonConfig["weatherbit_key"].ToObject<string>();
 
