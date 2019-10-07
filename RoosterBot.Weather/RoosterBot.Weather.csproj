@@ -44,6 +44,10 @@
     <Compile Include="Services\WeatherService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
+      <Project>{7ADFD197-2812-49FF-9191-5F16605A20F2}</Project>
+      <Name>RoosterBot.DateTimeUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
       <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
       <Name>RoosterBot</Name>
