@@ -21,19 +21,26 @@ namespace RoosterBot.Weather {
 
 		public string WindDirectionAbbr { get; }
 
-		internal WeatherInfo(CityInfo city, JObject jObject) {
+		internal WeatherInfo(CityInfo city, JObject jsonInfo) {
 			City = city;
 
-			JObject info = jObject["data"][0].ToObject<JObject>();
+			Temperature = jsonInfo["temp"].ToObject<float>();
+			ApparentTemperature = jsonInfo["app_temp"].ToObject<float>();
 
-			Temperature = info["temp"].ToObject<float>();
-			ApparentTemperature = info["app_temp"].ToObject<float>();
-
-			m_WeatherCode = info["weather"]["code"].ToObject<short>();
+			m_WeatherCode = jsonInfo["weather"]["code"].ToObject<short>();
 		}
 
 		public string Present() {
-			return $"{City.Name}, {City.Region}: {Math.Round(Temperature, 1)} °C\n{GetDescription()}";
+			string ret = $"{City.Name}, {City.Region}: {Math.Round(Temperature, 1)} °C (voelt als {Math.Round(ApparentTemperature, 1)})\n";
+			ret += GetDescription();
+
+			double roundWindSpeed = Math.Round(WindSpeed, 1);
+			if (roundWindSpeed < 0.05) { // For floating point errors
+				ret += "\n:wind_blowing_face: Geen wind";
+			} else {
+				ret += $"\n:wind_blowing_face: {roundWindSpeed} m/s vanuit {WindDirectionAbbr}";
+			}
+			return ret;
 		}
 
 		private string GetDescription() {
@@ -45,37 +52,37 @@ namespace RoosterBot.Weather {
 				case 231: return ":thunder_cloud_rain: Onweer met motregen";
 				case 232: return ":thunder_cloud_rain: Onweer met hevige motregen";
 				case 233: return ":thunder_cloud_rain: Onweer met hagel";
-				case 300: return "Lichte motregen";
-				case 301: return "Motregen";
-				case 302: return "Hevige motregen";
-				case 500: return "Lichte regen";
-				case 501: return "Regen";
-				case 502: return "Zware regen";
-				case 511: return "Vriezende regen";
-				case 520: return "Lichte buien";
-				case 521: return "Buien";
-				case 522: return "Hevige buien";
-				case 600: return "Lichte sneeuw";
-				case 601: return "Sneeuw";
-				case 602: return "Hevige sneeuw";
-				case 610: return "Sneeuw en regen";
-				case 611: return "Ijzel";
-				case 612: return "Hevige ijzel";
-				case 621: return "Sneeuwbuien";
-				case 622: return "Zware sneeuwbuien";
-				case 623: return "Sneeuwvlagen";
-				case 700: return "Mist";
-				case 711: return "Rook";
-				case 721: return "Nevel";
-				case 731: return "Zand/stof";
-				case 741: return "Mist";
-				case 751: return "Vriezende mist";
-				case 800: return "Klare lucht";
-				case 801: return "Enkele wolken";
-				case 802: return "Licht bewolkt";
-				case 803: return "Overwegend bewolkt";
-				case 804: return "Bewolkt";
-				case 900: return "Onbekend";
+				case 300: return ":white_sun_rain_cloud: Lichte motregen";
+				case 301: return ":cloud_rain: Motregen";
+				case 302: return ":cloud_rain: Hevige motregen";
+				case 500: return ":white_sun_rain_cloud: Lichte regen";
+				case 501: return ":cloud_rain: Regen";
+				case 502: return ":cloud_rain: Zware regen";
+				case 511: return ":cloud_rain: Vriezende regen";
+				case 520: return ":white_sun_rain_cloud: Lichte buien";
+				case 521: return ":cloud_rain: Buien";
+				case 522: return ":cloud_rain: Hevige buien";
+				case 600: return ":cloud_snow: Lichte sneeuw";
+				case 601: return ":cloud_snow: Sneeuw";
+				case 602: return ":cloud_snow: Hevige sneeuw";
+				case 610: return ":cloud_snow: Sneeuw en regen";
+				case 611: return ":snowflake: Ijzel";
+				case 612: return ":snowflake: Hevige ijzel";
+				case 621: return ":cloud_snow: Sneeuwbuien";
+				case 622: return ":cloud_snow: Zware sneeuwbuien";
+				case 623: return ":cloud_snow: Sneeuwvlagen";
+				case 700: return ":foggy: Mist";
+				case 711: return ":warning: Rook";
+				case 721: return ":foggy: Nevel";
+				case 731: return "warning: Zand/stof";
+				case 741: return ":foggy: Mist";
+				case 751: return "foggy: :snowflake: Vriezende mist";
+				case 800: return ":sunny: Klare lucht";
+				case 801: return ":white_sun_small_cloud: Enkele wolken";
+				case 802: return ":white_sun_small_cloud: Licht bewolkt";
+				case 803: return ":white_sun_cloud: Overwegend bewolkt";
+				case 804: return ":cloud: Bewolkt";
+				case 900: return ":question: Onbekend"; // TODO roosterbot unknown emote
 				default:
 					Logger.Error("WeatherInfo", "Unknown code " + m_WeatherCode);
 					return "Gefeliciteerd, je krijg een gratis Mars-reep van de bot eigenaar. Foutcode D" + m_WeatherCode;

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -16,9 +17,9 @@ namespace RoosterBot.Weather {
 		}
 
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {
-			return new WeatherInfo(city, await GetResponseAsync("current", new Dictionary<string, string>() {
+			return new WeatherInfo(city, (await GetResponseAsync("current", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() }
-			}));
+			}))["data"][0].ToObject<JObject>());
 		}
 
 		public async Task<WeatherInfo> GetWeatherForecastAsync(CityInfo city, int hoursFromNow) {
@@ -26,6 +27,19 @@ namespace RoosterBot.Weather {
 				{ "city_id", city.CityId.ToString() },
 				{ "hours", hoursFromNow.ToString() + "-" + (hoursFromNow + 1).ToString() }
 			}));
+		}
+
+		public async Task<WeatherInfo[]> GetDayForecastAsync(CityInfo city, DateTime date) {
+			//JObject info = jObject["data"][0].ToObject<JObject>();
+			int offsetStart = (date - DateTime.Today).Hours + 8;
+			int offsetEnd = offsetStart + 8;
+
+			JObject jsonResult = await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
+				{ "city_id", city.CityId.ToString() },
+				{ "hours", offsetStart.ToString() + "-" + offsetEnd.ToString() }
+			});
+
+			return jsonResult["data"].ToObject<JArray>().Cast<JObject>().Select(jo => new WeatherInfo(city, jo)).ToArray();
 		}
 
 		private async Task<JObject> GetResponseAsync(string function, IDictionary<string, string> parameters) {

@@ -34,7 +34,7 @@ namespace RoosterBot.Weather {
 			}
 		}
 
-		public Task<CityInfo> GetByWeatherBitId(int weatherBitId) => Task.Run(() => {
+		public Task<CityInfo> GetByWeatherBitIdAsync(int weatherBitId) => Task.Run(() => {
 			return m_Cities.SingleOrDefault(city => city.CityId == weatherBitId);
 		});
 
