@@ -15,7 +15,7 @@ namespace RoosterBot.Weather {
 
 		[Command(RunMode = RunMode.Async), Alias("nu")]
 		public async Task GetCurrentWeatherCommand(CityInfo city) {
-			WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, DateTime.Now);
+			WeatherInfo weather = await Weather.GetCurrentWeatherAsync(city);
 			ReplyDeferred(weather.Present());
 		}
 
@@ -37,7 +37,7 @@ namespace RoosterBot.Weather {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 				}
 			} else if (unit == "uur") {
-				WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, DateTime.Now.AddHours(amount));
+				WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, amount);
 				ReplyDeferred(weather.Present());
 			} else {
 				await MinorError("Ik kan alleen op uur- of dagniveau het weer voorspellen.");
@@ -46,7 +46,7 @@ namespace RoosterBot.Weather {
 
 		private async Task RespondDayForecast(CityInfo city, DateTime date) {
 			Task<WeatherInfo> getHourForecast(int hours) {
-				return Weather.GetWeatherForecastAsync(city, date.AddHours(hours));
+				return Weather.GetWeatherForecastAsync(city, hours);
 			}
 
 			WeatherInfo morning = await getHourForecast(8);
