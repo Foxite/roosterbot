@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DateTimeUtils;
+using RoosterBot.DateTimeUtils;
 using Discord;
 using Discord.Commands;
 

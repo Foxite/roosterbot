@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {

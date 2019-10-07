@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DateTimeUtils {
+namespace RoosterBot.DateTimeUtils {
 	public static class DateTimeUtil {
 		public static string GetStringFromDayOfWeek(CultureInfo culture, DayOfWeek day) {
 			return culture.DateTimeFormat.DayNames[(int) day];
@@ -20,10 +20,10 @@ namespace DateTimeUtils {
 			DateTime targetDate;
 			if (includeToday) {
 				// Get the next {day} including today
-				targetDate = DateTime.Today.AddDays(((int)day - (int)DateTime.Today.DayOfWeek + 7) % 7);
+				targetDate = DateTime.Today.AddDays(((int) day - (int) DateTime.Today.DayOfWeek + 7) % 7);
 			} else {
 				// Get the next {day} after today
-				targetDate = DateTime.Today.AddDays(1 + ((int)day - (int)DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
+				targetDate = DateTime.Today.AddDays(1 + ((int) day - (int) DateTime.Today.AddDays(1).DayOfWeek + 7) % 7);
 			}
 
 			return targetDate;
