@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.DateTimeUtils {
 	public class DayOfWeekReader : RoosterTypeReaderBase {
 		protected override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			input = input.ToLower();

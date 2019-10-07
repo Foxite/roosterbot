@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DateTimeUtils;
 using Discord;
 using Discord.Commands;
 
@@ -26,7 +27,7 @@ namespace RoosterBot.Schedule {
 					if (record == null) {
 						string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
 
-						if (ScheduleUtil.IsWeekend(DateTime.Today)) {
+						if (DateTimeUtil.IsWeekend(DateTime.Today)) {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
@@ -58,7 +59,7 @@ namespace RoosterBot.Schedule {
 
 		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info = null) {
-			await RespondDay(info, ScheduleUtil.NextDayOfWeek(day, false));
+			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTomorrowCommand_Summary")]
@@ -177,8 +178,8 @@ namespace RoosterBot.Schedule {
 
 					if (records.Length == 0) {
 						string response = GetString("ScheduleModule_RespondDay_NoRecordAtRelative", info.DisplayText, relativeDateReference);
-						if (ScheduleUtil.IsWeekend(date)) {
-							if (ScheduleUtil.IsWithinSameWeekend(date, DateTime.Today)) {
+						if (DateTimeUtil.IsWeekend(date)) {
+							if (DateTimeUtil.IsWithinSameWeekend(date, DateTime.Today)) {
 								response += GetString("ScheduleModule_ItIsWeekend");
 							} else {
 								response += GetString("ScheduleModule_ThatIsWeekend");
@@ -320,7 +321,7 @@ namespace RoosterBot.Schedule {
 				if (query.Record == null) {
 					pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
 				} else if (query.Record.Start.Date != nextRecord.Start.Date) {
-					pretext = $"{query.Identifier.DisplayText}: Als eerste op {ScheduleUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek)}\n";
+					pretext = $"{query.Identifier.DisplayText}: Als eerste op {DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek)}\n";
 				} else {
 					pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
 				}

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
-namespace RoosterBot.Schedule {
-	public static class ScheduleUtil {
-		/// <summary>
-		/// Given a DayOfWeek, this returns the Dutch name of that day.
-		/// </summary>
+namespace DateTimeUtils {
+	public static class DateTimeUtil {
 		public static string GetStringFromDayOfWeek(CultureInfo culture, DayOfWeek day) {
 			return culture.DateTimeFormat.DayNames[(int) day];
 		}

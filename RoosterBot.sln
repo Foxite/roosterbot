@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.MockUCS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.SQL", "RoosterBot.Schedule.SQL\RoosterBot.Schedule.SQL.csproj", "{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Weather", "RoosterBot.Weather\RoosterBot.Weather.csproj", "{AA18223C-C097-4E57-8DE9-CDAE5913C189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.DateTimeUtils", "DateTimeUtils\RoosterBot.DateTimeUtils.csproj", "{7ADFD197-2812-49FF-9191-5F16605A20F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,14 @@ Global
 		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADFD197-2812-49FF-9191-5F16605A20F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADFD197-2812-49FF-9191-5F16605A20F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADFD197-2812-49FF-9191-5F16605A20F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADFD197-2812-49FF-9191-5F16605A20F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -53,14 +53,12 @@
     <Compile Include="Modules\TeacherListModule.cs" />
     <Compile Include="Modules\UserClassModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Readers\DayOfWeekReader.cs" />
     <Compile Include="Readers\IdentifierInfoReaderBase.cs" />
     <Compile Include="Readers\MultiReader.cs" />
     <Compile Include="Readers\RoomInfoReader.cs" />
     <Compile Include="Readers\StudentSetInfoReader.cs" />
     <Compile Include="Readers\TeacherInfoReader.cs" />
     <Compile Include="ScheduleComponent.cs" />
-    <Compile Include="ScheduleUtil.cs" />
     <Compile Include="Services\IdentifierReaderService.cs" />
     <Compile Include="Services\IUserClassesService.cs" />
     <Compile Include="MemoryScheduleProvider.cs" />
@@ -94,6 +92,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
+      <Project>{7adfd197-2812-49ff-9191-5f16605a20f2}</Project>
+      <Name>RoosterBot.DateTimeUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
       <Project>{294cd2af-490f-4432-ac24-17eaa9f0e112}</Project>
       <Name>RoosterBot</Name>
