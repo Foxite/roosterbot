@@ -41,8 +41,8 @@
     <Compile Include="RoleAssignmentHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
-      <Project>{7adfd197-2812-49ff-9191-5f16605a20f2}</Project>
+    <ProjectReference Include="..\RoosterBot.DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
+      <Project>{3b470eb8-b24c-41c8-8209-736cd4463e16}</Project>
       <Name>RoosterBot.DateTimeUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : ComponentBase {
@@ -15,6 +14,7 @@ namespace RoosterBot.Schedule {
 			return DependencyResult.Build(components)
 				.RequireTag("ScheduleProvider")
 				.RequireTag("UserClassesService")
+				.RequireTag("DayOfWeekReader")
 				.Check();
 		}
 
@@ -41,8 +41,6 @@ namespace RoosterBot.Schedule {
 				new RoomInfoReader()
 			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
 			commandService.AddTypeReader<IdentifierInfo>(s_IdentifierReaders);
-
-			commandService.AddExternalTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModules(await Task.WhenAll(
 				//commandService.AddModuleAsync<DefaultScheduleModule>(services),

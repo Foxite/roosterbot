@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DateTimeUtils")]
+[assembly: AssemblyTitle("RoosterBot.DateTimeUtils2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DateTimeUtils")]
-[assembly: AssemblyCopyright("Copyright © 2019")]
+[assembly: AssemblyProduct("RoosterBot.DateTimeUtils2")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7adfd197-2812-49ff-9191-5f16605a20f2")]
+[assembly: Guid("3b470eb8-b24c-41c8-8209-736cd4463e16")]
 
 // Version information for an assembly consists of the following four values:
 //
