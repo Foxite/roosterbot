@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using RoosterBot.DateTimeUtils;
 using System;
 using System.Threading.Tasks;
 
@@ -22,28 +23,55 @@ namespace RoosterBot.Weather {
 		public async Task GetDayForecastCommand(DayOfWeek day, CityInfo city) {
 			// Get the forecast for the day at {hours} o clock
 			DateTime date = DateTime.Today.AddDays((int) (day - DateTime.Today.DayOfWeek));
-			Task<WeatherInfo> getHourForecast(int hours) {
-				return Weather.GetWeatherForecastAsync(city, date.AddHours(hours));
-			}
-			
-			WeatherInfo morning = await getHourForecast(8);
-			WeatherInfo noon    = await getHourForecast(12);
-			WeatherInfo evening = await getHourForecast(18);
-
-			string response = $"{city.Name}: Weer op {day}\n";
-			response +=   "08:00: " + morning.Present();
-			response += "\n12:00: " + noon.Present();
-			response += "\n18:00: " + evening.Present();
-
-			ReplyDeferred(response);
+			await RespondDayForecast(city, date);
 		}
 
 		// TODO Discord.NET features a builtin TimeSpan reader, however it probably won't work very well in Dutch (or any language besides English probably)
 		// We should probably add a localized one to RoosterBot
 		[Command("over", RunMode = RunMode.Async)]
-		public async Task GetForecastCommand(TimeSpan time, CityInfo city) {
-			WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, time);
-			ReplyDeferred(weather.Present());
+		public async Task GetForecastCommand(int amount, string unit, CityInfo city) {
+			if (unit == "dag" || unit == "dagen") {
+				if (amount > 7) {
+					await MinorError("Ik kan het weer niet verder dan 7 dagen voorspellen.");
+				} else {
+					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
+				}
+			} else if (unit == "uur") {
+				WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, DateTime.Now.AddHours(amount));
+				ReplyDeferred(weather.Present());
+			} else {
+				await MinorError("Ik kan alleen op uur- of dagniveau het weer voorspellen.");
+			}
+		}
+
+		private async Task RespondDayForecast(CityInfo city, DateTime date) {
+			Task<WeatherInfo> getHourForecast(int hours) {
+				return Weather.GetWeatherForecastAsync(city, date.AddHours(hours));
+			}
+
+			WeatherInfo morning = await getHourForecast(8);
+			WeatherInfo noon = await getHourForecast(12);
+			WeatherInfo evening = await getHourForecast(18);
+
+			// Copied from ScheduleModule, should probably move into DateTimeUtil, although the fact that the strings need to be localized is annoying
+			// DateTimeUtils is not component and can't make use of RoosterBot's resource system, but there's no reason we *can't* make it one
+			string relativeDateReference;
+			if (date == DateTime.Today) {
+				relativeDateReference = "vandaag";
+			} else if (date == DateTime.Today.AddDays(1)) {
+				relativeDateReference = "morgen";
+			} else if ((date - DateTime.Today).TotalDays < 7) {
+				relativeDateReference = "op " + date.DayOfWeek.GetName(Culture);
+			} else {
+				relativeDateReference = "op " + date.ToShortDateString(Culture);
+			}
+
+			string response = $"{city.Name}: Weer {relativeDateReference}\n";
+			response += "08:00: " + morning.Present();
+			response += "\n12:00: " + noon.Present();
+			response += "\n18:00: " + evening.Present();
+
+			ReplyDeferred(response);
 		}
 	}
 }
