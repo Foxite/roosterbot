@@ -8,6 +8,8 @@ namespace RoosterBot.PublicTransit {
 		public NSAPI NSAPI { get; set; }
 		public StationInfoService Stations { get; set; }
 
+		// TODO this currently does not work, because the documentation regarding "params" in command args does not match what actually happens
+		// I'm waiting for a response to the issue I created ( https://github.com/discord-net/Discord.Net/issues/1394 ), until then this is on hold.
 		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
 		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming")] params StationInfo[] stops) {
 			if (stops.Length < 1 || stops.Length > 2) {
