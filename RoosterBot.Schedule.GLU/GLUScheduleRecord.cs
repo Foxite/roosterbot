@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
