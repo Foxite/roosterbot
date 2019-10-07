@@ -6,41 +6,23 @@ namespace RoosterBot.PublicTransit {
 	[Name("OV")]
 	public class PTModule : RoosterModuleBase {
 		public NSAPI NSAPI { get; set; }
-		public StationCodeService Stations { get; set; }
+		public StationInfoService Stations { get; set; }
 
 		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
-		public async Task GetTrainRouteCommand([Remainder] string van_en_naar) {
-			string[] stops = van_en_naar.Split(',');
+		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming")] params StationInfo[] stops) {
 			if (stops.Length < 1 || stops.Length > 2) {
 				await MinorError("Ik moet ten minste 1 station hebben, en maximaal 2.");
 				return;
 			}
 
-			for (int i = 0; i < stops.Length; i++) {
-				stops[i] = stops[i].Trim();
-			}
-
 			StationInfo stationFrom;
 			StationInfo stationTo;
 			if (stops.Length == 2) {
-				if (stops[0][0] == '$') {
-					stationFrom = Stations.GetByCode(stops[0].Substring(1));
-				} else {
-					stationFrom = Stations.Lookup(stops[0]).Station;
-				}
-
-				if (stops[1][0] == '$') {
-					stationTo = Stations.GetByCode(stops[1].Substring(1));
-				} else {
-					stationTo = Stations.Lookup(stops[1]).Station;
-				}
+				stationFrom = stops[0];
+				stationTo = stops[1];
 			} else {
 				stationFrom = Stations.DefaultDeparture;
-				if (stops[0][0] == '$') {
-					stationTo = Stations.GetByCode(stops[0].Substring(1));
-				} else {
-					stationTo = Stations.Lookup(stops[0]).Station;
-				}
+				stationTo = stops[0];
 			}
 
 			await ReplyAsync($"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName} opzoeken...");
@@ -101,24 +83,24 @@ namespace RoosterBot.PublicTransit {
 
 		[Command("stations"), Summary("Zoek een station op in de lijst.")]
 		public async Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
-			StationMatchInfo[] matches = Stations.Lookup(input.ToLower(), 5);
 			string response = "Gevonden stations zijn (beste match eerst):\n\n";
 
+			StationMatchInfo[] matches = Stations.Lookup(input, 3);
 			int i = 1;
-			foreach (StationMatchInfo match in matches) {
-				response += $"{i}. {match.Station.DisplayName}";
+			foreach (StationMatchInfo matchInfo in matches) {
+				response += $"{i}. {matchInfo.Station.DisplayName}";
 
-				if (match.Station.Names.Length != 1) {
+				if (matchInfo.Station.Synonyms.Count != 1) {
 					string aka = " (ook bekend als: ";
 
 					int count = 0;
 					bool notFirst = false;
-					for (int j = 1; j < match.Station.Names.Length; j++) {
-						if (match.Station.Names[j] != match.Station.DisplayName.ToLower()) {
+					for (int j = 1; j < matchInfo.Station.Synonyms.Count; j++) {
+						if (matchInfo.Station.Synonyms[j] != matchInfo.Station.DisplayName.ToLower()) {
 							if (notFirst) {
 								aka += ", ";
 							}
-							aka += "\"" + match.Station.Names[j] + "\"";
+							aka += "\"" + matchInfo.Station.Synonyms[j] + "\"";
 							notFirst = true;
 							count++;
 						}
@@ -130,7 +112,7 @@ namespace RoosterBot.PublicTransit {
 					}
 				}
 
-				response += $". Code: {match.Station.Code}\n";
+				response += $". Code: {matchInfo.Station.Code}\n";
 				i++;
 			}
 			await ReplyAsync(response);

@@ -37,10 +37,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DataTypes\Journey.cs" />
+    <Compile Include="DataTypes\StationInfo.cs" />
     <Compile Include="Modules\PTModule.cs" />
+    <Compile Include="Readers\StationInfoReader.cs" />
     <Compile Include="Services\IRestApi.cs" />
     <Compile Include="Services\NSAPI.cs" />
-    <Compile Include="Services\StationCodeService.cs" />
+    <Compile Include="Services\StationInfoService.cs" />
     <Compile Include="Services\XmlRestApi.cs" />
     <Compile Include="PublicTransitComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

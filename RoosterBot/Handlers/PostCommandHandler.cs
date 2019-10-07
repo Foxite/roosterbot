@@ -19,7 +19,7 @@ namespace RoosterBot {
 			commands.CommandExecuted += OnCommandExecuted;
 		}
 
-		private async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
+		public async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
 				string response = null;
 				bool bad = false;

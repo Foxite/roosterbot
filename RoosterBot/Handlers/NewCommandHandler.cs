@@ -1,18 +1,18 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
 	public sealed class NewCommandHandler {
-		private RoosterCommandService m_Commands;
-		private ConfigService m_ConfigService;
-		private DiscordSocketClient m_Client;
+		private readonly DiscordSocketClient m_Client;
+		private readonly RoosterCommandService m_Commands;
+		private readonly ConfigService m_ConfigService;
 
 		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService configService) {
 			m_Client = client;
 			m_Commands = commands;
 			m_ConfigService = configService;
-
 			m_Client.MessageReceived += HandleNewCommand;
 		}
 

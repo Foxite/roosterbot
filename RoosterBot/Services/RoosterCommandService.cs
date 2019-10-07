@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.Commands.Builders;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -40,6 +39,8 @@ namespace RoosterBot {
 
 			return false;
 		}
+
+		
 
 		private async Task<ModuleInfo[]> AddLocalizedModuleInternalAsync(Type module, Assembly assembly) {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
