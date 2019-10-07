@@ -19,7 +19,7 @@ namespace MiscStuffComponent.Modules {
 			await (await (await Context.Client.GetChannelAsync(channel) as ITextChannel).GetMessageAsync(msg)).DeleteAsync();
 		}
 
-		[Command("dank u"), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "thanks", "thx")]
+		[Command("dank u"), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "goed zo", "goedzo", "thanks", "thx")]
 		public async Task ThankYouCommand() {
 			string[] responses = new[] {
 				":smile:",
