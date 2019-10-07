@@ -2,12 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(0, 1, 0);
+
+		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+			return DependencyResult.Build(components)
+				.RequireTag("DayOfWeekReader")
+				.Check();
+		}
 
 		public async override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			CityService cityService = new CityService(configPath);
