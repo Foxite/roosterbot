@@ -42,7 +42,7 @@ namespace RoosterBot.Schedule {
 			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
 			commandService.AddTypeReader<IdentifierInfo>(s_IdentifierReaders);
 
-			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
+			commandService.AddExternalTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModules(await Task.WhenAll(
 				//commandService.AddModuleAsync<DefaultScheduleModule>(services),

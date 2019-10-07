@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using RoosterBot.DateTimeUtils;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace RoosterBot.Weather {
 
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
 			commandService.AddTypeReader<CityInfo>(new CityInfoReader());
+			commandService.AddExternalTypeReader<DayOfWeek>(new DayOfWeekReader());
 
 			registerModuleFunction(new[] {
 				await commandService.AddModuleAsync<WeatherModule>(services)

@@ -40,7 +40,13 @@ namespace RoosterBot {
 			return false;
 		}
 
-		
+		public void AddExternalTypeReader<T>(TypeReader reader, bool replaceDefault = true) => AddExternalTypeReader(typeof(T), reader, replaceDefault);
+
+		public void AddExternalTypeReader(Type t, TypeReader reader, bool replaceDefault = true) {
+			if (!TypeReaders.Contains(t)) { // TODO not sure if default readers are in this collection
+				AddTypeReader(t, reader, replaceDefault);
+			}
+		}
 
 		private async Task<ModuleInfo[]> AddLocalizedModuleInternalAsync(Type module, Assembly assembly) {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
