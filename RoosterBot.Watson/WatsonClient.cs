@@ -85,9 +85,9 @@ namespace RoosterBot.Watson {
 					RoosterCommandContext context;
 					// TODO properly support command editing/deletion with Watson
 					if (crp != null) {
-						context = new RoosterCommandContext(m_DiscordClient, message, crp.Responses, LogTag);
+						context = new RoosterCommandContext(m_DiscordClient, message, crp.Responses);
 					} else {
-						context = new RoosterCommandContext(m_DiscordClient, message, null, LogTag);
+						context = new RoosterCommandContext(m_DiscordClient, message, null);
 					}
 					
 					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);

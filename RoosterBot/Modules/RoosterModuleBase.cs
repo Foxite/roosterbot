@@ -186,11 +186,10 @@ namespace RoosterBot {
 		public IMessageChannel Channel { get; }
 		public IGuild Guild { get; }
 		public bool IsPrivate { get; }
-		public string CallTag { get; }
 		// If this is null, we should make a new message.
 		public IReadOnlyList<IUserMessage> Responses { get; }
 		
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage[] originalResponses, string calltag) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage[] originalResponses) {
 			Client = client;
 			Message = message;
 			User = message.Author;
@@ -198,7 +197,6 @@ namespace RoosterBot {
 			IsPrivate = Channel is IPrivateChannel;
 			Guild = IsPrivate ? (User as SocketUser)?.MutualGuilds.First() : (Channel as IGuildChannel).Guild;
 			Responses = originalResponses;
-			CallTag = calltag;
 		}
 	}
 

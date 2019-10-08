@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -80,7 +81,7 @@ namespace RoosterBot {
 					response = Util.ErrorPrefix + response;
 				}
 
-				IUserMessage[] initialResponses = (context as RoosterCommandContext)?.Responses;
+				IReadOnlyList<IUserMessage> initialResponses = (context as RoosterCommandContext)?.Responses;
 				if (initialResponses == null) {
 					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {

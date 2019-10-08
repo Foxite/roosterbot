@@ -31,7 +31,7 @@ namespace RoosterBot {
 						responses = null;
 					}
 
-					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses, "EditedCommand");
+					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses);
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
 				} else {
 					if (crp != null) {

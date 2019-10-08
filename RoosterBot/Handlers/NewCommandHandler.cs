@@ -20,7 +20,7 @@ namespace RoosterBot {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			if (m_Commands.IsMessageCommand(socketMessage, out int argPos)) {
-				RoosterCommandContext context = new RoosterCommandContext(m_Client, socketMessage as IUserMessage, null, "NewCommand");
+				RoosterCommandContext context = new RoosterCommandContext(m_Client, socketMessage as IUserMessage, null);
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			}
