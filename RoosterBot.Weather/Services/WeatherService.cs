@@ -23,28 +23,33 @@ namespace RoosterBot.Weather {
 		}
 
 		public async Task<WeatherInfo> GetWeatherForecastAsync(CityInfo city, int hoursFromNow) {
-			return new WeatherInfo(city, await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
+			return new WeatherInfo(city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() },
-				{ "hours", hoursFromNow.ToString() + "-" + (hoursFromNow + 1).ToString() }
-			}));
+				{ "hours", hoursFromNow.ToString() }
+			}))["data"].Last.ToObject<JObject>());
 		}
 
 		public async Task<WeatherInfo[]> GetDayForecastAsync(CityInfo city, DateTime date) {
 			//JObject info = jObject["data"][0].ToObject<JObject>();
-			int offsetStart = (date - DateTime.Today).Hours + 8;
-			int offsetEnd = offsetStart + 8;
+			int hoursForecast = (int) (date - DateTime.Today).TotalHours + 18;
 
-			JObject jsonResult = await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
+			JToken result = (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() },
-				{ "hours", offsetStart.ToString() + "-" + offsetEnd.ToString() }
-			});
+				{ "hours", hoursForecast.ToString() }
+			}))["data"];
 
-			return jsonResult["data"].ToObject<JArray>().Cast<JObject>().Select(jo => new WeatherInfo(city, jo)).ToArray();
+			JToken[] resultIntervals = new[] {
+				result[hoursForecast - 11], // 8 am
+				result[hoursForecast - 7], // 12 pm
+				result[hoursForecast - 1] // 6 pm
+			};
+
+			return resultIntervals.Select(jt => new WeatherInfo(city, jt.ToObject<JObject>())).ToArray();
 		}
 
 		private async Task<JObject> GetResponseAsync(string function, IDictionary<string, string> parameters) {
 			string url = BaseUrl + function;
-			url += "?key=" + m_WeatherBitKey;
+			url += $"?key={m_WeatherBitKey}&lang=nl";
 			foreach (KeyValuePair<string, string> parameter in parameters) {
 				url += $"&{parameter.Key}={parameter.Value}";
 			}

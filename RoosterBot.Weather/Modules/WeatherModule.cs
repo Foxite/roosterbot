@@ -13,36 +13,54 @@ namespace RoosterBot.Weather {
 	public class WeatherModule : RoosterModuleBase {
 		public WeatherService Weather { get; set; }
 
-		[Command(RunMode = RunMode.Async), Alias("nu")]
+		[Command(RunMode = RunMode.Async), Alias("nu", "in")]
 		public async Task GetCurrentWeatherCommand(CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
-			ReplyDeferred(weather.Present());
+			ReplyDeferred(weather.Present(DateTime.Now, Culture));
 		}
 
-		[Command(RunMode = RunMode.Async), Alias("dag")]
+		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
 		public async Task GetDayForecastCommand(DayOfWeek day, CityInfo city) {
-			// Get the forecast for the day at {hours} o clock
+			// Get the forecast for the day
 			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
 			await RespondDayForecast(city, date);
 		}
 
+		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
+		public async Task GetDayForecastCommand(DayOfWeek day, DateTime time, CityInfo city) {
+			DateTime datetime;
+			WeatherInfo weather;
+			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
+				// Get the forecast for the day at the time indicated by the DateTime object (the Date is ignored)
+				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(time.TimeOfDay);
+				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
+			}
+			ReplyDeferred(weather.Present(datetime, Culture));
+		}
+
 		[Command("over", RunMode = RunMode.Async)]
 		public async Task GetForecastCommand(int amount, string unit, CityInfo city) {
-			if (unit == "dag" || unit == "dagen") {
+			if (amount < 1) {
+				await MinorError("Ik kan niet terug kijken.");
+			} else if (unit == "dag" || unit == "dagen") {
 				if (amount > 7) {
 					await MinorError("Ik kan het weer niet verder dan 7 dagen voorspellen.");
 				} else {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 				}
 			} else if (unit == "uur") {
-				WeatherInfo weather;
-				using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-					weather = await Weather.GetWeatherForecastAsync(city, amount);
+				if (amount > 168) {
+					await MinorError("Ik kan het weer niet verder dan 7 dagen voorspellen.");
+				} else {
+					WeatherInfo weather;
+					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
+						weather = await Weather.GetWeatherForecastAsync(city, amount);
+					}
+					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture));
 				}
-				ReplyDeferred(weather.Present());
 			} else {
 				await MinorError("Ik kan alleen op uur- of dagniveau het weer voorspellen.");
 			}
@@ -53,12 +71,10 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
 
-				string relativeDateReference = DateTimeUtil.GetRelativeDateReference(date, Culture);
-
-				response = $"{city.Name}: Weer {relativeDateReference}\n";
-				response += "08:00: " + dayForecast[0].Present();
-				response += "\n\n12:00: " + dayForecast[1].Present();
-				response += "\n\n18:00: " + dayForecast[2].Present();
+				response = $"{dayForecast[0].City.Name}, {dayForecast[0].City.Region}: Weer {DateTimeUtil.GetRelativeDateReference(date, Culture)}\n";
+				response += "08:00:\n" + dayForecast[0].Present();
+				response += "\n\n12:00:\n" + dayForecast[1].Present();
+				response += "\n\n18:00:\n" + dayForecast[2].Present();
 			}
 
 			ReplyDeferred(response);

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using Newtonsoft.Json.Linq;
+using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Weather {
 	public class WeatherInfo {
@@ -15,11 +17,11 @@ namespace RoosterBot.Weather {
 		public float ApparentTemperature { get; }
 
 		/// <summary>
-		/// m/s
+		/// km/h
 		/// </summary>
 		public float WindSpeed { get; }
 
-		public string WindDirectionAbbr { get; }
+		public string WindDirection { get; }
 
 		internal WeatherInfo(CityInfo city, JObject jsonInfo) {
 			City = city;
@@ -27,18 +29,36 @@ namespace RoosterBot.Weather {
 			Temperature = jsonInfo["temp"].ToObject<float>();
 			ApparentTemperature = jsonInfo["app_temp"].ToObject<float>();
 
+			WindSpeed = jsonInfo["wind_spd"].ToObject<float>() * 3.6f; // m/s -> km/h
+			WindDirection = jsonInfo["wind_cdir_full"].ToObject<string>();
+
 			m_WeatherCode = jsonInfo["weather"]["code"].ToObject<short>();
 		}
 
+		/// <summary>
+		/// Format the WeatherInfo to be sent to Discord, including a pretext with city and time information.
+		/// </summary>
+		public string Present(DateTime time, CultureInfo culture) {
+			return $"{City.Name}, {City.Region}: Weer {DateTimeUtil.GetRelativeDateReference(time, culture)} {time.ToShortTimeString(culture)}\n" + Present();
+		}
+
+		/// <summary>
+		/// Format the WeatherInfo to be sent to Discord.
+		/// </summary>
 		public string Present() {
-			string ret = $"{City.Name}, {City.Region}: {Math.Round(Temperature, 1)} °C (voelt als {Math.Round(ApparentTemperature, 1)})\n";
+			string ret = $":thermometer: {Math.Round(Temperature, 1)} °C";
+
+			if (ApparentTemperature != Temperature) {
+				ret += $" (voelt als {Math.Round(ApparentTemperature, 1)})";
+			}
+			ret += "\n";
 			ret += GetDescription();
 
 			double roundWindSpeed = Math.Round(WindSpeed, 1);
 			if (roundWindSpeed < 0.05) { // For floating point errors
 				ret += "\n:wind_blowing_face: Geen wind";
 			} else {
-				ret += $"\n:wind_blowing_face: {roundWindSpeed} m/s vanuit {WindDirectionAbbr}";
+				ret += $"\n:wind_blowing_face: {roundWindSpeed} km/h vanuit {WindDirection}";
 			}
 			return ret;
 		}
