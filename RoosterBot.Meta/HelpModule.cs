@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		public Task HelpCommand() {
 			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", Config.CommandPrefix) + "\n\n";
 			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
-			response += string.Join(", ", Help.GetSectionNames());
+			response += string.Join(", ", Help.GetSectionNames()) + "\n\n";
 
 			response += GetString("MetaCommandsModule_HelpCommand_PostText");
 
