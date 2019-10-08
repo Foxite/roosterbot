@@ -14,7 +14,7 @@ namespace RoosterBot.Weather {
 		public WeatherService Weather { get; set; }
 
 		[Command(RunMode = RunMode.Async), Alias("nu", "in")]
-		public async Task GetCurrentWeatherCommand(CityInfo city) {
+		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
@@ -23,14 +23,14 @@ namespace RoosterBot.Weather {
 		}
 
 		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
-		public async Task GetDayForecastCommand(DayOfWeek day, CityInfo city) {
+		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
 			await RespondDayForecast(city, date);
 		}
 
 		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
-		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, CityInfo city) {
+		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -42,7 +42,7 @@ namespace RoosterBot.Weather {
 		}
 
 		[Command("over", RunMode = RunMode.Async)]
-		public async Task GetForecastCommand(int amount, string unit, CityInfo city) {
+		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
 				await MinorError("Ik kan niet terug kijken.");
 			} else if (unit == "dag" || unit == "dagen") {

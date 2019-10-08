@@ -38,15 +38,16 @@ namespace RoosterBot.Weather {
 			return m_Cities.SingleOrDefault(city => city.CityId == weatherBitId);
 		});
 
-		public Task<CityInfo[]> Lookup(string input) => Task.Run(() => {
+		public Task<CityInfo> Lookup(string input) => Task.Run(() => {
 			// TODO implement better matching logic
 			// TODO find a way to differentiate between identical city names in different states (Hengelo being a good example)
+			input = input.ToLower();
 			foreach (CityInfo city in m_Cities) {
 				if (city.Match(input)) {
-					return new[] { city };
+					return city;
 				}
 			}
-			return Array.Empty<CityInfo>();
+			return null;
 		});
 	}
 }
