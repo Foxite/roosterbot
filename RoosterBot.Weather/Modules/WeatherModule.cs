@@ -1,7 +1,7 @@
-﻿using Discord.Commands;
-using RoosterBot.DateTimeUtils;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Discord.Commands;
+using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Weather {
 	// TODO localize? The API is not restricted to the Netherlands but we would have to provide the entire cities file, which takes considerable time to read
@@ -30,12 +30,12 @@ namespace RoosterBot.Weather {
 		}
 
 		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
-		public async Task GetDayForecastCommand(DayOfWeek day, DateTime time, CityInfo city) {
+		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				// Get the forecast for the day at the time indicated by the DateTime object (the Date is ignored)
-				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(time.TimeOfDay);
+				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
 				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			}
 			ReplyDeferred(weather.Present(datetime, Culture));

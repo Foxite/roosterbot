@@ -38,8 +38,17 @@ namespace RoosterBot.Weather {
 		/// <summary>
 		/// Format the WeatherInfo to be sent to Discord, including a pretext with city and time information.
 		/// </summary>
-		public string Present(DateTime time, CultureInfo culture) {
-			return $"{City.Name}, {City.Region}: Weer {DateTimeUtil.GetRelativeDateReference(time, culture)} {time.ToShortTimeString(culture)}\n" + Present();
+		public string Present(DateTime datetime, CultureInfo culture) {
+			string ret = $"{City.Name}, {City.Region}: Weer ";
+
+			if ((datetime - DateTime.Now).TotalMinutes < 1) {
+				ret += "nu";
+			} else {
+				ret += DateTimeUtil.GetRelativeDateReference(datetime.Date, culture) + " " + datetime.ToShortTimeString(culture);
+			}
+			ret += "\n";
+			ret += Present();
+			return ret;
 		}
 
 		/// <summary>
