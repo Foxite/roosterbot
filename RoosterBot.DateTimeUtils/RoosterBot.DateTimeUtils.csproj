@@ -49,5 +49,10 @@
     <EmbeddedResource Include="Resources.nl-NL.resx" />
     <EmbeddedResource Include="Resources.en-US.resx" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Discord.Net.Commands">
+      <Version>2.1.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

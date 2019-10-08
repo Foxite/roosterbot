@@ -38,12 +38,11 @@ namespace RoosterBot.Weather {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 				}
 			} else if (unit == "uur") {
+				WeatherInfo weather;
 				using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-						WeatherInfo weather = await Weather.GetWeatherForecastAsync(city, amount);
-					}
-					ReplyDeferred(weather.Present());
+					weather = await Weather.GetWeatherForecastAsync(city, amount);
 				}
+				ReplyDeferred(weather.Present());
 			} else {
 				await MinorError("Ik kan alleen op uur- of dagniveau het weer voorspellen.");
 			}
