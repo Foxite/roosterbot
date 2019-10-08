@@ -1,8 +1,9 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfoReader : RoosterTypeReaderBase {
@@ -17,11 +18,11 @@ namespace RoosterBot.PublicTransit {
 					result = TypeReaderResult.FromError(CommandError.ParseFailed, "Die code bestaat niet.");
 				}
 			} else {
-				StationMatchInfo[] results = sis.Lookup(input, 1);
-				if (results.Any()) {
+				IEnumerable<StationMatchInfo> matchResults = sis.Lookup(input, 1);
+				if (matchResults.Any()) {
 					result = TypeReaderResult.FromSuccess(
-						from lookupResult in results
-						let floatScore = (float) (lookupResult.Score == 0 ? 1.0f : (1.0f / lookupResult.Score))
+						from lookupResult in matchResults
+						let floatScore = lookupResult.Score == 0 ? 1.0f : (1.0f / lookupResult.Score)
 						select new TypeReaderValue(lookupResult.Station, lookupResult.Score)
 					);
 				} else {

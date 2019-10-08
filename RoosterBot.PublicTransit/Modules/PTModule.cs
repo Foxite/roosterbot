@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.PublicTransit {
@@ -87,7 +88,7 @@ namespace RoosterBot.PublicTransit {
 		public async Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
 			string response = "Gevonden stations zijn (beste match eerst):\n\n";
 
-			StationMatchInfo[] matches = Stations.Lookup(input, 3);
+			IReadOnlyList<StationMatchInfo> matches = Stations.Lookup(input, 3);
 			int i = 1;
 			foreach (StationMatchInfo matchInfo in matches) {
 				response += $"{i}. {matchInfo.Station.DisplayName}";
