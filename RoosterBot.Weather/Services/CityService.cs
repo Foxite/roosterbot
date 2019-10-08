@@ -44,8 +44,6 @@ namespace RoosterBot.Weather {
 		});
 
 		public Task<CityInfo> Lookup(string input) => Task.Run(() => {
-			// TODO implement better matching logic
-			// TODO find a way to differentiate between identical city names in different states (Hengelo being a good example)
 			input = Util.RemoveDiacritics(input).ToLower();
 			foreach (CityInfo city in m_Cities) {
 				if (city.Match(input)) {
