@@ -59,6 +59,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Handlers\PostCommandHandler.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
+    <Compile Include="Preconditions\CountAttribute.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
     <Compile Include="Preconditions\RequireBotManagerAttribute.cs" />
     <Compile Include="Preconditions\RequireCultureAttribute.cs" />

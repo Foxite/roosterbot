@@ -10,13 +10,7 @@ namespace RoosterBot.PublicTransit {
 		public StationInfoService Stations { get; set; }
 
 		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
-		// TODO array count precondition
-		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Remainder] StationInfo[] stops) {
-			if (stops.Length < 1 || stops.Length > 2) {
-				await MinorError("Ik moet ten minste 1 station hebben, en maximaal 2.");
-				return;
-			}
-
+		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {
 			StationInfo stationFrom;
 			StationInfo stationTo;
 			if (stops.Length == 2) {
