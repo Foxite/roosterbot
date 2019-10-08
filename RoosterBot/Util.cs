@@ -206,13 +206,6 @@ namespace RoosterBot {
 		#endregion
 
 		#region LINQ
-		public static IEnumerable<T> Add<T>(this IEnumerable<T> source, T item) {
-			foreach (T current in source) {
-				yield return current;
-			}
-			yield return item;
-		}
-
 		/// <summary>
 		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
 		/// </summary>
