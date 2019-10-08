@@ -15,7 +15,7 @@ namespace RoosterBot.PublicTransit {
 			string[] inputs = input.Split(',');
 			StationInfo[] results = new StationInfo[inputs.Length];
 			for (int i = 0; i < inputs.Length; i++) {
-				TypeReaderResult indivResult = await m_IndivReader.ReadAsync(context, inputs[i], services);
+				TypeReaderResult indivResult = await m_IndivReader.ReadAsync(context, inputs[i].Trim(), services);
 				if (indivResult.IsSuccess) {
 					results[i] = (StationInfo) indivResult.BestMatch; // Unsafe cast but if this ever goes wrong, then it sure as hell isn't this class' fault.
 				} else {
