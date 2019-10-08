@@ -13,7 +13,7 @@ namespace RoosterBot.Weather {
 	public class WeatherModule : RoosterModuleBase {
 		public WeatherService Weather { get; set; }
 
-		[Command(RunMode = RunMode.Async), Alias("nu", "in")]
+		[Command(RunMode = RunMode.Async), Alias("in")]
 		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -22,14 +22,14 @@ namespace RoosterBot.Weather {
 			ReplyDeferred(weather.Present(DateTime.Now, Culture));
 		}
 
-		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
+		[Command(RunMode = RunMode.Async), Alias("op")]
 		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
 			await RespondDayForecast(city, date);
 		}
 
-		[Command(RunMode = RunMode.Async), Alias("dag", "op")]
+		[Command(RunMode = RunMode.Async), Alias("op")]
 		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
