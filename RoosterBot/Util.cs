@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net;
@@ -77,6 +79,29 @@ namespace RoosterBot {
 			}
 
 			return input;
+		}
+
+		/// <summary>
+		/// Removes diacritics from characters: characters like â become a, etc.
+		/// </summary>
+		/// <remarks>
+		/// https://stackoverflow.com/a/249126/3141917
+		/// 
+		/// This is apparently wrong, due to certain characters being replaced phonetically.
+		/// </remarks>
+		/// <returns></returns>
+		public static string RemoveDiacritics(string text) {
+			var normalizedString = text.Normalize(NormalizationForm.FormD);
+			var stringBuilder = new StringBuilder();
+
+			foreach (var c in normalizedString) {
+				var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+				if (unicodeCategory != UnicodeCategory.NonSpacingMark) {
+					stringBuilder.Append(c);
+				}
+			}
+
+			return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 		}
 		#endregion
 

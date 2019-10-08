@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTypes\CityInfo.cs" />
+    <Compile Include="DataTypes\RegionInfo.cs" />
     <Compile Include="Readers\CityInfoReader.cs" />
     <Compile Include="Services\CityService.cs" />
     <Compile Include="DataTypes\WeatherInfo.cs" />
