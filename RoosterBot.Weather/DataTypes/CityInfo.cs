@@ -30,6 +30,9 @@ namespace RoosterBot.Weather {
 
 		private bool MatchName(string input) {
 			// We could change this to a fuzzy matching algorithm, but is it necessary?
+			// It certainly is useful for towns with stupidly long names (Westerhaar-Vriezenveensewijk)
+			// We could do something like m_NormalName.StartsWith(input) but what if there's a town with a shorter name that also matches this predicate? That one should get chosen.
+			// If we do this I recommend returning the score as (input.Length / m_NormalName.Length) if m_NormalName.StartsWith(input), otherwise it will always be 0.
 			return m_NormalName == input;
 		}
 
