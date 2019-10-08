@@ -206,6 +206,16 @@ namespace RoosterBot {
 		#endregion
 
 		#region LINQ
+		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
+			if (list.Count > 0) {
+				LinkedListNode<T> node = list.First;
+				do {
+					yield return node;
+					node = node.Next;
+				} while (node != null);
+			}
+		}
+
 		/// <summary>
 		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
 		/// </summary>
