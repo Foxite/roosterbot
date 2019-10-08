@@ -52,5 +52,21 @@ namespace RoosterBot.DateTimeUtils {
 		public static string ToLongDateString(this DateTime datetime, CultureInfo culture) {
 			return datetime.ToString(culture.DateTimeFormat.LongDatePattern, culture);
 		}
+
+		public static string GetRelativeDateReference(DateTime date, CultureInfo culture) {
+			string GetString(string key, params string[] objects) {
+				return string.Format(DateTimeUtilsComponent.ResourceService.GetString(culture, key), objects);
+			}
+
+			if (date == DateTime.Today) {
+				return GetString("RelativeDateReference_Today");
+			} else if (date == DateTime.Today.AddDays(1)) {
+				return GetString("RelativeDateReference_Tomorrow");
+			} else if ((date - DateTime.Today).TotalDays < 7) {
+				return GetString("RelativeDateReference_DayName", date.DayOfWeek.GetName(culture));
+			} else {
+				return GetString("RelativeDateReference_Date", date.ToShortDateString(culture));
+			}
+		}
 	}
 }

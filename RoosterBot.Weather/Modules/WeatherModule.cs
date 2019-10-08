@@ -52,23 +52,12 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
 
-				// Copied from ScheduleModule, should probably move into DateTimeUtil, although the fact that the strings need to be localized is annoying
-				// DateTimeUtils is not component and can't make use of RoosterBot's resource system, but there's no reason we *can't* make it one
-				string relativeDateReference;
-				if (date == DateTime.Today) {
-					relativeDateReference = "vandaag";
-				} else if (date == DateTime.Today.AddDays(1)) {
-					relativeDateReference = "morgen";
-				} else if ((date - DateTime.Today).TotalDays < 7) {
-					relativeDateReference = "op " + date.DayOfWeek.GetName(Culture);
-				} else {
-					relativeDateReference = "op " + date.ToShortDateString(Culture);
-				}
+				string relativeDateReference = DateTimeUtil.GetRelativeDateReference(date, Culture);
 
 				string response = $"{city.Name}: Weer {relativeDateReference}\n";
 				response += "08:00: " + dayForecast[0].Present();
-				response += "\n12:00: " + dayForecast[1].Present();
-				response += "\n18:00: " + dayForecast[2].Present();
+				response += "\n\n12:00: " + dayForecast[1].Present();
+				response += "\n\n18:00: " + dayForecast[2].Present();
 
 				ReplyDeferred(response);
 			}

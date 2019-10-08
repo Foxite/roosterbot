@@ -126,4 +126,18 @@
   <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
   </data>
+  <data name="RelativeDateReference_Date" xml:space="preserve">
+    <value>op {0}</value>
+    <comment>0: localized short date string (day and month)</comment>
+  </data>
+  <data name="RelativeDateReference_DayName" xml:space="preserve">
+    <value>op {0}</value>
+    <comment>0: localized day name</comment>
+  </data>
+  <data name="RelativeDateReference_Today" xml:space="preserve">
+    <value>vandaag</value>
+  </data>
+  <data name="RelativeDateReference_Tomorrow" xml:space="preserve">
+    <value>morgen</value>
+  </data>
 </root>

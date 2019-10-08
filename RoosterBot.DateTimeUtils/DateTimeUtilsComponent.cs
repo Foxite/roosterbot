@@ -9,8 +9,11 @@ namespace RoosterBot.DateTimeUtils {
 
 		public override string[] Tags => new[] { "DayOfWeekReader" };
 
+		internal static ResourceService ResourceService { get; private set; }
+
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.DateTimeUtils.Resources");
+			ResourceService = services.GetService<ResourceService>();
+			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
 			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
 
