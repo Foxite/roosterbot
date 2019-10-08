@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
+	// TODO localize the entire component
 	public class WeatherComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
