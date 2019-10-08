@@ -16,10 +16,10 @@ namespace RoosterBot.PublicTransit {
 			m_DelayRegex = new Regex("[0-9]+");
 		}
 
-		public async Task<Journey[]> GetTravelRecommendation(int amount, string from, string to) {
+		public async Task<Journey[]> GetTravelRecommendation(int amount, StationInfo from, StationInfo to) {
 			XmlDocument response = await m_RestApi.GetXmlOutputAsync("treinplanner", new Dictionary<string, string>() {
-				{ "fromStation", from },
-				{ "toStation", to },
+				{ "fromStation", from.Code },
+				{ "toStation", to.Code },
 				{ "previousAdvices", "1" }
 			});
 

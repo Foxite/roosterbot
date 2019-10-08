@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -18,13 +17,15 @@ namespace RoosterBot.PublicTransit {
 					result = TypeReaderResult.FromError(CommandError.ParseFailed, "Die code bestaat niet.");
 				}
 			} else {
-				IEnumerable<StationMatchInfo> matchResults = sis.Lookup(input, 1);
-				if (matchResults.Any()) {
-					result = TypeReaderResult.FromSuccess(
+				StationInfo stationResult = sis.Lookup(input, 1).SingleOrDefault()?.Station;
+				if (stationResult != null) {
+					result = TypeReaderResult.FromSuccess(stationResult);
+				//if (matchResults.Any()) {
+					/*result = TypeReaderResult.FromSuccess((
 						from lookupResult in matchResults
 						let floatScore = lookupResult.Score == 0 ? 1.0f : (1.0f / lookupResult.Score)
 						select new TypeReaderValue(lookupResult.Station, lookupResult.Score)
-					);
+					).ToArray());*/
 				} else {
 					result = TypeReaderResult.FromError(CommandError.ParseFailed, "Ik ken dat station niet. Ik ken geen busstations, en steden zonder treinstations staan niet in mijn lijst.");
 				}

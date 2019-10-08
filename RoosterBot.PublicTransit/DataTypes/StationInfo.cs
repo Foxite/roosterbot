@@ -52,6 +52,8 @@ namespace RoosterBot.PublicTransit {
 			}
 			return score;
 		}
+
+		public override string ToString() => DisplayName;
 	}
 
 	public class StationMatchInfo : IComparable<StationMatchInfo> {
@@ -61,5 +63,7 @@ namespace RoosterBot.PublicTransit {
 		public int CompareTo(StationMatchInfo other) {
 			return Math.Sign(Score - other.Score);
 		}
+
+		public override string ToString() => Station.ToString() + "@" + Score;
 	}
 }

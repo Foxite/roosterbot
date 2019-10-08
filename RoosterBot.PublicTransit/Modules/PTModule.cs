@@ -9,10 +9,9 @@ namespace RoosterBot.PublicTransit {
 		public NSAPI NSAPI { get; set; }
 		public StationInfoService Stations { get; set; }
 
-		// TODO this currently does not work, because the documentation regarding "params" in command args does not match what actually happens
-		// I'm waiting for a response to the issue I created ( https://github.com/discord-net/Discord.Net/issues/1394 ), until then this is on hold.
 		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
-		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming")] params StationInfo[] stops) {
+		// TODO array count precondition
+		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Remainder] StationInfo[] stops) {
 			if (stops.Length < 1 || stops.Length > 2) {
 				await MinorError("Ik moet ten minste 1 station hebben, en maximaal 2.");
 				return;
@@ -30,7 +29,7 @@ namespace RoosterBot.PublicTransit {
 
 			await ReplyAsync($"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName} opzoeken...");
 
-			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom.Code, stationTo.Code);
+			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
 
 			ReplyDeferred($"{Context.User.Mention} Mogelijkheden: (elke optie is in een aparte tabel, en elke rij is één overstap)");
 
