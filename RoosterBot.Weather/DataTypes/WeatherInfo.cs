@@ -39,7 +39,13 @@ namespace RoosterBot.Weather {
 		/// Format the WeatherInfo to be sent to Discord, including a pretext with city and time information.
 		/// </summary>
 		public string Present(DateTime datetime, CultureInfo culture) {
-			string ret = $"{City.Name}, {City.Region}: Weer ";
+			string ret;
+
+			if (City.Name == City.Region.Name) {
+				ret = $"{City.Name}: Weer ";
+			} else {
+				ret = $"{City.Name}, {City.Region}: Weer ";
+			}
 
 			if ((datetime - DateTime.Now).TotalMinutes < 1) {
 				ret += "nu";
