@@ -26,6 +26,7 @@ namespace RoosterBot {
 
 		private Program() { }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log crash and exit")]
 		private static int Main(string[] args) {
 			Console.CancelKeyPress += (o, e) => {
 				e.Cancel = true;

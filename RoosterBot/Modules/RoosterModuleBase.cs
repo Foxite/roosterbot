@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -187,7 +188,7 @@ namespace RoosterBot {
 		public bool IsPrivate { get; }
 		public string CallTag { get; }
 		// If this is null, we should make a new message.
-		public IUserMessage[] Responses { get; }
+		public IReadOnlyList<IUserMessage> Responses { get; }
 		
 		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage[] originalResponses, string calltag) {
 			Client = client;

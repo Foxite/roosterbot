@@ -154,7 +154,8 @@ namespace RoosterBot {
 			try {
 				await message.AddReactionAsync(new Emoji(unicode));
 				return true;
-			} catch (HttpException) { // Permission denied
+			} catch (HttpException e) { // Permission denied
+				Logger.Warning("Util", "Attempted to add a reaction to a message, but this failed", e);
 				return false;
 			}
 		}
@@ -163,7 +164,8 @@ namespace RoosterBot {
 			try {
 				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
 				return true;
-			} catch (HttpException) { // Permission denied
+			} catch (HttpException e) { // Permission denied
+				Logger.Warning("Util", "Attempted to add a reaction to a message, but this failed", e);
 				return false;
 			}
 		}
