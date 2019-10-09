@@ -9,7 +9,7 @@ namespace RoosterBot.PublicTransit {
 		public NSAPI NSAPI { get; set; }
 		public StationInfoService Stations { get; set; }
 
-		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `!ov amsterdam sloterdijk, utrecht centraal`")]
+		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `{0}ov amsterdam sloterdijk, utrecht centraal`")]
 		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {
 			StationInfo stationFrom;
 			StationInfo stationTo;
