@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ConfigService {
-		public   string CommandPrefix { get; }
+		public   string CommandPrefix { get; } // TODO command prefixes should be per server
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
 		public   MultiMatchHandling MultiMatchHandling { get; }
