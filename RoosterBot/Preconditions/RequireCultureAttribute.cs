@@ -25,7 +25,7 @@ namespace RoosterBot {
 				ResourceService resources = services.GetService<ResourceService>();
 				string reason;
 				if (Hide) {
-					reason = string.Format(resources.GetString(contextCulture, "Program_OnCommandExecuted_UnknownCommand"), services.GetService<ConfigService>().CommandPrefix);
+					reason = string.Format(resources.GetString(contextCulture, "Program_OnCommandExecuted_UnknownCommand"), services.GetService<ConfigService>().DefaultCommandPrefix);
 				} else {
 					CultureNameService cns = services.GetService<CultureNameService>();
 					string localizedName = cns.GetLocalizedName(Culture, contextCulture);

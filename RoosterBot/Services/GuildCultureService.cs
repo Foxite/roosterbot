@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 
 namespace RoosterBot {
+	// TODO ditch this service and use GuildConfigService
 	public class GuildCultureService {
 		private Dictionary<ulong, CultureInfo> m_GuildCultures; // Maps guild IDs to CultureInfo
 		private CultureInfo m_DefaultCulture;

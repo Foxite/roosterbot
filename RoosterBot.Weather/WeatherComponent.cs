@@ -46,7 +46,7 @@ namespace RoosterBot.Weather {
 			helpText += "Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve spellingen. Als je een stad tegenkomt waarvan de alternatieve spelling niet bekend is, laat dit weten aan de bot eigenaar.";
 
 
-			help.AddHelpSection(this, "weer", string.Format(helpText, services.GetService<ConfigService>().CommandPrefix));
+			help.AddHelpSection(this, "weer", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix));
 		}
 	}
 }

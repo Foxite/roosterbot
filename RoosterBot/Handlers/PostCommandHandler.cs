@@ -31,7 +31,7 @@ namespace RoosterBot {
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 						case CommandError.UnknownCommand:
-							response = string.Format(m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_UnknownCommand"), m_Config.CommandPrefix);
+							response = string.Format(m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_UnknownCommand"), m_Config.DefaultCommandPrefix);
 							break;
 						case CommandError.BadArgCount:
 							response = m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_BadArgCount");

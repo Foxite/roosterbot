@@ -54,7 +54,7 @@ namespace RoosterBot.Watson {
 			if (socketMsg is IUserMessage msg && !msg.Author.IsBot) {
 				int argPos = 0;
 				bool process = false;
-				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.CommandPrefix)) {
+				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.DefaultCommandPrefix)) {
 					Logger.Info("WatsonComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel: {socketMsg.Content}");
 					process = true;
 				} else if (msg.Channel is IGuildChannel gch && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {

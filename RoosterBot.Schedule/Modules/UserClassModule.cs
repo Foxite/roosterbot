@@ -16,7 +16,7 @@ namespace RoosterBot.Schedule {
 			} else {
 				response = GetString("UserClassModule_GetClassForUser_UserIsInClass", clazz);
 			}
-			response += GetString("UserClassModule_GetClassForUser_ChangeHint", Config.CommandPrefix);
+			response += GetString("UserClassModule_GetClassForUser_ChangeHint", Config.DefaultCommandPrefix);
 			await ReplyAsync(response);
 		}
 		

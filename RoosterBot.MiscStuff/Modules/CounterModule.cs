@@ -19,7 +19,7 @@ namespace RoosterBot.MiscStuff {
 												counterData.LastResetDate.ToString("dd-MM-yyyy"),
 												counterData.LastResetDate.ToString("HH:mm"),
 												FormatTimeSpan(counterData.HighScoreTimespan),
-												Config.CommandPrefix);
+												Config.DefaultCommandPrefix);
 				ReplyDeferred(response);
 				return Task.CompletedTask;
 			} catch (FileNotFoundException) {

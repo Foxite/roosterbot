@@ -244,4 +244,41 @@ namespace RoosterBot {
 		public bool Success;
 		public T Value;
 	}
+
+	/// <summary>
+	/// A lazy-evaluation wrapper for any type.
+	/// </summary>
+	public class Lazy<T> {
+		public bool IsEvaluated { get; private set; }
+		public T Value {
+			get {
+				if (!IsEvaluated) {
+					m_Value = m_Factory();
+					IsEvaluated = true;
+				}
+				return m_Value;
+			}
+		}
+
+		private Func<T> m_Factory;
+		private T m_Value;
+
+		public Lazy(Func<T> factory) {
+			IsEvaluated = false;
+			m_Factory = factory;
+		}
+
+		/// <summary>
+		/// Bypasses the lazy-evaluation system. Useful if you need to assign a Lazy<T> property but have already evaluated the value.
+		/// </summary>
+		/// <param name="value"></param>
+		public Lazy(T value) {
+			IsEvaluated = true;
+			m_Value = value;
+		}
+
+		public static implicit operator T(Lazy<T> lazy) {
+			return lazy.Value;
+		}
+	}
 }

@@ -14,25 +14,23 @@ namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
 		public GuildCultureService Cultures { get; set; }
+		public GuildConfigService GuildConfigService { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
 		public CommandResponseService CommandResponses { get; set; }
 		public new T Context { get; internal set; }
 
 		protected ModuleLogger Log { get; private set; }
-		protected CultureInfo Culture {
-			get {
-				if (m_Culture == null) {
-					m_Culture = Cultures.GetCultureForGuild(Context.Guild);
-				}
-				return m_Culture;
-			}
-		}
+		protected GuildConfig GuildConfig { get; private set; }
 
-		private CultureInfo m_Culture = null;
+		/// <summary>
+		/// Use GuildConfig.Culture instead.
+		/// </summary>
+		protected CultureInfo Culture => GuildConfig.Culture;
+
 		private StringBuilder m_Response;
 		private bool m_Replied = false;
-		
+
 		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
 		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
 
@@ -40,6 +38,7 @@ namespace RoosterBot {
 			if (Context == null) {
 				Context = base.Context;
 			}
+			GuildConfig = GuildConfigService.GetConfig(Context.Guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
 			
 			Log = new ModuleLoggerInternal(GetType().Name);
 

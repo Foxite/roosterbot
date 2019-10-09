@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ConfigService {
-		public   string CommandPrefix { get; } // TODO command prefixes should be per server
+		public   string DefaultCommandPrefix { get; } // TODO command prefixes should be per server
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
 		public   MultiMatchHandling MultiMatchHandling { get; }
@@ -16,6 +17,7 @@ namespace RoosterBot {
 		public   IReadOnlyCollection<ulong> StaffRoles { get; }
 		internal bool ReportStartupVersionToOwner { get; }
 		internal int MinimumMemorySeconds { get; }
+		public CultureInfo DefaultCulture { get; internal set; }
 
 		private  ulong m_BotOwnerId;
 
@@ -32,7 +34,7 @@ namespace RoosterBot {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
 			authToken = jsonConfig["token"].ToObject<string>();
-			CommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
+			DefaultCommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
 			GameString = jsonConfig["gameString"].ToObject<string>();
 			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
 			MultiMatchHandling = jsonConfig["multiMatchHandling"].ToObject<MultiMatchHandling>();

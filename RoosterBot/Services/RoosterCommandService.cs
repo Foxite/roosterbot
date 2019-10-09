@@ -27,10 +27,10 @@ namespace RoosterBot {
 			argPos = 0;
 			if (message.Source == MessageSource.User &&
 				message is IUserMessage userMessage &&
-				message.Content.Length > m_Config.CommandPrefix.Length &&
-				userMessage.HasStringPrefix(m_Config.CommandPrefix, ref argPos)) {
+				message.Content.Length > m_Config.DefaultCommandPrefix.Length &&
+				userMessage.HasStringPrefix(m_Config.DefaultCommandPrefix, ref argPos)) {
 				// First char after prefix
-				char firstChar = message.Content.Substring(m_Config.CommandPrefix.Length)[0];
+				char firstChar = message.Content.Substring(m_Config.DefaultCommandPrefix.Length)[0];
 				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
 					return true;
