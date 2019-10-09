@@ -122,8 +122,7 @@
 Je hoeft niet aan te geven of je een klas, leraar of lokaal bedoelt; ik begrijp dit automatisch.
 
 Je kunt deze commands gebruiken om dit te zien:
-`{0}nu`
-`{0}hierna`
+`{0}nu`, `{0}hierna`, `{0}vandaag`, `{0}morgen`, `{0}deze week`, `{0}volgende week`
 Hierbij vul je na de command in wat je wilt zien. Als je bijvoorbeeld wilt zien welke les 2GD1 nu heeft, doe je dit:
 `{0}nu 2gd1`
 

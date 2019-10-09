@@ -122,8 +122,7 @@
 You don't have to indicate which you mean; I will pick up on this automatically.
 
 You can use these commands to see this:
-`{0}now`
-`{0}next`
+`{0}now`, `{0}next`, `{0}today`, `{0}tomorrow`, `{0}this week`, `{0}next week`
 After your command, include what you want to know about. If you want to see where 2GD1 is right now, you do this:
 `{0}now 2gd1`
 
