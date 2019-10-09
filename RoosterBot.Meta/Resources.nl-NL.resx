@@ -144,13 +144,13 @@
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
     <value>Al mijn commands beginnen met `{0}`.
 
-Gebruik `!help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
+Gebruik `{0}help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
     <value>Beschikbare hoofdstukken zijn:</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
-    <value>Je kunt ook `!commands` gebruiken om een lijst van categorieën te zien, en `!commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>
+    <value>Je kunt ook `{0}commands` gebruiken om een lijst van categorieën te zien, en `{0}commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
     <value>hoofdstuk</value>

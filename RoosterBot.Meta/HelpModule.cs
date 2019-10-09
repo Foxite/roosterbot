@@ -14,7 +14,7 @@ namespace RoosterBot.Meta {
 			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
 			response += string.Join(", ", Help.GetSectionNames()) + "\n\n";
 
-			response += GetString("MetaCommandsModule_HelpCommand_PostText");
+			response += GetString("MetaCommandsModule_HelpCommand_PostText", Config.CommandPrefix);
 
 			ReplyDeferred(response);
 
