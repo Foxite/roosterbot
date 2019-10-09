@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
+	// TODO should this be a service? I've seen that Microsoft.Extensions contains stuff for logging, including a way to do this
+	// serviceCollection.AddLogging
+	// And that's that. We could use that.
 	public static class Logger {
-		private static readonly object s_Lock;
-		private static readonly int s_LongestSeverity;
+		private static readonly object Lock = new object();
+		private static readonly int LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
 
-		public static readonly string LogPath;
+		public static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 
 		static Logger() {
-			LogPath = Path.Combine(Program.DataPath, "RoosterBot");
-			s_Lock = new object();
-
 			// Keep the log from the previous launch as ".old.log"
 			if (File.Exists(LogPath + ".log")) {
 				if (File.Exists(LogPath + ".old.log")) {
@@ -28,9 +28,6 @@ namespace RoosterBot {
 			} else {
 				LogPath += ".log";
 			}
-
-			LogSeverity[] severities = (LogSeverity[]) typeof(LogSeverity).GetEnumValues();
-			s_LongestSeverity = severities.Max(sev => sev.ToString().Length);
 		}
 
 		public static void Verbose(string tag, string msg, Exception e = null) {
@@ -58,7 +55,7 @@ namespace RoosterBot {
 		}
 
 		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
-			string severityStr = severity.ToString().PadLeft(s_LongestSeverity);
+			string severityStr = severity.ToString().PadLeft(LongestSeverity);
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " [" + severityStr + "] " + tag + " : " + msg;
 			if (exception != null) {
@@ -69,7 +66,7 @@ namespace RoosterBot {
 				}
 			}
 			Console.WriteLine(loggedMessage);
-			lock (s_Lock) {
+			lock (Lock) {
 				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
 			}
 		}
