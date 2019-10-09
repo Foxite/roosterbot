@@ -12,8 +12,8 @@ using Discord.WebSocket;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
-		public ConfigService Config { get; set; } // TODO a lot of these dependencies aren't supposed to be used by actual modules.
-		public GuildCultureService Cultures { get; set; } // We could/should use constructor DI instead of public settable properties.
+		public ConfigService Config { get; set; }
+		public GuildCultureService Cultures { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
 		public CommandResponseService CommandResponses { get; set; }

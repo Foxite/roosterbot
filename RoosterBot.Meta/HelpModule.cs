@@ -26,7 +26,7 @@ namespace RoosterBot.Meta {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
 				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
-				response += ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2);
+				response += string.Format(ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2), Config.CommandPrefix);
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";

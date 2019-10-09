@@ -118,30 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
-    <value>You can look up what a class or teacher is currently doing, or what is going on in a room.
-I will automatically understand if you're talking about a class, teacher, or room.
-I know the abbreviations, full names, and alternative spellings of all teachers.
-`!nu 1gd2`, `!nu laurence candel`, `!nu laurens`, `!nu lca`, `!nu a223`
+    <value>You can query the schedule for a class, teacher or room.
+You don't have to indicate which you mean; I will pick up on this automatically.
 
-You can also look up what takes place next, or on a certain day of the week.
-`!next 2gd1`, `!day wednesday lance` (you don't have to type the full thing: `!day we lkr` does the same)
-Note: If you use `!today`, I will use today. But if you do this on Monday: `!day monday 4ga1` I will show Monday, next week.
+You can use these commands to see this:
+`{0}now`
+`{0}next`
+After your command, include what you want to know about. If you want to see where 2GD1 is right now, you do this:
+`{0}now 2gd1`
 
-You can also see what's scheduled for a class/teacher/room after the last thing I showed you.
-`!hierna 3ga1` followed by `!next`. You can use `!next` as often as you want.
+You can also view day or week level.
+With `{0}day tuesday a223` you can see what is scheduled on wednesday in room A2.23.
+With `{0}in 2 weeks lance krasniqi` you can see the schedule for Lance Krasniqi, for that entire week.
 
-If you are in a break, I will automatically show you what comes after the break.
-You can request a list of all teachers, including their abbreviations and Discord names: `!teachers`
-You can also filter this list: `!teachers martin` shows you all teachers with the first name Martin.</value>
+`{0}in` supports hours, days, and weeks. `{0}in 2 hours a127`, `{0}in 3 days 4ga1`, `{0}in 1 week joram`
+
+You can also see what is scheduled after the last item you viewed. Use `{0}after` for this.
+
+Lastly, you can tell me what class you are in, so you won't have to tell me in every command. Use `{0}help your class` for more information.
+Better yet: if I know what class a person is in, you can mention that person in my commands. Keep in mind that person gets a ping when you do this.</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
     <value>I can remember in what class you are, so you won't have to tell me every time.
-To set your class: `!me &lt;class&gt;`, for example `!me 2gd1`.
-After that you won't have to put your class in commands. So you can just type `!now` and I will know what to search for.
-You can always check what class I think you're in by just typing `!me`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)
-
-This also works with natural-language commands: `@RoosterBot what's up now?`
-Warning: natural-language commands are not supported yet in English.</value>
+To set your class: `{0}me &lt;class&gt;`, for example `{0}me 2gd1`.
+After that you won't have to put your class in commands. So you can just type `{0}now` and I will know what to search for.
+You can always check what class I think you're in by just typing `{0}me`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
     <value>Is that a teacher? :thinking: If they are new, they need to be added by the bot owner.</value>
@@ -156,7 +159,8 @@ Warning: natural-language commands are not supported yet in English.</value>
     <value>I don't know in what class you are. Use `!me &lt;your class&gt;` to change this.</value>
   </data>
   <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
-    <value>Hint: To use !daarna, you don't need to specify parameters.</value>
+    <value>Hint: To use {0}next, you don't need to specify parameters.</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>After what?</value>

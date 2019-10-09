@@ -118,28 +118,35 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
-    <value>Je kan opvragen welke les een klas of een leraar nu heeft, of in een lokaal bezig is.
-Ik begrijp dan automatisch of je het over een klas, leraar of lokaal hebt.
-Ik ken de afkortingen, voornamen, en alternative spellingen van alle leraren.
-`!nu 1gd2`, `!nu laurence candel`, `!nu laurens`, `!nu lca`, `!nu a223`
+    <value>Je kunt opvragen welke les een klas of leraar heeft, of nu in een lokaal bezig is.
+Je hoeft niet aan te geven of je een klas, leraar of lokaal bedoelt; ik begrijp dit automatisch.
 
-Je kan ook opvragen wat er hierna of op een bepaalde weekdag is.
-`!hierna 2gd1`, `!dag lance woensdag` (de volgorde maakt niet uit: `!dag wo lkr` doet hetzelfde), `!morgen b114`
-Let op: Als je `!vandaag` gebruikt, pak ik vandaag. Maar als je bijvoorbeeld op maandag dit doet: `!dag maandag 4ga1`, pak ik volgende week maandag.
+Je kunt deze commands gebruiken om dit te zien:
+`{0}nu`
+`{0}hierna`
+Hierbij vul je na de command in wat je wilt zien. Als je bijvoorbeeld wilt zien welke les 2GD1 nu heeft, doe je dit:
+`{0}nu 2gd1`
 
-Je kan ook zien wat de klas/leraar/lokaal heeft na wat ik je net heb verteld.
-`!hierna 3ga1` en dan `!daarna`. Je kan `!daarna` zo vaak gebruiken als je wilt.
-Als je pauze hebt, laat ik automatisch zien wat er daarna komt.
-Je kan een lijst van alle docenten opvragen, met hun afkortingen en discord namen: `!docenten` of `!leraren`
-Deze lijst kan ook gefilterd worden: `!docenten martijn`</value>
+Je kunt ook op dag- of weekniveau kijken.
+Met `{0}dag woensdag a223` kun je bekijken welke lessen er op aanstaande woensdag in lokaal A2.23 zijn.
+Met `{0}over 2 weken martijn kunstman` zie je het rooster van Martijn Kunstman, voor die hele week.
+
+`{0}over` ondersteunt uren, dagen, en weken. `{0}over 2 uur a127`, `{0}over 3 dagen 4ga1`, `{0}over 1 week lance`
+
+Verder kun je zien wat er op het rooster staat na het laatste item wat je hebt bekeken. Gebruik hiervoor `{0}daarna`.
+
+Ten laatste, je kunt ook instellen in welke klas jij zit, zodat je niet je eigen klas hoeft in te vullen. Gebruik `{0}help jouw klas` voor meer informatie.
+Sterker nog: als ik weet in welke klas een persoon zit, kun je die persoon mentionen in mijn commands. Hou er rekening mee dat die persoon een ping krijgt als je dit doet.</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
     <value>Ik kan onthouden in welke klas jij zit, zodat je dit niet elke keer er bij hoeft te zetten.
-Stel je klas in met: `!ik &lt;klas&gt;`, bijvoorbeeld `!ik 2gd1`.
-Daarna hoef je niet meer je klas in commands te zetten. Je kan dus alleen maar `!nu` typen en dan weet ik wat ik moet opzoeken.
-Je kan altijd kijken in welke klas ik denk dat je zit door alleen `!ik` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)
+Stel je klas in met: `{0}ik &lt;klas&gt;`, bijvoorbeeld `{0}ik 2gd1`.
+Daarna hoef je niet meer je klas in commands te zetten. Je kan dus alleen maar `{0}nu` typen en dan weet ik wat ik moet opzoeken.
+Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)
 
 Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
     <value>Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.</value>
