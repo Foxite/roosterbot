@@ -121,7 +121,9 @@
     <value>There can't be extra lines or tabs in the input.</value>
   </data>
   <data name="WatsonComponent_HelpText" xml:space="preserve">
-    <value>I use a machine-learning system to understand natural language.
+    <value>**Natural language is not yet supported in English.**
+
+I use a machine-learning system to understand natural language.
 
 To use this, mention me at the start of a message and ask me a question.
 For example:
