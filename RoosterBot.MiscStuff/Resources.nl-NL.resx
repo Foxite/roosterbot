@@ -119,9 +119,10 @@
   </resheader>
   <data name="MiscStuffComponent_HelpText" xml:space="preserve">
     <value>Voor de rest zijn er nog deze commands:
-`counter &lt;naam van counter&gt;`
-`counter reset &lt;naam van counter&gt;`
+`{0}counter &lt;naam van counter&gt;`
+`{0}counter reset &lt;naam van counter&gt;`
 En nog minstens 4 geheime commands voor de bot owner.</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="CounterService_FormatTimeSpan_DaysSingular" xml:space="preserve">
     <value>{0} dag</value>
@@ -153,12 +154,13 @@ En nog minstens 4 geheime commands voor de bot owner.</value>
     <value>Dagen geleden dat {0}: {1}.
 (Laatst gereset op {2} om {3})
 De highscore is {4}.
-Reset de counter met `!counter reset &lt;counter&gt;`.</value>
+Reset de counter met `{5}counter reset &lt;counter&gt;`.</value>
     <comment>0: Counter description
 			1: time since reset
 			2: last reset date
 			3: last reset time
-			4: highscore</comment>
+			4: highscore
+5: command prefix</comment>
   </data>
   <data name="CounterModule_GetCounterCommand_CounterDoesNotExist" xml:space="preserve">
     <value>Die bestaat niet.</value>

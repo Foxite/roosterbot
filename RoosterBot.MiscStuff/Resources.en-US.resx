@@ -153,12 +153,13 @@ And at least 4 secret commands for the bot owner.</value>
     <value>Days since {0}: {1}.
 (Last rest on {2} at {3})
 The highscore is {4}.
-Reset the counter using `!counter reset &lt;counter&gt;`.</value>
+Reset the counter using `{5}counter reset &lt;counter&gt;`.</value>
     <comment>0: Counter description
 			1: time since reset
 			2: last reset date
 			3: last reset time
-			4: highscore</comment>
+			4: highscore
+5: command prefix</comment>
   </data>
   <data name="CounterModule_GetCounterCommand_CounterDoesNotExist" xml:space="preserve">
     <value>That counter doesn't exit.</value>
