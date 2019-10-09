@@ -29,9 +29,9 @@ namespace RoosterBot.Schedule {
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionUser");
+						message = string.Format(resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionUser"), services.GetService<ConfigService>().CommandPrefix);
 					} else {
-						message = resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionSelf");
+						message = String.Format(resources.GetString(context, "StudentSetInfoReader_CheckFailed_MentionSelf"), services.GetService<ConfigService>().CommandPrefix);
 					}
 					return TypeReaderResult.FromError(CommandError.Unsuccessful, message);
 				} else {

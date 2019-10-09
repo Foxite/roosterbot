@@ -153,13 +153,13 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>Thats not a class.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
-    <value>I don't know in what class that person is. He/she needs to use `!me &lt;his/her class&gt;` to change this.</value>
+    <value>I don't know in what class that person is. He/she needs to use `{0}me &lt;his/her class&gt;` to change this.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>I don't know in what class you are. Use `!me &lt;your class&gt;` to change this.</value>
+    <value>I don't know in what class you are. Use `{0}me &lt;your class&gt;` to change this.</value>
   </data>
   <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
-    <value>Hint: To use {0}next, you don't need to specify parameters.</value>
+    <value>Hint: To use `{0}next`, you don't need to specify parameters.</value>
     <comment>0: command prefix</comment>
   </data>
   <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
@@ -260,7 +260,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <comment>0: user's student set</comment>
   </data>
   <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
-    <value>Use `!me &lt;your class&gt;` to change this.</value>
+    <value>Use `{0}me &lt;your class&gt;` to change this.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
     <value>Noted: you are in {0}.</value>
@@ -288,7 +288,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>Discord name</value>
   </data>
   <data name="ScheduleModule_Remarks" xml:space="preserve">
-    <value>You can use `!me` to tell me what class you are in, so you don't have to tell me every time.</value>
+    <value>You can use `{0}me` to tell me what class you are in, so you don't have to tell me every time.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Automatically understands if you're talking about a class, teacher, or room.</value>
@@ -303,7 +303,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>See the next schedule item.</value>
   </data>
   <data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
-    <value>The schedule for a certain day. If you use today, then I will show you next week. !today does not do this.</value>
+    <value>The schedule for a certain day. If you use today, then I will show you next week. `{0}today` does not do this.</value>
   </data>
   <data name="ScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
     <value>See the schedule for tomorrow.</value>

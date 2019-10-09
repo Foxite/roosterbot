@@ -83,7 +83,7 @@ namespace RoosterBot.Meta {
 						}
 
 						string paramName = ResourcesService.ResolveString(Culture, component, param.Name);
-						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {ResourcesService.ResolveString(Culture, component, param.Summary)}";
+						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {string.Format(ResourcesService.ResolveString(Culture, component, param.Summary), Config.CommandPrefix)}";
 						
 						response += $" <{paramName.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{paramSummary}>";
 					}
@@ -91,7 +91,7 @@ namespace RoosterBot.Meta {
 					if (string.IsNullOrWhiteSpace(command.Summary)) {
 						response += "`";
 					} else {
-						string commandSummary = ResourcesService.ResolveString(Culture, component, command.Summary);
+						string commandSummary = string.Format(ResourcesService.ResolveString(Culture, component, command.Summary), Config.CommandPrefix);
 						response += $"`: {commandSummary}";
 					}
 
@@ -105,7 +105,7 @@ namespace RoosterBot.Meta {
 								if (preconditionsAdded != 0) {
 									preconditionText += ", ";
 								}
-								preconditionText += ResourcesService.ResolveString(Culture, component, rpc.Summary);
+								preconditionText += string.Format(ResourcesService.ResolveString(Culture, component, rpc.Summary), Config.CommandPrefix);
 								preconditionsAdded++;
 							}
 						}
@@ -119,7 +119,7 @@ namespace RoosterBot.Meta {
 				}
 
 				if (!string.IsNullOrWhiteSpace(module.Remarks)) {
-					response += ResourcesService.ResolveString(Culture, component, module.Remarks) + "\n";
+					response += string.Format(ResourcesService.ResolveString(Culture, component, module.Remarks), Config.CommandPrefix) + "\n";
 				}
 
 				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
