@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using RoosterBot;
 using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using ScheduleComponent.DataTypes;
@@ -51,8 +52,9 @@ namespace ScheduleComponent.Modules {
 
 					await guildUser.RemoveRolesAsync(oldRoles);
 					await guildUser.AddRolesAsync(newRoles);
-				} catch (Exception) {
-					// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
+				} catch (Exception e) {
+					Logger.Error("UserClassModule", "Failed to assign role", e);
+					await Config.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
 				}
 			} catch (ArgumentException) {
 				await ReplyAsync("Dat is geen klas.");
