@@ -43,7 +43,7 @@ namespace ScheduleComponent.Modules {
 
 				try {
 					IRole[] oldRoles;
-					if (oldStudentSet == null) {
+					if (oldStudentSet != null) {
 						oldRoles = new[] { Context.Guild.GetRole(278937741478330389) };
 					} else {
 						oldRoles = Roles.GetRolesForStudentSet(Context.Guild, oldStudentSet).ToArray();
