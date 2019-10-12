@@ -8,6 +8,7 @@ using System;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Linq;
+using Discord.Commands;
 
 namespace MiscStuffComponent {
 	public class MiscStuffComponent : ComponentBase {
@@ -35,7 +36,32 @@ namespace MiscStuffComponent {
 			helpText += "En nog minstens 4 geheime commands voor de bot owner.";
 			help.AddHelpSection("misc", helpText);
 
-			services.GetService<DiscordSocketClient>().UserJoined += WelcomeUser;
+			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
+			client.UserJoined += WelcomeUser;
+			client.MessageReceived += HintManualRanks;
+		}
+
+		private async Task HintManualRanks(SocketMessage msg) {
+			if (msg is SocketUserMessage sum) {
+				int argPos = 0;
+				if (sum.HasStringPrefix("?rank ", ref argPos)) {
+					bool respond = false;
+					if (sum.Content.ToLower().EndsWith("e jaar")) {
+						respond = true;
+					} else {
+						string manualRank = sum.Content.ToLower().Substring(argPos);
+						if (manualRank == "developer" || manualRank == "artist") {
+							respond = true;
+						}
+					}
+
+					if (respond) {
+						await msg.Channel.SendMessageAsync(msg.Author.Mention +
+							", je hoeft niet meer handmatig aan te geven aan Dyno in welke jaar/opleiding je zit. " +
+						   "Dit wordt nu automatisch gedaan als je je klas instelt met `!ik <jouw klas>`.");
+					}
+				}
+			}
 		}
 
 		private async Task WelcomeUser(SocketGuildUser user) {
