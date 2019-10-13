@@ -9,12 +9,12 @@ namespace ScheduleComponent.Services {
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
 
 		public UserClassRoleService() {
-			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
+			ulong[] yearRoles = new ulong[] { 494531025473503252u, 494531131606040586u, 494531205966987285u, 494531269796036618u };
 
 			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();
 
-			ulong dev = 278587815271464970;
-			ulong art = 278587791141765121;
+			ulong dev = 278587815271464970u;
+			ulong art = 278587791141765121u;
 
 			void setupYearRoles(ulong courseRole) {
 				for (int i = 0; i < yearRoles.Length; i++) {
