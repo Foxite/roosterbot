@@ -15,13 +15,13 @@ namespace RoosterBot.Watson {
 		private const string LogTag = "Watson";
 		private readonly string m_AssistantId;
 		private readonly AssistantService m_Assistant;
-		private readonly GuildCultureService m_GCS;
+		private readonly GuildConfigService m_GCS;
 		private readonly ResourceService m_Resources;
 		private readonly IDiscordClient m_DiscordClient;
 		private readonly RoosterCommandService m_CommandService;
 		private readonly CommandResponseService m_CRS;
 
-		public WatsonClient(string apiKey, string assistantId, GuildCultureService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
+		public WatsonClient(string apiKey, string assistantId, GuildConfigService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
@@ -39,7 +39,7 @@ namespace RoosterBot.Watson {
 		public async Task ProcessCommandAsync(IUserMessage message, string input) {
 			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
 				IGuild guild = (message.Author as SocketUser)?.MutualGuilds.First() ?? (message.Channel as IGuildChannel).Guild;
-				CultureInfo culture = m_GCS.GetCultureForGuild(guild);
+				CultureInfo culture = (await m_GCS.GetConfigAsync(guild)).Culture;
 				await message.Channel.SendMessageAsync(Util.ErrorPrefix + m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
 				return;
 			}

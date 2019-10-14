@@ -13,7 +13,6 @@ using Discord.WebSocket;
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
-		public GuildCultureService Cultures { get; set; }
 		public GuildConfigService GuildConfigService { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
@@ -38,7 +37,7 @@ namespace RoosterBot {
 			if (Context == null) {
 				Context = base.Context;
 			}
-			GuildConfig = GuildConfigService.GetConfig(Context.Guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
 			
 			Log = new ModuleLoggerInternal(GetType().Name);
 

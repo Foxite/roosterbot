@@ -100,10 +100,10 @@ namespace RoosterBot {
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
 			HelpService helpService = new HelpService();
-			GuildCultureService gcs = new GuildCultureService();
+			GuildConfigService gcs = new GuildConfigService(m_ConfigService, m_Client);
 			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
-			ResourceService resources = new ResourceService(gcs);
+			ResourceService resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
 
 			CultureNameService cns = new CultureNameService();

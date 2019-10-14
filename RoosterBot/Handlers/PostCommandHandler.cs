@@ -8,10 +8,10 @@ namespace RoosterBot {
 	internal sealed class PostCommandHandler {
 		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
-		private readonly GuildCultureService m_GCS;
+		private readonly GuildConfigService m_GCS;
 		private readonly ResourceService m_ResourcesService;
 
-		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, GuildCultureService gcs, ResourceService resources, CommandResponseService crs) {
+		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, GuildConfigService gcs, ResourceService resources, CommandResponseService crs) {
 			m_Config = config;
 			m_ResourcesService = resources;
 			m_GCS = gcs;
@@ -26,7 +26,7 @@ namespace RoosterBot {
 				bool bad = false;
 				string badReport = $"\"{context.Message}\": ";
 
-				CultureInfo culture = m_GCS.GetCultureForGuild(context.Guild);
+				CultureInfo culture = (await m_GCS.GetConfigAsync(context.Guild)).Culture;
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {

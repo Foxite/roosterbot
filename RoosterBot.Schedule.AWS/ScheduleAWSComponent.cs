@@ -14,7 +14,7 @@ namespace RoosterBot.Schedule.AWS {
 		private DynamoDBUserClassesService m_UserClasses;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
-		public override string[] Tags => new[] { "UserClassesService" };
+		public override IEnumerable<string> Tags => new[] { "UserClassesService" };
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
 			return DependencyResult.Build(components)

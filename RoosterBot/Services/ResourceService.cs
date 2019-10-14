@@ -7,11 +7,9 @@ using Discord.Commands;
 namespace RoosterBot {
 	public sealed class ResourceService {
 		private Dictionary<Assembly, ResourceManager> m_ResourceManagers;
-		private GuildCultureService m_GCS;
 
-		internal ResourceService(GuildCultureService gcs) {
+		internal ResourceService() {
 			m_ResourceManagers = new Dictionary<Assembly, ResourceManager>();
-			m_GCS = gcs;
 		}
 
 		public void RegisterResources(string baseName) {
@@ -23,16 +21,8 @@ namespace RoosterBot {
 			return m_ResourceManagers[Assembly.GetCallingAssembly()].GetString(name, culture);
 		}
 
-		public string GetString(ICommandContext context, string name) {
-			return m_ResourceManagers[Assembly.GetCallingAssembly()].GetString(name, m_GCS.GetCultureForGuild(context.Guild));
-		}
-
 		public string GetString(Assembly assembly, CultureInfo culture, string name) {
 			return m_ResourceManagers[assembly].GetString(name, culture);
-		}
-
-		public string ResolveString(ICommandContext context, ComponentBase component, string str) {
-			return ResolveString(m_GCS.GetCultureForGuild(context.Guild), component, str);
 		}
 
 		public string ResolveString(CultureInfo culture, ComponentBase component, string str) {

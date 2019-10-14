@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -13,13 +14,14 @@ namespace RoosterBot.Schedule {
 			if (baseResult.IsSuccess) {
 				return TypeReaderResult.FromSuccess(baseResult.Values.First());
 			} else {
+				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
 				TeacherNameService tns = services.GetService<TeacherNameService>();
 				IEnumerable<TeacherNameService.TeacherMatch> result = null;
 
 				IUser user = null;
 				if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
 					user = await context.Guild.GetUserAsync(id);
-				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(context, "IdentifierInfoReader_Self")) {
+				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(culture, "IdentifierInfoReader_Self")) {
 					user = context.User;
 				}
 
@@ -35,7 +37,7 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (result == null || result.FirstOrDefault() == null) {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, services.GetService<ResourceService>().GetString(context, "TeacherInfoReader_CheckFailed"));
+					return TypeReaderResult.FromError(CommandError.ParseFailed, services.GetService<ResourceService>().GetString(culture, "TeacherInfoReader_CheckFailed"));
 				} else {
 					TypeReaderResult typeReaderResult = TypeReaderResult.FromSuccess(result.Select(teacher => new TypeReaderValue(teacher.Teacher, teacher.Score)).ToList());
 					return typeReaderResult;

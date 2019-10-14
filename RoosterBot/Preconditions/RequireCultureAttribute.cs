@@ -17,10 +17,10 @@ namespace RoosterBot {
 			Hide = hide;
 		}
 
-		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			CultureInfo contextCulture = services.GetService<GuildCultureService>().GetCultureForGuild(context.Guild);
+		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
+			CultureInfo contextCulture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
 			if (Culture == contextCulture) {
-				return Task.FromResult(PreconditionResult.FromSuccess());
+				return PreconditionResult.FromSuccess();
 			} else {
 				ResourceService resources = services.GetService<ResourceService>();
 				string reason;
@@ -31,7 +31,7 @@ namespace RoosterBot {
 					string localizedName = cns.GetLocalizedName(Culture, contextCulture);
 					reason = string.Format(resources.GetString(contextCulture, "RequireCultureAttribute_CheckFailed"), localizedName);
 				}
-				return Task.FromResult(PreconditionResult.FromError(reason));
+				return PreconditionResult.FromError(reason);
 			}
 		}
 	}

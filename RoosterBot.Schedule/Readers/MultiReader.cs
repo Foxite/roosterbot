@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -36,7 +37,8 @@ namespace RoosterBot.Schedule {
 				}
 			}
 			ResourceService resources = services.GetService<ResourceService>();
-			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(context, m_ResourcesComponent, m_ErrorMessage));
+			CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
+			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(culture, m_ResourcesComponent, m_ErrorMessage));
 		}
 	}
 }

@@ -61,11 +61,31 @@ namespace RoosterBot {
 	}
 
 	/// <summary>
+	/// Thrown by ComponentManager when a component throws an exception during the install phase.
+	/// </summary>
+	[Serializable]
+	public class ComponentInstallationException : OuterComponentException {
+		public ComponentInstallationException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
+		protected ComponentInstallationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	}
+
+	/// <summary>
 	/// Thrown by ComponentManager when a component throws an exception during the modules phase.
 	/// </summary>
 	[Serializable]
 	public class ComponentModuleException : OuterComponentException {
 		public ComponentModuleException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected ComponentModuleException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	}
+
+	/// <summary>
+	/// Thrown if one or more services were not successfully installed.
+	/// </summary>
+	[Serializable]
+	public class ServiceInstallationException : Exception {
+		public ServiceInstallationException() { }
+		public ServiceInstallationException(string message) : base(message) { }
+		public ServiceInstallationException(string message, Exception innerException) : base(message, innerException) { }
+		protected ServiceInstallationException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) { }
 	}
 }

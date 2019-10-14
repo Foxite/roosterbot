@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -6,21 +6,28 @@ using Discord;
 
 namespace RoosterBot {
 	// TODO actually start using this, add a database Provider via AWS
-	public sealed class GuildConfigService {
+	public sealed class GuildConfigService : IInstalledService {
 		private readonly ConfigService m_Config;
 		private readonly IDiscordClient m_Client;
-		private readonly Provider m_Provider;
+		private Provider m_Provider;
 
 		internal GuildConfigService(ConfigService config, IDiscordClient client) {
 			m_Config = config;
 			m_Client = client;
 		}
 
-		public Task<bool> UpdateGuild(GuildConfig config) {
+		public void InstallProvider(Provider provider) {
+			if (m_Provider != null) {
+				throw new InvalidOperationException("A provider is already installed: " + m_Provider.GetType().FullName);
+			}
+			m_Provider = provider;
+		}
+
+		public Task<bool> UpdateGuildAsync(GuildConfig config) {
 			return m_Provider.UpdateGuildAsync(config);
 		}
 
-		public async Task<GuildConfig> GetConfig(IGuild guild) {
+		public async Task<GuildConfig> GetConfigAsync(IGuild guild) {
 			GuildConfig ret = await m_Provider.GetGuildAsync(guild);
 
 			if (ret == null) {
@@ -33,7 +40,7 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		public async Task<GuildConfig> GetConfig(ulong guildId) {
+		public async Task<GuildConfig> GetConfigAsync(ulong guildId) {
 			GuildConfig ret = await m_Provider.GetGuildAsync(guildId);
 
 			if (ret == null) {
@@ -44,6 +51,10 @@ namespace RoosterBot {
 				await m_Provider.UpdateGuildAsync(ret);
 			}
 			return ret;
+		}
+
+		bool IInstalledService.Installed() {
+			return m_Provider != null;
 		}
 
 		/// <summary>

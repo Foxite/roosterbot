@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule.GLU {
 		private Regex m_RoomRegex;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
-		public override string[] Tags => new[] { "ScheduleProvider" };
+		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
 		public GLUScheduleComponent() {
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");

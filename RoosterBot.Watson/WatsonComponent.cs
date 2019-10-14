@@ -33,7 +33,7 @@ namespace RoosterBot.Watson {
 			m_Client = services.GetService<DiscordSocketClient>();
 			
 			m_Watson = new WatsonClient(m_WatsonKey, m_WatsonID,
-				services.GetService<GuildCultureService>(),
+				services.GetService<GuildConfigService>(),
 				services.GetService<ResourceService>(),
 				m_Client,
 				commandService,
