@@ -50,7 +50,6 @@ namespace RoosterBot.Schedule {
 
 			registerModules(await commandService.AddLocalizedModuleAsync<ScheduleModule>());
 
-			// TODO rewrite documentation everywhere, it is outdated, unclear, and possibly wrong since updates
 			help.AddHelpSection(this, "rooster", "#ScheduleComponent_HelpText_Rooster");
 
 			help.AddHelpSection(this, "klas", "#ScheduleComponent_HelpText_Class");

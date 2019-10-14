@@ -83,7 +83,6 @@ namespace RoosterBot.Watson {
 
 					CommandResponsePair crp = m_CRS.GetResponse(message);
 					RoosterCommandContext context;
-					// TODO properly support command editing/deletion with Watson
 					if (crp != null) {
 						context = new RoosterCommandContext(m_DiscordClient, message, crp.Responses);
 					} else {
