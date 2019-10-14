@@ -100,7 +100,7 @@ namespace RoosterBot {
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
 			HelpService helpService = new HelpService();
-			GuildConfigService gcs = new GuildConfigService(m_ConfigService, m_Client);
+			GuildConfigService gcs = new GuildConfigService(m_ConfigService);
 			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
 			ResourceService resources = new ResourceService();
