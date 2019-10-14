@@ -103,7 +103,6 @@ namespace RoosterBot {
 		}
 
 		private void CheckDependencies(IEnumerable<ComponentBase> components) {
-			// TODO this function should make sure dependencies do not load after dependents
 			foreach (ComponentBase component in components) {
 				DependencyResult dependencyResult = component.CheckDependencies(components);
 				if (!dependencyResult.OK) {
