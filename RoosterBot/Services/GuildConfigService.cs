@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
-	// TODO actually start using this, add a database Provider via AWS
-	public sealed class GuildConfigService : IInstalledService {
+	public sealed class GuildConfigService {
 		private readonly ConfigService m_Config;
 		private readonly IDiscordClient m_Client;
 		private Provider m_Provider;
@@ -14,6 +13,20 @@ namespace RoosterBot {
 		internal GuildConfigService(ConfigService config, IDiscordClient client) {
 			m_Config = config;
 			m_Client = client;
+		}
+
+		private GuildConfig GetDefaultConfig(IGuild guild) {
+			return new GuildConfig(guild) {
+				Culture = m_Config.DefaultCulture, // TODO discord is going to add a preferred locale to guilds, we should use that as soon as Discord.NET releases support for it
+				CommandPrefix = m_Config.DefaultCommandPrefix
+			};
+		}
+
+		private GuildConfig GetDefaultConfig(ulong guildId) {
+			return new GuildConfig(m_Client, guildId) {
+				Culture = m_Config.DefaultCulture,
+				CommandPrefix = m_Config.DefaultCommandPrefix
+			};
 		}
 
 		public void InstallProvider(Provider provider) {
@@ -28,33 +41,29 @@ namespace RoosterBot {
 		}
 
 		public async Task<GuildConfig> GetConfigAsync(IGuild guild) {
-			GuildConfig ret = await m_Provider.GetGuildAsync(guild);
-
-			if (ret == null) {
-				ret = new GuildConfig(guild) {
-					Culture = m_Config.DefaultCulture, // TODO discord is going to add a preferred locale to guilds, we should use that as soon as Discord.NET releases support for it
-					CommandPrefix = m_Config.DefaultCommandPrefix
-				};
-				await m_Provider.UpdateGuildAsync(ret);
+			GuildConfig ret;
+			if (m_Provider == null) {
+				ret = GetDefaultConfig(guild);
+			} else {
+				ret = await m_Provider.GetGuildAsync(guild);
+				if (ret == null) {
+					await m_Provider.UpdateGuildAsync(ret);
+				}
 			}
 			return ret;
 		}
 
 		public async Task<GuildConfig> GetConfigAsync(ulong guildId) {
-			GuildConfig ret = await m_Provider.GetGuildAsync(guildId);
-
-			if (ret == null) {
-				ret = new GuildConfig(m_Client, guildId) {
-					Culture = m_Config.DefaultCulture,
-					CommandPrefix = m_Config.DefaultCommandPrefix
-				};
-				await m_Provider.UpdateGuildAsync(ret);
+			GuildConfig ret;
+			if (m_Provider == null) {
+				ret = GetDefaultConfig(guildId);
+			} else {
+				ret = await m_Provider.GetGuildAsync(guildId);
+				if (ret == null) {
+					await m_Provider.UpdateGuildAsync(ret);
+				}
 			}
 			return ret;
-		}
-
-		bool IInstalledService.Installed() {
-			return m_Provider != null;
 		}
 
 		/// <summary>

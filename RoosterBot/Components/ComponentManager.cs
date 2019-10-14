@@ -132,17 +132,6 @@ namespace RoosterBot {
 			return serviceCollection.BuildServiceProvider();
 		}
 
-		private async Task InstallComponentsAsync(IServiceProvider services) {
-			foreach (ComponentBase component in m_Components) {
-				await component.InstallAsync(services);
-			}
-
-			IEnumerable<IInstalledService> failedServices = services.GetServices<IInstalledService>().Where(service => !service.Installed());
-			if (failedServices.Any()) {
-				throw new ServiceInstallationException("One or more services have failed to install: " + string.Join(", ", failedServices.Select(service => service.GetType().Name)));
-			}
-		}
-
 		private async Task AddComponentModulesAsync(IServiceProvider services) {
 			RoosterCommandService commands = services.GetService<RoosterCommandService>();
 			HelpService help = services.GetService<HelpService>();

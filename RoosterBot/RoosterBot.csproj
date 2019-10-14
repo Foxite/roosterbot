@@ -58,7 +58,6 @@
     <Compile Include="Components\VersionPredicate.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Handlers\PostCommandHandler.cs" />
-    <Compile Include="IInstalledService.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\CountAttribute.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CultureNameService.cs" />
     <Compile Include="Services\GuildConfigService.cs" />
-    <Compile Include="Services\GuildCultureService.cs" />
     <Compile Include="Services\HelpService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ResourceService.cs" />

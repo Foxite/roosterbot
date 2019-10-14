@@ -26,7 +26,6 @@ namespace RoosterBot {
 			OK = true
 		};
 		public virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
-		public virtual Task InstallAsync(IServiceProvider services) => Task.CompletedTask;
 		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) => Task.CompletedTask;
 
 		#region IDisposable Support
