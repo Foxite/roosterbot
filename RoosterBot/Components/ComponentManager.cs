@@ -39,7 +39,6 @@ namespace RoosterBot {
 			ConstructComponents(types);
 			CheckDependencies(m_Components);
 			Services = await AddComponentServicesAsync(serviceCollection);
-			await InstallComponentsAsync(Services);
 			await AddComponentModulesAsync(Services);
 		}
 
