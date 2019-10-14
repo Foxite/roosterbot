@@ -9,7 +9,7 @@ namespace RoosterBot.DateTimeUtils {
 			input = input.ToLower();
 			ResourceService resources = services.GetService<ResourceService>();
 			if (input == resources.GetString(context, "DayOfWeekReader_Today")) {
-				Task.FromResult(TypeReaderResult.FromSuccess(DateTime.Today.DayOfWeek));
+				return Task.FromResult(TypeReaderResult.FromSuccess(DateTime.Today.DayOfWeek));
 			} else if (input == resources.GetString(context, "DayOfWeekReader_Tomorrow")) {
 				return Task.FromResult(TypeReaderResult.FromSuccess(DateTime.Today.AddDays(1).DayOfWeek));
 			}
