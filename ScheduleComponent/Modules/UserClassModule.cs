@@ -15,7 +15,7 @@ namespace ScheduleComponent.Modules {
 		public UserClassesService Classes { get; set; }
 		public UserClassRoleService Roles { get; set; }
 
-		[Command("ik"), Summary("Kijk in welke klas jij zit, volgens mijn gegevens.")]
+		[Command("ik"), Summary("Kijk in welke klas jij zit, volgens mijn gegevens."), RequireContext(ContextType.Guild, ErrorMessage = "Deze command moet binnen een server worden gebruikt.")]
 		public async Task GetClassForUser() {
 			string clazz = (await Classes.GetClassForDiscordUser(Context.User))?.DisplayText;
 			string response;
