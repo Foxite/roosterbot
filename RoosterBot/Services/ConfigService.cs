@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ConfigService {
-		public   string DefaultCommandPrefix { get; } // TODO command prefixes should be per server
+		public   string DefaultCommandPrefix { get; }
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
 		public   MultiMatchHandling MultiMatchHandling { get; }
@@ -17,7 +17,7 @@ namespace RoosterBot {
 		public   IReadOnlyCollection<ulong> StaffRoles { get; }
 		internal bool ReportStartupVersionToOwner { get; }
 		internal int MinimumMemorySeconds { get; }
-		public CultureInfo DefaultCulture { get; internal set; }
+		public CultureInfo DefaultCulture { get; }
 
 		private  ulong m_BotOwnerId;
 
@@ -33,15 +33,16 @@ namespace RoosterBot {
 			string jsonFile = File.ReadAllText(jsonPath);
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
-			authToken = jsonConfig["token"].ToObject<string>();
-			DefaultCommandPrefix = jsonConfig["commandPrefix"].ToObject<string>();
-			GameString = jsonConfig["gameString"].ToObject<string>();
-			ActivityType = jsonConfig["activityType"].ToObject<ActivityType>();
-			MultiMatchHandling = jsonConfig["multiMatchHandling"].ToObject<MultiMatchHandling>();
+			authToken                   = jsonConfig["token"]                      .ToObject<string>();
+			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]       .ToObject<string>();
+			GameString                  = jsonConfig["gameString"]                 .ToObject<string>();
+			ActivityType                = jsonConfig["activityType"]               .ToObject<ActivityType>();
+			MultiMatchHandling          = jsonConfig["multiMatchHandling"]         .ToObject<MultiMatchHandling>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
-			m_BotOwnerId = jsonConfig["botOwnerId"].ToObject<ulong>();
-			MinimumMemorySeconds = jsonConfig["minimumMemorySeconds"].ToObject<int>();
-			StaffRoles = jsonConfig["staffRoles"].ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
+			m_BotOwnerId                = jsonConfig["botOwnerId"]                 .ToObject<ulong>();
+			MinimumMemorySeconds        = jsonConfig["minimumMemorySeconds"]       .ToObject<int>();
+			StaffRoles                  = jsonConfig["staffRoles"]                 .ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
+			DefaultCulture              = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"].ToObject<string>());
 		}
 		
 		/// <summary>
