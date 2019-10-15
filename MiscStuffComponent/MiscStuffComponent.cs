@@ -37,6 +37,11 @@ namespace MiscStuffComponent {
 			helpText += "En nog minstens 4 geheime commands voor de bot owner.";
 			help.AddHelpSection("misc", helpText);
 
+			helpText = "Als jij de Dark Side rol hebt, en jij iemand mentioned, dan krijgt diegene automatisch de Dark Side rol.\n";
+			helpText += "Gebruik `!darkside` om statistieken te zien over de infectie.\n\n";
+			helpText += "Dit is een tijdelijke feature.";
+			help.AddHelpSection("darkside", helpText);
+
 			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 			client.UserJoined += WelcomeUser;
 			client.MessageReceived += HintManualRanks;
