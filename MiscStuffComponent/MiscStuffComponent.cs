@@ -19,6 +19,7 @@ namespace MiscStuffComponent {
 			ConfigPath = configPath;
 
 			services.AddSingleton(new CounterService(Path.Combine(configPath, "counters")));
+			services.AddSingleton(new PropagationService(configPath));
 			return Task.CompletedTask;
 		}
 
@@ -26,7 +27,8 @@ namespace MiscStuffComponent {
 			await Task.WhenAll(
 				commandService.AddModuleAsync<CounterModule>(services),
 				commandService.AddModuleAsync<MiscModule>(services),
-				commandService.AddModuleAsync<ModerationModule>(services)
+				commandService.AddModuleAsync<ModerationModule>(services),
+				commandService.AddModuleAsync<PropagationModule>(services)
 			);
 
 			string helpText = "Voor de rest zijn er nog deze commands:\n";
@@ -38,6 +40,8 @@ namespace MiscStuffComponent {
 			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 			client.UserJoined += WelcomeUser;
 			client.MessageReceived += HintManualRanks;
+
+			new PropagationHandler(client, services.GetService<PropagationService>());
 		}
 
 		private async Task HintManualRanks(SocketMessage msg) {
