@@ -54,7 +54,7 @@ namespace MiscStuffComponent {
 			if (arg is SocketUserMessage sum && arg.Author is IGuildUser sendingUser && sendingUser.RoleIds.Any(id => id == DarkSideRole)) {
 				if (sum.MentionedUsers.Any()) {
 					if (m_LastPropagations.TryGetValue(sendingUser, out DateTime lastProp)) {
-						if ((DateTime.Now - lastProp).TotalMinutes < 10) {
+						if ((DateTime.Now - lastProp).TotalMinutes < 5) {
 							return;
 						} else {
 							m_LastPropagations[sendingUser] = DateTime.Now;
