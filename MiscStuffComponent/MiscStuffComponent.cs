@@ -52,7 +52,7 @@ namespace MiscStuffComponent {
 		private async Task DarkSidePropagation(SocketMessage arg) {
 			const long DarkSideRole = 633610934979395584;
 			if (arg is SocketUserMessage sum && arg.Author is IGuildUser sendingUser && sendingUser.RoleIds.Any(id => id == DarkSideRole)) {
-				if (MentionUtils.TryParseUser(arg.Content, out ulong mentionedUserId)) {
+				if (sum.MentionedUsers.Any()) {
 					if (m_LastPropagations.TryGetValue(sendingUser, out DateTime lastProp)) {
 						if ((DateTime.Now - lastProp).TotalMinutes < 10) {
 							return;
@@ -64,7 +64,7 @@ namespace MiscStuffComponent {
 					}
 
 					ITextChannel textChannel = arg.Channel as ITextChannel;
-					IGuildUser propagatedUser = await textChannel.GetUserAsync(mentionedUserId);
+					IGuildUser propagatedUser = sum.MentionedUsers.First() as IGuildUser;
 					Logger.Info("Propagation", $"Propagating role from {sendingUser.Username}#{sendingUser.Discriminator} to {propagatedUser.Username}#{propagatedUser.Discriminator}");
 					await propagatedUser.AddRoleAsync(textChannel.Guild.GetRole(DarkSideRole));
 				}
