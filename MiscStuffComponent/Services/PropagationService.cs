@@ -30,9 +30,13 @@ namespace MiscStuffComponent.Services {
 				if (user.RoleIds.Any(roleId => roleId == propagatedRoleId)) {
 					if (user.IsBot) {
 						stats.InfectedBots++;
-					} else if ()
+					} else if (UserIsStaff(user)) {
+						stats.InfectedStaff++;
+					} else {
+						stats.InfectedOtherUsers++;
+					}
 				} else {
-
+					
 				}
 			}
 		}
@@ -54,15 +58,15 @@ namespace MiscStuffComponent.Services {
 	}
 
 	public class PropagationStats {
-		public int InfectedBots { get; set; }
-		public int InfectedStaff { get; set; }
-		public int InfectedOtherUsers { get; set; }
+		public UserCount Clean { get; }
+		public UserCount Infected { get; }
 
-		public int CleanBots { get; set; }
-		public int CleanStaff { get; set; }
-		public int CleanOtherUsers { get; set; }
+	}
 
-		public int InfectedMembers => InfectedBots + InfectedStaff + InfectedOtherUsers;
-		public int CleanMembers => CleanBots + CleanStaff + CleanOtherUsers;
+	public class UserCount {
+		public int Bots { get; set; }
+		public int Staff { get; set; }
+		public int OtherUsers { get; set; }
+		public int Total => Bots + Staff + OtherUsers;
 	}
 }
