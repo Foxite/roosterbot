@@ -81,7 +81,15 @@ namespace MiscStuffComponent.Services {
 		public UserCount Infected { get; }
 
 		public string Present() {
-			return ":blue_heart: " + Clean.Present("clean") + "\n:biohazard: " + Infected.Present("infected");
+			string ret = ":blue_heart: " + Clean.Present("clean");
+			ret += "\n\n:biohazard: " + Infected.Present("infected");
+
+			int infectedPercent = (100 * Infected.Total) / (Clean.Total + Infected.Total);
+			// Round to 5% accuracy
+			infectedPercent = (int) (Math.Round(infectedPercent / 5.0f) * 5);
+			ret += $"\n\nApproximately {infectedPercent}% of users are infected.";
+
+			return ret;
 		}
 	}
 
@@ -95,7 +103,7 @@ namespace MiscStuffComponent.Services {
 			string ret = $"{Total.ToString()} {label} members\n";
 			ret += $"- {Staff.ToString()} staff\n";
 			ret += $"- {Bots.ToString()} bots\n";
-			ret += $"- {OtherUsers.ToString()} other users\n";
+			ret += $"- {OtherUsers.ToString()} other users";
 			return ret;
 		}
 	}
