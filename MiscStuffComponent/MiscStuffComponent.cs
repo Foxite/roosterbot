@@ -9,11 +9,11 @@ using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Linq;
 using Discord.Commands;
+using Discord;
 
 namespace MiscStuffComponent {
 	public class MiscStuffComponent : ComponentBase {
 		public string ConfigPath { get; private set; }
-
 		public override string VersionString => "1.0.0";
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
@@ -39,6 +39,17 @@ namespace MiscStuffComponent {
 			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 			client.UserJoined += WelcomeUser;
 			client.MessageReceived += HintManualRanks;
+			client.MessageReceived += DarkSidePropagation;
+		}
+
+		private async Task DarkSidePropagation(SocketMessage arg) {
+			const long DarkSideRole = 633610934979395584;
+			if (arg is SocketUserMessage sum && arg.Author is IGuildUser sendingUser && sendingUser.RoleIds.Any(id => id == DarkSideRole)) {
+				if (MentionUtils.TryParseUser(arg.Content, out ulong mentionedUserId)) {
+					ITextChannel textChannel = (arg.Channel as ITextChannel);
+					await (await textChannel.GetUserAsync(mentionedUserId)).AddRoleAsync(textChannel.Guild.GetRole(DarkSideRole));
+				}
+			}
 		}
 
 		private async Task HintManualRanks(SocketMessage msg) {
