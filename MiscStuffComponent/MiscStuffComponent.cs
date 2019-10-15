@@ -9,19 +9,11 @@ using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Linq;
 using Discord.Commands;
-using Discord;
-using System.Collections.Generic;
 
 namespace MiscStuffComponent {
 	public class MiscStuffComponent : ComponentBase {
 		public string ConfigPath { get; private set; }
 		public override string VersionString => "1.0.0";
-
-		private Dictionary<IGuildUser, DateTime> m_LastPropagations;
-
-		public MiscStuffComponent() {
-			m_LastPropagations = new Dictionary<IGuildUser, DateTime>();
-		}
 
 		public override Task AddServices(IServiceCollection services, string configPath) {
 			ConfigPath = configPath;
@@ -46,29 +38,6 @@ namespace MiscStuffComponent {
 			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 			client.UserJoined += WelcomeUser;
 			client.MessageReceived += HintManualRanks;
-			client.MessageReceived += DarkSidePropagation;
-		}
-
-		private async Task DarkSidePropagation(SocketMessage arg) {
-			const long DarkSideRole = 633610934979395584;
-			if (arg is SocketUserMessage sum && arg.Author is IGuildUser sendingUser && sendingUser.RoleIds.Any(id => id == DarkSideRole)) {
-				if (MentionUtils.TryParseUser(arg.Content, out ulong mentionedUserId)) {
-					if (m_LastPropagations.TryGetValue(sendingUser, out DateTime lastProp)) {
-						if ((DateTime.Now - lastProp).TotalMinutes < 10) {
-							return;
-						} else {
-							m_LastPropagations[sendingUser] = DateTime.Now;
-						}
-					} else {
-						m_LastPropagations.Add(sendingUser, DateTime.Now);
-					}
-
-					ITextChannel textChannel = arg.Channel as ITextChannel;
-					IGuildUser propagatedUser = await textChannel.GetUserAsync(mentionedUserId);
-					Logger.Info("Propagation", $"Propagating role from {sendingUser.Username}#{sendingUser.Discriminator} to {propagatedUser.Username}#{propagatedUser.Discriminator}");
-					await propagatedUser.AddRoleAsync(textChannel.Guild.GetRole(DarkSideRole));
-				}
-			}
 		}
 
 		private async Task HintManualRanks(SocketMessage msg) {
