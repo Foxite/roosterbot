@@ -56,7 +56,11 @@ namespace MiscStuffComponent {
 					if (m_LastPropagations.TryGetValue(sendingUser, out DateTime lastProp)) {
 						if ((DateTime.Now - lastProp).TotalMinutes < 10) {
 							return;
+						} else {
+							m_LastPropagations[sendingUser] = DateTime.Now;
 						}
+					} else {
+						m_LastPropagations.Add(sendingUser, DateTime.Now);
 					}
 
 					ITextChannel textChannel = arg.Channel as ITextChannel;
