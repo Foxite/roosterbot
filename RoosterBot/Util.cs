@@ -314,6 +314,10 @@ namespace RoosterBot {
 
 			return ret;
 		}
+
+		public static bool HasRole(this IGuildUser user, ulong roleId) {
+			return user.RoleIds.Any(id => id == roleId);
+		}
 	}
 
 	public class ReturnValue<T> {

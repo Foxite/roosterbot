@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Newtonsoft.Json.Linq;
+using RoosterBot;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +45,12 @@ namespace MiscStuffComponent.Services {
 						count.Bots++;
 					} else if (UserIsStaff(user)) {
 						count.Staff++;
+					} else if (user.HasRole(278587815271464970)) {
+						count.Developers++;
+					} else if (user.HasRole(278587791141765121)) {
+						count.Artists++;
+					} else if (user.HasRole(278587837551607809)) {
+						count.Teachers++;
 					} else {
 						count.OtherUsers++;
 					}
@@ -96,12 +103,18 @@ namespace MiscStuffComponent.Services {
 	public class UserCount {
 		public int Bots { get; set; }
 		public int Staff { get; set; }
+		public int Teachers { get; set; }
+		public int Developers { get; set; }
+		public int Artists { get; set; }
 		public int OtherUsers { get; set; }
 		public int Total => Bots + Staff + OtherUsers;
 
 		internal string Present(string label) {
 			string ret = $"{Total.ToString()} {label} members\n";
 			ret += $"- {Staff.ToString()} staff\n";
+			ret += $"- {Teachers.ToString()} teachers\n";
+			ret += $"- {Artists.ToString()} artists\n";
+			ret += $"- {Developers.ToString()} developers\n";
 			ret += $"- {Bots.ToString()} bots\n";
 			ret += $"- {OtherUsers.ToString()} other users";
 			return ret;
