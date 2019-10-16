@@ -107,7 +107,7 @@ namespace MiscStuffComponent.Services {
 		public int Developers { get; set; }
 		public int Artists { get; set; }
 		public int OtherUsers { get; set; }
-		public int Total => Bots + Staff + OtherUsers;
+		public int Total => Bots + Staff + Teachers + Developers + Artists + OtherUsers;
 
 		internal string Present(string label) {
 			string ret = $"{Total.ToString()} {label} members\n";
