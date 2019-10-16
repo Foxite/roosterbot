@@ -122,14 +122,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.en-US.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources.nl-NL.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6.2 %28x86 and x64%29</ProductName>
