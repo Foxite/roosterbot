@@ -151,4 +151,16 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherModule_UnitForecast_Name" xml:space="preserve">
     <value>over</value>
   </data>
+  <data name="WeatherInfo_Present_ApparentTemperature" xml:space="preserve">
+    <value> (voelt als {0})</value>
+    <comment>0: apparent temperature, unit included</comment>
+  </data>
+  <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
+    <value>:wind_blowing_face: Geen wind</value>
+  </data>
+  <data name="WeatherInfo_Present_Wind" xml:space="preserve">
+    <value>:wind_blowing_face: {0} vanuit {1}</value>
+    <comment>0: wind speed, unit included
+1: cardinal direction, localized</comment>
+  </data>
 </root>

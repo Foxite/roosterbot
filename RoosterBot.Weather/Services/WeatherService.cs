@@ -47,6 +47,17 @@ namespace RoosterBot.Weather {
 			return resultIntervals.Select(jt => new WeatherInfo(city, jt.ToObject<JObject>())).ToArray();
 		}
 
+		public string GetDescription(CultureInfo culture, short weatherCode) {
+			string ret = m_Resources.GetString(culture, "WeatherBit_Code_" + weatherCode);
+
+			if (ret == null) {
+				Logger.Error("WeatherInfo", "Unknown code " + weatherCode);
+				return m_Resources.GetString(culture, "WeatherBit_Code_Unknown");
+			} else {
+				return ret;
+			}
+		}
+
 		private async Task<JObject> GetResponseAsync(string function, IDictionary<string, string> parameters) {
 			string url = BaseUrl + function;
 			url += $"?key={m_WeatherBitKey}&lang=nl";
