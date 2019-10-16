@@ -140,9 +140,15 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <value />
   </data>
   <data name="WeatherModule_TimeForecast_Aliases" xml:space="preserve">
-    <value />
+    <value>op</value>
   </data>
   <data name="WeatherModule_TimeForecast_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_UnitForecast_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_UnitForecast_Name" xml:space="preserve">
     <value>over</value>
   </data>
 </root>
