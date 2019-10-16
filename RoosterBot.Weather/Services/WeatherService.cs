@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,10 +11,12 @@ namespace RoosterBot.Weather {
 		private readonly string m_WeatherBitKey;
 		private const string BaseUrl = "https://api.weatherbit.io/v2.0/";
 		private WebClient m_Web;
+		private ResourceService m_Resources;
 
-		public WeatherService(string weatherBitKey) {
+		public WeatherService(ResourceService resources, string weatherBitKey) {
 			m_WeatherBitKey = weatherBitKey;
 			m_Web = new WebClient();
+			m_Resources = resources;
 		}
 
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {
