@@ -31,7 +31,7 @@ namespace MiscStuffComponent {
 					}
 
 					if (m_LastPropagations.TryGetValue(sendingUser, out DateTime lastProp)) {
-						if ((DateTime.Now - lastProp).TotalMinutes < 10) {
+						if ((DateTime.Now - lastProp).TotalMinutes < 1) {
 							return;
 						} else {
 							m_LastPropagations[sendingUser] = DateTime.Now;
