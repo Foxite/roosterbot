@@ -59,5 +59,9 @@
       <Version>12.1.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.en-US.resx" />
+    <EmbeddedResource Include="Resources.nl-NL.resx" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

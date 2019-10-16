@@ -32,21 +32,15 @@ namespace RoosterBot.Weather {
 		}
 
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
+			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
+
 			commandService.AddTypeReader<CityInfo>(new CityInfoReader());
 
 			registerModuleFunction(new[] {
 				await commandService.AddModuleAsync<WeatherModule>(services)
 			});
 
-			string helpText = "Ik kan weersvoorspellingen voor je opzoeken en in Discord laten zien. Hiervoor gebruik je het `weer` command.\n";
-			helpText += "Deze command heeft een aantal verschillende vormen:\n\n";
-			helpText += "`{0}weer in utrecht` laat de huidige weersomstandigheden in Utrecht zien. (`{0}weer nu utrecht` of `{0}weer utrecht` werkt ook.)\n";
-			helpText += "`{0}weer over 2 uur amsterdam` of `{0}weer op woensdag 15:00 rotterdam`: Deze voorbeelden spreken voor zich.\n";
-			helpText += "`{0}weer over 3 dagen hilversum` of `{0}weer op woensdag utrecht`: Deze commands laten het weer zien op de aangegeven dag, om 08:00, 12:00, en 18:00 uur.\n\n";
-			helpText += "Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve spellingen. Als je een stad tegenkomt waarvan de alternatieve spelling niet bekend is, laat dit weten aan de bot eigenaar.";
-
-
-			help.AddHelpSection(this, "weer", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix));
+			help.AddHelpSection(this, "weer", "#WeatherComponent_HelpText");
 		}
 	}
 }
