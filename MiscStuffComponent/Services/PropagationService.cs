@@ -43,14 +43,14 @@ namespace MiscStuffComponent.Services {
 
 					if (user.IsBot) {
 						count.Bots++;
+					} else if (user.HasRole(278587837551607809)) {
+						count.Teachers++;
 					} else if (UserIsStaff(user)) {
 						count.Staff++;
 					} else if (user.HasRole(278587815271464970)) {
 						count.Developers++;
 					} else if (user.HasRole(278587791141765121)) {
 						count.Artists++;
-					} else if (user.HasRole(278587837551607809)) {
-						count.Teachers++;
 					} else {
 						count.OtherUsers++;
 					}
