@@ -1,21 +1,14 @@
 ﻿using Discord.Commands;
-using MiscStuffComponent.Services;
+using RoosterBot.Attributes;
 using RoosterBot.Modules;
 using System.Threading.Tasks;
 
 namespace MiscStuffComponent.Modules {
-	[Name("darkside")]
+	[HiddenFromList]
 	public class PropagationModule : EditableCmdModuleBase {
-		public PropagationService Service { get; set; }
-
-		[Command("propagation stats"), Alias("darkside", "dark side"), Summary("Statistieken over de Dark Side.")]
+		[Command("propagation stats"), Alias("darkside", "dark side")]
 		public async Task PropagationStatsCommand() {
-			PropagationStats stats = await Service.GetPropagationStats(Context.Guild);
-
-
-			string response = $"{Context.Guild.Name} infection status\n";
-			response += stats.Present();
-			await ReplyAsync(response);
+			await ReplyAsync("Everybody is infected. Any when everyone's infected... https://www.youtube.com/watch?v=fmSO2cz2ozQ&feature=youtu.be&t=3");
 		}
 	}
 }
