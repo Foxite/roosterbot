@@ -4,10 +4,11 @@ using RoosterBot.Modules;
 using System.Threading.Tasks;
 
 namespace MiscStuffComponent.Modules {
+	[Name("darkside")]
 	public class PropagationModule : EditableCmdModuleBase {
 		public PropagationService Service { get; set; }
 
-		[Command("propagation stats"), Alias("darkside", "dark side")]
+		[Command("propagation stats"), Alias("darkside", "dark side"), Summary("Statistieken over de Dark Side.")]
 		public async Task PropagationStatsCommand() {
 			PropagationStats stats = await Service.GetPropagationStats(Context.Guild);
 
