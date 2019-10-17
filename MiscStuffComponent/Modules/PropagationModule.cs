@@ -8,7 +8,7 @@ namespace MiscStuffComponent.Modules {
 	public class PropagationModule : EditableCmdModuleBase {
 		[Command("propagation stats"), Alias("darkside", "dark side")]
 		public async Task PropagationStatsCommand() {
-			await ReplyAsync("Everybody is infected. Any when everyone's infected... https://www.youtube.com/watch?v=fmSO2cz2ozQ&feature=youtu.be&t=3");
+			await ReplyAsync("Everybody is infected. And when everyone's infected... https://www.youtube.com/watch?v=fmSO2cz2ozQ&feature=youtu.be&t=3");
 		}
 	}
 }
