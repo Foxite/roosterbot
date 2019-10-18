@@ -59,6 +59,7 @@ namespace RoosterBot {
 
 		private Action<ModuleBuilder> GetModuleBuildFunction(Type module, ComponentBase component, string locale) {
 			return (moduleBuilder) => {
+				// TODO this code is ugly as shit, take an example from how Discord.NET does it https://github.com/discord-net/Discord.Net/blob/dev/src/Discord.Net.Commands/Builders/ModuleClassBuilder.cs
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
 					.Select(method => (method: method, attribute: method.GetCustomAttribute<CommandAttribute>(false)))
@@ -73,7 +74,7 @@ namespace RoosterBot {
 				moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
 
 				string name = module.GetCustomAttribute<NameAttribute>()?.Text;
-				if (name == null) {
+				if (string.IsNullOrWhiteSpace(name)) {
 					name = module.Name;
 				} else {
 					name = m_ResourceService.ResolveString(culture, component, name);
@@ -81,11 +82,10 @@ namespace RoosterBot {
 				moduleBuilder.WithName(name);
 
 				string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
-				if (aliases != null) {
-					moduleBuilder.AddAliases(aliases);
-				} else if (name.StartsWith("#")) {
+				if (aliases == null && name.StartsWith("#")) {
 					aliases = m_ResourceService.ResolveString(culture, component, name + "_Aliases").Split('|');
 				}
+				moduleBuilder.AddAliases(aliases ?? new[] { "" });
 
 				string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
 				if (remarks != null) {
@@ -99,13 +99,16 @@ namespace RoosterBot {
 
 				string groupName = module.GetCustomAttribute<GroupAttribute>()?.Prefix;
 				if (groupName != null) {
-					moduleBuilder.Group = groupName;
+					moduleBuilder.Group = m_ResourceService.ResolveString(culture, component, groupName);
 				}
 
 				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
 
 				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
 					string primaryAlias = m_ResourceService.ResolveString(culture, component, attribute.Text);
+					if (string.IsNullOrWhiteSpace(primaryAlias)) {
+						primaryAlias = m_ResourceService.ResolveString(culture, component, moduleBuilder.Group);
+					}
 					moduleBuilder.AddCommand(
 						primaryAlias,
 						async (context, parameters, commandServices, command) => {
