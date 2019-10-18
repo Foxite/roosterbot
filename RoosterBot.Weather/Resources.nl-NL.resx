@@ -127,7 +127,7 @@ Deze command heeft een aantal verschillende vormen:
 
 Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of spellingen. Als je een stad tegenkomt waarvan de alternatieve spelling niet bekend is, laat dit weten aan de bot eigenaar.</value>
   </data>
-  <data name="WeatherModule_CurrentWeather_Name" xml:space="preserve">
+  <data name="WeatherModule_CurrentWeather" xml:space="preserve">
     <value />
   </data>
   <data name="WeatherModule_CurrentWeather_Aliases" xml:space="preserve">
@@ -136,19 +136,19 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherModule_DayForecast_Aliases" xml:space="preserve">
     <value>op</value>
   </data>
-  <data name="WeatherModule_DayForecast_Name" xml:space="preserve">
+  <data name="WeatherModule_DayForecast" xml:space="preserve">
     <value />
   </data>
   <data name="WeatherModule_TimeForecast_Aliases" xml:space="preserve">
     <value>op</value>
   </data>
-  <data name="WeatherModule_TimeForecast_Name" xml:space="preserve">
+  <data name="WeatherModule_TimeForecast" xml:space="preserve">
     <value />
   </data>
   <data name="WeatherModule_UnitForecast_Aliases" xml:space="preserve">
     <value />
   </data>
-  <data name="WeatherModule_UnitForecast_Name" xml:space="preserve">
+  <data name="WeatherModule_UnitForecast" xml:space="preserve">
     <value>over</value>
   </data>
   <data name="WeatherBit_Code_200" xml:space="preserve">
@@ -279,9 +279,6 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <value>:wind_blowing_face: {0} vanuit {1}</value>
     <comment>0: wind speed, unit included
 1: cardinal direction, localized</comment>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value />
   </data>
   <data name="WeatherModule_DayForecast_PretextCity" xml:space="preserve">
     <value>{0}: Weer {1}\n</value>

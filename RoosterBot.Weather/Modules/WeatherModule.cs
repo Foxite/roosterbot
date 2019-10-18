@@ -11,7 +11,7 @@ namespace RoosterBot.Weather {
 	public class WeatherModule : RoosterModuleBase {
 		public WeatherService Weather { get; set; }
 
-		[Command("#WeatherModule_CurrentWeather_Aliases", RunMode = RunMode.Async), Alias("#WeatherModule_CurrentWeather_Name")]
+		[Command("#WeatherModule_CurrentWeather", RunMode = RunMode.Async)]
 		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -20,14 +20,14 @@ namespace RoosterBot.Weather {
 			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO guild config for metric (probably use a dynamic config system so any component can have their own settings)
 		}
 
-		[Command("#WeatherModule_DayForecast_Name", RunMode = RunMode.Async), Alias("#WeatherModule_DayForecast_Aliases")]
+		[Command("#WeatherModule_DayForecast", RunMode = RunMode.Async)]
 		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
 			await RespondDayForecast(city, date);
 		}
 
-		[Command("#WeatherModule_TimeForecast_Aliases", RunMode = RunMode.Async), Alias("#WeatherModule_TimeForecast_Aliases")]
+		[Command("#WeatherModule_TimeForecast", RunMode = RunMode.Async)]
 		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
@@ -39,7 +39,7 @@ namespace RoosterBot.Weather {
 			ReplyDeferred(weather.Present(datetime, Culture, true));
 		}
 
-		[Command("#WeatherModule_UnitForecast_Name", RunMode = RunMode.Async), Alias("#WeatherModule_UnitForecast_Aliases")]
+		[Command("#WeatherModule_UnitForecast", RunMode = RunMode.Async)]
 		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
 				await MinorError(GetString("#WeatherModule_NoLookBack"));

@@ -127,28 +127,73 @@ This command has a few different forms:
 
 Certain towns (Den Bosch and The Hague) have alternative names or spellings. If you find a city of which I don't know the alternative spelling, let the bot owner know about this.</value>
   </data>
+  <data name="WeatherInfo_Present_ApparentTemperature" xml:space="preserve">
+    <value> (feels like {0})</value>
+    <comment>0: apparent temperature, unit included</comment>
+  </data>
+  <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
+    <value>:wind_blowing_face: No wind</value>
+  </data>
+  <data name="WeatherInfo_Present_Wind" xml:space="preserve">
+    <value>:wind_blowing_face: {0} wind {1}</value>
+    <comment>0: wind speed, unit included
+1: cardinal direction, localized</comment>
+  </data>
+  <data name="WeatherModule_CurrentWeather" xml:space="preserve">
+    <value />
+  </data>
   <data name="WeatherModule_CurrentWeather_Aliases" xml:space="preserve">
     <value>now|in</value>
   </data>
-  <data name="WeatherModule_CurrentWeather_Name" xml:space="preserve">
+  <data name="WeatherModule_DayForecast" xml:space="preserve">
     <value />
   </data>
   <data name="WeatherModule_DayForecast_Aliases" xml:space="preserve">
     <value>on</value>
   </data>
-  <data name="WeatherModule_DayForecast_Name" xml:space="preserve">
+  <data name="WeatherModule_DayForecast_PretextCity" xml:space="preserve">
+    <value>{0}: Weather {1}\n</value>
+    <comment>0: city name
+1: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_DayForecast_PretextRegion" xml:space="preserve">
+    <value>{0}, {1}: Weather {2}\n</value>
+    <comment>0: city name
+1: region name
+2: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_Group" xml:space="preserve">
+    <value>weather</value>
+  </data>
+  <data name="WeatherModule_Name" xml:space="preserve">
+    <value>weather</value>
+  </data>
+  <data name="WeatherModule_NoLookBack" xml:space="preserve">
+    <value>I can't look back.</value>
+  </data>
+  <data name="WeatherModule_SevenDayLimit" xml:space="preserve">
+    <value>I can't predict the weather beyond 7 days.</value>
+  </data>
+  <data name="WeatherModule_TimeForecast" xml:space="preserve">
     <value />
   </data>
   <data name="WeatherModule_TimeForecast_Aliases" xml:space="preserve">
     <value>on</value>
   </data>
-  <data name="WeatherModule_TimeForecast_Name" xml:space="preserve">
-    <value />
+  <data name="WeatherModule_UnitForecast" xml:space="preserve">
+    <value>in</value>
   </data>
   <data name="WeatherModule_UnitForecast_Aliases" xml:space="preserve">
     <value />
   </data>
-  <data name="WeatherModule_UnitForecast_Name" xml:space="preserve">
-    <value>in</value>
+  <data name="WeatherModule_Unit_Days" xml:space="preserve">
+    <value>day|days</value>
+    <comment>Separate with |</comment>
+  </data>
+  <data name="WeatherModule_Unit_Hours" xml:space="preserve">
+    <value>hour|hours</value>
+  </data>
+  <data name="WeatherModule_UnknownUnit" xml:space="preserve">
+    <value>I can only predict the weather per hour or per day.</value>
   </data>
 </root>
