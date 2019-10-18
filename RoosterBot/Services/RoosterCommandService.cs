@@ -97,6 +97,11 @@ namespace RoosterBot {
 					moduleBuilder.WithSummary(summary);
 				}
 
+				string groupName = module.GetCustomAttribute<GroupAttribute>()?.Prefix;
+				if (groupName != null) {
+					moduleBuilder.Group = groupName;
+				}
+
 				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
 
 				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
