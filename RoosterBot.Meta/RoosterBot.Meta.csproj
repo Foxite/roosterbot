@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="ConfigModule.cs" />
     <Compile Include="ControlModule.cs" />
+    <Compile Include="FileGuildConfigProvider.cs" />
     <Compile Include="HelpModule.cs" />
     <Compile Include="MetaComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
