@@ -59,7 +59,7 @@ namespace RoosterBot {
 
 		private Action<ModuleBuilder> GetModuleBuildFunction(Type module, ComponentBase component, string locale) {
 			return (moduleBuilder) => {
-				// TODO this code is ugly as shit, take an example from how Discord.NET does it https://github.com/discord-net/Discord.Net/blob/dev/src/Discord.Net.Commands/Builders/ModuleClassBuilder.cs
+				// TODO this code is still pretty messy, take an example from how Discord.NET does it https://github.com/discord-net/Discord.Net/blob/dev/src/Discord.Net.Commands/Builders/ModuleClassBuilder.cs
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
 					.Select(method => (method: method, attribute: method.GetCustomAttribute<CommandAttribute>(false)))
@@ -70,42 +70,48 @@ namespace RoosterBot {
 				}
 
 				CultureInfo culture = CultureInfo.GetCultureInfo(locale);
-				// Module creation
 				moduleBuilder.AddPrecondition(new RequireCultureAttribute(locale, true));
 
-				string name = module.GetCustomAttribute<NameAttribute>()?.Text;
-				if (string.IsNullOrWhiteSpace(name)) {
-					name = module.Name;
-				} else {
-					name = m_ResourceService.ResolveString(culture, component, name);
+				foreach (Attribute attr in module.GetCustomAttributes()) {
+					switch (attr) {
+						case NameAttribute name:
+							moduleBuilder.WithName(name.Text); // Don't resolve it here because we want to automatically add localized ones if there's no AliasAttribute
+							break;                             // So we do it after the foreach loop
+						case AliasAttribute alias:
+							if (alias.Aliases.Length == 1 && alias.Aliases[0].StartsWith("#")) {
+								moduleBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, alias.Aliases[0]).Split('|'));
+							} else {
+								moduleBuilder.AddAliases(alias.Aliases);
+							}
+							break;
+						case RemarksAttribute remarks:
+							moduleBuilder.WithRemarks(m_ResourceService.ResolveString(culture, component, remarks.Text));
+							break;
+						case SummaryAttribute summary:
+							moduleBuilder.WithSummary(m_ResourceService.ResolveString(culture, component, summary.Text));
+							break;
+						case GroupAttribute group:
+							moduleBuilder.Group = group.Prefix;
+							break;
+						case PreconditionAttribute precondition:
+							moduleBuilder.AddPrecondition(precondition);
+							break;
+						default:
+							moduleBuilder.AddAttributes(attr);
+							break;
+					}
 				}
-				moduleBuilder.WithName(name);
 
-				string[] aliases = module.GetCustomAttribute<AliasAttribute>()?.Aliases;
-				if (aliases == null && name.StartsWith("#")) {
-					aliases = m_ResourceService.ResolveString(culture, component, name + "_Aliases").Split('|');
+				if (!moduleBuilder.Aliases.Any() && moduleBuilder.Name.StartsWith("#")) {
+					moduleBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, moduleBuilder.Name + "_Aliases").Split('|'));
 				}
-				moduleBuilder.AddAliases(aliases ?? new[] { "" });
-
-				string remarks = module.GetCustomAttribute<RemarksAttribute>()?.Text;
-				if (remarks != null) {
-					moduleBuilder.WithRemarks(remarks);
+				if (string.IsNullOrWhiteSpace(moduleBuilder.Name)) {
+					moduleBuilder.Name = module.Name;
 				}
+				moduleBuilder.Name = m_ResourceService.ResolveString(culture, component, moduleBuilder.Name);
 
-				string summary = module.GetCustomAttribute<SummaryAttribute>()?.Text;
-				if (summary != null) {
-					moduleBuilder.WithSummary(summary);
-				}
-
-				string groupName = module.GetCustomAttribute<GroupAttribute>()?.Prefix;
-				if (groupName != null) {
-					moduleBuilder.Group = m_ResourceService.ResolveString(culture, component, groupName);
-				}
-
-				moduleBuilder.AddAttributes(module.GetCustomAttributes().ToArray());
-
-				foreach ((MethodInfo method, CommandAttribute attribute) in commands) {
-					string primaryAlias = m_ResourceService.ResolveString(culture, component, attribute.Text);
+				foreach ((MethodInfo method, CommandAttribute commandAttribute) in commands) {
+					string primaryAlias = m_ResourceService.ResolveString(culture, component, commandAttribute.Text);
 					if (string.IsNullOrWhiteSpace(primaryAlias)) {
 						primaryAlias = m_ResourceService.ResolveString(culture, component, moduleBuilder.Group);
 					}
@@ -125,7 +131,7 @@ namespace RoosterBot {
 							try {
 								moduleInstance.BeforeExecuteInternal(command);
 
-								Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.Delay(0);
+								Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.CompletedTask;
 								await task;
 							} finally {
 								moduleInstance.AfterExecuteInternal(command);
@@ -134,72 +140,8 @@ namespace RoosterBot {
 								}
 							}
 						},
-						(commandBuilder) => {
-							// Command creation
-							AliasAttribute aliasAttribute = method.GetCustomAttribute<AliasAttribute>(false);
-							string[] commandAliases;
-							if (aliasAttribute != null) {
-								commandAliases = aliasAttribute.Aliases
-									.Select(alias => m_ResourceService.ResolveString(culture, component, alias)).ToArray();
-								commandBuilder.AddAliases(commandAliases);
-							} else if (name.StartsWith("#")) {
-								commandAliases = m_ResourceService.ResolveString(culture, component, name + "_Aliases").Split('|');
-								commandBuilder.AddAliases(commandAliases);
-							}
-
-							commandBuilder.AddAttributes(method.GetCustomAttributes().ToArray());
-
-							IEnumerable<PreconditionAttribute> commandPreconditions = method.GetCustomAttributes<PreconditionAttribute>();
-							foreach (PreconditionAttribute precondition in commandPreconditions) {
-								commandBuilder.AddPrecondition(precondition);
-							}
-
-							int? priority = method.GetCustomAttribute<PriorityAttribute>()?.Priority;
-							if (priority != null) {
-								commandBuilder.WithPriority(priority.Value);
-							}
-
-							commandBuilder
-								.WithName(m_ResourceService.ResolveString(culture, component, attribute.Text))
-								.WithRunMode(attribute.RunMode)
-								.WithRemarks(method.GetCustomAttribute<RemarksAttribute>()?.Text)
-								.WithSummary(method.GetCustomAttribute<SummaryAttribute>()?.Text);
-
-							ParameterInfo[] parameters = method.GetParameters();
-							foreach (var parameter in parameters) {
-								// Parameter creation
-								string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
-								if (paramName == null) {
-									paramName = parameter.Name;
-								} else {
-									paramName = m_ResourceService.ResolveString(culture, component, paramName);
-								}
-
-								commandBuilder.AddParameter(
-									m_ResourceService.ResolveString(culture, component, paramName),
-									parameter.ParameterType,
-									(paramBuilder) => {
-										paramBuilder
-											.AddAttributes(parameter.GetCustomAttributes().ToArray())
-											.WithSummary(parameter.GetCustomAttribute<SummaryAttribute>()?.Text)
-											.WithIsRemainder(parameter.GetCustomAttribute<RemainderAttribute>() != null)
-											.WithIsMultiple(parameter.GetCustomAttribute<ParamArrayAttribute>() != null)
-											.WithDefault(parameter.DefaultValue)
-											.WithIsOptional(parameter.HasDefaultValue);
-
-										IEnumerable<ParameterPreconditionAttribute> paramPreconditions = parameter.GetCustomAttributes<ParameterPreconditionAttribute>();
-										foreach (ParameterPreconditionAttribute paramPrecondition in paramPreconditions) {
-											paramBuilder.AddPrecondition(paramPrecondition);
-										}
-
-										if (paramBuilder.TypeReader == null) {
-											paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
-										}
-									}
-								);
-							} // End parameter creation
-						}
-					); // End command creation
+						GetCommandBuildFunction(method, commandAttribute, moduleBuilder, culture, component)
+					);
 				}
 
 				// Submodule creation
@@ -212,7 +154,105 @@ namespace RoosterBot {
 
 					moduleBuilder.AddModule(submodule.GetCustomAttribute<NameAttribute>()?.Text ?? submodule.Name, GetModuleBuildFunction(submodule, component, locale));
 				}
-			}; // End module creation
+			};
+		}
+
+		private Action<CommandBuilder> GetCommandBuildFunction(MethodInfo method, CommandAttribute commandAttribute, ModuleBuilder moduleBuilder, CultureInfo culture, ComponentBase component) {
+			return (commandBuilder) => {
+				if (!string.IsNullOrWhiteSpace(commandAttribute.Text)) {
+					commandBuilder.WithName(commandAttribute.Text);
+				}
+
+				foreach (Attribute attr in method.GetCustomAttributes()) {
+					switch (attr) {
+						case NameAttribute name:
+							commandBuilder.Name = name.Text;
+							break;
+						case AliasAttribute alias:
+							if (alias.Aliases.Length == 1 && alias.Aliases[0].StartsWith("#")) {
+								moduleBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, alias.Aliases[0]).Split('|'));
+							} else {
+								moduleBuilder.AddAliases(alias.Aliases);
+							}
+							break;
+						case PriorityAttribute priority:
+							commandBuilder.WithPriority(priority.Priority);
+							break;
+						case PreconditionAttribute precondition:
+							commandBuilder.AddPrecondition(precondition);
+							break;
+						case SummaryAttribute summary:
+							commandBuilder.Summary = summary.Text;
+							break;
+						case RemarksAttribute remarks:
+							commandBuilder.Remarks = remarks.Text;
+							break;
+						default:
+							commandBuilder.AddAttributes(attr);
+							break;
+					}
+				}
+
+				if (!commandBuilder.Aliases.Any() && commandBuilder.Name.StartsWith("#")) {
+					commandBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, commandBuilder.Name + "_Aliases").Split('|'));
+				}
+				if (string.IsNullOrWhiteSpace(commandBuilder.Name)) {
+					commandBuilder.Name = method.Name;
+				}
+				if (commandAttribute.IgnoreExtraArgs.HasValue) {
+					commandBuilder.IgnoreExtraArgs = commandAttribute.IgnoreExtraArgs.Value;
+				}
+
+				commandBuilder.Name = m_ResourceService.ResolveString(culture, component, commandBuilder.Name);
+				commandBuilder.RunMode = commandAttribute.RunMode;
+
+				ParameterInfo[] parameters = method.GetParameters();
+				foreach (var parameter in parameters) {
+					string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
+					if (paramName == null) {
+						paramName = parameter.Name;
+					} else {
+						paramName = m_ResourceService.ResolveString(culture, component, paramName);
+					}
+
+					commandBuilder.AddParameter(
+						m_ResourceService.ResolveString(culture, component, paramName),
+						parameter.ParameterType,
+						GetParamBuildFunction(parameter)
+					);
+				}
+			};
+		}
+
+		private Action<ParameterBuilder> GetParamBuildFunction(ParameterInfo parameter) {
+			return (paramBuilder) => {
+				foreach (Attribute attr in parameter.GetCustomAttributes()) {
+					switch (attr) {
+						case SummaryAttribute summary:
+							paramBuilder.Summary = summary.Text;
+							break;
+						case ParameterPreconditionAttribute precondition:
+							paramBuilder.AddPrecondition(precondition);
+							break;
+						case RemainderAttribute remainder:
+							paramBuilder.IsRemainder = true;
+							break;
+						case ParamArrayAttribute _:
+							paramBuilder.WithIsMultiple(true);
+							break;
+						default:
+							paramBuilder.AddAttributes(attr);
+							break;
+					}
+				}
+				paramBuilder
+					.WithDefault(parameter.DefaultValue)
+					.WithIsOptional(parameter.HasDefaultValue);
+
+				if (paramBuilder.TypeReader == null) {
+					paramBuilder.TypeReader = TypeReaders[paramBuilder.ParameterType].FirstOrDefault();
+				}
+			};
 		}
 	}
 }
