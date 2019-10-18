@@ -38,14 +38,15 @@ namespace RoosterBot {
 			return false;
 		}
 
-		private async Task<ModuleInfo[]> AddLocalizedModuleInternalAsync(Type module, Assembly assembly) {
+		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleAsync(typeof(T));
+		public async Task<ModuleInfo[]> AddLocalizedModuleAsync(Type module) {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
 			if (module.IsSubclassOf(typeof(RoosterModuleBase<>))) {
 				throw new ArgumentException(module.Name + " must derive from RoosterModuleBase to support localization.");
 			}
 
 			IReadOnlyList<string> locales = module.GetCustomAttributes().OfType<LocalizedModuleAttribute>().Single().Locales;
-			ComponentBase component = Program.Instance.Components.GetComponentFromAssembly(assembly);
+			ComponentBase component = Program.Instance.Components.GetComponentFromAssembly(module.Assembly);
 			ModuleInfo[] localizedModules = new ModuleInfo[locales.Count];
 
 			for (int i = 0; i < locales.Count; i++) {
@@ -205,8 +206,5 @@ namespace RoosterBot {
 				}
 			}; // End module creation
 		}
-
-		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleInternalAsync(typeof(T), Assembly.GetCallingAssembly());
-		public Task<ModuleInfo[]> AddLocalizedModuleAsync(Type type) => AddLocalizedModuleInternalAsync(type, Assembly.GetCallingAssembly());
 	}
 }
