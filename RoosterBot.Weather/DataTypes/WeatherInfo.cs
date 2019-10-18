@@ -7,6 +7,8 @@ namespace RoosterBot.Weather {
 	public class WeatherInfo {
 		// Weather code from WeatherBit
 		private short m_WeatherCode;
+		private WeatherService m_WeatherService;
+		private ResourceService m_Resources;
 
 		public CityInfo City { get; }
 
@@ -23,7 +25,9 @@ namespace RoosterBot.Weather {
 
 		public string WindDirection { get; }
 
-		internal WeatherInfo(CityInfo city, JObject jsonInfo) {
+		internal WeatherInfo(ResourceService resources, WeatherService service, CityInfo city, JObject jsonInfo) {
+			m_Resources = resources;
+			m_WeatherService = service;
 			City = city;
 
 			Temperature = jsonInfo["temp"].ToObject<float>();
@@ -38,7 +42,7 @@ namespace RoosterBot.Weather {
 		/// <summary>
 		/// Format the WeatherInfo to be sent to Discord, including a pretext with city and time information.
 		/// </summary>
-		public string Present(ResourceService resources, WeatherService weatherService, DateTime datetime, CultureInfo culture, bool useMetric) {
+		public string Present(DateTime datetime, CultureInfo culture, bool useMetric) {
 			string ret;
 
 			if (City.Name == City.Region.Name) {
@@ -53,14 +57,14 @@ namespace RoosterBot.Weather {
 				ret += DateTimeUtil.GetRelativeDateReference(datetime.Date, culture) + " " + datetime.ToShortTimeString(culture);
 			}
 			ret += "\n";
-			ret += Present(resources, weatherService, culture, useMetric);
+			ret += Present(culture, useMetric);
 			return ret;
 		}
 
 		/// <summary>
 		/// Format the WeatherInfo to be sent to Discord.
 		/// </summary>
-		public string Present(ResourceService resources, WeatherService weatherService, CultureInfo culture, bool useMetric) {
+		public string Present(CultureInfo culture, bool useMetric) {
 			string ret = ":thermometer: ";
 			if (useMetric) {
 				ret += Math.Round(Temperature, 1).ToString() + " °C";
@@ -76,13 +80,13 @@ namespace RoosterBot.Weather {
 					appTempString = Math.Round(Temperature * 9 / 5 + 32, 1).ToString() + " °F";
 				}
 
-				ret += string.Format(resources.GetString(culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
+				ret += string.Format(m_Resources.GetString(culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
 			}
 			ret += "\n";
-			ret += weatherService.GetDescription(culture, m_WeatherCode);
+			ret += m_WeatherService.GetDescription(culture, m_WeatherCode);
 
 			if (WindSpeed == 0) {
-				ret += resources.GetString(culture, "WeatherInfo_Present_NoWind");
+				ret += m_Resources.GetString(culture, "WeatherInfo_Present_NoWind");
 			} else {
 				string windSpeedString;
 				if (useMetric) {
@@ -91,7 +95,7 @@ namespace RoosterBot.Weather {
 					windSpeedString = Math.Round(WindSpeed * 1.609, 1).ToString() + " mph";
 				}
 
-				ret += string.Format(resources.GetString(culture, "WeatherInfo_Present_Wind"), windSpeedString, WindDirection);
+				ret += string.Format(m_Resources.GetString(culture, "WeatherInfo_Present_Wind"), windSpeedString, WindDirection);
 			}
 			return ret;
 		}

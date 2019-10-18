@@ -39,10 +39,17 @@ namespace RoosterBot.Watson {
 				commandService,
 				services.GetService<CommandResponseService>());
 
-			m_Client.MessageReceived += (SocketMessage msg) => {
+			m_Client.MessageReceived += async (SocketMessage msg) => {
+				string commandPrefix;
+
+				if (msg.Channel is IGuildChannel guildChannel) {
+					commandPrefix = (await services.GetService<GuildConfigService>().GetConfigAsync(guildChannel.Guild)).CommandPrefix;
+				} else {
+					commandPrefix = m_Config.DefaultCommandPrefix;
+				}
+
 				// Do not await this task on the gateway thread because it can take very long.
-				_ = ProcessNaturalLanguageCommandsAsync(msg);
-				return Task.CompletedTask;
+				_ = ProcessNaturalLanguageCommandsAsync(msg, commandPrefix);
 			};
 			
 			help.AddHelpSection(this, "taal", "#WatsonComponent_HelpText");
@@ -50,11 +57,11 @@ namespace RoosterBot.Watson {
 			return Task.CompletedTask;
 		}
 
-		private async Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg) {
+		private async Task ProcessNaturalLanguageCommandsAsync(SocketMessage socketMsg, string commandPrefix) {
 			if (socketMsg is IUserMessage msg && !msg.Author.IsBot) {
 				int argPos = 0;
 				bool process = false;
-				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(m_Config.DefaultCommandPrefix)) {
+				if (msg.Channel is IDMChannel && !msg.Content.StartsWith(commandPrefix)) {
 					Logger.Info("WatsonComponent", $"Processing natlang command from {socketMsg.Author.Username}#{socketMsg.Author.Discriminator} in DM channel: {socketMsg.Content}");
 					process = true;
 				} else if (msg.Channel is IGuildChannel gch && msg.HasMentionPrefix(m_Client.CurrentUser, ref argPos)) {

@@ -13,27 +13,27 @@ namespace RoosterBot.Schedule {
 				return baseResult;
 			} else {
 				ResourceService resources = services.GetService<ResourceService>();
-				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
+				GuildConfig config = await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild);
 				IUser user;
 				bool byMention = false;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
 					user = await context.Client.GetUserAsync(id);
 					if (user == null) {
-						return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(culture, "StudentSetInfoReader_CheckFailed_InaccessibleUser"));
+						return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(config.Culture, "StudentSetInfoReader_CheckFailed_InaccessibleUser"));
 					}
 					byMention = true;
-				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(culture, "IdentifierInfoReader_Self")) {
+				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(config.Culture, "IdentifierInfoReader_Self")) {
 					user = context.User;
 				} else {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(culture, "StudentSetInfoReader_CheckFailed_Direct"));
+					return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(config.Culture, "StudentSetInfoReader_CheckFailed_Direct"));
 				}
 				StudentSetInfo result = await services.GetService<IUserClassesService>().GetClassForDiscordUserAsync(context, user);
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = string.Format(resources.GetString(culture, "StudentSetInfoReader_CheckFailed_MentionUser"), services.GetService<ConfigService>().DefaultCommandPrefix);
+						message = string.Format(resources.GetString(config.Culture, "StudentSetInfoReader_CheckFailed_MentionUser"), config.CommandPrefix);
 					} else {
-						message = String.Format(resources.GetString(culture, "StudentSetInfoReader_CheckFailed_MentionSelf"), services.GetService<ConfigService>().DefaultCommandPrefix);
+						message = string.Format(resources.GetString(config.Culture, "StudentSetInfoReader_CheckFailed_MentionSelf"), config.CommandPrefix);
 					}
 					return TypeReaderResult.FromError(CommandError.Unsuccessful, message);
 				} else {

@@ -27,7 +27,9 @@ namespace RoosterBot.Weather {
 
 			string weatherBitKey = jsonConfig["weatherbit_key"].ToObject<string>();
 
-			services.AddSingleton(new WeatherService(weatherBitKey));
+			services.AddSingleton(provider => { // Do it like this because we need a dependency service, but we can't access those yet
+				return new WeatherService(provider.GetService<ResourceService>(), weatherBitKey);
+			});
 			services.AddSingleton(cityService);
 		}
 
@@ -36,9 +38,7 @@ namespace RoosterBot.Weather {
 
 			commandService.AddTypeReader<CityInfo>(new CityInfoReader());
 
-			registerModuleFunction(new[] {
-				await commandService.AddModuleAsync<WeatherModule>(services)
-			});
+			registerModuleFunction(await commandService.AddLocalizedModuleAsync<WeatherModule>());
 
 			help.AddHelpSection(this, "weer", "#WeatherComponent_HelpText");
 		}

@@ -15,25 +15,24 @@ namespace RoosterBot.Weather {
 
 		public WeatherService(ResourceService resources, string weatherBitKey) {
 			m_WeatherBitKey = weatherBitKey;
-			m_Web = new WebClient();
 			m_Resources = resources;
+			m_Web = new WebClient();
 		}
 
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {
-			return new WeatherInfo(city, (await GetResponseAsync("current", new Dictionary<string, string>() {
+			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("current", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() }
 			}))["data"][0].ToObject<JObject>());
 		}
 
 		public async Task<WeatherInfo> GetWeatherForecastAsync(CityInfo city, int hoursFromNow) {
-			return new WeatherInfo(city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
+			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() },
 				{ "hours", hoursFromNow.ToString() }
 			}))["data"].Last.ToObject<JObject>());
 		}
 
 		public async Task<WeatherInfo[]> GetDayForecastAsync(CityInfo city, DateTime date) {
-			//JObject info = jObject["data"][0].ToObject<JObject>();
 			int hoursForecast = (int) (date - DateTime.Today).TotalHours + 18;
 
 			JToken result = (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
@@ -47,7 +46,7 @@ namespace RoosterBot.Weather {
 				result[hoursForecast - 1] // 6 pm
 			};
 
-			return resultIntervals.Select(jt => new WeatherInfo(city, jt.ToObject<JObject>())).ToArray();
+			return resultIntervals.Select(jt => new WeatherInfo(m_Resources, this, city, jt.ToObject<JObject>())).ToArray();
 		}
 
 		public string GetDescription(CultureInfo culture, short weatherCode) {

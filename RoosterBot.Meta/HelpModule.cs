@@ -10,11 +10,11 @@ namespace RoosterBot.Meta {
 
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Summary")]
 		public Task HelpCommand() {
-			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", Config.DefaultCommandPrefix) + "\n\n";
-			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
+			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n";
+			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
 			response += string.Join(", ", Help.GetSectionNames()) + "\n\n";
 
-			response += GetString("MetaCommandsModule_HelpCommand_PostText", Config.DefaultCommandPrefix);
+			response += GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix);
 
 			ReplyDeferred(response);
 
@@ -26,7 +26,7 @@ namespace RoosterBot.Meta {
 			string response = "";
 			if (Help.HelpSectionExists(section)) {
 				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
-				response += string.Format(ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2), Config.DefaultCommandPrefix);
+				response += string.Format(ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2), GuildConfig.CommandPrefix);
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
@@ -39,11 +39,7 @@ namespace RoosterBot.Meta {
 
 		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Summary")]
 		public Task CommandListCommand() {
-			// List modules with visible commands
-			string response = GetString("MetaCommandsModule_CommandListCommand_Pretext") + "\n\n";
-			response += GetCategoryList();
-
-			ReplyDeferred(response);
+			ReplyDeferred(GetCategoryList());
 
 			return Task.CompletedTask;
 		}
@@ -73,7 +69,7 @@ namespace RoosterBot.Meta {
 						continue;
 					}
 
-					response += $"`{Config.DefaultCommandPrefix}";
+					response += $"`{GuildConfig.CommandPrefix}";
 					response += ResourcesService.ResolveString(Culture, component, command.Name);
 
 					// Parameters
@@ -83,7 +79,7 @@ namespace RoosterBot.Meta {
 						}
 
 						string paramName = ResourcesService.ResolveString(Culture, component, param.Name);
-						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {string.Format(ResourcesService.ResolveString(Culture, component, param.Summary), Config.DefaultCommandPrefix)}";
+						string paramSummary = string.IsNullOrWhiteSpace(param.Summary) ? "" : $": {string.Format(ResourcesService.ResolveString(Culture, component, param.Summary), GuildConfig.CommandPrefix)}";
 						
 						response += $" <{paramName.Replace('_', ' ')}{(param.IsOptional ? "(?)" : "")}{paramSummary}>";
 					}
@@ -91,7 +87,7 @@ namespace RoosterBot.Meta {
 					if (string.IsNullOrWhiteSpace(command.Summary)) {
 						response += "`";
 					} else {
-						string commandSummary = string.Format(ResourcesService.ResolveString(Culture, component, command.Summary), Config.DefaultCommandPrefix);
+						string commandSummary = string.Format(ResourcesService.ResolveString(Culture, component, command.Summary), GuildConfig.CommandPrefix);
 						response += $"`: {commandSummary}";
 					}
 
@@ -105,7 +101,7 @@ namespace RoosterBot.Meta {
 								if (preconditionsAdded != 0) {
 									preconditionText += ", ";
 								}
-								preconditionText += string.Format(ResourcesService.ResolveString(Culture, component, rpc.Summary), Config.DefaultCommandPrefix);
+								preconditionText += string.Format(ResourcesService.ResolveString(Culture, component, rpc.Summary), GuildConfig.CommandPrefix);
 								preconditionsAdded++;
 							}
 						}
@@ -119,7 +115,7 @@ namespace RoosterBot.Meta {
 				}
 
 				if (!string.IsNullOrWhiteSpace(module.Remarks)) {
-					response += string.Format(ResourcesService.ResolveString(Culture, component, module.Remarks), Config.DefaultCommandPrefix) + "\n";
+					response += string.Format(ResourcesService.ResolveString(Culture, component, module.Remarks), GuildConfig.CommandPrefix) + "\n";
 				}
 
 				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
@@ -130,9 +126,12 @@ namespace RoosterBot.Meta {
 		}
 
 		private string GetCategoryList() {
+			// List modules with visible commands
 			IEnumerable<string> visibleModules =
 				from module in CmdService.Modules
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
+				let culture = module.Attributes.OfType<RequireCultureAttribute>().FirstOrDefault()
+				where culture == null || culture.Culture == Culture
 				select ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
 			string ret = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext") + "\n";

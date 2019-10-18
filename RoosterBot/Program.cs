@@ -112,7 +112,7 @@ namespace RoosterBot {
 			cns.AddLocalizedName("en-US", "nl-NL", "engels");
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
-			RoosterCommandService commands = new RoosterCommandService(m_ConfigService, resources);
+			RoosterCommandService commands = new RoosterCommandService(resources);
 			commands.Log += Logger.LogSync;
 
 			// Create handlers
@@ -127,8 +127,8 @@ namespace RoosterBot {
 			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
 			//  that use the object's fields.
 			new RestartHandler(m_Client, m_NotificationService, 5);
-			new NewCommandHandler(m_Client, commands, m_ConfigService);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs);
+			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
 			new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
 			new DeletedCommandHandler(m_Client, crs);
 			new DeadlockHandler(m_Client, m_NotificationService, 60000);

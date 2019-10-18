@@ -280,4 +280,40 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <comment>0: wind speed, unit included
 1: cardinal direction, localized</comment>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_DayForecast_PretextCity" xml:space="preserve">
+    <value>{0}: Weer {1}\n</value>
+    <comment>0: city name
+1: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_DayForecast_PretextRegion" xml:space="preserve">
+    <value>{0}, {1}: Weer {2}\n</value>
+    <comment>0: city name
+1: region name
+2: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_Group" xml:space="preserve">
+    <value>weer</value>
+  </data>
+  <data name="WeatherModule_Name" xml:space="preserve">
+    <value>weer</value>
+  </data>
+  <data name="WeatherModule_NoLookBack" xml:space="preserve">
+    <value>Ik kan niet terug kijken.</value>
+  </data>
+  <data name="WeatherModule_SevenDayLimit" xml:space="preserve">
+    <value>Ik kan het weer niet verder dan 7 dagen voorspellen.</value>
+  </data>
+  <data name="WeatherModule_Unit_Days" xml:space="preserve">
+    <value>dag|dagen</value>
+    <comment>Separate with |</comment>
+  </data>
+  <data name="WeatherModule_Unit_Hours" xml:space="preserve">
+    <value>uur</value>
+  </data>
+  <data name="WeatherModule_UnknownUnit" xml:space="preserve">
+    <value>Ik kan alleen op uur- of dagniveau het weer voorspellen.</value>
+  </data>
 </root>

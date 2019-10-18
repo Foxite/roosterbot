@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -26,18 +25,18 @@ namespace RoosterBot {
 				bool bad = false;
 				string badReport = $"\"{context.Message}\": ";
 
-				CultureInfo culture = (await m_GCS.GetConfigAsync(context.Guild)).Culture;
+				GuildConfig guildConfig = await m_GCS.GetConfigAsync(context.Guild);
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {
 						case CommandError.UnknownCommand:
-							response = string.Format(m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_UnknownCommand"), m_Config.DefaultCommandPrefix);
+							response = string.Format(m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_UnknownCommand"), guildConfig.CommandPrefix);
 							break;
 						case CommandError.BadArgCount:
-							response = m_ResourcesService.GetString(culture, "Program_OnCommandExecuted_BadArgCount");
+							response = m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
 							break;
 						case CommandError.UnmetPrecondition:
-							response = m_ResourcesService.ResolveString(culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+							response = m_ResourcesService.ResolveString(guildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
 							break;
 						case CommandError.ParseFailed:
 							response = result.ErrorReason;
@@ -76,7 +75,7 @@ namespace RoosterBot {
 						await m_Config.BotOwner.SendMessageAsync(badReport);
 					}
 
-					response = Util.ErrorPrefix + m_ResourcesService.GetString(culture, "RoosterBot_FatalError");
+					response = Util.ErrorPrefix + m_ResourcesService.GetString(guildConfig.Culture, "RoosterBot_FatalError");
 				} else {
 					response = Util.ErrorPrefix + response;
 				}

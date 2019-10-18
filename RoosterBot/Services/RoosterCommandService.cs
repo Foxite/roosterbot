@@ -14,23 +14,21 @@ namespace RoosterBot {
 	/// RoosterCommandService keeps track of executed commands and their replies.
 	/// </summary>
 	public sealed class RoosterCommandService : CommandService {
-		private readonly ConfigService m_Config;
 		private readonly ResourceService m_ResourceService;
 
 		/// <param name="minimumMemorySeconds">How long it takes at least before old commands are deleted. Old commands are not deleted until a new one from the same user comes in.</param>
-		internal RoosterCommandService(ConfigService config, ResourceService resourceService) {
-			m_Config = config;
+		internal RoosterCommandService(ResourceService resourceService) {
 			m_ResourceService = resourceService;
 		}
 
-		internal bool IsMessageCommand(IMessage message, out int argPos) {
+		internal bool IsMessageCommand(IMessage message, string prefix, out int argPos) {
 			argPos = 0;
 			if (message.Source == MessageSource.User &&
 				message is IUserMessage userMessage &&
-				message.Content.Length > m_Config.DefaultCommandPrefix.Length &&
-				userMessage.HasStringPrefix(m_Config.DefaultCommandPrefix, ref argPos)) {
+				message.Content.Length > prefix.Length &&
+				userMessage.HasStringPrefix(prefix, ref argPos)) {
 				// First char after prefix
-				char firstChar = message.Content.Substring(m_Config.DefaultCommandPrefix.Length)[0];
+				char firstChar = message.Content.Substring(prefix.Length)[0];
 				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
 					return true;

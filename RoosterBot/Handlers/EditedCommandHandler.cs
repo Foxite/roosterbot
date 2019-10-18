@@ -8,12 +8,14 @@ namespace RoosterBot {
 		private readonly RoosterCommandService m_Commands;
 		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
+		private readonly GuildConfigService m_GCS;
 
-		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, CommandResponseService crs) {
+		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, CommandResponseService crs, GuildConfigService gcs) {
 			m_Client = client;
 			m_Commands = commands;
 			m_Config = config;
 			m_CRS = crs;
+			m_GCS = gcs;
 
 			m_Client.MessageUpdated += OnMessageUpdated;
 		}
@@ -21,7 +23,14 @@ namespace RoosterBot {
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
 				CommandResponsePair crp = m_CRS.GetResponse(userMessageAfter);
-				if (m_Commands.IsMessageCommand(userMessageAfter, out int argPos)) {
+				string prefix;
+				if (channel is IGuildChannel guildChannel) {
+					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
+				} else {
+					prefix = m_Config.DefaultCommandPrefix;
+				}
+
+				if (m_Commands.IsMessageCommand(userMessageAfter, prefix, out int argPos)) {
 					IUserMessage[] responses;
 					if (crp != null) {
 						// Was previously a command

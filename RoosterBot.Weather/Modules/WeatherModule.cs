@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using RoosterBot.DateTimeUtils;
@@ -6,7 +7,7 @@ using RoosterBot.DateTimeUtils;
 namespace RoosterBot.Weather {
 	// The free license for Weatherbit allows 500 calls per month, so we shouldn't try to show too much data at once. If the user wants to know the weather 3 hours from now, they
 	// should request just that, instead of being shown a per-hour forecast of the entire day (24 calls), while they only care about one data point.
-	[Name("weer"), Group("weer"), LocalizedModule("nl-NL", "en-US"]
+	[Name("#WeatherModule_Name"), Group("#WeatherModule_Group"), LocalizedModule("nl-NL", "en-US")]
 	public class WeatherModule : RoosterModuleBase {
 		public WeatherService Weather { get; set; }
 
@@ -16,7 +17,7 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
-			ReplyDeferred(weather.Present(DateTime.Now, Culture));
+			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO guild config for metric (probably use a dynamic config system so any component can have their own settings)
 		}
 
 		[Command("#WeatherModule_DayForecast_Name", RunMode = RunMode.Async), Alias("#WeatherModule_DayForecast_Aliases")]
@@ -35,31 +36,31 @@ namespace RoosterBot.Weather {
 				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
 				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			}
-			ReplyDeferred(weather.Present(datetime, Culture));
+			ReplyDeferred(weather.Present(datetime, Culture, true));
 		}
 
 		[Command("#WeatherModule_UnitForecast_Name", RunMode = RunMode.Async), Alias("#WeatherModule_UnitForecast_Aliases")]
 		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
-				await MinorError("Ik kan niet terug kijken.");
-			} else if (unit == "dag" || unit == "dagen") {
+				await MinorError(GetString("#WeatherModule_NoLookBack"));
+			} else if (GetString("WeatherModule_Unit_Days").Split('|').Contains(unit)) {
 				if (amount > 7) {
-					await MinorError("Ik kan het weer niet verder dan 7 dagen voorspellen.");
+					await MinorError(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 				}
-			} else if (unit == "uur") {
+			} else if (GetString("WeatherModule_Unit_Hours").Split('|').Contains(unit)) {
 				if (amount > 168) {
-					await MinorError("Ik kan het weer niet verder dan 7 dagen voorspellen.");
+					await MinorError(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					WeatherInfo weather;
 					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 						weather = await Weather.GetWeatherForecastAsync(city, amount);
 					}
-					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture));
+					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture, true));
 				}
 			} else {
-				await MinorError("Ik kan alleen op uur- of dagniveau het weer voorspellen.");
+				await MinorError(GetString("WeatherModule_UnknownUnit"));
 			}
 		}
 
@@ -68,10 +69,16 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
 
-				response = $"{dayForecast[0].City.Name}, {dayForecast[0].City.Region}: Weer {DateTimeUtil.GetRelativeDateReference(date, Culture)}\n";
-				response += "08:00:\n" + dayForecast[0].Present();
-				response += "\n\n12:00:\n" + dayForecast[1].Present();
-				response += "\n\n18:00:\n" + dayForecast[2].Present();
+				string pretext;
+				if (dayForecast[0].City.Name == dayForecast[0].City.Region.Name) {
+					pretext = GetString("WeatherModule_DayForecast_PretextRegion", dayForecast[0].City.Name, dayForecast[0].City.Region.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
+				} else {
+					pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
+				}
+				
+				response  = DateTime.Today.AddHours(08).ToShortTimeString(Culture) + "\n" + dayForecast[0].Present(Culture, true);
+				response += DateTime.Today.AddHours(12).ToShortTimeString(Culture) + "\n" + dayForecast[1].Present(Culture, true);
+				response += DateTime.Today.AddHours(18).ToShortTimeString(Culture) + "\n" + dayForecast[2].Present(Culture, true);
 			}
 
 			ReplyDeferred(response);
