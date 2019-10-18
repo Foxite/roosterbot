@@ -70,7 +70,13 @@ namespace RoosterBot.Meta {
 					}
 
 					response += $"`{GuildConfig.CommandPrefix}";
-					response += ResourcesService.ResolveString(Culture, component, command.Name);
+					if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
+						response += command.Module.Group;
+					}
+					string name = ResourcesService.ResolveString(Culture, component, command.Name);
+					if (!string.IsNullOrWhiteSpace(name)) {
+						response += " " + name;
+					}
 
 					// Parameters
 					foreach (ParameterInfo param in command.Parameters) {
@@ -130,8 +136,8 @@ namespace RoosterBot.Meta {
 			IEnumerable<string> visibleModules =
 				from module in CmdService.Modules
 				where !module.Attributes.Any(attr => attr is HiddenFromListAttribute)
-				let culture = module.Attributes.OfType<RequireCultureAttribute>().FirstOrDefault()
-				where culture == null || culture.Culture == Culture
+				let culture = module.Preconditions.OfType<RequireCultureAttribute>().FirstOrDefault()
+				where culture == null || culture.Culture.Equals(Culture)
 				select ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
 			string ret = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext") + "\n";
