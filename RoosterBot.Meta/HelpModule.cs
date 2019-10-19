@@ -47,9 +47,13 @@ namespace RoosterBot.Meta {
 		[Command("commands"), Summary("#MetaCommandsModule_CommandListCommand_Category_Summary")]
 		public Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string moduleName) {
 			moduleName = moduleName.ToLower();
-			ModuleInfo module = CmdService.Modules
-				.Where(aModule => ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName)
-				.SingleOrDefault();
+			ModuleInfo module = (
+				from aModule in CmdService.Modules
+				where ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(aModule), aModule.Name).ToLower() == moduleName
+				let culturePrecon = aModule.Preconditions.OfType<RequireCultureAttribute>().SingleOrDefault()
+				where culturePrecon == null || !culturePrecon.Hide || culturePrecon.Culture.Equals(Culture)
+				select aModule
+				).SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
 				string response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist");
