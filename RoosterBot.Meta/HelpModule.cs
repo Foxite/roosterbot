@@ -74,12 +74,18 @@ namespace RoosterBot.Meta {
 					}
 
 					response += $"`{GuildConfig.CommandPrefix}";
+					bool groupAdded = false;
 					if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
-						response += command.Module.Group;
+						response += ResourcesService.ResolveString(Culture, component, command.Module.Group);
+						groupAdded = true;
+
 					}
 					string name = ResourcesService.ResolveString(Culture, component, command.Name);
 					if (!string.IsNullOrWhiteSpace(name)) {
-						response += " " + name;
+						if (groupAdded) {
+							response += " ";
+						}
+						response += name;
 					}
 
 					// Parameters
