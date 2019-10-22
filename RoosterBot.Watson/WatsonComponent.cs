@@ -52,7 +52,7 @@ namespace RoosterBot.Watson {
 				_ = ProcessNaturalLanguageCommandsAsync(msg, commandPrefix);
 			};
 			
-			help.AddHelpSection(this, "taal", "#WatsonComponent_HelpText");
+			help.AddHelpSection(this, "#WatsonComponent_HelpName", "#WatsonComponent_HelpText");
 
 			return Task.CompletedTask;
 		}

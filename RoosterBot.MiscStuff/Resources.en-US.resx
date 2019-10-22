@@ -184,4 +184,7 @@ That's a new record! The previous highscore was {2}.</value>
   <data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
     <value>Reset a counter back to zero.</value>
   </data>
+  <data name="MiscStuffComponent_HelpName" xml:space="preserve">
+    <value>misc</value>
+  </data>
 </root>

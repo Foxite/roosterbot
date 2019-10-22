@@ -40,7 +40,7 @@ namespace RoosterBot.Weather {
 
 			registerModuleFunction(await commandService.AddLocalizedModuleAsync<WeatherModule>());
 
-			help.AddHelpSection(this, "weer", "#WeatherComponent_HelpText");
+			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 		}
 	}
 }

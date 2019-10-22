@@ -488,4 +488,10 @@ You can always check what class I think you're in by just typing `{0}me`, to che
   <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
     <value>Class</value>
   </data>
+  <data name="ScheduleComponent_HelpName_Class" xml:space="preserve">
+    <value>your class</value>
+  </data>
+  <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
+    <value>schedule</value>
+  </data>
 </root>

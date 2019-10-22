@@ -27,8 +27,7 @@ namespace RoosterBot.MiscStuff {
 				commandService.AddModuleAsync<ModerationModule>(services)
 			));
 
-			string helpText = "#MiscStuffComponent_HelpText";
-			help.AddHelpSection(this, "misc", helpText);
+			help.AddHelpSection(this, "#MiscStuffComponent_HelpName", "#MiscStuffComponent_HelpText");
 		}
 	}
 }

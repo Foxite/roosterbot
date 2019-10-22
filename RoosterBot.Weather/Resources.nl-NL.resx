@@ -313,4 +313,7 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherModule_UnknownUnit" xml:space="preserve">
     <value>Ik kan alleen op uur- of dagniveau het weer voorspellen.</value>
   </data>
+  <data name="WeatherComponent_HelpName" xml:space="preserve">
+    <value>weer</value>
+  </data>
 </root>

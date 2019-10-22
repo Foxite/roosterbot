@@ -43,16 +43,13 @@ namespace RoosterBot.Schedule {
 			commandService.AddTypeReader<IdentifierInfo>(s_IdentifierReaders);
 
 			registerModules(await Task.WhenAll(
-				//commandService.AddModuleAsync<DefaultScheduleModule>(services),
 				commandService.AddModuleAsync<TeacherListModule>(services),
 				commandService.AddModuleAsync<UserClassModule>(services)
 			));
-
 			registerModules(await commandService.AddLocalizedModuleAsync<ScheduleModule>());
 
-			help.AddHelpSection(this, "rooster", "#ScheduleComponent_HelpText_Rooster");
-
-			help.AddHelpSection(this, "klas", "#ScheduleComponent_HelpText_Class");
+			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
+			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
 		}
 	}
 }

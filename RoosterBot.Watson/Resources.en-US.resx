@@ -123,6 +123,9 @@
   <data name="WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs" xml:space="preserve">
     <value>There can't be extra lines or tabs in the input.</value>
   </data>
+  <data name="WatsonComponent_HelpName" xml:space="preserve">
+    <value>language</value>
+  </data>
   <data name="WatsonComponent_HelpText" xml:space="preserve">
     <value>**Natural language is not yet supported in English.**
 

@@ -185,4 +185,7 @@ Dat is een nieuw record! De vorige highscore was {2}.</value>
   <data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
     <value>Zet een counter weer op nul.</value>
   </data>
+  <data name="MiscStuffComponent_HelpName" xml:space="preserve">
+    <value>misc</value>
+  </data>
 </root>

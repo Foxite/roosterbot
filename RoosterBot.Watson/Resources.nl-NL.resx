@@ -123,6 +123,9 @@
   <data name="WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs" xml:space="preserve">
     <value>Er kunnen geen extra regels of tabs in de input zitten.</value>
   </data>
+  <data name="WatsonComponent_HelpName" xml:space="preserve">
+    <value>taal</value>
+  </data>
   <data name="WatsonComponent_HelpText" xml:space="preserve">
     <value>Ik gebruik een machine-learning systeem waarmee ik spreektaal kan begrijpen.
 Om dit te gebruiken, mention je me aan het begin van een command en stel je me een vraag.
