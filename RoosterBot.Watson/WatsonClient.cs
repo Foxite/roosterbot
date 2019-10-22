@@ -93,7 +93,16 @@ namespace RoosterBot.Watson {
 					// AddResponse will be handled by PostCommandHandler.
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
-					await Util.AddReaction(message, "❓"); // TODO stop using reactions
+
+					CultureInfo culture;
+					if (message.Channel is IGuildChannel guildChannel) {
+						culture = (await m_GCS.GetConfigAsync(guildChannel.Guild)).Culture;
+					} else {
+						// TODO get culture from mutual guilds with user
+						culture = CultureInfo.GetCultureInfo("nl-NL");
+					}
+
+					await message.Channel.SendMessageAsync(Util.Unknown + m_Resources.GetString(culture, "WatsonClient_CommandNotUnderstood"));
 				}
 			} catch (Exception e) {
 				Logger.Error(LogTag, "That didn't work.", e);

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WatsonClient_CommandNotUnderstood" xml:space="preserve">
+    <value>I don't understand that question.</value>
+  </data>
   <data name="WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs" xml:space="preserve">
     <value>There can't be extra lines or tabs in the input.</value>
   </data>
