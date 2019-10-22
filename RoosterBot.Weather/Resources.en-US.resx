@@ -117,6 +117,120 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WeatherBit_Code_200" xml:space="preserve">
+    <value>:cloud_lightning: Thunderstorm with light rain</value>
+  </data>
+  <data name="WeatherBit_Code_201" xml:space="preserve">
+    <value>:thunder_cloud_rain: Thunderstorm with rain</value>
+  </data>
+  <data name="WeatherBit_Code_202" xml:space="preserve">
+    <value>:thunder_cloud_rain: Thunderstorm with heavy rain</value>
+  </data>
+  <data name="WeatherBit_Code_230" xml:space="preserve">
+    <value>:cloud_lightning: Thunderstorm with light drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_231" xml:space="preserve">
+    <value>:thunder_cloud_rain: Thunderstorm with drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_232" xml:space="preserve">
+    <value>:thunder_cloud_rain: Thunderstorm with heavy drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_233" xml:space="preserve">
+    <value>:thunder_cloud_rain: Thunderstorm with Hail</value>
+  </data>
+  <data name="WeatherBit_Code_300" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Light Drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_301" xml:space="preserve">
+    <value>:cloud_rain: Drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_302" xml:space="preserve">
+    <value>:cloud_rain: Heavy Drizzle</value>
+  </data>
+  <data name="WeatherBit_Code_500" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Light Rain</value>
+  </data>
+  <data name="WeatherBit_Code_501" xml:space="preserve">
+    <value>:cloud_rain: Moderate Rain</value>
+  </data>
+  <data name="WeatherBit_Code_502" xml:space="preserve">
+    <value>:cloud_rain: Heavy Rain</value>
+  </data>
+  <data name="WeatherBit_Code_511" xml:space="preserve">
+    <value>:cloud_rain: Freezing rain</value>
+  </data>
+  <data name="WeatherBit_Code_520" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Light shower rain</value>
+  </data>
+  <data name="WeatherBit_Code_521" xml:space="preserve">
+    <value>:cloud_rain: Shower rain</value>
+  </data>
+  <data name="WeatherBit_Code_522" xml:space="preserve">
+    <value>:cloud_rain: Heavy shower rain</value>
+  </data>
+  <data name="WeatherBit_Code_600" xml:space="preserve">
+    <value>:cloud_snow: Light snow</value>
+  </data>
+  <data name="WeatherBit_Code_601" xml:space="preserve">
+    <value>:cloud_snow: Snow</value>
+  </data>
+  <data name="WeatherBit_Code_602" xml:space="preserve">
+    <value>:cloud_snow: Heavy Snow</value>
+  </data>
+  <data name="WeatherBit_Code_610" xml:space="preserve">
+    <value>:cloud_snow: Mix snow/rain</value>
+  </data>
+  <data name="WeatherBit_Code_611" xml:space="preserve">
+    <value>:snowflake: Sleet</value>
+  </data>
+  <data name="WeatherBit_Code_612" xml:space="preserve">
+    <value>:snowflake: Heavy sleet</value>
+  </data>
+  <data name="WeatherBit_Code_621" xml:space="preserve">
+    <value>:cloud_snow: Snow shower</value>
+  </data>
+  <data name="WeatherBit_Code_622" xml:space="preserve">
+    <value>:cloud_snow: Heavy snow shower</value>
+  </data>
+  <data name="WeatherBit_Code_623" xml:space="preserve">
+    <value>:cloud_snow: Flurries</value>
+  </data>
+  <data name="WeatherBit_Code_700" xml:space="preserve">
+    <value>:foggy: Mist</value>
+  </data>
+  <data name="WeatherBit_Code_711" xml:space="preserve">
+    <value>:warning: Smoke</value>
+  </data>
+  <data name="WeatherBit_Code_721" xml:space="preserve">
+    <value>:foggy: Haze</value>
+  </data>
+  <data name="WeatherBit_Code_731" xml:space="preserve">
+    <value>:warning: Sand/dust</value>
+  </data>
+  <data name="WeatherBit_Code_741" xml:space="preserve">
+    <value>:foggy: Fog</value>
+  </data>
+  <data name="WeatherBit_Code_751" xml:space="preserve">
+    <value>:foggy: Freezing Fog</value>
+  </data>
+  <data name="WeatherBit_Code_800" xml:space="preserve">
+    <value>:sunny: Clear sky</value>
+  </data>
+  <data name="WeatherBit_Code_801" xml:space="preserve">
+    <value>:white_sun_small_cloud: Few clouds</value>
+  </data>
+  <data name="WeatherBit_Code_802" xml:space="preserve">
+    <value>:white_sun_small_cloud: Scattered clouds</value>
+  </data>
+  <data name="WeatherBit_Code_803" xml:space="preserve">
+    <value>:white_sun_cloud: Broken clouds</value>
+  </data>
+  <data name="WeatherBit_Code_804" xml:space="preserve">
+    <value>:cloud: Overcast clouds</value>
+  </data>
+  <data name="WeatherBit_Code_900" xml:space="preserve">
+    <value>&lt;:unknown:636213624460935188&gt; Unknown</value>
+  </data>
   <data name="WeatherComponent_HelpName" xml:space="preserve">
     <value>weather</value>
   </data>
