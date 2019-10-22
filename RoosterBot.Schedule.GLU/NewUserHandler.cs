@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule.GLU {
 		}
 
 		private async Task WelcomeUser(SocketGuildUser user) {
-			if (user.Guild.Id == 278586698877894657 && // TODO get from config file
+			if (user.Guild.Id == GLUScheduleComponent.GLUGuildId &&
 				user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
 				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel).Mention;
 

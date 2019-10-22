@@ -9,7 +9,6 @@ using Discord.Net;
 
 namespace RoosterBot {
 	public static class Util {
-		// TODO before deploying 2.0 make sure the bot can access this emote!
 		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
 		public static readonly Random RNG = new Random();
 

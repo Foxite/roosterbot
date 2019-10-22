@@ -17,7 +17,6 @@ namespace RoosterBot {
 		public static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 
 		static Logger() {
-			// TODO proper log rotating, config setting for the amount of logs to keep
 			// Keep the log from the previous launch as ".old.log"
 			if (File.Exists(LogPath + ".log")) {
 				if (File.Exists(LogPath + ".old.log")) {

@@ -10,7 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Schedule.GLU {
+	// This component has a lot of hardcoded snowflake IDs. Normally I'd get all that from a config file, but this component is specifically made for a particular guild,
+	//  so generalizing the code does not make a lot of sense.
 	public class GLUScheduleComponent : ComponentBase {
+		public const long GLUGuildId = 278586698877894657;
+
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
