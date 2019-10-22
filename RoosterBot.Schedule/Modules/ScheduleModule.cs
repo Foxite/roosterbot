@@ -7,7 +7,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO reduce the size of this file (it has 352 lines right now)
+	// TODO (refactoring) reduce the size of this file (it has 352 lines right now)
 	[Name("#ScheduleModule_Name")]
 	[Summary("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]

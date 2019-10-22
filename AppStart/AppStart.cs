@@ -31,7 +31,7 @@ namespace RoosterBot.Automation {
 
 			Log("App started, monitoring");
 
-			// TODO: Move this code to a program/script running in the ValidateService phase, if possible
+			// TODO (refactoring) Move this code to a program/script running in the ValidateService phase, if possible
 			CancellationTokenSource cts = new CancellationTokenSource();
 			CancellationToken token = cts.Token;
 			bool waitResult = await await Task.WhenAny(
@@ -57,7 +57,7 @@ namespace RoosterBot.Automation {
 				if (pipeServer.IsConnected) {
 					using (StreamReader sr = new StreamReader(pipeServer)) {
 						string input = sr.ReadLine();
-						// TODO: find out if it is possible for a process to send a simple "ping" rather than arbitrary data
+						// TODO (investigate) find out if it is possible for a process to send a simple "ping" rather than arbitrary data
 						// This will fuck up if the received data is anything other than "ready", although that shouldn't happen (at the time of writing)
 						if (input == "ready") {
 							return true;

@@ -22,7 +22,7 @@ namespace RoosterBot.Watson {
 		private readonly RoosterCommandService m_CommandService;
 		private readonly CommandResponseService m_CRS;
 
-		// TODO Reduce parameter count
+		// TODO (refactoring) Reduce parameter count
 		public WatsonClient(string apiKey, string assistantId, ConfigService config, GuildConfigService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {

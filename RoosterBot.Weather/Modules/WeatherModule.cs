@@ -17,7 +17,7 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
-			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO guild config for metric (probably use a dynamic config system so any component can have their own settings)
+			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO (feature) guild config for metric (probably use a dynamic config system so any component can have their own settings)
 		}
 
 		[Command("#WeatherModule_DayForecast", RunMode = RunMode.Async)]

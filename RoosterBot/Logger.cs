@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
-	// TODO should this be a service? I've seen that Microsoft.Extensions contains stuff for logging, including a way to do this
+	// TODO (investigate) should this be a service? I've seen that Microsoft.Extensions contains stuff for logging, including a way to do this
 	// serviceCollection.AddLogging
 	// And that's that. We could use that.
 	public static class Logger {
