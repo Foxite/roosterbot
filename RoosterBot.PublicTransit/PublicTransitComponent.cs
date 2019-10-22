@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using Discord.Commands;
+using System.Globalization;
 
 namespace RoosterBot.PublicTransit {
 	// TODO restrict help text from this component to Dutch guilds
@@ -43,7 +44,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n\n";
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
-			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix));
+			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix), CultureInfo.GetCultureInfo("nl-NL"));
 		}
 
 		protected override void Dispose(bool disposing) {
