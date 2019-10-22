@@ -99,7 +99,6 @@ namespace RoosterBot {
 
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
-			HelpService helpService = new HelpService();
 			GuildConfigService gcs = new GuildConfigService(m_ConfigService);
 			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
@@ -112,6 +111,7 @@ namespace RoosterBot {
 			cns.AddLocalizedName("en-US", "nl-NL", "engels");
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
+			HelpService helpService = new HelpService(resources);
 			RoosterCommandService commands = new RoosterCommandService(resources);
 			commands.Log += Logger.LogSync;
 

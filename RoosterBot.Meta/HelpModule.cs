@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		public Task HelpCommand() {
 			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n";
 			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
-			response += string.Join(", ", Help.GetSectionNames()) + "\n\n";
+			response += string.Join(", ", Help.GetSectionNames(Culture)) + "\n\n";
 
 			response += GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix);
 
@@ -24,13 +24,13 @@ namespace RoosterBot.Meta {
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Section_Summary")]
 		public Task HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
 			string response = "";
-			if (Help.HelpSectionExists(section)) {
-				(ComponentBase, string) helpSection = Help.GetHelpSection(section);
-				response += string.Format(ResourcesService.ResolveString(Culture, helpSection.Item1, helpSection.Item2), GuildConfig.CommandPrefix);
+			if (Help.HelpSectionExists(Culture, section)) {
+				string helpText = Help.GetHelpSection(Culture, section);
+				response += helpText;
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
-				response += string.Join(", ", Help.GetSectionNames());
+				response += string.Join(", ", Help.GetSectionNames(Culture));
 			}
 			ReplyDeferred(response);
 
