@@ -39,7 +39,6 @@
     <Compile Include="DataTypes\Journey.cs" />
     <Compile Include="DataTypes\StationInfo.cs" />
     <Compile Include="Modules\PTModule.cs" />
-    <Compile Include="Readers\StationInfoArrayReader.cs" />
     <Compile Include="Readers\StationInfoReader.cs" />
     <Compile Include="Services\IRestApi.cs" />
     <Compile Include="Services\NSAPI.cs" />

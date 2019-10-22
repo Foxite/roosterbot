@@ -65,7 +65,8 @@
     <Compile Include="Preconditions\RequireCultureAttribute.cs" />
     <Compile Include="Preconditions\RoosterPreconditionAttribute.cs" />
     <Compile Include="Preconditions\UserIsModeratorAttribute.cs" />
-    <Compile Include="Readers\RoosterTypeReaderBase.cs" />
+    <Compile Include="Readers\ArrayReader.cs" />
+    <Compile Include="Readers\RoosterTypeReader.cs" />
     <Compile Include="Handlers\RestartHandler.cs" />
     <Compile Include="Handlers\EditedCommandHandler.cs" />
     <Compile Include="Services\CommandResponseService.cs" />
