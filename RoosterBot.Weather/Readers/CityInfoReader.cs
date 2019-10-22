@@ -4,7 +4,7 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
-	public class CityInfoReader : RoosterTypeReaderBase {
+	public class CityInfoReader : RoosterTypeReader {
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			CityService cities = services.GetService<CityService>();
 			CityInfo cityResult = await cities.Lookup(input);

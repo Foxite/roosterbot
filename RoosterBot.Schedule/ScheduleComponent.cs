@@ -35,7 +35,7 @@ namespace RoosterBot.Schedule {
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			s_IdentifierReaders = new MultiReader(new RoosterTypeReaderBase[] {
+			s_IdentifierReaders = new MultiReader(new RoosterTypeReader[] {
 				new TeacherInfoReader(),
 				new StudentSetInfoReader(),
 				new RoomInfoReader()
