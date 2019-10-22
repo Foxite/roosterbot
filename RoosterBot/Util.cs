@@ -9,7 +9,10 @@ using Discord.Net;
 
 namespace RoosterBot {
 	public static class Util {
-		public static readonly string ErrorPrefix = "<:rb_error:623935318814621717> ";
+		public static readonly string Error = "<:error:636213609919283238> ";
+		public static readonly string Success = "<:ok:636213617825546242> ";
+		public static readonly string Warning = "<:warning:636213630114856962> ";
+		public static readonly string Unknown = "<:unknown:636213624460935188> ";
 		public static readonly Random RNG = new Random();
 
 		#region String utils

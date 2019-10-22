@@ -75,9 +75,9 @@ namespace RoosterBot {
 						await m_Config.BotOwner.SendMessageAsync(badReport);
 					}
 
-					response = Util.ErrorPrefix + m_ResourcesService.GetString(guildConfig.Culture, "RoosterBot_FatalError");
+					response = Util.Error + m_ResourcesService.GetString(guildConfig.Culture, "RoosterBot_FatalError");
 				} else {
-					response = Util.ErrorPrefix + response;
+					response = Util.Error + response;
 				}
 
 				IReadOnlyList<IUserMessage> initialResponses = (context as RoosterCommandContext)?.Responses;

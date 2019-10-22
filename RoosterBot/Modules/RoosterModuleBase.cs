@@ -112,7 +112,7 @@ namespace RoosterBot {
 
 		// Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError
 		protected virtual Task MinorError(string message) {
-			return ReplyAsync(Util.ErrorPrefix + message);
+			return ReplyAsync(Util.Error + message);
 		}
 
 		protected virtual async Task FatalError(string message, Exception exception = null) {
@@ -128,7 +128,7 @@ namespace RoosterBot {
 				await Config.BotOwner.SendMessageAsync(report);
 			}
 			
-			string response = Util.ErrorPrefix + GetString("RoosterBot_FatalError");
+			string response = Util.Error + GetString("RoosterBot_FatalError");
 			await ReplyAsync(response);
 		}
 
