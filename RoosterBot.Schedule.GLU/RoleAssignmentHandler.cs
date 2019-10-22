@@ -54,8 +54,8 @@ namespace RoosterBot.Schedule.GLU {
 						await guildUser.AddRolesAsync(newRoles);
 					}
 				}
-			} catch (Exception) {
-				// Ignore, either we did not have permission or the roles were not found. In either case, it doesn't matter.
+			} catch (Exception e) {
+				Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
 			}
 		}
 
