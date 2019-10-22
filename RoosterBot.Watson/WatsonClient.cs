@@ -11,17 +11,19 @@ using IBM.WatsonDeveloperCloud.Util;
 
 namespace RoosterBot.Watson {
 	public class WatsonClient {
-		internal static readonly string VersionDate = "2019-04-24";
+		internal const string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
 		private readonly string m_AssistantId;
 		private readonly AssistantService m_Assistant;
+		private readonly ConfigService m_Config;
 		private readonly GuildConfigService m_GCS;
 		private readonly ResourceService m_Resources;
 		private readonly IDiscordClient m_DiscordClient;
 		private readonly RoosterCommandService m_CommandService;
 		private readonly CommandResponseService m_CRS;
 
-		public WatsonClient(string apiKey, string assistantId, GuildConfigService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
+		// TODO Reduce parameter count
+		public WatsonClient(string apiKey, string assistantId, ConfigService config, GuildConfigService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
@@ -29,6 +31,7 @@ namespace RoosterBot.Watson {
 			};
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
 
+			m_Config = config;
 			m_GCS = gcs;
 			m_Resources = resources;
 			m_DiscordClient = discord;
@@ -94,13 +97,13 @@ namespace RoosterBot.Watson {
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
 
-					CultureInfo culture;
+					IGuild cultureGuild;
 					if (message.Channel is IGuildChannel guildChannel) {
-						culture = (await m_GCS.GetConfigAsync(guildChannel.Guild)).Culture;
+						cultureGuild = guildChannel.Guild;
 					} else {
-						// TODO get culture from mutual guilds with user
-						culture = CultureInfo.GetCultureInfo("nl-NL");
+						cultureGuild = (message.Author as SocketUser).MutualGuilds.FirstOrDefault();
 					}
+					CultureInfo culture = (await m_GCS.GetConfigAsync(cultureGuild))?.Culture ?? m_Config.DefaultCulture;
 
 					await message.Channel.SendMessageAsync(Util.Unknown + m_Resources.GetString(culture, "WatsonClient_CommandNotUnderstood"));
 				}
