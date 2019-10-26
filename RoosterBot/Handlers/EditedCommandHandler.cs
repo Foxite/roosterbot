@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
@@ -31,7 +32,7 @@ namespace RoosterBot {
 				}
 
 				if (m_Commands.IsMessageCommand(userMessageAfter, prefix, out int argPos)) {
-					IUserMessage[] responses;
+					IReadOnlyCollection<IUserMessage> responses;
 					if (crp != null) {
 						// Was previously a command
 						responses = crp.Responses;

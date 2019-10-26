@@ -80,7 +80,7 @@ namespace RoosterBot {
 					response = Util.Error + response;
 				}
 
-				IReadOnlyList<IUserMessage> initialResponses = (context as RoosterCommandContext)?.Responses;
+				IReadOnlyCollection<IUserMessage> initialResponses = (context as RoosterCommandContext)?.Responses;
 				if (initialResponses == null) {
 					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {

@@ -185,9 +185,9 @@ namespace RoosterBot {
 		public IGuild Guild { get; }
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
-		public IReadOnlyList<IUserMessage> Responses { get; }
+		public IReadOnlyCollection<IUserMessage> Responses { get; }
 		
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage[] originalResponses) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage> originalResponses) {
 			Client = client;
 			Message = message;
 			User = message.Author;
