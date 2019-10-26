@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MiscStuffComponent_HelpText" xml:space="preserve">
-    <value>On top of that there are these commands:
-`counter &lt;name of counter&gt;`
-`counter reset &lt;name of counter&gt;`
-And at least 4 secret commands for the bot owner.</value>
-  </data>
   <data name="CounterService_FormatTimeSpan_DaysSingular" xml:space="preserve">
     <value>{0} day</value>
     <comment>0: amount of days (always 1 in this case)</comment>
@@ -183,8 +177,5 @@ That's a new record! The previous highscore was {2}.</value>
   </data>
   <data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
     <value>Reset a counter back to zero.</value>
-  </data>
-  <data name="MiscStuffComponent_HelpName" xml:space="preserve">
-    <value>misc</value>
   </data>
 </root>

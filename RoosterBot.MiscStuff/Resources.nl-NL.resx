@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MiscStuffComponent_HelpText" xml:space="preserve">
-    <value>Voor de rest zijn er nog deze commands:
-`{0}counter &lt;naam van counter&gt;`
-`{0}counter reset &lt;naam van counter&gt;`
-En nog minstens 4 geheime commands voor de bot owner.</value>
-    <comment>0: command prefix</comment>
-  </data>
   <data name="CounterService_FormatTimeSpan_DaysSingular" xml:space="preserve">
     <value>{0} dag</value>
     <comment>0: amount of days (always 1 in this case)</comment>
@@ -184,8 +177,5 @@ Dat is een nieuw record! De vorige highscore was {2}.</value>
   </data>
   <data name="CounterModule_ResetCounterCommand_Summary" xml:space="preserve">
     <value>Zet een counter weer op nul.</value>
-  </data>
-  <data name="MiscStuffComponent_HelpName" xml:space="preserve">
-    <value>misc</value>
   </data>
 </root>

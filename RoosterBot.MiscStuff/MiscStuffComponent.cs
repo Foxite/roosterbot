@@ -3,8 +3,6 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.WebSocket;
-using System.Linq;
 
 namespace RoosterBot.MiscStuff {
 	public class MiscStuffComponent : ComponentBase {
@@ -26,8 +24,6 @@ namespace RoosterBot.MiscStuff {
 				commandService.AddModuleAsync<CounterModule>(services),
 				commandService.AddModuleAsync<ModerationModule>(services)
 			));
-
-			help.AddHelpSection(this, "#MiscStuffComponent_HelpName", "#MiscStuffComponent_HelpText");
 		}
 	}
 }
