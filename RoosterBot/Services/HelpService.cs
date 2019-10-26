@@ -29,7 +29,7 @@ namespace RoosterBot {
 		public bool HelpSectionExists(CultureInfo culture, string name) {
 			HelpSection section = GetSection(culture, name);
 			if (section != null) {
-				return section.Cultures.Contains(culture);
+				return !section.Cultures.Any() || section.Cultures.Contains(culture);
 			} else {
 				return false;
 			}
@@ -43,7 +43,7 @@ namespace RoosterBot {
 		}
 
 		private HelpSection GetSection(CultureInfo culture, string name) {
-			return m_Sections.First(thisSection =>
+			return m_Sections.FirstOrDefault(thisSection =>
 				(thisSection.Cultures.Count == 0 || thisSection.Cultures.Contains(culture)) &&
 				m_Resources.ResolveString(culture, thisSection.Component, thisSection.Name) == name);
 		}
