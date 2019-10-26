@@ -39,7 +39,7 @@ namespace RoosterBot.Schedule {
 				new TeacherInfoReader(),
 				new StudentSetInfoReader(),
 				new RoomInfoReader()
-			}, "#DefaultScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
+			}, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
 			commandService.AddTypeReader<IdentifierInfo>(s_IdentifierReaders);
 
 			registerModules(await Task.WhenAll(
