@@ -26,7 +26,7 @@ namespace RoosterBot.Meta {
 			string response = "";
 			if (Help.HelpSectionExists(Culture, section)) {
 				string helpText = Help.GetHelpSection(Culture, section);
-				response += helpText;
+				response += string.Format(helpText, GuildConfig.CommandPrefix);
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
