@@ -30,13 +30,13 @@ namespace RoosterBot {
 
 			IUserMessage[] newSequence = new IUserMessage[] { botResponse };
 			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newSequence), (key, crp) => {
-				((ICommandResponsePair) crp).Responses = crp.Responses.Concat(newSequence).ToArray();
+				crp.Responses = crp.Responses.Concat(newSequence).ToArray();
 				return crp;
 			});
 		}
 
 		public void ModifyResponse(ulong commandId, IUserMessage[] responses) {
-			((ICommandResponsePair) GetResponse(commandId)).Responses = responses;
+			GetResponse(commandId).Responses = responses;
 		}
 
 		public CommandResponsePair GetResponse(ulong userCommandId) {
@@ -56,19 +56,11 @@ namespace RoosterBot {
 		public void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 	}
 
-	internal interface ICommandResponsePair {
-		IUserMessage Command { set; }
-		IUserMessage[] Responses { set; }
-	}
+	public class CommandResponsePair {
+		public IUserMessage Command { get; internal set; }
+		public IReadOnlyCollection<IUserMessage> Responses { get; internal set; }
 
-	public class CommandResponsePair : ICommandResponsePair {
-		IUserMessage   ICommandResponsePair.Command { set => Command = value; }
-		IUserMessage[] ICommandResponsePair.Responses { set => Responses = value; }
-
-		public IUserMessage Command { get; private set; }
-		public IUserMessage[] Responses { get; private set; }
-
-		public CommandResponsePair(IUserMessage command, IUserMessage[] responses) {
+		public CommandResponsePair(IUserMessage command, IReadOnlyCollection<IUserMessage> responses) {
 			Command = command;
 			Responses = responses;
 		}
