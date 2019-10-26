@@ -33,7 +33,7 @@ namespace RoosterBot.PublicTransit {
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			StationInfoReader stationInfoReader = new StationInfoReader();
 			commandService.AddTypeReader<StationInfo>(stationInfoReader);
-			commandService.AddTypeReader<StationInfo[]>(new ArrayReader(stationInfoReader));
+			commandService.AddTypeReader<StationInfo[]>(new ArrayReader<StationInfo>(stationInfoReader));
 
 			registerModules(new[] { await commandService.AddModuleAsync<PTModule>(services) });
 
