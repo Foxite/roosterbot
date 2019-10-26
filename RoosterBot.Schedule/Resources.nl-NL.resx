@@ -134,7 +134,7 @@ Met `{0}over 2 weken martijn kunstman` zie je het rooster van Martijn Kunstman, 
 
 Verder kun je zien wat er op het rooster staat na het laatste item wat je hebt bekeken. Gebruik hiervoor `{0}daarna`.
 
-Ten laatste, je kunt ook instellen in welke klas jij zit, zodat je niet je eigen klas hoeft in te vullen. Gebruik `{0}help jouw klas` voor meer informatie.
+Ten slotte kun je ook instellen in welke klas jij zit, zodat je niet je eigen klas in hoeft te vullen. Gebruik `{0}help jouw klas` voor meer informatie.
 Sterker nog: als ik weet in welke klas een persoon zit, kun je die persoon mentionen in mijn commands. Hou er rekening mee dat die persoon een ping krijgt als je dit doet.</value>
     <comment>0: command prefix</comment>
   </data>
