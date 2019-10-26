@@ -31,7 +31,6 @@ namespace RoosterBot.Automation {
 
 			Log("App started, monitoring");
 
-			// TODO (refactoring) Move this code to a program/script running in the ValidateService phase, if possible
 			CancellationTokenSource cts = new CancellationTokenSource();
 			CancellationToken token = cts.Token;
 			bool waitResult = await await Task.WhenAny(
