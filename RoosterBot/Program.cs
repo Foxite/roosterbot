@@ -33,17 +33,12 @@ namespace RoosterBot {
 				Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
 			};
 
-			string indicatorPath = Path.Combine(DataPath, "running");
-
-			if (File.Exists(indicatorPath)) {
-				if (args.Contains("--override-running")) {
-					Console.WriteLine("The bot appears to be already running, but a command line argument has overridden this. This may lead to log file corruption.");
-				} else {
-					Console.WriteLine("Bot already appears to be running. Delete the \"running\" file in the ProgramData folder to override this.");
-					return 1;
-				}
-			} else {
-				File.Create(indicatorPath).Dispose();
+			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
+				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
+#if DEBUG
+				Console.ReadKey();
+#endif
+				return 1;
 			}
 
 			try {
@@ -55,8 +50,6 @@ namespace RoosterBot {
 				Console.ReadKey();
 #endif
 				return 2;
-			} finally {
-				File.Delete(indicatorPath);
 			}
 			return 0;
 		}
