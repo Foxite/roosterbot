@@ -112,8 +112,11 @@ namespace RoosterBot {
 
 				foreach ((MethodInfo method, CommandAttribute commandAttribute) in commands) {
 					string primaryAlias = m_ResourceService.ResolveString(culture, component, commandAttribute.Text);
+					if (!string.IsNullOrWhiteSpace(moduleBuilder.Group)) {
+						primaryAlias = (moduleBuilder.Group + " " + primaryAlias).Trim();
+					}
 					if (string.IsNullOrWhiteSpace(primaryAlias)) {
-						primaryAlias = m_ResourceService.ResolveString(culture, component, moduleBuilder.Group);
+						primaryAlias = m_ResourceService.ResolveString(culture, component, method.Name);
 					}
 					moduleBuilder.AddCommand(
 						primaryAlias,
@@ -169,10 +172,16 @@ namespace RoosterBot {
 							commandBuilder.Name = m_ResourceService.ResolveString(culture, component, name.Text);
 							break;
 						case AliasAttribute alias:
+							string[] aliases;
 							if (alias.Aliases.Length == 1 && alias.Aliases[0].StartsWith("#")) {
-								moduleBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, alias.Aliases[0]).Split('|'));
+								aliases = m_ResourceService.ResolveString(culture, component, alias.Aliases[0]).Split('|');
 							} else {
-								moduleBuilder.AddAliases(alias.Aliases);
+								aliases = alias.Aliases;
+							}
+							if (!string.IsNullOrWhiteSpace(moduleBuilder.Group)) {
+								moduleBuilder.AddAliases(aliases.Select(aliasText => moduleBuilder.Group + " " + aliasText).ToArray());
+							} else {
+								moduleBuilder.AddAliases(aliases);
 							}
 							break;
 						case PriorityAttribute priority:
