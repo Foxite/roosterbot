@@ -59,7 +59,7 @@ namespace RoosterBot {
 				if (exception is FileLoadException) {
 					loggedMessage += "\n" + exception.ToString();
 				} else {
-					loggedMessage += "\n" + exception.ToStringDemystified(); // If this line causes an error, `using System.Diagnostics`
+					loggedMessage += "\n" + exception.ToStringDemystified();
 				}
 			}
 			Console.WriteLine(loggedMessage);
