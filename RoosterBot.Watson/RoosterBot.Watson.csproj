@@ -40,6 +40,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WatsonClient.cs" />
     <Compile Include="WatsonComponent.cs" />
+    <Compile Include="WatsonException.cs" />
+    <Compile Include="WatsonHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

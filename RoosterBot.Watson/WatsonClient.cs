@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using IBM.WatsonDeveloperCloud.Assistant.v2;
 using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
 using IBM.WatsonDeveloperCloud.Util;
@@ -15,42 +10,19 @@ namespace RoosterBot.Watson {
 		private const string LogTag = "Watson";
 		private readonly string m_AssistantId;
 		private readonly AssistantService m_Assistant;
-		private readonly ConfigService m_Config;
-		private readonly GuildConfigService m_GCS;
-		private readonly ResourceService m_Resources;
-		private readonly IDiscordClient m_DiscordClient;
-		private readonly RoosterCommandService m_CommandService;
-		private readonly CommandResponseService m_CRS;
 
-		// TODO (refactoring) Reduce parameter count
-		public WatsonClient(string apiKey, string assistantId, ConfigService config, GuildConfigService gcs, ResourceService resources, IDiscordClient discord, RoosterCommandService commandService, CommandResponseService crs) {
+		public WatsonClient(string apiKey, string assistantId) {
 			m_AssistantId = assistantId;
 			TokenOptions ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
 			};
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
-
-			m_Config = config;
-			m_GCS = gcs;
-			m_Resources = resources;
-			m_DiscordClient = discord;
-			m_CommandService = commandService;
-			m_CRS = crs;
 		}
 
-		public async Task ProcessCommandAsync(IUserMessage message, string input) {
-			if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
-				IGuild guild = (message.Author as SocketUser)?.MutualGuilds.First() ?? (message.Channel as IGuildChannel).Guild;
-				CultureInfo culture = (await m_GCS.GetConfigAsync(guild)).Culture;
-				await message.Channel.SendMessageAsync(Util.Error + m_Resources.GetString(culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs"));
-				return;
-			}
-
+		public string ConvertCommandAsync(string input) {
 			string sessionId = null;
-			IDisposable typingState = null;
 			try {
-				typingState = message.Channel.EnterTypingState();
 				sessionId = m_Assistant.CreateSession(m_AssistantId).SessionId;
 
 				MessageResponse result = m_Assistant.Message(m_AssistantId, sessionId, new MessageRequest() { Input = new MessageInput() { Text = input } });
@@ -75,7 +47,14 @@ namespace RoosterBot.Watson {
 							int? start = (int?) entity.Location[i];
 							int? end = (int?) entity.Location[++i];
 							if (start.HasValue && end.HasValue) {
-								params_ += " " + FixWeekday(input.Substring(start.Value, end.Value - start.Value));
+								string entityValue = input.Substring(start.Value, end.Value - start.Value);
+								// Fix for weekday
+								// For questions, please go back in time to 26 april 2019 and ask my past self.
+								if (entityValue.StartsWith("op ")) {
+									entityValue = entityValue.Substring(3);
+								}
+
+								params_ += " " + entityValue;
 							} else {
 								Logger.Error(LogTag, $"Entity {entity.Entity}: {entity.Value} was skipped: Start or end is null");
 							}
@@ -83,47 +62,17 @@ namespace RoosterBot.Watson {
 					}
 					string convertedCommand = maxConfidence.Intent + params_;
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
-
-					CommandResponsePair crp = m_CRS.GetResponse(message);
-					RoosterCommandContext context;
-					if (crp != null) {
-						context = new RoosterCommandContext(m_DiscordClient, message, crp.Responses);
-					} else {
-						context = new RoosterCommandContext(m_DiscordClient, message, null);
-					}
-					
-					await m_CommandService.ExecuteAsync(context, convertedCommand, Program.Instance.Components.Services);
-					// AddResponse will be handled by PostCommandHandler.
+					return convertedCommand;
 				} else {
 					Logger.Debug(LogTag, $"Natlang command `{input}` was not recognized.");
-
-					IGuild cultureGuild;
-					if (message.Channel is IGuildChannel guildChannel) {
-						cultureGuild = guildChannel.Guild;
-					} else {
-						cultureGuild = (message.Author as SocketUser).MutualGuilds.FirstOrDefault();
-					}
-					CultureInfo culture = (await m_GCS.GetConfigAsync(cultureGuild))?.Culture ?? m_Config.DefaultCulture;
-
-					await message.Channel.SendMessageAsync(Util.Unknown + m_Resources.GetString(culture, "WatsonClient_CommandNotUnderstood"));
+					return null;
 				}
 			} catch (Exception e) {
-				Logger.Error(LogTag, "That didn't work.", e);
+				throw new WatsonException($"Exception was thrown while converting {input}", e);
 			} finally {
 				if (sessionId != null) {
 					m_Assistant.DeleteSession(m_AssistantId, sessionId);
 				}
-				if (typingState != null) {
-					typingState.Dispose();
-				}
-			}
-		}
-
-		private string FixWeekday(string entityValue) {
-			if (entityValue.StartsWith("op ")) {
-				return entityValue.Substring(3);
-			} else {
-				return entityValue;
 			}
 		}
 	}
