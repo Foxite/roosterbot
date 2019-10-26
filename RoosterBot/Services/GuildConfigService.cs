@@ -13,11 +13,18 @@ namespace RoosterBot {
 			m_Config = config;
 		}
 
+		public GuildConfig GetDefaultConfig() {
+			return new GuildConfig(0) {
+				Culture = m_Config.DefaultCulture,
+				CommandPrefix = m_Config.DefaultCommandPrefix
+			};
+		}
+
 		private GuildConfig GetDefaultConfig(ulong guildId) {
 			return new GuildConfig(guildId) {
 				Culture = m_Config.DefaultCulture,
 				CommandPrefix = m_Config.DefaultCommandPrefix
-			};;
+			};
 		}
 
 		public void InstallProvider(Provider provider) {
