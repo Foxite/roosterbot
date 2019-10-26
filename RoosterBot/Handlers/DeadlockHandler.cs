@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 
 namespace RoosterBot {
+	/// <summary>
+	/// This handler makes sure the bot will restart if it is disconnected for more than a specified time.
+	/// </summary>
 	internal sealed class DeadlockHandler {
 		private NotificationService m_Notificationervice;
 		private Timer m_Timer;
