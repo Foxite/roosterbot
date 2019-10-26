@@ -23,6 +23,8 @@ namespace RoosterBot.Meta {
 				commandService.AddModuleAsync<HelpModule>(services),
 				commandService.AddModuleAsync<ControlModule>(services)
 			));
+
+			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 		}
 	}
 }

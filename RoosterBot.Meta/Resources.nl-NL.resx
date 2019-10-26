@@ -164,4 +164,14 @@ Gebruik `{0}help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
   <data name="MetaCommandsModule_Name" xml:space="preserve">
     <value>Meta</value>
   </data>
+  <data name="Meta_HelpName_Edit" xml:space="preserve">
+    <value>edit</value>
+  </data>
+  <data name="Meta_HelpText_Edit" xml:space="preserve">
+    <value>Als je een command verkeerd typt, kun je het bericht bewerken. Ik zie dit en bewerk mijn antwoord volgens je nieuwe command.
+
+Ook verwijder ik mijn antwoorden als je een command verwijdert.
+
+Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arrow_up: toets. Haal het hele bericht weg om het te verwijderen.</value>
+  </data>
 </root>
