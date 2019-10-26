@@ -82,8 +82,7 @@ namespace RoosterBot.Weather {
 
 				ret += string.Format(m_Resources.GetString(culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
 			}
-			ret += "\n";
-			ret += m_WeatherService.GetDescription(culture, m_WeatherCode);
+			ret += "\n" + m_WeatherService.GetDescription(culture, m_WeatherCode) + "\n";
 
 			if (WindSpeed == 0) {
 				ret += m_Resources.GetString(culture, "WeatherInfo_Present_NoWind");
