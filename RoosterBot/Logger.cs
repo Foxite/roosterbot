@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
-	// TODO (investigate) should this be a service? I've seen that Microsoft.Extensions contains stuff for logging, including a way to do this
-	// serviceCollection.AddLogging
-	// And that's that. We could use that.
 	public static class Logger {
 		private static readonly object Lock = new object();
 		private static readonly int LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
