@@ -91,7 +91,7 @@ namespace RoosterBot {
 							moduleBuilder.WithSummary(m_ResourceService.ResolveString(culture, component, summary.Text));
 							break;
 						case GroupAttribute group:
-							moduleBuilder.Group = group.Prefix;
+							moduleBuilder.Group = m_ResourceService.ResolveString(culture, component, group.Prefix);
 							break;
 						case PreconditionAttribute precondition:
 							moduleBuilder.AddPrecondition(precondition);
@@ -166,7 +166,7 @@ namespace RoosterBot {
 				foreach (Attribute attr in method.GetCustomAttributes()) {
 					switch (attr) {
 						case NameAttribute name:
-							commandBuilder.Name = name.Text;
+							commandBuilder.Name = m_ResourceService.ResolveString(culture, component, name.Text);
 							break;
 						case AliasAttribute alias:
 							if (alias.Aliases.Length == 1 && alias.Aliases[0].StartsWith("#")) {
@@ -182,10 +182,10 @@ namespace RoosterBot {
 							commandBuilder.AddPrecondition(precondition);
 							break;
 						case SummaryAttribute summary:
-							commandBuilder.Summary = summary.Text;
+							commandBuilder.WithSummary(m_ResourceService.ResolveString(culture, component, summary.Text));
 							break;
 						case RemarksAttribute remarks:
-							commandBuilder.Remarks = remarks.Text;
+							commandBuilder.WithRemarks(m_ResourceService.ResolveString(culture, component, remarks.Text));
 							break;
 						default:
 							commandBuilder.AddAttributes(attr);
@@ -218,18 +218,18 @@ namespace RoosterBot {
 					commandBuilder.AddParameter(
 						m_ResourceService.ResolveString(culture, component, paramName),
 						parameter.ParameterType,
-						GetParamBuildFunction(parameter)
+						GetParamBuildFunction(parameter, culture, component)
 					);
 				}
 			};
 		}
 
-		private Action<ParameterBuilder> GetParamBuildFunction(ParameterInfo parameter) {
+		private Action<ParameterBuilder> GetParamBuildFunction(ParameterInfo parameter, CultureInfo culture, ComponentBase component) {
 			return (paramBuilder) => {
 				foreach (Attribute attr in parameter.GetCustomAttributes()) {
 					switch (attr) {
 						case SummaryAttribute summary:
-							paramBuilder.Summary = summary.Text;
+							paramBuilder.Summary = m_ResourceService.ResolveString(culture, component, summary.Text);
 							break;
 						case ParameterPreconditionAttribute precondition:
 							paramBuilder.AddPrecondition(precondition);
