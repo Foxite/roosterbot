@@ -196,6 +196,14 @@ namespace RoosterBot {
 			Guild = IsPrivate ? (User as SocketUser)?.MutualGuilds.First() : (Channel as IGuildChannel).Guild;
 			Responses = originalResponses;
 		}
+
+		public override string ToString() {
+			if (Guild != null) {
+				return $"{User.Username}#{User.Discriminator} in `{Guild.Name}` channel `{Channel.Name}`: {Message.Content}";
+			} else {
+				return $"{User.Username}#{User.Discriminator} in private channel `{Channel.Name}`: {Message.Content}";
+			}
+		}
 	}
 
 	internal interface IRoosterModuleBase {
