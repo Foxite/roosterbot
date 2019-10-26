@@ -24,7 +24,11 @@ namespace RoosterBot.Weather {
 		[Command("#WeatherModule_DayForecast", RunMode = RunMode.Async)]
 		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
-			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
+			int daysFromNow = day - DateTime.Today.DayOfWeek;
+			if (daysFromNow < 0) {
+				daysFromNow += 7;
+			}
+			DateTime date = DateTime.Today.AddDays(daysFromNow);
 			await RespondDayForecast(city, date);
 			Attribution();
 		}
@@ -80,7 +84,7 @@ namespace RoosterBot.Weather {
 				} else {
 					pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
 				}
-				
+
 				response  = DateTime.Today.AddHours(08).ToShortTimeString(Culture) + "\n" + dayForecast[0].Present(Culture, true);
 				response += DateTime.Today.AddHours(12).ToShortTimeString(Culture) + "\n" + dayForecast[1].Present(Culture, true);
 				response += DateTime.Today.AddHours(18).ToShortTimeString(Culture) + "\n" + dayForecast[2].Present(Culture, true);
