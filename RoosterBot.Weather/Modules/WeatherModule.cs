@@ -18,6 +18,7 @@ namespace RoosterBot.Weather {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
 			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO (feature) guild config for metric (probably use a dynamic config system so any component can have their own settings)
+			Attribution();
 		}
 
 		[Command("#WeatherModule_DayForecast", RunMode = RunMode.Async)]
@@ -25,6 +26,7 @@ namespace RoosterBot.Weather {
 			// Get the forecast for the day
 			DateTime date = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek);
 			await RespondDayForecast(city, date);
+			Attribution();
 		}
 
 		[Command("#WeatherModule_TimeForecast", RunMode = RunMode.Async)]
@@ -37,6 +39,7 @@ namespace RoosterBot.Weather {
 				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			}
 			ReplyDeferred(weather.Present(datetime, Culture, true));
+			Attribution();
 		}
 
 		[Command("#WeatherModule_UnitForecast", RunMode = RunMode.Async)]
@@ -48,6 +51,7 @@ namespace RoosterBot.Weather {
 					await MinorError(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
+					Attribution();
 				}
 			} else if (GetString("WeatherModule_Unit_Hours").Split('|').Contains(unit)) {
 				if (amount > 168) {
@@ -58,6 +62,7 @@ namespace RoosterBot.Weather {
 						weather = await Weather.GetWeatherForecastAsync(city, amount);
 					}
 					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture, true));
+					Attribution();
 				}
 			} else {
 				await MinorError(GetString("WeatherModule_UnknownUnit"));
@@ -82,6 +87,12 @@ namespace RoosterBot.Weather {
 			}
 
 			ReplyDeferred(response);
+		}
+
+		private void Attribution() {
+			if (Weather.Attribution) {
+				ReplyDeferred(GetString("WeatherComponent_Attribution"));
+			}
 		}
 	}
 }

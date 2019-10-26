@@ -13,10 +13,16 @@ namespace RoosterBot.Weather {
 		private WebClient m_Web;
 		private ResourceService m_Resources;
 
-		public WeatherService(ResourceService resources, string weatherBitKey) {
+		/// <summary>
+		/// Indicates if the WeatherBit API is being used under a Free license, which means attribution must be provided.
+		/// </summary>
+		public bool Attribution { get; }
+
+		public WeatherService(ResourceService resources, string weatherBitKey, bool attribution) {
 			m_WeatherBitKey = weatherBitKey;
 			m_Resources = resources;
 			m_Web = new WebClient();
+			Attribution = attribution;
 		}
 
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {

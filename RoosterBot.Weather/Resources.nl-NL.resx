@@ -266,7 +266,7 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <value>:question: Onbekend</value>
   </data>
   <data name="WeatherBit_Code_Unknown" xml:space="preserve">
-    <value>Gefeliciteerd, je krijg een gratis Mars-reep van de bot eigenaar. Foutcode</value>
+    <value>Gefeliciteerd, je krijgt een gratis Mars-reep van de bot eigenaar. Foutcode</value>
   </data>
   <data name="WeatherInfo_Present_ApparentTemperature" xml:space="preserve">
     <value> (voelt als {0})</value>
@@ -315,5 +315,8 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   </data>
   <data name="WeatherComponent_HelpName" xml:space="preserve">
     <value>weer</value>
+  </data>
+  <data name="WeatherComponent_Attribution" xml:space="preserve">
+    <value>Informatie wordt verstrekt door WeatherBit.</value>
   </data>
 </root>

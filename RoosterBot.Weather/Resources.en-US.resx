@@ -231,6 +231,12 @@
   <data name="WeatherBit_Code_900" xml:space="preserve">
     <value>&lt;:unknown:636213624460935188&gt; Unknown</value>
   </data>
+  <data name="WeatherBit_Code_Unknown" xml:space="preserve">
+    <value>Congratulations, you are eligible for a free Mars bar. Please contact the bot owner. Error code</value>
+  </data>
+  <data name="WeatherComponent_Attribution" xml:space="preserve">
+    <value>Information is provided by WeatherBit.</value>
+  </data>
   <data name="WeatherComponent_HelpName" xml:space="preserve">
     <value>weather</value>
   </data>
