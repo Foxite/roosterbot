@@ -311,7 +311,7 @@ namespace RoosterBot.Schedule {
 				if (query.Record == null) {
 					pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
 				} else if (query.Record.Start.Date != nextRecord.Start.Date) {
-					pretext = $"{query.Identifier.DisplayText}: Als eerste op {DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek)}\n";
+					pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek));
 				} else {
 					pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
 				}
