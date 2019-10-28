@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -72,25 +73,35 @@ namespace RoosterBot {
 			List<string> lines = new List<string>();
 
 			for (int i = 0; i < words.Length; i++) {
-				string lastLine = lines[lines.Count - 1];
+				string lastLine = lines.Count == 0 ? "" : lines[lines.Count - 1];
+				void writeBackLastLine() {
+					if (lines.Count == 0) {
+						lines.Add(lastLine);
+					} else {
+						lines[lines.Count - 1] = lastLine;
+					}
+				}
+
 				string word = words[i];
 
 				if (lastLine.Length + 1 + word.Length <= maxLineLength) { // If it fits
-					lastLine += " " + word;
-					lines[lines.Count - 1] = lastLine;
-				} else if (word.Length > maxLineLength) { // If the word is longer than a line
+					lastLine += (i == 0 ? "" : " ") + word;
+					writeBackLastLine();
+				} else if (word.Length > maxLineLength) { // If the word is longer than a line (-1 because we'll add a hyphen)
 					// Break the word with a hyphen
 					int breakPos = maxLineLength - 1;
-					lastLine += word.Substring(0, breakPos) + '-';
-					lines[lines.Count - 1] = lastLine;
-					lines.Add(word.Substring(breakPos - 1));
+					lastLine += (i == 0 ? "" : " ") + word.Substring(0, breakPos) + '-';
+					writeBackLastLine();
+					lines.Add("");
+					words[i] = word.Substring(breakPos, word.Length - breakPos);
+					i--;
 				} else { // If it does not fit in an existing line
-					if (maxLineLength - lastLine.Length < 5) { // And at least the first 4 characters fit (excluding the space)
+					if (maxLineLength - lastLine.Length > 5) { // And at least the first 4 characters fit (excluding the space)
 						// Break the word with a hyphen
-						int breakPos = maxLineLength - lastLine.Length;
-						lastLine += word.Substring(0, breakPos) + '-';
-						lines[lines.Count - 1] = lastLine;
-						lines.Add(word.Substring(breakPos - 1));
+						int breakPos = maxLineLength - lastLine.Length - 2;
+						lastLine += ' ' + word.Substring(0, breakPos) + '-';
+						writeBackLastLine();
+						lines.Add(word.Substring(breakPos + 1));
 					} else { // And less than 4 characters fit
 						// Start a new line
 						lines.Add(word);
