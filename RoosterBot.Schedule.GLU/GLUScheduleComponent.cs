@@ -81,7 +81,7 @@ namespace RoosterBot.Schedule.GLU {
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 
-			new RoleAssignmentHandler(services.GetService<IUserClassesService>());
+			new RoleAssignmentHandler(services.GetService<IUserClassesService>(), services.GetService<ConfigService>());
 			new NewUserHandler(services.GetService<DiscordSocketClient>());
 		}
 

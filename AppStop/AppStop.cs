@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoosterBot.Automation {
 	internal class AppStop {
@@ -15,10 +18,16 @@ namespace RoosterBot.Automation {
 			try {
 				pipeClient = new NamedPipeClientStream(".", "roosterbotStopPipe", PipeDirection.Out);
 				pipeClient.Connect(1);
+
+				Process[] processes = Process.GetProcessesByName("RoosterBot");
 				using (StreamWriter sw = new StreamWriter(pipeClient)) {
 					pipeClient = null;
 					sw.WriteLine("stop");
 				}
+				Task.WaitAny(processes.Select((process) => {
+					process.WaitForExit();
+					return Task.CompletedTask;
+				}).ToArray());
 				Log("Process stopped.");
 			} catch (TimeoutException) {
 				Log("No process to stop.");

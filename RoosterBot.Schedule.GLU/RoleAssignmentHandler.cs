@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Discord;
-using Discord.WebSocket;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
+		private readonly ConfigService m_Config;
 
-		public RoleAssignmentHandler(IUserClassesService ucs) {
+		public RoleAssignmentHandler(IUserClassesService ucs, ConfigService config) {
+			m_Config = config;
 			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
 
 			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();
@@ -31,31 +32,29 @@ namespace RoosterBot.Schedule.GLU {
 			ucs.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async void OnUserChangedClass(IUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
+		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
 			// Assign roles
 			try {
-				SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == GLUScheduleComponent.GLUGuildId).SingleOrDefault();
-				if (guild != null) {
-					IGuildUser guildUser = guild.GetUser(user.Id);
-					IEnumerable<IRole> newRoles = GetRolesForStudentSet(guild, newSSI);
-					if (oldSSI != null) {
-						IEnumerable<IRole> oldRoles = GetRolesForStudentSet(guild, oldSSI);
-						IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
+				//SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == GLUScheduleComponent.GLUGuildId).SingleOrDefault();
+				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
+				if (oldSSI != null) {
+					IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+					IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
 
-						oldRoles = oldRoles.Except(keptRoles);
-						newRoles = newRoles.Except(keptRoles);
+					oldRoles = oldRoles.Except(keptRoles);
+					newRoles = newRoles.Except(keptRoles);
 
-						if (oldRoles.Any()) {
-							await guildUser.RemoveRolesAsync(oldRoles);
-						}
+					if (oldRoles.Any()) {
+						await user.RemoveRolesAsync(oldRoles);
 					}
+				}
 
-					if (newRoles.Any()) {
-						await guildUser.AddRolesAsync(newRoles);
-					}
+				if (newRoles.Any()) {
+					await user.AddRolesAsync(newRoles);
 				}
 			} catch (Exception e) {
 				Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
+				await m_Config.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
 			}
 		}
 

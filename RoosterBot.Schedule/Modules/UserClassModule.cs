@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
@@ -20,12 +21,11 @@ namespace RoosterBot.Schedule {
 			await ReplyAsync(response);
 		}
 		
-		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_SetClassForUser_Summary")]
+		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_SetClassForUser_Summary"), RequireContext(ContextType.Guild, ErrorMessage = "Deze command moet binnen een server worden gebruikt.")]
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] string clazzName) {
 			StudentSetInfo newStudentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
 			if (newStudentSet != null) {
-				//await Classes.GetClassForDiscordUserAsync(Context, Context.User);
-				StudentSetInfo oldStudentSet = await Classes.SetClassForDiscordUserAsync(Context, Context.User, newStudentSet);
+				StudentSetInfo oldStudentSet = await Classes.SetClassForDiscordUserAsync(Context, (IGuildUser) Context.User, newStudentSet);
 				if (oldStudentSet == null) {
 					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
 				} else {

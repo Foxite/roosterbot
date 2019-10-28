@@ -37,7 +37,7 @@ namespace RoosterBot.Schedule.SQL {
 			m_InsertClassCommand.Parameters.Add("@UserClass", SqlDbType.VarChar, 5);
 		}
 
-		public event Action<IUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
 
 		public async Task<StudentSetInfo> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
 			Task open = m_SQL.OpenAsync();
@@ -53,7 +53,7 @@ namespace RoosterBot.Schedule.SQL {
 			return GetSSIFromString(ssi);
 		}
 
-		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IUser user, StudentSetInfo ssi) {
+		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IGuildUser user, StudentSetInfo ssi) {
 			await m_SQL.OpenAsync();
 			
 			m_GetClassCommand.Parameters["@UserId"].Value = user.Id;
