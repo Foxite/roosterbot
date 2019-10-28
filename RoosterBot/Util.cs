@@ -39,6 +39,8 @@ namespace RoosterBot {
 		/// <param name="includeHeaderSeperation">Include a line of '-'s after the first row.</param>
 		/// <returns>A string that you can send directly into a chat message.</returns>
 		public static string FormatTextTable(string[][] table) {
+			// TODO (feature) max column width, this will prevent the table from being ruined if columns are wide (which often happens with schedule information).
+			// I've written BreakStringIntoLines for this, although it's difficult to make this work for more than one column at a time.
 			int[] columnWidths = new int[table[0].Length];
 
 			for (int column = 0; column < table[0].Length; column++) {
@@ -63,6 +65,39 @@ namespace RoosterBot {
 			}
 			ret += "```";
 			return ret;
+		}
+
+		public static List<string> BreakStringIntoLines(string input, int maxLineLength) {
+			string[] words = input.Split(' ', (char) 0x200B); // 200B == zero width space
+			List<string> lines = new List<string>();
+
+			for (int i = 0; i < words.Length; i++) {
+				string lastLine = lines[lines.Count - 1];
+				string word = words[i];
+
+				if (lastLine.Length + 1 + word.Length <= maxLineLength) { // If it fits
+					lastLine += " " + word;
+					lines[lines.Count - 1] = lastLine;
+				} else if (word.Length > maxLineLength) { // If the word is longer than a line
+					// Break the word with a hyphen
+					int breakPos = maxLineLength - 1;
+					lastLine += word.Substring(0, breakPos) + '-';
+					lines[lines.Count - 1] = lastLine;
+					lines.Add(word.Substring(breakPos - 1));
+				} else { // If it does not fit in an existing line
+					if (maxLineLength - lastLine.Length < 5) { // And at least the first 4 characters fit (excluding the space)
+						// Break the word with a hyphen
+						int breakPos = maxLineLength - lastLine.Length;
+						lastLine += word.Substring(0, breakPos) + '-';
+						lines[lines.Count - 1] = lastLine;
+						lines.Add(word.Substring(breakPos - 1));
+					} else { // And less than 4 characters fit
+						// Start a new line
+						lines.Add(word);
+					}
+				}
+			}
+			return lines;
 		}
 
 		public static string EscapeString(string input) {
