@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiscStuffComponent.Services {
+namespace RoosterBot.MiscStuff {
 	public class PropagationService {
 		private readonly Dictionary<ulong, ulong> m_PropagatedRoles;
 

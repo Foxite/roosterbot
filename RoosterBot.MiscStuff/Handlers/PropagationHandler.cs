@@ -1,13 +1,11 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using MiscStuffComponent.Services;
-using RoosterBot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiscStuffComponent {
+namespace RoosterBot.MiscStuff {
 	internal sealed class PropagationHandler {
 		private readonly Dictionary<IGuildUser, DateTime> m_LastPropagations;
 		private readonly PropagationService m_Service;
