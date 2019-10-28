@@ -22,12 +22,12 @@ namespace RoosterBot.PublicTransit {
 			int[,] d = new int[n + 1, m + 1];
 
 			// initialize the top and right of the table to 0, 1, 2, ...
-			for (int i = 0; i <= n; d[i, 0] = i++);
-			for (int j = 1; j <= m; d[0, j] = j++);
+			for (int i = 0; i <= n; d[i, 0] = i++) ;
+			for (int j = 1; j <= m; d[0, j] = j++) ;
 
 			for (int i = 1; i <= n; i++) {
 				for (int j = 1; j <= m; j++) {
-					int cost = (target[j - 1] == source[i - 1]) ? 0 : 1;
+					int cost = (target[j - 1] == source[i - 1]) ? 0 : Math.Min(n - i, m - j);
 					int min1 = d[i - 1, j] + n - i;
 					int min2 = d[i, j - 1] + m - j;
 					int min3 = d[i - 1, j - 1] + cost;
