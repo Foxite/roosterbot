@@ -1,35 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Discord.Net;
 
 namespace RoosterBot {
 	public static class Util {
+		public static readonly string Error = "<:error:636213609919283238> ";
+		public static readonly string Success = "<:ok:636213617825546242> ";
+		public static readonly string Warning = "<:warning:636213630114856962> ";
+		public static readonly string Unknown = "<:unknown:636213624460935188> ";
 		public static readonly Random RNG = new Random();
 
-		/// <summary>
-		/// Format a string array nicely, with commas and an optional "and" between the last two items.
-		/// </summary>
-		/// <param name="finalDelimiter">Should include a comma and a trailing space.</param>
-		public static string FormatStringArray(this string[] array, string finalDelimiter = ", ") {
-			if (array.Length > 0) {
-				string ret = array[0];
-				for (int i = 1; i < array.Length - 1; i++) {
-					ret += ", " + array[i];
-				}
-				if (array.Length > 1) {
-					ret += finalDelimiter + array[array.Length - 1];
-				}
-				return ret;
-			} else {
-				return null;
-			}
-		}
-
+		#region String utils
 		/// <summary>
 		/// Capitalize the first character in a string.
 		/// </summary>
@@ -44,29 +30,6 @@ namespace RoosterBot {
 					return input.First().ToString().ToUpper() + input.Substring(1);
 			}
 		}
-		
-		/// <summary>Adds a reaction to an IUserMessage. Only supports Emoji, not server-specific emotes.</summary>
-		/// <returns>Success. It can fail if the bot does not have permission to add reactions.</returns>
-		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
-			try {
-				await message.AddReactionAsync(new Emoji(unicode));
-				return true;
-			} catch (HttpException) { // Permission denied
-				return false;
-			}
-		}
-
-		/// <summary>Removes our own reaction to an IUserMessage. If we have not added this reaction, nothing will happen. Only supports Emoji, not server-specific emotes.</summary>
-		/// <param name="botUser">The bot's user.</param>
-		/// <returns>Success. It can fail if the bot does not have permission to add reactions.</returns>
-		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
-			try {
-				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
-				return true;
-			} catch (HttpException) { // Permission denied
-				return false;
-			}
-		}
 
 		/// <summary>
 		/// Generate a table for use in a Discord message. Output will be formatted into a code block.
@@ -75,7 +38,9 @@ namespace RoosterBot {
 		/// <param name="table">An array[row][column]. While it can be jagged, if it is jagged, this will not work properly.</param>
 		/// <param name="includeHeaderSeperation">Include a line of '-'s after the first row.</param>
 		/// <returns>A string that you can send directly into a chat message.</returns>
-		public static string FormatTextTable(string[][] table, bool includeHeaderSeperation) {
+		public static string FormatTextTable(string[][] table) {
+			// TODO (feature) max column width, this will prevent the table from being ruined if columns are wide (which often happens with schedule information).
+			// I've written BreakStringIntoLines for this, although it's difficult to make this work for more than one column at a time.
 			int[] columnWidths = new int[table[0].Length];
 
 			for (int column = 0; column < table[0].Length; column++) {
@@ -102,222 +67,228 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		#region GetRange(T[])
-		public static T[] GetRange<T>(this T[] source, int start, int count) {
-			T[] ret = new T[count];
-			Array.Copy(source, start, ret, 0, count);
-			return ret;
-		}
+		public static List<string> BreakStringIntoLines(string input, int maxLineLength) {
+			string[] words = input.Split(' ', (char) 0x200B); // 200B == zero width space
+			List<string> lines = new List<string>();
 
-		public static T[] GetRange<T>(this T[] source, int start) {
-			return GetRange(source, start, source.Length - start);
-		}
-		#endregion
-
-		#region Levenshtein
-		/// <summary>
-		/// Returns the Levenshtein distance from {source} to {target}.
-		/// From https://stackoverflow.com/a/6944095/3141917
-		/// </summary>
-		public static int Levenshtein(string source, string target) {
-			if (string.IsNullOrEmpty(source)) {
-				if (string.IsNullOrEmpty(target))
-					return 0;
-				return target.Length;
-			}
-
-			if (string.IsNullOrEmpty(target)) {
-				return source.Length;
-			}
-
-			int n = source.Length;
-			int m = target.Length;
-			int[,] d = new int[n + 1, m + 1];
-
-			// initialize the top and right of the table to 0, 1, 2, ...
-			for (int i = 0; i <= n; d[i, 0] = i++)
-				;
-			for (int j = 1; j <= m; d[0, j] = j++)
-				;
-
-			for (int i = 1; i <= n; i++) {
-				for (int j = 1; j <= m; j++) {
-					int cost = (target[j - 1] == source[i - 1]) ? 0 : Math.Min(n - i, m - j);
-					int min1 = d[i - 1, j] + n - i;
-					int min2 = d[i, j - 1] + m - j;
-					int min3 = d[i - 1, j - 1] + cost;
-					d[i, j] = Math.Min(Math.Min(min1, min2), min3);
-				}
-			}
-			return d[n, m];
-		}
-		#endregion
-
-		#region Longest Common Subsequence
-		private class Cell {
-			public enum Directions {
-				None,
-				Up,
-				Left,
-				/// <summary>
-				/// Refers to Top,Left
-				/// </summary>
-				Diagonal
-			}
-
-			public int LCS { get; set; }
-			public Directions Direction { get; set; }
-			//backward reference so that we can backtrack
-			public Cell From { get; set; }
-			/// <summary>
-			/// C will only have values for row 0 and column 0
-			/// </summary>
-			public char C { get; set; }
-			public int X { get; set; }
-			public int Y { get; set; }
-
-			public Directions GetDirection(Cell c) {
-				if (c.X == X - 1 && c.Y == Y - 1) {
-					return Directions.Diagonal;
-				} else if (c.X == X && c.Y == Y - 1) {
-					return Directions.Up;
-				} else if (c.X == X - 1 && c.Y == Y) {
-					return Directions.Left;
-				} else {
-					return Directions.None;
-				}
-			}
-		}
-
-		public static string GetLongestCommonSubsequence(string x, string y) {
-			// columns and rows + 1 because we need to create an empty cell at [0,0]
-			int columns = x.Length + 1;
-			int rows = y.Length + 1;
-
-			Cell[] cells = new Cell[rows * columns];
-			cells[0] = new Cell();
-
-			//initialise column 0 cells all to '0'
-			for (int c = 1; c < columns; c++) {
-				cells[c] = new Cell() { X = c, Y = 0, C = x[c - 1] };
-			}
-
-			//initialise row 0 cells all to '0'
-			for (int r = 1; r < rows; r++) {
-				cells[r * columns] = new Cell() { X = 0, Y = r, C = y[r - 1] };
-			}
-
-			//up till now are initialisation steps. the LCS algo starts here
-
-			for (int r = 1; r < rows; r++) {
-				for (int c = 1; c < columns; c++) {
-					var cell = new Cell() { X = c, Y = r };
-
-					var thisrow = cells[r * columns];
-					var thiscol = cells[c];
-
-					//compare row and column, if they have the same character, select diagonal cell's LCS
-					if (thisrow.C == thiscol.C) {
-						var diagcell = cells[(r - 1) * columns + c - 1];
-						cell.LCS = diagcell.LCS + 1;
-						cell.From = diagcell;
+			for (int i = 0; i < words.Length; i++) {
+				string lastLine = lines.Count == 0 ? "" : lines[lines.Count - 1];
+				void writeBackLastLine() {
+					if (lines.Count == 0) {
+						lines.Add(lastLine);
 					} else {
-						var uppercell = cells[(r - 1) * columns + c];
-						var leftcell = cells[r * columns + c - 1];
-
-						//take the larger LCS, if not use the upper cell's LCS
-						if (leftcell.LCS > uppercell.LCS) {
-							cell.LCS = leftcell.LCS;
-							cell.From = leftcell;
-						} else {
-							cell.LCS = uppercell.LCS;
-							cell.From = uppercell;
-						}
+						lines[lines.Count - 1] = lastLine;
 					}
+				}
 
-					cells[r * columns + c] = cell;
+				string word = words[i];
+
+				if (lastLine.Length + 1 + word.Length <= maxLineLength) { // If it fits
+					lastLine += (i == 0 ? "" : " ") + word;
+					writeBackLastLine();
+				} else if (word.Length > maxLineLength) { // If the word is longer than a line (-1 because we'll add a hyphen)
+					// Break the word with a hyphen
+					int breakPos = maxLineLength - 1;
+					lastLine += (i == 0 ? "" : " ") + word.Substring(0, breakPos) + '-';
+					writeBackLastLine();
+					lines.Add("");
+					words[i] = word.Substring(breakPos, word.Length - breakPos);
+					i--;
+				} else { // If it does not fit in an existing line
+					if (maxLineLength - lastLine.Length > 5) { // And at least the first 4 characters fit (excluding the space)
+						// Break the word with a hyphen
+						int breakPos = maxLineLength - lastLine.Length - 2;
+						lastLine += ' ' + word.Substring(0, breakPos) + '-';
+						writeBackLastLine();
+						lines.Add(word.Substring(breakPos + 1));
+					} else { // And less than 4 characters fit
+						// Start a new line
+						lines.Add(word);
+					}
+				}
+			}
+			return lines;
+		}
+
+		public static string EscapeString(string input) {
+			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
+				("\\", "\\\\"), // Needs to be done first
+				("_", @"\_"),
+				("*", @"\*"), // Also covers **, which need only their *first* side escaped, or all of the asterisks in *both* sides
+				(">", @"\>"),
+				(">>>", @"\>>>"),
+				("<", @"\<"),
+				("`", @"\`")
+			};
+
+			foreach ((string replace, string with) in replacements) {
+				input = input.Replace(replace, with);
+			}
+
+			return input;
+		}
+
+		/// <summary>
+		/// Removes diacritics from characters: characters like â become a, etc.
+		/// </summary>
+		/// <remarks>
+		/// https://stackoverflow.com/a/249126/3141917
+		/// 
+		/// This is apparently wrong, due to certain characters being replaced phonetically.
+		/// </remarks>
+		/// <returns></returns>
+		public static string RemoveDiacritics(string text) {
+			var normalizedString = text.Normalize(NormalizationForm.FormD);
+			var stringBuilder = new StringBuilder();
+
+			foreach (var c in normalizedString) {
+				var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+				if (unicodeCategory != UnicodeCategory.NonSpacingMark) {
+					stringBuilder.Append(c);
 				}
 			}
 
-			//start backtracking
-			//we will be getting characters in reverse, so we will use reverse
-			Stack<char> stack = new Stack<char>();
-
-			//last cell i.e bottom right most
-			Cell curr = cells[rows * columns - 1];
-			int length = curr.LCS;
-			while (curr.From != null) {
-				var from = curr.From;
-				var dir = curr.GetDirection(from);
-				if (dir == Cell.Directions.Diagonal) {
-					var c = cells[curr.X].C;
-					stack.Push(c);
-				}
-				curr = from;
-			}
-
-			StringBuilder sbLcs = new StringBuilder();
-			for (int i = 0; i < length; i++) {
-				sbLcs.Append(stack.Pop());
-			}
-			return sbLcs.ToString();
+			return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 		}
 		#endregion
 
+		#region Async delegate
+		private static void CheckAsyncDelegate(Delegate asyncEvent, object[] parameters) {
+			if (asyncEvent.Method.ReturnType != typeof(Task)) {
+				throw new ArgumentException($"{nameof(asyncEvent)} must return Task", nameof(asyncEvent));
+			}
+
+			System.Reflection.ParameterInfo[] delegateParams = asyncEvent.Method.GetParameters();
+			for (int i = 0; i < delegateParams.Length; i++) {
+				if (!delegateParams[i].ParameterType.IsAssignableFrom(parameters[i].GetType())) {
+					throw new ArgumentException($"Given parameter {i} must be assignable to the equivalent delegate parameter.", nameof(parameters));
+				}
+			}
+		}
+
 		/// <summary>
-		/// Finds a mention in a string, then returns the ID in that mention.
+		/// Invokes an async delegate in such a way that the invocations run at the same time.
 		/// </summary>
-		/// <param name="startIndex">The index where the mention starts.</param>
-		/// <param name="endIndex">The index where the mention ends.</param>
-		/// <returns>The ID in the mention, or null if there is no valid mention.</returns>
-		public static ulong? ExtractIDFromMentionString(string search) {
-			int startIndex = search.IndexOf("<@");
-			if (startIndex != -1) {
-				if (search[startIndex + 2] == '!') {
-					startIndex++;
-				}
-				int endIndex = search.IndexOf(">", startIndex);
-				return ulong.Parse(search.Substring(startIndex + 2, endIndex - startIndex - 2));
+		public static async Task InvokeAsyncEventConcurrent(Delegate asyncEvent, params object[] parameters) {
+			CheckAsyncDelegate(asyncEvent, parameters);
+
+			Delegate[] invocationList = asyncEvent.GetInvocationList();
+			Task[] invocationTasks = new Task[invocationList.Length];
+
+			for (int i = 0; i < invocationList.Length; i++) {
+				invocationTasks[i] = (Task) invocationList[i].DynamicInvoke(parameters);
 			}
-			return null;
+
+			await Task.WhenAll(invocationTasks);
 		}
 
-		private static string GetModuleSignature(this ModuleInfo module) {
-			string ret = module.Name;
-			if (!string.IsNullOrEmpty(module.Group)) {
-				ret = $"{module.Group} {ret}";
-			}
+		/// <summary>
+		/// Invokes an async delegate in such a way that the invocations run one by one.
+		/// </summary>
+		public static async Task InvokeAsyncEventSequential(Delegate asyncEvent, params object[] parameters) {
+			CheckAsyncDelegate(asyncEvent, parameters);
 
-			if (module.IsSubmodule) {
-				return $"{GetModuleSignature(module.Parent)} {ret}";
+			Delegate[] invocationList = asyncEvent.GetInvocationList();
+
+			for (int i = 0; i < invocationList.Length; i++) {
+				await (Task) invocationList[i].DynamicInvoke(parameters);
+			}
+		}
+		#endregion
+
+		#region Discord utils
+		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
+			try {
+				await message.AddReactionAsync(new Emoji(unicode));
+				return true;
+			} catch (HttpException e) { // Permission denied
+				Logger.Warning("Util", "Attempted to add a reaction to a message, but this failed", e);
+				return false;
+			}
+		}
+
+		public static async Task<bool> RemoveReaction(IUserMessage message, string unicode, IUser botUser) {
+			try {
+				await message.RemoveReactionAsync(new Emoji(unicode), botUser);
+				return true;
+			} catch (HttpException e) { // Permission denied
+				Logger.Warning("Util", "Attempted to add a reaction to a message, but this failed", e);
+				return false;
+			}
+		}
+
+		public static async Task DeleteAll(IMessageChannel channel, IEnumerable<IUserMessage> messages) {
+			if (channel is ITextChannel textChannel) {
+				await textChannel.DeleteMessagesAsync(messages);
 			} else {
-				return ret;
+				// No idea what kind of non-text MessageChannel there are, but at least they support non-bulk deletion.
+				foreach (IUserMessage message in messages) {
+					await message.DeleteAsync();
+				}
 			}
 		}
 
-		public static string GetCommandSignature(this CommandInfo command) {
-			string ret = command.Name;
+		/// <summary>
+		/// Given a set of messages that we sent, this will delete all messages except the first, and modify the first according to <paramref name="message"/>.
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="responses"></param>
+		/// <param name="append">If true, this will append <paramref name="message"/> to the first response, otherwise this will overwrite the contents of that message.</param>
+		/// <returns></returns>
+		public static async Task<IUserMessage> ModifyResponsesIntoSingle(string message, IEnumerable<IUserMessage> responses, bool append) {
+			IUserMessage singleResponse = responses.First();
+			IEnumerable<IUserMessage> extraMessages = responses.Skip(1);
 
-			bool notFirst = false;
-			foreach (ParameterInfo param in command.Parameters) {
-				ret += param.Type.Name + " " + param.Name;
-				if (notFirst) {
-					ret += ", ";
+			if (extraMessages.Any()) {
+				await DeleteAll(singleResponse.Channel, extraMessages);
+			}
+
+			await singleResponse.ModifyAsync((msgProps) => {
+				if (append) {
+					msgProps.Content += "\n\n" + message;
+				} else {
+					msgProps.Content = message;
 				}
-				notFirst = true;
-			}
+			});
+			return singleResponse;
+		}
+		#endregion
 
-			string moduleSig = command.Module.GetModuleSignature();
-			if (!string.IsNullOrEmpty(moduleSig)) {
-				ret = moduleSig + " " + ret;
+		#region LINQ
+		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
+			if (list.Count > 0) {
+				LinkedListNode<T> node = list.First;
+				do {
+					yield return node;
+					node = node.Next;
+				} while (node != null);
 			}
+		}
 
-			return ret;
+		/// <summary>
+		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="moveInto"></param>
+		/// <param name="predicate"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
+			List<T> outA = new List<T>();
+			List<T> outB = new List<T>();
+
+			foreach (T item in source) {
+				List<T> outInto = predicate(item) ? outB : outA;
+				outInto.Add(item);
+			}
+			moveInto = outB;
+			return outA;
 		}
 
 		public static bool HasRole(this IGuildUser user, ulong roleId) {
 			return user.RoleIds.Any(id => id == roleId);
 		}
+		#endregion
 	}
 
 	public class ReturnValue<T> {

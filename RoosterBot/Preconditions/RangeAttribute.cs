@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace RoosterBot.Preconditions {
-	public class RangeAttribute : ParameterPreconditionAttribute {
+namespace RoosterBot {
+	public sealed class RangeAttribute : ParameterPreconditionAttribute {
 		public int Min { get; }
 		public int Max { get; }
 
@@ -12,12 +14,13 @@ namespace RoosterBot.Preconditions {
 			Max = max;
 		}
 
-		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, ParameterInfo parameter, object value, IServiceProvider services) {
+		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, ParameterInfo parameter, object value, IServiceProvider services) {
 			bool ret = (dynamic) value >= Min && (dynamic) value <= Max;
 			if (ret) {
-				return Task.FromResult(PreconditionResult.FromSuccess());
+				return PreconditionResult.FromSuccess();
 			} else {
-				return Task.FromResult(PreconditionResult.FromError($"Dat is te hoog of te laag."));
+				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
+				return PreconditionResult.FromError(services.GetService<ResourceService>().GetString(culture, "RangeAttribute_CheckFailed"));
 			}
 		}
 	}

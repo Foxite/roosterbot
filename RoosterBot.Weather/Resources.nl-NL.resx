@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WeatherComponent_HelpText" xml:space="preserve">
+    <value>Ik kan weersvoorspellingen voor je opzoeken en in Discord laten zien. Hiervoor gebruik je het `weer` command.
+Deze command heeft een aantal verschillende vormen:
+
+`{0}weer in utrecht` laat de huidige weersomstandigheden in Utrecht zien. (`{0}weer nu utrecht` of `{0}weer utrecht` werkt ook.)
+`{0}weer over 2 uur amsterdam` of `{0}weer op woensdag 15:00 rotterdam`: Deze voorbeelden spreken voor zich.
+`{0}weer over 3 dagen hilversum` of `{0}weer op woensdag utrecht`: Deze commands laten het weer zien op de aangegeven dag, om 08:00, 12:00, en 18:00 uur.
+
+Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of spellingen. Als je een stad tegenkomt waarvan de alternatieve spelling niet bekend is, laat dit weten aan de bot eigenaar.</value>
+  </data>
+  <data name="WeatherModule_CurrentWeather" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_CurrentWeather_Aliases" xml:space="preserve">
+    <value>in</value>
+  </data>
+  <data name="WeatherModule_DayForecast_Aliases" xml:space="preserve">
+    <value>op</value>
+  </data>
+  <data name="WeatherModule_DayForecast" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_TimeForecast_Aliases" xml:space="preserve">
+    <value>op</value>
+  </data>
+  <data name="WeatherModule_TimeForecast" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_UnitForecast_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WeatherModule_UnitForecast" xml:space="preserve">
+    <value>over</value>
+  </data>
+  <data name="WeatherBit_Code_200" xml:space="preserve">
+    <value>:cloud_lightning: Onweer met lichte regen</value>
+  </data>
+  <data name="WeatherBit_Code_201" xml:space="preserve">
+    <value>:thunder_cloud_rain: Onweer met regen</value>
+  </data>
+  <data name="WeatherBit_Code_202" xml:space="preserve">
+    <value>:thunder_cloud_rain: Onweer met zware regen</value>
+  </data>
+  <data name="WeatherBit_Code_230" xml:space="preserve">
+    <value>:cloud_lightning: Onweer met lichte motregen</value>
+  </data>
+  <data name="WeatherBit_Code_231" xml:space="preserve">
+    <value>:thunder_cloud_rain: Onweer met motregen</value>
+  </data>
+  <data name="WeatherBit_Code_232" xml:space="preserve">
+    <value>:thunder_cloud_rain: Onweer met hevige motregen</value>
+  </data>
+  <data name="WeatherBit_Code_233" xml:space="preserve">
+    <value>:thunder_cloud_rain: Onweer met hagel</value>
+  </data>
+  <data name="WeatherBit_Code_300" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Lichte motregen</value>
+  </data>
+  <data name="WeatherBit_Code_301" xml:space="preserve">
+    <value>:cloud_rain: Motregen</value>
+  </data>
+  <data name="WeatherBit_Code_302" xml:space="preserve">
+    <value>:cloud_rain: Hevige motregen</value>
+  </data>
+  <data name="WeatherBit_Code_500" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Lichte regen</value>
+  </data>
+  <data name="WeatherBit_Code_501" xml:space="preserve">
+    <value>:cloud_rain: Regen</value>
+  </data>
+  <data name="WeatherBit_Code_502" xml:space="preserve">
+    <value>:cloud_rain: Zware regen</value>
+  </data>
+  <data name="WeatherBit_Code_511" xml:space="preserve">
+    <value>:cloud_rain: Vriezende regen</value>
+  </data>
+  <data name="WeatherBit_Code_520" xml:space="preserve">
+    <value>:white_sun_rain_cloud: Lichte buien</value>
+  </data>
+  <data name="WeatherBit_Code_521" xml:space="preserve">
+    <value>:cloud_rain: Buien</value>
+  </data>
+  <data name="WeatherBit_Code_522" xml:space="preserve">
+    <value>:cloud_rain: Hevige buien</value>
+  </data>
+  <data name="WeatherBit_Code_600" xml:space="preserve">
+    <value>:cloud_snow: Lichte sneeuw</value>
+  </data>
+  <data name="WeatherBit_Code_601" xml:space="preserve">
+    <value>:cloud_snow: Sneeuw</value>
+  </data>
+  <data name="WeatherBit_Code_602" xml:space="preserve">
+    <value>:cloud_snow: Hevige sneeuw</value>
+  </data>
+  <data name="WeatherBit_Code_610" xml:space="preserve">
+    <value>:cloud_snow: Sneeuw en regen</value>
+  </data>
+  <data name="WeatherBit_Code_611" xml:space="preserve">
+    <value>:snowflake: Ijzel</value>
+  </data>
+  <data name="WeatherBit_Code_612" xml:space="preserve">
+    <value>:snowflake: Hevige ijzel</value>
+  </data>
+  <data name="WeatherBit_Code_621" xml:space="preserve">
+    <value>:cloud_snow: Sneeuwbuien</value>
+  </data>
+  <data name="WeatherBit_Code_622" xml:space="preserve">
+    <value>:cloud_snow: Zware sneeuwbuien</value>
+  </data>
+  <data name="WeatherBit_Code_623" xml:space="preserve">
+    <value>:cloud_snow: Sneeuwvlagen</value>
+  </data>
+  <data name="WeatherBit_Code_700" xml:space="preserve">
+    <value>:foggy: Mist</value>
+  </data>
+  <data name="WeatherBit_Code_711" xml:space="preserve">
+    <value>:warning: Rook</value>
+  </data>
+  <data name="WeatherBit_Code_721" xml:space="preserve">
+    <value>:foggy: Nevel</value>
+  </data>
+  <data name="WeatherBit_Code_731" xml:space="preserve">
+    <value>:warning: Zand/stof</value>
+  </data>
+  <data name="WeatherBit_Code_741" xml:space="preserve">
+    <value>:foggy: Mist</value>
+  </data>
+  <data name="WeatherBit_Code_751" xml:space="preserve">
+    <value>:foggy: :snowflake: Vriezende mist</value>
+  </data>
+  <data name="WeatherBit_Code_800" xml:space="preserve">
+    <value>:sunny: Klare lucht</value>
+  </data>
+  <data name="WeatherBit_Code_801" xml:space="preserve">
+    <value>:white_sun_small_cloud: Enkele wolken</value>
+  </data>
+  <data name="WeatherBit_Code_802" xml:space="preserve">
+    <value>:white_sun_small_cloud: Licht bewolkt</value>
+  </data>
+  <data name="WeatherBit_Code_803" xml:space="preserve">
+    <value>:white_sun_cloud: Overwegend bewolkt</value>
+  </data>
+  <data name="WeatherBit_Code_804" xml:space="preserve">
+    <value>:cloud: Bewolkt</value>
+  </data>
+  <data name="WeatherBit_Code_900" xml:space="preserve">
+    <value>:question: Onbekend</value>
+  </data>
+  <data name="WeatherBit_Code_Unknown" xml:space="preserve">
+    <value>Gefeliciteerd, je krijgt een gratis Mars-reep van de bot eigenaar. Foutcode</value>
+  </data>
+  <data name="WeatherInfo_Present_ApparentTemperature" xml:space="preserve">
+    <value> (voelt als {0})</value>
+    <comment>0: apparent temperature, unit included</comment>
+  </data>
+  <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
+    <value>:wind_blowing_face: Geen wind</value>
+  </data>
+  <data name="WeatherInfo_Present_Wind" xml:space="preserve">
+    <value>:wind_blowing_face: {0} vanuit {1}</value>
+    <comment>0: wind speed, unit included
+1: cardinal direction, localized</comment>
+  </data>
+  <data name="WeatherModule_DayForecast_PretextCity" xml:space="preserve">
+    <value>{0}: Weer {1}\n</value>
+    <comment>0: city name
+1: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_DayForecast_PretextRegion" xml:space="preserve">
+    <value>{0}, {1}: Weer {2}\n</value>
+    <comment>0: city name
+1: region name
+2: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_Group" xml:space="preserve">
+    <value>weer</value>
+  </data>
+  <data name="WeatherModule_Name" xml:space="preserve">
+    <value>weer</value>
+  </data>
+  <data name="WeatherModule_NoLookBack" xml:space="preserve">
+    <value>Ik kan niet terug kijken.</value>
+  </data>
+  <data name="WeatherModule_SevenDayLimit" xml:space="preserve">
+    <value>Ik kan het weer niet verder dan 7 dagen voorspellen.</value>
+  </data>
+  <data name="WeatherModule_Unit_Days" xml:space="preserve">
+    <value>dag|dagen</value>
+    <comment>Separate with |</comment>
+  </data>
+  <data name="WeatherModule_Unit_Hours" xml:space="preserve">
+    <value>uur</value>
+  </data>
+  <data name="WeatherModule_UnknownUnit" xml:space="preserve">
+    <value>Ik kan alleen op uur- of dagniveau het weer voorspellen.</value>
+  </data>
+  <data name="WeatherComponent_HelpName" xml:space="preserve">
+    <value>weer</value>
+  </data>
+  <data name="WeatherComponent_Attribution" xml:space="preserve">
+    <value>Informatie wordt verstrekt door WeatherBit.</value>
+  </data>
+</root>

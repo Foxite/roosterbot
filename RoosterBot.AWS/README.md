@@ -1,0 +1,1 @@
+RoosterBot.AWS provides AWS functionality to RoosterBot. Currently this consists only of integration with Simple Notification Service, so the owner of the bot can be notified if the bot loses connection.

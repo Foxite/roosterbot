@@ -1,65 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using RoosterBot.Attributes;
-using RoosterBot.Services;
+using Discord.WebSocket;
 
-namespace RoosterBot.Modules {
-	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : class, ICommandContext {
+namespace RoosterBot {
+	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
 		public ConfigService Config { get; set; }
+		public GuildConfigService GuildConfigService { get; set; }
+		public ResourceService ResourcesService { get; set; }
+		public RoosterCommandService CmdService { get; set; }
+		public CommandResponseService CommandResponses { get; set; }
+		public new T Context { get; internal set; }
 
-		protected string LogTag { get; private set; }
 		protected ModuleLogger Log { get; private set; }
+		protected GuildConfig GuildConfig { get; private set; }
 
-		protected internal StringBuilder m_Response;
-		protected internal string m_Reaction;
+		/// <summary>
+		/// Use GuildConfig.Culture instead.
+		/// </summary>
+		protected CultureInfo Culture => GuildConfig.Culture;
+
+		private StringBuilder m_Response;
+		private bool m_Replied = false;
+
+		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
+		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
 
 		protected override void BeforeExecute(CommandInfo command) {
-			LogTag = null;
-			foreach (Attribute attr in command.Module.Attributes) {
-				if (attr is LogTagAttribute logTagAttribute) {
-					LogTag = logTagAttribute.LogTag;
+			if (Context == null) {
+				Context = base.Context;
+			}
+			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+			
+			Log = new ModuleLoggerInternal(GetType().Name);
+
+			string logMessage = $"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in ";
+			if (Context.IsPrivate) {
+				if (Context.Channel is IDMChannel) {
+					logMessage += "DM";
+				} else {
+					logMessage = $"group {Context.Channel.Name}";
 				}
-			}
-
-			if (LogTag == null) {
-				LogTag = GetType().Name;
-				Logger.Log(LogSeverity.Warning, LogTag, $"{GetType().Name} did not have a LogTag attribute and its tag has been set to its class name.");
-			}
-
-			Log = new ModuleLoggerInternal(LogTag);
-
-			if (Context.Guild == null) {
-				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in PM channel {Context.Channel.Name}");
 			} else {
-				Log.Info($"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in {Context.Guild.Name} channel {Context.Channel.Name}");
+				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}";
 			}
+			Log.Debug(logMessage);
 
 			m_Response = new StringBuilder();
 		}
 
 		protected override void AfterExecute(CommandInfo command) {
-			if (m_Reaction != null) {
-				Util.AddReaction(Context.Message, m_Reaction).GetAwaiter().GetResult();
-			}
-
 			if (m_Response.Length != 0) {
 				string message = m_Response.ToString();
 				m_Response.Clear();
 				ReplyAsync(message).GetAwaiter().GetResult();
 			}
-		}
-
-		/// <summary>
-		/// Queues a message to be sent after the command has finished executing, as well as a reaction to be added.
-		/// </summary>
-		protected virtual void ReplyDeferred(string message, string reactionUnicode) {
-			lock (m_Response) {
-				m_Response.AppendLine(message);
-			}
-			SetReactionDeferred(reactionUnicode);
 		}
 
 		/// <summary>
@@ -71,36 +73,14 @@ namespace RoosterBot.Modules {
 			}
 		}
 
-		/// <summary>
-		/// Sets a reaction to be added after the command has finished executing. Set null to not add a reaction.
-		/// </summary>
-		protected virtual void SetReactionDeferred(string unicode) {
-			m_Reaction = unicode;
-		}
-
-		protected async virtual Task<IUserMessage> SendDeferredResponseAsync() {
+		protected virtual Task<IUserMessage> SendDeferredResponseAsync() {
 			if (m_Response.Length != 0) {
 				string message = m_Response.ToString();
 				m_Response.Clear();
-				return await ReplyAsync(message);
+				return ReplyAsync(message);
 			} else {
 				return null;
 			}
-		}
-
-		protected async virtual Task SendDeferredReactionsAsync() {
-			if (m_Reaction != null) {
-				await Util.AddReaction(Context.Message, m_Reaction);
-				m_Reaction = null;
-			}
-		}
-
-		/// <summary>
-		/// Sends a response and reaction immediately.
-		/// </summary>
-		protected virtual async Task<IUserMessage> ReplyAsync(string message, string reactionUnicode, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
-			await AddReactionAsync(reactionUnicode);
-			return await ReplyAsync(message, isTTS, embed, options);
 		}
 
 		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
@@ -110,78 +90,81 @@ namespace RoosterBot.Modules {
 					.ToString();
 				m_Response.Clear();
 			}
-			return await base.ReplyAsync(message);
-		}
 
-		/// <summary>
-		/// Sends a reaction immediately.
-		/// </summary>
-		protected virtual async Task<bool> AddReactionAsync(string unicode) {
-			return await Util.AddReaction(Context.Message, unicode);
-		}
-
-		/// <summary>
-		/// Removes a reaction immediately.
-		/// </summary>
-		protected virtual async Task<bool> RemoveReactionAsync(string unicode) {
-			return await Util.RemoveReaction(Context.Message, unicode, Context.Client.CurrentUser);
-		}
-
-		protected virtual async Task MinorError(string message) {
-			Log.Info($"Command failed: {message}");
-			if (Config.ErrorReactions) {
-				await ReplyAsync(message, "❌");
+			IUserMessage ret;
+			if (Context.Responses == null) {
+				// The command was not edited, or the command somehow did not invoke a reply.
+				IUserMessage response = await Context.Channel.SendMessageAsync(message, isTTS, embed, options);
+				CommandResponses.AddResponse(Context.Message, response);
+				ret = response;
 			} else {
-				await ReplyAsync(message);
+				// The command was edited.
+				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
+
+				CommandResponses.ModifyResponse(Context.Message, new[] { ret });
 			}
+
+			m_Replied = true;
+
+			CommandResponses.AddResponse(Context.Message, ret);
+			return ret;
+		}
+
+		// Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError
+		protected virtual Task MinorError(string message) {
+			return ReplyAsync(Util.Error + message);
 		}
 
 		protected virtual async Task FatalError(string message, Exception exception = null) {
-			string report = $"Critical error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild.Name} channel {Context.Channel.Name}: {message}";
+			string report = $"Fatal error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild?.Name ?? "DM"} channel {Context.Channel.Name}: {message}";
+
+			Log.Error(report, exception);
 
 			if (exception != null) {
-				report += $"\nAttached exception: {exception.GetType().Name}\n";
-				report += exception.StackTrace;
+				report += $"\nAttached exception: {Util.EscapeString(exception.ToStringDemystified())}\n";
 			}
+			
+			if (Config.BotOwner != null) {
+				await Config.BotOwner.SendMessageAsync(report);
+			}
+			
+			string response = Util.Error + GetString("RoosterBot_FatalError");
+			await ReplyAsync(response);
+		}
 
-			Log.Error(report);
+		protected string GetString(string name) {
+			return ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name);
+		}
 
-			if (Config.LogChannel != null) {
-				await Config.LogChannel.SendMessageAsync($"{Config.BotOwner.Mention} {report}");
-			}
-			string response = "Ik weet niet wat, maar er is iets gloeiend misgegaan. Probeer het later nog eens? Dat moet ik zeggen van mijn maker, maar volgens mij gaat het niet werken totdat hij het fixt. Sorry.\n";
-			if (Config.ErrorReactions) {
-				await ReplyAsync(response, "🚫");
-			} else {
-				await ReplyAsync(response);
-			}
+		protected string GetString(string name, params object[] args) {
+			return string.Format(ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
 		}
 
 		public abstract class ModuleLogger {
-			protected string m_Tag;
+			protected internal string m_Tag;
 
-			public void Verbose(string message) {
-				Logger.Verbose(m_Tag, message);
+			public void Verbose(string message, Exception e = null) {
+				Logger.Verbose(m_Tag, message, e);
 			}
 
-			public void Debug(string message) {
-				Logger.Debug(m_Tag, message);
+			public void Debug(string message, Exception e = null) {
+				Logger.Debug(m_Tag, message, e);
 			}
 
-			public void Info(string message) {
-				Logger.Info(m_Tag, message);
+			public void Info(string message, Exception e = null) {
+				Logger.Info(m_Tag, message, e);
 			}
 
-			public void Warning(string message) {
-				Logger.Warning(m_Tag, message);
+			public void Warning(string message, Exception e = null) {
+				Logger.Warning(m_Tag, message, e);
 			}
 
-			public void Error(string message) {
-				Logger.Error(m_Tag, message);
+			public void Error(string message, Exception e = null) {
+				Logger.Error(m_Tag, message, e);
 			}
 
-			public void Critical(string message) {
-				Logger.Critical(m_Tag, message);
+			public void Critical(string message, Exception e = null) {
+				Logger.Critical(m_Tag, message, e);
 			}
 		}
 
@@ -192,5 +175,39 @@ namespace RoosterBot.Modules {
 		}
 	}
 
-	public abstract class RoosterModuleBase : RoosterModuleBase<CommandContext> { }
+	public abstract class RoosterModuleBase : RoosterModuleBase<RoosterCommandContext> { }
+
+	public class RoosterCommandContext : ICommandContext {
+		public IDiscordClient Client { get; }
+		public IUserMessage Message { get; }
+		public IUser User { get; }
+		public IMessageChannel Channel { get; }
+		public IGuild Guild { get; }
+		public bool IsPrivate { get; }
+		// If this is null, we should make a new message.
+		public IReadOnlyCollection<IUserMessage> Responses { get; }
+		
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage> originalResponses) {
+			Client = client;
+			Message = message;
+			User = message.Author;
+			Channel = message.Channel;
+			IsPrivate = Channel is IPrivateChannel;
+			Guild = IsPrivate ? (User as SocketUser)?.MutualGuilds.First() : (Channel as IGuildChannel).Guild;
+			Responses = originalResponses;
+		}
+
+		public override string ToString() {
+			if (Guild != null) {
+				return $"{User.Username}#{User.Discriminator} in `{Guild.Name}` channel `{Channel.Name}`: {Message.Content}";
+			} else {
+				return $"{User.Username}#{User.Discriminator} in private channel `{Channel.Name}`: {Message.Content}";
+			}
+		}
+	}
+
+	internal interface IRoosterModuleBase {
+		void BeforeExecuteInternal(CommandInfo command);
+		void AfterExecuteInternal(CommandInfo command);
+	}
 }

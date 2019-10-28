@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Automation {
 	internal class AppStop {
-		private static void Main(string[] args) {
+		private static void Main() {
 			Log("Stopping app");
 
 			// Avoid nested `using` blocks because they may cause the outer object to be Dispose()d twice, causing an ObjectDisposedException.

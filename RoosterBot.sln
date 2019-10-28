@@ -1,21 +1,52 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot", "RoosterBot\RoosterBot.csproj", "{294CD2AF-490F-4432-AC24-17EAA9F0E112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleComponent", "ScheduleComponent\ScheduleComponent.csproj", "{0C053E6F-97D0-431D-B4E3-A2B340E60665}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule", "RoosterBot.Schedule\RoosterBot.Schedule.csproj", "{0C053E6F-97D0-431D-B4E3-A2B340E60665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicTransitComponent", "TrainComponent\PublicTransitComponent.csproj", "{0D452EB0-1D7F-4D32-B65E-41D5099A130C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.PublicTransit", "RoosterBot.PublicTransit\RoosterBot.PublicTransit.csproj", "{0D452EB0-1D7F-4D32-B65E-41D5099A130C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiscStuffComponent", "MiscStuffComponent\MiscStuffComponent.csproj", "{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.MiscStuff", "RoosterBot.MiscStuff\RoosterBot.MiscStuff.csproj", "{6DDCBFF7-9EA5-4562-8576-98658CE3C51A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStop", "AppStop\AppStop.csproj", "{EE3B243E-3A2A-408B-985B-77B3C046DB8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStart", "AppStart\AppStart.csproj", "{D772BA7F-C78C-4F53-80F7-8A5F612DD60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatsonComponent", "WatsonComponent\WatsonComponent.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Watson", "RoosterBot.Watson\RoosterBot.Watson.csproj", "{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.GLU", "RoosterBot.Schedule.GLU\RoosterBot.Schedule.GLU.csproj", "{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665} = {0C053E6F-97D0-431D-B4E3-A2B340E60665}
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Meta", "RoosterBot.Meta\RoosterBot.Meta.csproj", "{D8F8831C-003C-46BF-90E5-7924E48F7E49}"
+	ProjectSection(ProjectDependencies) = postProject
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.AWS", "RoosterBot.AWS\RoosterBot.AWS.csproj", "{A6DDD117-C18D-4E94-B85A-CCA214FE8238}"
+	ProjectSection(ProjectDependencies) = postProject
+		{294CD2AF-490F-4432-AC24-17EAA9F0E112} = {294CD2AF-490F-4432-AC24-17EAA9F0E112}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Tests", "RoosterBot.Tests\RoosterBot.Tests.csproj", "{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.AWS", "RoosterBot.Schedule.AWS\RoosterBot.Schedule.AWS.csproj", "{4D56894F-4487-46D2-9CC2-261F557B7400}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0C053E6F-97D0-431D-B4E3-A2B340E60665} = {0C053E6F-97D0-431D-B4E3-A2B340E60665}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.MockUCS", "RoosterBot.Schedule.MockUCS\RoosterBot.Schedule.MockUCS.csproj", "{19FC649C-54BB-4051-9D45-37D2A87DFD80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Schedule.SQL", "RoosterBot.Schedule.SQL\RoosterBot.Schedule.SQL.csproj", "{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Weather", "RoosterBot.Weather\RoosterBot.Weather.csproj", "{AA18223C-C097-4E57-8DE9-CDAE5913C189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.DateTimeUtils", "RoosterBot.DateTimeUtils\RoosterBot.DateTimeUtils.csproj", "{3B470EB8-B24C-41C8-8209-736CD4463E16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +82,42 @@ Global
 		{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3273B167-9AD4-4A2D-A07A-176DD8AA9D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FDA423D-BE0F-4565-ABAD-CB5B2355CDE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F8831C-003C-46BF-90E5-7924E48F7E49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F8831C-003C-46BF-90E5-7924E48F7E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F8831C-003C-46BF-90E5-7924E48F7E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F8831C-003C-46BF-90E5-7924E48F7E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DDD117-C18D-4E94-B85A-CCA214FE8238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3548D0FB-EB1F-4B15-A87A-9E78D3C49271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D56894F-4487-46D2-9CC2-261F557B7400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D56894F-4487-46D2-9CC2-261F557B7400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D56894F-4487-46D2-9CC2-261F557B7400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D56894F-4487-46D2-9CC2-261F557B7400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19FC649C-54BB-4051-9D45-37D2A87DFD80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19FC649C-54BB-4051-9D45-37D2A87DFD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19FC649C-54BB-4051-9D45-37D2A87DFD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19FC649C-54BB-4051-9D45-37D2A87DFD80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7231FDF-CF1A-4004-9B71-CCC88D4296B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA18223C-C097-4E57-8DE9-CDAE5913C189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B470EB8-B24C-41C8-8209-736CD4463E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B470EB8-B24C-41C8-8209-736CD4463E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B470EB8-B24C-41C8-8209-736CD4463E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B470EB8-B24C-41C8-8209-736CD4463E16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
