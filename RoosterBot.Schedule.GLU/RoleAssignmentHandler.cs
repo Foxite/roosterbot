@@ -35,7 +35,6 @@ namespace RoosterBot.Schedule.GLU {
 		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
 			// Assign roles
 			try {
-				//SocketGuild guild = (user as SocketUser)?.MutualGuilds.Where(thisGuild => thisGuild.Id == GLUScheduleComponent.GLUGuildId).SingleOrDefault();
 				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
 				if (oldSSI != null) {
 					IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
