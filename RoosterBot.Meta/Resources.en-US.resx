@@ -117,6 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InfoModule_InfoCommand_ListItem" xml:space="preserve">
+    <value>- {0} {1}</value>
+    <comment>0: component name
+1: component version</comment>
+  </data>
+  <data name="InfoModule_InfoCommand_PostText" xml:space="preserve">
+    <value>All code is available on GitHub: {0}</value>
+    <comment>Github link</comment>
+  </data>
+  <data name="InfoModule_InfoCommand_Pretext" xml:space="preserve">
+    <value>This bot is based on RoosterBot {0}. Installed components:</value>
+    <comment>0: bot version string</comment>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
     <value>Available categories are:</value>
   </data>
