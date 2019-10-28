@@ -210,69 +210,72 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task RespondWeek(IdentifierInfo info, int weeksFromNow) {
-			string response;
-			ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
-			if (weekRecords.Length > 0) {
-				if (weeksFromNow == 0) {
-					response = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
-				} else if (weeksFromNow == 1) {
-					response = GetString("ScheduleModule_RespondWeek_ScheduleNextWeek", info);
-				} else {
-					response = GetString("ScheduleModule_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
-				}
-
-				Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
-					/* Key select */ group => group.Key,
-					/* Val select */ group => group.ToArray()
-				);
-				int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
-				
-				// Header
-				string[][] cells = new string[longestColumn + 2][];
-				cells[0] = Enumerable.Range(1, 5).Select(dow => ((DayOfWeek) dow).GetName(Culture)).ToArray(); // Outputs day names of Monday through Friday
-
-				// Initialize cells to empty strings
-				for (int i = 1; i < cells.Length; i++) {
-					cells[i] = new string[5];
-					for (int j = 0; j < cells[i].Length; j++) {
-						cells[i][j] = "";
-					}
-				}
-
-				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
-					for (int i = 0; i < kvp.Value.Length; i++) {
-						cells[i + 2][(int) kvp.Key - 1] = kvp.Value[i].Activity.DisplayText;
-					}
-				}
-
-				AvailabilityInfo[] availabilities;
-				availabilities = new AvailabilityInfo[5];
-				foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
-					availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
-				}
-
-				// Time of day start/end, and set to "---" if empty
-				for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
-					if (!dayRecords.ContainsKey(dow)) {
-						cells[2][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
+			info = await ResolveNullInfo(info);
+			if (info != null) {
+				string response;
+				ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
+				if (weekRecords.Length > 0) {
+					if (weeksFromNow == 0) {
+						response = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
+					} else if (weeksFromNow == 1) {
+						response = GetString("ScheduleModule_RespondWeek_ScheduleNextWeek", info);
 					} else {
-						AvailabilityInfo dayAvailability = availabilities[(int) dow - 1];
-						cells[1][(int) dow - 1] = dayAvailability.StartOfAvailability.ToString("HH:mm") + " - " + dayAvailability.EndOfAvailability.ToString("HH:mm");
+						response = GetString("ScheduleModule_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
+					}
+
+					Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
+						/* Key select */ group => group.Key,
+						/* Val select */ group => group.ToArray()
+					);
+					int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
+
+					// Header
+					string[][] cells = new string[longestColumn + 2][];
+					cells[0] = Enumerable.Range(1, 5).Select(dow => ((DayOfWeek) dow).GetName(Culture)).ToArray(); // Outputs day names of Monday through Friday
+
+					// Initialize cells to empty strings
+					for (int i = 1; i < cells.Length; i++) {
+						cells[i] = new string[5];
+						for (int j = 0; j < cells[i].Length; j++) {
+							cells[i][j] = "";
+						}
+					}
+
+					foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+						for (int i = 0; i < kvp.Value.Length; i++) {
+							cells[i + 2][(int) kvp.Key - 1] = kvp.Value[i].Activity.DisplayText;
+						}
+					}
+
+					AvailabilityInfo[] availabilities;
+					availabilities = new AvailabilityInfo[5];
+					foreach (KeyValuePair<DayOfWeek, ScheduleRecord[]> kvp in dayRecords) {
+						availabilities[(int) kvp.Key - 1] = new AvailabilityInfo(kvp.Value.First().Start, kvp.Value.Last().End);
+					}
+
+					// Time of day start/end, and set to "---" if empty
+					for (DayOfWeek dow = DayOfWeek.Monday; dow <= DayOfWeek.Friday; dow++) {
+						if (!dayRecords.ContainsKey(dow)) {
+							cells[2][(int) dow - 1] = "---"; // dow - 1 because 0 is Sunday
+						} else {
+							AvailabilityInfo dayAvailability = availabilities[(int) dow - 1];
+							cells[1][(int) dow - 1] = dayAvailability.StartOfAvailability.ToString("HH:mm") + " - " + dayAvailability.EndOfAvailability.ToString("HH:mm");
+						}
+					}
+
+					response += Util.FormatTextTable(cells);
+				} else {
+					if (weeksFromNow == 0) {
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info);
+					} else if (weeksFromNow == 1) {
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info);
+					} else {
+						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info, weeksFromNow);
 					}
 				}
 
-				response += Util.FormatTextTable(cells);
-			} else {
-				if (weeksFromNow == 0) {
-					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info);
-				} else if (weeksFromNow == 1) {
-					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek", info);
-				} else {
-					response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info, weeksFromNow);
-				}
+				ReplyDeferred(response);
 			}
-
-			ReplyDeferred(response);
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
