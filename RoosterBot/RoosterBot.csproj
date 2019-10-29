@@ -58,6 +58,7 @@
     <Compile Include="Components\VersionPredicate.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Handlers\PostCommandHandler.cs" />
+    <Compile Include="Handlers\Sentience.cs" />
     <Compile Include="Modules\RoosterModuleBase.cs" />
     <Compile Include="Preconditions\CountAttribute.cs" />
     <Compile Include="Preconditions\RangeAttribute.cs" />
