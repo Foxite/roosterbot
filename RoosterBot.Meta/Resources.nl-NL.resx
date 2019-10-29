@@ -130,6 +130,9 @@
     <value>Deze bot is gebaseerd op RoosterBot {0}. De volgende componenten zijn geïnstalleerd:</value>
     <comment>0: bot version string</comment>
   </data>
+  <data name="InfoModule_InfoCommand_Summary" xml:space="preserve">
+    <value>Technische informatie over de bot.</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
     <value>Beschikbare categorieën zijn:</value>
   </data>

@@ -130,6 +130,9 @@
     <value>This bot is based on RoosterBot {0}. Installed components:</value>
     <comment>0: bot version string</comment>
   </data>
+  <data name="InfoModule_InfoCommand_Summary" xml:space="preserve">
+    <value>Technical information about the bot.</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
     <value>Available categories are:</value>
   </data>
