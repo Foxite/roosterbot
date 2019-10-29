@@ -38,6 +38,7 @@
     <Compile Include="DiagnosticModule.cs" />
     <Compile Include="FileGuildConfigProvider.cs" />
     <Compile Include="HelpModule.cs" />
+    <Compile Include="InfoModule.cs" />
     <Compile Include="MetaComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
