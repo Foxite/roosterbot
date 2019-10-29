@@ -12,7 +12,7 @@ namespace RoosterBot {
 		private readonly ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
 		private readonly ConfigService m_Config;
 
-		/// <param name="minimumMemorySeconds">How long it takes at least before old commands are deleted. Old commands are not deleted until a new one from the same user comes in.</param>
+		/// <param name="minimumMemorySeconds">Minimum time before old commands are forgotten. Old commands are not forgotten until a new one from the same user comes in.</param>
 		internal CommandResponseService(ConfigService config) {
 			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Config = config;

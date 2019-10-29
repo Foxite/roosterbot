@@ -16,7 +16,6 @@ namespace RoosterBot {
 	public sealed class RoosterCommandService : CommandService {
 		private readonly ResourceService m_ResourceService;
 
-		/// <param name="minimumMemorySeconds">How long it takes at least before old commands are deleted. Old commands are not deleted until a new one from the same user comes in.</param>
 		internal RoosterCommandService(ResourceService resourceService) {
 			m_ResourceService = resourceService;
 		}
