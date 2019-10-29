@@ -30,7 +30,7 @@ namespace RoosterBot {
 		}
 
 		private Task Client_Ready() {
-			Timer_Elapsed();
+			Timer_Elapsed(this, null);
 			m_Timer.Start();
 			return Task.CompletedTask;
 		}
