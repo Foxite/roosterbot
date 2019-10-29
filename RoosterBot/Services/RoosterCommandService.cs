@@ -22,7 +22,8 @@ namespace RoosterBot {
 
 		internal bool IsMessageCommand(IMessage message, string prefix, out int argPos) {
 			argPos = 0;
-			if (message.Source == MessageSource.User &&
+			if (message.Content != null && // Message objects created for MessageUpdated events only contain what was modified. Content may be null in certain cases. https://github.com/discord-net/Discord.Net/issues/1409
+				message.Source == MessageSource.User &&
 				message is IUserMessage userMessage &&
 				message.Content.Length > prefix.Length &&
 				userMessage.HasStringPrefix(prefix, ref argPos)) {
