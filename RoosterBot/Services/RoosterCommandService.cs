@@ -169,20 +169,12 @@ namespace RoosterBot {
 				foreach (Attribute attr in method.GetCustomAttributes()) {
 					switch (attr) {
 						case NameAttribute name:
-							commandBuilder.Name = m_ResourceService.ResolveString(culture, component, name.Text);
+							Logger.Warning("RoosterCommandService", "Attempted to add a NameAttribute to a localized command in module " + moduleBuilder.Name +
+								". NameAttributes are not used in localized modules.");
 							break;
 						case AliasAttribute alias:
-							string[] aliases;
-							if (alias.Aliases.Length == 1 && alias.Aliases[0].StartsWith("#")) {
-								aliases = m_ResourceService.ResolveString(culture, component, alias.Aliases[0]).Split('|');
-							} else {
-								aliases = alias.Aliases;
-							}
-							if (!string.IsNullOrWhiteSpace(moduleBuilder.Group)) {
-								moduleBuilder.AddAliases(aliases.Select(aliasText => moduleBuilder.Group + " " + aliasText).ToArray());
-							} else {
-								moduleBuilder.AddAliases(aliases);
-							}
+							Logger.Warning("RoosterCommandService", "Attempted to manually add aliases to localized command in module " + moduleBuilder.Name +
+								". These are automatically added according to the resource key of the command name, followed by `_Aliases`, and split by '|'.");
 							break;
 						case PriorityAttribute priority:
 							commandBuilder.WithPriority(priority.Priority);
@@ -202,8 +194,11 @@ namespace RoosterBot {
 					}
 				}
 
-				if (!commandBuilder.Aliases.Any() && commandBuilder.Name.StartsWith("#")) {
-					commandBuilder.AddAliases(m_ResourceService.ResolveString(culture, component, commandBuilder.Name + "_Aliases").Split('|'));
+				if (commandBuilder.Aliases.Count == 1 && commandBuilder.Name.StartsWith("#")) {
+					string localizedAliases = m_ResourceService.ResolveString(culture, component, commandBuilder.Name + "_Aliases");
+					if (localizedAliases.Length != 0) {
+						commandBuilder.AddAliases(localizedAliases.Split('|'));
+					}
 				}
 				if (string.IsNullOrWhiteSpace(commandBuilder.Name)) {
 					commandBuilder.Name = method.Name;
