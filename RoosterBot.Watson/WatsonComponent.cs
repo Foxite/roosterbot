@@ -23,14 +23,16 @@ namespace RoosterBot.Watson {
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> unused) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Watson.Resources");
+			ResourceService resourceService = services.GetService<ResourceService>();
+			resourceService.RegisterResources("RoosterBot.Watson.Resources");
+
 			new WatsonHandler(
 				services.GetService<DiscordSocketClient>(),
 				services.GetService<CommandResponseService>(),
 				services.GetService<GuildConfigService>(),
 				new WatsonClient(m_WatsonKey, m_WatsonID),
 				commandService,
-				services.GetService<ResourceService>());
+				resourceService);
 			
 			help.AddHelpSection(this, "#WatsonComponent_HelpName", "#WatsonComponent_HelpText");
 

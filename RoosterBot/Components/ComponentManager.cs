@@ -68,10 +68,24 @@ namespace RoosterBot {
 			List<Assembly> assemblies = new List<Assembly>();
 			foreach (string file in assemblyPaths) {
 				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+
+				List<string> folders = path.Split('\\').ToList();
+				for (int i = 0; i < folders.Count; i++) {
+					if (folders[i] == "..") {
+						folders.RemoveAt(i);
+						folders.RemoveAt(i - 1);
+						i--;
+					}
+				}
+				path = Path.Combine(folders.ToArray());
+
 				if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".dll") {
 					Logger.Debug("ComponentManager", "Loading assembly " + file);
-					
-					assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path)));
+
+					//AssemblyName assemblyRef = AssemblyName.GetAssemblyName(path);
+					//Assembly assembly = AppDomain.CurrentDomain.Load(assemblyRef);
+					Assembly assembly = Assembly.LoadFrom(path);
+					assemblies.Add(assembly);
 				} else {
 					Logger.Error("ComponentManager", "Component " + file + " does not exist or it is not a DLL file");
 				}
