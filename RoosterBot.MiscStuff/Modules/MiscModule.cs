@@ -5,7 +5,7 @@ namespace RoosterBot.MiscStuff {
 	public class MiscModule : RoosterModuleBase {
 		public PrankService PrankService { get; set; }
 
-		[Command("dank u"), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "goed zo", "goedzo", "thanks", "thx")]
+		[Command("dank u", true), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "goed zo", "goedzo", "thanks", "thx")]
 		public async Task ThankYouCommand() {
 			string response;
 			if (PrankService.GetAlwaysJoram(Context.User.Id)) {
