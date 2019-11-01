@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -12,19 +14,19 @@ namespace RoosterBot.Schedule {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
 
-		private MemoryScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
+		private MemoryScheduleProvider(ulong[] allowedGuilds, string name, List<ScheduleRecord> schedule) : base(allowedGuilds) {
+			m_Name = name;
+			m_Schedule = schedule;
+		}
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
 		public static async Task<MemoryScheduleProvider> CreateAsync(string name, ScheduleReader reader, ulong[] allowedGuildIds) {
-			MemoryScheduleProvider service = new MemoryScheduleProvider(allowedGuildIds) {
-				m_Name = name,
-				m_Schedule = await reader.GetSchedule() // Unfortunately we can't have async constructors (for good reasons), so this'll do.
-			};
-			return service;
+			// Unfortunately we can't have async constructors (for good reasons), so this'll do.
+			return new MemoryScheduleProvider(allowedGuildIds, name, await reader.GetSchedule());
 		}
 
 		/// <returns>null if the class has no activity currently ongoing.</returns>
-		public override Task<ScheduleRecord> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
+		public override Task<ScheduleRecord?> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
 			DateTime now = DateTime.Now;
 			bool sawRecordForClass = false;
 
@@ -45,7 +47,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public override Task<ScheduleRecord> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
+		public override Task<ScheduleRecord?> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
 			DateTime target = DateTime.Now + timespan;
 			bool sawRecordForClass = false;
 

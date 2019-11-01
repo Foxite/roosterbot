@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleService {
@@ -13,7 +11,8 @@ namespace RoosterBot.Schedule {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();
 		}
 
-		public Task<ScheduleRecord> GetCurrentRecord(IdentifierInfo identifier, RoosterCommandContext context) {
+		#nullable enable
+		public Task<ScheduleRecord?> GetCurrentRecord(IdentifierInfo identifier, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetCurrentRecordAsync(identifier);
 		}
 
@@ -33,13 +32,14 @@ namespace RoosterBot.Schedule {
 			return GetSchedule(identifier, context).GetWeekAvailabilityAsync(identifier, weeksFromNow);
 		}
 
-		public Task<ScheduleRecord> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, RoosterCommandContext context) {
+		public Task<ScheduleRecord?> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetRecordAfterTimeSpanAsync(identifier, timespan);
 		}
 		
 		public Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetWeekRecordsAsync(identifier, weeksFromNow);
 		}
+		#nullable disable // Dictionary.TryGetValue is apparently null-oblivious, despite being an official supported API in .NET Core 3.0, so we'll have to stop here.
 
 		private ScheduleProvider GetSchedule(IdentifierInfo info, RoosterCommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider> list)) {
