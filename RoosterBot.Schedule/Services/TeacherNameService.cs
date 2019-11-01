@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,31 +18,30 @@ namespace RoosterBot.Schedule {
 			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
-				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
-					await csv.ReadAsync();
-					csv.ReadHeader();
+				using CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
+				await csv.ReadAsync();
+				csv.ReadHeader();
 
-					List<TeacherInfo> currentRecords = new List<TeacherInfo>();
+				List<TeacherInfo> currentRecords = new List<TeacherInfo>();
 
-					while (await csv.ReadAsync()) {
-						TeacherInfo record = new TeacherInfo() {
-							Abbreviation = csv["Abbreviation"],
-							FullName = csv["FullName"],
-							NoLookup = bool.Parse(csv["NoLookup"]),
-							DiscordUser = csv["DiscordUser"]
-						};
-						string altSpellingsString = csv["AltSpellings"];
+				while (await csv.ReadAsync()) {
+					TeacherInfo record = new TeacherInfo() {
+						Abbreviation = csv["Abbreviation"],
+						FullName = csv["FullName"],
+						NoLookup = bool.Parse(csv["NoLookup"]),
+						DiscordUser = csv["DiscordUser"]
+					};
+					string altSpellingsString = csv["AltSpellings"];
 
-						if (altSpellingsString != "") {
-							record.AltSpellings = altSpellingsString.Split(',');
-						};
+					if (!string.IsNullOrEmpty(altSpellingsString)) {
+						record.AltSpellings = altSpellingsString.Split(',');
+					};
 
-						currentRecords.Add(record);
-					}
+					currentRecords.Add(record);
+				}
 
-					lock (m_Records) {
-						m_Records.Add(new GuildTeacherList(allowedGuilds, currentRecords));
-					}
+				lock (m_Records) {
+					m_Records.Add(new GuildTeacherList(allowedGuilds, currentRecords));
 				}
 			}
 			Logger.Info("TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
@@ -68,6 +69,7 @@ namespace RoosterBot.Schedule {
 			return records.ToArray();
 		}
 		
+		// TODO stop returning TeacherMatch, return only the best TeacherInfo because nothing actually cares about anything else
 		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
@@ -86,7 +88,7 @@ namespace RoosterBot.Schedule {
 			return records.AsReadOnly();
 		}
 
-		public TeacherInfo GetTeacherByDiscordUser(IGuild guild, IUser user) {
+		public TeacherInfo? GetTeacherByDiscordUser(IGuild guild, IUser user) {
 			string findDiscordUser = $"{user.Username}#{user.Discriminator}";
 			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(guild.Id)) {
 				if (findDiscordUser == teacher.DiscordUser) {

@@ -7,7 +7,7 @@ namespace RoosterBot.Schedule {
 	public abstract class GuildSpecificInfo {
 		private ulong[] m_AllowedGuilds;
 
-		public GuildSpecificInfo(ulong[] allowedGuilds) {
+		protected GuildSpecificInfo(ulong[] allowedGuilds) {
 			m_AllowedGuilds = allowedGuilds;
 		}
 
