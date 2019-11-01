@@ -141,8 +141,7 @@ namespace RoosterBot {
 		private async Task OnClientReady() {
 			try {
 				await m_ConfigService.LoadDiscordInfo(m_Client);
-				// TODO (Temporary) Commented for halloween
-				//await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
+				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 				Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
