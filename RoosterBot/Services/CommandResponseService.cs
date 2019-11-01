@@ -21,7 +21,7 @@ namespace RoosterBot {
 		public void AddResponse(IUserMessage userCommand, IUserMessage botResponse) {
 			// Remove previous commands from this user if they are older than the minimum memory
 			IEnumerable<ulong> oldCommandIds = m_Messages.Where((kvp) => {
-				return (DateTime.Now - kvp.Value.Command.Timestamp.UtcDateTime).TotalSeconds > m_Config.MinimumMemorySeconds && kvp.Value.Command.Author.Id == userCommand.Author.Id;
+				return (DateTime.UtcNow - kvp.Value.Command.Timestamp.UtcDateTime).TotalSeconds > m_Config.MinimumMemorySeconds && kvp.Value.Command.Author.Id == userCommand.Author.Id;
 			}).Select(kvp => kvp.Key);
 
 			foreach (ulong commandId in oldCommandIds) {
