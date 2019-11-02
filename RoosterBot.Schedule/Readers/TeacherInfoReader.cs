@@ -16,9 +16,9 @@ namespace RoosterBot.Schedule {
 			} else {
 				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
 				TeacherNameService tns = services.GetService<TeacherNameService>();
-				IEnumerable<TeacherMatch> result = null;
+				IEnumerable<TeacherMatch>? result = null;
 
-				IUser user = null;
+				IUser? user = null;
 				if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
 					user = await context.Guild.GetUserAsync(id);
 				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(culture, "IdentifierInfoReader_Self")) {
@@ -30,9 +30,12 @@ namespace RoosterBot.Schedule {
 						result = tns.Lookup(context.Guild.Id, input);
 					}
 				} else {
-					TeacherInfo teacher = tns.GetTeacherByDiscordUser(context.Guild, user);
-					if (teacher != null) {
-						result = Util.Pack(new TeacherMatch(teacher, 1));
+					IGuild? lookupGuild = context.Guild ?? context.UserGuild;
+					if (lookupGuild != null) {
+						TeacherInfo? teacher = tns.GetTeacherByDiscordUser(lookupGuild, user);
+						if (teacher != null) {
+							result = Util.Pack(new TeacherMatch(teacher, 1));
+						}
 					}
 				}
 

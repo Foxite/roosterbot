@@ -13,12 +13,17 @@ namespace RoosterBot.Schedule {
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
-		public LastScheduleCommandService LSCService { get; set; }
-		public ScheduleService Schedules { get; set; }
+		private LastScheduleCommandService LSCService { get; }
+		private ScheduleService Schedules { get; }
+
+		public ScheduleModule(LastScheduleCommandService lSCService, ScheduleService schedules) {
+			LSCService = lSCService;
+			Schedules = schedules;
+		}
 
 		#region Commands
 		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultCurrentCommand_Summary")]
-		public async Task CurrentCommand([Remainder] IdentifierInfo info = null) {
+		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
@@ -40,7 +45,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultNextCommand_Summary")]
-		public async Task NextCommand([Remainder] IdentifierInfo info = null) {
+		public async Task NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
@@ -58,32 +63,32 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultWeekdayCommand_Summary")]
-		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo info = null) {
+		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTomorrowCommand_Summary")]
-		public async Task TodayCommand([Remainder] IdentifierInfo info = null) {
+		public async Task TodayCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
 		}
 
 		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTodayCommand_Summary")]
-		public async Task TomorrowCommand([Remainder] IdentifierInfo info = null) {
+		public async Task TomorrowCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
 		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
+		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 0);
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo info = null) {
+		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
 		}
 
 		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
-		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo info = null) {
+		public async Task ShowFutureCommand(int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName")] string unit, [Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				unit = unit.ToLower();
@@ -121,7 +126,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
 			LSCService.OnRequestByUser(Context, identifier, record);
 			return ret;
@@ -130,7 +135,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord record) {
+		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord? record) {
 			base.ReplyDeferred(message);
 			LSCService.OnRequestByUser(Context, identifier, record);
 		}
@@ -140,7 +145,7 @@ namespace RoosterBot.Schedule {
 			LSCService.RemoveLastQuery(Context);
 		}
 
-		protected async override Task FatalError(string message, Exception exception = null) {
+		protected async override Task FatalError(string message, Exception? exception = null) {
 			await base.FatalError(message, exception);
 			LSCService.RemoveLastQuery(Context);
 		}
@@ -157,7 +162,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		private async Task RespondDay(IdentifierInfo info, DateTime date) {
+		private async Task RespondDay(IdentifierInfo? info, DateTime date) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
@@ -209,7 +214,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected async Task RespondWeek(IdentifierInfo info, int weeksFromNow) {
+		protected async Task RespondWeek(IdentifierInfo? info, int weeksFromNow) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				string response;
@@ -279,8 +284,8 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
-			ScheduleCommandInfo query = LSCService.GetLastCommandForContext(Context);
-			if (query.Equals(default(ScheduleCommandInfo))) {
+			LastScheduleCommandInfo? query = LSCService.GetLastCommandForContext(Context);
+			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
 				ScheduleRecord nextRecord;
@@ -331,7 +336,7 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Convenience
-		private async Task<IdentifierInfo> ResolveNullInfo(IdentifierInfo info) {
+		private async Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
 				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
 				if (infoResult.IsSuccess) {

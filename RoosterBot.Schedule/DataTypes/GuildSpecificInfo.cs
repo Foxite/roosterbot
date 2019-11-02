@@ -1,13 +1,14 @@
 ﻿using Discord;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
 namespace RoosterBot.Schedule {
 	public abstract class GuildSpecificInfo {
-		private ulong[] m_AllowedGuilds;
+		private IEnumerable<ulong> m_AllowedGuilds;
 
-		protected GuildSpecificInfo(ulong[] allowedGuilds) {
+		protected GuildSpecificInfo(IEnumerable<ulong> allowedGuilds) {
 			m_AllowedGuilds = allowedGuilds;
 		}
 

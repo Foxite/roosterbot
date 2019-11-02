@@ -1,28 +1,29 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
 	public class LastScheduleCommandService {
-		private ConcurrentDictionary<SCIKey, ScheduleCommandInfo> m_SCIs;
+		private ConcurrentDictionary<SCIKey, LastScheduleCommandInfo> m_SCIs;
 
 		public LastScheduleCommandService() {
-			m_SCIs = new ConcurrentDictionary<SCIKey, ScheduleCommandInfo>();
+			m_SCIs = new ConcurrentDictionary<SCIKey, LastScheduleCommandInfo>();
 		}
 
-		public ScheduleCommandInfo GetLastCommandForContext(ICommandContext context) {
-			if (m_SCIs.TryGetValue(new SCIKey(context), out ScheduleCommandInfo previous)) {
+		public LastScheduleCommandInfo? GetLastCommandForContext(ICommandContext context) {
+			if (m_SCIs.TryGetValue(new SCIKey(context), out LastScheduleCommandInfo? previous)) {
 				return previous;
 			} else {
-				return default(ScheduleCommandInfo);
+				return null;
 			}
 		}
 
-		public void OnRequestByUser(ICommandContext context, IdentifierInfo identifier, ScheduleRecord record) {
-			if (identifier != null) {
-				m_SCIs[new SCIKey(context)] = new ScheduleCommandInfo(identifier, record);
-			} else {
+		public void OnRequestByUser(ICommandContext context, IdentifierInfo? identifier, ScheduleRecord? record) {
+			if (identifier is null) {
 				m_SCIs.TryRemove(new SCIKey(context), out _);
+			} else {
+				m_SCIs[new SCIKey(context)] = new LastScheduleCommandInfo(identifier, record);
 			}
 		}
 
@@ -39,27 +40,22 @@ namespace RoosterBot.Schedule {
 				User = context.User;
 			}
 
-			public override bool Equals(object obj) {
+			public override bool Equals(object? obj) {
 				return
 					obj is SCIKey key &&
 					key.Channel.Id == Channel.Id &&
 					key.User.Id == User.Id;
 			}
 
-			public override int GetHashCode() {
-				var hashCode = -400689418;
-				hashCode = hashCode * -1521134295 + Channel.Id.GetHashCode(); // It turns out that no Discord entity implements GetHashCode, but SnowflakeEntites can be uniquely identified
-				hashCode = hashCode * -1521134295 + User.Id.GetHashCode();    //  by their ID. The only thing is that the ID is a long, and we must return int. But that's not a real problem.
-				return hashCode;
-			}
+			public override int GetHashCode() => HashCode.Combine(Channel, User);
 		}
 	}
 
-	public struct ScheduleCommandInfo {
-		public ScheduleRecord Record;
-		public IdentifierInfo Identifier;
+	public class LastScheduleCommandInfo {
+		public IdentifierInfo Identifier { get; set; }
+		public ScheduleRecord? Record { get; set; }
 
-		public ScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord record) {
+		internal LastScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord? record) {
 			Identifier = identifier;
 			Record = record;
 		}
