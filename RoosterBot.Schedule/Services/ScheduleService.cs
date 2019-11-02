@@ -11,7 +11,6 @@ namespace RoosterBot.Schedule {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();
 		}
 
-		#nullable enable
 		public Task<ScheduleRecord?> GetCurrentRecord(IdentifierInfo identifier, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetCurrentRecordAsync(identifier);
 		}
@@ -39,11 +38,10 @@ namespace RoosterBot.Schedule {
 		public Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetWeekRecordsAsync(identifier, weeksFromNow);
 		}
-		#nullable disable // Dictionary.TryGetValue is apparently null-oblivious, despite being an official supported API in .NET Core 3.0, so we'll have to stop here.
 
 		private ScheduleProvider GetSchedule(IdentifierInfo info, RoosterCommandContext context) {
-			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider> list)) {
-				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {context.Guild.Name}");
+			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider>? list)) {
+				return list!.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.Guild)) ?? throw new NoAllowedGuildsException($"No schedules are allowed for guild {context.Guild.Name}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
@@ -58,8 +56,8 @@ namespace RoosterBot.Schedule {
 				throw new ArgumentException($"A schedule was already registered for {infoType.Name}.");
 			}
 
-			if (m_Schedules.TryGetValue(infoType, out List<ScheduleProvider> list)) {
-				list.Add(schedule);
+			if (m_Schedules.TryGetValue(infoType, out List<ScheduleProvider>? list)) {
+				list!.Add(schedule);
 			} else {
 				m_Schedules[infoType] = new List<ScheduleProvider>() {
 					schedule

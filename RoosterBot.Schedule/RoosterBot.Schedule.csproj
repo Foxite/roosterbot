@@ -13,6 +13,7 @@
   </PropertyGroup>
 	
   <PropertyGroup>
+	  <Nullable>enable</Nullable>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
