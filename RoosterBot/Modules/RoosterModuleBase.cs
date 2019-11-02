@@ -184,6 +184,11 @@ namespace RoosterBot {
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
 		public IReadOnlyCollection<IUserMessage> Responses { get; }
+
+		/// <summary>
+		/// If IsPrivate is true, then this guild will be suitable to use for config information. It is the first mutual guild between the user and the bot user.
+		/// </summary>
+		public IGuild? UserGuild { get; }
 		
 		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage> originalResponses) {
 			Client = client;
@@ -191,8 +196,12 @@ namespace RoosterBot {
 			User = message.Author;
 			Channel = message.Channel;
 			IsPrivate = Channel is IPrivateChannel;
-			Guild = IsPrivate ? (User as SocketUser)?.MutualGuilds.First() : (Channel as IGuildChannel).Guild;
+			Guild = (Channel as IGuildChannel)?.Guild;
 			Responses = originalResponses;
+
+			if (IsPrivate && User is SocketUser socketUser) {
+				Guild = socketUser.MutualGuilds.FirstOrDefault();
+			}
 		}
 
 		public override string ToString() {
