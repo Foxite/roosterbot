@@ -105,8 +105,6 @@ namespace RoosterBot {
 			}
 
 			m_Replied = true;
-
-			CommandResponses.AddResponse(Context.Message, ret);
 			return ret;
 		}
 

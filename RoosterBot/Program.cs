@@ -21,7 +21,6 @@ namespace RoosterBot {
 		private DiscordSocketClient m_Client;
 		private ConfigService m_ConfigService;
 		private NotificationService m_NotificationService;
-		private Sentience m_Sentience;
 
 		public ComponentManager Components { get; private set; }
 
@@ -76,7 +75,6 @@ namespace RoosterBot {
 
 			Logger.Info("Main", "Stopping program");
 
-			m_Sentience.Dispose();
 			await m_Client.StopAsync();
 			await m_Client.LogoutAsync();
 
@@ -128,9 +126,6 @@ namespace RoosterBot {
 			new DeletedCommandHandler(m_Client, crs);
 			new DeadlockHandler(m_Client, m_NotificationService, 60000);
 
-			// TODO (Temporary) Halloween only
-			m_Sentience = new Sentience(m_Client);
-
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
 				.AddSingleton(m_NotificationService)
@@ -146,8 +141,7 @@ namespace RoosterBot {
 		private async Task OnClientReady() {
 			try {
 				await m_ConfigService.LoadDiscordInfo(m_Client);
-				// TODO (Temporary) Commented for halloween
-				//await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
+				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
 				Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
 
 				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
