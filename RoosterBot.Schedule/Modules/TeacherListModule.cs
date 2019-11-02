@@ -14,7 +14,7 @@ namespace RoosterBot.Schedule {
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords(Context.Guild.Id);
 			} else {
-				records = Teachers.Lookup(Context.Guild.Id, name).Select(match => match.Teacher);
+				records = Teachers.Lookup(Context.Guild.Id, name);
 			}
 
 			if (!records.Any()) {

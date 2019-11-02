@@ -255,6 +255,18 @@ namespace RoosterBot {
 		#endregion
 
 		#region LINQ
+		/// <summary>
+		/// Returns the params list as an IEnumerable.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="items"></param>
+		/// <returns></returns>
+		public static IEnumerable<T> Pack<T>(params T[] items) {
+			for (int i = 0; i < items.Length; i++) {
+				yield return items[i];
+			}
+		}
+
 		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
 			if (list.Count > 0) {
 				LinkedListNode<T> node = list.First;

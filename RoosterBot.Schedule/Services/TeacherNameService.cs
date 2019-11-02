@@ -69,7 +69,6 @@ namespace RoosterBot.Schedule {
 			return records.ToArray();
 		}
 		
-		// TODO stop returning TeacherMatch, return only the best TeacherInfo because nothing actually cares about anything else
 		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
@@ -115,15 +114,15 @@ namespace RoosterBot.Schedule {
 				m_Teachers = teachers;
 			}
 		}
+	}
 
-		public class TeacherMatch {
-			public TeacherInfo Teacher { get; }
-			public float Score { get; }
+	public class TeacherMatch {
+		public TeacherInfo Teacher { get; }
+		public float Score { get; }
 
-			public TeacherMatch(TeacherInfo teacher, float score) {
-				Teacher = teacher;
-				Score = score;
-			}
+		public TeacherMatch(TeacherInfo teacher, float score) {
+			Teacher = teacher;
+			Score = score;
 		}
 	}
 }
