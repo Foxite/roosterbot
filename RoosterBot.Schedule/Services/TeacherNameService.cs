@@ -1,5 +1,4 @@
-﻿#nullable enable
-
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,17 +24,21 @@ namespace RoosterBot.Schedule {
 				List<TeacherInfo> currentRecords = new List<TeacherInfo>();
 
 				while (await csv.ReadAsync()) {
-					TeacherInfo record = new TeacherInfo() {
-						Abbreviation = csv["Abbreviation"],
-						FullName = csv["FullName"],
-						NoLookup = bool.Parse(csv["NoLookup"]),
-						DiscordUser = csv["DiscordUser"]
-					};
 					string altSpellingsString = csv["AltSpellings"];
+					string[]? altSpellings = null;
 
 					if (!string.IsNullOrEmpty(altSpellingsString)) {
-						record.AltSpellings = altSpellingsString.Split(',');
+						altSpellings = altSpellingsString.Split(',');
 					};
+
+					TeacherInfo record = new TeacherInfo(
+						isUnknown: false,
+						abbreviation: csv["Abbreviation"],
+						fullName: csv["FullName"],
+						noLookup: bool.Parse(csv["NoLookup"]),
+						discordUser: csv["DiscordUser"],
+						altSpellings ?? Array.Empty<string>()
+					);
 
 					currentRecords.Add(record);
 				}
@@ -58,12 +61,14 @@ namespace RoosterBot.Schedule {
 				if (record != null) {
 					records.Add(record);
 				} else if (!string.IsNullOrWhiteSpace(abbrs[i])) {
-					records.Add(new TeacherInfo() {
-						IsUnknown = true,
-						Abbreviation = abbrs[i],
-						FullName = '"' + abbrs[i] + '"',
-						NoLookup = true
-					});
+					records.Add(new TeacherInfo(
+						isUnknown: true,
+						abbreviation: abbrs[i],
+						fullName: '"' + abbrs[i] + '"',
+						noLookup: true,
+						discordUser: null,
+						altSpellings: Array.Empty<string>()
+					));
 				}
 			}
 			return records.ToArray();

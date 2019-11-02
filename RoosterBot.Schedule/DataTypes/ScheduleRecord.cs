@@ -1,17 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public abstract class ScheduleRecord {
-		public ActivityInfo Activity { get; set; }
-		public DateTime Start { get; set; }
+		public ActivityInfo Activity { get; }
+		public DateTime Start { get; }
 		public DateTime End { get; set; }
-		public StudentSetInfo[] StudentSets { get; set; }
-		public TeacherInfo[] StaffMember { get; set; }
-		public RoomInfo[] Room { get; set; }
-		public DateTime? BreakStart { get; set; }
-		public DateTime? BreakEnd { get; set; }
+		public IReadOnlyList<StudentSetInfo> StudentSets { get; }
+		public IReadOnlyList<TeacherInfo> StaffMember { get; }
+		public IReadOnlyList<RoomInfo> Room { get; }
+		public BreakTime? Break { get; set; }
+
+		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room) {
+			Activity = activity;
+			Start = start;
+			End = end;
+			StudentSets = studentSets;
+			StaffMember = staffMember;
+			Room = room;
+		}
 
 		public TimeSpan Duration => End - Start;
 		public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ClassName));
@@ -21,12 +30,22 @@ namespace RoosterBot.Schedule {
 
 		public override string ToString() {
 			return $"{StudentSetsString}: {Activity.ScheduleCode} in {RoomString} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
-				$"{(BreakStart.HasValue ? "no break" : ("a break from " + BreakStart.Value.ToString() + " to " + BreakEnd.Value.ToString()))}) to {End.ToString()} by {StaffMember}";
+				$"{(Break == null ? "no break" : ("a break from " + Break.Start.ToString() + " to " + Break.End.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 
 		/// <summary>
 		/// Convert this instance to a string that can be sent to Discord.
 		/// </summary>
 		public abstract Task<string> PresentAsync(IdentifierInfo relevantIdentifier);
+	}
+
+	public class BreakTime {
+		public DateTime Start { get; }
+		public DateTime End { get; }
+
+		public BreakTime(DateTime start, DateTime end) {
+			Start = start;
+			End = end;
+		}
 	}
 }
