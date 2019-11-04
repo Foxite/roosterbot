@@ -114,7 +114,7 @@ namespace RoosterBot {
 		}
 
 		protected virtual async Task FatalError(string message, Exception exception = null) {
-			string report = $"Fatal error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild?.Name ?? "DM"} channel {Context.Channel.Name}: {message}";
+			string report = $"Fatal error executing {Context}\nAttached error message: {message}";
 
 			Log.Error(report, exception);
 
