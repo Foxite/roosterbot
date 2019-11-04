@@ -47,16 +47,16 @@ namespace RoosterBot.Schedule.GLU {
 						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], @"hh\:mm", culture);
 						DateTime end = date + TimeSpan.ParseExact(csv["EndTime"], @"hh\:mm", culture); // Under the assumption that nobody works overnight
 
-						ScheduleRecord record = new GLUScheduleRecord() {
-							Activity = new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
-							StaffMember = m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-							StudentSets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo() { ClassName = code }).ToArray(),
+						ScheduleRecord record = new GLUScheduleRecord(
+							activity:  new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
+							staffMember: m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
+							studentSets: csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo(code)).ToArray(),
 							// Rooms often have " (0)" behind them. unknown reason.
 							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							Room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo() { Room = code }).ToArray(),
-							Start = start,
-							End = end
-						};
+							room: csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo(code)).ToArray(),
+							start: start,
+							end: end
+						);
 
 						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord lastRecord) &&
 							record.Start.Date == lastRecord.Start.Date &&
@@ -64,8 +64,7 @@ namespace RoosterBot.Schedule.GLU {
 							record.StaffMember.SequenceEqual(lastRecord.StaffMember) &&
 							record.Room.SequenceEqual(lastRecord.Room)) {
 							// Note: This does not support records with multiple breaks. If that happens, it will result in only the last break being displayed.
-							lastRecord.BreakStart = lastRecord.End;
-							lastRecord.BreakEnd = record.Start;
+							lastRecord.Break = new BreakTime(lastRecord.End, record.Start);
 							lastRecord.End = record.End;
 						} else {
 							lastRecords[record.Activity] = record;

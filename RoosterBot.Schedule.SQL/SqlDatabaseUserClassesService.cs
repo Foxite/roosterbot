@@ -82,9 +82,7 @@ namespace RoosterBot.Schedule.SQL {
 			if (str == null) {
 				return null;
 			} else {
-				return new StudentSetInfo() {
-					ClassName = str
-				};
+				return new StudentSetInfo(str);
 			}
 		}
 

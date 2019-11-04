@@ -91,13 +91,9 @@ namespace RoosterBot.Schedule.GLU {
 				input = input.ToUpper();
 				IdentifierInfo result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {
-					result = new StudentSetInfo() {
-						ClassName = input
-					};
+					result = new StudentSetInfo(input);
 				} else if (m_RoomRegex.IsMatch(input)) {
-					result = new RoomInfo() {
-						Room = input
-					};
+					result = new RoomInfo(input);
 				}
 				return Task.FromResult(result);
 			}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,19 +9,22 @@ namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
+		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
+			: base(activity, start, end, studentSets, staffMember, room) { }
+
 		public override Task<string> PresentAsync(IdentifierInfo info) {
 			string ret = $":notepad_spiral: {Activity.DisplayText}\n";
 
 			if (Activity.ScheduleCode != "stdag doc") {
 				if (Activity.ScheduleCode != "pauze") {
 					if (!(info is TeacherInfo)) {
-						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
+						if (StaffMember.Count == 1 && StaffMember[0].IsUnknown) {
 							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
 						}
 
 						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
 						if (!string.IsNullOrWhiteSpace(teachers)) {
-							if (StaffMember.Length == 1 && StaffMember[0].Abbreviation == "JWO") {
+							if (StaffMember.Count == 1 && StaffMember[0].Abbreviation == "JWO") {
 								ret += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
 								ret += $":bust_in_silhouette: {teachers}\n";
@@ -51,8 +55,8 @@ namespace RoosterBot.Schedule.GLU {
 					ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
 				}
 
-				if (BreakStart.HasValue) {
-					ret += $"\n:coffee: {BreakStart.Value.ToString("HH:mm")} - {BreakEnd.Value.ToString("HH:mm")}\n";
+				if (Break != null) {
+					ret += $"\n:coffee: {Break.Start.ToString("HH:mm")} - {Break.End.ToString("HH:mm")}\n";
 				}
 			}
 

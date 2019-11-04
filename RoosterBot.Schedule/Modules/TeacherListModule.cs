@@ -6,8 +6,12 @@ using Discord.Commands;
 namespace RoosterBot.Schedule {
 	[Name("#TeacherListModule_Name")]
 	public class TeacherListModule : RoosterModuleBase {
-		public TeacherNameService Teachers { get; set; }
-		
+		private TeacherNameService Teachers { get; }
+
+		public TeacherListModule(TeacherNameService teachers) {
+			Teachers = teachers;
+		}
+
 		[Command("leraren"), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
 		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
@@ -37,7 +41,7 @@ namespace RoosterBot.Schedule {
 					cells[recordIndex] = new string[3];
 					cells[recordIndex][0] = record.FullName;
 					cells[recordIndex][1] = record.Abbreviation;
-					cells[recordIndex][2] = record.DiscordUser;
+					cells[recordIndex][2] = record.DiscordUser ?? "";
 
 					recordIndex++;
 				}

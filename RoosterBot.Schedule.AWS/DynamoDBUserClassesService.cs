@@ -29,7 +29,7 @@ namespace RoosterBot.Schedule.AWS {
 		public async Task<StudentSetInfo> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document != null) {
-				return new StudentSetInfo() { ClassName = document["class"].AsString() };
+				return new StudentSetInfo(document["class"].AsString());
 			} else {
 				return null;
 			}
@@ -46,7 +46,7 @@ namespace RoosterBot.Schedule.AWS {
 				UserChangedClass?.Invoke(user, null, ssi);
 				return null;
 			} else {
-				StudentSetInfo old = new StudentSetInfo() { ClassName = document["class"] };
+				StudentSetInfo old = new StudentSetInfo(document["class"]);
 				document["class"] = ssi.ScheduleCode;
 				await m_Table.UpdateItemAsync(document);
 				UserChangedClass?.Invoke(user, null, ssi);
