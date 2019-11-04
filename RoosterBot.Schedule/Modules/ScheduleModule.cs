@@ -34,6 +34,7 @@ namespace RoosterBot.Schedule {
 						ReplyDeferred(response, info, record);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
+						await NextCommand(info);
 					}
 				}
 			}
