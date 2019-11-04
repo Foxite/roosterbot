@@ -367,6 +367,9 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
+			ReturnValue<T> failure = new ReturnValue<T>() {
+				Success = false
+			};
 			try {
 				return new ReturnValue<T>() {
 					Success = true,
@@ -374,24 +377,16 @@ namespace RoosterBot.Schedule {
 				};
 			} catch (IdentifierNotFoundException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
+				return failure;
 			} catch (RecordsOutdatedException) {
 				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
+				return failure;
 			} catch (NoAllowedGuildsException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
+				return failure;
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
-				return new ReturnValue<T>() {
-					Success = false
-				};
+				return failure;
 			}
 		}
 		#endregion
