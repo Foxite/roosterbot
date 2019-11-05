@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,16 +12,18 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RoosterBot {
 	public sealed class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
+#nullable disable
 		public static Program Instance { get; private set; }
 
-		private bool m_BeforeStart;
-		private bool m_StopFlagSet;
-		private bool m_VersionNotReported = true;
+		public ComponentManager Components { get; private set; }
+		
 		private DiscordSocketClient m_Client;
 		private ConfigService m_ConfigService;
 		private NotificationService m_NotificationService;
-
-		public ComponentManager Components { get; private set; }
+#nullable restore
+		private bool m_BeforeStart;
+		private bool m_StopFlagSet;
+		private bool m_VersionNotReported = true;
 
 		private Program() { }
 
@@ -157,15 +158,14 @@ namespace RoosterBot {
 				}
 
 				// Find an open Ready pipe and report
-				NamedPipeClientStream pipeClient = null;
+				NamedPipeClientStream? pipeClient = null;
 
 				try {
 					pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
 					await pipeClient.ConnectAsync(1);
-					using (StreamWriter sw = new StreamWriter(pipeClient)) {
-						pipeClient = null;
-						sw.WriteLine("ready");
-					}
+					using StreamWriter sw = new StreamWriter(pipeClient);
+					pipeClient = null;
+					sw.WriteLine("ready");
 				} catch (TimeoutException) {
 					// Pass
 				} finally {
@@ -210,7 +210,7 @@ namespace RoosterBot {
 						Task.Delay(500).ContinueWith((t) => {
 							// Pipe connection by stop executable
 							if (pipeServer.IsConnected) {
-								string input = sr.ReadLine();
+								string? input = sr.ReadLine();
 								if (input == "stop") {
 									Logger.Info("Main", "Stop command received from external process");
 									keepRunning = false;
