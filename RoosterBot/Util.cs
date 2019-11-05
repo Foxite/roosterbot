@@ -21,13 +21,10 @@ namespace RoosterBot {
 		/// </summary>
 		/// From https://stackoverflow.com/a/4405876/3141917
 		public static string FirstCharToUpper(this string input) {
-			switch (input) {
-				case null:
-					throw new ArgumentNullException(nameof(input));
-				case "":
-					throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-				default:
-					return input.First().ToString().ToUpper() + input.Substring(1);
+			if (input.Length == 0) {
+				throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+			} else {
+				return input[0].ToString().ToUpper() + input.Substring(1);
 			}
 		}
 
@@ -92,7 +89,7 @@ namespace RoosterBot {
 					lastLine += (i == 0 ? "" : " ") + word.Substring(0, breakPos) + '-';
 					writeBackLastLine();
 					lines.Add("");
-					words[i] = word.Substring(breakPos, word.Length - breakPos);
+					words[i] = word[breakPos..];
 					i--;
 				} else { // If it does not fit in an existing line
 					if (maxLineLength - lastLine.Length > 5) { // And at least the first 4 characters fit (excluding the space)
@@ -176,7 +173,7 @@ namespace RoosterBot {
 			Task[] invocationTasks = new Task[invocationList.Length];
 
 			for (int i = 0; i < invocationList.Length; i++) {
-				invocationTasks[i] = (Task) invocationList[i].DynamicInvoke(parameters);
+				invocationTasks[i] = (Task) invocationList[i].DynamicInvoke(parameters)!;
 			}
 
 			await Task.WhenAll(invocationTasks);
@@ -191,7 +188,7 @@ namespace RoosterBot {
 			Delegate[] invocationList = asyncEvent.GetInvocationList();
 
 			for (int i = 0; i < invocationList.Length; i++) {
-				await (Task) invocationList[i].DynamicInvoke(parameters);
+				await (Task) invocationList[i].DynamicInvoke(parameters)!;
 			}
 		}
 		#endregion
@@ -269,11 +266,11 @@ namespace RoosterBot {
 
 		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
 			if (list.Count > 0) {
-				LinkedListNode<T> node = list.First;
-				do {
+				LinkedListNode<T>? node = list.First;
+				while (node != null) {
 					yield return node;
 					node = node.Next;
-				} while (node != null);
+				}
 			}
 		}
 
@@ -303,8 +300,20 @@ namespace RoosterBot {
 		#endregion
 	}
 
-	public class ReturnValue<T> {
-		public bool Success;
-		public T Value;
+	public class ReturnValue<T> where T : class {
+		private readonly T? m_Value;
+
+		public bool Success { get; }
+		public T Value => m_Value ?? throw new InvalidOperationException("Can't get the result of an unsuccessful operation");
+
+		public ReturnValue() {
+			Success = false;
+			m_Value = default;
+		}
+
+		public ReturnValue(T value) {
+			Success = true;
+			m_Value = value;
+		}
 	}
 }
