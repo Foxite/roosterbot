@@ -11,7 +11,7 @@ namespace RoosterBot.Schedule.GLU {
 		private async Task WelcomeUser(SocketGuildUser user) {
 			if (user.Guild.Id == GLUScheduleComponent.GLUGuildId &&
 				user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
-				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel).Mention;
+				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel)!.Mention;
 
 				string text = $"Welkom {user.Mention},\n";
 				text += "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";

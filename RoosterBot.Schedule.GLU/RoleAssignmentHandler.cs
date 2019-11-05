@@ -32,7 +32,7 @@ namespace RoosterBot.Schedule.GLU {
 			ucs.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
+		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo? oldSSI, StudentSetInfo newSSI) {
 			// Assign roles
 			try {
 				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);

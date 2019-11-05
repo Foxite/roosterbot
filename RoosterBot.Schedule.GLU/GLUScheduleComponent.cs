@@ -25,6 +25,9 @@ namespace RoosterBot.Schedule.GLU {
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
 		public GLUScheduleComponent() {
+			m_Schedules = new List<ScheduleRegistryInfo>();
+			m_AllowedGuilds = Array.Empty<ulong>();
+			m_TeacherPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
@@ -39,8 +42,6 @@ namespace RoosterBot.Schedule.GLU {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
-
-			m_Schedules = new List<ScheduleRegistryInfo>();
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
@@ -85,11 +86,11 @@ namespace RoosterBot.Schedule.GLU {
 			new NewUserHandler(services.GetService<DiscordSocketClient>());
 		}
 
-		private Task<IdentifierInfo> ValidateIdentifier(RoosterCommandContext context, string input) {
+		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
 			ulong guildId = context.Guild.Id;
 			if (m_AllowedGuilds.Contains(guildId)) {
 				input = input.ToUpper();
-				IdentifierInfo result = null;
+				IdentifierInfo? result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {
 					result = new StudentSetInfo(input);
 				} else if (m_RoomRegex.IsMatch(input)) {
@@ -97,7 +98,7 @@ namespace RoosterBot.Schedule.GLU {
 				}
 				return Task.FromResult(result);
 			}
-			return Task.FromResult((IdentifierInfo) null);
+			return Task.FromResult((IdentifierInfo?) null);
 		}
 
 		private class ScheduleRegistryInfo {

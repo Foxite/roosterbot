@@ -58,7 +58,7 @@ namespace RoosterBot.Schedule.GLU {
 							end: end
 						);
 
-						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord lastRecord) &&
+						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord? lastRecord) &&
 							record.Start.Date == lastRecord.Start.Date &&
 							record.StudentSets.SequenceEqual(lastRecord.StudentSets) &&
 							record.StaffMember.SequenceEqual(lastRecord.StaffMember) &&
