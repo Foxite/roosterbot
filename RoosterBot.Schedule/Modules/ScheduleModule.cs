@@ -7,7 +7,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO (refactoring) reduce the size of this file (it has 352 lines right now)
+	// TODO (refactor) reduce the size of this file (it has 404 lines right now)
 	[Name("#ScheduleModule_Name")]
 	[Summary("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
@@ -338,7 +338,7 @@ namespace RoosterBot.Schedule {
 		#region Convenience
 		private async Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
-				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
+				TypeReaderResult infoResult = await ScheduleComponent.Instance.IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
 				if (infoResult.IsSuccess) {
 					return (IdentifierInfo) infoResult.BestMatch;
 				} else {

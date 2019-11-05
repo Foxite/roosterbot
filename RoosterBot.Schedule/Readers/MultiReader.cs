@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +16,8 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
-		public MultiReader(IEnumerable<RoosterTypeReader> readers, string errorMessage, ComponentBase resourcesComponent) {
-			m_Readers = readers.ToList();
+		public MultiReader(string errorMessage, ComponentBase resourcesComponent) {
+			m_Readers = new List<RoosterTypeReader>();
 			m_ErrorMessage = errorMessage;
 			m_ResourcesComponent = resourcesComponent;
 		}
