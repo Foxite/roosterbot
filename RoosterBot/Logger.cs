@@ -27,31 +27,31 @@ namespace RoosterBot {
 			}
 		}
 
-		public static void Verbose(string tag, string msg, Exception e = null) {
+		public static void Verbose(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Verbose, tag, msg, e);
 		}
 
-		public static void Debug(string tag, string msg, Exception e = null) {
+		public static void Debug(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Debug, tag, msg, e);
 		}
 
-		public static void Info(string tag, string msg, Exception e = null) {
+		public static void Info(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Info, tag, msg, e);
 		}
 
-		public static void Warning(string tag, string msg, Exception e = null) {
+		public static void Warning(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Warning, tag, msg, e);
 		}
 
-		public static void Error(string tag, string msg, Exception e = null) {
+		public static void Error(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Error, tag, msg, e);
 		}
 
-		public static void Critical(string tag, string msg, Exception e = null) {
+		public static void Critical(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Critical, tag, msg, e);
 		}
 
-		private static void Log(LogSeverity severity, string tag, string msg, Exception exception = null) {
+		private static void Log(LogSeverity severity, string tag, string msg, Exception? exception = null) {
 			string severityStr = severity.ToString().PadLeft(LongestSeverity);
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " [" + severityStr + "] " + tag + " : " + msg;
