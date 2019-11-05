@@ -37,9 +37,9 @@ namespace RoosterBot.Schedule.SQL {
 			m_InsertClassCommand.Parameters.Add("@UserClass", SqlDbType.VarChar, 5);
 		}
 
-		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+		public event Action<IGuildUser, StudentSetInfo?, StudentSetInfo>? UserChangedClass;
 
-		public async Task<StudentSetInfo> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
+		public async Task<StudentSetInfo?> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
 			Task open = m_SQL.OpenAsync();
 
 			m_GetClassCommand.Parameters["@UserId"].Value = user.Id;
@@ -50,10 +50,10 @@ namespace RoosterBot.Schedule.SQL {
 
 			m_SQL.Close();
 
-			return GetSSIFromString(ssi);
+			return ssi == null ? null : new StudentSetInfo(ssi);
 		}
 
-		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IGuildUser user, StudentSetInfo ssi) {
+		public async Task<StudentSetInfo?> SetClassForDiscordUserAsync(ICommandContext context, IGuildUser user, StudentSetInfo ssi) {
 			await m_SQL.OpenAsync();
 			
 			m_GetClassCommand.Parameters["@UserId"].Value = user.Id;
@@ -72,18 +72,10 @@ namespace RoosterBot.Schedule.SQL {
 
 			m_SQL.Close();
 
-			StudentSetInfo oldSSI = GetSSIFromString(old);
+			StudentSetInfo? oldSSI = old == null ? null : new StudentSetInfo(old);
 			UserChangedClass?.Invoke(user, oldSSI, ssi);
 
 			return oldSSI;
-		}
-
-		private StudentSetInfo GetSSIFromString(string str) {
-			if (str == null) {
-				return null;
-			} else {
-				return new StudentSetInfo(str);
-			}
 		}
 
 		#region IDisposable Support
