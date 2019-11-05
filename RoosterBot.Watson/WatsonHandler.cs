@@ -8,7 +8,7 @@ using Discord.WebSocket;
 namespace RoosterBot.Watson {
 	/// <summary>
 	/// Checks received messages if they start with a mention to the bot user, and calls WatsonClient to parse it.
-	///
+	/// </summary>
 	internal sealed class WatsonHandler {
 		private readonly DiscordSocketClient m_Discord;
 		private readonly GuildConfigService m_GCS;
@@ -60,14 +60,14 @@ namespace RoosterBot.Watson {
 			IDisposable typingState = context.Channel.EnterTypingState();
 
 			IGuild cultureGuild;
-			if (context.IsPrivate) {
-				cultureGuild = (context.User as SocketUser).MutualGuilds.FirstOrDefault();
+			if (context.IsPrivate && context.User is SocketUser socketUser) {
+				cultureGuild = socketUser.MutualGuilds.FirstOrDefault();
 			} else {
 				cultureGuild = context.Guild;
 			}
 			GuildConfig guildConfig = await m_GCS.GetConfigAsync(cultureGuild);
 
-			string returnMessage = null;
+			string? returnMessage = null;
 			try {
 				string input = context.Message.Content.Substring(argPos);
 				if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
@@ -75,7 +75,7 @@ namespace RoosterBot.Watson {
 					return;
 				}
 
-				string result = m_Watson.ConvertCommandAsync(input);
+				string? result = m_Watson.ConvertCommandAsync(input);
 
 				if (result != null) {
 					await m_CommandService.ExecuteAsync(context, result, Program.Instance.Components.Services);

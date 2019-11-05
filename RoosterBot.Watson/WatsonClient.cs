@@ -20,8 +20,8 @@ namespace RoosterBot.Watson {
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
 		}
 
-		public string ConvertCommandAsync(string input) {
-			string sessionId = null;
+		public string? ConvertCommandAsync(string input) {
+			string? sessionId = null;
 			try {
 				sessionId = m_Assistant.CreateSession(m_AssistantId).SessionId;
 
@@ -47,7 +47,7 @@ namespace RoosterBot.Watson {
 							int? start = (int?) entity.Location[i];
 							int? end = (int?) entity.Location[++i];
 							if (start.HasValue && end.HasValue) {
-								string entityValue = input.Substring(start.Value, end.Value - start.Value);
+								string entityValue = input[start.Value..end.Value];
 								// Fix for weekday
 								// For questions, please go back in time to 26 april 2019 and ask my past self.
 								if (entityValue.StartsWith("op ")) {

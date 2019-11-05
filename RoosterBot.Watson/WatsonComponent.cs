@@ -8,8 +8,8 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Watson {
 	public class WatsonComponent : ComponentBase {
-		private string m_WatsonID;
-		private string m_WatsonKey;
+		private string m_WatsonID = "";
+		private string m_WatsonKey = "";
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
