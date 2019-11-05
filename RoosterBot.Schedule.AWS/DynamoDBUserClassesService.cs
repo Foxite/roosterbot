@@ -12,11 +12,9 @@ namespace RoosterBot.Schedule.AWS {
 		private AmazonDynamoDBClient m_Client;
 		private Table m_Table;
 
-		public event Action<IGuildUser, StudentSetInfo, StudentSetInfo> UserChangedClass;
+		public event Action<IGuildUser, StudentSetInfo?, StudentSetInfo>? UserChangedClass;
 
-		public DynamoDBUserClassesService() { }
-
-		public void Initialize(AWSConfigService config, string tableName) {
+		public DynamoDBUserClassesService(AWSConfigService config, string tableName) {
 			Logger.Info("UserClasses", "Connecting to database");
 			m_Client = new AmazonDynamoDBClient(config.Credentials, new AmazonDynamoDBConfig() {
 				RegionEndpoint = config.Region
@@ -26,7 +24,7 @@ namespace RoosterBot.Schedule.AWS {
 			Logger.Info("UserClasses", "UserClassesService loaded");
 		}
 
-		public async Task<StudentSetInfo> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
+		public async Task<StudentSetInfo?> GetClassForDiscordUserAsync(ICommandContext context, IUser user) {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document != null) {
 				return new StudentSetInfo(document["class"].AsString());
@@ -35,7 +33,7 @@ namespace RoosterBot.Schedule.AWS {
 			}
 		}
 
-		public async Task<StudentSetInfo> SetClassForDiscordUserAsync(ICommandContext context, IGuildUser user, StudentSetInfo ssi) {
+		public async Task<StudentSetInfo?> SetClassForDiscordUserAsync(ICommandContext context, IGuildUser user, StudentSetInfo ssi) {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document is null) {
 				document = new Document(new Dictionary<string, DynamoDBEntry>() {
