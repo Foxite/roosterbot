@@ -14,6 +14,7 @@
 	
   <PropertyGroup>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
