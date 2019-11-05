@@ -14,12 +14,10 @@ namespace RoosterBot.Schedule {
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
 		private LastScheduleCommandService LSCService { get; }
-		private IUserClassesService UserClasses { get; }
 		private ScheduleService Schedules { get; }
 
-		public ScheduleModule(LastScheduleCommandService lSCService, IUserClassesService userClasses, ScheduleService schedules) {
+		public ScheduleModule(LastScheduleCommandService lSCService, ScheduleService schedules) {
 			LSCService = lSCService;
-			UserClasses = userClasses;
 			Schedules = schedules;
 		}
 
@@ -340,8 +338,7 @@ namespace RoosterBot.Schedule {
 		#region Convenience
 		private async Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
-				TypeReaderResult infoResult = await UserClasses.GetClassForDiscordUserAsync(context, Context.User);
-					//await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
+				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
 				if (infoResult.IsSuccess) {
 					return (IdentifierInfo) infoResult.BestMatch;
 				} else {
