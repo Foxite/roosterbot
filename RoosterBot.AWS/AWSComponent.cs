@@ -15,9 +15,8 @@ namespace RoosterBot.AWS {
 	public class AWSComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		private string m_NotificationARN;
-		private AWSConfigService m_AWSConfig;
-		private SNSNotificationHandler m_SNS;
+		private string m_NotificationARN = "";
+		private SNSNotificationHandler? m_SNS;
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -29,15 +28,14 @@ namespace RoosterBot.AWS {
 			string secretKey = jsonConfig["secretKey"].ToObject<string>();
 			RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
 
-			m_AWSConfig = new AWSConfigService(accessKey, secretKey, endpoint);
-			services.AddSingleton(m_AWSConfig);
+			services.AddSingleton(new AWSConfigService(accessKey, secretKey, endpoint));
 
 			return Task.CompletedTask;
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
 #if !DEBUG
-			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), m_AWSConfig, m_NotificationARN);
+			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
 #endif
 			return Task.CompletedTask;
 		}
