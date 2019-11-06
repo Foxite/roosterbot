@@ -33,31 +33,52 @@ namespace RoosterBot {
 		/// Warning: This will glitch out when the table array is jagged.
 		/// </summary>
 		/// <param name="table">An array[row][column]. While it can be jagged, if it is jagged, this will not work properly.</param>
-		/// <param name="includeHeaderSeperation">Include a line of '-'s after the first row.</param>
+		/// <param name="maxColumnWidth">The maximum width for any column. Cells will be broken by word into lines if the cell length exceeds this value.</param>
 		/// <returns>A string that you can send directly into a chat message.</returns>
-		public static string FormatTextTable(string[][] table) {
-			// TODO (feature) max column width, this will prevent the table from being ruined if columns are wide (which often happens with schedule information).
-			// I've written BreakStringIntoLines for this, although it's difficult to make this work for more than one column at a time.
-			int[] columnWidths = new int[table[0].Length];
-
-			for (int column = 0; column < table[0].Length; column++) {
-				columnWidths[column] = 1;
-				for (int row = 0; row < table.Length; row++) {
-					columnWidths[column] = Math.Max(columnWidths[column], table[row][column].Length);
+		public static string FormatTextTable(string[][] table, int maxColumnWidth = 20) {
+			// Split cells into lines and determine row heights
+			int[] rowHeights = new int[table.Length];
+			List<string>[][] cellLines = new List<string>[table.Length][];
+			for (int row = 0; row < table.Length; row++) {
+				cellLines[row] = new List<string>[table[0].Length];
+				for (int column = 0; column < table[0].Length; column++) {
+					cellLines[row][column] = BreakStringIntoLines(table[row][column], maxColumnWidth);
+					rowHeights[row] = Math.Max(cellLines[row][column].Count, rowHeights[row]);
 				}
 			}
 
-			string ret = "```";
-			for (int row = 0; row < table.Length; row++) {
-				for (int column = 0; column < table[0].Length; column++) {
-					if (column != 0) {
-						ret += " | ";
-					}
-					ret += table[row][column].PadRight(columnWidths[column]);
+			// Determine column widths
+			int[] columnWidths = new int[cellLines[0].Length];
+			for (int column = 0; column < table[0].Length; column++) {
+				columnWidths[column] = 1;
+				for (int row = 0; row < table.Length; row++) {
+					columnWidths[column] = Math.Max(columnWidths[column], cellLines[row][column].Max(str => str.Length));
 				}
+			}
+			
+			// Fill up unused space
+			for (int row = 0; row < cellLines.Length; row++) {
+				for (int column = 0; column < cellLines[row].Length; column++) {
+					int addEmptyLines = rowHeights[row] - cellLines[row][column].Count;
+					for (int line = 0; line < addEmptyLines; line++) {
+						cellLines[row][column].Add(new string(' ', columnWidths[column]));
+					}
+				}
+			}
 
-				if (row != table.Length - 1) {
-					ret += "\n";
+			// Output
+			string ret = "```\n";
+			for (int row = 0; row < cellLines.Length; row++) {
+				for (int rowLine = 0; rowLine < cellLines[row][0].Count; rowLine++) {
+					for (int column = 0; column < cellLines[0].Length; column++) {
+						List<string> lines = cellLines[row][column];
+						ret += lines[rowLine].PadRight(columnWidths[column]);
+						if (column == cellLines[0].Length - 1) {
+							ret += "\n";
+						} else {
+							ret += " | ";
+						}
+					}
 				}
 			}
 			ret += "```";
