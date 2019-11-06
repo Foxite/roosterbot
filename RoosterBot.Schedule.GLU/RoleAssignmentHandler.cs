@@ -5,6 +5,7 @@ using Discord;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
+		private const long NewUserRanks = 278937741478330389;
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
 		private readonly ConfigService m_Config;
 
@@ -47,6 +48,10 @@ namespace RoosterBot.Schedule.GLU {
 							oldRoleList.Add(role);
 						}
 					}
+					if (user.HasRole(NewUserRanks)) {
+						oldRoleList.Add(NewUserRanks);
+					}
+
 					oldRoles = oldRoleList.Select(role => user.Guild.GetRole(role));
 				}
 				IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
