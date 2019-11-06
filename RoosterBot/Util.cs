@@ -321,15 +321,15 @@ namespace RoosterBot {
 		#endregion
 	}
 
-	public class ReturnValue<T> where T : class {
-		private readonly T? m_Value;
+	public class ReturnValue<T> {
+		private readonly T m_Value;
 
 		public bool Success { get; }
-		public T Value => m_Value ?? throw new InvalidOperationException("Can't get the result of an unsuccessful operation");
+		public T Value => Success ? m_Value : throw new InvalidOperationException("Can't get the result of an unsuccessful operation");
 
 		public ReturnValue() {
 			Success = false;
-			m_Value = default;
+			m_Value = default!;
 		}
 
 		public ReturnValue(T value) {

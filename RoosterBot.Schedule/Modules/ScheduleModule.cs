@@ -350,7 +350,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetCurrentRecord(IdentifierInfo identifier) {
+		protected async Task<ReturnValue<ScheduleRecord?>> GetCurrentRecord(IdentifierInfo identifier) {
 			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
@@ -366,37 +366,23 @@ namespace RoosterBot.Schedule {
 			return await HandleErrorAsync(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
+		protected async Task<ReturnValue<ScheduleRecord?>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
 			return await HandleErrorAsync(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
 			try {
-				return new ReturnValue<T>() {
-					Success = true,
-					Value = await action()
-				};
+				return new ReturnValue<T>(await action());
 			} catch (IdentifierNotFoundException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
 			} catch (RecordsOutdatedException) {
 				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
 			} catch (NoAllowedGuildsException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
-				return new ReturnValue<T>() {
-					Success = false
-				};
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
-				return new ReturnValue<T>() {
-					Success = false
-				};
 			}
+			return new ReturnValue<T>();
 		}
 		#endregion
 	}
