@@ -11,7 +11,7 @@ namespace RoosterBot {
 	/// </summary>
 	internal sealed class DeadlockHandler {
 		private NotificationService m_Notificationervice;
-		private Timer m_Timer;
+		private Timer? m_Timer;
 		private bool m_TimerRunning;
 
 		internal int MaxDisconnectMillis { get; }
@@ -41,13 +41,13 @@ namespace RoosterBot {
 			};
 		}
 
-		private async void TimerCallback(object state) {
-			if (m_TimerRunning) { // Prevent race condition
+		private async void TimerCallback(object? state) {
+			if (m_TimerRunning) { // Prevent race condition. Apparently Timer may call this function after we stopped it, and we have to account for that.
 				await Restart(state as Exception);
 			}
 		}
 
-		private async Task Restart(Exception e) {
+		private async Task Restart(Exception? e) {
 			string report = $"RoosterBot has failed to reconnect after {MaxDisconnectMillis / 1000} seconds.\n\n";
 
 			if (e != null) {
@@ -59,7 +59,7 @@ namespace RoosterBot {
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
 			await m_Notificationervice.AddNotificationAsync(report);
 
-			Process.Start(new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\AppStart\AppStart.exe"), "delay 20000"));
+			Process.Start(new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, @"..\AppStart\AppStart.exe"), "delay 20000"));
 			Program.Instance.Shutdown();
 		}
 	}

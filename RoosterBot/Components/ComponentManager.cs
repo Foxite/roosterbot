@@ -16,9 +16,24 @@ namespace RoosterBot {
 		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
 		private ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
 
+#nullable disable
+		// This is a bit similar to the problem explained in Program.cs, namely this property is set in an async "sequel" to the constructor.
+		// There's only a single instance of this class in the entire program and it needs to await stuff in its constructor, so we make an essentially empty constructor
+		//  and do all the things in an async method that's supposed to be called right after construction.
+		// There wasn't a problem with this approach until we switched to .NET Core 3.0 and enabled nullable reference types. The compiler doesn't know about SetupComponents.
+		// Again simple solution is to ignore or disable the warnings.
+		// That said I'd really love to get rid of this property, or even make this entire class internal, as it doesn't feel like something any component should be using.
+		// But the few (currently 4) uses outside of the main project aren't easily worked around. Removing the need for this property in all those places are each todo items on their own.
+		// Since the entire command system is likely to be thrown over its head once we switch to Qmmands for 3.0, it may be better to not fix those issues for now, as the staging branch won't
+		//  be released until 3.0 is done.
 		public IServiceProvider Services { get; private set; }
+#nullable restore
 
-		internal ComponentManager() { }
+		internal ComponentManager() {
+			m_Components = new List<ComponentBase>();
+			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
+			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
+		}
 
 		/// <summary>
 		/// Runs the full initialization process for components.
@@ -30,10 +45,6 @@ namespace RoosterBot {
 			IEnumerable<string> assemblyPaths = ReadComponentsFile();
 			List<Assembly> assemblies = LoadAssemblies(assemblyPaths);
 			Type[] types = FindComponentClasses(assemblies);
-
-			m_Components = new List<ComponentBase>(types.Length);
-			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
-			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
 
 			// Start components
 			ConstructComponents(types);
@@ -50,7 +61,7 @@ namespace RoosterBot {
 				throw new FileNotFoundException("Components.json was not found in the DataPath.");
 			}
 
-			JObject json = null;
+			JObject? json = null;
 			try {
 				json = JObject.Parse(File.ReadAllText(filePath));
 			} catch (JsonReaderException e) {
@@ -67,7 +78,7 @@ namespace RoosterBot {
 		private List<Assembly> LoadAssemblies(IEnumerable<string> assemblyPaths) {
 			List<Assembly> assemblies = new List<Assembly>();
 			foreach (string file in assemblyPaths) {
-				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+				string path = Path.Combine(AppContext.BaseDirectory, file);
 
 				List<string> folders = path.Split('\\').ToList();
 				for (int i = 0; i < folders.Count; i++) {
@@ -107,7 +118,7 @@ namespace RoosterBot {
 			foreach (Type type in componentTypes) {
 				Logger.Debug("ComponentManager", "Constructing component " + type.Name);
 				try {
-					ComponentBase component = Activator.CreateInstance(type) as ComponentBase;
+					ComponentBase component = (Activator.CreateInstance(type) as ComponentBase)!; // Can technically be null but should never happen.
 					m_Components.Add(component);
 					m_ComponentsByAssembly[type.Assembly] = component;
 				} catch (Exception ex) {
@@ -180,7 +191,7 @@ namespace RoosterBot {
 		}
 
 		public ComponentBase GetComponentForModule(ModuleInfo module) {
-			if (m_ComponentsByModule.TryGetValue(module, out ComponentBase result)) {
+			if (m_ComponentsByModule.TryGetValue(module, out ComponentBase? result)) {
 				return result;
 			} else {
 				throw new ArgumentException($"Module of type {module.Name} is not registered");
@@ -188,7 +199,7 @@ namespace RoosterBot {
 		}
 
 		internal ComponentBase GetComponentFromAssembly(Assembly assembly) {
-			if (m_ComponentsByAssembly.TryGetValue(assembly, out ComponentBase result)) {
+			if (m_ComponentsByAssembly.TryGetValue(assembly, out ComponentBase? result)) {
 				return result;
 			} else {
 				throw new ArgumentException($"Assembly {assembly.FullName} does not have a ComponentBase");

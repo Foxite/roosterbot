@@ -21,8 +21,8 @@ namespace RoosterBot {
 
 		public async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
 			if (!result.IsSuccess) {
-				string response = null;
-				bool bad = false;
+				string response = "Er is iets heel erg misgegaan, en er is iets heel erg misgegaan toen ik het aan je wou vertellen."; // TODO (localize) This error message
+				bool bad = true;
 				string badReport = $"\"{context.Message}\": ";
 
 				GuildConfig guildConfig = await m_GCS.GetConfigAsync(context.Guild);
@@ -60,7 +60,7 @@ namespace RoosterBot {
 							bad = true;
 							break;
 						default:
-							badReport += "Unknown error: " + result.Error.Value;
+							badReport += "Unknown error: " + result.Error.Value.ToString();
 							bad = true;
 							break;
 					}
@@ -80,7 +80,7 @@ namespace RoosterBot {
 					response = Util.Error + response;
 				}
 
-				IReadOnlyCollection<IUserMessage> initialResponses = (context as RoosterCommandContext)?.Responses;
+				IReadOnlyCollection<IUserMessage>? initialResponses = (context as RoosterCommandContext)?.Responses;
 				if (initialResponses == null) {
 					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				} else {

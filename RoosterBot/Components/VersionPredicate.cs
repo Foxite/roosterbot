@@ -26,7 +26,7 @@ namespace RoosterBot {
 				&& (!Minor  .HasValue || version.Minor   == Minor);
 		}
 
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			return obj is VersionPredicate predicate
 				&& Major   == predicate.Major
 				&& Feature == predicate.Feature

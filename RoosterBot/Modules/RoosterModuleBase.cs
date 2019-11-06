@@ -12,22 +12,35 @@ using Discord.WebSocket;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
+#nullable disable
+		// Another case of local nullability overrides, but this one's a bit more hairy.
+		// There are two ways for modules to get service instances:
+		// - Public settable properties
+		// - Constructor parameters
+		// For every module I write, I've switched to using constructors. I like it less than properties, but at least it works without generating warnings or having to disable nullability.
+		// I would do it here as well but I'd get PTSD. Why?
+		// Back before this bot was remotely structured the way it is now, before I even released the program called "RoosterBot", I used constructors for dependency injection, everywhere, and the longest
+		//  inheritance chain for modules at that time was 3.
+		// Every single module had to extend the constructors of its base class, and with as much as 7 services in one module (including inherited dependencies) you can see where this is going.
+		// I don't want to go back to that, and while there's less inheritance surrounding modues now, there's still 5 dependencies here that need to be set. All of them are specific to this
+		//  class only, and are not supposed to be used by subclasses, but they would still need to be inherited by subclasses if I added a constructor here.
+		// So again the best solution is to just disable the warnings here.
+		// I'd love a way to disable all warnings that come with DI somehow, as an exception is thrown during AddModuleAsync if a dependency is not found, but there's no feasible way to do that.
 		public ConfigService Config { get; set; }
 		public GuildConfigService GuildConfigService { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
 		public CommandResponseService CommandResponses { get; set; }
 		public new T Context { get; internal set; }
+		// TODO (investigate) Can analyzers disable other analyzers? Make an analyzer for ModuleBase<T> that disables nullability warnings on public settable properties.
 
 		protected ModuleLogger Log { get; private set; }
 		protected GuildConfig GuildConfig { get; private set; }
+#nullable restore
 
-		/// <summary>
-		/// Use GuildConfig.Culture instead.
-		/// </summary>
 		protected CultureInfo Culture => GuildConfig.Culture;
 
-		private StringBuilder m_Response;
+		private StringBuilder m_Response = new StringBuilder();
 		private bool m_Replied = false;
 
 		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
@@ -37,12 +50,17 @@ namespace RoosterBot {
 			if (Context == null) {
 				Context = base.Context;
 			}
-			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+			IGuild? guild = Context.Guild ?? Context.UserGuild;
+			if (guild == null) {
+				GuildConfig = GuildConfigService.GetDefaultConfig();
+			} else {
+				GuildConfig = GuildConfigService.GetConfigAsync(guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+			}
 			
-			Log = new ModuleLoggerInternal(GetType().Name);
+			Log = new ModuleLogger(GetType().Name);
 
 			string logMessage = $"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in ";
-			if (Context.IsPrivate) {
+			if (Context.Guild == null) {
 				if (Context.Channel is IDMChannel) {
 					logMessage += "DM";
 				} else {
@@ -52,8 +70,6 @@ namespace RoosterBot {
 				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}";
 			}
 			Log.Debug(logMessage);
-
-			m_Response = new StringBuilder();
 		}
 
 		protected override void AfterExecute(CommandInfo command) {
@@ -73,17 +89,28 @@ namespace RoosterBot {
 			}
 		}
 
-		protected virtual Task<IUserMessage> SendDeferredResponseAsync() {
+		protected async virtual Task<IUserMessage?> SendDeferredResponseAsync() {
 			if (m_Response.Length != 0) {
 				string message = m_Response.ToString();
 				m_Response.Clear();
-				return ReplyAsync(message);
+				// Ending with `return await` is not preferred because it creates an unnecessary async state machine, but ReplyAsync never returns null but this function might.
+				// The only way to make it work without warnings is to make this an async function and await ReplyAsync. I initially tried returning Task.FromResult(null) but Task<T> cannot be used in place of Task<T?>.
+				// This is by design. Consider this:
+				// 
+				//     List<string?> list = new List<string>();
+				//     list.Add(null); // List that doesn't handle null types now contains a null item
+				// 
+				// The opposite doesn't work either:
+				// 
+				//     List<string> list = new List<string?>();
+				//     foreach (string item in list) { ... } // item may be null despite not being nullable
+				return await ReplyAsync(message);
 			} else {
 				return null;
 			}
 		}
 
-		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed embed = null, RequestOptions options = null) {
+		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
@@ -113,7 +140,7 @@ namespace RoosterBot {
 			return ReplyAsync(Util.Error + message);
 		}
 
-		protected virtual async Task FatalError(string message, Exception exception = null) {
+		protected virtual async Task FatalError(string message, Exception? exception = null) {
 			string report = $"Fatal error executing `{Context.Message.Content}` for `{Context.User.Mention}` in {Context.Guild?.Name ?? "DM"} channel {Context.Channel.Name}: {message}";
 
 			Log.Error(report, exception);
@@ -138,37 +165,37 @@ namespace RoosterBot {
 			return string.Format(ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
 		}
 
-		public abstract class ModuleLogger {
+		protected class ModuleLogger {
 			protected internal string m_Tag;
 
-			public void Verbose(string message, Exception e = null) {
+			private ModuleLogger() { m_Tag = "ErrorModule"; }
+
+			internal ModuleLogger(string tag) {
+				m_Tag = tag;
+			}
+
+			public void Verbose(string message, Exception? e = null) {
 				Logger.Verbose(m_Tag, message, e);
 			}
 
-			public void Debug(string message, Exception e = null) {
+			public void Debug(string message, Exception? e = null) {
 				Logger.Debug(m_Tag, message, e);
 			}
 
-			public void Info(string message, Exception e = null) {
+			public void Info(string message, Exception? e = null) {
 				Logger.Info(m_Tag, message, e);
 			}
 
-			public void Warning(string message, Exception e = null) {
+			public void Warning(string message, Exception? e = null) {
 				Logger.Warning(m_Tag, message, e);
 			}
 
-			public void Error(string message, Exception e = null) {
+			public void Error(string message, Exception? e = null) {
 				Logger.Error(m_Tag, message, e);
 			}
 
-			public void Critical(string message, Exception e = null) {
+			public void Critical(string message, Exception? e = null) {
 				Logger.Critical(m_Tag, message, e);
-			}
-		}
-
-		private sealed class ModuleLoggerInternal : ModuleLogger {
-			public ModuleLoggerInternal(string tag) {
-				m_Tag = tag;
 			}
 		}
 	}
@@ -180,10 +207,10 @@ namespace RoosterBot {
 		public IUserMessage Message { get; }
 		public IUser User { get; }
 		public IMessageChannel Channel { get; }
-		public IGuild Guild { get; }
+		public IGuild? Guild { get; }
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
-		public IReadOnlyCollection<IUserMessage> Responses { get; }
+		public IReadOnlyCollection<IUserMessage>? Responses { get; }
 
 		/// <summary>
 		/// If IsPrivate is true, then this guild will be suitable to use for config information. It is the first mutual guild between the user and the bot user.

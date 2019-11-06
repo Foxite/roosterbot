@@ -23,10 +23,10 @@ namespace RoosterBot {
 			Minor = minor;
 		}
 
-		public override bool Equals(object obj) => Equals(obj as Version);
+		public override bool Equals(object? obj) => Equals(obj as Version);
 
-		public bool Equals(Version other) {
-			return other != null
+		public bool Equals(Version? other) {
+			return !(other is null)
 				&& Major   == other.Major
 				&& Feature == other.Feature
 				&& Minor   == other.Minor;
