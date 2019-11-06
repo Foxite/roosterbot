@@ -2,6 +2,7 @@
 using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
+	[HiddenFromList]
 	public class MiscModule : RoosterModuleBase {
 		public PrankService PrankService { get; set; }
 
