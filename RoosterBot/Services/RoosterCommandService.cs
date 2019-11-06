@@ -123,7 +123,15 @@ namespace RoosterBot {
 						async (context, parameters, commandServices, command) => {
 							// Command execution
 							PropertyInfo[] properties = module.GetProperties();
-							IRoosterModuleBase moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
+							IRoosterModuleBase moduleInstance;
+							ParameterInfo[] ctorParameters = module.GetConstructors().First().GetParameters();
+							if (ctorParameters.Length == 0) {
+								moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
+							} else {
+								object[] services = ctorParameters.Select(param => commandServices.GetService(param.ParameterType)).ToArray();
+								moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module, services);
+							}
+
 							foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
 								object service = commandServices.GetService(prop.PropertyType);
 								prop.SetValue(moduleInstance, service);
