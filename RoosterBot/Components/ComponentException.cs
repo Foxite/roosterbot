@@ -11,12 +11,12 @@ namespace RoosterBot {
 
 		public Type CausingComponent { get; }
 
-		public ComponentException(string message, Type causingComponent, Exception inner = null) : base(message, inner) {
+		protected ComponentException(string message, Type causingComponent, Exception? inner = null) : base(message, inner) {
 			CausingComponent = causingComponent;
 		}
 
 		protected ComponentException(SerializationInfo info, StreamingContext context) : base(info, context) {
-			CausingComponent = (Type) info.GetValue(CausingComponentSerializedName, typeof(Type));
+			CausingComponent = (Type) (info.GetValue(CausingComponentSerializedName, typeof(Type)) ?? throw new SerializationException("The serialized value of CausingComponent is null"));
 		}
 
 		public override void GetObjectData(SerializationInfo info, StreamingContext context) {
@@ -38,7 +38,7 @@ namespace RoosterBot {
 	/// </summary>
 	[Serializable]
 	public abstract class OuterComponentException : ComponentException {
-		public OuterComponentException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
+		protected OuterComponentException(string message, Type causingComponent, Exception inner) : base(message, causingComponent, inner) { }
 		protected OuterComponentException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
