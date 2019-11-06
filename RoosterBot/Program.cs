@@ -13,10 +13,15 @@ namespace RoosterBot {
 	public sealed class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 #nullable disable
+		// These are set during the static Main and MainAsync, but the compiler can't use these methods to determine if they are always set.
+		// I would solve this by moving all MainAsync code into the constructor, but:
+		// - Constructors can't be async so we can't await anything, which is definitely necessary
+		// - You would have to remove all single-use functions like SetupClient, creating a huge constructor which is basically a regression to the pre-2.0 codebase.
+		// So I just disable nullable here, because I know it's fine.
 		public static Program Instance { get; private set; }
 
 		public ComponentManager Components { get; private set; }
-		
+
 		private DiscordSocketClient m_Client;
 		private ConfigService m_ConfigService;
 		private NotificationService m_NotificationService;
@@ -47,6 +52,9 @@ namespace RoosterBot {
 				Instance.MainAsync().GetAwaiter().GetResult();
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
+				// At this point it can not be assumed that literally any part of the program is functional, so there's no reporting this crash to Discord or Notification endpoints.
+				// At one point someone will notice that the bot is offline and restart it manually.
+				// Or if the crash occurred during startup it's likely that the deploy system saw the crash and is doing something about it.
 #if DEBUG
 				Console.ReadKey();
 #endif
@@ -159,7 +167,6 @@ namespace RoosterBot {
 
 				// Find an open Ready pipe and report
 				NamedPipeClientStream? pipeClient = null;
-
 				try {
 					pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
 					await pipeClient.ConnectAsync(1);
