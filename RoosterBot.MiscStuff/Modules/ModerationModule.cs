@@ -18,15 +18,6 @@ namespace RoosterBot.MiscStuff {
 			table[0] = new[] { "Joined", "Username" };
 			unnamedUsers.CopyTo(table, 1);
 
-			/*foreach (IGuildUser user in unnamedUsers) {
-				response += "`";
-				if (user.JoinedAt != null) {
-					response += user.JoinedAt.Value.ToString("yyyy-MM-dd");
-				} else {
-					response += "Unknown   ";
-				}
-				response += $"`: @{user.Username}#{user.Discriminator}\n";
-			}*/
 			await base.ReplyAsync(Util.FormatTextTable(table));
 		}
 	}
