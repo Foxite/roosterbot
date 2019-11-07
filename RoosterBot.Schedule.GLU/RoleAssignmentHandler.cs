@@ -5,6 +5,7 @@ using Discord;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
+		private const long NewUserRanks = 278937741478330389;
 		private IReadOnlyDictionary<string, ulong[]> m_Roles;
 		private readonly ConfigService m_Config;
 
@@ -36,16 +37,30 @@ namespace RoosterBot.Schedule.GLU {
 			// Assign roles
 			try {
 				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
+				IEnumerable<IRole> oldRoles;
 				if (oldSSI != null) {
-					IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
-					IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
-
-					oldRoles = oldRoles.Except(keptRoles);
-					newRoles = newRoles.Except(keptRoles);
-
-					if (oldRoles.Any()) {
-						await user.RemoveRolesAsync(oldRoles);
+					oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+				} else {
+					// Check if the user has any roles that belong to a student set, even though they didn't have a known student set
+					List<ulong> oldRoleList = new List<ulong>();
+					foreach (ulong role in m_Roles.SelectMany(kvp => kvp.Value)) {
+						if (user.HasRole(role)) {
+							oldRoleList.Add(role);
+						}
 					}
+					if (user.HasRole(NewUserRanks)) {
+						oldRoleList.Add(NewUserRanks);
+					}
+
+					oldRoles = oldRoleList.Select(role => user.Guild.GetRole(role));
+				}
+				IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
+
+				oldRoles = oldRoles.Except(keptRoles);
+				newRoles = newRoles.Except(keptRoles);
+
+				if (oldRoles.Any()) {
+					await user.RemoveRolesAsync(oldRoles);
 				}
 
 				if (newRoles.Any()) {
