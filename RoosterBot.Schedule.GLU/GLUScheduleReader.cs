@@ -11,11 +11,13 @@ namespace RoosterBot.Schedule.GLU {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;
 		private readonly ulong m_Guild;
+		private readonly bool m_SkipPastRecords;
 
-		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild) {
+		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild, bool skipPastRecords) {
 			m_Path = path;
 			m_Teachers = teachers;
 			m_Guild = guild;
+			m_SkipPastRecords = skipPastRecords;
 		}
 
 		public async override Task<List<ScheduleRecord>> GetSchedule() {
@@ -40,7 +42,7 @@ namespace RoosterBot.Schedule.GLU {
 						line++;
 						DateTime date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
 
-						if (date < lastMonday) { // Only store past records for this week
+						if (m_SkipPastRecords && date < lastMonday) { // Only store past records for this week
 							continue;
 						}
 

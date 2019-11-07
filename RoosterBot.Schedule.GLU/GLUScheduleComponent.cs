@@ -18,6 +18,7 @@ namespace RoosterBot.Schedule.GLU {
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
+		private bool m_SkipPastRecords;
 		private Regex m_StudentSetRegex;
 		private Regex m_RoomRegex;
 
@@ -38,6 +39,8 @@ namespace RoosterBot.Schedule.GLU {
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
+			m_SkipPastRecords = jsonConfig["skipPastRecords"].ToObject<bool>();
+
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
 
 			m_Schedules = new List<ScheduleRegistryInfo>();
@@ -66,7 +69,7 @@ namespace RoosterBot.Schedule.GLU {
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0]), m_AllowedGuilds)));
+				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds)));
 			}
 
 			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
