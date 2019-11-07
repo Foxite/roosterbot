@@ -1,6 +1,4 @@
-﻿using Discord;
-using Discord.Commands;
-using System;
+﻿using Discord.Commands;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,25 +8,26 @@ namespace RoosterBot.MiscStuff {
 	public class ModerationModule : RoosterModuleBase {
 		[Command("users unnamed"), UserIsModerator]
 		public async Task GetUnnamedUsers() {
-			IEnumerable<IGrouping<DateTime?, IGuildUser>> unnamedUsers =
+			IEnumerable<string[]> unnamedUsers =
 				from user in await Context.Guild.GetUsersAsync()
 				where !user.IsBot && user.Nickname == null
-				group user by user.JoinedAt?.Date into groups
-				orderby groups.Key.Value
-				select groups;
+				orderby user.JoinedAt?.Date
+				select new[] { user.JoinedAt?.ToString("yyyy-MM-dd") ?? "Unknown", $"@{user.Username}#{user.Discriminator}" };
 
-			string response = "Users with no set nickname (excluding bots, grouped by join date):\n";
-			foreach (IGrouping<DateTime?, IGuildUser> group in unnamedUsers) {
-				if (group.Key.HasValue) {
-					response += $"\n**{group.Key.Value.ToString("yyyy-MM-dd")}**\n";
+			string[][] table = new string[unnamedUsers.Count() + 1][];
+			table[0] = new[] { "Joined", "Username" };
+			unnamedUsers.CopyTo(table, 1);
+
+			/*foreach (IGuildUser user in unnamedUsers) {
+				response += "`";
+				if (user.JoinedAt != null) {
+					response += user.JoinedAt.Value.ToString("yyyy-MM-dd");
 				} else {
-					response += "\n**Unknown**\n";
+					response += "Unknown   ";
 				}
-				foreach (IGuildUser item in group) {
-					response += $"@{item.Username}#{item.Discriminator}\n";
-				}
-			}
-			await ReplyAsync(response);
+				response += $"`: @{user.Username}#{user.Discriminator}\n";
+			}*/
+			await base.ReplyAsync(Util.FormatTextTable(table));
 		}
 	}
 }
