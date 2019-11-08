@@ -29,7 +29,7 @@ namespace RoosterBot.PublicTransit {
 			for (int i = 0; i < amount; i++) {
 				XmlNode xmlJourney = xmlOptions[i];
 
-				int parseDelay(string input) {
+				int parseDelay(string? input) {
 					if (input == null) {
 						return 0;
 					}
@@ -57,8 +57,12 @@ namespace RoosterBot.PublicTransit {
 
 				XmlNodeList xmlComponents = xmlJourney.SelectNodes("ReisDeel");
 				journeys[i].Components = new List<JourneyComponent>();
+				// For no discernable reason, XmlNodeList implements IEnumerable - not IEnumerable<T>. The documentation is very good at dodging the question of what it enumerates,
+				//  but I eventually determined that it's XmlNode. I still get the warning about it, which I have to manually disable like this.
+#nullable disable
 				foreach (XmlNode xmlComponent in xmlComponents) {
 					XmlNodeList xmlStops = xmlComponent.SelectNodes("ReisStop");
+#nullable restore
 
 					JourneyStop parseJourneyStop(XmlNode xmlStop) {
 						XmlNode xmlStopPlatform = xmlStop["Spoor"];
@@ -86,18 +90,15 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool m_DisposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing) {
-			if (!disposedValue) {
+			if (!m_DisposedValue) {
 				if (disposing) {
 					m_RestApi.Dispose();
-					m_RestApi = null;
 				}
 
-				m_DelayRegex = null;
-
-				disposedValue = true;
+				m_DisposedValue = true;
 			}
 		}
 		

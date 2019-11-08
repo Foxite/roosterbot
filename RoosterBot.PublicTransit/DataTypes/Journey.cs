@@ -1,4 +1,17 @@
-﻿using System;
+﻿#nullable disable
+/* I used to be a big fan of this pattern:
+ * 
+ * var thing = new object() {
+ *     Prop = value,
+ *     Et = cetera
+ * }
+ * 
+ * But this doesn't work with nullable reference types.
+ * So I've abandoned it in favor of proper constructors almost everywhere, except here. The constructs for these classes would have the longest parameter lists in the entire solution,
+ *  and I won't have that.
+ */
+
+using System;
 using System.Collections.Generic;
 
 namespace RoosterBot.PublicTransit {

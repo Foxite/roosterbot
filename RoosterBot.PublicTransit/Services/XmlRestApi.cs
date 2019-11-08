@@ -61,16 +61,15 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool m_DisposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing) {
-			if (!disposedValue) {
+			if (!m_DisposedValue) {
 				if (disposing) {
 					m_Web.Dispose();
-					m_Web = null;
 				}
 
-				disposedValue = true;
+				m_DisposedValue = true;
 			}
 		}
 		

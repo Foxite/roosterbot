@@ -6,16 +6,16 @@ using System.Xml.Linq;
 namespace RoosterBot.PublicTransit {
 	public class StationInfo {
 		public string Code { get; }
-		public string ShortName { get; }
-		public string MidName { get; }
-		public string LongName { get; }
+		public string? ShortName { get; }
+		public string? MidName { get; }
+		public string? LongName { get; }
 		public float Latitude { get; }
 		public float Longitude { get; }
 		public IReadOnlyList<string> Synonyms { get; }
 
 		public string DisplayName => LongName ?? MidName ?? ShortName ?? Code ?? "If you see this, please contact the bot owner for a free mars bar.";
 
-		private IEnumerable<string> Names => Synonyms.Concat(new[] { ShortName, MidName, LongName }.Where(item => item != null));
+		private IEnumerable<string> Names => Synonyms.Concat(new[] { ShortName, MidName, LongName }.WhereNotNull();
 
 		internal StationInfo(XElement xmlStation) {
 			Code = xmlStation.Element(XName.Get("Code")).Value;
@@ -23,7 +23,7 @@ namespace RoosterBot.PublicTransit {
 				from name in xmlStation.Element(XName.Get("Namen")).Elements()
 				select name;
 
-			string getXmlName(string identifier) {
+			string? getXmlName(string identifier) {
 				return names.SingleOrDefault(element => element.Name == identifier)?.Value;
 			}
 			

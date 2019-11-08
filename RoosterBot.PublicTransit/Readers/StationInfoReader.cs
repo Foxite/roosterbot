@@ -10,14 +10,14 @@ namespace RoosterBot.PublicTransit {
 			StationInfoService sis = services.GetService<StationInfoService>();
 			TypeReaderResult result;
 			if (input.StartsWith("$")) {
-				StationInfo lookupResult = sis.GetByCode(input.Substring(1));
+				StationInfo? lookupResult = sis.GetByCode(input.Substring(1));
 				if (lookupResult != null) {
 					result = TypeReaderResult.FromSuccess(lookupResult);
 				} else {
 					result = TypeReaderResult.FromError(CommandError.ParseFailed, "Die code bestaat niet.");
 				}
 			} else {
-				StationInfo stationResult = sis.Lookup(input, 1).SingleOrDefault()?.Station;
+				StationInfo? stationResult = sis.Lookup(input, 1).SingleOrDefault()?.Station;
 				if (stationResult != null) {
 					result = TypeReaderResult.FromSuccess(stationResult);
 				} else {

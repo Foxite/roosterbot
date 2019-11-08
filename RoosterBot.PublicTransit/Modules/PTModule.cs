@@ -6,8 +6,13 @@ namespace RoosterBot.PublicTransit {
 	[RequireCulture("nl-NL", false)]
 	[Name("OV")]
 	public class PTModule : RoosterModuleBase {
-		public NSAPI NSAPI { get; set; }
-		public StationInfoService Stations { get; set; }
+		private NSAPI NSAPI { get; }
+		private StationInfoService Stations { get; }
+
+		public PTModule(NSAPI nSAPI, StationInfoService stations) {
+			NSAPI = nSAPI;
+			Stations = stations;
+		}
 
 		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `{0}ov amsterdam sloterdijk, utrecht centraal`")]
 		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {

@@ -7,13 +7,13 @@ namespace RoosterBot.PublicTransit {
 		/// From https://stackoverflow.com/a/6944095/3141917
 		/// </summary>
 		public static int Levenshtein(string source, string target) {
-			if (string.IsNullOrEmpty(source)) {
-				if (string.IsNullOrEmpty(target))
+			if (source.Length == 0) {
+				if (target.Length == 0) {
 					return 0;
-				return target.Length;
-			}
-
-			if (string.IsNullOrEmpty(target)) {
+				} else {
+					return target.Length;
+				}
+			} else if (target.Length == 0) {
 				return source.Length;
 			}
 

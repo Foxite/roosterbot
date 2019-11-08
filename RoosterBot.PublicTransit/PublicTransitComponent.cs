@@ -10,7 +10,9 @@ namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
 	// This functionality is only useful in the Netherlands.
 	public class PublicTransitComponent : ComponentBase {
+#nullable disable
 		private NSAPI m_NSAPI;
+#nullable restore
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
