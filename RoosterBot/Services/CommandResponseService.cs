@@ -51,12 +51,12 @@ namespace RoosterBot {
 			}
 		}
 
-		public bool RemoveCommand(ulong commandId, [MaybeNullWhen(false)] out CommandResponsePair? crp) {
+		public bool RemoveCommand(ulong commandId, [NotNullWhen(true)] out CommandResponsePair? crp) {
 			return m_Messages.TryRemove(commandId, out crp);
 		}
 
 		public CommandResponsePair? GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
-		public bool RemoveCommand(IUserMessage command, [MaybeNullWhen(false)] out CommandResponsePair? crp) => RemoveCommand(command.Id, out crp);
+		public bool RemoveCommand(IUserMessage command, [NotNullWhen(true)] out CommandResponsePair? crp) => RemoveCommand(command.Id, out crp);
 		public void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 	}
 
