@@ -282,6 +282,14 @@ namespace RoosterBot {
 		#endregion
 
 		#region LINQ
+		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class {
+			foreach (T? item in enumerable) {
+				if (!(item is null)) {
+					yield return item;
+				}
+			}
+		}
+		
 		/// <summary>
 		/// Returns the params list as an IEnumerable.
 		/// </summary>
