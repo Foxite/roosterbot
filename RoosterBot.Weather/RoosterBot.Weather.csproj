@@ -14,9 +14,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\RoosterBot.DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
 			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
 			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
 

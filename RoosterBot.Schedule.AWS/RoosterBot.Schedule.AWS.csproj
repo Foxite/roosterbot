@@ -9,7 +9,9 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
+		<PackageReference Include="AWSSDK.Core" Version="3.3.103.58">
+			<IncludeAssets>compile</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.84" />
 	</ItemGroup>
 
@@ -17,14 +19,17 @@
 		<ProjectReference Include="..\RoosterBot.AWS\RoosterBot.AWS.csproj">
 			<Private>false</Private>
 			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 		<ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
 			<Private>false</Private>
 			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
 			<Private>false</Private>
 			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
 
