@@ -39,7 +39,7 @@ namespace RoosterBot.Weather {
 		}
 
 		public async Task<WeatherInfo[]> GetDayForecastAsync(CityInfo city, DateTime date) {
-			// TODO (Feature) Change DayForecast to return a single info item for that whole day
+			// TODO (feature) Change DayForecast to return a single info item for that whole day
 			// The API does not allow us to see per-hour beyond 48 hours (unless you pay), but it does let us see per-day up to 5 days in the future.
 			// If you try to view further than 48 hours it will simply not return any more data, causing an exception when we try to get the last few items.
 			int hoursForecast = (int) (date - DateTime.Today).TotalHours + 18;

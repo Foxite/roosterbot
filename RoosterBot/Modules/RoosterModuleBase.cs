@@ -19,8 +19,8 @@ namespace RoosterBot {
 		// - Constructor parameters
 		// For every module I write, I've switched to using constructors. I like it less than properties, but at least it works without generating warnings or having to disable nullability.
 		// I would do it here as well but I'd get PTSD. Why?
-		// Back before this bot was remotely structured the way it is now, before I even released the program called "RoosterBot", I used constructors for dependency injection, everywhere, and the longest
-		//  inheritance chain for modules at that time was 3.
+		// Back before this bot was remotely structured the way it is now, I used constructors for dependency injection, everywhere, and the longest
+		//  inheritance chain for modules at that time was 4.
 		// Every single module had to extend the constructors of its base class, and with as much as 7 services in one module (including inherited dependencies) you can see where this is going.
 		// I don't want to go back to that, and while there's less inheritance surrounding modues now, there's still 5 dependencies here that need to be set. All of them are specific to this
 		//  class only, and are not supposed to be used by subclasses, but they would still need to be inherited by subclasses if I added a constructor here.
@@ -212,7 +212,7 @@ namespace RoosterBot {
 		/// </summary>
 		public IGuild UserGuild { get; }
 		
-		// TODO review all instantiations, it now throws an exception if there's no mutual guilds
+		// TODO (review) all instantiations, it now throws an exception if there's no mutual guilds
 		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage>? originalResponses) {
 			Client = client;
 			Message = message;
