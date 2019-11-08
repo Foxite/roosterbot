@@ -8,7 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IBM.WatsonDeveloperCloud.Assistant.v2" Version="2.17.0" />
+		<PackageReference Include="IBM.WatsonDeveloperCloud.Assistant.v2" Version="2.17.0">
+			<IncludeAssets>compile</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
