@@ -9,8 +9,10 @@ namespace RoosterBot.DateTimeUtils {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override IEnumerable<string> Tags => new[] { "DayOfWeekReader" };
-
+		
+#nullable disable
 		internal static ResourceService ResourceService { get; private set; }
+#nullable restore
 
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
 			ResourceService = services.GetService<ResourceService>();
