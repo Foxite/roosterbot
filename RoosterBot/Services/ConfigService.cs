@@ -13,11 +13,13 @@ namespace RoosterBot {
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
 		public   MultiMatchHandling MultiMatchHandling { get; }
-		public   IUser BotOwner { get; private set; }
 		public   IReadOnlyCollection<ulong> StaffRoles { get; }
 		internal bool ReportStartupVersionToOwner { get; }
 		internal int MinimumMemorySeconds { get; }
-		public CultureInfo DefaultCulture { get; }
+		public   CultureInfo DefaultCulture { get; }
+#nullable disable
+		public   IUser BotOwner { get; private set; }
+#nullable restore
 
 		private  ulong m_BotOwnerId;
 

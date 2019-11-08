@@ -10,7 +10,7 @@ namespace RoosterBot {
 	internal sealed class RestartHandler {
 		private int m_Attempts;
 		private NotificationService m_Notifications;
-		private Exception m_InitialException;
+		private Exception? m_InitialException;
 
 		public int MaxAttempts { get; }
 
@@ -38,7 +38,7 @@ namespace RoosterBot {
 			};
 		}
 
-		private async Task Restart(Exception e) {
+		private async Task Restart(Exception? e) {
 			string report = $"RoosterBot has failed to reconnect after {m_Attempts} attempts.\n\n";
 			if (m_InitialException != null) {
 				report += $"The initial exception is: {m_InitialException.ToStringDemystified()}";

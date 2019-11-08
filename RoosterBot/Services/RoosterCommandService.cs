@@ -123,13 +123,15 @@ namespace RoosterBot {
 						async (context, parameters, commandServices, command) => {
 							// Command execution
 							PropertyInfo[] properties = module.GetProperties();
-							IRoosterModuleBase moduleInstance;
+							RoosterModuleBase moduleInstance;
 							ParameterInfo[] ctorParameters = module.GetConstructors().First().GetParameters();
 							if (ctorParameters.Length == 0) {
-								moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module);
+								// Activator.CreateInstance returns an `object?`. This does not match the documentation (where it says it returns `object`) and also does not make any kind of sense
+								//  as constructors can never return null.
+								moduleInstance = (RoosterModuleBase) (Activator.CreateInstance(module) ?? throw new InvalidOperationException("Activator.CreateInstance returned null"));
 							} else {
 								object[] services = ctorParameters.Select(param => commandServices.GetService(param.ParameterType)).ToArray();
-								moduleInstance = (IRoosterModuleBase) Activator.CreateInstance(module, services);
+								moduleInstance = (RoosterModuleBase) (Activator.CreateInstance(module, services) ?? throw new InvalidOperationException("Activator.CreateInstance returned null"));
 							}
 
 							foreach (PropertyInfo prop in properties.Where(prop => prop.SetMethod != null && prop.SetMethod.IsPublic && !prop.SetMethod.IsAbstract)) {
@@ -137,15 +139,16 @@ namespace RoosterBot {
 								prop.SetValue(moduleInstance, service);
 							}
 
-							module.GetProperty("Context").SetValue(moduleInstance, context);
+							//module.GetProperty("Context").SetValue(moduleInstance, context);
+							moduleInstance.Context = (RoosterCommandContext) context;
 
 							try {
-								moduleInstance.BeforeExecuteInternal(command);
+								((IRoosterModuleBase) moduleInstance).BeforeExecuteInternal(command);
 
 								Task task = method.Invoke(moduleInstance, parameters) as Task ?? Task.CompletedTask;
 								await task;
 							} finally {
-								moduleInstance.AfterExecuteInternal(command);
+								((IRoosterModuleBase) moduleInstance).AfterExecuteInternal(command);
 								if (moduleInstance is IDisposable disposableModuleInstance) {
 									disposableModuleInstance.Dispose();
 								}
@@ -219,8 +222,8 @@ namespace RoosterBot {
 				commandBuilder.RunMode = commandAttribute.RunMode;
 
 				ParameterInfo[] parameters = method.GetParameters();
-				foreach (var parameter in parameters) {
-					string paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
+				foreach (ParameterInfo parameter in parameters) {
+					string? paramName = parameter.GetCustomAttribute<NameAttribute>()?.Text;
 					if (paramName == null) {
 						paramName = parameter.Name;
 					} else {
@@ -228,7 +231,7 @@ namespace RoosterBot {
 					}
 
 					commandBuilder.AddParameter(
-						m_ResourceService.ResolveString(culture, component, paramName),
+						m_ResourceService.ResolveString(culture, component, paramName!), // Second example of a pointless, undocumented nullable property in reflection classes
 						parameter.ParameterType,
 						GetParamBuildFunction(parameter, culture, component)
 					);

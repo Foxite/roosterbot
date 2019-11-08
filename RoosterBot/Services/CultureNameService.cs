@@ -14,7 +14,7 @@ namespace RoosterBot {
 		}
 
 		public string GetLocalizedName(string nameOf, string inLanguage) {
-			if (m_Table.TryGetValue((nameOf, inLanguage), out string ret)) {
+			if (m_Table.TryGetValue((nameOf, inLanguage), out string? ret)) {
 				return ret;
 			} else {
 				throw new ArgumentException($"The name of {nameOf} in {inLanguage} is not known.");

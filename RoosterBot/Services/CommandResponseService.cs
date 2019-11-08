@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace RoosterBot {
@@ -25,7 +26,7 @@ namespace RoosterBot {
 			}).Select(kvp => kvp.Key);
 
 			foreach (ulong commandId in oldCommandIds) {
-				m_Messages.TryRemove(commandId, out CommandResponsePair unused);
+				m_Messages.TryRemove(commandId, out _);
 			}
 
 			IUserMessage[] newSequence = new IUserMessage[] { botResponse };
@@ -36,23 +37,26 @@ namespace RoosterBot {
 		}
 
 		public void ModifyResponse(ulong commandId, IUserMessage[] responses) {
-			GetResponse(commandId).Responses = responses;
+			CommandResponsePair? crp = GetResponse(commandId);
+			if (crp != null) {
+				crp.Responses = responses;
+			}
 		}
 
-		public CommandResponsePair GetResponse(ulong userCommandId) {
-			if (m_Messages.TryGetValue(userCommandId, out CommandResponsePair ret)) {
+		public CommandResponsePair? GetResponse(ulong userCommandId) {
+			if (m_Messages.TryGetValue(userCommandId, out CommandResponsePair? ret)) {
 				return ret;
 			} else {
 				return null;
 			}
 		}
 
-		public bool RemoveCommand(ulong commandId, out CommandResponsePair crp) {
+		public bool RemoveCommand(ulong commandId, [MaybeNullWhen(false)] out CommandResponsePair? crp) {
 			return m_Messages.TryRemove(commandId, out crp);
 		}
 
-		public CommandResponsePair GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
-		public bool RemoveCommand(IUserMessage command, out CommandResponsePair crp) => RemoveCommand(command.Id, out crp);
+		public CommandResponsePair? GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
+		public bool RemoveCommand(IUserMessage command, [MaybeNullWhen(false)] out CommandResponsePair? crp) => RemoveCommand(command.Id, out crp);
 		public void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
 	}
 

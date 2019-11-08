@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -23,10 +24,10 @@ namespace RoosterBot {
 
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
-				CommandResponsePair crp = m_CRS.GetResponse(userMessageAfter);
-				string prefix;
+				CommandResponsePair? crp = m_CRS.GetResponse(userMessageAfter);
+				string? prefix;
 				if (channel is IGuildChannel guildChannel) {
-					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
+					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))?.CommandPrefix;
 				} else {
 					prefix = m_Config.DefaultCommandPrefix;
 				}
@@ -38,7 +39,7 @@ namespace RoosterBot {
 						responses = crp.Responses;
 					} else {
 						// Was previously not a command
-						responses = null;
+						responses = Array.Empty<IUserMessage>();
 					}
 
 					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses);

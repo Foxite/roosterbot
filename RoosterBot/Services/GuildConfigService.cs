@@ -7,24 +7,18 @@ using Discord;
 namespace RoosterBot {
 	public sealed class GuildConfigService {
 		private readonly ConfigService m_Config;
-		private Provider m_Provider;
+		private Provider? m_Provider;
 
 		internal GuildConfigService(ConfigService config) {
 			m_Config = config;
 		}
 
 		public GuildConfig GetDefaultConfig() {
-			return new GuildConfig(0) {
-				Culture = m_Config.DefaultCulture,
-				CommandPrefix = m_Config.DefaultCommandPrefix
-			};
+			return GetDefaultConfig(0);
 		}
 
 		private GuildConfig GetDefaultConfig(ulong guildId) {
-			return new GuildConfig(guildId) {
-				Culture = m_Config.DefaultCulture,
-				CommandPrefix = m_Config.DefaultCommandPrefix
-			};
+			return new GuildConfig(guildId, m_Config.DefaultCulture, m_Config.DefaultCommandPrefix);
 		}
 
 		public void InstallProvider(Provider provider) {
@@ -35,20 +29,21 @@ namespace RoosterBot {
 		}
 
 		public Task<bool> UpdateGuildAsync(GuildConfig config) {
-			return m_Provider.UpdateGuildAsync(config);
+			if (m_Provider == null) {
+				return Task.FromResult(false);
+			} else {
+				return m_Provider.UpdateGuildAsync(config);
+			}
 		}
 
-		public Task<GuildConfig> GetConfigAsync(IGuild guild) => GetConfigAsync(guild.Id);
+		public Task<GuildConfig?> GetConfigAsync(IGuild guild) => GetConfigAsync(guild.Id);
 
-		public async Task<GuildConfig> GetConfigAsync(ulong guildId) {
-			GuildConfig ret;
+		public async Task<GuildConfig?> GetConfigAsync(ulong guildId) {
+			GuildConfig? ret;
 			if (m_Provider == null) {
 				ret = GetDefaultConfig(guildId);
 			} else {
 				ret = await m_Provider.GetGuildAsync(guildId);
-				if (ret == null) {
-					await m_Provider.UpdateGuildAsync(ret);
-				}
 			}
 			return ret;
 		}
@@ -60,12 +55,12 @@ namespace RoosterBot {
 			/// <summary>
 			/// Returns null if the guild is unknown.
 			/// </summary>
-			public virtual Task<GuildConfig> GetGuildAsync(IGuild guild) => GetGuildAsync(guild.Id);
+			public virtual Task<GuildConfig?> GetGuildAsync(IGuild guild) => GetGuildAsync(guild.Id);
 
 			/// <summary>
 			/// Returns null if the guild is unknown.
 			/// </summary>
-			public abstract Task<GuildConfig> GetGuildAsync(ulong guildId);
+			public abstract Task<GuildConfig?> GetGuildAsync(ulong guildId);
 
 			/// <summary>
 			/// Returns a value representing the success of the operation.
@@ -85,8 +80,10 @@ namespace RoosterBot {
 
 		public ulong GuildId { get; }
 
-		public GuildConfig(ulong guildId) {
+		public GuildConfig(ulong guildId, CultureInfo culture, string commandPrefix) {
 			GuildId = guildId;
+			Culture = culture;
+			CommandPrefix = commandPrefix;
 		}
 	}
 }

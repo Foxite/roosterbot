@@ -54,7 +54,7 @@ namespace RoosterBot {
 			if (guild == null) {
 				GuildConfig = GuildConfigService.GetDefaultConfig();
 			} else {
-				GuildConfig = GuildConfigService.GetConfigAsync(guild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+				GuildConfig = GuildConfigService.GetConfigAsync(guild).GetAwaiter().GetResult()!; // Change to await after switching to Qmmands in 3.0
 			}
 			
 			Log = new ModuleLogger(GetType().Name);
@@ -210,7 +210,7 @@ namespace RoosterBot {
 		public IGuild? Guild { get; }
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
-		public IReadOnlyCollection<IUserMessage>? Responses { get; }
+		public IReadOnlyCollection<IUserMessage> Responses { get; }
 
 		/// <summary>
 		/// If IsPrivate is true, then this guild will be suitable to use for config information. It is the first mutual guild between the user and the bot user.

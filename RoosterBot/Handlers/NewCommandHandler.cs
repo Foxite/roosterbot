@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -22,13 +23,13 @@ namespace RoosterBot {
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			string prefix;
 			if (socketMessage.Channel is IGuildChannel guildChannel) {
-				prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
+				prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
 			} else {
 				prefix = m_ConfigService.DefaultCommandPrefix;
 			}
 
-			if (m_Commands.IsMessageCommand(socketMessage, prefix, out int argPos)) {
-				RoosterCommandContext context = new RoosterCommandContext(m_Client, socketMessage as IUserMessage, null);
+			if (socketMessage is IUserMessage userMessage && m_Commands.IsMessageCommand(userMessage, prefix, out int argPos)) {
+				RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessage, Array.Empty<IUserMessage>());
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			}

@@ -18,7 +18,7 @@ namespace RoosterBot {
 		}
 
 		public async override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
-			GuildConfig config = await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild);
+			GuildConfig config = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild))!;
 			if (Culture == config.Culture) {
 				return PreconditionResult.FromSuccess();
 			} else {
