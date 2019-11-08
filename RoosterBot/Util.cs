@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net;
+using Discord.WebSocket;
 
 namespace RoosterBot {
 	public static class Util {
@@ -215,6 +216,14 @@ namespace RoosterBot {
 		#endregion
 
 		#region Discord utils
+		public static IReadOnlyCollection<IGuild> GetMutualGuilds(this IUser user) {
+			if (user is SocketUser socketUser) {
+				return socketUser.MutualGuilds;
+			} else {
+				return Array.Empty<IGuild>();
+			}
+		}
+
 		public static async Task<bool> AddReaction(IUserMessage message, string unicode) {
 			try {
 				await message.AddReactionAsync(new Emoji(unicode));
