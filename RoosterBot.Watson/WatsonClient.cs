@@ -6,7 +6,7 @@ using IBM.WatsonDeveloperCloud.Util;
 
 namespace RoosterBot.Watson {
 	public class WatsonClient {
-		internal const string VersionDate = "2019-04-24";
+		private const string VersionDate = "2019-04-24";
 		private const string LogTag = "Watson";
 		private readonly string m_AssistantId;
 		private readonly AssistantService m_Assistant;
