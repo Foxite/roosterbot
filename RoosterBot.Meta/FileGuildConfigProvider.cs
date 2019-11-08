@@ -16,10 +16,7 @@ namespace RoosterBot.Meta {
 			JObject jsonConfig = JObject.Parse(File.ReadAllText(filePath));
 			foreach (KeyValuePair<string, JToken> kvp in jsonConfig) {
 				ulong guildId = ulong.Parse(kvp.Key);
-				m_Guilds.Add(guildId, new GuildConfig(guildId) {
-					CommandPrefix = kvp.Value["CommandPrefix"].ToObject<string>(),
-					Culture = CultureInfo.GetCultureInfo(kvp.Value["Culture"].ToObject<string>())
-				});
+				m_Guilds.Add(guildId, new GuildConfig(guildId, CultureInfo.GetCultureInfo(kvp.Value["Culture"].ToObject<string>()), kvp.Value["CommandPrefix"].ToObject<string>()));
 			}
 		}
 
