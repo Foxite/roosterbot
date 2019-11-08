@@ -5,6 +5,7 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>Weather</AssemblyName>
 		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

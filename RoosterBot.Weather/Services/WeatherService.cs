@@ -90,8 +90,6 @@ namespace RoosterBot.Weather {
 					m_Web.Dispose();
 				}
 
-				m_Web = null;
-
 				m_DisposedValue = true;
 			}
 		}

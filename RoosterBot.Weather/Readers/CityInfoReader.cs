@@ -7,7 +7,7 @@ namespace RoosterBot.Weather {
 	public class CityInfoReader : RoosterTypeReader {
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			CityService cities = services.GetService<CityService>();
-			CityInfo cityResult = await cities.Lookup(input);
+			CityInfo? cityResult = await cities.Lookup(input);
 
 			if (cityResult == null) {
 				// TODO (feature) problem-reporting command, this could be a useful alternative to "contacting the bot owner" if we ever go beyond servers that any dev is in

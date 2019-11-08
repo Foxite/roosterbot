@@ -9,7 +9,11 @@ namespace RoosterBot.Weather {
 	// should request just that, instead of being shown a per-hour forecast of the entire day (24 calls), while they only care about one data point.
 	[Name("#WeatherModule_Name"), Group("#WeatherModule_Group"), LocalizedModule("nl-NL", "en-US")]
 	public class WeatherModule : RoosterModuleBase {
-		public WeatherService Weather { get; set; }
+		private WeatherService Weather { get; }
+
+		public WeatherModule(WeatherService weather) {
+			Weather = weather;
+		}
 
 		[Command("#WeatherModule_CurrentWeather", RunMode = RunMode.Async)]
 		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
