@@ -78,19 +78,9 @@ namespace RoosterBot {
 		private List<Assembly> LoadAssemblies(IEnumerable<string> assemblyPaths) {
 			List<Assembly> assemblies = new List<Assembly>();
 			foreach (string file in assemblyPaths) {
-				string path = Path.Combine(AppContext.BaseDirectory, file);
+				string path = Path.Combine(AppContext.BaseDirectory, "..", "Components", file, file + ".dll");
 
-				List<string> folders = path.Split('\\').ToList();
-				for (int i = 0; i < folders.Count; i++) {
-					if (folders[i] == "..") {
-						folders.RemoveAt(i);
-						folders.RemoveAt(i - 1);
-						i--;
-					}
-				}
-				path = Path.Combine(folders.ToArray());
-
-				if (File.Exists(path) && Path.GetExtension(path).ToLower() == ".dll") {
+				if (File.Exists(path)) {
 					Logger.Debug("ComponentManager", "Loading assembly " + file);
 
 					//AssemblyName assemblyRef = AssemblyName.GetAssemblyName(path);
