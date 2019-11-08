@@ -24,7 +24,6 @@ namespace RoosterBot.Meta {
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<HelpModule>(services),
 				commandService.AddModuleAsync<ControlModule>(services),
-				commandService.AddModuleAsync<DiagnosticModule>(services),
 				commandService.AddModuleAsync<InfoModule>(services)
 			));
 
