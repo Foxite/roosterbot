@@ -31,12 +31,12 @@ namespace RoosterBot.Watson {
 					bool process = false;
 					int argPos = 0;
 					if (msg.Channel is IGuildChannel guildChannel) { // If in guild: Message starts with mention to bot
-						string commandPrefix = (await guildConfig.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
+						string commandPrefix = (await guildConfig.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
 						if (msg.HasMentionPrefix(m_Discord.CurrentUser, ref argPos)) {
 							process = true;
 						}
 					} else if (msg.Author.MutualGuilds.Any()) {
-						string commandPrefix = (await guildConfig.GetConfigAsync(msg.Author.MutualGuilds.First()))!.CommandPrefix;
+						string commandPrefix = (await guildConfig.GetConfigAsync(msg.Author.MutualGuilds.First())).CommandPrefix;
 						if (!msg.Content.StartsWith(commandPrefix)) {
 							process = true;
 						}
@@ -65,7 +65,7 @@ namespace RoosterBot.Watson {
 			} else {
 				cultureGuild = context.Guild!;
 			}
-			GuildConfig guildConfig = (await m_GCS.GetConfigAsync(cultureGuild))!;
+			GuildConfig guildConfig = await m_GCS.GetConfigAsync(cultureGuild);
 
 			string? returnMessage = null;
 			try {

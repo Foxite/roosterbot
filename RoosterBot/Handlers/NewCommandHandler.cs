@@ -23,7 +23,7 @@ namespace RoosterBot {
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			string prefix;
 			if (socketMessage.Channel is IGuildChannel guildChannel) {
-				prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
+				prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
 			} else {
 				prefix = m_ConfigService.DefaultCommandPrefix;
 			}

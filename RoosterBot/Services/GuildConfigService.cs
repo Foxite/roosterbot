@@ -36,14 +36,15 @@ namespace RoosterBot {
 			}
 		}
 
-		public Task<GuildConfig?> GetConfigAsync(IGuild guild) => GetConfigAsync(guild.Id);
-
-		public async Task<GuildConfig?> GetConfigAsync(ulong guildId) {
+		public async Task<GuildConfig> GetConfigAsync(IGuild guild) {
 			GuildConfig? ret;
 			if (m_Provider == null) {
-				ret = GetDefaultConfig(guildId);
+				ret = GetDefaultConfig(guild.Id);
 			} else {
-				ret = await m_Provider.GetGuildAsync(guildId);
+				ret = await m_Provider.GetGuildAsync(guild.Id);
+			}
+			if (ret == null) {
+				throw new InvalidOperationException($"Missing guild config for guild `{guild.Name}`.");
 			}
 			return ret;
 		}

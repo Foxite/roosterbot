@@ -23,7 +23,7 @@ namespace RoosterBot {
 				if (length >= Min && length <= Max) {
 					return PreconditionResult.FromSuccess();
 				} else {
-					CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild))!.Culture;
+					CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
 					return PreconditionResult.FromError(services.GetService<ResourceService>().GetString(culture, "Program_OnCommandExecuted_BadArgCount"));
 				}
 			}

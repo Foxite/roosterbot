@@ -25,7 +25,7 @@ namespace RoosterBot {
 				bool bad = true;
 				string badReport = $"\"{context.Message}\": ";
 
-				GuildConfig guildConfig = (await m_GCS.GetConfigAsync(context.Guild))!;
+				GuildConfig guildConfig = await m_GCS.GetConfigAsync(context.Guild); // TODO (fix) this fucks up in DMs!
 
 				if (result.Error.HasValue) {
 					switch (result.Error.Value) {

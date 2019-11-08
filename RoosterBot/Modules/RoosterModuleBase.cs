@@ -50,12 +50,7 @@ namespace RoosterBot {
 			if (Context == null) {
 				Context = base.Context;
 			}
-			IGuild? guild = Context.Guild ?? Context.UserGuild;
-			if (guild == null) {
-				GuildConfig = GuildConfigService.GetDefaultConfig();
-			} else {
-				GuildConfig = GuildConfigService.GetConfigAsync(guild).GetAwaiter().GetResult()!; // Change to await after switching to Qmmands in 3.0
-			}
+			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild ?? Context.UserGuild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
 			
 			Log = new ModuleLogger(GetType().Name);
 

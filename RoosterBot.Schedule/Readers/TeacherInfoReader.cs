@@ -14,7 +14,7 @@ namespace RoosterBot.Schedule {
 			if (baseResult.IsSuccess) {
 				return TypeReaderResult.FromSuccess(baseResult.Values.First());
 			} else {
-				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild ?? context.UserGuild))!.Culture;
+				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild ?? context.UserGuild)).Culture;
 				TeacherNameService tns = services.GetService<TeacherNameService>();
 				IEnumerable<TeacherMatch>? result = null;
 

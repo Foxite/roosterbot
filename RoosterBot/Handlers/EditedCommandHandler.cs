@@ -27,7 +27,7 @@ namespace RoosterBot {
 				CommandResponsePair? crp = m_CRS.GetResponse(userMessageAfter);
 				string prefix;
 				if (channel is IGuildChannel guildChannel) {
-					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
+					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
 				} else {
 					prefix = m_Config.DefaultCommandPrefix;
 				}
