@@ -8,7 +8,9 @@ namespace RoosterBot.Meta {
 	public class MetaComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
+#nullable disable
 		private string m_ConfigPath;
+#nullable restore
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			m_ConfigPath = configPath;

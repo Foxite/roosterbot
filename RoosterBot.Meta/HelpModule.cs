@@ -6,7 +6,11 @@ using Discord.Commands;
 namespace RoosterBot.Meta {
 	[Name("#MetaCommandsModule_Name")]
 	public class HelpModule : RoosterModuleBase {
-		public HelpService Help { get; set; }
+		private HelpService Help { get; }
+
+		public HelpModule(HelpService help) {
+			Help = help;
+		}
 
 		[Command("help"), Summary("#MetaCommandsModule_HelpCommand_Summary")]
 		public Task HelpCommand() {

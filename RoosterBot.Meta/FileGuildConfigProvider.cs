@@ -22,7 +22,10 @@ namespace RoosterBot.Meta {
 
 		public override IEnumerator<GuildConfig> GetEnumerator() => m_Guilds.Values.GetEnumerator();
 
-		public override Task<GuildConfig> GetGuildAsync(ulong guildId) => Task.FromResult(m_Guilds[guildId]);
+		public override Task<GuildConfig?> GetGuildAsync(ulong guildId) {
+			m_Guilds.TryGetValue(guildId, out GuildConfig? config);
+			return Task.FromResult(config);
+		}
 
 		public override Task<bool> UpdateGuildAsync(GuildConfig config) {
 			m_Guilds[config.GuildId] = config;

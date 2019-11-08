@@ -11,7 +11,6 @@ namespace RoosterBot.Meta {
 				response += "\n" + GetString("InfoModule_InfoCommand_ListItem", component.Name, component.ComponentVersion.ToString());
 			}
 			response += "\n" + GetString("InfoModule_InfoCommand_PostText", "https://github.com/Foxite/roosterbot"); // Hardcoded for now
-			//response += "\nAlle code is beschikbaar op Github: ";
 			ReplyDeferred(response);
 
 			return Task.CompletedTask;
