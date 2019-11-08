@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -10,11 +12,6 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\RoosterBot\bin\Release\Schedule.AWS</OutputPath>
-  </PropertyGroup>
-	
-  <PropertyGroup>
-	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
