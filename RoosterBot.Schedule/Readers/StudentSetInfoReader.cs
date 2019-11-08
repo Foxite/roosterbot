@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 				return baseResult;
 			} else {
 				ResourceService resources = services.GetService<ResourceService>();
-				GuildConfig config = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild))!;
+				GuildConfig config = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild ?? context.UserGuild))!;
 				IUser user;
 				bool byMention = false;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {

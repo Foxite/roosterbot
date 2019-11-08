@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule.SQL {
 	public class ScheduleSqlComponent : ComponentBase {
+#nullable disable
 		private SqlDatabaseUserClassesService m_UCS;
+#nullable restore
 
 		public override Version ComponentVersion => new Version(0, 1, 0);
 		public override IEnumerable<string> Tags => new[] { "UserClassesService" };

@@ -25,9 +25,9 @@ namespace RoosterBot {
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
 				CommandResponsePair? crp = m_CRS.GetResponse(userMessageAfter);
-				string? prefix;
+				string prefix;
 				if (channel is IGuildChannel guildChannel) {
-					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))?.CommandPrefix;
+					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
 				} else {
 					prefix = m_Config.DefaultCommandPrefix;
 				}

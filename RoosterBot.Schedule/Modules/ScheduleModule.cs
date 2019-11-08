@@ -26,9 +26,9 @@ namespace RoosterBot.Schedule {
 		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				ReturnValue<ScheduleRecord> result = await GetCurrentRecord(info);
+				ReturnValue<ScheduleRecord?> result = await GetCurrentRecord(info);
 				if (result.Success) {
-					ScheduleRecord record = result.Value;
+					ScheduleRecord? record = result.Value;
 					if (record == null) {
 						string response = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
 
@@ -93,9 +93,9 @@ namespace RoosterBot.Schedule {
 			if (info != null) {
 				unit = unit.ToLower();
 				if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
-					ReturnValue<ScheduleRecord> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+					ReturnValue<ScheduleRecord?> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
 					if (result.Success) {
-						ScheduleRecord record = result.Value;
+						ScheduleRecord? record = result.Value;
 						if (record != null) {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
