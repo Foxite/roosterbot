@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<OutDir>$(SolutionDir)\Output\Components\Schedule.MockUCS</OutDir>
+		<AssemblyName>Schedule.MockUCS</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

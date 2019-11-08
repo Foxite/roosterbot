@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<OutDir>$(SolutionDir)\Output\Components\Watson</OutDir>
-		<Nullable>enable</Nullable>
+		<AssemblyName>Watson</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 	</PropertyGroup>
 
 	<ItemGroup>

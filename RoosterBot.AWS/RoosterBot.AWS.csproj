@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<OutDir>$(SolutionDir)\Output\Components\AWS</OutDir>
+		<AssemblyName>AWS</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

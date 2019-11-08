@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<OutDir>$(SolutionDir)\Output\Components\Weather</OutDir>
+		<AssemblyName>Weather</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 	</PropertyGroup>
 
 	<ItemGroup>

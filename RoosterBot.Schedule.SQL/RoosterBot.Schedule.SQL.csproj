@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<OutDir>$(SolutionDir)\Output\Components\Schedule.SQL</OutDir>
+		<AssemblyName>Schedule.SQL</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

@@ -42,8 +42,8 @@ namespace RoosterBot {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
-			IEnumerable<string> assemblyPaths = ReadComponentsFile();
-			List<Assembly> assemblies = LoadAssemblies(assemblyPaths);
+			IEnumerable<string> componentNames = ReadComponentsFile();
+			List<Assembly> assemblies = LoadAssemblies(componentNames);
 			Type[] types = FindComponentClasses(assemblies);
 
 			// Start components
@@ -54,14 +54,14 @@ namespace RoosterBot {
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
-			List<string> assemblyPaths = new List<string>();
+			List<string> componentNames = new List<string>();
 			string filePath = Path.Combine(Program.DataPath, "Config", "Components.json");
 
 			if (!File.Exists(filePath)) {
 				throw new FileNotFoundException("Components.json was not found in the DataPath.");
 			}
 
-			JObject? json = null;
+			JObject json;
 			try {
 				json = JObject.Parse(File.ReadAllText(filePath));
 			} catch (JsonReaderException e) {
@@ -69,26 +69,24 @@ namespace RoosterBot {
 			}
 
 			try {
-				return json["components"].ToObject<JArray>().Select(jt => jt.ToObject<string>() + ".dll");
+				return json["components"].ToObject<JArray>().Select(jt => jt.ToObject<string>());
 			} catch (Exception e) {
 				throw new FormatException("Components.json contains invalid data.", e);
 			}
 		}
 
-		private List<Assembly> LoadAssemblies(IEnumerable<string> assemblyPaths) {
+		private List<Assembly> LoadAssemblies(IEnumerable<string> componentNames) {
 			List<Assembly> assemblies = new List<Assembly>();
-			foreach (string file in assemblyPaths) {
-				string path = Path.Combine(AppContext.BaseDirectory, "..", "Components", file, file + ".dll");
+			foreach (string componentName in componentNames) {
+				string path = Path.Combine(AppContext.BaseDirectory, "Components", componentName, componentName + ".dll");
 
 				if (File.Exists(path)) {
-					Logger.Debug("ComponentManager", "Loading assembly " + file);
+					Logger.Debug("ComponentManager", "Loading assembly " + componentName);
 
-					//AssemblyName assemblyRef = AssemblyName.GetAssemblyName(path);
-					//Assembly assembly = AppDomain.CurrentDomain.Load(assemblyRef);
 					Assembly assembly = Assembly.LoadFrom(path);
 					assemblies.Add(assembly);
 				} else {
-					Logger.Error("ComponentManager", "Component " + file + " does not exist or it is not a DLL file");
+					Logger.Error("ComponentManager", "Component " + componentName + " could not be found");
 				}
 			}
 			return assemblies;
