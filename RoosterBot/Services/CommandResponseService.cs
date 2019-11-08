@@ -44,11 +44,8 @@ namespace RoosterBot {
 		}
 
 		public CommandResponsePair? GetResponse(ulong userCommandId) {
-			if (m_Messages.TryGetValue(userCommandId, out CommandResponsePair? ret)) {
-				return ret;
-			} else {
-				return null;
-			}
+			m_Messages.TryGetValue(userCommandId, out CommandResponsePair? ret);
+			return ret;
 		}
 
 		public bool RemoveCommand(ulong commandId, [NotNullWhen(true)] out CommandResponsePair? crp) {

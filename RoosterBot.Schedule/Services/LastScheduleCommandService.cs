@@ -12,11 +12,8 @@ namespace RoosterBot.Schedule {
 		}
 
 		public LastScheduleCommandInfo? GetLastCommandForContext(ICommandContext context) {
-			if (m_SCIs.TryGetValue(new SCIKey(context), out LastScheduleCommandInfo? previous)) {
-				return previous;
-			} else {
-				return null;
-			}
+			m_SCIs.TryGetValue(new SCIKey(context), out LastScheduleCommandInfo? previous);
+			return previous;
 		}
 
 		public void OnRequestByUser(ICommandContext context, IdentifierInfo? identifier, ScheduleRecord? record) {
