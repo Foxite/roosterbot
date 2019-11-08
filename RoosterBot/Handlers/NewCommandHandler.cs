@@ -29,7 +29,7 @@ namespace RoosterBot {
 			}
 
 			if (socketMessage is IUserMessage userMessage && m_Commands.IsMessageCommand(userMessage, prefix, out int argPos)) {
-				RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessage, Array.Empty<IUserMessage>());
+				RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessage, null);
 
 				await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 			}

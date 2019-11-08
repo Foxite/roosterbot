@@ -205,7 +205,7 @@ namespace RoosterBot {
 		public IGuild? Guild { get; }
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
-		public IReadOnlyCollection<IUserMessage> Responses { get; }
+		public IReadOnlyCollection<IUserMessage>? Responses { get; }
 
 		/// <summary>
 		/// If IsPrivate is true, then this guild will be suitable to use for config information. It is the first mutual guild between the user and the bot user.
@@ -213,7 +213,7 @@ namespace RoosterBot {
 		public IGuild UserGuild { get; }
 		
 		// TODO review all instantiations, it now throws an exception if there's no mutual guilds
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage> originalResponses) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage>? originalResponses) {
 			Client = client;
 			Message = message;
 			User = message.Author;

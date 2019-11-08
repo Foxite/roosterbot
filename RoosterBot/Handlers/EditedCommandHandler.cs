@@ -33,24 +33,20 @@ namespace RoosterBot {
 				}
 
 				if (m_Commands.IsMessageCommand(userMessageAfter, prefix, out int argPos)) {
-					IReadOnlyCollection<IUserMessage> responses;
+					IReadOnlyCollection<IUserMessage>? responses = null;
 					if (crp != null) {
 						// Was previously a command
 						responses = crp.Responses;
-					} else {
-						// Was previously not a command
-						responses = Array.Empty<IUserMessage>();
 					}
+					// else: Was previously not a command. Use default value
 
 					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses);
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
-				} else {
-					if (crp != null) {
-						// No longer a command
-						m_CRS.RemoveCommand(userMessageAfter, out _);
-						await Util.DeleteAll(crp.Command.Channel, crp.Responses);
-					} // else: was not a command, is not a command
-				}
+				} else if (crp != null) {
+					// No longer a command
+					m_CRS.RemoveCommand(userMessageAfter, out _);
+					await Util.DeleteAll(crp.Command.Channel, crp.Responses);
+				} // else: was not a command, is not a command
 			}
 		}
 	}

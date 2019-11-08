@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -31,37 +33,36 @@ namespace RoosterBot {
 					switch (result.Error.Value) {
 						case CommandError.UnknownCommand:
 							response = string.Format(m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_UnknownCommand"), guildConfig.CommandPrefix);
+							bad = false;
 							break;
 						case CommandError.BadArgCount:
 							response = m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
+							bad = false;
 							break;
 						case CommandError.UnmetPrecondition:
 							response = m_ResourcesService.ResolveString(guildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+							bad = false;
 							break;
 						case CommandError.ParseFailed:
 							response = result.ErrorReason;
+							bad = false;
 							break;
 						case CommandError.ObjectNotFound:
 							badReport += "ObjectNotFound";
-							bad = true;
 							break;
 						case CommandError.MultipleMatches:
 							badReport += "MultipleMatches";
-							bad = true;
 							break;
 						case CommandError.Exception:
 							badReport += "Exception\n";
 							badReport += result.ErrorReason;
-							bad = true;
 							break;
 						case CommandError.Unsuccessful:
 							badReport += "Unsuccessful\n";
 							badReport += result.ErrorReason;
-							bad = true;
 							break;
 						default:
 							badReport += "Unknown error: " + result.Error.Value.ToString();
-							bad = true;
 							break;
 					}
 				} else {
@@ -81,10 +82,10 @@ namespace RoosterBot {
 				}
 
 				IReadOnlyCollection<IUserMessage>? initialResponses = (context as RoosterCommandContext)?.Responses;
-				if (initialResponses == null) {
-					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
-				} else {
+				if (initialResponses != null) {
 					await Util.ModifyResponsesIntoSingle(response, initialResponses, false);
+				} else {
+					m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
 				}
 			}
 		}

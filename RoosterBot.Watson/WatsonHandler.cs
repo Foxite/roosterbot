@@ -44,7 +44,7 @@ namespace RoosterBot.Watson {
 
 					if (process) {
 						CommandResponsePair? crp = m_CRS.GetResponse(msg);
-						RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp?.Responses ?? Array.Empty<IUserMessage>());
+						RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp?.Responses);
 
 						// Do not await this task on the gateway thread because it can take very long.
 						_ = Task.Run(async () => {
