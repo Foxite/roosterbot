@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 namespace RoosterBot.PublicTransit {
-	public class StationInfo {
+	public class StationInfo : IEquatable<StationInfo> {
 		public string Code { get; }
 		public string? ShortName { get; }
 		public string? MidName { get; }
@@ -15,7 +15,7 @@ namespace RoosterBot.PublicTransit {
 
 		public string DisplayName => LongName ?? MidName ?? ShortName ?? Code ?? "If you see this, please contact the bot owner for a free mars bar.";
 
-		private IEnumerable<string> Names => Synonyms.Concat(new[] { ShortName, MidName, LongName }.WhereNotNull();
+		private IEnumerable<string> Names => Synonyms.Concat(new[] { ShortName, MidName, LongName }.WhereNotNull());
 
 		internal StationInfo(XElement xmlStation) {
 			Code = xmlStation.Element(XName.Get("Code")).Value;
@@ -54,16 +54,62 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		public override string ToString() => DisplayName;
+
+		public bool Equals(StationInfo? other) {
+			return other != null
+				&& other.Code == Code;
+		}
 	}
 
 	public class StationMatchInfo : IComparable<StationMatchInfo> {
-		public StationInfo Station { get; set; }
-		public float Score { get; set; }
+		public StationInfo Station { get; }
+		public float Score { get; }
+
+		public StationMatchInfo(StationInfo station, float score) {
+			Station = station;
+			Score = score;
+		}
 
 		public int CompareTo(StationMatchInfo other) {
 			return Math.Sign(Score - other.Score);
 		}
 
 		public override string ToString() => Station.ToString() + "@" + Score;
+
+		public override bool Equals(object? obj) {
+			return obj is StationMatchInfo info
+				&& Station.Equals(info.Station)
+				&& Score == info.Score;
+		}
+
+		public override int GetHashCode() => HashCode.Combine(Station, Score);
+
+		public static bool operator ==(StationMatchInfo left, StationMatchInfo right) {
+			if (left is null) {
+				return right is null;
+			}
+
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(StationMatchInfo left, StationMatchInfo right) {
+			return !(left == right);
+		}
+
+		public static bool operator <(StationMatchInfo left, StationMatchInfo right) {
+			return left.Score < right.Score;
+		}
+
+		public static bool operator <=(StationMatchInfo left, StationMatchInfo right) {
+			return left.Score <= right.Score;
+		}
+
+		public static bool operator >(StationMatchInfo left, StationMatchInfo right) {
+			return left.Score > right.Score;
+		}
+
+		public static bool operator >=(StationMatchInfo left, StationMatchInfo right) {
+			return left.Score >= right.Score;
+		}
 	}
 }

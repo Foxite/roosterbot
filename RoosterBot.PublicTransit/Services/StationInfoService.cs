@@ -62,7 +62,7 @@ namespace RoosterBot.PublicTransit {
 			}
 
 			foreach (StationInfo v in m_Stations) {
-				insertMatch(new StationMatchInfo() { Station = v, Score = v.Match(inputLower) });
+				insertMatch(new StationMatchInfo(v, v.Match(inputLower)));
 			}
 
 			if (count == 1) {
