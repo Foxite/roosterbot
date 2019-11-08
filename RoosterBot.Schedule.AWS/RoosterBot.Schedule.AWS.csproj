@@ -1,37 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	  <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\RoosterBot\bin\Debug\Schedule.AWS</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>..\RoosterBot\bin\Debug\Schedule.AWS</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\RoosterBot\bin\Release\Schedule.AWS</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>..\RoosterBot\bin\Release\Schedule.AWS</OutputPath>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.84" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.84" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RoosterBot.AWS\RoosterBot.AWS.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\RoosterBot.AWS\RoosterBot.AWS.csproj">
+			<Private>false</Private>
+			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
+			<Private>false</Private>
+			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+			<Private>false</Private>
+			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+	</ItemGroup>
 
 </Project>
