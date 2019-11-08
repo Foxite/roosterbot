@@ -3,14 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Debug\PublicTransit</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Release\PublicTransit</OutputPath>
+		<OutDir>$(SolutionDir)\Output\Components\PublicTransit</OutDir>
 	</PropertyGroup>
 
 	<ItemGroup>

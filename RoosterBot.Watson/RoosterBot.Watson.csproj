@@ -3,15 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<OutDir>$(SolutionDir)\Output\Components\Watson</OutDir>
 		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Debug\Watson</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Release\Watson</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

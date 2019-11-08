@@ -3,14 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Debug\DateTimeUtils</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\RoosterBot\bin\Release\DateTimeUtils</OutputPath>
+		<OutDir>$(SolutionDir)\Output\Components\DateTimeUtils</OutDir>
 	</PropertyGroup>
 
 	<ItemGroup>
