@@ -36,7 +36,7 @@ namespace RoosterBot.Schedule {
 				}
 			}
 			ResourceService resources = services.GetService<ResourceService>();
-			CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild)).Culture;
+			CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild))!.Culture;
 			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(culture, m_ResourcesComponent, m_ErrorMessage));
 		}
 	}

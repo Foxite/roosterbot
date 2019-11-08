@@ -31,20 +31,20 @@ namespace RoosterBot.Watson {
 					bool process = false;
 					int argPos = 0;
 					if (msg.Channel is IGuildChannel guildChannel) { // If in guild: Message starts with mention to bot
-						string commandPrefix = (await guildConfig.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
+						string commandPrefix = (await guildConfig.GetConfigAsync(guildChannel.Guild))!.CommandPrefix;
 						if (msg.HasMentionPrefix(m_Discord.CurrentUser, ref argPos)) {
 							process = true;
 						}
 					} else if (msg.Author.MutualGuilds.Any()) {
-						string commandPrefix = (await guildConfig.GetConfigAsync(msg.Author.MutualGuilds.First())).CommandPrefix;
+						string commandPrefix = (await guildConfig.GetConfigAsync(msg.Author.MutualGuilds.First()))!.CommandPrefix;
 						if (!msg.Content.StartsWith(commandPrefix)) {
 							process = true;
 						}
 					}
 
 					if (process) {
-						CommandResponsePair crp = m_CRS.GetResponse(msg);
-						RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp?.Responses);
+						CommandResponsePair? crp = m_CRS.GetResponse(msg);
+						RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp?.Responses ?? Array.Empty<IUserMessage>());
 
 						// Do not await this task on the gateway thread because it can take very long.
 						_ = Task.Run(async () => {
@@ -63,9 +63,9 @@ namespace RoosterBot.Watson {
 			if (context.IsPrivate && context.User is SocketUser socketUser) {
 				cultureGuild = socketUser.MutualGuilds.FirstOrDefault();
 			} else {
-				cultureGuild = context.Guild;
+				cultureGuild = context.Guild!;
 			}
-			GuildConfig guildConfig = await m_GCS.GetConfigAsync(cultureGuild);
+			GuildConfig guildConfig = (await m_GCS.GetConfigAsync(cultureGuild))!;
 
 			string? returnMessage = null;
 			try {
