@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IBM.WatsonDeveloperCloud.Assistant.v2;
 using IBM.WatsonDeveloperCloud.Assistant.v2.Model;
 using IBM.WatsonDeveloperCloud.Util;
@@ -37,7 +38,7 @@ namespace RoosterBot.Watson {
 						}
 					}
 					Logger.Debug(LogTag, $"Selected {maxConfidence.Intent}");
-					string params_ = "";
+					List<(string, string)> parsedEntities = new List<(string, string)>();
 					foreach (RuntimeEntity entity in result.Output.Entities) {
 						for (int i = 0; i < entity.Location.Count; i++) {
 							// The C# API says this is a nullable long, but the API documentation says its an "integer[]"
@@ -46,6 +47,7 @@ namespace RoosterBot.Watson {
 							// Who knows why? God, and maybe the programmers at IBM as well, but don't count on it.
 							int? start = (int?) entity.Location[i];
 							int? end = (int?) entity.Location[++i];
+
 							if (start.HasValue && end.HasValue) {
 								string entityValue = input.Substring(start.Value, end.Value - start.Value);
 								// Fix for weekday
@@ -54,13 +56,15 @@ namespace RoosterBot.Watson {
 									entityValue = entityValue.Substring(3);
 								}
 
-								params_ += " " + entityValue;
+								parsedEntities.Add((entity.Entity, entityValue));
 							} else {
 								Logger.Error(LogTag, $"Entity {entity.Entity}: {entity.Value} was skipped: Start or end is null");
 							}
 						}
 					}
-					string convertedCommand = maxConfidence.Intent + params_;
+					string params_ = string.Join(" ", parsedEntities.OrderBy(tuple => tuple.Item1).Select(tuple => tuple.Item2));
+
+					string convertedCommand = maxConfidence.Intent + " " + params_;
 					Logger.Debug(LogTag, $"Natlang command `{input}` was converted into `{convertedCommand}`");
 					return convertedCommand;
 				} else {
