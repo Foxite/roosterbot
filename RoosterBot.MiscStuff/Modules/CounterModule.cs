@@ -6,8 +6,12 @@ using Discord.Commands;
 namespace RoosterBot.MiscStuff {
 	[Name("#CounterModule_Name")]
 	public class CounterModule : RoosterModuleBase {
-		public CounterService Service { get; set; }
-		
+		private CounterService Service { get; }
+
+		public CounterModule(CounterService service) {
+			Service = service;
+		}
+
 		[Command("counter"), Priority(0), Summary("#CounterModule_GetCounterCommand_Summary")]
 		public Task GetCounterCommand([Remainder] string counter) {
 			try {
@@ -26,8 +30,6 @@ namespace RoosterBot.MiscStuff {
 				return MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
 			} catch (ArgumentException e) {
 				return FatalError("Invalid counter", e);
-			} catch (Exception e) {
-				return FatalError("Uncaught exception", e);
 			}
 		}
 
@@ -50,8 +52,6 @@ namespace RoosterBot.MiscStuff {
 				return Task.CompletedTask;
 			} catch (FileNotFoundException) {
 				return MinorError(GetString("CounterModule_GetCounterCommand_CounterDoesNotExist"));
-			} catch (Exception e) {
-				return FatalError("Uncaught exception", e);
 			}
 		}
 

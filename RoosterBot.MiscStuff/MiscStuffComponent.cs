@@ -6,7 +6,9 @@ using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
 	public class MiscStuffComponent : ComponentBase {
+#nullable disable
 		public string ConfigPath { get; private set; }
+#nullable restore
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 

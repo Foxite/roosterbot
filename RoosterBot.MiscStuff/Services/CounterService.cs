@@ -10,15 +10,19 @@ namespace RoosterBot.MiscStuff {
 		}
 
 		public string GetCounterDescription(string counterName) {
+			string path;
 			try {
-				if (File.Exists(Path.Combine(m_CounterFolder, counterName))) {
-					return File.ReadAllLines(Path.Combine(m_CounterFolder, counterName))[0];
-				} else {
-					throw new FileNotFoundException();
-				}
+				path = Path.Combine(m_CounterFolder, counterName);
 			} catch (ArgumentException e) {
 				throw new FileNotFoundException("Counter is invalid", e);
 			}
+
+			if (File.Exists(path)) {
+				return File.ReadAllLines(Path.Combine(m_CounterFolder, counterName))[0];
+			} else {
+				throw new FileNotFoundException();
+			}
+
 		}
 
 		public CounterData GetDateCounter(string counterName) {
@@ -76,9 +80,26 @@ namespace RoosterBot.MiscStuff {
 		public TimeSpan HighScoreTimespan;
 
 		public CounterData(string description, DateTime lastResetDate, TimeSpan highScoreTimespan) {
-			this.Description = description;
-			this.LastResetDate = lastResetDate;
-			this.HighScoreTimespan = highScoreTimespan;
+			Description = description;
+			LastResetDate = lastResetDate;
+			HighScoreTimespan = highScoreTimespan;
+		}
+
+		public override bool Equals(object? obj) {
+			return obj is CounterData data
+				&& Description == data.Description
+				&& LastResetDate == data.LastResetDate
+				&& HighScoreTimespan.Equals(data.HighScoreTimespan);
+		}
+
+		public override int GetHashCode() => HashCode.Combine(Description, LastResetDate, HighScoreTimespan);
+
+		public static bool operator ==(CounterData left, CounterData right) {
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(CounterData left, CounterData right) {
+			return !(left == right);
 		}
 	}
 }

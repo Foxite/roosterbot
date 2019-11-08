@@ -24,11 +24,8 @@ namespace RoosterBot.MiscStuff {
 		}
 
 		public ulong? GetPropagatedRoleId(IGuild guild) {
-			if (m_PropagatedRoles.TryGetValue(guild.Id, out ulong roleId)) {
-				return roleId;
-			} else {
-				return null;
-			}
+			m_PropagatedRoles.TryGetValue(guild.Id, out ulong roleId);
+			return roleId;
 		}
 
 		public async Task<PropagationStats> GetPropagationStats(IGuild guild) {
