@@ -24,7 +24,7 @@ namespace RoosterBot.MiscStuff {
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<MiscModule>(services),
 				commandService.AddModuleAsync<CounterModule>(services),
-				commandService.AddModuleAsync<ModerationModule>(services)
+				commandService.AddModuleAsync<UserListModule>(services)
 			));
 		}
 	}
