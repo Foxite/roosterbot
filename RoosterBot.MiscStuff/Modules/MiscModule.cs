@@ -14,7 +14,7 @@ namespace RoosterBot.MiscStuff {
 				string[] responses = new[] {
 					":smile:",
 					":thumbsup:",
-					"<:wsjoram:570601561072467969>", // This probably can't make it into 2.0
+					"<:wsjoram:570601561072467969>",
 					":blush:"
 				};
 				response = responses[Util.RNG.Next(0, responses.Length)];

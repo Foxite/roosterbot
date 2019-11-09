@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
+	// TODO (refactor) Move stuff out of this component
+	// This component is half composed of GLU-requested features, and half actual miscellanea.
+	// The GLU stuff should go into Schedule.GLU, which should be renamed to GLU. It will contain all current and future GLU-specific stuff.
 	public class MiscStuffComponent : ComponentBase {
 #nullable disable
 		public string ConfigPath { get; private set; }
