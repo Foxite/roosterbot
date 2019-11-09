@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 using Discord;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
-	public sealed class GuildConfigService {
+	public abstract class GuildConfigService {
 		private readonly ConfigService m_Config;
-		private Provider? m_Provider;
 
-		internal GuildConfigService(ConfigService config) {
+		protected GuildConfigService(ConfigService config) {
 			m_Config = config;
 		}
 
@@ -17,74 +19,43 @@ namespace RoosterBot {
 			return GetDefaultConfig(0);
 		}
 
-		private GuildConfig GetDefaultConfig(ulong guildId) {
-			return new GuildConfig(guildId, m_Config.DefaultCulture, m_Config.DefaultCommandPrefix);
+		protected GuildConfig GetDefaultConfig(ulong guildId) {
+			return new GuildConfig(this, guildId, m_Config.DefaultCulture, m_Config.DefaultCommandPrefix, new Dictionary<string, JToken>());
 		}
 
-		public void InstallProvider(Provider provider) {
-			if (m_Provider != null) {
-				throw new InvalidOperationException("A provider is already installed: " + m_Provider.GetType().FullName);
-			}
-			m_Provider = provider;
-		}
-
-		public Task<bool> UpdateGuildAsync(GuildConfig config) {
-			if (m_Provider == null) {
-				return Task.FromResult(false);
-			} else {
-				return m_Provider.UpdateGuildAsync(config);
-			}
-		}
-
-		public async Task<GuildConfig> GetConfigAsync(IGuild guild) {
-			GuildConfig? ret;
-			if (m_Provider == null) {
-				ret = GetDefaultConfig(guild.Id);
-			} else {
-				ret = await m_Provider.GetGuildAsync(guild.Id);
-			}
-			if (ret == null) {
-				throw new InvalidOperationException($"Missing guild config for guild `{guild.Name}`.");
-			}
-			return ret;
-		}
-
-		/// <summary>
-		/// Provides GuildConfigService with its data.
-		/// </summary>
-		public abstract class Provider {
-			/// <summary>
-			/// Returns null if the guild is unknown.
-			/// </summary>
-			public virtual Task<GuildConfig?> GetGuildAsync(IGuild guild) => GetGuildAsync(guild.Id);
-
-			/// <summary>
-			/// Returns null if the guild is unknown.
-			/// </summary>
-			public abstract Task<GuildConfig?> GetGuildAsync(ulong guildId);
-
-			/// <summary>
-			/// Returns a value representing the success of the operation.
-			/// </summary>
-			public abstract Task<bool> UpdateGuildAsync(GuildConfig config);
-
-			/// <summary>
-			/// Enumerate all known guilds.
-			/// </summary>
-			public abstract IEnumerator<GuildConfig> GetEnumerator();
-		}
+		public abstract Task<bool> UpdateGuildAsync(GuildConfig config);
+		public abstract Task<GuildConfig> GetConfigAsync(IGuild guild);
 	}
 
+	/// <summary>
+	/// This class stores data about a guild's preferences with this bot. Built-in are the language and command prefix, and it can store arbitrary custom data.
+	/// 
+	/// This arbitrary data is serialized using Newtonsoft.Json. This means most built-in .NET types will work, and any custom data structure that you store must
+	/// be serializable with Newtonsoft.Json. Read its documentation to learn more.
+	/// </summary>
 	public class GuildConfig {
+		private GuildConfigService m_Service;
+		private IDictionary<string, JToken> m_CustomData;
+
 		public CultureInfo Culture { get; set; }
 		public string CommandPrefix { get; set; }
-
 		public ulong GuildId { get; }
 
-		public GuildConfig(ulong guildId, CultureInfo culture, string commandPrefix) {
-			GuildId = guildId;
-			Culture = culture;
-			CommandPrefix = commandPrefix;
+		// TODO constructor
+
+		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data) {
+			if (m_CustomData.TryGetValue(key, out JToken? value)) {
+				data = value.ToObject<T>();
+				return true;
+			} else {
+				data = default!;
+				return false;
+			}
+		}
+
+		public void SetData<T>(string key, T data) {
+			m_CustomData[key] = JToken.FromObject(data);
+			m_Service.UpdateGuildAsync(this);
 		}
 	}
 }

@@ -101,7 +101,6 @@ namespace RoosterBot {
 
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
-			GuildConfigService gcs = new GuildConfigService(m_ConfigService);
 			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
 			ResourceService resources = new ResourceService();
@@ -129,11 +128,13 @@ namespace RoosterBot {
 			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
 			//  that use the object's fields.
 			new RestartHandler(m_Client, m_NotificationService, 5);
-			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
-			new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
-			new DeletedCommandHandler(m_Client, crs);
 			new DeadlockHandler(m_Client, m_NotificationService, 60000);
+
+			// TODO do this during AddModules, it needs GuildConfigService but it's not available at this point anymore
+			//new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
+			//new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
+			//new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
+			//new DeletedCommandHandler(m_Client, crs);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
@@ -141,7 +142,6 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
-				.AddSingleton(gcs)
 				.AddSingleton(crs)
 				.AddSingleton(m_Client);
 			return serviceCollection;
