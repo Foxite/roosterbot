@@ -21,7 +21,8 @@ namespace RoosterBot.Weather {
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
-			ReplyDeferred(weather.Present(DateTime.Now, Culture, true)); // TODO (feature) guild config for metric (probably use a dynamic config system so any component can have their own settings)
+			GuildConfig.TryGetData("metric", out bool metric, true);
+			ReplyDeferred(weather.Present(DateTime.Now, Culture, metric));
 			Attribution();
 		}
 
@@ -46,7 +47,8 @@ namespace RoosterBot.Weather {
 				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
 				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			}
-			ReplyDeferred(weather.Present(datetime, Culture, true));
+			GuildConfig.TryGetData("metric", out bool metric, true);
+			ReplyDeferred(weather.Present(datetime, Culture, metric));
 			Attribution();
 		}
 
@@ -69,7 +71,8 @@ namespace RoosterBot.Weather {
 					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 						weather = await Weather.GetWeatherForecastAsync(city, amount);
 					}
-					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture, true));
+					GuildConfig.TryGetData("metric", out bool metric, true);
+					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture, metric));
 					Attribution();
 				}
 			} else {
@@ -89,9 +92,11 @@ namespace RoosterBot.Weather {
 					pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
 				}
 
-				response  = DateTime.Today.AddHours(08).ToShortTimeString(Culture) + "\n" + dayForecast[0].Present(Culture, true);
-				response += DateTime.Today.AddHours(12).ToShortTimeString(Culture) + "\n" + dayForecast[1].Present(Culture, true);
-				response += DateTime.Today.AddHours(18).ToShortTimeString(Culture) + "\n" + dayForecast[2].Present(Culture, true);
+				GuildConfig.TryGetData("metric", out bool metric, true);
+
+				response  = DateTime.Today.AddHours(08).ToShortTimeString(Culture) + "\n" + dayForecast[0].Present(Culture, metric);
+				response += DateTime.Today.AddHours(12).ToShortTimeString(Culture) + "\n" + dayForecast[1].Present(Culture, metric);
+				response += DateTime.Today.AddHours(18).ToShortTimeString(Culture) + "\n" + dayForecast[2].Present(Culture, metric);
 			}
 
 			ReplyDeferred(response);
