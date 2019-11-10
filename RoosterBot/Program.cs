@@ -77,6 +77,16 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
 
+			// TODO (refactor) find a better place for this
+			var commands = Components.Services.GetService<RoosterCommandService>();
+			var resources = Components.Services.GetService<ResourceService>();
+			var gcs = Components.Services.GetService<GuildConfigService>();
+			var crs = Components.Services.GetService<CommandResponseService>();
+			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
+			new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
+			new DeletedCommandHandler(m_Client, crs);
+
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
 
@@ -129,12 +139,6 @@ namespace RoosterBot {
 			//  that use the object's fields.
 			new RestartHandler(m_Client, m_NotificationService, 5);
 			new DeadlockHandler(m_Client, m_NotificationService, 60000);
-
-			// TODO do this during AddModules, it needs GuildConfigService but it's not available at this point anymore
-			//new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
-			//new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
-			//new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
-			//new DeletedCommandHandler(m_Client, crs);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(m_ConfigService)
