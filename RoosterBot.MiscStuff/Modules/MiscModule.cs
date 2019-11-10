@@ -9,7 +9,7 @@ namespace RoosterBot.MiscStuff {
 		[Command("dank u", true), Alias(
 			"danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt",
 			"goed", "goedzo", "good bot",
-			"thanks", "thx", "ty", "thank")]
+			"thanks", "thnx", "thx", "ty", "thank")]
 		public async Task ThankYouCommand() {
 			string response;
 			if (PrankService.GetAlwaysJoram(Context.User.Id)) {
