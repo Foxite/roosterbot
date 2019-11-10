@@ -30,10 +30,10 @@ namespace RoosterBot.Schedule {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			services
-				.AddSingleton(new TeacherNameService())
-				.AddSingleton(new ScheduleService())
-				.AddSingleton(new LastScheduleCommandService())
-				.AddSingleton(new IdentifierValidationService());
+				.AddSingleton<TeacherNameService>()
+				.AddSingleton<ScheduleService>()
+				.AddSingleton<LastScheduleCommandService>()
+				.AddSingleton<IdentifierValidationService>();
 
 			Logger.Debug("ScheduleComponent", "Started services");
 

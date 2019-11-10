@@ -50,7 +50,7 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		protected override void Dispose(bool disposing) {
-			m_NSAPI.Dispose();
+			m_NSAPI?.Dispose();
 		}
 	}
 }

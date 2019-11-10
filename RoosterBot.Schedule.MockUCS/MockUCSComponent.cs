@@ -8,7 +8,7 @@ namespace RoosterBot.Schedule.MockUCS {
 		public override IEnumerable<string> Tags => new[] { "UserClassesService" };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			services.AddSingleton<IUserClassesService>(new MockUserClassesService());
+			services.AddSingleton<IUserClassesService, MockUserClassesService>();
 			return Task.CompletedTask;
 		}
 	}
