@@ -3,7 +3,11 @@ using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
 	public class MiscModule : RoosterModuleBase {
-		public PrankService PrankService { get; set; }
+		private PrankService PrankService { get; }
+
+		public MiscModule(PrankService prankService) {
+			PrankService = prankService;
+		}
 
 		[Command("dank u", true), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "goed zo", "goedzo", "thanks", "thx")]
 		public async Task ThankYouCommand() {
