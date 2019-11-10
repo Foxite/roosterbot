@@ -51,12 +51,12 @@ namespace RoosterBot {
 
 		}
 
-		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data) {
+		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data, T defaultValue = default) {
 			if (m_CustomData.TryGetValue(key, out JToken? value)) {
 				data = value.ToObject<T>();
 				return true;
 			} else {
-				data = default!;
+				data = defaultValue;
 				return false;
 			}
 		}
