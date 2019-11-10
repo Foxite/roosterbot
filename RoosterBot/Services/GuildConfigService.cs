@@ -47,7 +47,6 @@ namespace RoosterBot {
 			Culture = culture;
 			GuildId = guildId;
 			m_CustomData = customData;
-
 		}
 
 		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data, T defaultValue = default) {
@@ -60,9 +59,9 @@ namespace RoosterBot {
 			}
 		}
 
-		public void SetData<T>(string key, T data) {
+		public async Task SetData<T>(string key, T data) {
 			m_CustomData[key] = JToken.FromObject(data);
-			m_Service.UpdateGuildAsync(this);
+			await m_Service.UpdateGuildAsync(this);
 		}
 	}
 }
