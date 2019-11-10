@@ -37,11 +37,10 @@ namespace RoosterBot {
 		private GuildConfigService m_Service;
 		private IDictionary<string, JToken> m_CustomData;
 
+		public ulong GuildId { get; }
 		public CultureInfo Culture { get; set; }
 		public string CommandPrefix { get; set; }
-		public ulong GuildId { get; }
 
-		// TODO constructor
 		public GuildConfig(GuildConfigService guildConfigService, string commandPrefix, CultureInfo culture, ulong guildId, IDictionary<string, JToken> customData) {
 			m_Service = guildConfigService;
 			CommandPrefix = commandPrefix;
