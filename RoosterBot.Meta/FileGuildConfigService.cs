@@ -18,23 +18,26 @@ namespace RoosterBot.Meta {
 			IDictionary<string, JToken> jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath));
 			m_Configs = jsonConfig.ToDictionary(
 				/* Key */ kvp => ulong.Parse(kvp.Key),
-				/* Val */ kvp => {
-					return new GuildConfig(this,
-						kvp.Value["commandPrefix"].ToObject<string>(),
-						CultureInfo.GetCultureInfo(kvp.Value["culture"].ToObject<string>()),
-						ulong.Parse(kvp.Key),
-						kvp.Value.ToObject<JObject>()["customData"].ToObject<JObject>()
-					);
-				}
+				/* Val */ kvp => new GuildConfig(this,
+					kvp.Value["commandPrefix"].ToObject<string>(),
+					CultureInfo.GetCultureInfo(kvp.Value["culture"].ToObject<string>()),
+					ulong.Parse(kvp.Key),
+					kvp.Value.ToObject<JObject>()["customData"].ToObject<JObject>()
+				)
 			);
 		}
 
 		public override Task<GuildConfig> GetConfigAsync(IGuild guild) {
-			return Task.FromResult(m_Configs[guild.Id]);
+			if (!m_Configs.TryGetValue(guild.Id, out GuildConfig? gc)) {
+				gc = GetDefaultConfig(guild.Id);
+			}
+			
+			return Task.FromResult(gc);
 		}
 
 		public async override Task UpdateGuildAsync(GuildConfig config) {
 			m_Configs[config.GuildId] = config;
+			// TODO (fix) this doesn't work because it doesn't know how to serialize GuildConfig
 			await File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(m_Configs).ToString(Newtonsoft.Json.Formatting.None));
 		}
 	}
