@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +14,28 @@ namespace RoosterBot.Meta {
 		public FileGuildConfigService(ConfigService config, string configPath) : base(config) {
 			m_ConfigFilePath = configPath;
 
-			// TODO read config file and populate m_Configs
+			// Read config file and populate m_Configs
+			IDictionary<string, JToken> jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath));
+			m_Configs = jsonConfig.ToDictionary(
+				/* Key */ kvp => ulong.Parse(kvp.Key),
+				/* Val */ kvp => {
+					return new GuildConfig(this,
+						kvp.Value["commandPrefix"].ToObject<string>(),
+						CultureInfo.GetCultureInfo(kvp.Value["culture"].ToObject<string>()),
+						ulong.Parse(kvp.Key),
+						kvp.Value.ToObject<JObject>()["customData"].ToObject<JObject>()
+					);
+				}
+			);
 		}
 
 		public override Task<GuildConfig> GetConfigAsync(IGuild guild) {
 			return Task.FromResult(m_Configs[guild.Id]);
 		}
 
-		public override Task<bool> UpdateGuildAsync(GuildConfig config) {
-			// TODO write m_Configs back to file
+		public async override Task UpdateGuildAsync(GuildConfig config) {
+			m_Configs[config.GuildId] = config;
+			await File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(m_Configs).ToString(Newtonsoft.Json.Formatting.None));
 		}
 	}
 }

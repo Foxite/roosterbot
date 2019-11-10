@@ -20,10 +20,10 @@ namespace RoosterBot {
 		}
 
 		protected GuildConfig GetDefaultConfig(ulong guildId) {
-			return new GuildConfig(this, guildId, m_Config.DefaultCulture, m_Config.DefaultCommandPrefix, new Dictionary<string, JToken>());
+			return new GuildConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, guildId, new Dictionary<string, JToken>());
 		}
 
-		public abstract Task<bool> UpdateGuildAsync(GuildConfig config);
+		public abstract Task UpdateGuildAsync(GuildConfig config);
 		public abstract Task<GuildConfig> GetConfigAsync(IGuild guild);
 	}
 
@@ -42,6 +42,14 @@ namespace RoosterBot {
 		public ulong GuildId { get; }
 
 		// TODO constructor
+		public GuildConfig(GuildConfigService guildConfigService, string commandPrefix, CultureInfo culture, ulong guildId, IDictionary<string, JToken> customData) {
+			m_Service = guildConfigService;
+			CommandPrefix = commandPrefix;
+			Culture = culture;
+			GuildId = guildId;
+			m_CustomData = customData;
+
+		}
 
 		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data) {
 			if (m_CustomData.TryGetValue(key, out JToken? value)) {
