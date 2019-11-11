@@ -3,7 +3,6 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO (refactor) This service is superseded by the new UserConfigService
 	public class LastScheduleCommandService {
 		private ConcurrentDictionary<SCIKey, ScheduleCommandInfo> m_SCIs;
 
