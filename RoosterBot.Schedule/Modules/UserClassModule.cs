@@ -28,6 +28,8 @@ namespace RoosterBot.Schedule {
 				StudentSetInfo oldStudentSet = await Classes.SetClassForDiscordUserAsync(Context, (IGuildUser) Context.User, newStudentSet);
 				if (oldStudentSet == null) {
 					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
+				} else if (oldStudentSet == newStudentSet) {
+					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmNoChange", newStudentSet.DisplayText));
 				} else {
 					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 				}
