@@ -42,9 +42,14 @@ namespace RoosterBot {
 			}
 		}
 
-		public async void SetDataAsync<T>(string key, T data) {
+		public void SetData<T>(string key, T data) {
 			m_CustomData[key] = JToken.FromObject(data);
-			await m_Service.UpdateUserAsync(this);
 		}
+
+		public Task UpdateAsync() {
+			return m_Service.UpdateUserAsync(this);
+		}
+
+		public JObject GetRawData() => JObject.FromObject(m_CustomData);
 	}
 }

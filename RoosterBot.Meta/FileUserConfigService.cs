@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	public class FileUserConfigService : UserConfigService {
-		private readonly string m_ConfigPath;
+		private readonly string m_ConfigFilePath;
 		private IDictionary<ulong, UserConfig> m_Configs;
 
 		public FileUserConfigService(string configPath) {
@@ -21,13 +21,13 @@ namespace RoosterBot.Meta {
 					string cultureString = userJO["culture"].ToObject<string>();
 					return new UserConfig(
 						this,
-						cultureString.Length == 0 ? CultureInfo.GetCultureInfo(cultureString) : null,
+						cultureString.Length != 0 ? CultureInfo.GetCultureInfo(cultureString) : null,
 						ulong.Parse(kvp.Key),
 						userJO["customData"].ToObject<JObject>()
 					);
 				}
 			);
-			m_ConfigPath = configPath;
+			m_ConfigFilePath = configPath;
 		}
 
 		public override Task<UserConfig> GetConfigAsync(IUser user) {
@@ -40,9 +40,20 @@ namespace RoosterBot.Meta {
 
 		public override Task UpdateUserAsync(UserConfig config) {
 			m_Configs[config.UserId] = config;
-			// TODO (fix) this doesn't work because it doesn't know how to serialize UserConfig
-			File.WriteAllText(m_ConfigPath, JObject.FromObject(m_Configs).ToString(Newtonsoft.Json.Formatting.None));
-			return Task.CompletedTask;
+			JObject jsonConfig = new JObject();
+
+			foreach (KeyValuePair<ulong, UserConfig> kvp in m_Configs) {
+				JObject jsonConfigItem = new JObject();
+
+				if (kvp.Value.Culture != null) {
+					jsonConfigItem["culture"] = kvp.Value.Culture.Name;
+				}
+
+				jsonConfigItem["customData"] = kvp.Value.GetRawData();
+				jsonConfig[kvp.Key.ToString()] = jsonConfigItem;
+			}
+
+			return File.WriteAllTextAsync(m_ConfigFilePath, jsonConfig.ToString(Newtonsoft.Json.Formatting.None));
 		}
 	}
 }

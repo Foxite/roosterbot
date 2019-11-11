@@ -10,6 +10,7 @@ namespace RoosterBot.Meta {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			services.AddSingleton<GuildConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
+			services.AddSingleton<UserConfigService,  FileUserConfigService >(isp => new FileUserConfigService (Path.Combine(configPath, "Users.json")));
 
 			return Task.CompletedTask;
 		}
@@ -21,7 +22,8 @@ namespace RoosterBot.Meta {
 				commandService.AddModuleAsync<HelpModule>(services),
 				commandService.AddModuleAsync<ControlModule>(services),
 				commandService.AddModuleAsync<InfoModule>(services),
-				commandService.AddModuleAsync<GuildConfigModule>(services)
+				commandService.AddModuleAsync<GuildConfigModule>(services),
+				commandService.AddModuleAsync<UserConfigModule>(services)
 			));
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");

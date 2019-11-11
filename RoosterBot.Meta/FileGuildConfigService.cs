@@ -35,7 +35,7 @@ namespace RoosterBot.Meta {
 			return Task.FromResult(gc);
 		}
 
-		public async override Task UpdateGuildAsync(GuildConfig config) {
+		public override Task UpdateGuildAsync(GuildConfig config) {
 			m_Configs[config.GuildId] = config;
 			JObject jsonConfig = new JObject();
 
@@ -47,7 +47,7 @@ namespace RoosterBot.Meta {
 				};
 			}
 
-			await File.WriteAllTextAsync(m_ConfigFilePath, jsonConfig.ToString(Newtonsoft.Json.Formatting.None));
+			return File.WriteAllTextAsync(m_ConfigFilePath, jsonConfig.ToString(Newtonsoft.Json.Formatting.None));
 		}
 	}
 }

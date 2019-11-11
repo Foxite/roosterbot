@@ -28,6 +28,7 @@ namespace RoosterBot {
 		// I'd love a way to disable all warnings that come with DI somehow, as an exception is thrown during AddModuleAsync if a dependency is not found, but there's no feasible way to do that.
 		public ConfigService Config { get; set; }
 		public GuildConfigService GuildConfigService { get; set; }
+		public UserConfigService UserConfigService { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
 		public CommandResponseService CommandResponses { get; set; }
@@ -36,9 +37,10 @@ namespace RoosterBot {
 
 		protected ModuleLogger Log { get; private set; }
 		protected GuildConfig GuildConfig { get; private set; }
+		protected UserConfig UserConfig { get; private set; }
 #nullable restore
 
-		protected CultureInfo Culture => GuildConfig.Culture;
+		protected CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 
 		private StringBuilder m_Response = new StringBuilder();
 		private bool m_Replied = false;
@@ -51,6 +53,7 @@ namespace RoosterBot {
 				Context = base.Context;
 			}
 			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild ?? Context.UserGuild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
+			UserConfig = UserConfigService.GetConfigAsync(Context.User).GetAwaiter().GetResult();
 			
 			Log = new ModuleLogger(GetType().Name);
 
