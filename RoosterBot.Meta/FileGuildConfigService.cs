@@ -37,8 +37,17 @@ namespace RoosterBot.Meta {
 
 		public async override Task UpdateGuildAsync(GuildConfig config) {
 			m_Configs[config.GuildId] = config;
-			// TODO (fix) this doesn't work because it doesn't know how to serialize GuildConfig
-			await File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(m_Configs).ToString(Newtonsoft.Json.Formatting.None));
+			JObject jsonConfig = new JObject();
+
+			foreach (KeyValuePair<ulong, GuildConfig> kvp in m_Configs) {
+				jsonConfig[kvp.Key.ToString()] = new JObject {
+					["culture"] = kvp.Value.Culture.Name,
+					["commandPrefix"] = kvp.Value.CommandPrefix,
+					["customData"] = kvp.Value.GetRawData()
+				};
+			}
+
+			await File.WriteAllTextAsync(m_ConfigFilePath, jsonConfig.ToString(Newtonsoft.Json.Formatting.None));
 		}
 	}
 }

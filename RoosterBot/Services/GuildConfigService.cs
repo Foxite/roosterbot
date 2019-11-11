@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Discord;
 using Newtonsoft.Json.Linq;
@@ -57,9 +60,14 @@ namespace RoosterBot {
 			}
 		}
 
-		public async Task SetData<T>(string key, T data) {
+		public void SetData<T>(string key, T data) {
 			m_CustomData[key] = JToken.FromObject(data);
-			await m_Service.UpdateGuildAsync(this);
 		}
+
+		public Task UpdateAsync() {
+			return m_Service.UpdateGuildAsync(this);
+		}
+
+		public JObject GetRawData() => JObject.FromObject(m_CustomData);
 	}
 }
