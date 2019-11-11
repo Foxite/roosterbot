@@ -32,5 +32,10 @@ namespace RoosterBot.MiscStuff {
 			PrankService.SetAlwaysJoram(Context.User.Id, value);
 			await ReplyAsync($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
 		}
+
+		[Command("kut", true)]
+		public async Task BoazBas() {
+			ReplyDeferred("Kut " + (await Context.Client.GetUserAsync(305398418984009729)).Mention);
+		}
 	}
 }
