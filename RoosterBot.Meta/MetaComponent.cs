@@ -3,14 +3,22 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			services.AddSingleton<GuildConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
-			services.AddSingleton<UserConfigService,  FileUserConfigService >(isp => new FileUserConfigService (Path.Combine(configPath, "Users.json")));
+			JObject jsonConfig = JObject.Parse(File.ReadAllText(configPath));
+
+			if (jsonConfig["useFileGuildConfig"].ToObject<bool>()) {
+				services.AddSingleton<GuildConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
+			}
+
+			if (jsonConfig["useFileUserConfig"].ToObject<bool>()) {
+				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
+			}
 
 			return Task.CompletedTask;
 		}

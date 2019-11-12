@@ -7,17 +7,21 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.DynamoDBv2;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
-	// TODO (feature) DynamoDB implementations for UserConfigService and GuildConfigService
 	public class AWSComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
-		private string m_NotificationARN = "";
+#nullable disable
+		private AmazonDynamoDBClient m_DynamoDBClient;
+#nullable restore
+		// This field may actually be null after startup, because it does not get created in debug builds. So don't exclude it from nullability.
 		private SNSNotificationHandler? m_SNS;
+		private string m_NotificationARN = "";
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
@@ -29,8 +33,10 @@ namespace RoosterBot.AWS {
 			string secretKey = jsonConfig["secretKey"].ToObject<string>();
 			RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
 
-			services.AddSingleton(new AWSConfigService(accessKey, secretKey, endpoint));
+			AWSConfigService awsConfig = new AWSConfigService(accessKey, secretKey, endpoint);
+			services.AddSingleton(awsConfig);
 
+			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
 			return Task.CompletedTask;
 		}
 
