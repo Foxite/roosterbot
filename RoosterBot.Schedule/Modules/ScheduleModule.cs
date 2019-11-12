@@ -13,11 +13,9 @@ namespace RoosterBot.Schedule {
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
-		private LastScheduleCommandService LSCService { get; }
 		private ScheduleService Schedules { get; }
 
-		public ScheduleModule(LastScheduleCommandService lSCService, ScheduleService schedules) {
-			LSCService = lSCService;
+		public ScheduleModule(ScheduleService schedules) {
 			Schedules = schedules;
 		}
 
@@ -128,7 +126,7 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			LSCService.OnRequestByUser(Context, identifier, record);
+			UserConfig.OnScheduleRequestByUser(Context.Channel, identifier, record);
 			return ret;
 		}
 
@@ -137,17 +135,17 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord? record) {
 			base.ReplyDeferred(message);
-			LSCService.OnRequestByUser(Context, identifier, record);
+			UserConfig.OnScheduleRequestByUser(Context.Channel, identifier, record);
 		}
 
 		protected async override Task MinorError(string message) {
 			await base.MinorError(message);
-			LSCService.RemoveLastQuery(Context);
+			UserConfig.RemoveLastScheduleCommand(Context.Channel);
 		}
 
 		protected async override Task FatalError(string message, Exception? exception = null) {
 			await base.FatalError(message, exception);
-			LSCService.RemoveLastQuery(Context);
+			UserConfig.RemoveLastScheduleCommand(Context.Channel);
 		}
 		#endregion
 
@@ -284,7 +282,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
-			LastScheduleCommandInfo? query = LSCService.GetLastCommandForContext(Context);
+			LastScheduleCommandInfo? query = UserConfig.GetLastScheduleCommand(Context.Channel);
 			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
