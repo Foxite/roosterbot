@@ -34,8 +34,9 @@ namespace RoosterBot.MiscStuff {
 		}
 
 		[Command("kut", true)]
-		public async Task BoazBas() {
-			ReplyDeferred("Kut " + (await Context.Client.GetUserAsync(305398418984009729)).Mention);
+		public Task BoazBas() {
+			ReplyDeferred("Kut " + Context.User.Mention);
+			return Task.CompletedTask;
 		}
 	}
 }
