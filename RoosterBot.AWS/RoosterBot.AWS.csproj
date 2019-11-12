@@ -9,8 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
-		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.82" />
+		<PackageReference Include="AWSSDK.Core" Version="3.3.103.62" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.88" />
+		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.86" />
 	</ItemGroup>
 
 	<ItemGroup>
