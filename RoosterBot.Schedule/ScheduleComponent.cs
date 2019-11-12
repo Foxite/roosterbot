@@ -23,7 +23,6 @@ namespace RoosterBot.Schedule {
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
 			return DependencyResult.Build(components)
 				.RequireTag("ScheduleProvider")
-				.RequireTag("UserClassesService")
 				.RequireTag("DayOfWeekReader")
 				.Check();
 		}
