@@ -38,7 +38,7 @@ namespace RoosterBot.AWS {
 				});
 				
 				if (config.Culture != null) {
-					document["culture"] = DynamoDBEntryConversion.V2.ConvertToEntry(config.Culture.Name)));
+					document["culture"] = DynamoDBEntryConversion.V2.ConvertToEntry(config.Culture.Name);
 				}
 
 				await m_Table.PutItemAsync(document);
