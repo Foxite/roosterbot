@@ -36,14 +36,14 @@ namespace RoosterBot {
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			
 			authToken                   = jsonConfig["token"]                      .ToObject<string>();
-			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]       .ToObject<string>();
 			GameString                  = jsonConfig["gameString"]                 .ToObject<string>();
+			m_BotOwnerId                = jsonConfig["botOwnerId"]                 .ToObject<ulong>();
+			StaffRoles                  = jsonConfig["staffRoles"]                 .ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
 			ActivityType                = jsonConfig["activityType"]               .ToObject<ActivityType>();
 			MultiMatchHandling          = jsonConfig["multiMatchHandling"]         .ToObject<MultiMatchHandling>();
-			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
-			m_BotOwnerId                = jsonConfig["botOwnerId"]                 .ToObject<ulong>();
 			MinimumMemorySeconds        = jsonConfig["minimumMemorySeconds"]       .ToObject<int>();
-			StaffRoles                  = jsonConfig["staffRoles"]                 .ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
+			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]       .ToObject<string>();
+			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
 			DefaultCulture              = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"].ToObject<string>());
 		}
 		
