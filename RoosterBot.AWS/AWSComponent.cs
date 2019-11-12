@@ -48,6 +48,7 @@ namespace RoosterBot.AWS {
 		}
 
 		protected override void Dispose(bool disposing) {
+			m_DynamoDBClient.Dispose();
 			m_SNS?.Dispose();
 		}
 	}
