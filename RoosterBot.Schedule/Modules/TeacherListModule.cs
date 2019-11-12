@@ -39,8 +39,8 @@ namespace RoosterBot.Schedule {
 				int recordIndex = 1;
 				foreach (TeacherInfo record in records) {
 					cells[recordIndex] = new string[3];
-					cells[recordIndex][0] = record.FullName;
-					cells[recordIndex][1] = record.Abbreviation;
+					cells[recordIndex][0] = record.DisplayText;
+					cells[recordIndex][1] = record.ScheduleCode;
 					cells[recordIndex][2] = record.DiscordUser ?? "";
 
 					recordIndex++;

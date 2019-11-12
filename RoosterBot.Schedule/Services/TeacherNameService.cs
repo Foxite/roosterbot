@@ -32,12 +32,12 @@ namespace RoosterBot.Schedule {
 					};
 
 					TeacherInfo record = new TeacherInfo(
+						scheduleCode: csv["Abbreviation"],
+						displayText: csv["FullName"],
 						isUnknown: false,
-						abbreviation: csv["Abbreviation"],
-						fullName: csv["FullName"],
 						noLookup: bool.Parse(csv["NoLookup"]),
 						discordUser: csv["DiscordUser"],
-						altSpellings ?? Array.Empty<string>()
+						altSpellings: altSpellings ?? Array.Empty<string>()
 					);
 
 					currentRecords.Add(record);
@@ -51,7 +51,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public TeacherInfo GetRecordFromAbbr(ulong guild, string abbr) {
-			return GetAllowedRecordsForGuild(guild).FirstOrDefault(record => record.Abbreviation == abbr);
+			return GetAllowedRecordsForGuild(guild).FirstOrDefault(record => record.ScheduleCode == abbr);
 		}
 
 		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
@@ -62,9 +62,9 @@ namespace RoosterBot.Schedule {
 					records.Add(record);
 				} else if (!string.IsNullOrWhiteSpace(abbrs[i])) {
 					records.Add(new TeacherInfo(
+						scheduleCode: abbrs[i],
+						displayText: '"' + abbrs[i] + '"',
 						isUnknown: true,
-						abbreviation: abbrs[i],
-						fullName: '"' + abbrs[i] + '"',
 						noLookup: true,
 						discordUser: null,
 						altSpellings: Array.Empty<string>()

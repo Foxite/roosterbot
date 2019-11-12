@@ -19,12 +19,12 @@ namespace RoosterBot.Schedule.GLU {
 				if (Activity.ScheduleCode != "pauze") {
 					if (!(info is TeacherInfo)) {
 						if (StaffMember.Count == 1 && StaffMember[0].IsUnknown) {
-							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
+							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].ScheduleCode}\n";
 						}
 
 						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
 						if (!string.IsNullOrWhiteSpace(teachers)) {
-							if (StaffMember.Count == 1 && StaffMember[0].Abbreviation == "JWO") {
+							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
 								ret += $"<:VRjoram:392762653367336960> {teachers}\n";
 							} else {
 								ret += $":bust_in_silhouette: {teachers}\n";

@@ -1,18 +1,18 @@
-﻿using System.Linq;
+﻿using Newtonsoft.Json;
+using System.Linq;
 
 namespace RoosterBot.Schedule {
+	[JsonObject(MemberSerialization.OptIn)]
 	public class StudentSetInfo : IdentifierInfo {
-		public string ClassName { get; }
+		[JsonProperty] public override string ScheduleCode { get; }
+		public override string DisplayText	=> ScheduleCode;
 
-		public StudentSetInfo(string className) {
-			ClassName = className;
+		public StudentSetInfo(string scheduleCode) {
+			ScheduleCode = scheduleCode;
 		}
 
 		public override bool Matches(ScheduleRecord record) {
 			return record.StudentSets.Contains(this);
 		}
-
-		public override string ScheduleCode => ClassName;
-		public override string DisplayText => ClassName;
 	}
 }

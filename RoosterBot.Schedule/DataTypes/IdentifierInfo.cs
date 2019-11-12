@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace RoosterBot.Schedule {
+	[JsonObject(MemberSerialization.OptIn)]
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
-		public abstract string ScheduleCode { get; }
+		[JsonProperty] public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
 
 		public abstract bool Matches(ScheduleRecord info);
@@ -20,9 +22,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override int GetHashCode() {
-			var hashCode = 120372121;
-			hashCode = hashCode * -1521134295 + ScheduleCode.GetHashCode();
-			return hashCode;
+			return ScheduleCode.GetHashCode();
 		}
 
 		public static bool operator ==(IdentifierInfo? lhs, IdentifierInfo? rhs) {
