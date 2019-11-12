@@ -134,7 +134,7 @@
     <value>Technical information about the bot.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
-    <value>Available categories are:</value>
+    <value>Use `{0}commands &lt;category&gt;` to get a list of commands. Available categories are:</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
     <value>That category doesn't exist.</value>
@@ -158,12 +158,10 @@
     <value>Sorry, that section does not exist.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
-    <value>All my commands start with `{0}`.
-
-Use `{0}help &lt;section&gt;` to get a specific explanation.</value>
+    <value>All my commands start with `{0}`.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
-    <value>Available sections are:</value>
+    <value>Use `{0}help &lt;section&gt;` to get help. Available sections are:</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
     <value>You can also use `{0}commands` to get a list of categories, and `{0}commands &lt;category&gt;` to see all commands for a certain category.</value>

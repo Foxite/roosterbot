@@ -134,7 +134,8 @@
     <value>Technische informatie over de bot.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
-    <value>Beschikbare categorieën zijn:</value>
+    <value>Gebruik `{0}commands &lt;categorie&gt;` om een lijst te zien. Beschikbare categorieën zijn:</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
     <value>Die categorie bestaat niet.</value>
@@ -158,12 +159,11 @@
     <value>Sorry, dat hoofdstuk bestaat niet.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
-    <value>Al mijn commands beginnen met `{0}`.
-
-Gebruik `{0}help &lt;hoofdstuk&gt;` om specifieke uitleg te krijgen.</value>
+    <value>Al mijn commands beginnen met `{0}`.</value>
   </data>
   <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
-    <value>Beschikbare hoofdstukken zijn:</value>
+    <value>Gebruik `{0}help &lt;hoofdstuk&gt;` om uitleg te krijgen. Beschikbare hoofdstukken zijn:</value>
+    <comment>0: command prefix</comment>
   </data>
   <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
     <value>Je kunt ook `{0}commands` gebruiken om een lijst van categorieën te zien, en `{0}commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>

@@ -29,7 +29,7 @@ namespace RoosterBot.Meta {
 				response += string.Format(helpText, GuildConfig.CommandPrefix);
 			} else {
 				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
-				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext") + "\n";
+				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
 				response += string.Join(", ", Help.GetSectionNames(Culture));
 			}
 			ReplyDeferred(response);
@@ -53,10 +53,10 @@ namespace RoosterBot.Meta {
 				let culturePrecon = aModule.Preconditions.OfType<RequireCultureAttribute>().SingleOrDefault()
 				where culturePrecon == null || !culturePrecon.Hide || culturePrecon.Culture.Equals(Culture)
 				select aModule
-				).SingleOrDefault();
+			).SingleOrDefault();
 
 			if (module == null || module.Attributes.Any(attr => attr is HiddenFromListAttribute)) {
-				string response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist");
+				string response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n";
 				response += GetCategoryList();
 				base.ReplyDeferred(response);
 			} else if (module.Commands.Count() == 0) {
@@ -150,7 +150,7 @@ namespace RoosterBot.Meta {
 				where culture == null || culture.Culture.Equals(Culture)
 				select ResourcesService.ResolveString(Culture, Program.Instance.Components.GetComponentForModule(module), module.Name).ToLower();
 
-			string ret = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext") + "\n";
+			string ret = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
 			ret += string.Join(", ", visibleModules);
 			return ret;
 		}
