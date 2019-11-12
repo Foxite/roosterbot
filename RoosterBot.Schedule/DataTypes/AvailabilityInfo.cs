@@ -9,5 +9,21 @@ namespace RoosterBot.Schedule {
 			StartOfAvailability = startOfAvailability;
 			EndOfAvailability = endOfAvailability;
 		}
+
+		public override bool Equals(object? obj) {
+			return obj is AvailabilityInfo info
+				&& StartOfAvailability == info.StartOfAvailability
+				&& EndOfAvailability == info.EndOfAvailability;
+		}
+
+		public override int GetHashCode() => HashCode.Combine(StartOfAvailability, EndOfAvailability);
+
+		public static bool operator ==(AvailabilityInfo left, AvailabilityInfo right) {
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(AvailabilityInfo left, AvailabilityInfo right) {
+			return !(left == right);
+		}
 	}
 }
