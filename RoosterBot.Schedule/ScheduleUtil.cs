@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Commands;
 using System;
 using System.Threading.Tasks;
 
@@ -24,17 +23,18 @@ namespace RoosterBot.Schedule {
 		#region User classes
 		public static event Action<ulong, StudentSetInfo?, StudentSetInfo>? UserChangedClass;
 
-		public static StudentSetInfo? GetStudentSet(this UserConfig config, IGuild guild) {
-			config.TryGetData("schedule.lastCommand." + guild.Id, out StudentSetInfo? ssi);
+		public static StudentSetInfo? GetStudentSet(this UserConfig config) {
+			config.TryGetData("schedule.userClass", out StudentSetInfo? ssi);
 			return ssi;
 		}
 
 		/// <returns>The old StudentSetInfo, or null if none was assigned</returns>
-		public static StudentSetInfo? SetStudentSet(this UserConfig config, IGuild guild, StudentSetInfo ssi) {
-			StudentSetInfo? old = GetStudentSet(config, guild);
-			config.SetData("schedule.lastCommand." + guild.Id, ssi);
+		public static async Task<StudentSetInfo?> SetStudentSetAsync(this UserConfig config, StudentSetInfo ssi) {
+			StudentSetInfo? old = GetStudentSet(config);
+			config.SetData("schedule.userClass", ssi);
+			await config.UpdateAsync();
 			if (old != ssi) {
-				UserChangedClass?.Invoke(config.UserId, old, ssi);
+				//UserChangedClass?.Invoke(config.UserId, old, ssi);
 			}
 			return old;
 		}
