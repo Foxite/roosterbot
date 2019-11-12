@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
+	// TODO (feature) DynamoDB implementations for UserConfigService and GuildConfigService
 	public class AWSComponent : ComponentBase {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
