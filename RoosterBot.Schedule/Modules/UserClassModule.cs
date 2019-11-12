@@ -13,8 +13,8 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_GetClassForUser_Summary")]
-		public async Task GetClassForUser() {
-			StudentSetInfo? ssi = UserConfig.GetStudentSet(Context.Guild ?? Context.UserGuild);
+		public Task GetClassForUser() {
+			StudentSetInfo? ssi = UserConfig.GetStudentSet();
 			string response;
 			if (ssi == null) {
 				response = GetString("UserClassModule_GetClassForUser_UserNotKnown");
@@ -22,21 +22,22 @@ namespace RoosterBot.Schedule {
 				response = GetString("UserClassModule_GetClassForUser_UserIsInClass", ssi.DisplayText);
 			}
 			response += GetString("UserClassModule_GetClassForUser_ChangeHint", GuildConfig.CommandPrefix);
-			await ReplyAsync(response);
+			ReplyDeferred(response);
+			return Task.CompletedTask;
 		}
 		
 		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_SetClassForUser_Summary"), RequireContext(ContextType.Guild, ErrorMessage = "Deze command moet binnen een server worden gebruikt.")]
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] string clazzName) {
 			StudentSetInfo? newStudentSet = await Validation.ValidateAsync<StudentSetInfo>(Context, clazzName);
 			if (newStudentSet != null) {
-				StudentSetInfo? oldStudentSet = UserConfig.SetStudentSet(Context.Guild ?? Context.UserGuild, newStudentSet);
+				StudentSetInfo? oldStudentSet = await UserConfig.SetStudentSetAsync(newStudentSet);
 				if (oldStudentSet == null) {
-					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
+					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
 				} else {
-					await ReplyAsync(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
+					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 				}
 			} else {
-				await ReplyAsync(GetString("UserClassModule_SetClassForUser_InvalidClass"));
+				ReplyDeferred(GetString("UserClassModule_SetClassForUser_InvalidClass"));
 			}
 		}
 	}

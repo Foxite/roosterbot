@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,7 +83,7 @@ namespace RoosterBot.Schedule.GLU {
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 
-			new RoleAssignmentHandler(services.GetService<IUserClassesService>(), services.GetService<ConfigService>());
+			new RoleAssignmentHandler(services.GetService<IDiscordClient>(), services.GetService<ConfigService>());
 			new NewUserHandler(services.GetService<DiscordSocketClient>());
 		}
 

@@ -28,7 +28,7 @@ namespace RoosterBot.Schedule {
 				} else {
 					return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(guildConfig.Culture, "StudentSetInfoReader_CheckFailed_Direct"));
 				}
-				StudentSetInfo? result = userConfig.GetStudentSet(context.Guild ?? context.UserGuild);
+				StudentSetInfo? result = userConfig.GetStudentSet();
 				if (result is null) {
 					string message;
 					if (byMention) {
