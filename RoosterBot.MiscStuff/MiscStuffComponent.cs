@@ -19,7 +19,6 @@ namespace RoosterBot.MiscStuff {
 			ConfigPath = configPath;
 
 			services.AddSingleton(new CounterService(Path.Combine(configPath, "counters")));
-			services.AddSingleton<PrankService>();
 			return Task.CompletedTask;
 		}
 

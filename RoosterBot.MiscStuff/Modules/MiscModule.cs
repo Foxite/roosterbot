@@ -3,16 +3,10 @@ using Discord.Commands;
 
 namespace RoosterBot.MiscStuff {
 	public class MiscModule : RoosterModuleBase {
-		private PrankService PrankService { get; }
-
-		public MiscModule(PrankService prankService) {
-			PrankService = prankService;
-		}
-
 		[Command("dank u", true), Alias("danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "goed zo", "goedzo", "thanks", "thx")]
 		public async Task ThankYouCommand() {
 			string response;
-			if (PrankService.GetAlwaysJoram(Context.User.Id)) {
+			if (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
 				response = "<:wsjoram:570601561072467969>";
 			} else {
 				string[] responses = new[] {
@@ -29,8 +23,9 @@ namespace RoosterBot.MiscStuff {
 
 		[Command("altijdJoram"), RequireContext(ContextType.DM), HiddenFromList]
 		public async Task AlwaysJoramCommand(bool value) {
-			PrankService.SetAlwaysJoram(Context.User.Id, value);
-			await ReplyAsync($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
+			UserConfig.SetData("misc.alwaysjoram", value);
+			await UserConfig.UpdateAsync();
+			ReplyDeferred($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
 		}
 	}
 }
