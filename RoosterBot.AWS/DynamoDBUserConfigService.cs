@@ -12,9 +12,9 @@ namespace RoosterBot.AWS {
 		private readonly Table m_Table;
 
 		public DynamoDBUserConfigService(AmazonDynamoDBClient client, string tableName) {	
-			Logger.Info("UserClasses", "Loading user table");
+			Logger.Info("DynamoDBUser", "Loading user table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("UserClasses", "UserClassesService loaded");
+			Logger.Info("DynamoDBUser", "UserClassesService loaded");
 		}
 
 		public async override Task<UserConfig> GetConfigAsync(IUser user) {
@@ -33,12 +33,12 @@ namespace RoosterBot.AWS {
 			Document document = await m_Table.GetItemAsync(config.UserId);
 			if (document is null) {
 				document = new Document(new Dictionary<string, DynamoDBEntry>() {
-					{ "id", DynamoDBEntryConversion.V2.ConvertToEntry(config.UserId) },
-					{ "customData", DynamoDBEntryConversion.V2.ConvertToEntry(config.GetRawData().ToString(Formatting.None)) }
+					{ "id", config.UserId },
+					{ "customData", config.GetRawData().ToString(Formatting.None) }
 				});
 				
 				if (config.Culture != null) {
-					document["culture"] = DynamoDBEntryConversion.V2.ConvertToEntry(config.Culture.Name);
+					document["culture"] = config.Culture.Name;
 				}
 
 				await m_Table.PutItemAsync(document);
@@ -49,7 +49,7 @@ namespace RoosterBot.AWS {
 				} else if (config.Culture == null) {
 					document.Remove("culture");
 				}
-				document["customData"] = DynamoDBEntryConversion.V2.ConvertToEntry(config.GetRawData().ToString(Formatting.None));
+				document["customData"] = config.GetRawData().ToString(Formatting.None);
 
 				await m_Table.UpdateItemAsync(document);
 			}

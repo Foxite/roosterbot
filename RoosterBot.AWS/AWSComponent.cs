@@ -27,16 +27,21 @@ namespace RoosterBot.AWS {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 
-			m_NotificationARN = jsonConfig["sns_arn"].ToObject<string>();
+			string accessKey  = jsonConfig["accessKey" ].ToObject<string>();
+			string secretKey  = jsonConfig["secretKey" ].ToObject<string>();
+			m_NotificationARN = jsonConfig["sns_arn"   ].ToObject<string>();
+			string userTable  = jsonConfig["userTable" ].ToObject<string>();
+			string guildTable = jsonConfig["guildTable"].ToObject<string>();
 
-			string accessKey = jsonConfig["accessKey"].ToObject<string>();
-			string secretKey = jsonConfig["secretKey"].ToObject<string>();
 			RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
 
 			AWSConfigService awsConfig = new AWSConfigService(accessKey, secretKey, endpoint);
 			services.AddSingleton(awsConfig);
 
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
+
+			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, userTable));
+			services.AddSingleton<GuildConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<ConfigService>(), m_DynamoDBClient, guildTable));
 			return Task.CompletedTask;
 		}
 
