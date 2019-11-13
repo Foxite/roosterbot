@@ -27,7 +27,6 @@ namespace RoosterBot.Watson {
 
 			m_Discord.MessageReceived += async (SocketMessage socketMsg) => {
 				if (socketMsg is SocketUserMessage msg && !msg.Author.IsBot) {
-					DateTime start = DateTime.Now;
 					bool process = false;
 					int argPos = 0;
 					if (msg.Channel is IGuildChannel guildChannel) { // If in guild: Message starts with mention to bot
