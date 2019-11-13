@@ -8,7 +8,6 @@ namespace RoosterBot.Schedule {
 	/// <summary>
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
-	// TODO (review) Make sure *everything* uses UtcNow instead of Now, readers should adjust the time zone so that all times are in utc
 	public class MemoryScheduleProvider : ScheduleProvider {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
@@ -24,28 +23,6 @@ namespace RoosterBot.Schedule {
 			return new MemoryScheduleProvider(allowedGuildIds, name, await reader.GetSchedule());
 		}
 
-		/// <returns>null if the class has no activity currently ongoing.</returns>
-		public override Task<ScheduleRecord?> GetCurrentRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
-			DateTime now = DateTime.Now;
-			bool sawRecordForClass = false;
-
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (now > record.Start && now < record.End) {
-						return record;
-					} else if (now < record.Start) {
-						return null;
-					}
-				}
-			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
-			} else {
-				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-			}
-		});
-
 		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			bool sawRecordForClass = false;
 
@@ -56,25 +33,6 @@ namespace RoosterBot.Schedule {
 						return record;
 					} else if (record.Start > target) {
 						return null;
-					}
-				}
-			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
-			} else {
-				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-			}
-		});
-
-		public override Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier) => Task.Run(() => {
-			DateTime now = DateTime.Now;
-			bool sawRecordForClass = false;
-
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (now < record.Start) {
-						return record;
 					}
 				}
 			}

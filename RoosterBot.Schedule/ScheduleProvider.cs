@@ -5,8 +5,6 @@ namespace RoosterBot.Schedule {
 	public abstract class ScheduleProvider : GuildSpecificInfo {
 		protected ScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
 
-		public abstract Task<ScheduleRecord?> GetCurrentRecordAsync(IdentifierInfo identifier);
-		public abstract Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier);
 		public abstract Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date);

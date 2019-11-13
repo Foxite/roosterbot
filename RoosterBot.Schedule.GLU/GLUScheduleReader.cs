@@ -11,11 +11,14 @@ namespace RoosterBot.Schedule.GLU {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;
 		private readonly ulong m_Guild;
+		private TimeZoneInfo m_TimeZone; // TODO make everything use this
 
-		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild) {
+		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild, TimeZoneInfo timezone) {
 			m_Path = path;
 			m_Teachers = teachers;
 			m_Guild = guild;
+
+			m_TimeZone = timezone;
 		}
 
 		public async override Task<List<ScheduleRecord>> GetSchedule() {
@@ -38,7 +41,9 @@ namespace RoosterBot.Schedule.GLU {
 
 					while (await csv.ReadAsync()) {
 						line++;
-						DateTime date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
+						DateTime localDateUnzoned = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
+						DateTimeOffset localDate = new DateTimeOffset(localDateUnzoned, m_TimeZone.GetUtcOffset(localDateUnzoned));
+						DateTime date = localDate.UtcDateTime;
 
 						if (date < lastMonday) { // Only store past records for this week
 							continue;

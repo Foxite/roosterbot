@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace RoosterBot.Meta {
 				/* Key */ kvp => ulong.Parse(kvp.Key),
 				/* Val */ kvp => new GuildConfig(this,
 					kvp.Value["commandPrefix"].ToObject<string>(),
+					TimeZoneInfo.FindSystemTimeZoneById(kvp.Value["timezone"].ToObject<string>()),
 					CultureInfo.GetCultureInfo(kvp.Value["culture"].ToObject<string>()),
 					ulong.Parse(kvp.Key),
 					kvp.Value.ToObject<JObject>()["customData"].ToObject<JObject>()

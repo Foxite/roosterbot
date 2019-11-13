@@ -12,14 +12,6 @@ namespace RoosterBot.Schedule {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();
 		}
 
-		public Task<ScheduleRecord?> GetCurrentRecord(IdentifierInfo identifier, RoosterCommandContext context) {
-			return GetSchedule(identifier, context).GetCurrentRecordAsync(identifier);
-		}
-
-		public Task<ScheduleRecord> GetNextRecord(IdentifierInfo identifier, RoosterCommandContext context) {
-			return GetSchedule(identifier, context).GetNextRecordAsync(identifier);
-		}
-
 		public Task<ScheduleRecord?> GetRecordAtDateTime(IdentifierInfo identifier, DateTime datetime, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetRecordAtDateTimeAsync(identifier, datetime);
 		}

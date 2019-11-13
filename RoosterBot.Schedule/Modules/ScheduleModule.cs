@@ -24,7 +24,7 @@ namespace RoosterBot.Schedule {
 		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				ReturnValue<ScheduleRecord?> result = await GetCurrentRecord(info);
+				ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.UtcNow);
 				if (result.Success) {
 					ScheduleRecord? record = result.Value;
 					if (record == null) {
@@ -46,7 +46,7 @@ namespace RoosterBot.Schedule {
 		public async Task NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				ReturnValue<ScheduleRecord> result = await GetNextRecord(info);
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.UtcNow);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					string pretext;
@@ -278,13 +278,7 @@ namespace RoosterBot.Schedule {
 			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
-				ReturnValue<ScheduleRecord> nextRecord;
-
-				if (query.RecordEndTime == null) {
-					nextRecord = await GetNextRecord(query.Identifier);
-				} else {
-					nextRecord = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime.Value);
-				}
+				ReturnValue<ScheduleRecord> nextRecord = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime == null ? DateTime.Now : query.RecordEndTime.Value);
 
 				if (nextRecord.Success) {
 					string pretext;
@@ -321,14 +315,6 @@ namespace RoosterBot.Schedule {
 			} else {
 				return info;
 			}
-		}
-
-		protected Task<ReturnValue<ScheduleRecord?>> GetCurrentRecord(IdentifierInfo identifier) {
-			return HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
-		}
-
-		protected Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
-			return HandleErrorAsync(() => Schedules.GetNextRecord(identifier, Context));
 		}
 
 		protected Task<ReturnValue<ScheduleRecord?>> GetRecordAtDateTime(IdentifierInfo identifier, DateTime datetime) {

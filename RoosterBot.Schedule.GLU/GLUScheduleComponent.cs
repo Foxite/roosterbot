@@ -21,6 +21,7 @@ namespace RoosterBot.Schedule.GLU {
 		private string m_TeacherPath;
 		private Regex m_StudentSetRegex;
 		private Regex m_RoomRegex;
+		private TimeZoneInfo m_TimeZone;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
@@ -31,6 +32,7 @@ namespace RoosterBot.Schedule.GLU {
 			m_TeacherPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
+			m_TimeZone = TimeZoneInfo.Utc;
 		}
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
@@ -43,6 +45,8 @@ namespace RoosterBot.Schedule.GLU {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
+
+			m_TimeZone = TimeZoneInfo.FindSystemTimeZoneById(jsonConfig["timezoneId"].ToObject<string>());
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
@@ -68,7 +72,7 @@ namespace RoosterBot.Schedule.GLU {
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0]), m_AllowedGuilds)));
+				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_TimeZone), m_AllowedGuilds)));
 			}
 
 			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
