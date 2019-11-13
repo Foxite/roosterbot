@@ -43,7 +43,11 @@ namespace RoosterBot {
 		}
 
 		public void SetData<T>(string key, T data) {
-			m_CustomData[key] = JToken.FromObject(data);
+			if (data is null) {
+				m_CustomData.Remove(key);
+			} else {
+				m_CustomData[key] = JToken.FromObject(data);
+			}
 		}
 
 		public Task UpdateAsync() {
