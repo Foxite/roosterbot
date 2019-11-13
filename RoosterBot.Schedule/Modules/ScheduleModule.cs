@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
-						await ReplyDeferred(response, info, record);
+						await ReplyDeferred(response, info, DateTime.UtcNow);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
 					}
@@ -91,13 +91,13 @@ namespace RoosterBot.Schedule {
 			if (info != null) {
 				unit = unit.ToLower();
 				if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
-					ReturnValue<ScheduleRecord?> result = await GetRecordAfterTimeSpan(info, TimeSpan.FromHours(amount));
+					ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.UtcNow + TimeSpan.FromHours(amount));
 					if (result.Success) {
 						ScheduleRecord? record = result.Value;
 						if (record != null) {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
-							await ReplyAsync(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"));
+							await ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.UtcNow + TimeSpan.FromHours(amount));
 						}
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
@@ -124,18 +124,10 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
-			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, record);
-			return ret;
-		}
-
-		/// <summary>
-		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
-		/// </summary>
-		protected async Task ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord? record) {
+		protected async Task ReplyDeferred(string message, IdentifierInfo identifier, DateTime recordEndTime) {
 			base.ReplyDeferred(message);
-			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, record);
+			// TODO (refactor) Do this in override SendDeferredResponseAsync instead
+			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, recordEndTime);
 		}
 
 		protected async override Task MinorError(string message) {
@@ -153,7 +145,7 @@ namespace RoosterBot.Schedule {
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
 			response += await record.PresentAsync(info);
-			await ReplyDeferred(response, info, record);
+			await ReplyDeferred(response, info, record.End);
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
 				await RespondAfter(0);
@@ -178,7 +170,7 @@ namespace RoosterBot.Schedule {
 								response += GetString("ScheduleModule_ThatIsWeekend");
 							}
 						}
-						await ReplyDeferred(response, info, null);
+						await ReplyDeferred(response, info, date);
 					} else if (records.Length == 1) {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
@@ -206,7 +198,7 @@ namespace RoosterBot.Schedule {
 							recordIndex++;
 						}
 						response += Util.FormatTextTable(cells);
-						await ReplyDeferred(response, info, records.Last());
+						await ReplyDeferred(response, info, records.Last().End);
 					}
 				}
 			}
@@ -276,8 +268,8 @@ namespace RoosterBot.Schedule {
 						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info, weeksFromNow);
 					}
 				}
-
 				ReplyDeferred(response);
+
 			}
 		}
 
@@ -286,48 +278,31 @@ namespace RoosterBot.Schedule {
 			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
-				ScheduleRecord nextRecord;
-				try {
-					if (query.Record == null) {
-						nextRecord = await Schedules.GetNextRecord(query.Identifier, Context);
-					} else {
-						nextRecord = await Schedules.GetRecordAfter(query.Identifier, query.Record, Context);
-					}
-				} catch (RecordsOutdatedException) {
-					await MinorError(GetString("ScheduleModule_GetAfterCommand_RecordsOutdated"));
-					return;
-				} catch (IdentifierNotFoundException) {
-					// This catch block scores 9 out of 10 on the "oh shit" scale
-					// It should never happen and it indicates that something has really been messed up somewhere, but it's not quite bad enough for a 10.
-					string report = $"daarna failed for query {query.Identifier}";
-					if (query.Record == null) {
-						report += " with no record";
-					} else {
-						report += $" with record: {query.Record.ToString()}";
-					}
+				ReturnValue<ScheduleRecord> nextRecord;
 
-					await FatalError(report);
-					return;
-				} catch (Exception ex) {
-					await FatalError("Uncaught exception", ex);
-					return;
-				}
-
-				string pretext;
-				if (query.Record == null) {
-					pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
-				} else if (query.Record.Start.Date != nextRecord.Start.Date) {
-					pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Start.DayOfWeek));
+				if (query.RecordEndTime == null) {
+					nextRecord = await GetNextRecord(query.Identifier);
 				} else {
-					pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
+					nextRecord = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime.Value);
 				}
-				
-				// Avoid RespondRecord automatically calling this function again because we do it ourselves
-				// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
-				await RespondRecord(pretext, query.Identifier, nextRecord, false);
 
-				if (nextRecord.ShouldCallNextCommand && recursion <= 5) {
-					await RespondAfter(recursion + 1);
+				if (nextRecord.Success) {
+					string pretext;
+					if (query.RecordEndTime == null) {
+						pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
+					} else if (query.RecordEndTime != nextRecord.Value.Start.Date) {
+						pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Value.Start.DayOfWeek));
+					} else {
+						pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
+					}
+
+					// Avoid RespondRecord automatically calling this function again because we do it ourselves
+					// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
+					await RespondRecord(pretext, query.Identifier, nextRecord.Value, false);
+
+					if (nextRecord.Value.ShouldCallNextCommand && recursion <= 5) {
+						await RespondAfter(recursion + 1);
+					}
 				}
 			}
 		}
@@ -348,24 +323,28 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord?>> GetCurrentRecord(IdentifierInfo identifier) {
-			return await HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
+		protected Task<ReturnValue<ScheduleRecord?>> GetCurrentRecord(IdentifierInfo identifier) {
+			return HandleErrorAsync(() => Schedules.GetCurrentRecord(identifier, Context));
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
-			return await HandleErrorAsync(() => Schedules.GetNextRecord(identifier, Context));
+		protected Task<ReturnValue<ScheduleRecord>> GetNextRecord(IdentifierInfo identifier) {
+			return HandleErrorAsync(() => Schedules.GetNextRecord(identifier, Context));
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
-			return await HandleErrorAsync(() => Schedules.GetSchedulesForDate(identifier, date, Context));
+		protected Task<ReturnValue<ScheduleRecord?>> GetRecordAtDateTime(IdentifierInfo identifier, DateTime datetime) {
+			return HandleErrorAsync(() => Schedules.GetRecordAtDateTime(identifier, datetime, Context));
 		}
 
-		protected async Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
-			return await HandleErrorAsync(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
+		protected Task<ReturnValue<ScheduleRecord>> GetRecordAfterDateTime(IdentifierInfo identifier, DateTime datetime) {
+			return HandleErrorAsync(() => Schedules.GetRecordAfterDateTime(identifier, datetime, Context));
 		}
 
-		protected async Task<ReturnValue<ScheduleRecord?>> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan span) {
-			return await HandleErrorAsync(() => Schedules.GetRecordAfterTimeSpan(identifier, span, Context));
+		protected Task<ReturnValue<ScheduleRecord[]>> GetSchedulesForDay(IdentifierInfo identifier, DateTime date) {
+			return HandleErrorAsync(() => Schedules.GetSchedulesForDate(identifier, date, Context));
+		}
+
+		protected Task<ReturnValue<AvailabilityInfo[]>> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow) {
+			return HandleErrorAsync(() => Schedules.GetWeekAvailability(identifier, weeksFromNow, Context));
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {

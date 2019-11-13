@@ -45,7 +45,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public override Task<ScheduleRecord?> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
+		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
 			DateTime target = DateTime.Now + timespan;
 			bool sawRecordForClass = false;
 

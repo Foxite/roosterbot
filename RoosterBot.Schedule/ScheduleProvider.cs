@@ -7,8 +7,8 @@ namespace RoosterBot.Schedule {
 
 		public abstract Task<ScheduleRecord?> GetCurrentRecordAsync(IdentifierInfo identifier);
 		public abstract Task<ScheduleRecord> GetNextRecordAsync(IdentifierInfo identifier);
-		public abstract Task<ScheduleRecord> GetRecordAfterOtherAsync(IdentifierInfo identifier, ScheduleRecord givenRecord);
-		public abstract Task<ScheduleRecord?> GetRecordAfterTimeSpanAsync(IdentifierInfo identifier, TimeSpan timespan);
+		public abstract Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
+		public abstract Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date);
 		public abstract Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow);
 		public abstract Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow = 0);

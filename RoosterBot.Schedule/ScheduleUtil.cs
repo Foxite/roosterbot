@@ -44,13 +44,14 @@ namespace RoosterBot.Schedule {
 		#endregion
 	}
 
+	[JsonObject(ItemTypeNameHandling = TypeNameHandling.Auto)]
 	public class LastScheduleCommandInfo {
 		public IdentifierInfo Identifier { get; set; }
-		public ScheduleRecord? Record { get; set; }
+		public DateTime? RecordEndTime { get; set; }
 
-		public LastScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord? record) {
+		public LastScheduleCommandInfo(IdentifierInfo identifier, DateTime? recordEndTime) {
 			Identifier = identifier;
-			Record = record;
+			RecordEndTime = recordEndTime;
 		}
 	}
 }

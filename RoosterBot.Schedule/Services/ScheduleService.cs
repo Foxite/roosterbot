@@ -20,8 +20,12 @@ namespace RoosterBot.Schedule {
 			return GetSchedule(identifier, context).GetNextRecordAsync(identifier);
 		}
 
-		public Task<ScheduleRecord> GetRecordAfter(IdentifierInfo identifier, ScheduleRecord givenRecord, RoosterCommandContext context) {
-			return GetSchedule(identifier, context).GetRecordAfterOtherAsync(identifier, givenRecord);
+		public Task<ScheduleRecord?> GetRecordAtDateTime(IdentifierInfo identifier, DateTime datetime, RoosterCommandContext context) {
+			return GetSchedule(identifier, context).GetRecordAtDateTimeAsync(identifier, datetime);
+		}
+
+		public Task<ScheduleRecord> GetRecordAfterDateTime(IdentifierInfo identifier, DateTime datetime, RoosterCommandContext context) {
+			return GetSchedule(identifier, context).GetRecordAfterDateTimeAsync(identifier, datetime);
 		}
 
 		public Task<ScheduleRecord[]> GetSchedulesForDate(IdentifierInfo identifier, DateTime date, RoosterCommandContext context) {
@@ -30,10 +34,6 @@ namespace RoosterBot.Schedule {
 
 		public Task<AvailabilityInfo[]> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetWeekAvailabilityAsync(identifier, weeksFromNow);
-		}
-
-		public Task<ScheduleRecord?> GetRecordAfterTimeSpan(IdentifierInfo identifier, TimeSpan timespan, RoosterCommandContext context) {
-			return GetSchedule(identifier, context).GetRecordAfterTimeSpanAsync(identifier, timespan);
 		}
 		
 		public Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {

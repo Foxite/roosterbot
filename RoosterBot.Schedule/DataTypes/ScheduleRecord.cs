@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
-	[JsonObject(MemberSerialization.OptOut)]
+	[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
 	public abstract class ScheduleRecord {
 		// TODO (review) Do all these properties need to be in Schedule component? It's better to move everything into GLUScheduleRecord, and all identifiers types into Schedule.GLU
 		// An abstract PresentRowAsync will be necessary for this
