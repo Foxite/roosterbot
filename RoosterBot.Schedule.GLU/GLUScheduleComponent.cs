@@ -19,6 +19,7 @@ namespace RoosterBot.Schedule.GLU {
 		private List<ScheduleRegistryInfo> m_Schedules;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
+		private bool m_SkipPastRecords;
 		private Regex m_StudentSetRegex;
 		private Regex m_RoomRegex;
 		private TimeZoneInfo m_TimeZone;
@@ -44,9 +45,10 @@ namespace RoosterBot.Schedule.GLU {
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			JObject jsonConfig = JObject.Parse(jsonFile);
-			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
-
+			m_SkipPastRecords = jsonConfig["skipPastRecords"].ToObject<bool>();
 			m_TimeZone = TimeZoneInfo.FindSystemTimeZoneById(jsonConfig["timezoneId"].ToObject<string>());
+
+			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
@@ -72,7 +74,7 @@ namespace RoosterBot.Schedule.GLU {
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_TimeZone), m_AllowedGuilds)));
+				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords, m_TimeZone), m_AllowedGuilds)));
 			}
 
 			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
@@ -86,9 +88,11 @@ namespace RoosterBot.Schedule.GLU {
 
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
+			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 
-			new RoleAssignmentHandler(services.GetService<IDiscordClient>(), services.GetService<ConfigService>());
-			new NewUserHandler(services.GetService<DiscordSocketClient>());
+			new RoleAssignmentHandler(services.GetService<IUserClassesService>(), services.GetService<ConfigService>());
+			new ManualRanksHintHandler(client);
+			new NewUserHandler(client);
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {

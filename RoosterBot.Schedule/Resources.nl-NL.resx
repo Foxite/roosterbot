@@ -498,4 +498,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
     <value>rooster</value>
   </data>
+  <data name="UserClassModule_SetClassForUser_ConfirmNoChange" xml:space="preserve">
+    <value>Je zit al in {0}!</value>
+    <comment>0: student set</comment>
+  </data>
 </root>

@@ -11,13 +11,14 @@ namespace RoosterBot.Schedule.GLU {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;
 		private readonly ulong m_Guild;
-		private TimeZoneInfo m_TimeZone; // TODO make everything use this
+		private readonly bool m_SkipPastRecords;
+		private readonly TimeZoneInfo m_TimeZone; // TODO make everything use this
 
-		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild, TimeZoneInfo timezone) {
+		public GLUScheduleReader(string path, TeacherNameService teachers, ulong guild, bool skipPastRecords, TimeZoneInfo timezone) {
 			m_Path = path;
 			m_Teachers = teachers;
 			m_Guild = guild;
-
+			m_SkipPastRecords = skipPastRecords;
 			m_TimeZone = timezone;
 		}
 
@@ -45,7 +46,7 @@ namespace RoosterBot.Schedule.GLU {
 						DateTimeOffset localDate = new DateTimeOffset(localDateUnzoned, m_TimeZone.GetUtcOffset(localDateUnzoned));
 						DateTime date = localDate.UtcDateTime;
 
-						if (date < lastMonday) { // Only store past records for this week
+						if (m_SkipPastRecords && date < lastMonday) { // Only store past records for this week
 							continue;
 						}
 

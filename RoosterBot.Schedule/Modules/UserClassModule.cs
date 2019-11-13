@@ -33,6 +33,8 @@ namespace RoosterBot.Schedule {
 				StudentSetInfo? oldStudentSet = await UserConfig.SetStudentSetAsync(newStudentSet);
 				if (oldStudentSet == null) {
 					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
+				} else if (oldStudentSet == newStudentSet) {
+					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmNoChange", newStudentSet.DisplayText));
 				} else {
 					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 				}

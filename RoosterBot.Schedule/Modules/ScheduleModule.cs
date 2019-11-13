@@ -34,7 +34,8 @@ namespace RoosterBot.Schedule {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
-						await ReplyDeferred(response, info, DateTime.UtcNow);
+						ReplyDeferred(response, info, DateTime.UtcNow);
+						await NextCommand(info);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
 					}
@@ -113,7 +114,7 @@ namespace RoosterBot.Schedule {
 		[Command("#ScheduleModule_AfterCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_AfterCommand_Summary")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
-				ReplyDeferred(GetString("ScheduleModule_GetAfterCommand_ParameterHint"));
+				ReplyDeferred(GetString("ScheduleModule_GetAfterCommand_ParameterHint", GuildConfig.CommandPrefix));
 			}
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();
@@ -334,16 +335,21 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
+			ReturnValue<T> failure = new ReturnValue<T>();
 			try {
 				return new ReturnValue<T>(await action());
 			} catch (IdentifierNotFoundException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
+				return failure;
 			} catch (RecordsOutdatedException) {
 				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
+				return failure;
 			} catch (NoAllowedGuildsException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
+				return failure;
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
+				return failure;
 			}
 			return new ReturnValue<T>();
 		}

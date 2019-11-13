@@ -336,6 +336,22 @@ namespace RoosterBot {
 		public static bool HasRole(this IGuildUser user, ulong roleId) {
 			return user.RoleIds.Any(id => id == roleId);
 		}
+
+		/// <summary>
+		/// Does effectively the same as enumerable.ToArray().CopyTo(...), but does not convert the enumerable to an array.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="enumerable"></param>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		/// <param name="amount"></param>
+		public static void CopyTo<T>(this IEnumerable<T> enumerable, T[] array, int index) {
+			int i = index;
+			foreach (T item in enumerable) {
+				array[i] = item;
+				i++;
+			}
+		}
 		#endregion
 	}
 

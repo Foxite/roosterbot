@@ -6,6 +6,7 @@ using Discord.WebSocket;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
+		private const long NewUserRanks = 278937741478330389;
 		private readonly IReadOnlyDictionary<string, ulong[]> m_Roles;
 		private readonly ConfigService m_Config;
 		private readonly IDiscordClient m_Client;
@@ -40,6 +41,7 @@ namespace RoosterBot.Schedule.GLU {
 				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUScheduleComponent.GLUGuildId)?.GetUser(userId);
 				// Assign roles
 				if (user != null) {
+					// Assign roles
 					try {
 						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
 						if (oldSSI != null) {
@@ -49,8 +51,10 @@ namespace RoosterBot.Schedule.GLU {
 							oldRoles = oldRoles.Except(keptRoles);
 							newRoles = newRoles.Except(keptRoles);
 
-							if (oldRoles.Any()) {
-								await user.RemoveRolesAsync(oldRoles);
+							foreach (IRole role in oldRoles) {
+								if (user.HasRole(role.Id)) {
+									await user.RemoveRolesAsync(oldRoles);
+								}
 							}
 						}
 
