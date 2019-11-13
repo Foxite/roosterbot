@@ -2,9 +2,8 @@
 using System.Linq;
 
 namespace RoosterBot.Schedule {
-	[JsonObject(MemberSerialization.OptIn)]
 	public class RoomInfo : IdentifierInfo {
-		[JsonProperty] public override string ScheduleCode { get; }
+		public override string ScheduleCode { get; }
 		public override string DisplayText => ScheduleCode;
 
 		public RoomInfo(string scheduleCode) {

@@ -6,7 +6,6 @@ using System.Linq;
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptIn)]
 	public class TeacherInfo : IdentifierInfo {
-		[JsonProperty]
 		public override string ScheduleCode { get; }
 		public override string DisplayText { get; }
 		public bool			   IsUnknown { get; }

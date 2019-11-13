@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -10,8 +11,8 @@ namespace RoosterBot.Schedule {
 			return lsci;
 		}
 
-		public static async Task OnScheduleRequestByUserAsync(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, ScheduleRecord? record) {
-			LastScheduleCommandInfo lsci = new LastScheduleCommandInfo(identifier, record);
+		public static async Task OnScheduleRequestByUserAsync(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, DateTime recordEndTime) {
+			LastScheduleCommandInfo lsci = new LastScheduleCommandInfo(identifier, recordEndTime);
 			userConfig.SetData("schedule.lastCommand." + channel.Id, lsci);
 			await userConfig.UpdateAsync();
 		}

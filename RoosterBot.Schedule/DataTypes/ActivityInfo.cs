@@ -2,8 +2,8 @@
 
 namespace RoosterBot.Schedule {
 	public class ActivityInfo : IdentifierInfo {
-		public override string DisplayText { get; }
 		public override string ScheduleCode { get; }
+		public override string DisplayText { get; }
 
 		public ActivityInfo(string scheduleCode, string displayText) {
 			ScheduleCode = scheduleCode;
