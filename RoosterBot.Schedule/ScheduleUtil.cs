@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -42,16 +41,5 @@ namespace RoosterBot.Schedule {
 			return old;
 		}
 		#endregion
-	}
-
-	[JsonObject(ItemTypeNameHandling = TypeNameHandling.Auto)]
-	public class LastScheduleCommandInfo {
-		public IdentifierInfo Identifier { get; set; }
-		public DateTime? RecordEndTime { get; set; }
-
-		public LastScheduleCommandInfo(IdentifierInfo identifier, DateTime? recordEndTime) {
-			Identifier = identifier;
-			RecordEndTime = recordEndTime;
-		}
 	}
 }
