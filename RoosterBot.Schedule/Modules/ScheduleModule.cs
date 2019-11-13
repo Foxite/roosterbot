@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
-						ReplyDeferred(response, info, record);
+						await ReplyDeferred(response, info, record);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
 					}
@@ -126,26 +126,26 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		protected async Task<IUserMessage> ReplyAsync(string message, IdentifierInfo identifier, ScheduleRecord record, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			IUserMessage ret = await base.ReplyAsync(message, isTTS, embed, options);
-			UserConfig.OnScheduleRequestByUser(Context.Channel, identifier, record);
+			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, record);
 			return ret;
 		}
 
 		/// <summary>
 		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
 		/// </summary>
-		protected void ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord? record) {
+		protected async Task ReplyDeferred(string message, IdentifierInfo identifier, ScheduleRecord? record) {
 			base.ReplyDeferred(message);
-			UserConfig.OnScheduleRequestByUser(Context.Channel, identifier, record);
+			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, record);
 		}
 
 		protected async override Task MinorError(string message) {
 			await base.MinorError(message);
-			UserConfig.RemoveLastScheduleCommand(Context.Channel);
+			await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
 		}
 
 		protected async override Task FatalError(string message, Exception? exception = null) {
 			await base.FatalError(message, exception);
-			UserConfig.RemoveLastScheduleCommand(Context.Channel);
+			await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
 		}
 		#endregion
 
@@ -153,7 +153,7 @@ namespace RoosterBot.Schedule {
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
 			response += await record.PresentAsync(info);
-			ReplyDeferred(response, info, record);
+			await ReplyDeferred(response, info, record);
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
 				await RespondAfter(0);
@@ -178,7 +178,7 @@ namespace RoosterBot.Schedule {
 								response += GetString("ScheduleModule_ThatIsWeekend");
 							}
 						}
-						ReplyDeferred(response, info, null);
+						await ReplyDeferred(response, info, null);
 					} else if (records.Length == 1) {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
@@ -206,7 +206,7 @@ namespace RoosterBot.Schedule {
 							recordIndex++;
 						}
 						response += Util.FormatTextTable(cells);
-						ReplyDeferred(response, info, records.Last());
+						await ReplyDeferred(response, info, records.Last());
 					}
 				}
 			}

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.AWS {
 	// TODO (tomorrow) Here's what doesn't work yet in the new system:
-	// !daarna: Data does not make it to database and an exception is thrown when you attempt to use this command
+	// Deserialization of LastScheduleCommandInfo: one of the parameters for the constructor is an abstract type and it doesn't know what to use
 	// UserChangedClass event, even if the guild isn't targeted by the handler (I've disabled it for now by commenting the invocation) (see below)
 	// 
 	// This works:

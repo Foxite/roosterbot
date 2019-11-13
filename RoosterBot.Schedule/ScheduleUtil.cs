@@ -10,13 +10,15 @@ namespace RoosterBot.Schedule {
 			return lsci;
 		}
 
-		public static void OnScheduleRequestByUser(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, ScheduleRecord? record) {
+		public static async Task OnScheduleRequestByUserAsync(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, ScheduleRecord? record) {
 			LastScheduleCommandInfo lsci = new LastScheduleCommandInfo(identifier, record);
 			userConfig.SetData("schedule.lastCommand." + channel.Id, lsci);
+			await userConfig.UpdateAsync();
 		}
 
-		public static void RemoveLastScheduleCommand(this UserConfig userConfig, IChannel channel) {
+		public static async Task RemoveLastScheduleCommandAsync(this UserConfig userConfig, IChannel channel) {
 			userConfig.SetData<LastScheduleCommandInfo?>("schedule.lastCommand." + channel.Id, null);
+			await userConfig.UpdateAsync();
 		}
 		#endregion
 
@@ -45,7 +47,7 @@ namespace RoosterBot.Schedule {
 		public IdentifierInfo Identifier { get; set; }
 		public ScheduleRecord? Record { get; set; }
 
-		internal LastScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord? record) {
+		public LastScheduleCommandInfo(IdentifierInfo identifier, ScheduleRecord? record) {
 			Identifier = identifier;
 			Record = record;
 		}
