@@ -8,18 +8,6 @@ using System.Globalization;
 using System.Threading.Tasks;
 
 namespace RoosterBot.AWS {
-	// TODO (tomorrow) Here's what doesn't work yet in the new system:
-	// Deserialization of LastScheduleCommandInfo: one of the parameters for the constructor is an abstract type and it doesn't know what to use
-	// UserChangedClass event, even if the guild isn't targeted by the handler (I've disabled it for now by commenting the invocation) (see below)
-	// 
-	// This works:
-	// !altijdJoram
-	// !ik
-	// Serialization of IdentifierInfo
-	// 
-	// As for the UCC event, the error is extremely weird - the error does not appear in Logger endpoints, and seems to happen right after ReplyDeferred is called; however,
-	//  the error won't show up before the message actually makes it to Discord. The error itself is simply a crash which Visual Studio shows as a NRE in System.Private.CoreLib.
-	// I can't tell where it comes from but removing the event invocation prevents it from happening. I very much think it has to do with the fact that the handler is async void.
 	public class DynamoDBUserConfigService : UserConfigService {
 		private readonly Table m_Table;
 
