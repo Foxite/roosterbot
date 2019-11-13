@@ -71,11 +71,7 @@ namespace RoosterBot {
 		}
 
 		protected override void AfterExecute(CommandInfo command) {
-			if (m_Response.Length != 0) {
-				string message = m_Response.ToString();
-				m_Response.Clear();
-				ReplyAsync(message).GetAwaiter().GetResult();
-			}
+			SendDeferredResponseAsync().GetAwaiter().GetResult();
 		}
 
 		/// <summary>
