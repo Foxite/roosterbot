@@ -14,6 +14,7 @@ namespace RoosterBot {
 		public static readonly string Success = "<:ok:636213617825546242> ";
 		public static readonly string Warning = "<:warning:636213630114856962> ";
 		public static readonly string Unknown = "<:unknown:636213624460935188> ";
+		public static readonly string Info = "<:info:644251874010202113> ";
 		public static readonly Random RNG = new Random();
 
 		#region String utils
