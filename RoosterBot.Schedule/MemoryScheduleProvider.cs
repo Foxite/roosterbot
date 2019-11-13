@@ -8,6 +8,7 @@ namespace RoosterBot.Schedule {
 	/// <summary>
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
+	// TODO (review) Make sure *everything* uses UtcNow instead of Now, readers should adjust the time zone so that all times are in utc
 	public class MemoryScheduleProvider : ScheduleProvider {
 		private List<ScheduleRecord> m_Schedule;
 		private string m_Name;
@@ -45,8 +46,7 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, TimeSpan timespan) => Task.Run(() => {
-			DateTime target = DateTime.Now + timespan;
+		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			bool sawRecordForClass = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
@@ -85,21 +85,15 @@ namespace RoosterBot.Schedule {
 			}
 		});
 
-		public override Task<ScheduleRecord> GetRecordAfterOtherAsync(IdentifierInfo identifier, ScheduleRecord givenRecord) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			bool sawRecordForClass = false;
-			bool sawGivenRecord = false;
 
 			foreach (ScheduleRecord record in m_Schedule) {
-				if (sawGivenRecord) {
-					if (identifier.Matches(record)) {
+				if (identifier.Matches(record)) {
+					if (record.Start > target) {
 						return record;
-					}
-				} else {
-					if (identifier.Matches(record)) {
+					} else {
 						sawRecordForClass = true;
-					}
-					if (givenRecord == record) {
-						sawGivenRecord = true;
 					}
 				}
 			}
