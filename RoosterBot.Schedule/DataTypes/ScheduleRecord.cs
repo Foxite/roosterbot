@@ -46,14 +46,4 @@ namespace RoosterBot.Schedule {
 		// TODO (review) Should this really be async? The instance is supposed to have all the data it needs, and shouldn't have any service reference to get data from
 		public abstract Task<string> PresentAsync(IdentifierInfo relevantIdentifier);
 	}
-
-	public class BreakTime {
-		public DateTime Start { get; }
-		public DateTime End { get; }
-
-		public BreakTime(DateTime start, DateTime end) {
-			Start = start;
-			End = end;
-		}
-	}
 }
