@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace RoosterBot {
 	// TODO (refactor) This service is superseded by the new UserConfigService
-	public class CommandResponseService {
+	public sealed class CommandResponseService {
 		/// <summary>
 		/// Maps command IDs to CommandResponsePairs
 		/// </summary>

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace RoosterBot {
-	public class NotificationService {
+	public sealed class NotificationService {
 		public event Func<string, Task>? NotificationAdded;
 
 		internal NotificationService() { }

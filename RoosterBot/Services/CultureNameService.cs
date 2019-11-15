@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 
 namespace RoosterBot {
-	public class CultureNameService {
+	public sealed class CultureNameService {
 		/// <summary>
 		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
 		/// </summary>
