@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -11,35 +12,32 @@ namespace RoosterBot {
 		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
 		private readonly GuildConfigService m_GCS;
+		private readonly UserConfigService m_UCS;
 
-		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, CommandResponseService crs, GuildConfigService gcs) {
+		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, CommandResponseService crs, GuildConfigService gcs, UserConfigService ucs) {
 			m_Client = client;
 			m_Commands = commands;
 			m_Config = config;
 			m_CRS = crs;
 			m_GCS = gcs;
-
+			m_UCS = ucs;
 			m_Client.MessageUpdated += OnMessageUpdated;
 		}
 
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageAfter is SocketUserMessage userMessageAfter) {
 				CommandResponsePair? crp = m_CRS.GetResponse(userMessageAfter);
-				string prefix;
-				if (channel is IGuildChannel guildChannel) {
-					prefix = (await m_GCS.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
-				} else {
-					prefix = m_Config.DefaultCommandPrefix;
-				}
+				GuildConfig guildConfig = await m_GCS.GetConfigAsync((channel as IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First());
 
-				if (m_Commands.IsMessageCommand(userMessageAfter, prefix, out int argPos)) {
+				if (m_Commands.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
 					IReadOnlyCollection<IUserMessage>? responses = null;
 					if (crp != null) {
 						// Was previously a command
 						responses = crp.Responses;
 					} // else: Was previously not a command. Use default value
+					UserConfig userConfig = await m_UCS.GetConfigAsync(messageAfter.Author);
 
-					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses);
+					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses, userConfig, guildConfig);
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
 				} else if (crp != null) {
 					// No longer a command
