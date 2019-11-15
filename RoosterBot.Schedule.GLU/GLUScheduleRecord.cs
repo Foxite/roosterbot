@@ -16,14 +16,14 @@ namespace RoosterBot.Schedule.GLU {
 					if (!(info is TeacherInfo)) {
 						if (StaffMember.Length == 1 && StaffMember[0].IsUnknown) {
 							ret += $":bust_in_silhouette: Onbekende leraar met afkorting {StaffMember[0].Abbreviation}\n";
-						}
-
-						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							if (StaffMember.Length == 1 && StaffMember[0].Abbreviation == "JWO") {
-								ret += $"<:VRjoram:392762653367336960> {teachers}\n";
-							} else {
-								ret += $":bust_in_silhouette: {teachers}\n";
+						} else {
+							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
+							if (!string.IsNullOrWhiteSpace(teachers)) {
+								if (StaffMember.Length == 1 && StaffMember[0].Abbreviation == "JWO") {
+									ret += $"<:VRjoram:392762653367336960> {teachers}\n";
+								} else {
+									ret += $":bust_in_silhouette: {teachers}\n";
+								}
 							}
 						}
 					}
