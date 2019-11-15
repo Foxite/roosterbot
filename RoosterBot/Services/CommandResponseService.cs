@@ -29,16 +29,12 @@ namespace RoosterBot {
 			await userConfig.UpdateAsync();
 		}
 
-		public void ModifyResponse(ulong commandId, IUserMessage[] responses) {
-			CommandResponsePair? crp = GetResponse(commandId);
-			if (crp != null) {
-				crp.Responses = responses;
+		public CommandResponsePair? GetResponse(UserConfig userConfig, ulong messageId) {
+			if (userConfig.TryGetData(CommandResponseJsonKey, out CommandResponsePair[]? crps)) {
+				return crps.SingleOrDefault(crp => crp.Command.Id == messageId);
+			} else {
+				return null;
 			}
-		}
-
-		public CommandResponsePair? GetResponse(ulong userCommandId) {
-			m_Messages.TryGetValue(userCommandId, out CommandResponsePair? ret);
-			return ret;
 		}
 
 		public async Task<CommandResponsePair?> RemoveCommandAsync(UserConfig userConfig, ulong commandId) {
