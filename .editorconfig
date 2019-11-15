@@ -2,3 +2,5 @@
 
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
+
+csharp_preferred_modifier_order = public,private,protected,internal,new,static,extern,volatile,readonly,unsafe,async,virtual,abstract,sealed,override:suggestion
