@@ -36,10 +36,10 @@ namespace RoosterBot {
 		// TODO (investigate) Can analyzers disable other analyzers? Make an analyzer for ModuleBase<T> that disables nullability warnings on public settable properties.
 
 		protected ModuleLogger Log { get; private set; }
-		protected GuildConfig GuildConfig { get; private set; }
-		protected UserConfig UserConfig { get; private set; }
 #nullable restore
 
+		protected UserConfig UserConfig => Context.UserConfig;
+		protected GuildConfig GuildConfig => Context.GuildConfig;
 		protected CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 
 		private StringBuilder m_Response = new StringBuilder();
@@ -52,22 +52,10 @@ namespace RoosterBot {
 			if (Context == null) {
 				Context = base.Context;
 			}
-			GuildConfig = GuildConfigService.GetConfigAsync(Context.Guild ?? Context.UserGuild).GetAwaiter().GetResult(); // Change to await after switching to Qmmands in 3.0
-			UserConfig = UserConfigService.GetConfigAsync(Context.User).GetAwaiter().GetResult();
 			
 			Log = new ModuleLogger(GetType().Name);
 
-			string logMessage = $"Executing `{Context.Message.Content}` for `{Context.User.Username}#{Context.User.Discriminator}` in ";
-			if (Context.Guild == null) {
-				if (Context.Channel is IDMChannel) {
-					logMessage += "DM";
-				} else {
-					logMessage = $"group {Context.Channel.Name}";
-				}
-			} else {
-				logMessage += $"{Context.Guild.Name} channel {Context.Channel.Name}";
-			}
-			Log.Debug(logMessage);
+			Log.Debug(Context.ToString());
 		}
 
 		protected override void AfterExecute(CommandInfo command) {
@@ -160,9 +148,7 @@ namespace RoosterBot {
 		}
 
 		protected class ModuleLogger {
-			protected internal string m_Tag;
-
-			private ModuleLogger() { m_Tag = "ErrorModule"; }
+			protected internal string m_Tag = "ErrorModule";
 
 			internal ModuleLogger(string tag) {
 				m_Tag = tag;
@@ -206,13 +192,12 @@ namespace RoosterBot {
 		// If this is null, we should make a new message.
 		public IReadOnlyCollection<IUserMessage>? Responses { get; }
 
-		/// <summary>
-		/// If IsPrivate is true, then this guild will be suitable to use for config information. It is the first mutual guild between the user and the bot user.
-		/// </summary>
-		public IGuild UserGuild { get; }
+		public UserConfig UserConfig { get; }
+		public GuildConfig GuildConfig { get; }
+		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 		
 		// TODO (review) all instantiations, it now throws an exception if there's no mutual guilds
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage>? originalResponses) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage>? originalResponses, UserConfig userConfig, GuildConfig guildConfig) {
 			Client = client;
 			Message = message;
 			User = message.Author;
@@ -221,7 +206,8 @@ namespace RoosterBot {
 			Guild = (Channel as IGuildChannel)?.Guild;
 			Responses = originalResponses;
 
-			UserGuild = User.GetMutualGuilds().First();
+			UserConfig = userConfig;
+			GuildConfig = guildConfig;
 		}
 
 		public override string ToString() {
