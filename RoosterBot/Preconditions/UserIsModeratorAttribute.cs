@@ -9,15 +9,15 @@ namespace RoosterBot {
 	public sealed class UserIsModeratorAttribute : RoosterPreconditionAttribute {
 		public override string Summary => "#UserIsModeratorAttribute_Summary";
 
-		protected override Task<PreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
+		protected override Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
 			if (context.User is IGuildUser user) {
 				if (services.GetService<ConfigService>().StaffRoles.Intersect(user.RoleIds).Any()) {
-					return Task.FromResult(PreconditionResult.FromSuccess());
+					return Task.FromResult(RoosterPreconditionResult.FromSuccess());
 				} else {
-					return Task.FromResult(PreconditionResult.FromError("#UserIsModeratorAttribute_CheckFailed"));
+					return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#UserIsModeratorAttribute_CheckFailed"));
 				}
 			} else {
-				return Task.FromResult(PreconditionResult.FromError("#UserIsModeratorAttribute_GuildsOnly"));
+				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#UserIsModeratorAttribute_GuildsOnly"));
 			}
 		}
 	}

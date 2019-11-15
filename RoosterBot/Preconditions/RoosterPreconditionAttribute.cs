@@ -11,16 +11,16 @@ namespace RoosterBot {
 
 		public abstract string Summary { get; }
 
-		public sealed override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
+		public async sealed override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
 			if (context is RoosterCommandContext rcc) {
-				return CheckPermissionsAsync(rcc, command, services);
+				return await CheckPermissionsAsync(rcc, command, services);
 			} else if (ThrowOnInvalidContext) {
-				throw new InvalidOperationException($"{nameof(RoosterTypeReader)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
+				throw new InvalidOperationException($"{nameof(RoosterPreconditionAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return Task.FromResult(PreconditionResult.FromError("If you see this, then you may slap the programmer."));
+				return PreconditionResult.FromError("If you see this, then you may slap the programmer.");
 			}
 		}
 
-		protected abstract Task<PreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services);
+		protected abstract Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services);
 	}
 }

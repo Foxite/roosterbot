@@ -16,21 +16,15 @@ namespace RoosterBot {
 			Hide = hide;
 		}
 
-		protected async override Task<PreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
-			GuildConfig config = await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild ?? context.UserGuild);
-			if (Culture == config.Culture) {
-				return PreconditionResult.FromSuccess();
+		protected override Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
+			if (Culture == context.GuildConfig.Culture) {
+				return Task.FromResult(RoosterPreconditionResult.FromSuccess());
+			} else if (Hide) {
+				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
 			} else {
-				ResourceService resources = services.GetService<ResourceService>();
-				string reason;
-				if (Hide) {
-					reason = string.Format(resources.GetString(config.Culture, "Program_OnCommandExecuted_UnknownCommand"), config.CommandPrefix);
-				} else {
-					CultureNameService cns = services.GetService<CultureNameService>();
-					string localizedName = cns.GetLocalizedName(Culture, config.Culture);
-					reason = string.Format(resources.GetString(config.Culture, "RequireCultureAttribute_CheckFailed"), localizedName);
-				}
-				return PreconditionResult.FromError(reason);
+				CultureNameService cns = services.GetService<CultureNameService>();
+				string localizedName = cns.GetLocalizedName(Culture, context.GuildConfig.Culture);
+				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#RequireCultureAttribute_CheckFailed", localizedName));
 			}
 		}
 	}
