@@ -41,8 +41,20 @@ namespace RoosterBot {
 			return ret;
 		}
 
-		public bool RemoveCommand(ulong commandId, [NotNullWhen(true)] out CommandResponsePair? crp) {
-			return m_Messages.TryRemove(commandId, out crp);
+		public async Task<CommandResponsePair?> RemoveCommandAsync(UserConfig userConfig, ulong commandId) {
+			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
+				for (int i = 0; i < crps.Count; i++) {
+					if (crps[i].Command.Id == commandId) {
+						CommandResponsePair ret = crps[i];
+						crps.RemoveAt(i);
+						await userConfig.UpdateAsync();
+						return ret;
+					}
+				}
+				return null;
+			} else {
+				return null;
+			}
 		}
 
 		public CommandResponsePair? GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
