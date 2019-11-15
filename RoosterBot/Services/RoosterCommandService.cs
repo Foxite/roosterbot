@@ -38,6 +38,7 @@ namespace RoosterBot {
 			return false;
 		}
 
+		// TODO (investigate) Here's another way to do this: Emit a small module that does nothing other than call ExecuteAsync on the CommandInfo that it mirrors
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleAsync(typeof(T));
 		public async Task<ModuleInfo[]> AddLocalizedModuleAsync(Type module) {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings

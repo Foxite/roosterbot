@@ -37,8 +37,7 @@ namespace RoosterBot {
 					if (crp != null) {
 						// Was previously a command
 						responses = crp.Responses;
-					}
-					// else: Was previously not a command. Use default value
+					} // else: Was previously not a command. Use default value
 
 					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, responses);
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
