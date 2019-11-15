@@ -15,23 +15,23 @@ namespace RoosterBot {
 			m_Config = config;
 		}
 
-		public async Task SetResponseAsync(UserConfig userConfig, IUserMessage userCommand, IUserMessage botResponse) {
+		public async Task SetResponseAsync(UserConfig userConfig, ulong userCommandId, ulong botResponseId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
-				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.Command.Id == userCommand.Id);
+				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.CommandId == userCommandId);
 				if (relevantCRP == null) {
-					crps.Add(new CommandResponsePair(userCommand, botResponse));
+					crps.Add(new CommandResponsePair(userCommandId, botResponseId));
 				} else {
-					relevantCRP.Response = botResponse;
+					relevantCRP.ResponseId = botResponseId;
 				}
 			} else {
-				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommand, botResponse) });
+				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommandId, botResponseId) });
 			}
 			await userConfig.UpdateAsync();
 		}
 
 		public CommandResponsePair? GetResponse(UserConfig userConfig, ulong messageId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out CommandResponsePair[]? crps)) {
-				return crps.SingleOrDefault(crp => crp.Command.Id == messageId);
+				return crps.SingleOrDefault(crp => crp.CommandId == messageId);
 			} else {
 				return null;
 			}
@@ -40,7 +40,7 @@ namespace RoosterBot {
 		public async Task<CommandResponsePair?> RemoveCommandAsync(UserConfig userConfig, ulong commandId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				for (int i = 0; i < crps.Count; i++) {
-					if (crps[i].Command.Id == commandId) {
+					if (crps[i].CommandId == commandId) {
 						CommandResponsePair ret = crps[i];
 						crps.RemoveAt(i);
 						await userConfig.UpdateAsync();
@@ -59,12 +59,12 @@ namespace RoosterBot {
 	}
 
 	public class CommandResponsePair {
-		public IUserMessage Command { get; internal set; }
-		public IUserMessage Response { get; internal set; }
+		public ulong CommandId { get; set; }
+		public ulong ResponseId { get; set; }
 
-		public CommandResponsePair(IUserMessage command, IUserMessage response) {
-			Command = command;
-			Response = response;
+		public CommandResponsePair(ulong commandId, ulong responseId) {
+			CommandId = commandId;
+			ResponseId = responseId;
 		}
 	}
 }
