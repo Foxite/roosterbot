@@ -5,7 +5,6 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 	public sealed class RequireCultureAttribute : RoosterPreconditionAttribute {
 		public override string Summary => "#RequireCultureAttribute_Summary";
 		public CultureInfo Culture { get; }

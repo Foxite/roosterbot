@@ -5,7 +5,8 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	[AttributeUsage(AttributeTargets.Parameter)]
+	// TODO (feature) RoosterParameterPreconditionAttribute that only accepts RoosterCommandContext
+	// If you do this make sure not to violate DRY; RoosterPreconditionAttribute and RoosterTypeReader contain the same code to check if the context is RCC
 	public sealed class CountAttribute : ParameterPreconditionAttribute {
 		public int Min { get; }
 		public int Max { get; }
