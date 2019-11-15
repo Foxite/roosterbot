@@ -9,7 +9,7 @@ namespace RoosterBot {
 	public sealed class UserIsModeratorAttribute : RoosterPreconditionAttribute {
 		public override string Summary => "#UserIsModeratorAttribute_Summary";
 
-		public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
+		protected override Task<PreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
 			if (context.User is IGuildUser user) {
 				if (services.GetService<ConfigService>().StaffRoles.Intersect(user.RoleIds).Any()) {
 					return Task.FromResult(PreconditionResult.FromSuccess());
