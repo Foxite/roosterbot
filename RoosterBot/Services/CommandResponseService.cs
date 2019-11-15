@@ -1,40 +1,32 @@
 ﻿using Discord;
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoosterBot {
 	// TODO (refactor) This service is superseded by the new UserConfigService
 	public sealed class CommandResponseService {
-		/// <summary>
-		/// Maps command IDs to CommandResponsePairs
-		/// </summary>
-		private readonly ConcurrentDictionary<ulong, CommandResponsePair> m_Messages;
+		private const string CommandResponseJsonKey = "command_response";
+
 		private readonly ConfigService m_Config;
 
-		/// <param name="minimumMemorySeconds">Minimum time before old commands are forgotten. Old commands are not forgotten until a new one from the same user comes in.</param>
 		internal CommandResponseService(ConfigService config) {
-			m_Messages = new ConcurrentDictionary<ulong, CommandResponsePair>();
 			m_Config = config;
 		}
 
-		public void AddResponse(IUserMessage userCommand, IUserMessage botResponse) {
-			// Remove previous commands from this user if they are older than the minimum memory
-			IEnumerable<ulong> oldCommandIds = m_Messages.Where((kvp) => {
-				return (DateTime.UtcNow - kvp.Value.Command.Timestamp.UtcDateTime).TotalSeconds > m_Config.MinimumMemorySeconds && kvp.Value.Command.Author.Id == userCommand.Author.Id;
-			}).Select(kvp => kvp.Key);
-
-			foreach (ulong commandId in oldCommandIds) {
-				m_Messages.TryRemove(commandId, out _);
+		public async Task SetResponseAsync(UserConfig userConfig, IUserMessage userCommand, IUserMessage botResponse) {
+			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
+				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.Command.Id == userCommand.Id);
+				if (relevantCRP == null) {
+					crps.Add(new CommandResponsePair(userCommand, botResponse));
+				} else {
+					relevantCRP.Response = botResponse;
+				}
+			} else {
+				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommand, botResponse) });
 			}
-
-			IUserMessage[] newSequence = new IUserMessage[] { botResponse };
-			m_Messages.AddOrUpdate(userCommand.Id, new CommandResponsePair(userCommand, newSequence), (key, crp) => {
-				crp.Responses = crp.Responses.Concat(newSequence).ToArray();
-				return crp;
-			});
+			await userConfig.UpdateAsync();
 		}
 
 		public void ModifyResponse(ulong commandId, IUserMessage[] responses) {
