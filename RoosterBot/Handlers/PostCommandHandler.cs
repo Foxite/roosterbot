@@ -27,20 +27,19 @@ namespace RoosterBot {
 					bool bad = true;
 					string badReport = $"\"{context.Message}\": ";
 
-					GuildConfig guildConfig = await m_GCS.GetConfigAsync(rcc.Guild ?? rcc.UserGuild);
-
 					if (result.Error.HasValue) {
 						switch (result.Error.Value) {
 							case CommandError.UnknownCommand:
-								response = string.Format(m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_UnknownCommand"), guildConfig.CommandPrefix);
+								response = string.Format(m_ResourcesService.GetString(rcc.GuildConfig.Culture, "Program_OnCommandExecuted_UnknownCommand"), rcc.GuildConfig.CommandPrefix);
 								bad = false;
 								break;
 							case CommandError.BadArgCount:
-								response = m_ResourcesService.GetString(guildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
+								response = m_ResourcesService.GetString(rcc.GuildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
 								bad = false;
 								break;
 							case CommandError.UnmetPrecondition:
-								response = m_ResourcesService.ResolveString(guildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+								response = m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+								// TODO (feature) Preconditions should use IResult and pass information about their component, this doesn't work with external components
 								bad = false;
 								break;
 							case CommandError.ParseFailed:
@@ -76,7 +75,7 @@ namespace RoosterBot {
 							await m_Config.BotOwner.SendMessageAsync(badReport);
 						}
 
-						response = Util.Error + m_ResourcesService.GetString(guildConfig.Culture, "RoosterBot_FatalError");
+						response = Util.Error + m_ResourcesService.GetString(rcc.GuildConfig.Culture, "RoosterBot_FatalError");
 					} else {
 						response = Util.Error + response;
 					}
