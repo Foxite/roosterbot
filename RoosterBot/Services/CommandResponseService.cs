@@ -64,11 +64,11 @@ namespace RoosterBot {
 
 	public class CommandResponsePair {
 		public IUserMessage Command { get; internal set; }
-		public IReadOnlyCollection<IUserMessage> Responses { get; internal set; }
+		public IUserMessage Response { get; internal set; }
 
-		public CommandResponsePair(IUserMessage command, IReadOnlyCollection<IUserMessage> responses) {
+		public CommandResponsePair(IUserMessage command, IUserMessage response) {
 			Command = command;
-			Responses = responses;
+			Response = response;
 		}
 	}
 }
