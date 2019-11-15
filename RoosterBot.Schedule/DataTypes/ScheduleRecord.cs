@@ -17,17 +17,14 @@ namespace RoosterBot.Schedule {
 		public IReadOnlyList<RoomInfo> Room { get; }
 		public abstract bool ShouldCallNextCommand { get; }
 		public BreakTime? Break { get; set; }
-		
-		protected TimeZoneInfo Timezone { get; }
 
-		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room, TimeZoneInfo timezone) {
+		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room) {
 			Activity = activity;
 			Start = start;
 			End = end;
 			StudentSets = studentSets;
 			StaffMember = staffMember;
 			Room = room;
-			Timezone = timezone;
 		}
 
 		[JsonIgnore] public TimeSpan Duration => End - Start;

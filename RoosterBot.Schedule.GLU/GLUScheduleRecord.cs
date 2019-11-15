@@ -9,8 +9,8 @@ namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
-		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room, TimeZoneInfo timezone)
-			: base(activity, start, end, studentSets, staffMember, room, timezone) { }
+		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
+			: base(activity, start, end, studentSets, staffMember, room) { }
 
 		public override Task<string> PresentAsync(IdentifierInfo info) {
 			string ret = $":notepad_spiral: {Activity.DisplayText}\n";
@@ -39,21 +39,19 @@ namespace RoosterBot.Schedule.GLU {
 					}
 				}
 
-				DateTime now = DateTime.UtcNow + Timezone.GetUtcOffset(DateTimeOffset.UtcNow);
-
-				if (Start.Date != now.Date) {
+				if (Start.Date != DateTime.Today) {
 					ret += $":calendar_spiral: {Start.DayOfWeek.GetName(CultureInfo.GetCultureInfo("nl-NL"))} {Start.ToString("dd-MM-yyyy")}\n";
 				}
 
 				ret += $":clock5: {Start.ToString("HH:mm")} - {End.ToString("HH:mm")}";
-				if (Start.Date == now.Date && Start > now) {
-					TimeSpan timeTillStart = Start - now;
+				if (Start.Date == DateTime.Today && Start > DateTime.UtcNow) {
+					TimeSpan timeTillStart = Start - DateTime.UtcNow;
 					ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
 				}
 
 				ret += $"\n:stopwatch: {(int) Duration.TotalHours}:{Duration.Minutes.ToString().PadLeft(2, '0')}";
-				if (Start < now && End > now) {
-					TimeSpan timeLeft = End - now;
+				if (Start < DateTime.UtcNow && End > DateTime.UtcNow) {
+					TimeSpan timeLeft = End - DateTime.UtcNow;
 					ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
 				}
 
