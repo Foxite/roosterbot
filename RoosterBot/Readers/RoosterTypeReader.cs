@@ -9,15 +9,13 @@ namespace RoosterBot {
 		/// </summary>
 		public bool ThrowOnInvalidContext { get; set; }
 
-		public sealed async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
+		public sealed override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			if (context is RoosterCommandContext rcc) {
-				return await ReadAsync(rcc, input, services);
+				return ReadAsync(rcc, input, services);
+			} else if (ThrowOnInvalidContext) {
+				throw new InvalidOperationException($"{nameof(RoosterTypeReader)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				if (ThrowOnInvalidContext) {
-					throw new InvalidOperationException($"{nameof(RoosterTypeReader)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
-				} else {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, "If you see this, then you may slap the programmer.");
-				}
+				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "If you see this, then you may slap the programmer."));
 			}
 		}
 
