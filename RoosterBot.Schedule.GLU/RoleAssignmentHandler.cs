@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
 namespace RoosterBot.Schedule.GLU {
 	public class RoleAssignmentHandler {
-		private const long NewUserRanks = 278937741478330389;
+		private const long NewUserRank = 278937741478330389;
 		private readonly IReadOnlyDictionary<string, ulong[]> m_Roles;
 		private readonly ConfigService m_Config;
 		private readonly IDiscordClient m_Client;
@@ -36,7 +37,7 @@ namespace RoosterBot.Schedule.GLU {
 			ScheduleUtil.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async void OnUserChangedClass(ulong userId, StudentSetInfo? oldSSI, StudentSetInfo newSSI) {
+		private async Task OnUserChangedClass(ulong userId, StudentSetInfo? oldSSI, StudentSetInfo newSSI) {
 			if ((await m_Client.GetUserAsync(userId)) is SocketUser socketUser && socketUser.MutualGuilds.Count != 0) {
 				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUScheduleComponent.GLUGuildId)?.GetUser(userId);
 				// Assign roles
@@ -55,6 +56,9 @@ namespace RoosterBot.Schedule.GLU {
 								if (user.HasRole(role.Id)) {
 									await user.RemoveRolesAsync(oldRoles);
 								}
+							}
+							if (user.HasRole(NewUserRank)) {
+								await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 							}
 						}
 

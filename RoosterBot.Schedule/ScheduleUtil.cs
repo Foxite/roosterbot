@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region User classes
-		public static event Action<ulong, StudentSetInfo?, StudentSetInfo>? UserChangedClass;
+		public static event Func<ulong, StudentSetInfo?, StudentSetInfo, Task>? UserChangedClass;
 
 		public static StudentSetInfo? GetStudentSet(this UserConfig config) {
 			config.TryGetData("schedule.userClass", out StudentSetInfo? ssi);
@@ -35,8 +35,8 @@ namespace RoosterBot.Schedule {
 			StudentSetInfo? old = GetStudentSet(config);
 			config.SetData("schedule.userClass", ssi);
 			await config.UpdateAsync();
-			if (old != ssi) {
-				//UserChangedClass?.Invoke(config.UserId, old, ssi);
+			if (old != ssi && UserChangedClass != null) {
+				await Util.InvokeAsyncEventSequential(UserChangedClass, config.UserId, old, ssi);
 			}
 			return old;
 		}
