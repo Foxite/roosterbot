@@ -53,9 +53,9 @@ namespace RoosterBot {
 			}
 		}
 
-		public CommandResponsePair? GetResponse(IUserMessage userCommand) => GetResponse(userCommand.Id);
-		public bool RemoveCommand(IUserMessage command, [NotNullWhen(true)] out CommandResponsePair? crp) => RemoveCommand(command.Id, out crp);
-		public void ModifyResponse(IUserMessage command, IUserMessage[] responses) => ModifyResponse(command.Id, responses);
+		public Task SetResponseAsync(UserConfig userConfig, IUserMessage userMessage, IUserMessage botResponse) => SetResponseAsync(userConfig, userMessage.Id, botResponse.Id);
+		public CommandResponsePair? GetResponsePair(UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
+		public Task<CommandResponsePair?> RemoveCommandAsync(UserConfig userConfig, IUserMessage command) => RemoveCommandAsync(userConfig, command.Id);
 	}
 
 	public class CommandResponsePair {
