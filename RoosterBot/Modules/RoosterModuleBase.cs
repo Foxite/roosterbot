@@ -189,7 +189,6 @@ namespace RoosterBot {
 		public GuildConfig GuildConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 		
-		// TODO (review) all instantiations, it now throws an exception if there's no mutual guilds
 		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage? originalResponse, UserConfig userConfig, GuildConfig guildConfig) {
 			Client = client;
 			Message = message;
