@@ -11,8 +11,7 @@ namespace RoosterBot.Weather {
 
 			if (cityResult == null) {
 				// TODO (feature) problem-reporting command, this could be a useful alternative to "contacting the bot owner" if we ever go beyond servers that any dev is in
-				// TODO (localize) this error message
-				return TypeReaderResult.FromError(CommandError.ParseFailed, "Die stad ken ik niet. Bedoelde je een stad die officiëel een andere naam heeft? Geef het door aan de bot eigenaar.");
+				return TypeReaderResult.FromError(CommandError.ParseFailed, "#CityInfoReader_ParseFailed");
 			} else {
 				return TypeReaderResult.FromSuccess(cityResult);
 			}

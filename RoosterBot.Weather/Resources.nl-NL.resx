@@ -319,4 +319,7 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherComponent_Attribution" xml:space="preserve">
     <value>Informatie wordt verstrekt door WeatherBit.</value>
   </data>
+  <data name="CityInfoReader_ParseFailed" xml:space="preserve">
+    <value>Die stad ken ik niet. Bedoelde je een stad die officiëel een andere naam heeft? Geef het door aan de bot eigenaar.</value>
+  </data>
 </root>

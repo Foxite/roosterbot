@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CityInfoReader_ParseFailed" xml:space="preserve">
+    <value>I don't know that city. Did you mean a city that has a different official name? Tell the bot owner about this.</value>
+  </data>
   <data name="WeatherBit_Code_200" xml:space="preserve">
     <value>:cloud_lightning: Thunderstorm with light rain</value>
   </data>
