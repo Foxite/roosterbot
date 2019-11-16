@@ -8,8 +8,8 @@ using Discord;
 
 namespace RoosterBot {
 	public static class Logger {
-		private static readonly object Lock = new object();
-		private static readonly int LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
+		private static readonly object s_Lock = new object();
+		private static readonly int s_LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
 
 		public static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 
@@ -52,7 +52,7 @@ namespace RoosterBot {
 		}
 
 		private static void Log(LogSeverity severity, string tag, string msg, Exception? exception = null) {
-			string severityStr = severity.ToString().PadLeft(LongestSeverity);
+			string severityStr = severity.ToString().PadLeft(s_LongestSeverity);
 			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
 								+ " [" + severityStr + "] " + tag + " : " + msg;
 			if (exception != null) {
@@ -63,7 +63,7 @@ namespace RoosterBot {
 				}
 			}
 			Console.WriteLine(loggedMessage);
-			lock (Lock) {
+			lock (s_Lock) {
 				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
 			}
 		}
