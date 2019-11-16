@@ -12,92 +12,89 @@ namespace RoosterBot.Watson {
 	internal sealed class WatsonHandler {
 		private readonly DiscordSocketClient m_Discord;
 		private readonly GuildConfigService m_GCS;
-		private readonly CommandResponseService m_CRS;
+		private readonly UserConfigService m_UCS;
 		private readonly ResourceService m_Resources;
 		private readonly CommandService m_CommandService;
 		private readonly WatsonClient m_Watson;
 
-		public WatsonHandler(DiscordSocketClient client, CommandResponseService crs, GuildConfigService guildConfig, WatsonClient watson, CommandService commandService, ResourceService resources) {
+		public WatsonHandler(DiscordSocketClient client, UserConfigService ucs, GuildConfigService guildConfig, WatsonClient watson, CommandService commandService, ResourceService resources) {
 			m_Discord = client;
 			m_GCS = guildConfig;
-			m_CRS = crs;
+			m_UCS = ucs;
 			m_Watson = watson;
 			m_CommandService = commandService;
 			m_Resources = resources;
 
-			m_Discord.MessageReceived += async (SocketMessage socketMsg) => {
-				if (socketMsg is SocketUserMessage msg && !msg.Author.IsBot) {
-					bool process = false;
-					int argPos = 0;
-					if (msg.Channel is IGuildChannel guildChannel) { // If in guild: Message starts with mention to bot
-						string commandPrefix = (await guildConfig.GetConfigAsync(guildChannel.Guild)).CommandPrefix;
-						if (msg.HasMentionPrefix(m_Discord.CurrentUser, ref argPos)) {
-							process = true;
-						}
-					} else if (msg.Author.MutualGuilds.Any()) {
-						string commandPrefix = (await guildConfig.GetConfigAsync(msg.Author.MutualGuilds.First())).CommandPrefix;
-						if (!msg.Content.StartsWith(commandPrefix)) {
-							process = true;
-						}
-					}
-
-					if (process) {
-						CommandResponsePair? crp = m_CRS.GetResponse(msg);
-						RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp?.Responses);
-
-						// Do not await this task on the gateway thread because it can take very long.
-						_ = Task.Run(async () => {
-							await ProcessNaturalLanguageCommandsAsync(context, argPos);
-						});
-					}
-				}
-			};
+			m_Discord.MessageReceived += OnMessageReceived;
 		}
 
-		private async Task ProcessNaturalLanguageCommandsAsync(RoosterCommandContext context, int argPos) {
-			Logger.Info("WatsonComponent", $"Processing natlang command: {context.ToString()}");
-			IDisposable typingState = context.Channel.EnterTypingState();
+		private Task OnMessageReceived(SocketMessage socketMsg) {
+			_ = Task.Run(async () => {
+				// TODO (refactor) This is a mess
+				// I know this will crash the CLR if it throws an exception, although I can hardly do all this work on the gateway thread.
+				try {
+					if (socketMsg is SocketUserMessage msg && !msg.Author.IsBot) {
+						bool process = false;
+						int argPos = 0;
+						IGuild guild = msg.Channel is IGuildChannel guildChannel ? guildChannel.Guild : msg.Author.MutualGuilds.First();
+						GuildConfig guildConfig = await m_GCS.GetConfigAsync(guild);
+						string commandPrefix = guildConfig.CommandPrefix;
 
-			IGuild cultureGuild;
-			if (context.IsPrivate && context.User is SocketUser socketUser) {
-				cultureGuild = socketUser.MutualGuilds.FirstOrDefault();
-			} else {
-				cultureGuild = context.Guild!;
-			}
-			GuildConfig guildConfig = await m_GCS.GetConfigAsync(cultureGuild);
+						if (msg.Channel is IGuildChannel) { // If in guild: Message starts with mention to bot
+							if (msg.HasMentionPrefix(m_Discord.CurrentUser, ref argPos)) {
+								process = true;
+							}
+						} else if (msg.Author.MutualGuilds.Any()) {
+							if (!msg.Content.StartsWith(commandPrefix)) {
+								process = true;
+							}
+						}
 
-			string? returnMessage = null;
-			try {
-				string input = context.Message.Content.Substring(argPos);
-				if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
-					returnMessage = Util.Error + m_Resources.GetString(guildConfig.Culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs");
-					return;
-				}
+						if (process) {
+							UserConfig userConfig = await m_UCS.GetConfigAsync(msg.Author);
+							CommandResponsePair? crp = userConfig.GetResponse(msg);
 
-				string? result = m_Watson.ConvertCommandAsync(input);
+							RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp == null ? null : (await socketMsg.Channel.GetMessageAsync(crp.ResponseId) as IUserMessage), userConfig, guildConfig);
 
-				if (result != null) {
-					await m_CommandService.ExecuteAsync(context, result, Program.Instance.Components.Services);
-					// AddResponse will be handled by PostCommandHandler.
-				} else {
-					returnMessage = Util.Unknown + m_Resources.GetString(guildConfig.Culture, "WatsonClient_CommandNotUnderstood");
-				}
-			} catch (WatsonException e) {
-				Logger.Error("Watson", $"Caught an exception while handling natlang command: {context}", e);
-			} finally {
-				if (typingState != null) {
-					typingState.Dispose();
-				}
+							Logger.Info("WatsonComponent", $"Processing natlang command: {context.ToString()}");
+							IDisposable typingState = context.Channel.EnterTypingState();
 
-				if (returnMessage != null) {
-					IUserMessage returnedDiscordMessage = await context.Channel.SendMessageAsync(returnMessage);
-					if (context.Responses == null) {
-						m_CRS.AddResponse(context.Message, returnedDiscordMessage);
-					} else {
-						m_CRS.ModifyResponse(context.Message, new[] { returnedDiscordMessage });
+							string? returnMessage = null;
+							try {
+								string input = context.Message.Content.Substring(argPos);
+								if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
+									returnMessage = Util.Error + m_Resources.GetString(guildConfig.Culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs");
+									return;
+								}
+
+								string? result = m_Watson.ConvertCommand(input);
+
+								if (result != null) {
+									await m_CommandService.ExecuteAsync(context, result, Program.Instance.Components.Services);
+									// AddResponse will be handled by PostCommandHandler.
+								} else {
+									returnMessage = Util.Unknown + m_Resources.GetString(guildConfig.Culture, "WatsonClient_CommandNotUnderstood");
+								}
+							} catch (WatsonException e) {
+								Logger.Error("Watson", $"Caught an exception while handling natlang command: {context}", e);
+							} finally {
+								if (typingState != null) {
+									typingState.Dispose();
+								}
+
+								if (returnMessage != null) {
+									IUserMessage returnedDiscordMessage = await context.Channel.SendMessageAsync(returnMessage);
+									await userConfig.SetResponseAsync(context.Message, returnedDiscordMessage);
+								}
+							}
+						}
 					}
+				} catch (Exception e) {
+					Logger.Critical("WatsonHandler", "An unhandled exception was thrown in WatsonHandler. This is going to crash the CLR.", e);
+					throw;
 				}
-			}
+			});
+			return Task.CompletedTask;
 		}
 	}
 }

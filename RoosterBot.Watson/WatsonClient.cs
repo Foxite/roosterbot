@@ -21,7 +21,7 @@ namespace RoosterBot.Watson {
 			m_Assistant = new AssistantService(ibmToken, VersionDate);
 		}
 
-		public string? ConvertCommandAsync(string input) {
+		public string? ConvertCommand(string input) {
 			string? sessionId = null;
 			try {
 				sessionId = m_Assistant.CreateSession(m_AssistantId).SessionId;
