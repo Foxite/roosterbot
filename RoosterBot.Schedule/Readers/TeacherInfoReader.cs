@@ -14,7 +14,7 @@ namespace RoosterBot.Schedule {
 			if (baseResult.IsSuccess) {
 				return TypeReaderResult.FromSuccess(baseResult.Values.First());
 			} else {
-				CultureInfo culture = (await services.GetService<GuildConfigService>().GetConfigAsync(context.Guild ?? context.UserGuild)).Culture;
+				CultureInfo culture = context.Culture;
 				TeacherNameService tns = services.GetService<TeacherNameService>();
 				IEnumerable<TeacherMatch>? result = null;
 
@@ -30,11 +30,10 @@ namespace RoosterBot.Schedule {
 						result = tns.Lookup(context.Guild.Id, input);
 					}
 				} else {
-					IGuild? lookupGuild = context.Guild ?? context.UserGuild;
-					if (lookupGuild != null) {
-						TeacherInfo? teacher = tns.GetTeacherByDiscordUser(lookupGuild, user);
+					if (context.Guild != null) {
+						TeacherInfo? teacher = tns.GetTeacherByDiscordUser(context.Guild, user);
 						if (teacher != null) {
-							result = Util.Pack(new TeacherMatch(teacher, 1));
+							result = LinqExtensions.Pack(new TeacherMatch(teacher, 1));
 						}
 					}
 				}
