@@ -13,6 +13,9 @@ namespace RoosterBot.Schedule {
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
+		private IdentifierInfo? m_LookedUpIdentifier;
+		private DateTime? m_LookedUpRecordEndTime;
+
 		private ScheduleService Schedules { get; }
 
 		public ScheduleModule(ScheduleService schedules) {
@@ -98,7 +101,7 @@ namespace RoosterBot.Schedule {
 						if (record != null) {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
-							await ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.UtcNow + TimeSpan.FromHours(amount));
+							ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.UtcNow + TimeSpan.FromHours(amount));
 						}
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
@@ -121,32 +124,11 @@ namespace RoosterBot.Schedule {
 		}
 		#endregion
 
-		#region Reply functions
-		/// <summary>
-		/// Posts a message in Context.Channel with the given text, and adds given schedule, identifier, and record to the LastScheduleCommandService for use in the !daarna command.
-		/// </summary>
-		protected async Task ReplyDeferred(string message, IdentifierInfo identifier, DateTime recordEndTime) {
-			base.ReplyDeferred(message);
-			// TODO (refactor) Do this in override SendDeferredResponseAsync instead
-			await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, identifier, recordEndTime);
-		}
-
-		protected async override Task MinorError(string message) {
-			await base.MinorError(message);
-			await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
-		}
-
-		protected async override Task FatalError(string message, Exception? exception = null) {
-			await base.FatalError(message, exception);
-			await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
-		}
-		#endregion
-
 		#region Record response functions
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			string response = pretext + "\n";
-			response += await record.PresentAsync(info);
-			await ReplyDeferred(response, info, record.End);
+			response += record.Present(info);
+			ReplyDeferred(response, info, record.End);
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
 				await RespondAfter(0);
@@ -171,7 +153,7 @@ namespace RoosterBot.Schedule {
 								response += GetString("ScheduleModule_ThatIsWeekend");
 							}
 						}
-						await ReplyDeferred(response, info, date);
+						ReplyDeferred(response, info, date);
 					} else if (records.Length == 1) {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
@@ -198,8 +180,8 @@ namespace RoosterBot.Schedule {
 
 							recordIndex++;
 						}
-						response += Util.FormatTextTable(cells);
-						await ReplyDeferred(response, info, records.Last().End);
+						response += StringUtil.FormatTextTable(cells);
+						ReplyDeferred(response, info, records.Last().End);
 					}
 				}
 			}
@@ -259,7 +241,7 @@ namespace RoosterBot.Schedule {
 						}
 					}
 
-					response += Util.FormatTextTable(cells);
+					response += StringUtil.FormatTextTable(cells);
 				} else {
 					if (weeksFromNow == 0) {
 						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info);
@@ -335,23 +317,40 @@ namespace RoosterBot.Schedule {
 		}
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
-			ReturnValue<T> failure = new ReturnValue<T>();
 			try {
 				return new ReturnValue<T>(await action());
 			} catch (IdentifierNotFoundException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
-				return failure;
 			} catch (RecordsOutdatedException) {
 				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
-				return failure;
 			} catch (NoAllowedGuildsException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
-				return failure;
 			} catch (Exception ex) {
 				await FatalError("Uncaught exception", ex);
-				return failure;
 			}
 			return new ReturnValue<T>();
+		}
+		#endregion
+
+		#region Overrides
+		/// <summary>
+		/// Posts a message in Context.Channel with the given text, and records the given identifier and record end time for use in the !daarna command.
+		/// </summary>
+		protected void ReplyDeferred(string message, IdentifierInfo identifier, DateTime recordEndTime) {
+			base.ReplyDeferred(message);
+
+			m_LookedUpIdentifier = identifier;
+			m_LookedUpRecordEndTime = recordEndTime;
+		}
+
+		protected async override Task<IUserMessage?> SendDeferredResponseAsync() {
+			if (m_LookedUpIdentifier != null && m_LookedUpRecordEndTime != null) {
+				await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, m_LookedUpIdentifier, m_LookedUpRecordEndTime.Value);
+			} else {
+				await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
+			}
+			
+			return await base.SendDeferredResponseAsync();
 		}
 		#endregion
 	}
