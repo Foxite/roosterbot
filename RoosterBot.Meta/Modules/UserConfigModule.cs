@@ -1,6 +1,6 @@
-﻿using Discord.Commands;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace RoosterBot.Meta {
 	// TODO (localize) this module

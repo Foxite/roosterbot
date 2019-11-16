@@ -1,12 +1,12 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Discord;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
 
 namespace RoosterBot.AWS {
 	public class DynamoDBGuildConfigService : GuildConfigService {

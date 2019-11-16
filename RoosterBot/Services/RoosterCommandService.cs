@@ -1,12 +1,12 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.Commands.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.Commands.Builders;
 using ParameterInfo = System.Reflection.ParameterInfo;
 
 namespace RoosterBot {

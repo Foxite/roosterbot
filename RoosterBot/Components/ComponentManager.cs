@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -7,8 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {

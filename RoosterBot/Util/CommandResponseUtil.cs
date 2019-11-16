@@ -1,7 +1,7 @@
-﻿using Discord;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord;
 
 namespace RoosterBot {
 	public static class CommandResponseUtil {

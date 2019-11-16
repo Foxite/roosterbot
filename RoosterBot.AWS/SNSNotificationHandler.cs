@@ -1,6 +1,6 @@
-﻿using Amazon.SimpleNotificationService;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Amazon.SimpleNotificationService;
 
 namespace RoosterBot.AWS {
 	public class SNSNotificationHandler : IDisposable {

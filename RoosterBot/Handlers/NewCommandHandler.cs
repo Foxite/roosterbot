@@ -1,7 +1,7 @@
-﻿using Discord;
-using Discord.WebSocket;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Discord;
+using Discord.WebSocket;
 
 namespace RoosterBot {
 	internal sealed class NewCommandHandler {

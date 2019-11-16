@@ -1,9 +1,6 @@
-﻿using Discord.Commands;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace RoosterBot.Meta {
 	[Group("config"), HiddenFromList]
