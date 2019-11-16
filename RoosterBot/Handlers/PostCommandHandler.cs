@@ -16,6 +16,10 @@ namespace RoosterBot {
 		}
 
 		public async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
+			// TODO (feature) Make use of the actual type of Result
+			// I've discovered that result may be an an object of type SearchResult, ParseResult, and ExecuteResult, the latter 2 of which can carry an Exception object. This is undocumented.
+			// This makes it possible to report the actual exception that was thrown, which is something I thought was literally impossible since I started working on this.
+			// Also investigate what other types may be used and everything they carry as well. This will seriously help with the 3.0 handling system which will use RuntimeResult extensively.
 			if (context is RoosterCommandContext rcc) {
 				if (!result.IsSuccess) {
 					string response = "";
