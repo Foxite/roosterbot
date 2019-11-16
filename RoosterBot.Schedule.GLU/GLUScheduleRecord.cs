@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule.GLU {
 		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
 			: base(activity, start, end, studentSets, staffMember, room) { }
 
-		public override Task<string> PresentAsync(IdentifierInfo info) {
+		public override string Present(IdentifierInfo info) {
 			string ret = $":notepad_spiral: {Activity.DisplayText}\n";
 
 			if (Activity.ScheduleCode != "stdag doc") {
@@ -60,7 +60,7 @@ namespace RoosterBot.Schedule.GLU {
 				}
 			}
 
-			return Task.FromResult(ret);
+			return ret;
 		}
 	}
 }

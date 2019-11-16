@@ -40,7 +40,6 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Convert this instance to a string that can be sent to Discord.
 		/// </summary>
-		// TODO (review) Should this really be async? The instance is supposed to have all the data it needs, and shouldn't have any service reference to get data from
-		public abstract Task<string> PresentAsync(IdentifierInfo relevantIdentifier);
+		public abstract string Present(IdentifierInfo relevantIdentifier);
 	}
 }
