@@ -36,7 +36,7 @@ namespace RoosterBot.Schedule {
 			config.SetData("schedule.userClass", ssi);
 			await config.UpdateAsync();
 			if (old != ssi && UserChangedClass != null) {
-				await Util.InvokeAsyncEventSequential(UserChangedClass, config.UserId, old, ssi);
+				await DelegateUtil.InvokeAsyncEventSequential(UserChangedClass, config.UserId, old, ssi);
 			}
 			return old;
 		}

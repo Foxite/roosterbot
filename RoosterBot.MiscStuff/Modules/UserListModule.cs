@@ -63,7 +63,7 @@ namespace RoosterBot.MiscStuff {
 			table[0] = new[] { "Username", "Joined", "Roles" };
 			userRows.CopyTo(table, 1);
 
-			ReplyDeferred(Util.FormatTextTable(table));
+			ReplyDeferred(StringUtil.FormatTextTable(table));
 			return Task.CompletedTask;
 		}
 	}

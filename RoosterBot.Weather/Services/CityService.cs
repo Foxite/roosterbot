@@ -49,7 +49,7 @@ namespace RoosterBot.Weather {
 		});
 
 		public Task<CityInfo?> Lookup(string input) => Task.Run(() => {
-			input = Util.RemoveDiacritics(input).ToLower();
+			input = StringUtil.RemoveDiacritics(input).ToLower();
 			foreach (CityInfo city in m_Cities) {
 				if (city.Match(input)) {
 					return city;

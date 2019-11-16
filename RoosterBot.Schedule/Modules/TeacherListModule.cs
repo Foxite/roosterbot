@@ -45,7 +45,7 @@ namespace RoosterBot.Schedule {
 
 					recordIndex++;
 				}
-				string response = Util.FormatTextTable(cells);
+				string response = StringUtil.FormatTextTable(cells);
 
 				ReplyDeferred(response);
 			}

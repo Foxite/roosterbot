@@ -9,7 +9,7 @@
 			Id = id;
 			Name = name;
 
-			m_NormalName = Util.RemoveDiacritics(name).ToLower();
+			m_NormalName = StringUtil.RemoveDiacritics(name).ToLower();
 		}
 
 		public bool Match(string input) {
