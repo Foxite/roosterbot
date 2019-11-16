@@ -1,8 +1,6 @@
 ﻿using Discord;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -56,7 +54,7 @@ namespace RoosterBot {
 		}
 
 		public static Task SetResponseAsync(this UserConfig userConfig, IUserMessage userMessage, IUserMessage botResponse) => SetResponseAsync(userConfig, userMessage.Id, botResponse.Id);
-		public static CommandResponsePair? GetResponsePair(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
+		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
 		public static Task<CommandResponsePair?> RemoveCommandAsync(this UserConfig userConfig, IUserMessage command) => RemoveCommandAsync(userConfig, command.Id);
 	}
 }
