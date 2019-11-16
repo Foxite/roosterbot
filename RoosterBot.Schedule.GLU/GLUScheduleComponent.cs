@@ -93,8 +93,7 @@ namespace RoosterBot.Schedule.GLU {
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
-			ulong guildId = context.Guild?.Id ?? context.UserGuild.Id;
-			if (m_AllowedGuilds.Contains(guildId)) {
+			if (m_AllowedGuilds.Contains(context.GuildConfig.GuildId)) {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {
