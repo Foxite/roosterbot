@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace RoosterBot {
 	internal sealed class PostCommandHandler {
-		private readonly CommandResponseService m_CRS;
 		private readonly ConfigService m_Config;
-		private readonly GuildConfigService m_GCS;
 		private readonly ResourceService m_ResourcesService;
 
-		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, GuildConfigService gcs, ResourceService resources, CommandResponseService crs) {
+		internal PostCommandHandler(RoosterCommandService commands, ConfigService config, ResourceService resources) {
 			m_Config = config;
 			m_ResourcesService = resources;
-			m_GCS = gcs;
-			m_CRS = crs;
 
 			commands.CommandExecuted += OnCommandExecuted;
 		}
@@ -80,11 +76,13 @@ namespace RoosterBot {
 						response = Util.Error + response;
 					}
 
-					IReadOnlyCollection<IUserMessage>? initialResponses = (context as RoosterCommandContext)?.Responses;
-					if (initialResponses != null) {
-						await Util.ModifyResponsesIntoSingle(response, initialResponses, false);
+					IUserMessage? initialResponse = rcc.Response;
+					if (initialResponse == null) {
+						await rcc.UserConfig.SetResponseAsync(context.Message, await context.Channel.SendMessageAsync(response));
 					} else {
-						m_CRS.AddResponse(context.Message, await context.Channel.SendMessageAsync(response));
+						await initialResponse.ModifyAsync(props => {
+							props.Content += "\n\n" + response;
+						});
 					}
 				}
 			} else {
