@@ -9,7 +9,7 @@ namespace RoosterBot {
 
 		internal async Task AddNotificationAsync(string message) {
 			if (!(NotificationAdded is null)) {
-				await Util.InvokeAsyncEventConcurrent(NotificationAdded, message);
+				await DelegateUtil.InvokeAsyncEventConcurrent(NotificationAdded, message);
 			}
 		}
 	}

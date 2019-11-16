@@ -81,11 +81,12 @@ namespace RoosterBot {
 			var commands = Components.Services.GetService<RoosterCommandService>();
 			var resources = Components.Services.GetService<ResourceService>();
 			var gcs = Components.Services.GetService<GuildConfigService>();
-			var crs = Components.Services.GetService<CommandResponseService>();
-			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService, crs, gcs);
-			new PostCommandHandler(commands, m_ConfigService, gcs, resources, crs);
-			new DeletedCommandHandler(m_Client, crs);
+			var ucs = Components.Services.GetService<UserConfigService>();
+
+			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
+			new PostCommandHandler(commands, m_ConfigService, resources);
+			new DeletedCommandHandler(m_Client, ucs);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);
 			await m_Client.StartAsync();
@@ -111,7 +112,6 @@ namespace RoosterBot {
 
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
-			CommandResponseService crs = new CommandResponseService(m_ConfigService);
 
 			ResourceService resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
@@ -146,7 +146,6 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
-				.AddSingleton(crs)
 				.AddSingleton(m_Client);
 			return serviceCollection;
 		}

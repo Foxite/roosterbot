@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
@@ -31,7 +28,6 @@ namespace RoosterBot {
 		public UserConfigService UserConfigService { get; set; }
 		public ResourceService ResourcesService { get; set; }
 		public RoosterCommandService CmdService { get; set; }
-		public CommandResponseService CommandResponses { get; set; }
 		public new T Context { get; internal set; }
 		// TODO (investigate) Can analyzers disable other analyzers? Make an analyzer for ModuleBase<T> that disables nullability warnings on public settable properties.
 
@@ -43,7 +39,6 @@ namespace RoosterBot {
 		protected CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 
 		private StringBuilder m_Response = new StringBuilder();
-		private bool m_Replied = false;
 
 		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
 		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
@@ -92,7 +87,7 @@ namespace RoosterBot {
 			}
 		}
 
-		protected override async Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
+		protected async override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
@@ -101,19 +96,17 @@ namespace RoosterBot {
 			}
 
 			IUserMessage ret;
-			if (Context.Responses == null) {
+			if (Context.Response == null) {
 				// The command was not edited, or the command somehow did not invoke a reply.
 				IUserMessage response = await Context.Channel.SendMessageAsync(message, isTTS, embed, options);
-				CommandResponses.AddResponse(Context.Message, response);
+				await UserConfig.SetResponseAsync(Context.Message, response);
 				ret = response;
 			} else {
 				// The command was edited.
-				ret = await Util.ModifyResponsesIntoSingle(message, Context.Responses, m_Replied);
-
-				CommandResponses.ModifyResponse(Context.Message, new[] { ret });
+				await Context.Response.ModifyAsync(props => props.Content += "\n\n" + message);
+				ret = Context.Response;
 			}
 
-			m_Replied = true;
 			return ret;
 		}
 
@@ -122,13 +115,13 @@ namespace RoosterBot {
 			return ReplyAsync(Util.Error + message);
 		}
 
-		protected virtual async Task FatalError(string message, Exception? exception = null) {
+		protected async virtual Task FatalError(string message, Exception? exception = null) {
 			string report = $"Fatal error executing {Context}\nAttached error message: {message}";
 
 			Log.Error(report, exception);
 
 			if (exception != null) {
-				report += $"\nAttached exception: {Util.EscapeString(exception.ToStringDemystified())}\n";
+				report += $"\nAttached exception: {StringUtil.EscapeString(exception.ToStringDemystified())}\n";
 			}
 			
 			if (Config.BotOwner != null) {
@@ -190,21 +183,21 @@ namespace RoosterBot {
 		public IGuild? Guild { get; }
 		public bool IsPrivate { get; }
 		// If this is null, we should make a new message.
-		public IReadOnlyCollection<IUserMessage>? Responses { get; }
+		public IUserMessage? Response { get; }
 
 		public UserConfig UserConfig { get; }
 		public GuildConfig GuildConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 		
 		// TODO (review) all instantiations, it now throws an exception if there's no mutual guilds
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IReadOnlyCollection<IUserMessage>? originalResponses, UserConfig userConfig, GuildConfig guildConfig) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage? originalResponse, UserConfig userConfig, GuildConfig guildConfig) {
 			Client = client;
 			Message = message;
 			User = message.Author;
 			Channel = message.Channel;
 			IsPrivate = Channel is IPrivateChannel;
 			Guild = (Channel as IGuildChannel)?.Guild;
-			Responses = originalResponses;
+			Response = originalResponse;
 
 			UserConfig = userConfig;
 			GuildConfig = guildConfig;
