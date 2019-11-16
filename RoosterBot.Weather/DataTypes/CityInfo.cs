@@ -23,7 +23,7 @@ namespace RoosterBot.Weather {
 				return MatchName(input);
 			} else {
 				return
-					Region.Match(split[split.Length - 1].Trim()) &&
+					Region.Match(split[^1].Trim()) &&
 					MatchName(string.Join(" ", split.Take(split.Length - 1).Select(str => str.Trim())));
 			}
 		}
