@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -16,15 +18,16 @@ namespace RoosterBot {
 		}
 
 		public async Task OnCommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result) {
-			// TODO (feature) Make use of the actual type of Result
-			// I've discovered that result may be an an object of type SearchResult, ParseResult, and ExecuteResult, the latter 2 of which can carry an Exception object. This is undocumented.
-			// This makes it possible to report the actual exception that was thrown, which is something I thought was literally impossible since I started working on this.
-			// Also investigate what other types may be used and everything they carry as well. This will seriously help with the 3.0 handling system which will use RuntimeResult extensively.
+			// IResult in an interface (obviously) and its actual object may be one of several types: https://github.com/discord-net/Discord.Net/tree/dev/src/Discord.Net.Commands/Results
+			// I'd love to extend these into RoosterParseResult etc and add localization stuff, and turn this function into a more object-oriented handling system,
+			//  but there's one critical problem: for no apparent reason[1], 4 of these are structs. This makes them impossible to extend.
+			// Qmmands does not do this, so in 3.0 this won't be a problem.
+			// 
+			//     [1]: https://github.com/discord-net/Discord.Net/tree/dev/src/Discord.Net.Commands/Results
 			if (context is RoosterCommandContext rcc) {
 				if (!result.IsSuccess) {
-					string response = "";
+					string response;
 					bool bad = true;
-					string badReport = $"\"{context.Message}\": ";
 
 					if (result.Error.HasValue) {
 						switch (result.Error.Value) {
@@ -37,41 +40,61 @@ namespace RoosterBot {
 								bad = false;
 								break;
 							case CommandError.UnmetPrecondition:
-								response = m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
-								// TODO (feature) Preconditions should use IResult and pass information about their component, this doesn't work with external components
+								if (result is RoosterPreconditionResult rpr) {
+									response = string.Format(m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, rpr.ErrorReasonComponent, result.ErrorReason), rpr.ErrorReasonObjects);
+								} else {
+									response = m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+								}
 								bad = false;
 								break;
 							case CommandError.ParseFailed:
+								// Would love to do the same thing here as in UnmetPrecondition, but per the comment above this is impossible.
 								response = result.ErrorReason;
 								bad = false;
 								break;
-							case CommandError.ObjectNotFound:
-								badReport += "ObjectNotFound";
-								break;
 							case CommandError.MultipleMatches:
-								badReport += "MultipleMatches";
+								if (result is SearchResult searchResult) {
+									response = string.Join("\n", searchResult.Commands.Select(command => command.Command.GetSignature(m_ResourcesService, rcc.GuildConfig.Culture)));
+									bad = false;
+								} else {
+									response = "MultipleMatches\n";
+									response += result.ErrorReason + "\n";
+									response += result.ToString();
+								}
+								break;
+							case CommandError.ObjectNotFound:
+								response = "ObjectNotFoundn\n";
+								response += result.ErrorReason + "\n";
+								response += result.ToString();
 								break;
 							case CommandError.Exception:
-								badReport += "Exception\n";
-								badReport += result.ErrorReason;
+								response = "Exception\n";
+								if (result is ExecuteResult executeResult) {
+									response += executeResult.Exception.ToStringDemystified();
+								} else {
+									// In any other case the actual exception is lost, ErrorReason contains the Message that was carried by the exception.
+									response += result.ErrorReason;
+								}
+								response += "\n" + result.ToString();
 								break;
 							case CommandError.Unsuccessful:
-								badReport += "Unsuccessful\n";
-								badReport += result.ErrorReason;
+								response = "Unsuccessful\n";
+								response += result.ErrorReason + "\n";
+								response += result.ToString();
 								break;
 							default:
-								badReport += "Unknown error: " + result.Error.Value.ToString();
+								response = "Unknown error reason: " + result.Error.Value.ToString();
 								break;
 						}
 					} else {
-						badReport += "No error reason";
-						bad = true;
+						response = "No error reason";
 					}
 
 					if (bad) {
-						Logger.Error("Program", "Error occurred while parsing command " + badReport);
+						string report = "Error occurred while executing: " + context.ToString() + "\n" + response;
+						Logger.Error("Program", report);
 						if (m_Config.BotOwner != null) {
-							await m_Config.BotOwner.SendMessageAsync(badReport);
+							await m_Config.BotOwner.SendMessageAsync(report);
 						}
 
 						response = Util.Error + m_ResourcesService.GetString(rcc.GuildConfig.Culture, "RoosterBot_FatalError");
@@ -79,12 +102,12 @@ namespace RoosterBot {
 						response = Util.Error + response;
 					}
 
-					IUserMessage? initialResponse = rcc.Response;
-					if (initialResponse == null) {
+					IUserMessage? responseMessage = rcc.Response;
+					if (responseMessage == null) {
 						await rcc.UserConfig.SetResponseAsync(context.Message, await context.Channel.SendMessageAsync(response));
 					} else {
-						await initialResponse.ModifyAsync(props => {
-							props.Content += "\n\n" + response;
+						await responseMessage.ModifyAsync(props => {
+							props.Content = response;
 						});
 					}
 				}
