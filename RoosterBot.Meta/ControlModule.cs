@@ -21,8 +21,8 @@ namespace RoosterBot.Meta {
 		}
 
 		[Command("send"), RequireBotManager]
-		public async Task SendMessageCommand(IMessageChannel channel, [Remainder] string message) {
-			await channel.SendMessageAsync(message);
+		public async Task SendMessageCommand(ulong channel, [Remainder] string message) {
+			await ((ITextChannel) await Context.Client.GetChannelAsync(channel)).SendMessageAsync(message);
 		}
 
 		[Command("delete"), RequireBotManager]
