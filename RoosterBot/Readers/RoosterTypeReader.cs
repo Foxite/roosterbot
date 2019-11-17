@@ -9,6 +9,21 @@ namespace RoosterBot {
 		/// </summary>
 		public bool ThrowOnInvalidContext { get; set; }
 
+		/// <summary>
+		/// The Type that this TypeReader parses.
+		/// </summary>
+		public abstract Type Type { get; }
+
+		/// <summary>
+		/// The display name of the Type that this TypeReader parses. This may be a resolvable resource.
+		/// </summary>
+		public abstract string TypeDisplayName { get; }
+
+		/// <summary>
+		/// The component that this RoosterTypeReader belongs to. Used to resolve <see cref="TypeDisplayName"/>.
+		/// </summary>
+		public abstract ComponentBase Component { get; }
+
 		public sealed override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			if (context is RoosterCommandContext rcc) {
 				return ReadAsync(rcc, input, services);
