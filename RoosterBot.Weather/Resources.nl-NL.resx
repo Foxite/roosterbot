@@ -322,4 +322,7 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="CityInfoReader_ParseFailed" xml:space="preserve">
     <value>Die stad ken ik niet. Bedoelde je een stad die officiëel een andere naam heeft? Geef het door aan de bot eigenaar.</value>
   </data>
+  <data name="CityInfo_TypeDisplayName" xml:space="preserve">
+    <value>stad</value>
+  </data>
 </root>

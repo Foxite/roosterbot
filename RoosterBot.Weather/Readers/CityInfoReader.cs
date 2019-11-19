@@ -5,6 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
 	public class CityInfoReader : RoosterTypeReader {
+		public override Type Type => typeof(CityInfo);
+
+		public override string TypeDisplayName => "#CityInfo_TypeDisplayName";
+
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			CityService cities = services.GetService<CityService>();
 			CityInfo? cityResult = await cities.Lookup(input);
