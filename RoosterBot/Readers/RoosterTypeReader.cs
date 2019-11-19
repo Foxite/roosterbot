@@ -19,11 +19,6 @@ namespace RoosterBot {
 		/// </summary>
 		public abstract string TypeDisplayName { get; }
 
-		/// <summary>
-		/// The component that this RoosterTypeReader belongs to. Used to resolve <see cref="TypeDisplayName"/>.
-		/// </summary>
-		public abstract ComponentBase Component { get; }
-
 		public sealed override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
 			if (context is RoosterCommandContext rcc) {
 				return ReadAsync(rcc, input, services);

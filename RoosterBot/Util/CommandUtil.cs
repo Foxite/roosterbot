@@ -23,7 +23,8 @@ namespace RoosterBot {
 				ret += "<" + resources.ResolveString(culture, component, param.Name);
 				RoosterTypeReader? reader = command.Module.Service.TypeReaders[param.Type].OfType<RoosterTypeReader>().FirstOrDefault();
 				if (reader != null) {
-					ret += ": " + resources.ResolveString(culture, reader.Component, reader.TypeDisplayName);
+					ComponentBase readerComponent = Program.Instance.Components.GetComponentFromAssembly(reader.GetType().Assembly);
+					ret += ": " + resources.ResolveString(culture, readerComponent, reader.TypeDisplayName);
 				} else {
 					ret += ": " + param.Type.Name;
 				}
