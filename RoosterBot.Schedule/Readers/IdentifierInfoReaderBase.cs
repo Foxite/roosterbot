@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 
 namespace RoosterBot.Schedule {
-	public class IdentifierInfoReaderBase<T> : RoosterTypeReader where T : IdentifierInfo {
+	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeReader where T : IdentifierInfo {
+		public override Type Type => typeof(T);
+
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			T? result = await services.GetService<IdentifierValidationService>().ValidateAsync<T>(context as RoosterCommandContext, input);
 			if (result is null) {
