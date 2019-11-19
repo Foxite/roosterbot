@@ -6,6 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DateTimeUtils {
 	public class DayOfWeekReader : RoosterTypeReader {
+		public override Type Type => typeof(DayOfWeek);
+
+		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
+
 		protected override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			input = input.ToLower();
 			ResourceService resources = services.GetService<ResourceService>();

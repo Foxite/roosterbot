@@ -126,6 +126,9 @@
   <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
   </data>
+  <data name="DayOfWeek_DisplayName" xml:space="preserve">
+    <value>weekdag</value>
+  </data>
   <data name="RelativeDateReference_Date" xml:space="preserve">
     <value>op {0}</value>
     <comment>0: localized short date string (day and month)</comment>
