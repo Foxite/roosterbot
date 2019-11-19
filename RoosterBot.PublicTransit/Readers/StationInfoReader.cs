@@ -6,6 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfoReader : RoosterTypeReader {
+		public override Type Type => typeof(StationInfo);
+
+		public override string TypeDisplayName => "treinstation";
+
 		protected override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			StationInfoService sis = services.GetService<StationInfoService>();
 			TypeReaderResult result;
