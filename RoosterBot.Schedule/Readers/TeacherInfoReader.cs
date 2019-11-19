@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class TeacherInfoReader : IdentifierInfoReaderBase<TeacherInfo> {
+		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
+
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
 			TypeReaderResult baseResult = await base.ReadAsync(context, input, services);
 			if (baseResult.IsSuccess) {

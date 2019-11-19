@@ -502,4 +502,13 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Je zit al in {0}!</value>
     <comment>0: student set</comment>
   </data>
+  <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
+    <value>lokaal</value>
+  </data>
+  <data name="StudentSetInfo_TypeDisplayName" xml:space="preserve">
+    <value>klas</value>
+  </data>
+  <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
+    <value>leraar</value>
+  </data>
 </root>
