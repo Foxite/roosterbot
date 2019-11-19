@@ -11,13 +11,19 @@ namespace RoosterBot.Schedule {
 		private readonly string m_ErrorMessage;
 		private readonly ComponentBase m_ResourcesComponent;
 
+		public override Type Type { get; }
+
+		public override string TypeDisplayName { get; }
+
 		/// <summary>
 		/// Allows multiple type readers to be used for a single type.
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
-		public MultiReader(string errorMessage, ComponentBase resourcesComponent) {
+		public MultiReader(string errorMessage, Type type, string typeDisplayName, ComponentBase resourcesComponent) {
 			m_Readers = new List<RoosterTypeReader>();
+			Type = type; // na naa na na na
+			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;
 			m_ResourcesComponent = resourcesComponent;
 		}
