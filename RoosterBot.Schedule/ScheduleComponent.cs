@@ -17,7 +17,7 @@ namespace RoosterBot.Schedule {
 
 		public ScheduleComponent() {
 			Instance = this;
-			IdentifierReaders = new MultiReader("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", this);
+			IdentifierReaders = new MultiReader("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", typeof(IdentifierInfo), "#IdentifierInfo_MultiReader_TypeDisplayName", this);
 		}
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
