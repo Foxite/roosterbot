@@ -37,6 +37,9 @@ namespace RoosterBot {
 								break;
 							case CommandError.BadArgCount:
 								response = m_ResourcesService.GetString(rcc.GuildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
+								if (command.IsSpecified) {
+									response += "\n" + string.Format(m_ResourcesService.GetString(rcc.GuildConfig.Culture, "PostCommandHandler_UsageHint"), command.Value.GetSignature(m_ResourcesService, rcc.Culture));
+								}
 								bad = false;
 								break;
 							case CommandError.UnmetPrecondition:
