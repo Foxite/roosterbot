@@ -15,20 +15,21 @@ namespace RoosterBot.Schedule {
 				return baseResult;
 			} else {
 				ResourceService resources = services.GetService<ResourceService>();
-				IUser user;
-				bool byMention = false;
+				bool byMention;
+				StudentSetInfo? result;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
-					user = await context.Client.GetUserAsync(id);
+					IUser user = await context.Client.GetUserAsync(id);
 					if (user == null) {
-						return TypeReaderResult.FromError(CommandError.ParseFailed, "#StudentSetInfoReader_CheckFailed_InaccessibleUser");
+						return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_InaccessibleUser"));
 					}
+					result = (await services.GetService<UserConfigService>().GetConfigAsync(user)).GetStudentSet();
 					byMention = true;
-				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
-					user = context.User;
+				} else if (input.ToLower() == resources.GetString(context.Culture, "IdentifierInfoReader_Self")) {
+					result = context.UserConfig.GetStudentSet();
+					byMention = false;
 				} else {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, "#StudentSetInfoReader_CheckFailed_Direct");
+					return TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_Direct"));
 				}
-				StudentSetInfo? result = context.UserConfig.GetStudentSet();
 				if (result is null) {
 					string message;
 					if (byMention) {
