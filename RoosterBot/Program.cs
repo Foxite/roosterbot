@@ -146,6 +146,7 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
+				.AddSingleton(cns)
 				.AddSingleton(m_Client);
 			return serviceCollection;
 		}
