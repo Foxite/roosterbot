@@ -9,6 +9,9 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
+		// Initializing a property with `null!` will prevent a warning about non-nullable properties being unassigned.
+		// They will be assigned through reflection, and this is the best way to tell the compiler that it's fine.
+		// https://stackoverflow.com/a/57343485/3141917
 		public ConfigService Config { get; set; } = null!;
 		public GuildConfigService GuildConfigService { get; set; } = null!;
 		public UserConfigService UserConfigService { get; set; } = null!;
