@@ -22,10 +22,6 @@ namespace RoosterBot.Schedule {
 			} else if (records.Count() > 25) {
 				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
 			} else {
-				// A foreach loop is faster than a for loop if you have to use the item more than once.
-				// https://www.dotnetperls.com/for-foreach
-				// Because of NoLookup, we don't actually know how many times we use the item, but in practice, we almost always have to use it twice and not once.
-
 				string[][] cells = new string[records.Count() + 1][];
 				cells[0] = new string[] {
 					GetString("TeacherListModule_TeacherListCommand_ColumnFullName"),
