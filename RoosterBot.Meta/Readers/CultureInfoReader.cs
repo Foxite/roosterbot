@@ -23,13 +23,14 @@ namespace RoosterBot.Meta {
 				return Task.FromResult(TypeReaderResult.FromSuccess(info));
 			}
 
+			var resources = services.GetService<ResourceService>();
 			Match flagMatch = m_FlagEmoteRegex.Match(input);
 			if (flagMatch.Success) {
 				string countryCode = flagMatch.Groups[0].Value;
 				if (TryGetCultureInfo(countryCode, out info)) {
 					return Task.FromResult(TypeReaderResult.FromSuccess(info));
 				} else {
-					return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "#CultureInfoReader_ParseFailed_UnknownFlag"));
+					return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "CultureInfoReader_ParseFailed_UnknownFlag")));
 				}
 			}
 
@@ -39,7 +40,7 @@ namespace RoosterBot.Meta {
 				return Task.FromResult(TypeReaderResult.FromSuccess(CultureInfo.GetCultureInfo(resultCode)));
 			}
 
-			return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "#CultureInfoReader_ParseFailed"));
+			return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "CultureInfoReader_ParseFailed")));
 		}
 
 		private bool TryGetCultureInfo(string name, [NotNullWhen(true), MaybeNullWhen(false)] out CultureInfo? info) {
