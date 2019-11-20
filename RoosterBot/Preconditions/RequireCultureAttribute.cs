@@ -17,7 +17,7 @@ namespace RoosterBot {
 		}
 
 		protected override Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
-			if (Culture == context.GuildConfig.Culture) {
+			if (Culture == context.Culture) {
 				return Task.FromResult(RoosterPreconditionResult.FromSuccess());
 			} else if (Hide) {
 				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
