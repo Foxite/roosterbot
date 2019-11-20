@@ -36,7 +36,7 @@ namespace RoosterBot {
 			}
 
 			if (ret.Length >= 1 && ret[^1] == ' ') {
-				return ret[0..^2];
+				return ret[0..^1];
 			} else {
 				return ret;
 			}
