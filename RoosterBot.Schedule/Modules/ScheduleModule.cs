@@ -7,7 +7,7 @@ using Discord;
 using Discord.Commands;
 
 namespace RoosterBot.Schedule {
-	// TODO (refactor) reduce the size of this file (it has 404 lines right now)
+	// TODO (refactor) reduce the size of this file (it has 353 lines right now)
 	[Name("#ScheduleModule_Name")]
 	[Summary("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
@@ -158,21 +158,22 @@ namespace RoosterBot.Schedule {
 
 						string[][] cells = new string[records.Length + 1][];
 						cells[0] = new string[] {
-						GetString("ScheduleModule_RespondDay_ColumnActivity"),
-						GetString("ScheduleModule_RespondDay_ColumnTime"),
-						GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
-						GetString("ScheduleModule_RespondDay_ColumnTeacher"),
-						GetString("ScheduleModule_RespondDay_ColumnRoom")
-					};
+							GetString("ScheduleModule_RespondDay_ColumnActivity"),
+							GetString("ScheduleModule_RespondDay_ColumnTime"),
+							GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
+							GetString("ScheduleModule_RespondDay_ColumnTeacher"),
+							GetString("ScheduleModule_RespondDay_ColumnRoom")
+						};
 
 						int recordIndex = 1;
 						foreach (ScheduleRecord record in records) {
-							cells[recordIndex] = new string[5];
-							cells[recordIndex][0] = record.Activity.DisplayText;
-							cells[recordIndex][1] = $"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}";
-							cells[recordIndex][2] = record.StudentSetsString;
-							cells[recordIndex][3] = record.StaffMemberString;
-							cells[recordIndex][4] = record.RoomString;
+							cells[recordIndex] = new string[] {
+								record.Activity.DisplayText,
+								$"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}",
+								record.StudentSetsString,
+								record.StaffMemberString,
+								record.RoomString
+							};
 
 							recordIndex++;
 						}
@@ -321,8 +322,6 @@ namespace RoosterBot.Schedule {
 				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
 			} catch (NoAllowedGuildsException) {
 				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
-			} catch (Exception ex) {
-				await FatalError("Uncaught exception", ex);
 			}
 			return new ReturnValue<T>();
 		}
@@ -345,7 +344,7 @@ namespace RoosterBot.Schedule {
 			} else {
 				await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
 			}
-			
+
 			return await base.SendDeferredResponseAsync();
 		}
 		#endregion
