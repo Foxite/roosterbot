@@ -153,4 +153,8 @@
     <value>Vereist een {0}talige server.</value>
     <comment>{0}: localized language name</comment>
   </data>
+  <data name="PostCommandHandler_UsageHint" xml:space="preserve">
+    <value>Gebruik: {0}</value>
+    <comment>0: command signature</comment>
+  </data>
 </root>
