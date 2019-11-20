@@ -132,13 +132,20 @@ namespace RoosterBot {
 				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
 				
 				try {
-					servicesLoading[i] = component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
+#if DEBUG
+					await
+#else
+					servicesLoading[i] = 
+#endif               
+						component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
 					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", component.GetType(), ex);
 				}
 				i++;
 			}
+#if !DEBUG
 			await Task.WhenAll(servicesLoading);
+#endif
 
 			return serviceCollection.BuildServiceProvider();
 		}
@@ -158,14 +165,21 @@ namespace RoosterBot {
 						}
 					}
 
-					modulesLoading[moduleIndex] = component.AddModulesAsync(services, commands, help, registerModule);
+#if DEBUG
+					await
+#else
+					modulesLoading[moduleIndex] = 
+#endif
+						component.AddModulesAsync(services, commands, help, registerModule);
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
 				moduleIndex++;
 			}
 
+#if !DEBUG
 			await Task.WhenAll(modulesLoading);
+#endif
 		}
 
 		internal void ShutdownComponents() {
