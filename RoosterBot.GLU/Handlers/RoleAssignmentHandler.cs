@@ -39,7 +39,7 @@ namespace RoosterBot.Schedule.GLU {
 
 		private async Task OnUserChangedClass(ulong userId, StudentSetInfo? oldSSI, StudentSetInfo newSSI) {
 			if ((await m_Client.GetUserAsync(userId)) is SocketUser socketUser && socketUser.MutualGuilds.Count != 0) {
-				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUScheduleComponent.GLUGuildId)?.GetUser(userId);
+				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUComponent.GLUGuildId)?.GetUser(userId);
 				// Assign roles
 				if (user != null) {
 					// Assign roles

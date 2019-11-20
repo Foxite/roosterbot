@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace RoosterBot.Schedule.GLU {
 	// This component has a lot of hardcoded snowflake IDs. Normally I'd get all that from a config file, but this component is specifically made for a particular guild,
 	//  so generalizing the code does not make a lot of sense.
-	public class GLUScheduleComponent : ComponentBase {
+	public class GLUComponent : ComponentBase {
 		public const long GLUGuildId = 278586698877894657;
 
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
@@ -25,7 +25,7 @@ namespace RoosterBot.Schedule.GLU {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
-		public GLUScheduleComponent() {
+		public GLUComponent() {
 			m_Schedules = new List<ScheduleRegistryInfo>();
 			m_AllowedGuilds = Array.Empty<ulong>();
 			m_TeacherPath = "";
