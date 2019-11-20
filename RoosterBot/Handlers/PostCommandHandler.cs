@@ -32,32 +32,31 @@ namespace RoosterBot {
 					if (result.Error.HasValue) {
 						switch (result.Error.Value) {
 							case CommandError.UnknownCommand:
-								response = string.Format(m_ResourcesService.GetString(rcc.GuildConfig.Culture, "Program_OnCommandExecuted_UnknownCommand"), rcc.GuildConfig.CommandPrefix);
+								response = string.Format(m_ResourcesService.GetString(rcc.Culture, "Program_OnCommandExecuted_UnknownCommand"), rcc.GuildConfig.CommandPrefix);
 								bad = false;
 								break;
 							case CommandError.BadArgCount:
-								response = m_ResourcesService.GetString(rcc.GuildConfig.Culture, "Program_OnCommandExecuted_BadArgCount");
+								response = m_ResourcesService.GetString(rcc.Culture, "Program_OnCommandExecuted_BadArgCount");
 								if (command.IsSpecified) {
-									response += "\n" + string.Format(m_ResourcesService.GetString(rcc.GuildConfig.Culture, "PostCommandHandler_UsageHint"), command.Value.GetSignature(m_ResourcesService, rcc.Culture));
+									response += "\n" + string.Format(m_ResourcesService.GetString(rcc.Culture, "PostCommandHandler_UsageHint"), command.Value.GetSignature(m_ResourcesService, rcc.Culture));
 								}
 								bad = false;
 								break;
 							case CommandError.UnmetPrecondition:
 								if (result is RoosterPreconditionResult rpr) {
-									response = string.Format(m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, rpr.ErrorReasonComponent, result.ErrorReason), rpr.ErrorReasonObjects);
+									response = string.Format(m_ResourcesService.ResolveString(rcc.Culture, rpr.ErrorReasonComponent, result.ErrorReason), rpr.ErrorReasonObjects.ToArray());
 								} else {
-									response = m_ResourcesService.ResolveString(rcc.GuildConfig.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
+									response = m_ResourcesService.ResolveString(rcc.Culture, Program.Instance.Components.GetComponentForModule(command.Value.Module), result.ErrorReason);
 								}
 								bad = false;
 								break;
 							case CommandError.ParseFailed:
-								// Would love to do the same thing here as in UnmetPrecondition, but per the comment above this is impossible.
 								response = result.ErrorReason;
 								bad = false;
 								break;
 							case CommandError.MultipleMatches:
 								if (result is SearchResult searchResult) {
-									response = string.Join("\n", searchResult.Commands.Select(command => command.Command.GetSignature(m_ResourcesService, rcc.GuildConfig.Culture)));
+									response = string.Join("\n", searchResult.Commands.Select(command => command.Command.GetSignature(m_ResourcesService, rcc.Culture)));
 									bad = false;
 								} else {
 									response = "MultipleMatches\n";
@@ -100,7 +99,7 @@ namespace RoosterBot {
 							await m_Config.BotOwner.SendMessageAsync(report);
 						}
 
-						response = Util.Error + m_ResourcesService.GetString(rcc.GuildConfig.Culture, "RoosterBot_FatalError");
+						response = Util.Error + m_ResourcesService.GetString(rcc.Culture, "RoosterBot_FatalError");
 					} else {
 						response = Util.Error + response;
 					}

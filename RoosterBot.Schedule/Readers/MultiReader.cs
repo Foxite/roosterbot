@@ -42,7 +42,7 @@ namespace RoosterBot.Schedule {
 				}
 			}
 			ResourceService resources = services.GetService<ResourceService>();
-			CultureInfo culture = context.GuildConfig.Culture;
+			CultureInfo culture = context.Culture;
 			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(culture, m_ResourcesComponent, m_ErrorMessage));
 		}
 	}

@@ -15,8 +15,6 @@ namespace RoosterBot.Schedule {
 				return baseResult;
 			} else {
 				ResourceService resources = services.GetService<ResourceService>();
-				GuildConfig guildConfig = context.GuildConfig;
-				UserConfig userConfig = await services.GetRequiredService<UserConfigService>().GetConfigAsync(context.User);
 				IUser user;
 				bool byMention = false;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
@@ -25,18 +23,18 @@ namespace RoosterBot.Schedule {
 						return TypeReaderResult.FromError(CommandError.ParseFailed, "#StudentSetInfoReader_CheckFailed_InaccessibleUser");
 					}
 					byMention = true;
-				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(guildConfig.Culture, "IdentifierInfoReader_Self")) {
+				} else if (input.ToLower() == services.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
 					user = context.User;
 				} else {
 					return TypeReaderResult.FromError(CommandError.ParseFailed, "#StudentSetInfoReader_CheckFailed_Direct");
 				}
-				StudentSetInfo? result = userConfig.GetStudentSet();
+				StudentSetInfo? result = context.UserConfig.GetStudentSet();
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = string.Format(resources.GetString(guildConfig.Culture, "StudentSetInfoReader_CheckFailed_MentionUser"), guildConfig.CommandPrefix);
+						message = string.Format(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_MentionUser"), context.GuildConfig.CommandPrefix);
 					} else {
-						message = string.Format(resources.GetString(guildConfig.Culture, "StudentSetInfoReader_CheckFailed_MentionSelf"), guildConfig.CommandPrefix);
+						message = string.Format(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_MentionSelf"), context.GuildConfig.CommandPrefix);
 					}
 					return TypeReaderResult.FromError(CommandError.Unsuccessful, message);
 				} else {

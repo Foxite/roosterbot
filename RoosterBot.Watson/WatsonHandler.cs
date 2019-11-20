@@ -54,7 +54,7 @@ namespace RoosterBot.Watson {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(msg.Author);
 							CommandResponsePair? crp = userConfig.GetResponse(msg);
 
-							RoosterCommandContext context = new RoosterCommandContext(m_Discord, msg, crp == null ? null : (await socketMsg.Channel.GetMessageAsync(crp.ResponseId) as IUserMessage), userConfig, guildConfig);
+							var context = new RoosterCommandContext(m_Discord, msg, crp == null ? null : (await socketMsg.Channel.GetMessageAsync(crp.ResponseId) as IUserMessage), userConfig, guildConfig);
 
 							Logger.Info("WatsonComponent", $"Processing natlang command: {context.ToString()}");
 							IDisposable typingState = context.Channel.EnterTypingState();
@@ -63,7 +63,7 @@ namespace RoosterBot.Watson {
 							try {
 								string input = context.Message.Content.Substring(argPos);
 								if (input.Contains("\n") || input.Contains("\r") || input.Contains("\t")) {
-									returnMessage = Util.Error + m_Resources.GetString(guildConfig.Culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs");
+									returnMessage = Util.Error + m_Resources.GetString(context.Culture, "WatsonClient_ProcessCommandAsync_NoExtraLinesOrTabs");
 									return;
 								}
 
@@ -73,7 +73,7 @@ namespace RoosterBot.Watson {
 									await m_CommandService.ExecuteAsync(context, result, Program.Instance.Components.Services);
 									// AddResponse will be handled by PostCommandHandler.
 								} else {
-									returnMessage = Util.Unknown + m_Resources.GetString(guildConfig.Culture, "WatsonClient_CommandNotUnderstood");
+									returnMessage = Util.Unknown + m_Resources.GetString(context.Culture, "WatsonClient_CommandNotUnderstood");
 								}
 							} catch (WatsonException e) {
 								Logger.Error("Watson", $"Caught an exception while handling natlang command: {context}", e);
