@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : ComponentBase {
-		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			JObject jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));

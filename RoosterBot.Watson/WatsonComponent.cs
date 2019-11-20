@@ -11,7 +11,7 @@ namespace RoosterBot.Watson {
 		private string m_WatsonID = "";
 		private string m_WatsonKey = "";
 
-		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));

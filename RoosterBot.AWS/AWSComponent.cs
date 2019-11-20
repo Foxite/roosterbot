@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : ComponentBase {
-		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override Version ComponentVersion => new Version(1, 1, 0);
 
 #nullable disable
 		private AmazonDynamoDBClient m_DynamoDBClient;

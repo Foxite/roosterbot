@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : ComponentBase {
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(0, 2, 0);
 		public bool AttributionLicense { get; private set; }
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
