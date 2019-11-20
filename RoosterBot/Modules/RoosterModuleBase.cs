@@ -22,7 +22,7 @@ namespace RoosterBot {
 		protected GuildConfig GuildConfig => Context.GuildConfig;
 		protected CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 
-		private StringBuilder m_Response = new StringBuilder();
+		private readonly StringBuilder m_Response = new StringBuilder();
 
 		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
 		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
