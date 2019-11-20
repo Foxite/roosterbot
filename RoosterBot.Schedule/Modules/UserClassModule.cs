@@ -5,12 +5,7 @@ using Discord.Commands;
 namespace RoosterBot.Schedule {
 	[Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary")]
 	public class UserClassModule : RoosterModuleBase {
-		private IdentifierValidationService Validation { get; }
-
-		public UserClassModule(UserConfigService userConfigService, IdentifierValidationService validation) {
-			UserConfigService = userConfigService;
-			Validation = validation;
-		}
+		public IdentifierValidationService Validation { get; set; } = null!;
 
 		[Command("ik", RunMode = RunMode.Async), Summary("#UserClassModule_GetClassForUser_Summary")]
 		public Task GetClassForUser() {

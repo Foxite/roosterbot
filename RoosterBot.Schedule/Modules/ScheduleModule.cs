@@ -16,11 +16,7 @@ namespace RoosterBot.Schedule {
 		private IdentifierInfo? m_LookedUpIdentifier;
 		private DateTime? m_LookedUpRecordEndTime;
 
-		private ScheduleService Schedules { get; }
-
-		public ScheduleModule(ScheduleService schedules) {
-			Schedules = schedules;
-		}
+		public ScheduleService Schedules { get; set; } = null!;
 
 		#region Commands
 		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultCurrentCommand_Summary")]

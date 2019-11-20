@@ -9,30 +9,14 @@ using Discord.Commands;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
-#nullable disable
-		// Another case of local nullability overrides, but this one's a bit more hairy.
-		// There are two ways for modules to get service instances:
-		// - Public settable properties
-		// - Constructor parameters
-		// For every module I write, I've switched to using constructors. I like it less than properties, but at least it works without generating warnings or having to disable nullability.
-		// I would do it here as well but I'd get PTSD. Why?
-		// Back before this bot was remotely structured the way it is now, I used constructors for dependency injection, everywhere, and the longest
-		//  inheritance chain for modules at that time was 4.
-		// Every single module had to extend the constructors of its base class, and with as much as 7 services in one module (including inherited dependencies) you can see where this is going.
-		// I don't want to go back to that, and while there's less inheritance surrounding modues now, there's still 5 dependencies here that need to be set. All of them are specific to this
-		//  class only, and are not supposed to be used by subclasses, but they would still need to be inherited by subclasses if I added a constructor here.
-		// So again the best solution is to just disable the warnings here.
-		// I'd love a way to disable all warnings that come with DI somehow, as an exception is thrown during AddModuleAsync if a dependency is not found, but there's no feasible way to do that.
-		public ConfigService Config { get; set; }
-		public GuildConfigService GuildConfigService { get; set; }
-		public UserConfigService UserConfigService { get; set; }
-		public ResourceService ResourcesService { get; set; }
-		public RoosterCommandService CmdService { get; set; }
-		public new T Context { get; internal set; }
-		// TODO (investigate) Can analyzers disable other analyzers? Make an analyzer for ModuleBase<T> that disables nullability warnings on public settable properties.
+		public ConfigService Config { get; set; } = null!;
+		public GuildConfigService GuildConfigService { get; set; } = null!;
+		public UserConfigService UserConfigService { get; set; } = null!;
+		public ResourceService ResourcesService { get; set; } = null!;
+		public RoosterCommandService CmdService { get; set; } = null!;
+		public new T Context { get; internal set; } = null!;
 
-		protected ModuleLogger Log { get; private set; }
-#nullable restore
+		protected ModuleLogger Log { get; private set; } = null!;
 
 		protected UserConfig UserConfig => Context.UserConfig;
 		protected GuildConfig GuildConfig => Context.GuildConfig;

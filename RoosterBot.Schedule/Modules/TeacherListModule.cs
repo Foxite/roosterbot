@@ -6,11 +6,7 @@ using Discord.Commands;
 namespace RoosterBot.Schedule {
 	[Name("#TeacherListModule_Name")]
 	public class TeacherListModule : RoosterModuleBase {
-		private TeacherNameService Teachers { get; }
-
-		public TeacherListModule(TeacherNameService teachers) {
-			Teachers = teachers;
-		}
+		public TeacherNameService Teachers { get; set; } = null!;
 
 		[Command("leraren"), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
 		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
