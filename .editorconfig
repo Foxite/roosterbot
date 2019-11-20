@@ -186,10 +186,6 @@ dotnet_naming_rule.non_field_members_should_be_pascalcase.severity = suggestion
 dotnet_naming_rule.non_field_members_should_be_pascalcase.symbols = non_field_members
 dotnet_naming_rule.non_field_members_should_be_pascalcase.style = pascalcase
 
-dotnet_naming_rule.async_method_should_be_pascalcaseasync.severity = suggestion
-dotnet_naming_rule.async_method_should_be_pascalcaseasync.symbols = async_method
-dotnet_naming_rule.async_method_should_be_pascalcaseasync.style = pascalcaseasync
-
 # Symbol specifications
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
@@ -216,10 +212,6 @@ dotnet_naming_symbols.constant.applicable_kinds = namespace, property, field, ev
 dotnet_naming_symbols.constant.applicable_accessibilities = *
 dotnet_naming_symbols.constant.required_modifiers = const
 
-dotnet_naming_symbols.async_method.applicable_kinds = method, local_function
-dotnet_naming_symbols.async_method.applicable_accessibilities = *
-dotnet_naming_symbols.async_method.required_modifiers = async
-
 dotnet_naming_symbols.private_field.applicable_kinds = field
 dotnet_naming_symbols.private_field.applicable_accessibilities = private
 dotnet_naming_symbols.private_field.required_modifiers = 
@@ -245,11 +237,6 @@ dotnet_naming_style.m_pascalcase.required_prefix = m_
 dotnet_naming_style.m_pascalcase.required_suffix = 
 dotnet_naming_style.m_pascalcase.word_separator = 
 dotnet_naming_style.m_pascalcase.capitalization = pascal_case
-
-dotnet_naming_style.pascalcaseasync.required_prefix = 
-dotnet_naming_style.pascalcaseasync.required_suffix = Async
-dotnet_naming_style.pascalcaseasync.word_separator = 
-dotnet_naming_style.pascalcaseasync.capitalization = pascal_case
 
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
