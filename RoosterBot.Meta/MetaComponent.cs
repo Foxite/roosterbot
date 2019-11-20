@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Discord.Commands;
@@ -22,6 +23,8 @@ namespace RoosterBot.Meta {
 
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
+
+			commandService.AddTypeReader<CultureInfo>(new CultureInfoReader());
 
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<HelpModule>(services),
