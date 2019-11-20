@@ -77,7 +77,6 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
 
-			// TODO (refactor) find a better place for this
 			var commands = Components.Services.GetService<RoosterCommandService>();
 			var resources = Components.Services.GetService<ResourceService>();
 			var gcs = Components.Services.GetService<GuildConfigService>();
