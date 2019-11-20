@@ -1,1 +1,0 @@
-RoosterBot.MiscStuff provides miscellaneous functionality that was requested by users. Currently this consists only of a counter module, which tracks the amount of time since a counter was last reset, as well as the "high-score" for each counter.

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +15,12 @@ namespace RoosterBot.Schedule.GLU {
 	public class GLUScheduleComponent : ComponentBase {
 		public const long GLUGuildId = 278586698877894657;
 
-		private List<ScheduleRegistryInfo> m_Schedules;
+		private readonly List<ScheduleRegistryInfo> m_Schedules;
+		private readonly Regex m_StudentSetRegex;
+		private readonly Regex m_RoomRegex;
 		private ulong[] m_AllowedGuilds;
 		private string m_TeacherPath;
 		private bool m_SkipPastRecords;
-		private Regex m_StudentSetRegex;
-		private Regex m_RoomRegex;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };

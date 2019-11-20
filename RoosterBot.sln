@@ -24,11 +24,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Meta", "RoosterB
 		{63D120EC-21E7-4FC0-8B5C-75895690BA37} = {63D120EC-21E7-4FC0-8B5C-75895690BA37}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.MiscStuff", "RoosterBot.MiscStuff\RoosterBot.MiscStuff.csproj", "{50136859-6657-4605-BE0A-BB641B2D1F75}"
-	ProjectSection(ProjectDependencies) = postProject
-		{63D120EC-21E7-4FC0-8B5C-75895690BA37} = {63D120EC-21E7-4FC0-8B5C-75895690BA37}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.PublicTransit", "RoosterBot.PublicTransit\RoosterBot.PublicTransit.csproj", "{25DFE51F-5803-4BA0-A326-8D5F8EA14264}"
 	ProjectSection(ProjectDependencies) = postProject
 		{63D120EC-21E7-4FC0-8B5C-75895690BA37} = {63D120EC-21E7-4FC0-8B5C-75895690BA37}
@@ -39,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Schedule", "Roos
 		{7BD87AB2-4DE7-48FE-89BF-2419E46FA027} = {7BD87AB2-4DE7-48FE-89BF-2419E46FA027}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Schedule.GLU", "RoosterBot.Schedule.GLU\RoosterBot.Schedule.GLU.csproj", "{B85E1D8C-A4EF-4B3D-90ED-9E647DC96C6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.GLU", "RoosterBot.GLU\RoosterBot.GLU.csproj", "{B85E1D8C-A4EF-4B3D-90ED-9E647DC96C6E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{32AF9309-CE53-473B-9FB3-A9B2541E5633} = {32AF9309-CE53-473B-9FB3-A9B2541E5633}
 	EndProjectSection
@@ -94,10 +89,6 @@ Global
 		{AFA915D6-EC45-42BC-88FD-12929305399F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA915D6-EC45-42BC-88FD-12929305399F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFA915D6-EC45-42BC-88FD-12929305399F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50136859-6657-4605-BE0A-BB641B2D1F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50136859-6657-4605-BE0A-BB641B2D1F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50136859-6657-4605-BE0A-BB641B2D1F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50136859-6657-4605-BE0A-BB641B2D1F75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25DFE51F-5803-4BA0-A326-8D5F8EA14264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25DFE51F-5803-4BA0-A326-8D5F8EA14264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25DFE51F-5803-4BA0-A326-8D5F8EA14264}.Release|Any CPU.ActiveCfg = Release|Any CPU
