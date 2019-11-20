@@ -7,7 +7,7 @@ namespace RoosterBot.Meta {
 	public class GuildConfigModule : RoosterModuleBase {
 		[Command("prefix"), RequireBotManager]
 		public Task GetCommandPrefix() {
-			ReplyDeferred($"This guild's command prefix is {GuildConfig.CommandPrefix}");
+			ReplyDeferred($"This guild's command prefix is `{GuildConfig.CommandPrefix}`");
 			return Task.CompletedTask;
 		}
 
@@ -15,7 +15,7 @@ namespace RoosterBot.Meta {
 		public async Task SetCommandPrefix(string prefix) {
 			GuildConfig.CommandPrefix = prefix;
 			await GuildConfig.UpdateAsync();
-			ReplyDeferred($"{Util.Success}This guild's command prefix is now {GuildConfig.CommandPrefix}");
+			ReplyDeferred($"{Util.Success}This guild's command prefix is now `{GuildConfig.CommandPrefix}`");
 		}
 
 		[Command("language"), RequireBotManager]

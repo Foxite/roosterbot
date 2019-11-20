@@ -514,4 +514,13 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
     <value>leraar</value>
   </data>
+  <data name="UserClassModule_GetClassForUser_Name" xml:space="preserve">
+    <value>zit in</value>
+  </data>
+  <data name="UserClassModule_Group" xml:space="preserve">
+    <value>ik</value>
+  </data>
+  <data name="UserClassModule_SetClassForUser_Name" xml:space="preserve">
+    <value>zit in</value>
+  </data>
 </root>

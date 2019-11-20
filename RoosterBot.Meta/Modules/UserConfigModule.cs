@@ -4,9 +4,9 @@ using Discord.Commands;
 
 namespace RoosterBot.Meta {
 	// TODO (localize) this module
-	[/*LocalizedModule("nl-NL", "en-US"), */Group("settings")]
+	[/*LocalizedModule("nl-NL", "en-US"), */Group("i")]
 	public class UserConfigModule : RoosterModuleBase {
-		[Command("language")]
+		[Command("speak")]
 		public Task GetLanguage() {
 			if (UserConfig.Culture != null) {
 				ReplyDeferred("Your language is " + UserConfig.Culture.EnglishName);
@@ -16,7 +16,7 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 
-		[Command("language")]
+		[Command("speak")]
 		public async Task SetLanguage(string language) {
 			// TODO (feature) Users should not have to pass the language's internal name for this, use CultureNameService
 			UserConfig.Culture = CultureInfo.GetCultureInfo(language);
