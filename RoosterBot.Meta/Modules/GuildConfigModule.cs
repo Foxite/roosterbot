@@ -21,7 +21,7 @@ namespace RoosterBot.Meta {
 		[Command("GuildConfigModule_Language_Name"), RequireBotManager]
 		public async Task Language(CultureInfo? culture = null) {
 			if (culture == null) {
-				ReplyDeferred(GetString("GuildConfigModule_GetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture));
+				ReplyDeferred(GetString("GuildConfigModule_GetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
 			} else {
 				GuildConfig.Culture = culture;
 				await GuildConfig.UpdateAsync();
