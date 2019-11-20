@@ -136,11 +136,17 @@
   <data name="GuildConfigModule_Group" xml:space="preserve">
     <value>config</value>
   </data>
-  <data name="GuildConfigModule_Language_Name" xml:space="preserve">
+  <data name="GuildConfigModule_Language" xml:space="preserve">
     <value>taal</value>
   </data>
-  <data name="GuildConfigModule_Prefix_Name" xml:space="preserve">
+  <data name="GuildConfigModule_Language_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GuildConfigModule_Prefix" xml:space="preserve">
     <value>prefix</value>
+  </data>
+  <data name="GuildConfigModule_Prefix_Aliases" xml:space="preserve">
+    <value />
   </data>
   <data name="GuildConfigModule_SetLanguage" xml:space="preserve">
     <value>De servertaal is nu {0}.</value>
@@ -236,6 +242,9 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   </data>
   <data name="UserConfigModule_Language" xml:space="preserve">
     <value>spreek</value>
+  </data>
+  <data name="UserConfigModule_Language_Aliases" xml:space="preserve">
+    <value />
   </data>
   <data name="UserConfigModule_SetLanguage" xml:space="preserve">
     <value>Jouw taal is nu {0}.</value>
