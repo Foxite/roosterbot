@@ -38,7 +38,11 @@ namespace RoosterBot {
 			return false;
 		}
 
-		// TODO (investigate) Here's another way to do this: Emit a small module that does nothing other than call ExecuteAsync on the CommandInfo that it mirrors
+		// One of the task items for 3.0 was that we switch to Qmmands.
+		// Qmmands is a command framework similar to what we're already using, but it's not limited to Discord. It works with any text interface.
+		// Furthermore I asked the product owner if there's any way to localize commands, and it's extremely easy: AddModule<YourModule>(x => x.WithName(m_Resources.ResolveString(x.Name))
+		// I've inferred that this will construct a module as usual and allow you to make changes to it. Instead of doing everything ourselves, we only do what we want.
+		// So when I heard about this, I decided to move Qmmands to RoosterBot 2.2.
 		public Task<ModuleInfo[]> AddLocalizedModuleAsync<T>() => AddLocalizedModuleAsync(typeof(T));
 		public async Task<ModuleInfo[]> AddLocalizedModuleAsync(Type module) {
 			// For each culture supported by the module, create a ModuleInfo from the type with resolved strings
@@ -60,7 +64,6 @@ namespace RoosterBot {
 
 		private Action<ModuleBuilder> GetModuleBuildFunction(Type module, ComponentBase component, string locale) {
 			return (moduleBuilder) => {
-				// TODO (refactor) this code is still pretty messy, take an example from how Discord.NET does it https://github.com/discord-net/Discord.Net/blob/dev/src/Discord.Net.Commands/Builders/ModuleClassBuilder.cs
 				IEnumerable<(MethodInfo method, CommandAttribute attribute)> commands = module.GetMethods()
 					.Where(method => method.ReturnType == typeof(Task) || method.ReturnType == typeof(Task<RuntimeResult>))
 					.Select(method => (method, attribute: method.GetCustomAttribute<CommandAttribute>(false)!))
