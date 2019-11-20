@@ -91,6 +91,8 @@ namespace RoosterBot.Watson {
 					}
 				} catch (Exception e) {
 					Logger.Critical("WatsonHandler", "An unhandled exception was thrown in WatsonHandler. This is going to crash the CLR.", e);
+					// I still throw this exception because there are not supposed to be any exceptions but if I still manage to get one, I want to know about it.
+					// By crashing the bot I can guarantee that I will find out, and by logging it I won't see a mysterious crash, but a perfectly explicable one.
 					throw;
 				}
 			});
