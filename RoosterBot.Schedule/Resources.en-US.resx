@@ -498,13 +498,19 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>You're already in {0}!</value>
     <comment>0: student set</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_Name" xml:space="preserve">
+  <data name="UserClassModule_GetClassForUser" xml:space="preserve">
     <value>am in</value>
   </data>
   <data name="UserClassModule_Group" xml:space="preserve">
     <value>i</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_Name" xml:space="preserve">
+  <data name="UserClassModule_SetClassForUser" xml:space="preserve">
     <value>am in</value>
+  </data>
+  <data name="UserClassModule_GetClassForUser_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserClassModule_SetClassForUser_Aliases" xml:space="preserve">
+    <value />
   </data>
 </root>
