@@ -3,32 +3,30 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[Group("config"), HiddenFromList]
+	[LocalizedModule("nl-NL", "en-US"), Group("GuildConfigModule_Group"), HiddenFromList]
 	public class GuildConfigModule : RoosterModuleBase {
-		[Command("prefix"), RequireBotManager]
-		public Task GetCommandPrefix() {
-			ReplyDeferred($"This guild's command prefix is `{GuildConfig.CommandPrefix}`");
-			return Task.CompletedTask;
+		public CultureNameService CultureNameService { get; set; } = null!;
+
+		[Command("GuildConfigModule_Prefix_Name"), RequireBotManager]
+		public async Task CommandPrefix(string? prefix = null) {
+			if (prefix == null) {
+				ReplyDeferred(GetString("GuildConfigModule_GetPrefix", GuildConfig.CommandPrefix));
+			} else {
+				GuildConfig.CommandPrefix = prefix;
+				await GuildConfig.UpdateAsync();
+				ReplyDeferred(Util.Success + GetString("GuildConfigModule_SetPrefix", GuildConfig.CommandPrefix));
+			}
 		}
 
-		[Command("prefix"), RequireBotManager]
-		public async Task SetCommandPrefix(string prefix) {
-			GuildConfig.CommandPrefix = prefix;
-			await GuildConfig.UpdateAsync();
-			ReplyDeferred($"{Util.Success}This guild's command prefix is now `{GuildConfig.CommandPrefix}`");
-		}
-
-		[Command("language"), RequireBotManager]
-		public Task GetLanguage() {
-			ReplyDeferred($"This guild's language is {GuildConfig.Culture.Name}");
-			return Task.CompletedTask;
-		}
-
-		[Command("language"), RequireBotManager]
-		public async Task SetLanguage(string name) {
-			GuildConfig.Culture = CultureInfo.GetCultureInfo(name);
-			await GuildConfig.UpdateAsync();
-			ReplyDeferred($"{Util.Success}This guild's language is now {GuildConfig.Culture.Name}");
+		[Command("GuildConfigModule_Language_Name"), RequireBotManager]
+		public async Task Language(CultureInfo? culture = null) {
+			if (culture == null) {
+				ReplyDeferred(GetString("GuildConfigModule_GetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture));
+			} else {
+				GuildConfig.Culture = culture;
+				await GuildConfig.UpdateAsync();
+				ReplyDeferred(Util.Success + GetString("GuildConfigModule_SetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+			}
 		}
 	}
 }

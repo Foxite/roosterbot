@@ -117,6 +117,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CultureInfoReader_ParseFailed" xml:space="preserve">
+    <value>Ik ken die taal niet.</value>
+  </data>
+  <data name="CultureInfoReader_ParseFailed_UnknownFlag" xml:space="preserve">
+    <value>Ik ken die vlag niet.</value>
+  </data>
+  <data name="CultureInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="GuildConfigModule_GetLanguage" xml:space="preserve">
+    <value>De servertaal is {0}.</value>
+    <comment>0: current language name, localized</comment>
+  </data>
+  <data name="GuildConfigModule_GetPrefix" xml:space="preserve">
+    <value>De servercommandprefix is `{0}`.</value>
+  </data>
+  <data name="GuildConfigModule_Group" xml:space="preserve">
+    <value>config</value>
+  </data>
+  <data name="GuildConfigModule_Language_Name" xml:space="preserve">
+    <value>taal</value>
+  </data>
+  <data name="GuildConfigModule_Prefix_Name" xml:space="preserve">
+    <value>prefix</value>
+  </data>
+  <data name="GuildConfigModule_SetLanguage" xml:space="preserve">
+    <value>De servertaal is nu {0}.</value>
+    <comment>0: new language name, localized</comment>
+  </data>
+  <data name="GuildConfigModule_SetPrefix" xml:space="preserve">
+    <value>Deze servercommandprefix is nu `{0}`.</value>
+    <comment>0: new prefix</comment>
+  </data>
   <data name="InfoModule_InfoCommand_ListItem" xml:space="preserve">
     <value>- {0} {1}</value>
     <comment>0: component name
@@ -189,5 +222,23 @@
 Ook verwijder ik mijn antwoorden als je een command verwijdert.
 
 Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arrow_up: toets. Haal het hele bericht weg om het te verwijderen.</value>
+  </data>
+  <data name="UserConfigModule_GetLanguage" xml:space="preserve">
+    <value>Jouw taal is {0}.</value>
+    <comment>0: current language name, localized</comment>
+  </data>
+  <data name="UserConfigModule_GetLanguage_NoneSet" xml:space="preserve">
+    <value>Je hebt geen taal ingesteld, de servertaal {0} wordt gebruikt.</value>
+    <comment>0: guild language name, localized</comment>
+  </data>
+  <data name="UserConfigModule_Group" xml:space="preserve">
+    <value>ik</value>
+  </data>
+  <data name="UserConfigModule_Language" xml:space="preserve">
+    <value>spreek</value>
+  </data>
+  <data name="UserConfigModule_SetLanguage" xml:space="preserve">
+    <value>Jouw taal is nu {0}.</value>
+    <comment>0: new language name, localized</comment>
   </data>
 </root>

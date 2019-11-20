@@ -117,6 +117,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CultureInfoReader_ParseFailed" xml:space="preserve">
+    <value>I don't recognize that language.</value>
+  </data>
+  <data name="CultureInfoReader_ParseFailed_UnknownFlag" xml:space="preserve">
+    <value>I don't recognize that flag.</value>
+  </data>
+  <data name="CultureInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="GuildConfigModule_GetLanguage" xml:space="preserve">
+    <value>This server's language is {0}.</value>
+    <comment>0: current language name, localized</comment>
+  </data>
+  <data name="GuildConfigModule_GetPrefix" xml:space="preserve">
+    <value>This server's command prefix is `{0}`.</value>
+  </data>
+  <data name="GuildConfigModule_Group" xml:space="preserve">
+    <value>config</value>
+  </data>
+  <data name="GuildConfigModule_Language_Name" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="GuildConfigModule_Prefix_Name" xml:space="preserve">
+    <value>prefix</value>
+  </data>
+  <data name="GuildConfigModule_SetLanguage" xml:space="preserve">
+    <value>This server's language is now {0}.</value>
+    <comment>0: new language name, localized</comment>
+  </data>
+  <data name="GuildConfigModule_SetPrefix" xml:space="preserve">
+    <value>This server's command prefix is now `{0}`.</value>
+    <comment>0: new prefix</comment>
+  </data>
   <data name="InfoModule_InfoCommand_ListItem" xml:space="preserve">
     <value>- {0} {1}</value>
     <comment>0: component name
@@ -187,5 +220,23 @@
 I also remove my replies if you delete a command.
 
 To quickly edit your last message, klik on the textbox and press the :arrow_up: key. Remove the entire message to delete it.</value>
+  </data>
+  <data name="String1UserConfigModule_Group" xml:space="preserve">
+    <value>i</value>
+  </data>
+  <data name="UserConfigModule_GetLanguage" xml:space="preserve">
+    <value>Your language is {0}</value>
+    <comment>0: current language name, localized</comment>
+  </data>
+  <data name="UserConfigModule_GetLanguage_NoneSet" xml:space="preserve">
+    <value>You do not have a language set, the server language {0} will be used.</value>
+    <comment>0: guild language name, localized</comment>
+  </data>
+  <data name="UserConfigModule_Language" xml:space="preserve">
+    <value>speak</value>
+  </data>
+  <data name="UserConfigModule_SetLanguage" xml:space="preserve">
+    <value>Your language is now {0}.</value>
+    <comment>0: new language name, localized</comment>
   </data>
 </root>

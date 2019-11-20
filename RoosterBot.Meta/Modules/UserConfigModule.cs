@@ -3,25 +3,23 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	// TODO (localize) this module
-	[/*LocalizedModule("nl-NL", "en-US"), */Group("i")]
+	[LocalizedModule("nl-NL", "en-US"), Group("#UserConfigModule_Group")]
 	public class UserConfigModule : RoosterModuleBase {
-		[Command("speak")]
-		public Task GetLanguage() {
-			if (UserConfig.Culture != null) {
-				ReplyDeferred("Your language is " + UserConfig.Culture.EnglishName);
-			} else {
-				ReplyDeferred($"You do not have a language set; the guild's language {GuildConfig.Culture.EnglishName} will be used.");
-			}
-			return Task.CompletedTask;
-		}
+		public CultureNameService CultureNameService { get; set; } = null!;
 
-		[Command("speak")]
-		public async Task SetLanguage(string language) {
-			// TODO (feature) Users should not have to pass the language's internal name for this, use CultureNameService
-			UserConfig.Culture = CultureInfo.GetCultureInfo(language);
-			await UserConfig.UpdateAsync();
-			ReplyDeferred($"{Util.Success}Your language is now {UserConfig.Culture.EnglishName}");
+		[Command("#UserConfigModule_Language")]
+		public async Task Language(CultureInfo? culture = null) {
+			if (culture == null) {
+				if (UserConfig.Culture != null) {
+					ReplyDeferred(GetString("UserConfigModule_GetLanguage", CultureNameService.GetLocalizedName(UserConfig.Culture, UserConfig.Culture)));
+				} else {
+					ReplyDeferred(GetString("UserConfigModule_GetLanguage_NoneSet", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+				}
+			} else {
+				UserConfig.Culture = culture;
+				await UserConfig.UpdateAsync();
+				ReplyDeferred(Util.Success + GetString("UserConfigModule_SetLanguage", CultureNameService.GetLocalizedName(UserConfig.Culture, UserConfig.Culture)));
+			}
 		}
 	}
 }
