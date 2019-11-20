@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace RoosterBot {
 	public sealed class CultureNameService {
 		/// <summary>
 		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
 		/// </summary>
-		private Dictionary<(string, string), string> m_Table;
+		private readonly Dictionary<(string, string), string> m_Table;
 
 		public CultureNameService() {
 			m_Table = new Dictionary<(string, string), string>();
@@ -25,6 +26,22 @@ namespace RoosterBot {
 			} else {
 				m_Table[key] = name;
 				return true;
+			}
+		}
+
+		/// <summary>
+		/// Returns the code of a CultureInfo, which is named similar <paramref name="input"/> in <paramref name="inputLanguage"/>.
+		/// </summary>
+		/// <param name="inputLanguage"></param>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public string? Search(CultureInfo inputLanguage, string input) {
+			input = input.ToLower();
+			var results = m_Table.Where(kvp => kvp.Key.Item2 == inputLanguage.Name && kvp.Value.ToLower() == input);
+			if (results.Any()) {
+				return results.First().Key.Item1;
+			} else {
+				return null;
 			}
 		}
 
