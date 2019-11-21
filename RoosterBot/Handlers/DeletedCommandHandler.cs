@@ -18,10 +18,8 @@ namespace RoosterBot {
 				UserConfig userConfig = await m_UCS.GetConfigAsync(message.Value.Author);
 				CommandResponsePair? crp = userConfig.GetResponse(userMessage);
 				if (crp != null) {
-					await Task.WhenAll(new[] {
-						channel.DeleteMessageAsync(crp.ResponseId),
-						userConfig.RemoveCommandAsync(crp.CommandId)
-					});
+					await channel.DeleteMessageAsync(crp.ResponseId);
+					userConfig.RemoveCommand(crp.CommandId);
 				}
 			}
 		}

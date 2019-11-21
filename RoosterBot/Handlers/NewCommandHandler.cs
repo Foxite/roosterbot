@@ -28,7 +28,7 @@ namespace RoosterBot {
 				if (m_Commands.IsMessageCommand(userMessage, guildConfig.CommandPrefix, out int argPos)) {
 					UserConfig userConfig = await m_UCS.GetConfigAsync(userMessage.Author);
 
-					var context = new RoosterCommandContext(m_Client, userMessage, null, userConfig, guildConfig);
+					var context = new RoosterCommandContext(m_Client, userMessage, userConfig, guildConfig);
 
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
 				}

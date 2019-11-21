@@ -10,15 +10,12 @@ namespace RoosterBot.Schedule {
 			return lsci;
 		}
 
-		public static async Task OnScheduleRequestByUserAsync(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, DateTime recordEndTime) {
-			LastScheduleCommandInfo lsci = new LastScheduleCommandInfo(identifier, recordEndTime);
-			userConfig.SetData("schedule.lastCommand." + channel.Id, lsci);
-			await userConfig.UpdateAsync();
+		public static void OnScheduleRequestByUser(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, DateTime recordEndTime) {
+			userConfig.SetData("schedule.lastCommand." + channel.Id, new LastScheduleCommandInfo(identifier, recordEndTime));
 		}
 
-		public static async Task RemoveLastScheduleCommandAsync(this UserConfig userConfig, IChannel channel) {
+		public static void RemoveLastScheduleCommand(this UserConfig userConfig, IChannel channel) {
 			userConfig.SetData<LastScheduleCommandInfo?>("schedule.lastCommand." + channel.Id, null);
-			await userConfig.UpdateAsync();
 		}
 		#endregion
 

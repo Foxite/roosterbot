@@ -104,15 +104,9 @@ namespace RoosterBot {
 						response = Util.Error + response;
 					}
 
-					IUserMessage? responseMessage = rcc.Response;
-					if (responseMessage == null) {
-						await rcc.UserConfig.SetResponseAsync(context.Message, await context.Channel.SendMessageAsync(response));
-					} else {
-						await responseMessage.ModifyAsync(props => {
-							props.Content = response;
-						});
-					}
+					await CommandResponseUtil.RespondAsync(rcc, response);
 				}
+				await rcc.UserConfig.UpdateAsync();
 			} else {
 				var nse = new NotSupportedException($"A command has been executed that used a context of type {context.GetType().Name}. RoosterBot does not support this as of version 2.1. " +
 					"All command context objects must be derived from RoosterCommandContext. " +

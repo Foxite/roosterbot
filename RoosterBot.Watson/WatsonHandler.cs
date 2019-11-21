@@ -54,7 +54,7 @@ namespace RoosterBot.Watson {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(msg.Author);
 							CommandResponsePair? crp = userConfig.GetResponse(msg);
 
-							var context = new RoosterCommandContext(m_Discord, msg, crp == null ? null : (await socketMsg.Channel.GetMessageAsync(crp.ResponseId) as IUserMessage), userConfig, guildConfig);
+							var context = new RoosterCommandContext(m_Discord, msg, userConfig, guildConfig);
 
 							Logger.Info("WatsonComponent", $"Processing natlang command: {context.ToString()}");
 							IDisposable typingState = context.Channel.EnterTypingState();
@@ -83,8 +83,7 @@ namespace RoosterBot.Watson {
 								}
 
 								if (returnMessage != null) {
-									IUserMessage returnedDiscordMessage = await context.Channel.SendMessageAsync(returnMessage);
-									await userConfig.SetResponseAsync(context.Message, returnedDiscordMessage);
+									await context.RespondAsync(returnMessage);
 								}
 							}
 						}

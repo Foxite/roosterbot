@@ -27,14 +27,12 @@ namespace RoosterBot {
 				CommandResponsePair? crp = userConfig.GetResponse(userMessageAfter);
 
 				if (m_Commands.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-					IUserMessage? response = crp == null ? null : (await channel.GetMessageAsync(crp.ResponseId)) as IUserMessage;
-
-					RoosterCommandContext context = new RoosterCommandContext(m_Client, userMessageAfter, response, userConfig, guildConfig);
+					var context = new RoosterCommandContext(m_Client, userMessageAfter, userConfig, guildConfig);
 					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
 				} else if (crp != null) {
 					// No longer a command
-					await userConfig.RemoveCommandAsync(crp.CommandId);
 					await channel.DeleteMessageAsync(crp.ResponseId);
+					userConfig.RemoveCommand(crp.CommandId);
 				} // else: was not a command, is not a command
 			}
 		}

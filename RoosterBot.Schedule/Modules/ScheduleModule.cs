@@ -340,9 +340,9 @@ namespace RoosterBot.Schedule {
 
 		protected async override Task<IUserMessage?> SendDeferredResponseAsync() {
 			if (m_LookedUpIdentifier != null && m_LookedUpRecordEndTime != null) {
-				await UserConfig.OnScheduleRequestByUserAsync(Context.Channel, m_LookedUpIdentifier, m_LookedUpRecordEndTime.Value);
+				UserConfig.OnScheduleRequestByUser(Context.Channel, m_LookedUpIdentifier, m_LookedUpRecordEndTime.Value);
 			} else {
-				await UserConfig.RemoveLastScheduleCommandAsync(Context.Channel);
+				UserConfig.RemoveLastScheduleCommand(Context.Channel);
 			}
 
 			return await base.SendDeferredResponseAsync();

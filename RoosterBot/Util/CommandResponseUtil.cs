@@ -7,7 +7,7 @@ namespace RoosterBot {
 	public static class CommandResponseUtil {
 		private const string CommandResponseJsonKey = "command_response";
 
-		public static async Task SetResponseAsync(this UserConfig userConfig, ulong userCommandId, ulong botResponseId) {
+		public static void SetResponse(this UserConfig userConfig, ulong userCommandId, ulong botResponseId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.CommandId == userCommandId);
 				if (relevantCRP == null) {
@@ -23,10 +23,10 @@ namespace RoosterBot {
 				} else {
 					relevantCRP.ResponseId = botResponseId;
 				}
+				userConfig.SetData(CommandResponseJsonKey, crps);
 			} else {
 				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommandId, botResponseId) });
 			}
-			await userConfig.UpdateAsync();
 		}
 
 		public static CommandResponsePair? GetResponse(this UserConfig userConfig, ulong messageId) {
@@ -37,13 +37,12 @@ namespace RoosterBot {
 			}
 		}
 
-		public static async Task<CommandResponsePair?> RemoveCommandAsync(this UserConfig userConfig, ulong commandId) {
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, ulong commandId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				for (int i = 0; i < crps.Count; i++) {
 					if (crps[i].CommandId == commandId) {
 						CommandResponsePair ret = crps[i];
 						crps.RemoveAt(i);
-						await userConfig.UpdateAsync();
 						return ret;
 					}
 				}
@@ -53,8 +52,23 @@ namespace RoosterBot {
 			}
 		}
 
-		public static Task SetResponseAsync(this UserConfig userConfig, IUserMessage userMessage, IUserMessage botResponse) => SetResponseAsync(userConfig, userMessage.Id, botResponse.Id);
+		public static void SetResponse(this UserConfig userConfig, IUserMessage userMessage, IUserMessage botResponse) => SetResponse(userConfig, userMessage.Id, botResponse.Id);
 		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
-		public static Task<CommandResponsePair?> RemoveCommandAsync(this UserConfig userConfig, IUserMessage command) => RemoveCommandAsync(userConfig, command.Id);
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IUserMessage command) => RemoveCommand(userConfig, command.Id);
+
+		public static async Task<IUserMessage> RespondAsync(this RoosterCommandContext context, string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
+			ulong? responseId = context.UserConfig.GetResponse(context.Message)?.ResponseId;
+			IUserMessage? response = responseId == null ? null : (IUserMessage) await context.Channel.GetMessageAsync(responseId.Value);
+			if (response == null) {
+				// The response was already deleted, or there was no response to begin with.
+				response = await context.Channel.SendMessageAsync(message, isTTS, embed, options);
+				SetResponse(context.UserConfig, context.Message, response);
+			} else {
+				// The command was edited.
+				await response.ModifyAsync(props => props.Content = message, options);
+			}
+
+			return response;
+		}
 	}
 }

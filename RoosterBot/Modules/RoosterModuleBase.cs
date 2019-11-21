@@ -74,7 +74,7 @@ namespace RoosterBot {
 			}
 		}
 
-		protected async override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
+		protected override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
@@ -82,19 +82,7 @@ namespace RoosterBot {
 				m_Response.Clear();
 			}
 
-			IUserMessage ret;
-			if (Context.Response == null) {
-				// The command was not edited, or the command somehow did not invoke a reply.
-				IUserMessage response = await Context.Channel.SendMessageAsync(message, isTTS, embed, options);
-				await UserConfig.SetResponseAsync(Context.Message, response);
-				ret = response;
-			} else {
-				// The command was edited.
-				await Context.Response.ModifyAsync(props => props.Content += "\n\n" + message);
-				ret = Context.Response;
-			}
-
-			return ret;
+			return CommandResponseUtil.RespondAsync(Context, message, isTTS, embed, options);
 		}
 
 		// Discord.NET offers a command result system (IResult), we may be able to use that instead of MinorError and FatalError
@@ -169,21 +157,18 @@ namespace RoosterBot {
 		public IMessageChannel Channel { get; }
 		public IGuild? Guild { get; }
 		public bool IsPrivate { get; }
-		// If this is null, we should make a new message.
-		public IUserMessage? Response { get; }
 
 		public UserConfig UserConfig { get; }
 		public GuildConfig GuildConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
-		
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, IUserMessage? originalResponse, UserConfig userConfig, GuildConfig guildConfig) {
+
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, UserConfig userConfig, GuildConfig guildConfig) {
 			Client = client;
 			Message = message;
 			User = message.Author;
 			Channel = message.Channel;
 			IsPrivate = Channel is IPrivateChannel;
 			Guild = (Channel as IGuildChannel)?.Guild;
-			Response = originalResponse;
 
 			UserConfig = userConfig;
 			GuildConfig = guildConfig;
