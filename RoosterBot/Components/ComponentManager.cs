@@ -12,9 +12,9 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {
-		private List<ComponentBase> m_Components;
-		private ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
-		private ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
+		private readonly List<ComponentBase> m_Components;
+		private readonly ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
+		private readonly ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
 
 #nullable disable
 		// This is a bit similar to the problem explained in Program.cs, namely this property is set in an async "sequel" to the constructor.

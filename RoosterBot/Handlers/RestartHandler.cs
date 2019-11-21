@@ -8,8 +8,8 @@ namespace RoosterBot {
 	/// This handler will make sure the bot restarts after more than a specified amount of connection attempts, if the connection is lost.
 	/// </summary>
 	internal sealed class RestartHandler {
+		private readonly NotificationService m_Notifications;
 		private int m_Attempts;
-		private NotificationService m_Notifications;
 		private Exception? m_InitialException;
 
 		public int MaxAttempts { get; }

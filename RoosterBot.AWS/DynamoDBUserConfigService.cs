@@ -22,7 +22,7 @@ namespace RoosterBot.AWS {
 			if (document != null) {
 				CultureInfo? culture = document.TryGetValue("culture", out DynamoDBEntry cultureEntry) ? CultureInfo.GetCultureInfo(cultureEntry.AsString()) : null;
 				document.TryGetValue("customData", out DynamoDBEntry customDataEntry);
-				JObject customData = JObject.Parse(customDataEntry.ToString());
+				var customData = JObject.Parse(customDataEntry.ToString());
 				return new UserConfig(this, culture, user.Id, customData);
 			} else {
 				return GetDefaultConfig(user.Id);
