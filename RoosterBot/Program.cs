@@ -123,7 +123,9 @@ namespace RoosterBot {
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
 			HelpService helpService = new HelpService(resources);
-			RoosterCommandService commands = new RoosterCommandService(resources);
+			RoosterCommandService commands = new RoosterCommandService(resources, new Discord.Commands.CommandServiceConfig() {
+				DefaultRunMode = Discord.Commands.RunMode.Async
+			});
 			commands.Log += Logger.LogSync;
 
 			// Create handlers
