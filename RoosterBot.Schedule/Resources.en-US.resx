@@ -140,9 +140,9 @@ Better yet: if I know what class a person is in, you can mention that person in 
   </data>
   <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
     <value>I can remember in what class you are, so you won't have to tell me every time.
-To set your class: `{0}me &lt;class&gt;`, for example `{0}me 2gd1`.
+To set your class: `{0}i am in &lt;class&gt;`, for example `{0}i am in 2gd1`.
 After that you won't have to put your class in commands. So you can just type `{0}now` and I will know what to search for.
-You can always check what class I think you're in by just typing `{0}me`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)</value>
+You can always check what class I think you're in by just typing `{0}i am in`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)</value>
     <comment>0: command prefix</comment>
   </data>
   <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
@@ -287,7 +287,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>Discord name</value>
   </data>
   <data name="ScheduleModule_Remarks" xml:space="preserve">
-    <value>You can use `{0}me` to tell me what class you are in, so you don't have to tell me every time.</value>
+    <value>You can use `{0}i am in &lt;class&gt;` to tell me what class you are in, so you don't have to tell me every time.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Automatically understands if you're talking about a class, teacher, or room.</value>
@@ -521,5 +521,8 @@ You can always check what class I think you're in by just typing `{0}me`, to che
   </data>
   <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
     <value>teacher</value>
+  </data>
+  <data name="UserClassModule_GuildOnly" xml:space="preserve">
+    <value>This command must be used within a server.</value>
   </data>
 </root>

@@ -58,13 +58,7 @@ namespace RoosterBot {
 				}
 				ret += paramLine;
 			}
-			return ret;
-			/*
-			if (ret.Length >= 1 && ret[^1] == ' ') {
-				return ret[0..^2];
-			} else {
-				return ret;
-			}*/
+			return ret.Trim();
 		}
 
 		/// <summary>
