@@ -103,7 +103,8 @@ namespace RoosterBot {
 
 		private void SetupClient() {
 			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance
+				WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
+				MessageCacheSize = 5
 			});
 			m_Client.Log += Logger.LogSync;
 			m_Client.Ready += OnClientReady;
