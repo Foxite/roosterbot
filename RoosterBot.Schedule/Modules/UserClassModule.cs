@@ -4,7 +4,7 @@ using Discord.Commands;
 namespace RoosterBot.Schedule {
 	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary"), Group("#UserClassModule_Group")]
 	public class UserClassModule : RoosterModuleBase {
-		[Command("#UserClassModule_GetClassForUser_Name", RunMode = RunMode.Async), Summary("#UserClassModule_GetClassForUser_Summary")]
+		[Command("#UserClassModule_GetClassForUser", RunMode = RunMode.Async), Summary("#UserClassModule_GetClassForUser_Summary")]
 		public Task GetClassForUser() {
 			StudentSetInfo? ssi = UserConfig.GetStudentSet();
 			string response;
