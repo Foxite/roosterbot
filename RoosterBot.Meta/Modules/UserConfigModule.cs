@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace RoosterBot.Meta {
-	[LocalizedModule("nl-NL", "en-US"), Group("#UserConfigModule_Group")]
+	[LocalizedModule("nl-NL", "en-US"), Name("#UserConfigModule_Name"), Group("#UserConfigModule_Group")]
 	public class UserConfigModule : RoosterModuleBase {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
 		[Command("#UserConfigModule_Language")]
-		public Task Language(CultureInfo? culture = null) {
+		public Task Language([Name("#UserConfigModule_Language_ParamName")] CultureInfo? culture = null) {
 			if (culture == null) {
 				if (UserConfig.Culture != null) {
 					ReplyDeferred(GetString("UserConfigModule_GetLanguage", CultureNameService.GetLocalizedName(UserConfig.Culture, UserConfig.Culture)));

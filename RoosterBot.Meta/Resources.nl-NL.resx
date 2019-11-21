@@ -156,6 +156,12 @@
     <value>Deze servercommandprefix is nu `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
+  <data name="InfoModule_InfoCommand" xml:space="preserve">
+    <value>info</value>
+  </data>
+  <data name="InfoModule_InfoCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
   <data name="InfoModule_InfoCommand_ListItem" xml:space="preserve">
     <value>- {0} {1}</value>
     <comment>0: component name
@@ -179,9 +185,6 @@
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
     <value>Die categorie bestaat niet.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoryEmpty" xml:space="preserve">
-    <value>Geen commands gevonden.</value>
-  </data>
   <data name="MetaCommandsModule_CommandListCommand_Category_Summary" xml:space="preserve">
     <value>Lijst van alle commands in een categorie.</value>
   </data>
@@ -189,7 +192,7 @@
     <value>categorie</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
-    <value>Parameters met een `(?)` zijn optioneel.</value>
+    <value>Parameters omringd met `[]` zijn optioneel.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
     <value>Alle categorieën van commands.</value>
@@ -245,6 +248,12 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   </data>
   <data name="UserConfigModule_Language_Aliases" xml:space="preserve">
     <value />
+  </data>
+  <data name="UserConfigModule_Language_ParamName" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="UserConfigModule_Name" xml:space="preserve">
+    <value>Instellingen</value>
   </data>
   <data name="UserConfigModule_SetLanguage" xml:space="preserve">
     <value>Jouw taal is nu {0}.</value>

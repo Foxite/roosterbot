@@ -329,7 +329,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Stel in in welke klas jij zit.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
-    <value>jouw klas</value>
+    <value>klas</value>
   </data>
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>Kijk wat er gebeurt na het laatste wat je hebt bekeken.</value>
@@ -344,7 +344,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
   </data>
   <data name="UserClassModule_Name" xml:space="preserve">
-    <value>Jouw klas</value>
+    <value>Instellingen</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>

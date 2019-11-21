@@ -1,9 +1,27 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using Discord.Commands;
 
 namespace RoosterBot {
 	public static class CommandUtil {
+		private static string GetNiceName(Type type) => type.Name switch {
+			"Byte" => "integer",
+			"SByte" => "integer",
+			"Int16" => "integer",
+			"Int32" => "integer",
+			"Int64" => "integer",
+			"UInt16" => "integer",
+			"UInt32" => "integer",
+			"UInt64" => "integer",
+			"Single" => "decimal",
+			"Double" => "decimal",
+			"Decimal" => "decimal",
+			"Char" => "character",
+			"String" => "text",
+			_ => type.Name,
+		};
+
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.
 		/// </summary>
@@ -12,34 +30,41 @@ namespace RoosterBot {
 
 			string ret = "";
 			if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
-				ret += resources.ResolveString(culture, component, command.Module.Group + " ");
+				ret += resources.ResolveString(culture, component, command.Module.Group) + " ";
 			}
 
 			if (!string.IsNullOrWhiteSpace(command.Name)) {
-				ret += resources.ResolveString(culture, component, command.Name + " ");
+				ret += resources.ResolveString(culture, component, command.Name) + " ";
 			}
 
 			foreach (ParameterInfo param in command.Parameters) {
-				ret += "<" + resources.ResolveString(culture, component, param.Name);
-				RoosterTypeReader? reader = command.Module.Service.TypeReaders[param.Type].OfType<RoosterTypeReader>().FirstOrDefault();
-				if (reader != null) {
-					ComponentBase readerComponent = Program.Instance.Components.GetComponentFromAssembly(reader.GetType().Assembly);
-					ret += ": " + resources.ResolveString(culture, readerComponent, reader.TypeDisplayName);
-				} else {
-					ret += ": " + param.Type.Name;
+				string paramLine = resources.ResolveString(culture, component, param.Name);
+
+				RoosterTypeReader? typeReader = param.Command.Module.Service.TypeReaders.SelectMany(g => g).OfType<RoosterTypeReader>().Where(rtr => rtr.Type == param.Type).FirstOrDefault();
+				if (typeReader == null) {
+					paramLine += ": " + GetNiceName(param.Type);
+				} else if (typeReader.TypeDisplayName == param.Name) {
+					// Only include the type if the name isn't the same as the type display name
+					paramLine += ": " + resources.ResolveString(culture, component, typeReader.TypeDisplayName);
+				}
+				if (param.IsMultiple) {
+					paramLine += "...";
 				}
 
 				if (param.IsOptional) {
-					ret += " = " + param.DefaultValue?.ToString() ?? "null";
+					paramLine = "[" + paramLine + "] ";
+				} else {
+					paramLine = "<" + paramLine + "> ";
 				}
-				ret += "> ";
+				ret += paramLine;
 			}
-
+			return ret;
+			/*
 			if (ret.Length >= 1 && ret[^1] == ' ') {
-				return ret[0..^1];
+				return ret[0..^2];
 			} else {
 				return ret;
-			}
+			}*/
 		}
 
 		/// <summary>
@@ -56,18 +81,28 @@ namespace RoosterBot {
 			}
 
 			foreach (ParameterInfo param in command.Parameters) {
-				ret += "<" + param.Name + ": " + param.Type.Name;
-				if (param.IsOptional) {
-					ret += " = " + param.DefaultValue?.ToString() ?? "null";
+				string paramLine = param.Name;
+
+				RoosterTypeReader? typeReader = param.Command.Module.Service.TypeReaders.SelectMany(g => g).OfType<RoosterTypeReader>().Where(rtr => rtr.Type == param.Type).FirstOrDefault();
+				if (typeReader == null) {
+					paramLine += ": " + GetNiceName(param.Type);
+				} else if (typeReader.TypeDisplayName == param.Name) {
+					// Only include the type if the name isn't the same as the type display name
+					paramLine += ": " + typeReader.TypeDisplayName;
 				}
-				ret += "> ";
+				if (param.IsMultiple) {
+					paramLine += "...";
+				}
+
+				if (param.IsOptional) {
+					paramLine = "[" + paramLine + "] ";
+				} else {
+					paramLine = "<" + paramLine + "> ";
+				}
+				ret += paramLine;
 			}
 
-			if (ret.Length >= 1 && ret[^1] == ' ') {
-				return ret[0..^2];
-			} else {
-				return ret;
-			}
+			return ret;
 		}
 	}
 }

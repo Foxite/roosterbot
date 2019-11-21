@@ -326,7 +326,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>Change what class you are in.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
-    <value>your class</value>
+    <value>class</value>
   </data>
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>See what happens after the last thing you looked up.</value>
@@ -341,7 +341,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>See on what days a class or teacher is present, or when a room is in use.</value>
   </data>
   <data name="UserClassModule_Name" xml:space="preserve">
-    <value>Your class</value>
+    <value>Settings</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>That does not match anything.</value>
@@ -512,5 +512,14 @@ You can always check what class I think you're in by just typing `{0}me`, to che
   </data>
   <data name="UserClassModule_SetClassForUser_Aliases" xml:space="preserve">
     <value />
+  </data>
+  <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
+    <value>room</value>
+  </data>
+  <data name="StudentSetInfo_TypeDisplayName" xml:space="preserve">
+    <value>class</value>
+  </data>
+  <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
+    <value>teacher</value>
   </data>
 </root>

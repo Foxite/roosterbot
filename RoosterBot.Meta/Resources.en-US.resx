@@ -156,6 +156,12 @@
     <value>This server's command prefix is now `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
+  <data name="InfoModule_InfoCommand" xml:space="preserve">
+    <value>info</value>
+  </data>
+  <data name="InfoModule_InfoCommand_Aliases" xml:space="preserve">
+    <value />
+  </data>
   <data name="InfoModule_InfoCommand_ListItem" xml:space="preserve">
     <value>- {0} {1}</value>
     <comment>0: component name
@@ -178,9 +184,6 @@
   <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
     <value>That category doesn't exist.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoryEmpty" xml:space="preserve">
-    <value>No commands found.</value>
-  </data>
   <data name="MetaCommandsModule_CommandListCommand_Category_Summary" xml:space="preserve">
     <value>List of commands in a category.</value>
   </data>
@@ -188,7 +191,7 @@
     <value>category</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
-    <value>Parameters marked with `(?)` are optional.</value>
+    <value>Parameters surrounded with `[]` are optional.</value>
   </data>
   <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
     <value>List of categories with commands.</value>
@@ -243,6 +246,12 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
   </data>
   <data name="UserConfigModule_Language_Aliases" xml:space="preserve">
     <value />
+  </data>
+  <data name="UserConfigModule_Language_ParamName" xml:space="preserve">
+    <value>language</value>
+  </data>
+  <data name="UserConfigModule_Name" xml:space="preserve">
+    <value>Settings</value>
   </data>
   <data name="UserConfigModule_SetLanguage" xml:space="preserve">
     <value>Your language is now {0}.</value>
