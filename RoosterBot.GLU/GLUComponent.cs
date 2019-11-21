@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +90,30 @@ namespace RoosterBot.Schedule.GLU {
 			new RoleAssignmentHandler(client, services.GetService<ConfigService>());
 			new ManualRanksHintHandler(client);
 			new NewUserHandler(client);
+
+			ConfigService config = services.GetService<ConfigService>();
+
+			async Task leaveGuildIfOwnerNotPresent(SocketGuild guild) {
+				if (guild.Id == GLUGuildId && !guild.Users.Any(user => user.Id == config.BotOwner.Id)) {
+					await guild.LeaveAsync();
+				}
+			}
+
+			// Do not allow being in a server where the owner is not present
+			client.GuildMembersDownloaded += leaveGuildIfOwnerNotPresent;
+			client.JoinedGuild += leaveGuildIfOwnerNotPresent;
+
+			// Leave if the bot owner leaves/gets banned from the GLU server
+			client.UserLeft += async (guildUser) => {
+				if (guildUser.Guild.Id == GLUGuildId && guildUser.Id == config.BotOwner.Id) {
+					await guildUser.Guild.LeaveAsync();
+				}
+			};
+			client.UserBanned += async (user, guild) => {
+				if (guild.Id == GLUGuildId && user.Id == config.BotOwner.Id) {
+					await guild.LeaveAsync();
+				}
+			};
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
