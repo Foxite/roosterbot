@@ -31,7 +31,6 @@ namespace RoosterBot.Schedule {
 		public static async Task<StudentSetInfo?> SetStudentSetAsync(this UserConfig config, StudentSetInfo ssi) {
 			StudentSetInfo? old = GetStudentSet(config);
 			config.SetData("schedule.userClass", ssi);
-			await config.UpdateAsync();
 			if (old != ssi && UserChangedClass != null) {
 				await DelegateUtil.InvokeAsyncEventSequential(UserChangedClass, config.UserId, old, ssi);
 			}
