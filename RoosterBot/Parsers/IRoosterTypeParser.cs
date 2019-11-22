@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RoosterBot.Readers {
+namespace RoosterBot {
 	public interface IRoosterTypeParser {
 		Type Type { get; }
 
