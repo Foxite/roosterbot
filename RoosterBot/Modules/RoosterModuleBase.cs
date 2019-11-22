@@ -8,7 +8,7 @@ using Discord;
 using Qmmands;
 
 namespace RoosterBot {
-	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
+	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
 		// Initializing a property with `null!` will prevent a warning about non-nullable properties being unassigned.
 		// They will be assigned through reflection, and this is the best way to tell the compiler that it's fine.
 		// https://stackoverflow.com/a/57343485/3141917
@@ -17,7 +17,6 @@ namespace RoosterBot {
 		public UserConfigService UserConfigService { get; set; } = null!;
 		public ResourceService ResourcesService { get; set; } = null!;
 		public RoosterCommandService CmdService { get; set; } = null!;
-		public new T Context { get; internal set; } = null!;
 
 		protected ModuleLogger Log { get; private set; } = null!;
 
@@ -27,21 +26,16 @@ namespace RoosterBot {
 
 		private readonly StringBuilder m_Response = new StringBuilder();
 
-		void IRoosterModuleBase.BeforeExecuteInternal(CommandInfo command) => BeforeExecute(command);
-		void IRoosterModuleBase.AfterExecuteInternal(CommandInfo command) => AfterExecute(command);
-
-		protected override void BeforeExecute(CommandInfo command) {
-			if (Context == null) {
-				Context = base.Context;
-			}
-			
+		// TODO (fix) This function is async because I don't know what to return, and we don't have an await here
+		protected async override ValueTask BeforeExecutedAsync() {
 			Log = new ModuleLogger(GetType().Name);
 
-			Log.Debug(Context.ToString());
+			Log.Debug("Executing: " + Context.ToString());
+			
 		}
 
-		protected override void AfterExecute(CommandInfo command) {
-			SendDeferredResponseAsync().GetAwaiter().GetResult();
+		protected async override ValueTask AfterExecutedAsync() {
+			await SendDeferredResponseAsync();
 		}
 
 		/// <summary>
@@ -74,7 +68,8 @@ namespace RoosterBot {
 			}
 		}
 
-		protected override Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
+		// TODO (refactor) This function shouldn't be used anymore, we should use ReplyDeferred. Multiple responses is bad UI.
+		protected virtual Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
 			if (m_Response.Length != 0) {
 				message = m_Response
 					.AppendLine(message)
@@ -181,10 +176,5 @@ namespace RoosterBot {
 				return $"{User.Username}#{User.Discriminator} in private channel `{Channel.Name}`: {Message.Content}";
 			}
 		}
-	}
-
-	internal interface IRoosterModuleBase {
-		void BeforeExecuteInternal(CommandInfo command);
-		void AfterExecuteInternal(CommandInfo command);
 	}
 }
