@@ -254,7 +254,12 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
-			LastScheduleCommandInfo? query = UserConfig.GetLastScheduleCommand(Context.Channel);
+			LastScheduleCommandInfo? query;
+			if (m_LookedUpIdentifier != null) {
+				query = new LastScheduleCommandInfo(m_LookedUpIdentifier, m_LookedUpRecordEndTime);
+			} else {
+				query = UserConfig.GetLastScheduleCommand(Context.Channel);
+			}
 			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
