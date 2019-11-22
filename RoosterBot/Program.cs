@@ -23,14 +23,9 @@ namespace RoosterBot {
 
 		public ComponentManager Components { get; private set; }
 		public DateTime StartTime { get; } = DateTime.Now;
-
-		private DiscordSocketClient m_Client;
-		private ConfigService m_ConfigService;
-		private NotificationService m_NotificationService;
 #nullable restore
 		private bool m_BeforeStart;
 		private bool m_StopFlagSet;
-		private bool m_VersionNotReported = true;
 
 		private Program() { }
 
@@ -68,55 +63,48 @@ namespace RoosterBot {
 		private async Task MainAsync() {
 			Logger.Info("Main", "Starting program");
 			m_BeforeStart = true;
-			
+
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
-			m_ConfigService = new ConfigService(configFile, out string authToken);
+			var configService = new ConfigService(configFile, out string authToken);
 
-			SetupClient();
+			DiscordSocketClient client = SetupClient();
 
-			IServiceCollection serviceCollection = CreateRBServices();
+			IServiceCollection serviceCollection = CreateRBServices(client, configService);
 
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
 
-			var commands = Components.Services.GetService<RoosterCommandService>();
-			var resources = Components.Services.GetService<ResourceService>();
-			var gcs = Components.Services.GetService<GuildConfigService>();
-			var ucs = Components.Services.GetService<UserConfigService>();
+			CreateHandlers(client, configService);
 
-			var spch = new SequentialPostCommandHandler(resources, m_ConfigService);
-			new ParallelPostCommandFailedHandler(commands, m_ConfigService, resources);
-			new ParallelPostCommandSuccessHandler(commands);
-
-			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs, spch);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs, spch);
-			new DeletedCommandHandler(m_Client, ucs);
-
-			await m_Client.LoginAsync(TokenType.Bot, authToken);
-			await m_Client.StartAsync();
+			await client.LoginAsync(TokenType.Bot, authToken);
+			await client.StartAsync();
 
 			await WaitForQuitCondition();
 
 			Logger.Info("Main", "Stopping program");
 
-			await m_Client.StopAsync();
-			await m_Client.LogoutAsync();
+			await client.StopAsync();
+			await client.LogoutAsync();
 
 			Components.ShutdownComponents();
-			m_Client.Dispose();
+			client.Dispose();
 		}
 
-		private void SetupClient() {
-			m_Client = new DiscordSocketClient(new DiscordSocketConfig() {
+		private DiscordSocketClient SetupClient() {
+			var client = new DiscordSocketClient(new DiscordSocketConfig() {
 				WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
 				MessageCacheSize = 5
 			});
-			m_Client.Log += Logger.LogSync;
-			m_Client.Ready += OnClientReady;
+			client.Log += Logger.LogSync;
+			client.Ready += () => {
+				m_BeforeStart = false;
+				return Task.CompletedTask;
+			};
+			return client;
 		}
 
-		private IServiceCollection CreateRBServices() {
-			m_NotificationService = new NotificationService();
+		private IServiceCollection CreateRBServices(DiscordSocketClient m_Client, ConfigService configService) {
+			var notificationService = new NotificationService();
 
 			var resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
@@ -143,12 +131,13 @@ namespace RoosterBot {
 			// I don't know what is the least bad of these options.
 			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
 			//  that use the object's fields.
-			new RestartHandler(m_Client, m_NotificationService, 5);
-			new DeadlockHandler(m_Client, m_NotificationService, 60000);
+			new RestartHandler(m_Client, notificationService, 5);
+			new DeadlockHandler(m_Client, notificationService, 60000);
+			new ReadyHandler(configService, m_Client);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
-				.AddSingleton(m_ConfigService)
-				.AddSingleton(m_NotificationService)
+				.AddSingleton(configService)
+				.AddSingleton(notificationService)
 				.AddSingleton(commands)
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
@@ -157,51 +146,27 @@ namespace RoosterBot {
 			return serviceCollection;
 		}
 
-		private async Task OnClientReady() {
-			try {
-				await m_ConfigService.LoadDiscordInfo(m_Client);
-				await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-				Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+		private void CreateHandlers(DiscordSocketClient client, ConfigService configService) {
+			var commands = Components.Services.GetService<RoosterCommandService>();
+			var resources = Components.Services.GetService<ResourceService>();
+			var gcs = Components.Services.GetService<GuildConfigService>();
+			var ucs = Components.Services.GetService<UserConfigService>();
 
-				if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
-					m_VersionNotReported = false;
-					IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
-					string startReport = $"RoosterBot version: {Constants.VersionString}\n";
-					startReport += "Components:\n";
-					foreach (ComponentBase component in Components.GetComponents()) {
-						startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
-					}
+			var spch = new SequentialPostCommandHandler(resources, configService);
+			new ParallelPostCommandFailedHandler(commands, configService, resources);
+			new ParallelPostCommandSuccessHandler(commands);
 
-					await ownerDM.SendMessageAsync(startReport);
-				}
-
-				// Find an open Ready pipe and report
-				NamedPipeClientStream? pipeClient = null;
-				try {
-					pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
-					await pipeClient.ConnectAsync(1);
-					using StreamWriter sw = new StreamWriter(pipeClient);
-					pipeClient = null;
-					sw.WriteLine("ready");
-				} catch (TimeoutException) {
-					// Pass
-				} finally {
-					if (pipeClient != null) {
-						pipeClient.Dispose();
-					}
-				}
-			} finally {
-				// Make sure the program can be stopped gracefully regardless of any exceptions that occur here
-				m_BeforeStart = false;
-			}
+			new NewCommandHandler(client, commands, configService, gcs, ucs, spch);
+			new EditedCommandHandler(client, commands, configService, gcs, ucs, spch);
+			new DeletedCommandHandler(client, ucs);
 		}
 
 		private async Task WaitForQuitCondition() {
 			bool keepRunning = true;
 
-			CancellationTokenSource cts = new CancellationTokenSource();
-			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
-			using (StreamReader sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
+			var cts = new CancellationTokenSource();
+			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
+			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
 				_ = pipeServer.WaitForConnectionAsync(cts.Token);
 
 				do {
