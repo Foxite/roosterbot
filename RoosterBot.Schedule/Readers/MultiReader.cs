@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public class MultiReader : RoosterTypeParser {
-		private List<RoosterTypeParser> m_Readers;
+	// TODO (refactor) I really hate the Qmmands version of this class, find a better way to do this under Qmmands without using dynamic all over the place
+	public class MultiReader<T> : RoosterTypeParser<T> {
+		private readonly List<dynamic> m_Readers;
 		private readonly string m_ErrorMessage;
 		private readonly ComponentBase m_ResourcesComponent;
-
-		public override Type Type { get; }
 
 		public override string TypeDisplayName { get; }
 
@@ -20,30 +17,29 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
-		public MultiReader(string errorMessage, Type type, string typeDisplayName, ComponentBase resourcesComponent) {
-			m_Readers = new List<RoosterTypeParser>();
-			Type = type; // na naa na na na
+		public MultiReader(string errorMessage, string typeDisplayName, ComponentBase resourcesComponent) {
+			m_Readers = new List<dynamic>();
 			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;
 			m_ResourcesComponent = resourcesComponent;
 		}
 
-		internal void AddReader(RoosterTypeParser reader) {
-			m_Readers.Add(reader);
+		internal void AddReader<TReader>(RoosterTypeParser<TReader> reader) {
+			m_Readers.Add((dynamic) reader);
 		}
 
-		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
-			foreach (RoosterTypeParser reader in m_Readers) {
-				TypeReaderResult result = await reader.ReadAsync(context, input, services);
-				if (result.IsSuccess) {
-					return result;
-				} else if (result.Error != CommandError.ParseFailed) {
-					return TypeReaderResult.FromError(CommandError.ParseFailed, result.ErrorReason);
+		protected async override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
+			foreach (dynamic reader in m_Readers) {
+				// This is a TypeParserResult<extends T>
+				dynamic result = await reader.ReadAsync(parameter, value, context);
+				if (result.IsSuccessful) {
+					return TypeParserResult<T>.Successful((T) result.Value);
+				} else if (false /* TODO (feature) If failure reason is not standard */) {
+					return TypeParserResult<T>.Unsuccessful(result.Reason);
 				}
 			}
-			ResourceService resources = services.GetService<ResourceService>();
-			CultureInfo culture = context.Culture;
-			return TypeReaderResult.FromError(CommandError.ParseFailed, resources.ResolveString(culture, m_ResourcesComponent, m_ErrorMessage));
+			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
+			return TypeParserResult<T>.Unsuccessful(resources.ResolveString(context.Culture, m_ResourcesComponent, m_ErrorMessage));
 		}
 	}
 }
