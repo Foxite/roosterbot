@@ -1,17 +1,20 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RoosterBot.Weather {
 	public class CityInfo {
 		public int CityId { get; }
 
 		public string Name { get; }
+		public IReadOnlyList<string> Aliases { get; }
 		public RegionInfo Region { get; }
 
 		private string m_NormalName;
 
-		public CityInfo(int cityId, string name, RegionInfo region) {
+		public CityInfo(int cityId, string name, RegionInfo region, params string[] aliases) {
 			CityId = cityId;
 			Name = name;
+			Aliases = aliases;
 			Region = region;
 
 			m_NormalName = StringUtil.RemoveDiacritics(name).ToLower();
@@ -33,7 +36,7 @@ namespace RoosterBot.Weather {
 			// It certainly is useful for towns with stupidly long names (Westerhaar-Vriezenveensewijk)
 			// We could do something like m_NormalName.StartsWith(input) but what if there's a town with a shorter name that also matches this predicate? That one should get chosen.
 			// If we do this I recommend returning the score as (input.Length / m_NormalName.Length) if m_NormalName.StartsWith(input), otherwise it will always be 0.
-			return m_NormalName == input;
+			return m_NormalName == input || Aliases.Any(alias => alias == input);
 		}
 
 		public override string ToString() => Name;

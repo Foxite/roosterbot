@@ -35,7 +35,8 @@ namespace RoosterBot.Weather {
 				CityInfo city = new CityInfo(
 					int.Parse(csv["city_id"]),
 					csv["city_name"],
-					region
+					region,
+					csv["alt_city_names"].Split("|")
 				);
 				m_Cities.Add(city);
 			}
