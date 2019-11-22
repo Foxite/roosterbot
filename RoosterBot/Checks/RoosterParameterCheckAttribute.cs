@@ -10,7 +10,7 @@ namespace RoosterBot {
 			if (context is RoosterCommandContext rcc) {
 				return await CheckAsync(argument, context);
 			} else if (ThrowOnInvalidContext) {
-				throw new InvalidOperationException($"{nameof(RoosterTypeReader)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
+				throw new InvalidOperationException($"{nameof(RoosterParameterCheckAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
 				return CheckResult.Unsuccessful("If you see this, then you may slap the programmer.");
 			}

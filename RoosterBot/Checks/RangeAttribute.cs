@@ -16,7 +16,7 @@ namespace RoosterBot {
 		protected override ValueTask<RoosterCheckResult> CheckAsync(object value, RoosterCommandContext context) {
 			bool ret = (dynamic) value >= Min && (dynamic) value <= Max;
 			if (ret) {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RangeAttribute_CheckFailed"));
 			}

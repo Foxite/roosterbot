@@ -19,7 +19,7 @@ namespace RoosterBot {
 			if (value.GetType().IsArray) {
 				int length = ((Array) value).Length;
 				if (length >= Min && length <= Max) {
-					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
+					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 				} else {
 					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("Program_OnCommandExecuted_BadArgCount"));
 				}

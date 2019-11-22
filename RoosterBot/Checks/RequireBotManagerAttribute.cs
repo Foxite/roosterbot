@@ -7,7 +7,7 @@ namespace RoosterBot {
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (context.User.Id == context.ServiceProvider.GetService<ConfigService>().BotOwner.Id) {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RequireBotManagerAttribute_CheckFailed"));
 			}

@@ -10,7 +10,7 @@ namespace RoosterBot {
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (context.User is IGuildUser user) {
 				if (context.ServiceProvider.GetService<ConfigService>().StaffRoles.Intersect(user.RoleIds).Any()) {
-					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
+					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 				} else {
 					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_CheckFailed"));
 				}

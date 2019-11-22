@@ -16,7 +16,7 @@ namespace RoosterBot {
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (Culture == context.Culture) {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else if (Hide) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
 			} else {
