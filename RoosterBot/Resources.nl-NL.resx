@@ -157,4 +157,7 @@
     <value>Gebruik: {0}</value>
     <comment>0: command signature</comment>
   </data>
+  <data name="PostCommandHandler_ParseFailed" xml:space="preserve">
+    <value>Ik begrijp de parameter(s) niet.</value>
+  </data>
 </root>

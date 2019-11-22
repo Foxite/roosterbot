@@ -51,7 +51,10 @@ namespace RoosterBot {
 								bad = false;
 								break;
 							case CommandError.ParseFailed:
-								response = result.ErrorReason;
+								// This has the same problem described above, there is no way for me to know what TypeReader this was.
+								// I need to only display the ErrorReason if it was one of my TypeReaders, otherwise I don't want to display the english-only reason from the built in readers.
+								//response = result.ErrorReason;
+								response = m_ResourcesService.GetString(rcc.Culture, "PostCommandHandler_ParseFailed");
 								bad = false;
 								break;
 							case CommandError.MultipleMatches:
