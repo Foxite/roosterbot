@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
-	public abstract class RoosterTypeReader<T> : TypeParser<T> {
+	public abstract class RoosterTypeParser<T> : TypeParser<T> {
 		/// <summary>
 		/// If the given command context is not a RoosterCommandContext, then this indicates if an exception should be thrown, or a ParseFailed result should be returned.
 		/// </summary>

@@ -6,8 +6,8 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
-	public class MultiReader : RoosterTypeReader {
-		private List<RoosterTypeReader> m_Readers;
+	public class MultiReader : RoosterTypeParser {
+		private List<RoosterTypeParser> m_Readers;
 		private readonly string m_ErrorMessage;
 		private readonly ComponentBase m_ResourcesComponent;
 
@@ -21,19 +21,19 @@ namespace RoosterBot.Schedule {
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
 		public MultiReader(string errorMessage, Type type, string typeDisplayName, ComponentBase resourcesComponent) {
-			m_Readers = new List<RoosterTypeReader>();
+			m_Readers = new List<RoosterTypeParser>();
 			Type = type; // na naa na na na
 			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;
 			m_ResourcesComponent = resourcesComponent;
 		}
 
-		internal void AddReader(RoosterTypeReader reader) {
+		internal void AddReader(RoosterTypeParser reader) {
 			m_Readers.Add(reader);
 		}
 
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
-			foreach (RoosterTypeReader reader in m_Readers) {
+			foreach (RoosterTypeParser reader in m_Readers) {
 				TypeReaderResult result = await reader.ReadAsync(context, input, services);
 				if (result.IsSuccess) {
 					return result;

@@ -2,12 +2,12 @@
 using Qmmands;
 
 namespace RoosterBot {
-	public class ArrayParser<T> : RoosterTypeReader<T[]> {
-		private readonly RoosterTypeReader<T> m_IndivReader;
+	public class ArrayParser<T> : RoosterTypeParser<T[]> {
+		private readonly RoosterTypeParser<T> m_IndivReader;
 
 		public override string TypeDisplayName { get; }
 
-		public ArrayParser(RoosterTypeReader<T> indivReader, string? typeDisplayName = null) {
+		public ArrayParser(RoosterTypeParser<T> indivReader, string? typeDisplayName = null) {
 			m_IndivReader = indivReader;
 			TypeDisplayName = typeDisplayName ?? (m_IndivReader.TypeDisplayName + "[]");
 		}

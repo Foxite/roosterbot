@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 
 namespace RoosterBot.Schedule {
-	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeReader where T : IdentifierInfo {
+	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeParser where T : IdentifierInfo {
 		public override Type Type => typeof(T);
 
 		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {

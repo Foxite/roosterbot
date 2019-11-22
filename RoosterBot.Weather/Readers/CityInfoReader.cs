@@ -4,7 +4,7 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
-	public class CityInfoReader : RoosterTypeReader {
+	public class CityInfoReader : RoosterTypeParser {
 		public override Type Type => typeof(CityInfo);
 
 		public override string TypeDisplayName => "#CityInfo_TypeDisplayName";

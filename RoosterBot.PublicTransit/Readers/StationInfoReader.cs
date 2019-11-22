@@ -5,7 +5,7 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.PublicTransit {
-	public class StationInfoReader : RoosterTypeReader {
+	public class StationInfoReader : RoosterTypeParser {
 		public override Type Type => typeof(StationInfo);
 
 		public override string TypeDisplayName => "treinstation";

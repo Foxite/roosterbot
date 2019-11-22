@@ -5,7 +5,7 @@ using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DateTimeUtils {
-	public class DayOfWeekReader : RoosterTypeReader {
+	public class DayOfWeekReader : RoosterTypeParser {
 		public override Type Type => typeof(DayOfWeek);
 
 		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
