@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -22,7 +21,7 @@ namespace RoosterBot.Watson {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> unused) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules _) {
 			ResourceService resourceService = services.GetService<ResourceService>();
 			resourceService.RegisterResources("RoosterBot.Watson.Resources");
 

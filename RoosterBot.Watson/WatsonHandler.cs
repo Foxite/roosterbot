@@ -14,10 +14,10 @@ namespace RoosterBot.Watson {
 		private readonly GuildConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
 		private readonly ResourceService m_Resources;
-		private readonly CommandService m_CommandService;
+		private readonly RoosterCommandService m_CommandService;
 		private readonly WatsonClient m_Watson;
 
-		public WatsonHandler(DiscordSocketClient client, UserConfigService ucs, GuildConfigService guildConfig, WatsonClient watson, CommandService commandService, ResourceService resources) {
+		public WatsonHandler(DiscordSocketClient client, UserConfigService ucs, GuildConfigService guildConfig, WatsonClient watson, RoosterCommandService commandService, ResourceService resources) {
 			m_Discord = client;
 			m_GCS = guildConfig;
 			m_UCS = ucs;
@@ -41,12 +41,14 @@ namespace RoosterBot.Watson {
 						string commandPrefix = guildConfig.CommandPrefix;
 
 						if (msg.Channel is IGuildChannel) { // If in guild: Message starts with mention to bot
-							if (msg.HasMentionPrefix(m_Discord.CurrentUser, ref argPos)) {
+							if (msg.Content.StartsWith(m_Discord.CurrentUser.Mention)) {
 								process = true;
+								argPos = m_Discord.CurrentUser.Mention.Length;
 							}
 						} else if (msg.Author.MutualGuilds.Any()) {
 							if (!msg.Content.StartsWith(commandPrefix)) {
 								process = true;
+								argPos = commandPrefix.Length;
 							}
 						}
 
@@ -54,7 +56,7 @@ namespace RoosterBot.Watson {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(msg.Author);
 							CommandResponsePair? crp = userConfig.GetResponse(msg);
 
-							var context = new RoosterCommandContext(m_Discord, msg, userConfig, guildConfig);
+							var context = new RoosterCommandContext(m_Discord, msg, userConfig, guildConfig, Program.Instance.Components.Services);
 
 							Logger.Info("WatsonComponent", $"Processing natlang command: {context.ToString()}");
 							IDisposable typingState = context.Channel.EnterTypingState();
@@ -70,7 +72,7 @@ namespace RoosterBot.Watson {
 								string? result = m_Watson.ConvertCommand(input);
 
 								if (result != null) {
-									await m_CommandService.ExecuteAsync(context, result, Program.Instance.Components.Services);
+									await m_CommandService.ExecuteAsync(input, context);
 									// AddResponse will be handled by PostCommandHandler.
 								} else {
 									returnMessage = Util.Unknown + m_Resources.GetString(context.Culture, "WatsonClient_CommandNotUnderstood");
