@@ -33,7 +33,7 @@ namespace RoosterBot {
 
 					var context = new RoosterCommandContext(m_Client, userMessage, userConfig, guildConfig, Program.Instance.Components.Services);
 
-					IResult result = await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_ConfigService.MultiMatchHandling);
+					IResult result = await m_Commands.ExecuteAsync(userMessage.Content.Substring(argPos), context);
 					await m_SPCH.HandleResultAsync(result, context);
 				}
 			}

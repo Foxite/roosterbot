@@ -32,7 +32,7 @@ namespace RoosterBot {
 
 				if (m_Commands.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
 					var context = new RoosterCommandContext(m_Client, userMessageAfter, userConfig, guildConfig, Program.Instance.Components.Services);
-					IResult result = await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
+					IResult result = await m_Commands.ExecuteAsync(userMessageAfter.Content.Substring(argPos), context);
 					await m_SPCH.HandleResultAsync(result, context);
 				} else if (crp != null) {
 					// No longer a command
