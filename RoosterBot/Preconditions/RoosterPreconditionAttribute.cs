@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot {
-	public abstract class RoosterPreconditionAttribute : PreconditionAttribute {
+	public abstract class RoosterPreconditionAttribute : CheckAttribute {
 		/// <summary>
 		/// If the given command context is not a RoosterCommandContext, then this indicates if an exception should be thrown, or a ParseFailed result should be returned.
 		/// </summary>
@@ -11,16 +11,16 @@ namespace RoosterBot {
 
 		public abstract string Summary { get; }
 
-		public async sealed override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) {
+		public async sealed override ValueTask<CheckResult> CheckAsync(CommandContext context) {
 			if (context is RoosterCommandContext rcc) {
-				return await CheckPermissionsAsync(rcc, command, services);
+				return await CheckAsync(context);
 			} else if (ThrowOnInvalidContext) {
 				throw new InvalidOperationException($"{nameof(RoosterPreconditionAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return PreconditionResult.FromError("If you see this, then you may slap the programmer.");
+				return CheckResult.Unsuccessful("If you see this, then you may slap the programmer.");
 			}
 		}
 
-		protected abstract Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services);
+		protected abstract ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context);
 	}
 }

@@ -13,6 +13,7 @@
 		<PackageReference Include="Discord.Net.Providers.WS4Net" Version="2.1.1" />
 		<PackageReference Include="Discord.Net.Rest" Version="2.1.1" />
 		<PackageReference Include="Discord.Net.WebSocket" Version="2.1.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
 		<PackageReference Include="Qmmands" Version="3.0.0" />
 	</ItemGroup>

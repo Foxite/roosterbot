@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public sealed class RequireBotManagerAttribute : RoosterPreconditionAttribute {
 		public override string Summary => "#RequireBotManagerAttribute_Summary";
 
-		protected override Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
-			if (context.User.Id == services.GetService<ConfigService>().BotOwner.Id) {
-				return Task.FromResult(RoosterPreconditionResult.FromSuccess());
+		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
+			if (context.User.Id == context.ServiceProvider.GetService<ConfigService>().BotOwner.Id) {
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 			} else {
-				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#RequireBotManagerAttribute_CheckFailed"));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#RequireBotManagerAttribute_CheckFailed"));
 			}
 		}
 	}

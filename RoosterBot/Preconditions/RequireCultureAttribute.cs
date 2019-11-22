@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -16,15 +14,15 @@ namespace RoosterBot {
 			Hide = hide;
 		}
 
-		protected override Task<RoosterPreconditionResult> CheckPermissionsAsync(RoosterCommandContext context, CommandInfo command, IServiceProvider services) {
+		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (Culture == context.Culture) {
-				return Task.FromResult(RoosterPreconditionResult.FromSuccess());
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 			} else if (Hide) {
-				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
 			} else {
-				CultureNameService cns = services.GetService<CultureNameService>();
+				CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
 				string localizedName = cns.GetLocalizedName(Culture, context.GuildConfig.Culture);
-				return Task.FromResult(RoosterPreconditionResult.FromErrorBuiltin("#RequireCultureAttribute_CheckFailed", localizedName));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#RequireCultureAttribute_CheckFailed", localizedName));
 			}
 		}
 	}
