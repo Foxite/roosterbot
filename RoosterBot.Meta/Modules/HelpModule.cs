@@ -62,17 +62,22 @@ namespace RoosterBot.Meta {
 				base.ReplyDeferred(response);
 			} else {
 				string response = "";
+				bool containsOptionalParameters = false;
 
-				// Commands
 				foreach ((CommandInfo command, ComponentBase component) in commands) {
+					if (!containsOptionalParameters) {
+						containsOptionalParameters = command.Parameters.Any(param => param.IsOptional);
+					}
 					response += "`" + GuildConfig.CommandPrefix + command.GetSignature(ResourcesService, Culture) + "`";
 					if (command.Summary != null) {
-						response += ": " + ResourcesService.ResolveString(Culture, component, command.Summary);
+						response += ": " + string.Format(ResourcesService.ResolveString(Culture, component, command.Summary), GuildConfig.CommandPrefix);
 					}
 					response += "\n";
 				}
-				
-				response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
+
+				if (containsOptionalParameters) {
+					response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
+				}
 				ReplyDeferred(response);
 			}
 			return Task.CompletedTask;
