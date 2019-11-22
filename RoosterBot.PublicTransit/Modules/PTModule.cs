@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.PublicTransit {
 	[RequireCulture("nl-NL", false)]
@@ -9,7 +9,7 @@ namespace RoosterBot.PublicTransit {
 		public NSAPI NSAPI { get; set; } = null!;
 		public StationInfoService Stations { get; set; } = null!;
 
-		[Command("ov", RunMode = RunMode.Async), Summary("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `{0}ov amsterdam sloterdijk, utrecht centraal`")]
+		[Command("ov"), RunMode(RunMode.Parallel), Description("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `{0}ov amsterdam sloterdijk, utrecht centraal`")]
 		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {
 			StationInfo stationFrom;
 			StationInfo stationTo;
@@ -77,7 +77,7 @@ namespace RoosterBot.PublicTransit {
 			}
 		}
 
-		[Command("stations"), Summary("Zoek een station op in de lijst.")]
+		[Command("stations"), Description("Zoek een station op in de lijst.")]
 		public async Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
 			string response = "Gevonden stations zijn (beste match eerst):\n\n";
 

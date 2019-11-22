@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Threading.Tasks;
-using Discord.Commands;
 using System.Globalization;
 
 namespace RoosterBot.PublicTransit {
@@ -32,12 +31,12 @@ namespace RoosterBot.PublicTransit {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
-			StationInfoReader stationInfoReader = new StationInfoReader();
-			commandService.AddTypeReader<StationInfo>(stationInfoReader);
-			commandService.AddTypeReader<StationInfo[]>(new ArrayParser<StationInfo>(stationInfoReader));
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
+			var stationInfoReader = new StationInfoReader();
+			commandService.AddTypeParser<StationInfo>(stationInfoReader);
+			commandService.AddTypeParser<StationInfo[]>(new ArrayParser<StationInfo>(stationInfoReader));
 
-			registerModules(new[] { await commandService.AddModuleAsync<PTModule>(services) });
+			registerModules(new[] { commandService.AddModule<PTModule>() });
 
 			string helpText = "Met `{0}ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";
@@ -47,6 +46,8 @@ namespace RoosterBot.PublicTransit {
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
 			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix), CultureInfo.GetCultureInfo("nl-NL"));
+
+			return Task.CompletedTask;
 		}
 
 		protected override void Dispose(bool disposing) {
