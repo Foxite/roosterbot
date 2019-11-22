@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
@@ -12,7 +11,6 @@ namespace RoosterBot {
 		public   string DefaultCommandPrefix { get; }
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
-		public   MultiMatchHandling MultiMatchHandling { get; }
 		public   IReadOnlyCollection<ulong> StaffRoles { get; }
 		internal bool ReportStartupVersionToOwner { get; }
 		public   CultureInfo DefaultCulture { get; }
@@ -39,7 +37,6 @@ namespace RoosterBot {
 			m_BotOwnerId                = jsonConfig["botOwnerId"]                 .ToObject<ulong>();
 			StaffRoles                  = jsonConfig["staffRoles"]                 .ToObject<JArray>().Select(jt => jt.ToObject<ulong>()).ToList().AsReadOnly();
 			ActivityType                = jsonConfig["activityType"]               .ToObject<ActivityType>();
-			MultiMatchHandling          = jsonConfig["multiMatchHandling"]         .ToObject<MultiMatchHandling>();
 			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]       .ToObject<string>();
 			ReportStartupVersionToOwner = jsonConfig["reportStartupVersionToOwner"].ToObject<bool>();
 			DefaultCulture              = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"].ToObject<string>());
