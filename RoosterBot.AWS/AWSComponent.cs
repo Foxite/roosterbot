@@ -8,9 +8,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using Qmmands;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : ComponentBase {
@@ -45,7 +45,7 @@ namespace RoosterBot.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> _) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules _) {
 #if !DEBUG
 			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
 #endif
