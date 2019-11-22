@@ -18,7 +18,9 @@ namespace RoosterBot.DateTimeUtils {
 			ResourceService = services.GetService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
-			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader());
+			// This is bullshit, but it works, trust me.
+			// https://github.com/discord-net/Discord.Net/issues/1425
+			commandService.AddTypeReader<DayOfWeek>(new DayOfWeekReader(), false);
 
 			return Task.CompletedTask;
 		}
