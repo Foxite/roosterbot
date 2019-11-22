@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.Commands;
 using RoosterBot.DateTimeUtils;
+using Qmmands;
 
 namespace RoosterBot.Weather {
 	// The free license for Weatherbit allows 500 calls per month, so we shouldn't try to show too much data at once. If the user wants to know the weather 3 hours from now, they
@@ -11,7 +11,7 @@ namespace RoosterBot.Weather {
 	public class WeatherModule : RoosterModuleBase {
 		public WeatherService Weather { get; set; } = null!;
 
-		[Command("#WeatherModule_CurrentWeather", RunMode = RunMode.Async)]
+		[Command("#WeatherModule_CurrentWeather"), RunMode(RunMode.Parallel)]
 		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -22,7 +22,7 @@ namespace RoosterBot.Weather {
 			Attribution();
 		}
 
-		[Command("#WeatherModule_DayForecast", RunMode = RunMode.Async)]
+		[Command("#WeatherModule_DayForecast"), RunMode(RunMode.Parallel)]
 		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			int daysFromNow = day - DateTime.Today.DayOfWeek;
@@ -34,7 +34,7 @@ namespace RoosterBot.Weather {
 			Attribution();
 		}
 
-		[Command("#WeatherModule_TimeForecast", RunMode = RunMode.Async)]
+		[Command("#WeatherModule_TimeForecast"), RunMode(RunMode.Parallel)]
 		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
@@ -48,7 +48,7 @@ namespace RoosterBot.Weather {
 			Attribution();
 		}
 
-		[Command("#WeatherModule_UnitForecast", RunMode = RunMode.Async)]
+		[Command("#WeatherModule_UnitForecast"), RunMode(RunMode.Parallel)]
 		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
 				await MinorError(GetString("#WeatherModule_NoLookBack"));

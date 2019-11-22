@@ -1,5 +1,4 @@
-﻿using Discord.Commands;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -34,14 +33,16 @@ namespace RoosterBot.Weather {
 			services.AddSingleton(cityService);
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModuleFunction) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModuleFunction) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
-			commandService.AddTypeReader<CityInfo>(new CityInfoReader());
+			commandService.AddTypeParser<CityInfo>(new CityInfoReader());
 
-			registerModuleFunction(await commandService.AddLocalizedModule<WeatherModule>());
+			registerModuleFunction(commandService.AddLocalizedModule<WeatherModule>());
 
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
+
+			return Task.CompletedTask;
 		}
 	}
 }
