@@ -110,11 +110,8 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_AfterCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_AfterCommand_Summary")]
-		public async Task GetAfterCommand([Remainder] string ignored = "") {
-			if (!string.IsNullOrWhiteSpace(ignored)) {
-				ReplyDeferred(GetString("ScheduleModule_GetAfterCommand_ParameterHint", GuildConfig.CommandPrefix));
-			}
+		[Command("#ScheduleModule_AfterCommand"), RunMode(RunMode.Parallel), IgnoresExtraArguments, Description("#ScheduleModule_AfterCommand_Summary")]
+		public async Task GetAfterCommand() {
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();
 		}

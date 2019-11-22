@@ -157,10 +157,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
   </data>
-  <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
-    <value>Hint: To use `{0}next`, you don't need to specify parameters.</value>
-    <comment>0: command prefix</comment>
-  </data>
   <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>After what?</value>
   </data>

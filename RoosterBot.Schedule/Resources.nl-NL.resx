@@ -159,9 +159,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
   </data>
-  <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
-    <value>Hint: om `{0}daarna` te gebruiken hoef je geen parameters mee te geven.</value>
-  </data>
   <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
     <value>Na wat?</value>
   </data>
