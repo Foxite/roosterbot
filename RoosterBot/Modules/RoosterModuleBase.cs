@@ -27,11 +27,13 @@ namespace RoosterBot {
 		private readonly StringBuilder m_Response = new StringBuilder();
 
 		// TODO (fix) This function is async because I don't know what to return, and we don't have an await here
-		protected async override ValueTask BeforeExecutedAsync() {
+		protected override ValueTask BeforeExecutedAsync() {
 			Log = new ModuleLogger(GetType().Name);
 
 			Log.Debug("Executing: " + Context.ToString());
-			
+			// This is like Task.CompletedTask but with ValueTask
+			// https://github.com/dotnet/corefx/issues/33609#issuecomment-440123253
+			return default;
 		}
 
 		protected async override ValueTask AfterExecutedAsync() {
