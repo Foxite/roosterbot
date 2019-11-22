@@ -50,7 +50,7 @@ namespace RoosterBot {
 			CheckDependencies(m_Components);
 			Services = await AddComponentServicesAsync(serviceCollection);
 			await AddComponentModulesAsync(Services);
-			Logger.Info("ComponentManager", "Components ready")
+			Logger.Info("ComponentManager", "Components ready");
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
