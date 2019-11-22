@@ -17,10 +17,10 @@ namespace RoosterBot.Meta {
 				/* Key */ kvp => ulong.Parse(kvp.Key),
 				/* Val */ kvp => {
 					JObject userJO = kvp.Value.ToObject<JObject>();
-					string cultureString = userJO["culture"].ToObject<string>();
+					string? cultureString = userJO["culture"]?.ToObject<string>();
 					return new UserConfig(
 						this,
-						cultureString.Length != 0 ? CultureInfo.GetCultureInfo(cultureString) : null,
+						cultureString != null ? CultureInfo.GetCultureInfo(cultureString) : null,
 						ulong.Parse(kvp.Key),
 						userJO["customData"].ToObject<JObject>()
 					);
