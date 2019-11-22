@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.Schedule {
 	[Name("#TeacherListModule_Name")]
 	public class TeacherListModule : RoosterModuleBase {
 		public TeacherNameService Teachers { get; set; } = null!;
 
-		[Command("leraren"), Alias("docenten", "docent"), Summary("#TeacherListModule_TeacherListCommand_Summary")]
+		// TODO (localize) These aliases
+		[Command("leraren", "docenten", "docent"), Description("#TeacherListModule_TeacherListCommand_Summary")]
 		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {

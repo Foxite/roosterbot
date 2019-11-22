@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using RoosterBot.DateTimeUtils;
 using Discord;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.Schedule {
 	// TODO (refactor) reduce the size of this file (it has 353 lines right now)
 	[Name("#ScheduleModule_Name")]
-	[Summary("#ScheduleModule_Summary")]
+	[Description("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 		public ScheduleService Schedules { get; set; } = null!;
 
 		#region Commands
-		[Command("#ScheduleModule_NowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultCurrentCommand_Summary")]
+		[Command("#ScheduleModule_NowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -42,7 +42,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_NextCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultNextCommand_Summary")]
+		[Command("#ScheduleModule_NextCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultNextCommand_Summary")]
 		public async Task NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -60,32 +60,32 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_DayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Command("#ScheduleModule_DayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("#ScheduleModule_TodayCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task TodayCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
 		}
 
-		[Command("#ScheduleModule_TomorrowCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task TomorrowCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 		}
 
-		[Command("#ScheduleModule_ThisWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_ThisWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
 		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 0);
 		}
 
-		[Command("#ScheduleModule_NextWeekCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_NextWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
 		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
 		}
 
-		[Command("#ScheduleModule_FutureCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
+		[Command("#ScheduleModule_FutureCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
 		public async Task ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -110,7 +110,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_AfterCommand", RunMode = RunMode.Async), Summary("#ScheduleModule_AfterCommand_Summary")]
+		[Command("#ScheduleModule_AfterCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_AfterCommand_Summary")]
 		public async Task GetAfterCommand([Remainder] string ignored = "") {
 			if (!string.IsNullOrWhiteSpace(ignored)) {
 				ReplyDeferred(GetString("ScheduleModule_GetAfterCommand_ParameterHint", GuildConfig.CommandPrefix));
@@ -290,11 +290,11 @@ namespace RoosterBot.Schedule {
 		#region Convenience
 		private async Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
-				TypeReaderResult infoResult = await ScheduleComponent.Instance.IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
-				if (infoResult.IsSuccess) {
-					return (IdentifierInfo) infoResult.BestMatch;
+				StudentSetInfo? ssi = Context.UserConfig.GetStudentSet();
+				if (ssi != null) {
+					return ssi;
 				} else {
-					ReplyDeferred(Util.Error + infoResult.ErrorReason);
+					await MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf"));
 					return null;
 				}
 			} else {

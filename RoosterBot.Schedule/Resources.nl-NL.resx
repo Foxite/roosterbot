@@ -526,9 +526,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="UserClassModule_SetClassForUser_Aliases" xml:space="preserve">
     <value />
   </data>
-  <data name="UserClassModule_GuildOnly" xml:space="preserve">
-    <value>Deze command moet binnen een server worden gebruikt.</value>
-  </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
   </data>

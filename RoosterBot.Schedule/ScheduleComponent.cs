@@ -10,13 +10,13 @@ namespace RoosterBot.Schedule {
 #nullable enable
 
 		// TODO (refactor) need to find a better way to do this, a service just to serve this variable to ScheduleModule seems a bit too much
-		internal MultiParser IdentifierReaders { get; }
+		internal MultiParser<IdentifierInfo> IdentifierReaders { get; }
 
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public ScheduleComponent() {
 			Instance = this;
-			IdentifierReaders = new MultiParser("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", typeof(IdentifierInfo), "#IdentifierInfo_MultiReader_TypeDisplayName", this);
+			IdentifierReaders = new MultiParser<IdentifierInfo>("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName", this);
 		}
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
@@ -37,7 +37,7 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 			var ssir = new StudentSetInfoParser();
 
@@ -45,7 +45,7 @@ namespace RoosterBot.Schedule {
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			commandService.AddTypeParser<IdentifierInfo>(IdentifierReaders);
+			commandService.AddTypeParser(IdentifierReaders);
 			IdentifierReaders.AddReader(new TeacherInfoParser());
 			IdentifierReaders.AddReader(ssir);
 			IdentifierReaders.AddReader(new RoomInfoParser());
@@ -56,6 +56,8 @@ namespace RoosterBot.Schedule {
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
+
+			return Task.CompletedTask;
 		}
 	}
 }

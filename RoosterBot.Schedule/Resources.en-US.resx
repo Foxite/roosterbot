@@ -522,9 +522,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
     <value>teacher</value>
   </data>
-  <data name="UserClassModule_GuildOnly" xml:space="preserve">
-    <value>This command must be used within a server.</value>
-  </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
   </data>

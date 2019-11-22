@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.Schedule {
-	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_Name"), Summary("#UserClassModule_Summary"), Group("#UserClassModule_Group")]
+	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_Name"), Description("#UserClassModule_Summary"), Group("#UserClassModule_Group")]
 	public class UserClassModule : RoosterModuleBase {
-		[Command("#UserClassModule_SetClassForUser", RunMode = RunMode.Async), Summary("#UserClassModule_SetClassForUser_Summary"), RequireContext(ContextType.Guild, ErrorMessage = "#UserClassModule_GuildOnly")]
+		[Command("#UserClassModule_SetClassForUser"), RunMode(RunMode.Parallel), Description("#UserClassModule_SetClassForUser_Summary"), RequireContext(ContextType.Guild)]
 		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] StudentSetInfo? newStudentSet = null) {
 			if (newStudentSet == null) {
 				StudentSetInfo? ssi = UserConfig.GetStudentSet();

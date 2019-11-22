@@ -17,7 +17,7 @@ namespace RoosterBot {
 			} else if (ThrowOnInvalidContext) {
 				throw new InvalidOperationException($"{nameof(RoosterPreconditionAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return CheckResult.Unsuccessful("If you see this, then you may slap the programmer.");
+				return RoosterCheckResult.UnsuccessfulBuiltIn("If you see this, then you may slap the programmer.");
 			}
 		}
 

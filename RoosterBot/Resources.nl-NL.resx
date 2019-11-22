@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Program_OnCommandExecuted_UnknownCommand" xml:space="preserve">
-    <value>Die command ken ik niet. Gebruik `{0}help` voor informatie.</value>
-    <comment>0: Command prefix</comment>
-  </data>
-  <data name="Program_OnCommandExecuted_BadArgCount" xml:space="preserve">
-    <value>Dat zijn te veel of te weinig parameters.</value>
-  </data>
   <data name="RoosterBot_FatalError" xml:space="preserve">
     <value>Er is iets heel erg misgegaan.</value>
   </data>
@@ -137,7 +130,7 @@
     <value>Je bent niet gemachtigd om dat te doen.</value>
   </data>
   <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
-    <value>Je moet moderator privileges hebben om dat te doen.</value>
+    <value>Je moet moderatorprivileges hebben om dat te doen.</value>
   </data>
   <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
     <value>Dit werkt alleen in een server.</value>
@@ -153,11 +146,32 @@
     <value>Vereist een {0}talige server.</value>
     <comment>{0}: localized language name</comment>
   </data>
-  <data name="PostCommandHandler_UsageHint" xml:space="preserve">
+  <data name="CommandHandling_Cooldown" xml:space="preserve">
+    <value>Je zit nu nog {0} in cooldown.</value>
+    <comment>0: cooldown time remaining (formatted and localized)</comment>
+  </data>
+  <data name="CommandHandling_Disabled" xml:space="preserve">
+    <value>Die command is uitgeschakeld.</value>
+  </data>
+  <data name="CommandHandling_NotFound" xml:space="preserve">
+    <value>Die command ken ik niet. Gebruik `{0}help` voor informatie.</value>
+    <comment>0: Command prefix</comment>
+  </data>
+  <data name="CommandHandling_OverloadsFailed" xml:space="preserve">
+    <value>Ik weet niet welk van deze je bedoelt:</value>
+    <comment>Followed by list of signatures</comment>
+  </data>
+  <data name="CommandHandling_ParseFailed" xml:space="preserve">
+    <value>Ik begrijp de parameter(s) niet.</value>
+  </data>
+  <data name="CommandHandling_UsageHint" xml:space="preserve">
     <value>Gebruik: {0}</value>
     <comment>0: command signature</comment>
   </data>
-  <data name="PostCommandHandler_ParseFailed" xml:space="preserve">
-    <value>Ik begrijp de parameter(s) niet.</value>
+  <data name="RequireContextAttribute_DMOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een DM-kanaal.</value>
+  </data>
+  <data name="RequireContextAttribute_GuildOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een server.</value>
   </data>
 </root>

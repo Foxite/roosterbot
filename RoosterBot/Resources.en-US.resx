@@ -168,4 +168,10 @@
     <value>Usage: {0}</value>
     <comment>0: command signature</comment>
   </data>
+  <data name="RequireContextAttribute_DMOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een DM-kanaal.</value>
+  </data>
+  <data name="RequireContextAttribute_GuildOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een server.</value>
+  </data>
 </root>
