@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule.GLU {
+namespace RoosterBot.GLU {
 	public class RoleAssignmentHandler {
 		private const long NewUserRank = 278937741478330389;
 		private readonly IReadOnlyDictionary<string, ulong[]> m_Roles;
@@ -17,7 +18,7 @@ namespace RoosterBot.Schedule.GLU {
 			m_Config = config;
 			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
 
-			Dictionary<string, ulong[]> roles = new Dictionary<string, ulong[]>();
+			var roles = new Dictionary<string, ulong[]>();
 
 			ulong dev = 278587815271464970;
 			ulong art = 278587791141765121;

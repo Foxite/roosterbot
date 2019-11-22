@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule.GLU {
+namespace RoosterBot.GLU {
 	// This component has a lot of hardcoded snowflake IDs. Normally I'd get all that from a config file, but this component is specifically made for a particular guild,
 	//  so generalizing the code does not make a lot of sense.
 	public class GLUComponent : ComponentBase {
@@ -62,13 +61,18 @@ namespace RoosterBot.Schedule.GLU {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help, RegisterModules registerModules) {
+			registerModules(
+				commands.AddModule<MiscModule>(),
+				commands.AddModule<UserListModule>()
+			);
+
 			// Teachers
-			await services.GetService<TeacherNameService>().ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
+			TeacherNameService teachers = services.GetService<TeacherNameService>();
+			await teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
 			#region Read schedules
-			List<(Type identifierType, Task<MemoryScheduleProvider> scheduleTask)> tasks = new List<(Type identifierType, Task<MemoryScheduleProvider> scheduleTask)>();
-			TeacherNameService teachers = services.GetService<TeacherNameService>();
+			var tasks = new List<(Type identifierType, Task<MemoryScheduleProvider> scheduleTask)>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds)));
@@ -90,30 +94,6 @@ namespace RoosterBot.Schedule.GLU {
 			new RoleAssignmentHandler(client, services.GetService<ConfigService>());
 			new ManualRanksHintHandler(client);
 			new NewUserHandler(client);
-
-			ConfigService config = services.GetService<ConfigService>();
-
-			async Task leaveGuildIfOwnerNotPresent(SocketGuild guild) {
-				if (guild.Id == GLUGuildId && !guild.Users.Any(user => user.Id == config.BotOwner.Id)) {
-					await guild.LeaveAsync();
-				}
-			}
-
-			// Do not allow being in a server where the owner is not present
-			client.GuildMembersDownloaded += leaveGuildIfOwnerNotPresent;
-			client.JoinedGuild += leaveGuildIfOwnerNotPresent;
-
-			// Leave if the bot owner leaves/gets banned from the GLU server
-			client.UserLeft += async (guildUser) => {
-				if (guildUser.Guild.Id == GLUGuildId && guildUser.Id == config.BotOwner.Id) {
-					await guildUser.Guild.LeaveAsync();
-				}
-			};
-			client.UserBanned += async (user, guild) => {
-				if (guild.Id == GLUGuildId && user.Id == config.BotOwner.Id) {
-					await guild.LeaveAsync();
-				}
-			};
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {

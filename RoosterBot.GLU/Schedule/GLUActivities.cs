@@ -1,4 +1,4 @@
-﻿namespace RoosterBot.Schedule.GLU {
+﻿namespace RoosterBot.GLU {
 	public static class GLUActivities {
 		public static string GetActivityFromAbbr(string abbr) {
 			switch (abbr) {

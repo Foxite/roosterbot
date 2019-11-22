@@ -1,12 +1,12 @@
-﻿using Discord;
-using Discord.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord;
+using Qmmands;
 
-namespace RoosterBot.MiscStuff {
+namespace RoosterBot.GLU {
 	[HiddenFromList, Group("users")]
 	public class UserListModule : RoosterModuleBase {
 		[Command("with no nickname"), RequireContext(ContextType.Guild), UserIsModerator]

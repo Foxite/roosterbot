@@ -1,8 +1,7 @@
-﻿using Discord.Commands;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace RoosterBot.Schedule.GLU {
+namespace RoosterBot.GLU {
 	internal sealed class ManualRanksHintHandler {
 		public ManualRanksHintHandler(DiscordSocketClient client) {
 			client.MessageReceived += HintManualRanks;
@@ -11,7 +10,7 @@ namespace RoosterBot.Schedule.GLU {
 		private async Task HintManualRanks(SocketMessage msg) {
 			if (msg is SocketUserMessage sum) {
 				int argPos = 0;
-				if (sum.HasStringPrefix("?rank ", ref argPos)) {
+				if (sum.Content.StartsWith("?rank ")) {
 					string normalContent = sum.Content.ToLower();
 					bool respond = false;
 					if (normalContent.EndsWith("e jaar")) {
@@ -26,7 +25,7 @@ namespace RoosterBot.Schedule.GLU {
 					if (respond) {
 						await msg.Channel.SendMessageAsync(msg.Author.Mention +
 							", je hoeft niet meer handmatig aan te geven aan Dyno in welke jaar/opleiding je zit. " +
-						   "Dit wordt nu automatisch gedaan als je je klas instelt met `!ik <jouw klas>`.");
+						   "Dit wordt nu automatisch gedaan als je je klas instelt met `!ik zit in <klas>`.");
 					}
 				}
 			}

@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
-namespace RoosterBot.MiscStuff {
+namespace RoosterBot.GLU {
 	[HiddenFromList]
 	public class MiscModule : RoosterModuleBase {
-		[Command("dank u", true), Alias(
-			"danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "dank",
-			"goed", "goedzo", "good bot",
-			"thanks", "thnx", "thx", "ty", "thank")]
+		[Command("dank u", "danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "dank",
+				 "goed", "goedzo", "good bot",
+				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
 		public async Task ThankYouCommand() {
 			string response;
 			if (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
@@ -25,14 +24,14 @@ namespace RoosterBot.MiscStuff {
 			await ReplyAsync(response);
 		}
 
-		[Command("altijdJoram"), RequireContext(ContextType.DM), HiddenFromList]
+		[Command("altijdJoram"), RequireContext(ContextType.DM)]
 		public async Task AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			await UserConfig.UpdateAsync();
 			ReplyDeferred($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
 		}
 
-		[Command("kut", true)]
+		[Command("kut"), IgnoresExtraArguments]
 		public Task BoazBas() {
 			ReplyDeferred("Kut " + Context.User.Mention);
 			return Task.CompletedTask;

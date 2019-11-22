@@ -4,8 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using RoosterBot.DateTimeUtils;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule.GLU {
+namespace RoosterBot.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 

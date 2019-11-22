@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoosterBot.Schedule.GLU {
+namespace RoosterBot.GLU {
 	public class NewUserHandler {
 		public NewUserHandler(DiscordSocketClient client) {
 			client.UserJoined += WelcomeUser;
