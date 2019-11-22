@@ -43,12 +43,14 @@ namespace RoosterBot {
 			IEnumerable<string> componentNames = ReadComponentsFile();
 			List<Assembly> assemblies = LoadAssemblies(componentNames);
 			Type[] types = FindComponentClasses(assemblies);
+			EnsureNoMultiComponentAssemblies(types);
 
 			// Start components
 			ConstructComponents(types);
 			CheckDependencies(m_Components);
 			Services = await AddComponentServicesAsync(serviceCollection);
 			await AddComponentModulesAsync(Services);
+			Logger.Info("ComponentManager", "Components ready")
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
@@ -98,6 +100,15 @@ namespace RoosterBot {
 									 select assemblyType).ToArray();
 
 			return componentTypes;
+		}
+
+		private void EnsureNoMultiComponentAssemblies(IEnumerable<Type> componentTypes) {
+			var assembliesWithMultipleComponents = componentTypes.GroupBy(component => component.Assembly).Where(group => group.Count() > 1);
+			if (assembliesWithMultipleComponents.Any()) {
+				throw new InvalidOperationException(
+					$"One or more assemblies contain more than one {nameof(ComponentBase)} class. An assembly can have at most one component. The offending assemblies are:\n"
+					+ string.Join('\n', assembliesWithMultipleComponents));
+			}
 		}
 
 		private void ConstructComponents(IEnumerable<Type> componentTypes) {
