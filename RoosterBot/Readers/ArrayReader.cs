@@ -1,27 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using System.Threading.Tasks;
+using Qmmands;
 
 namespace RoosterBot {
-	public class ArrayReader<T> : TypeReader {
-		private TypeReader m_IndivReader;
+	public class ArrayReader<T> : RoosterTypeReader<T[]> {
+		private readonly RoosterTypeReader<T> m_IndivReader;
 
-		public ArrayReader(TypeReader indivReader) {
+		public override string TypeDisplayName { get; }
+
+		public ArrayReader(RoosterTypeReader<T> indivReader, string? typeDisplayName = null) {
 			m_IndivReader = indivReader;
+			TypeDisplayName = typeDisplayName ?? (m_IndivReader.TypeDisplayName + "[]");
 		}
 
-		public async override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
+		protected async override ValueTask<TypeParserResult<T[]>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			string[] inputs = input.Split(',');
 			T[] results = new T[inputs.Length];
 			for (int i = 0; i < inputs.Length; i++) {
-				TypeReaderResult indivResult = await m_IndivReader.ReadAsync(context, inputs[i].Trim(), services);
-				if (indivResult.IsSuccess) {
-					results[i] = (T) indivResult.BestMatch; // Unsafe cast but if this ever goes wrong, then it sure as hell isn't this class' fault.
+				TypeParserResult<T> indivResult = await m_IndivReader.ParseAsync(parameter, inputs[i].Trim(), context);
+				if (indivResult.IsSuccessful) {
+					results[i] = indivResult.Value;
 				} else {
-					return indivResult;
+					return TypeParserResult<T[]>.Unsuccessful(indivResult.Reason);
 				}
 			}
-			return TypeReaderResult.FromSuccess(results);
+			return TypeParserResult<T[]>.Successful(results);
 		}
 	}
 }

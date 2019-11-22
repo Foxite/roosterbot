@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot {
-	public abstract class RoosterTypeReader : TypeReader {
+	public abstract class RoosterTypeReader<T> : TypeParser<T> {
 		/// <summary>
 		/// If the given command context is not a RoosterCommandContext, then this indicates if an exception should be thrown, or a ParseFailed result should be returned.
 		/// </summary>
 		public bool ThrowOnInvalidContext { get; set; }
 
-		/// <summary>
-		/// The Type that this TypeReader parses.
-		/// </summary>
-		public abstract Type Type { get; }
+		public Type Type => typeof(T);
 
 		/// <summary>
 		/// The display name of the Type that this TypeReader parses. This may be a resolvable resource.
 		/// </summary>
 		public abstract string TypeDisplayName { get; }
 
-		public sealed override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) {
+		public sealed override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string value, CommandContext context) {
 			if (context is RoosterCommandContext rcc) {
-				return ReadAsync(rcc, input, services);
+				return ParseAsync(parameter, value, rcc);
 			} else if (ThrowOnInvalidContext) {
-				throw new InvalidOperationException($"{nameof(RoosterTypeReader)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
+				throw new InvalidOperationException($"{GetType().Name} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "If you see this, then you may slap the programmer."));
+				return new ValueTask<TypeParserResult<T>>(TypeParserResult<T>.Unsuccessful("If you see this, then you may slap the programmer."));
 			}
 		}
 
-		protected abstract Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services);
+		protected abstract ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context);
 	}
 }
