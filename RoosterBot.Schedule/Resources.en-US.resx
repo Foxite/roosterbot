@@ -152,10 +152,10 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>Thats not a class.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
-    <value>I don't know in what class that person is. He/she needs to use `{0}me &lt;his/her class&gt;` to change this.</value>
+    <value>I don't know in what class that person is. He/she needs to use `{0}i am in &lt;class&gt;` to change this.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>I don't know in what class you are. Use `{0}me &lt;your class&gt;` to change this.</value>
+    <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
   </data>
   <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
     <value>Hint: To use `{0}next`, you don't need to specify parameters.</value>
@@ -235,7 +235,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>{0}: Not on schedule right now</value>
     <comment>0: identifier info display text</comment>
   </data>
-  <data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
+  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
     <value> That is in the weekend after all.</value>
   </data>
   <data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
@@ -259,7 +259,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>0: user's student set</comment>
   </data>
   <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
-    <value>Use `{0}me &lt;your class&gt;` to change this.</value>
+    <value>Use `{0}i am in &lt;your class&gt;` to change this.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
     <value>Noted: you are in {0}.</value>

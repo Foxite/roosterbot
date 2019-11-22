@@ -140,7 +140,7 @@ Sterker nog: als ik weet in welke klas een persoon zit, kun je die persoon menti
   </data>
   <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
     <value>Ik kan onthouden in welke klas jij zit, zodat je dit niet elke keer er bij hoeft te zetten.
-Stel je klas in met: `{0}ik &lt;klas&gt;`, bijvoorbeeld `{0}ik 2gd1`.
+Stel je klas in met: `{0}ik zit in &lt;klas&gt;`, bijvoorbeeld `{0}ik zit in 2gd1`.
 Daarna hoef je niet meer je klas in commands te zetten. Je kan dus alleen maar `{0}nu` typen en dan weet ik wat ik moet opzoeken.
 Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)
 
@@ -154,10 +154,10 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Dat is geen klas.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
-    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik &lt;zijn/haar klas&gt;` gebruiken om dit in te stellen.</value>
+    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik zit in &lt;klas&gt;` gebruiken om dit in te stellen.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik &lt;jouw klas&gt;` om dit in te stellen.</value>
+    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
   </data>
   <data name="ScheduleModule_GetAfterCommand_ParameterHint" xml:space="preserve">
     <value>Hint: om `{0}daarna` te gebruiken hoef je geen parameters mee te geven.</value>
@@ -238,9 +238,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>{0}: Niet op het rooster op dit moment</value>
     <comment>0: identifier info display text</comment>
   </data>
-  <data name="ScheduleModuleBase_ThatIsWeekend" xml:space="preserve">
-    <value> Dat is dan ook weekend.</value>
-  </data>
   <data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>{0}: Rooster deze week</value>
     <comment>0: identifier display text</comment>
@@ -262,7 +259,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: user's student set</comment>
   </data>
   <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
-    <value> Gebruik `{0}ik &lt;jouw klas&gt;` om dit te veranderen.</value>
+    <value> Gebruik `{0}ik zit in &lt;klas&gt;` om dit te veranderen.</value>
   </data>
   <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}.</value>
@@ -290,7 +287,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Discord naam</value>
   </data>
   <data name="ScheduleModule_Remarks" xml:space="preserve">
-    <value>Met `{0}ik` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.</value>
+    <value>Met `{0}ik zit in &lt;klas&gt;` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt.</value>
@@ -534,6 +531,9 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
+  </data>
+  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
+    <value> Dat is dan ook in het weekend.</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
     <value>aantal</value>
