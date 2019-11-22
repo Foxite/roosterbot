@@ -1,46 +1,43 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
-	public class CultureInfoReader : RoosterTypeReader {
+	public class CultureInfoReader : RoosterTypeParser<CultureInfo> {
 		private Regex m_FlagEmoteRegex;
 
-		public override Type Type => typeof(CultureInfo);
 		public override string TypeDisplayName => "#CultureInfoReader_TypeDisplayName";
 
 		public CultureInfoReader() {
 			m_FlagEmoteRegex = new Regex(@"\:flag_([a-z]{2})\:");
 		}
 
-		protected override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
+		protected override ValueTask<TypeParserResult<CultureInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			if (TryGetCultureInfo(input, out CultureInfo? info)) {
-				return Task.FromResult(TypeReaderResult.FromSuccess(info));
+				return new ValueTask<TypeParserResult<CultureInfo>>(TypeParserResult<CultureInfo>.Successful(info));
 			}
 
-			var resources = services.GetService<ResourceService>();
+			var resources = context.ServiceProvider.GetService<ResourceService>();
 			Match flagMatch = m_FlagEmoteRegex.Match(input);
 			if (flagMatch.Success) {
 				string countryCode = flagMatch.Groups[0].Value;
 				if (TryGetCultureInfo(countryCode, out info)) {
-					return Task.FromResult(TypeReaderResult.FromSuccess(info));
+					return new ValueTask<TypeParserResult<CultureInfo>>(TypeParserResult<CultureInfo>.Successful(info));
 				} else {
-					return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "CultureInfoReader_ParseFailed_UnknownFlag")));
+					return new ValueTask<TypeParserResult<CultureInfo>>(TypeParserResult<CultureInfo>.Unsuccessful(resources.GetString(context.Culture, "CultureInfoReader_ParseFailed_UnknownFlag")));
 				}
 			}
 
-			CultureNameService cns = services.GetService<CultureNameService>();
+			CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
 			string? resultCode = cns.Search(context.Culture, input);
 			if (resultCode != null) {
-				return Task.FromResult(TypeReaderResult.FromSuccess(CultureInfo.GetCultureInfo(resultCode)));
+				return new ValueTask<TypeParserResult<CultureInfo>>(TypeParserResult<CultureInfo>.Successful(CultureInfo.GetCultureInfo(resultCode)));
 			}
 
-			return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, resources.GetString(context.Culture, "CultureInfoReader_ParseFailed")));
+			return new ValueTask<TypeParserResult<CultureInfo>>(TypeParserResult<CultureInfo>.Unsuccessful(resources.GetString(context.Culture, "CultureInfoReader_ParseFailed")));
 		}
 
 		private bool TryGetCultureInfo(string name, [NotNullWhen(true), MaybeNullWhen(false)] out CultureInfo? info) {

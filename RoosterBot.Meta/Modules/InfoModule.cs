@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.Meta {
 	[Name("#MetaCommandsModule_Name"), LocalizedModule("nl-NL", "en-US")]
 	public class InfoModule : RoosterModuleBase {
-		[Command("#InfoModule_InfoCommand"), Summary("#InfoModule_InfoCommand_Summary")]
+		[Command("#InfoModule_InfoCommand"), Description("#InfoModule_InfoCommand_Summary")]
 		public Task InfoCommand() {
 			string response = GetString("InfoModule_InfoCommand_Pretext", Constants.VersionString);
 			foreach (ComponentBase component in Program.Instance.Components.GetComponents()) {
@@ -17,7 +17,7 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 		
-		[Command("#InfoModule_Uptime"), Summary("#InfoModule_Uptime_Summary")]
+		[Command("#InfoModule_Uptime"), Description("#InfoModule_Uptime_Summary")]
 		public Task UptimeCommand() {
 			TimeSpan uptime = DateTime.Now - Program.Instance.StartTime;
 			ReplyDeferred(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds));

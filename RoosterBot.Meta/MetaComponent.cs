@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
@@ -21,21 +21,25 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
-			commandService.AddTypeReader<CultureInfo>(new CultureInfoReader());
+			commandService.AddTypeParser<CultureInfo>(new CultureInfoReader());
 
-			registerModules(await Task.WhenAll(
-				commandService.AddModuleAsync<HelpModule>(services),
-				commandService.AddModuleAsync<ControlModule>(services)
-			));
-
-			registerModules(await commandService.AddLocalizedModuleAsync<GuildConfigModule>());
-			registerModules(await commandService.AddLocalizedModuleAsync<UserConfigModule>());
-			registerModules(await commandService.AddLocalizedModuleAsync<InfoModule>());
+			registerModules(
+				new[] {
+					commandService.AddModule<HelpModule>(),
+					commandService.AddModule<ControlModule>()
+				}.Concat(LinqExtensions.Pack(
+					commandService.AddLocalizedModule<GuildConfigModule>(),
+					commandService.AddLocalizedModule<UserConfigModule>(),
+					commandService.AddLocalizedModule<InfoModule>()
+				).SelectMany(m => m)).ToArray()
+			);
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
+
+			return Task.CompletedTask;
 		}
 	}
 }

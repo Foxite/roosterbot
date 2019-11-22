@@ -159,18 +159,16 @@ namespace RoosterBot {
 			foreach (ComponentBase component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
-					void registerModule(Module[] modules) {
-						foreach (Module module in modules) {
-							m_ComponentsByModule[module] = component;
-						}
-					}
-
 #if DEBUG
 					await
 #else
 					modulesLoading[moduleIndex] = 
 #endif
-						component.AddModulesAsync(services, commands, help, registerModule);
+						component.AddModulesAsync(services, commands, help, (modules) => {
+							foreach (Module module in modules) {
+								m_ComponentsByModule[module] = component;
+							}
+						});
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
@@ -208,4 +206,6 @@ namespace RoosterBot {
 			}
 		}
 	}
+
+	public delegate void RegisterModules(params Module[] modules);
 }

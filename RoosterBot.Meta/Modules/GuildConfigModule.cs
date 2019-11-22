@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot.Meta {
 	[LocalizedModule("nl-NL", "en-US"), Group("#GuildConfigModule_Group"), HiddenFromList]

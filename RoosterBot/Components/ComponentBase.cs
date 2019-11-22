@@ -24,7 +24,7 @@ namespace RoosterBot {
 
 		public virtual DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) => new DependencyResult();
 		public virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
-		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<Module[]> registerModuleFunction) => Task.CompletedTask;
+		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModuleFunction) => Task.CompletedTask;
 
 		#region IDisposable Support
 		protected virtual void Dispose(bool disposing) { }
