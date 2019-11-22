@@ -382,7 +382,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>Separate possible values with |</comment>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitParameterName" xml:space="preserve">
-    <value>eenheid (uur, dagen, of weken)</value>
+    <value>eenheid</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitWeeks" xml:space="preserve">
     <value>week|weken</value>
@@ -503,7 +503,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: student set</comment>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
-    <value>identificatie</value>
+    <value>info</value>
   </data>
   <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
     <value>lokaal</value>
@@ -531,5 +531,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   </data>
   <data name="UserClassModule_GuildOnly" xml:space="preserve">
     <value>Deze command moet binnen een server worden gebruikt.</value>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
+    <value>uur, dagen, of weken</value>
   </data>
 </root>

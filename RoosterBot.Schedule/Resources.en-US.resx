@@ -379,7 +379,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>Separate possible values with |</comment>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitParameterName" xml:space="preserve">
-    <value>unit (hours, days, or weeks)</value>
+    <value>unit</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitWeeks" xml:space="preserve">
     <value>week|weeks</value>
@@ -524,5 +524,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="UserClassModule_GuildOnly" xml:space="preserve">
     <value>This command must be used within a server.</value>
+  </data>
+  <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
+    <value>info</value>
+  </data>
+  <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
+    <value>hours, days, or weeks</value>
   </data>
 </root>
