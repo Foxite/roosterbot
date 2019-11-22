@@ -7,23 +7,23 @@ namespace RoosterBot {
 		public IReadOnlyList<object> ErrorReasonObjects { get; }
 		public ComponentBase? ErrorReasonComponent { get; }
 
-		private RoosterCheckResult(CommandError error, string errorReason, ComponentBase? errorReasonComponent, params object[] errorReasonObjects) : base(error, errorReason) {
+		public static new RoosterCheckResult Successful => new RoosterCheckResult();
+
+		private RoosterCheckResult(string errorReason, ComponentBase? errorReasonComponent, params object[] errorReasonObjects) : base(errorReason) {
 			ErrorReasonObjects = errorReasonObjects;
 			ErrorReasonComponent = errorReasonComponent;
 		}
 
-		private RoosterCheckResult() : base(null, null) {
+		private RoosterCheckResult() : base(null) {
 			ErrorReasonObjects = Array.Empty<object>();
 		}
 
-		public static RoosterCheckResult FromError(string errorReason, ComponentBase errorReasonComponent, params object[] errorReasonObjects) {
-			return new RoosterCheckResult(CommandError.UnmetPrecondition, errorReason, errorReasonComponent, errorReasonObjects);
+		public static RoosterCheckResult Unsuccessful(string errorReason, ComponentBase errorReasonComponent, params object[] errorReasonObjects) {
+			return new RoosterCheckResult(errorReason, errorReasonComponent, errorReasonObjects);
 		}
 
-		internal static RoosterCheckResult FromErrorBuiltin(string errorReason, params object[] errorReasonObjects) {
-			return new RoosterCheckResult(CommandError.UnmetPrecondition, errorReason, null, errorReasonObjects);
+		internal static RoosterCheckResult UnsuccessfulBuiltIn(string errorReason, params object[] errorReasonObjects) {
+			return new RoosterCheckResult(errorReason, null, errorReasonObjects);
 		}
-
-		public static new RoosterCheckResult FromSuccess() => new RoosterCheckResult();
 	}
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Discord.Commands;
+﻿using System.Collections.Generic;
+using Qmmands;
 
 namespace RoosterBot {
 	public interface IRoosterResult : IResult {

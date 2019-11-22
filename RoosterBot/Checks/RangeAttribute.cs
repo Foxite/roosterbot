@@ -18,7 +18,7 @@ namespace RoosterBot {
 			if (ret) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 			} else {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#RangeAttribute_CheckFailed"));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RangeAttribute_CheckFailed"));
 			}
 		}
 	}

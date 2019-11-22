@@ -21,7 +21,7 @@ namespace RoosterBot {
 				if (length >= Min && length <= Max) {
 					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 				} else {
-					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("Program_OnCommandExecuted_BadArgCount"));
+					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("Program_OnCommandExecuted_BadArgCount"));
 				}
 			} else {
 				throw new InvalidOperationException("CountAttribute can only be used on array parameters.");

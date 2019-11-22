@@ -9,7 +9,7 @@ namespace RoosterBot {
 			if (context.User.Id == context.ServiceProvider.GetService<ConfigService>().BotOwner.Id) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 			} else {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#RequireBotManagerAttribute_CheckFailed"));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RequireBotManagerAttribute_CheckFailed"));
 			}
 		}
 	}

@@ -12,10 +12,10 @@ namespace RoosterBot {
 				if (context.ServiceProvider.GetService<ConfigService>().StaffRoles.Intersect(user.RoleIds).Any()) {
 					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromSuccess());
 				} else {
-					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#UserIsModeratorAttribute_CheckFailed"));
+					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_CheckFailed"));
 				}
 			} else {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.FromErrorBuiltin("#UserIsModeratorAttribute_GuildsOnly"));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_GuildsOnly"));
 			}
 		}
 	}
