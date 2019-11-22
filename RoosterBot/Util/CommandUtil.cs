@@ -26,37 +26,45 @@ namespace RoosterBot {
 		/// Returns a localized signature of a CommandInfo.
 		/// </summary>
 		public static string GetSignature(this CommandInfo command, ResourceService resources, CultureInfo culture) {
-			ComponentBase component = Program.Instance.Components.GetComponentForModule(command.Module);
+			ComponentBase moduleComponent = Program.Instance.Components.GetComponentForModule(command.Module);
 
 			string ret = "";
 			if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
-				ret += resources.ResolveString(culture, component, command.Module.Group) + " ";
+				ret += resources.ResolveString(culture, moduleComponent, command.Module.Group) + " ";
 			}
 
 			if (!string.IsNullOrWhiteSpace(command.Name)) {
-				ret += resources.ResolveString(culture, component, command.Name) + " ";
+				ret += resources.ResolveString(culture, moduleComponent, command.Name) + " ";
 			}
-
 			foreach (ParameterInfo param in command.Parameters) {
-				string paramLine = resources.ResolveString(culture, component, param.Name);
+				if (param.Name != "ignored") {
+					string paramText = resources.ResolveString(culture, moduleComponent, param.Name);
 
-				RoosterTypeReader? typeReader = param.Command.Module.Service.TypeReaders.SelectMany(g => g).OfType<RoosterTypeReader>().Where(rtr => rtr.Type == param.Type).FirstOrDefault();
-				if (typeReader == null) {
-					paramLine += ": " + GetNiceName(param.Type);
-				} else if (typeReader.TypeDisplayName == param.Name) {
-					// Only include the type if the name isn't the same as the type display name
-					paramLine += ": " + resources.ResolveString(culture, component, typeReader.TypeDisplayName);
-				}
-				if (param.IsMultiple) {
-					paramLine += "...";
-				}
+					RoosterTypeReader? typeReader = param.Command.Module.Service.TypeReaders.SelectMany(g => g).OfType<RoosterTypeReader>().Where(rtr => rtr.Type == param.Type).FirstOrDefault();
+					TypeDisplayAttribute? typeDisplayAttr = param.Attributes.OfType<TypeDisplayAttribute>().SingleOrDefault();
+					ComponentBase? typeReaderComponent = typeReader == null ? null : Program.Instance.Components.GetComponentFromAssembly(typeReader.GetType().Assembly);
+					if (typeDisplayAttr != null) {
+						paramText += ": " + resources.ResolveString(culture, moduleComponent, typeDisplayAttr.TypeDisplayName);
+					} else if (typeReader != null) {
+						string typeDisplayName = resources.ResolveString(culture, typeReaderComponent, typeReader.TypeDisplayName);
+						if (typeDisplayName != param.Name) {
+							// Only include the type if the name isn't the same as the type display name
+							paramText += ": " + typeDisplayName;
+						}
+					} else {
+						paramText += ": " + GetNiceName(param.Type);
+					}
+					if (param.IsMultiple) {
+						paramText += "...";
+					}
 
-				if (param.IsOptional) {
-					paramLine = "[" + paramLine + "] ";
-				} else {
-					paramLine = "<" + paramLine + "> ";
+					if (param.IsOptional) {
+						paramText = "[" + paramText + "] ";
+					} else {
+						paramText = "<" + paramText + "> ";
+					}
+					ret += paramText;
 				}
-				ret += paramLine;
 			}
 			return ret.Trim();
 		}
