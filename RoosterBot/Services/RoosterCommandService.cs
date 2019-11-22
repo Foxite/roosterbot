@@ -51,7 +51,14 @@ namespace RoosterBot {
 						foreach (string alias in m_ResourceService.ResolveString(culture, component, builder.Name + "_Aliases").Split('|')) {
 							builder.AddAlias(alias);
 						}
-						builder.Name = m_ResourceService.ResolveString(culture, component, builder.Name);
+						builder.Name = builder.Name == null ? builder.Name : m_ResourceService.ResolveString(culture, component, builder.Name);
+
+						foreach (CommandBuilder command in builder.Commands) {
+							foreach (string alias in m_ResourceService.ResolveString(culture, component, command.Name + "_Aliases").Split('|')) {
+								command.AddAlias(alias);
+							}
+							command.Name = command.Name == null ? command.Name : m_ResourceService.ResolveString(culture, component, command.Name);
+						}
 					});
 				}
 				return localizedModules;
