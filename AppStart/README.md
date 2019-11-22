@@ -1,0 +1,2 @@
+﻿This project produces an executable that will start RoosterBot, and then waits until the program either exits or emits a signal that it's ready for operation.
+If RoosterBot exits without emitting this signal then this executable will exit with the same code that RoosterBot exited with.

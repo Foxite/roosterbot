@@ -1,0 +1,1 @@
+﻿This component provides common code for DateTime objects.

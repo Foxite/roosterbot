@@ -1,0 +1,1 @@
+﻿This project produces an executable that will locate any running RoosterBot processes and instructs them to shut down.

@@ -4,4 +4,4 @@ It does not load any schedule data by itself, it depends on another component to
 
 It is designed to work with school schedules, but with some modification, it could support company schedules.
 
-It uses [CsvHelper](https://joshclose.github.io/CsvHelper/) and [AWS DynamoDB](https://aws.amazon.com/dynamodb/).
+It uses [CsvHelper](https://joshclose.github.io/CsvHelper/) to read staff member information.

@@ -1,1 +1,2 @@
-RoosterBot.AWS provides AWS functionality to RoosterBot. Currently this consists only of integration with Simple Notification Service, so the owner of the bot can be notified if the bot loses connection.
+RoosterBot.AWS provides AWS functionality to RoosterBot. This includes an SNS endpoint to NotificationService and a DynamoDB client to provide user and guild data.
+It also provides its AWS credentials to other components via AWSConfigService.

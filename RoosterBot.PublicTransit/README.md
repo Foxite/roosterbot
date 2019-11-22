@@ -4,4 +4,4 @@ It is not localized into English, because its functionality is only useful in th
 
 It only supports train journeys. The reason for this is because there exists an API that does support this, but it is a paid service. The NS API is free.
 
-It does not use any libraries to access the public API.
+It does not use any libraries that access the API. It does use [Newtonsoft.Json](https://www.newtonsoft.com/json) to provide its own API.
