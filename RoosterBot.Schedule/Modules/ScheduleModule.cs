@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.UtcNow);
+				ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.Now);
 				if (result.Success) {
 					ScheduleRecord? record = result.Value;
 					if (record == null) {
@@ -33,7 +33,7 @@ namespace RoosterBot.Schedule {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
-						ReplyDeferred(response, info, DateTime.UtcNow);
+						ReplyDeferred(response, info, DateTime.Now);
 						await NextCommand(info);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
@@ -46,7 +46,7 @@ namespace RoosterBot.Schedule {
 		public async Task NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.UtcNow);
+				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.Now);
 				if (result.Success) {
 					ScheduleRecord record = result.Value;
 					string pretext;
@@ -91,13 +91,13 @@ namespace RoosterBot.Schedule {
 			if (info != null) {
 				unit = unit.ToLower();
 				if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
-					ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.UtcNow + TimeSpan.FromHours(amount));
+					ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.Now + TimeSpan.FromHours(amount));
 					if (result.Success) {
 						ScheduleRecord? record = result.Value;
 						if (record != null) {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
-							ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.UtcNow + TimeSpan.FromHours(amount));
+							ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.Now + TimeSpan.FromHours(amount));
 						}
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
@@ -263,13 +263,13 @@ namespace RoosterBot.Schedule {
 			if (query == null) {
 				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
-				ReturnValue<ScheduleRecord> nextRecord = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime == null ? DateTime.Now : query.RecordEndTime.Value);
+				ReturnValue<ScheduleRecord> nextRecord = await GetRecordAfterDateTime(query.Identifier, (query.RecordEndTime == null ? DateTime.Now : query.RecordEndTime.Value) - TimeSpan.FromSeconds(1));
 
 				if (nextRecord.Success) {
 					string pretext;
 					if (query.RecordEndTime == null) {
 						pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
-					} else if (query.RecordEndTime != nextRecord.Value.Start.Date) {
+					} else if (query.RecordEndTime.Value.Date != nextRecord.Value.Start.Date) {
 						pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Value.Start.DayOfWeek));
 					} else {
 						pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);

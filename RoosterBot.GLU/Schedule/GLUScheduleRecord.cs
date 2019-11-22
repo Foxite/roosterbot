@@ -44,14 +44,14 @@ namespace RoosterBot.Schedule.GLU {
 				}
 
 				ret += $":clock5: {Start.ToString("HH:mm")} - {End.ToString("HH:mm")}";
-				if (Start.Date == DateTime.Today && Start > DateTime.UtcNow) {
-					TimeSpan timeTillStart = Start - DateTime.UtcNow;
+				if (Start.Date == DateTime.Today && Start > DateTime.Now) {
+					TimeSpan timeTillStart = Start - DateTime.Now;
 					ret += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
 				}
 
 				ret += $"\n:stopwatch: {(int) Duration.TotalHours}:{Duration.Minutes.ToString().PadLeft(2, '0')}";
-				if (Start < DateTime.UtcNow && End > DateTime.UtcNow) {
-					TimeSpan timeLeft = End - DateTime.UtcNow;
+				if (Start < DateTime.Now && End > DateTime.Now) {
+					TimeSpan timeLeft = End - DateTime.Now;
 					ret += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
 				}
 
