@@ -35,6 +35,8 @@ namespace RoosterBot {
 		}
 
 		protected async override ValueTask AfterExecutedAsync() {
+			// Can't return this task because ValueTask.
+			// ValueTask has a constructor that takes Task, should we use that? Don't do anything unless you know how ValueTask works
 			await SendDeferredResponseAsync();
 		}
 
