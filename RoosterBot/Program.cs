@@ -84,9 +84,12 @@ namespace RoosterBot {
 			var gcs = Components.Services.GetService<GuildConfigService>();
 			var ucs = Components.Services.GetService<UserConfigService>();
 
-			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
-			new EditedCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
-			new ParallelPostCommandSuccessHandler(commands, m_ConfigService, resources);
+			var spch = new SequentialPostCommandHandler(resources, m_ConfigService);
+			new ParallelPostCommandFailedHandler(commands, m_ConfigService, resources);
+			new ParallelPostCommandSuccessHandler(commands);
+
+			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs, spch);
+			new EditedCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs, spch);
 			new DeletedCommandHandler(m_Client, ucs);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);

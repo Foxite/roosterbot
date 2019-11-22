@@ -11,16 +11,14 @@ namespace RoosterBot {
 		private readonly ConfigService m_ConfigService;
 		private readonly GuildConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
-		private readonly ResourceService m_Resources;
 		private readonly SequentialPostCommandHandler m_SPCH;
 
-		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService configService, GuildConfigService gcs, UserConfigService ucs, ResourceService resources, SequentialPostCommandHandler spch) {
+		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService configService, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
 			m_Client = client;
 			m_Commands = commands;
 			m_ConfigService = configService;
 			m_GCS = gcs;
 			m_UCS = ucs;
-			m_Resources = resources;
 			m_SPCH = spch;
 			m_Client.MessageReceived += HandleNewCommand;
 		}
