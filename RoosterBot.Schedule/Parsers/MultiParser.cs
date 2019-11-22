@@ -5,7 +5,7 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	// TODO (refactor) I really hate the Qmmands version of this class, find a better way to do this under Qmmands without using dynamic all over the place
-	public class MultiReader<T> : RoosterTypeParser<T> {
+	public class MultiParser<T> : RoosterTypeParser<T> {
 		private readonly List<dynamic> m_Readers;
 		private readonly string m_ErrorMessage;
 		private readonly ComponentBase m_ResourcesComponent;
@@ -17,7 +17,7 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
-		public MultiReader(string errorMessage, string typeDisplayName, ComponentBase resourcesComponent) {
+		public MultiParser(string errorMessage, string typeDisplayName, ComponentBase resourcesComponent) {
 			m_Readers = new List<dynamic>();
 			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;

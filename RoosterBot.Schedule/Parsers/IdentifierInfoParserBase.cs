@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeParser<T> where T : IdentifierInfo {
+	public abstract class IdentifierInfoParserBase<T> : RoosterTypeParser<T> where T : IdentifierInfo {
 		protected async override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			T? result = await context.ServiceProvider.GetService<IdentifierValidationService>().ValidateAsync<T>(context, input);
 			if (result is null) {

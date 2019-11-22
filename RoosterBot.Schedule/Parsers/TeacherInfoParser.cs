@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public class TeacherInfoReader : IdentifierInfoReaderBase<TeacherInfo> {
+	public class TeacherInfoParser : IdentifierInfoParserBase<TeacherInfo> {
 		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
 
 		protected async override ValueTask<TypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {

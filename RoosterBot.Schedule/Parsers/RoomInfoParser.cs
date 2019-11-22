@@ -1,5 +1,5 @@
 ﻿namespace RoosterBot.Schedule {
-	public class RoomInfoReader : IdentifierInfoReaderBase<RoomInfo> {
+	public class RoomInfoParser : IdentifierInfoParserBase<RoomInfo> {
 		public override string TypeDisplayName => "#RoomInfo_TypeDisplayName";
 	}
 }

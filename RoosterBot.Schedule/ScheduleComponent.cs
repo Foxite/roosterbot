@@ -10,13 +10,13 @@ namespace RoosterBot.Schedule {
 #nullable enable
 
 		// TODO (refactor) need to find a better way to do this, a service just to serve this variable to ScheduleModule seems a bit too much
-		internal MultiReader IdentifierReaders { get; }
+		internal MultiParser IdentifierReaders { get; }
 
 		public override Version ComponentVersion => new Version(2, 0, 0);
 
 		public ScheduleComponent() {
 			Instance = this;
-			IdentifierReaders = new MultiReader("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", typeof(IdentifierInfo), "#IdentifierInfo_MultiReader_TypeDisplayName", this);
+			IdentifierReaders = new MultiParser("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", typeof(IdentifierInfo), "#IdentifierInfo_MultiReader_TypeDisplayName", this);
 		}
 
 		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
@@ -39,16 +39,16 @@ namespace RoosterBot.Schedule {
 
 		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
-			var ssir = new StudentSetInfoReader();
+			var ssir = new StudentSetInfoParser();
 
 			commandService.AddTypeParser(ssir);
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
 			commandService.AddTypeParser<IdentifierInfo>(IdentifierReaders);
-			IdentifierReaders.AddReader(new TeacherInfoReader());
+			IdentifierReaders.AddReader(new TeacherInfoParser());
 			IdentifierReaders.AddReader(ssir);
-			IdentifierReaders.AddReader(new RoomInfoReader());
+			IdentifierReaders.AddReader(new RoomInfoParser());
 
 			registerModules(new[] { commandService.AddModule<TeacherListModule>() });
 			registerModules(commandService.AddLocalizedModule<ScheduleModule>());
