@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Qmmands;
 
 namespace RoosterBot {
 	public sealed class Program {
@@ -114,20 +115,19 @@ namespace RoosterBot {
 		private IServiceCollection CreateRBServices() {
 			m_NotificationService = new NotificationService();
 
-			ResourceService resources = new ResourceService();
+			var resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
 
-			CultureNameService cns = new CultureNameService();
+			var cns = new CultureNameService();
 			cns.AddLocalizedName("nl-NL", "nl-NL", "nederlands");
 			cns.AddLocalizedName("nl-NL", "en-US", "Dutch");
 			cns.AddLocalizedName("en-US", "nl-NL", "engels");
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
-			HelpService helpService = new HelpService(resources);
-			RoosterCommandService commands = new RoosterCommandService(resources, new Discord.Commands.CommandServiceConfig() {
-				DefaultRunMode = Discord.Commands.RunMode.Async
+			var helpService = new HelpService(resources);
+			var commands = new RoosterCommandService(resources, new CommandServiceConfiguration() {
+				DefaultRunMode = RunMode.Parallel
 			});
-			commands.Log += Logger.LogSync;
 
 			// Create handlers
 			// I don't know what to do with this.
