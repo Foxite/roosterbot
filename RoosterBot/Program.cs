@@ -86,7 +86,7 @@ namespace RoosterBot {
 
 			new NewCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
 			new EditedCommandHandler(m_Client, commands, m_ConfigService, gcs, ucs);
-			new PostCommandHandler(commands, m_ConfigService, resources);
+			new ParallelPostCommandSuccessHandler(commands, m_ConfigService, resources);
 			new DeletedCommandHandler(m_Client, ucs);
 
 			await m_Client.LoginAsync(TokenType.Bot, authToken);

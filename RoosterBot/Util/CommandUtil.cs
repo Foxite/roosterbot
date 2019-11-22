@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot {
 	public static class CommandUtil {
@@ -25,7 +26,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.
 		/// </summary>
-		public static string GetSignature(this CommandInfo command, ResourceService resources, CultureInfo culture) {
+		public static string GetSignature(this Command command, ResourceService resources, CultureInfo culture) {
 			ComponentBase moduleComponent = Program.Instance.Components.GetComponentForModule(command.Module);
 
 			string ret = "";
@@ -72,7 +73,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Returns a non-localized signature of a CommandInfo.
 		/// </summary>
-		public static string GetSignature(this CommandInfo command) {
+		public static string GetSignature(this Command command) {
 			string ret = "";
 			if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
 				ret += command.Module.Group + " ";

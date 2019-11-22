@@ -117,13 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Program_OnCommandExecuted_UnknownCommand" xml:space="preserve">
-    <value>I don't know that command. Use `{0}help` for information.</value>
-    <comment>0: Command prefix</comment>
-  </data>
-  <data name="Program_OnCommandExecuted_BadArgCount" xml:space="preserve">
-    <value>That's too many or not enough parameters.</value>
-  </data>
   <data name="RoosterBot_FatalError" xml:space="preserve">
     <value>Something has gone horribly wrong.</value>
   </data>
@@ -153,11 +146,26 @@
     <value>Requires a {0}-speaking server.</value>
     <comment>{0}: localized language name</comment>
   </data>
-  <data name="PostCommandHandler_UsageHint" xml:space="preserve">
+  <data name="CommandHandling_Cooldown" xml:space="preserve">
+    <value>You're currently on cooldown for {0}.</value>
+    <comment>0: cooldown time remaining (formatted and localized)</comment>
+  </data>
+  <data name="CommandHandling_Disabled" xml:space="preserve">
+    <value>That command is disabled.</value>
+  </data>
+  <data name="CommandHandling_NotFound" xml:space="preserve">
+    <value>I don't know that command. Use `{0}help` for information.</value>
+    <comment>0: Command prefix</comment>
+  </data>
+  <data name="CommandHandling_OverloadsFailed" xml:space="preserve">
+    <value>I don't know which of these you mean:</value>
+    <comment>Followed by list of signatures</comment>
+  </data>
+  <data name="CommandHandling_ParseFailed" xml:space="preserve">
+    <value>I don't understand the parameter(s).</value>
+  </data>
+  <data name="CommandHandling_UsageHint" xml:space="preserve">
     <value>Usage: {0}</value>
     <comment>0: command signature</comment>
-  </data>
-  <data name="PostCommandHandler_ParseFailed" xml:space="preserve">
-    <value>I don't understand the parameter(s).</value>
   </data>
 </root>

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
+using Qmmands;
 
 namespace RoosterBot {
 	public abstract class RoosterModuleBase<T> : ModuleBase<T>, IRoosterModuleBase where T : RoosterCommandContext {
@@ -150,7 +150,7 @@ namespace RoosterBot {
 
 	public abstract class RoosterModuleBase : RoosterModuleBase<RoosterCommandContext> { }
 
-	public class RoosterCommandContext : ICommandContext {
+	public class RoosterCommandContext : CommandContext {
 		public IDiscordClient Client { get; }
 		public IUserMessage Message { get; }
 		public IUser User { get; }
@@ -162,7 +162,7 @@ namespace RoosterBot {
 		public GuildConfig GuildConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
 
-		public RoosterCommandContext(IDiscordClient client, IUserMessage message, UserConfig userConfig, GuildConfig guildConfig) {
+		public RoosterCommandContext(IDiscordClient client, IUserMessage message, UserConfig userConfig, GuildConfig guildConfig, IServiceProvider isp) : base(isp) {
 			Client = client;
 			Message = message;
 			User = message.Author;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Qmmands;
 
 namespace RoosterBot {
 	internal sealed class EditedCommandHandler {
@@ -10,13 +11,16 @@ namespace RoosterBot {
 		private readonly ConfigService m_Config;
 		private readonly GuildConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
+		private readonly SequentialPostCommandHandler m_SPCH;
 
-		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, GuildConfigService gcs, UserConfigService ucs) {
+		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
 			m_Client = client;
 			m_Commands = commands;
 			m_Config = config;
 			m_GCS = gcs;
 			m_UCS = ucs;
+			m_SPCH = spch;
+
 			m_Client.MessageUpdated += OnMessageUpdated;
 		}
 
@@ -27,8 +31,9 @@ namespace RoosterBot {
 				CommandResponsePair? crp = userConfig.GetResponse(userMessageAfter);
 
 				if (m_Commands.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-					var context = new RoosterCommandContext(m_Client, userMessageAfter, userConfig, guildConfig);
-					await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
+					var context = new RoosterCommandContext(m_Client, userMessageAfter, userConfig, guildConfig, Program.Instance.Components.Services);
+					IResult result = await m_Commands.ExecuteAsync(context, argPos, Program.Instance.Components.Services, m_Config.MultiMatchHandling);
+					await m_SPCH.HandleResultAsync(result, context);
 				} else if (crp != null) {
 					// No longer a command
 					await channel.DeleteMessageAsync(crp.ResponseId);
