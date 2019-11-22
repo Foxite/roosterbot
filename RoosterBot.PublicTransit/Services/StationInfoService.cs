@@ -15,6 +15,8 @@ namespace RoosterBot.PublicTransit {
 		// The constructor will throw if DefaultDeparture ends up uninitialized, but the compiler doesn't know that.
 		public StationInfoService(string stationXmlPath, string defaultDepartureCode) {
 #pragma warning restore CS8618
+			Logger.Info("StationInfoService", "Loading stations xml");
+
 			m_Stations = new List<StationInfo>();
 
 			XElement xml = XElement.Load(stationXmlPath);
@@ -31,6 +33,7 @@ namespace RoosterBot.PublicTransit {
 			if (DefaultDeparture == null) {
 				throw new InvalidOperationException("No station matching the default departure code was found in the xml file.");
 			}
+			Logger.Info("StationInfoService", "Finished loading stations xml");
 		}
 
 		public StationInfo? GetByCode(string code) {

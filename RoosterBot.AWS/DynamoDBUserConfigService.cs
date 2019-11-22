@@ -14,7 +14,7 @@ namespace RoosterBot.AWS {
 		public DynamoDBUserConfigService(AmazonDynamoDBClient client, string tableName) {	
 			Logger.Info("DynamoDBUser", "Loading user table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("DynamoDBUser", "UserClassesService loaded");
+			Logger.Info("DynamoDBUser", "Finished loading user table");
 		}
 
 		public async override Task<UserConfig> GetConfigAsync(IUser user) {

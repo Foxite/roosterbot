@@ -32,8 +32,6 @@ namespace RoosterBot.Schedule {
 				.AddSingleton<ScheduleService>()
 				.AddSingleton<IdentifierValidationService>();
 
-			Logger.Debug("ScheduleComponent", "Started services");
-
 			return Task.CompletedTask;
 		}
 

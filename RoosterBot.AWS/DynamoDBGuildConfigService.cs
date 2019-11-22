@@ -13,9 +13,9 @@ namespace RoosterBot.AWS {
 		private readonly Table m_Table;
 
 		public DynamoDBGuildConfigService(ConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
-			Logger.Info("DynamoDBGuild", "Loading user table");
+			Logger.Info("DynamoDBGuild", "Loading guild table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("DynamoDBGuild", "UserClassesService loaded");
+			Logger.Info("DynamoDBGuild", "Finished loading guild table");
 		}
 
 		public async override Task<GuildConfig> GetConfigAsync(IGuild guild) {
