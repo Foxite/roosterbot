@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Module = Qmmands.Module;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {
 		private readonly List<ComponentBase> m_Components;
-		private readonly ConcurrentDictionary<ModuleInfo, ComponentBase> m_ComponentsByModule;
+		private readonly ConcurrentDictionary<Module, ComponentBase> m_ComponentsByModule;
 		private readonly ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
 
 #nullable disable
@@ -31,7 +31,7 @@ namespace RoosterBot {
 
 		internal ComponentManager() {
 			m_Components = new List<ComponentBase>();
-			m_ComponentsByModule = new ConcurrentDictionary<ModuleInfo, ComponentBase>();
+			m_ComponentsByModule = new ConcurrentDictionary<Module, ComponentBase>();
 			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
 		}
 
@@ -159,8 +159,8 @@ namespace RoosterBot {
 			foreach (ComponentBase component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
-					void registerModule(ModuleInfo[] modules) {
-						foreach (ModuleInfo module in modules) {
+					void registerModule(Module[] modules) {
+						foreach (Module module in modules) {
 							m_ComponentsByModule[module] = component;
 						}
 					}
@@ -192,7 +192,7 @@ namespace RoosterBot {
 			return m_Components.AsReadOnly();
 		}
 
-		public ComponentBase GetComponentForModule(ModuleInfo module) {
+		public ComponentBase GetComponentForModule(Module module) {
 			if (m_ComponentsByModule.TryGetValue(module, out ComponentBase? result)) {
 				return result;
 			} else {
