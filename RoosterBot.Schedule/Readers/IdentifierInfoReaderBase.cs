@@ -1,19 +1,15 @@
-﻿using Discord.Commands;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using System.Globalization;
+using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeParser where T : IdentifierInfo {
-		public override Type Type => typeof(T);
-
-		protected async override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
-			T? result = await services.GetService<IdentifierValidationService>().ValidateAsync<T>(context as RoosterCommandContext, input);
+	public abstract class IdentifierInfoReaderBase<T> : RoosterTypeParser<T> where T : IdentifierInfo {
+		protected async override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			T? result = await context.ServiceProvider.GetService<IdentifierValidationService>().ValidateAsync<T>(context, input);
 			if (result is null) {
-				return TypeReaderResult.FromError(CommandError.ParseFailed, "#IdentifierInfoReaderBase_ErrorMessage");
+				return TypeParserResult<T>.Unsuccessful("#IdentifierInfoReaderBase_ErrorMessage");
 			} else {
-				return TypeReaderResult.FromSuccess(result);
+				return TypeParserResult<T>.Successful(result);
 			}
 		}
 	}

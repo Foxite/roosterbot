@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
@@ -38,24 +37,22 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, Action<ModuleInfo[]> registerModules) {
+		public async override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 			var ssir = new StudentSetInfoReader();
 
-			commandService.AddTypeReader<StudentSetInfo>(ssir);
+			commandService.AddTypeParser(ssir);
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			commandService.AddTypeReader<IdentifierInfo>(IdentifierReaders);
+			commandService.AddTypeParser<IdentifierInfo>(IdentifierReaders);
 			IdentifierReaders.AddReader(new TeacherInfoReader());
 			IdentifierReaders.AddReader(ssir);
 			IdentifierReaders.AddReader(new RoomInfoReader());
 
-			registerModules(await Task.WhenAll(
-				commandService.AddModuleAsync<TeacherListModule>(services)
-			));
-			registerModules(await commandService.AddLocalizedModule<ScheduleModule>());
-			registerModules(await commandService.AddLocalizedModule<UserClassModule>());
+			registerModules(new[] { commandService.AddModule<TeacherListModule>() });
+			registerModules(commandService.AddLocalizedModule<ScheduleModule>());
+			registerModules(commandService.AddLocalizedModule<UserClassModule>());
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
