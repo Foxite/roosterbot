@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using Qmmands;
 
 namespace RoosterBot.DateTimeUtils {
-	public class DayOfWeekReader : RoosterTypeParser {
-		public override Type Type => typeof(DayOfWeek);
-
+	public class DayOfWeekReader : RoosterTypeParser<DayOfWeek> {
 		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
 
-		protected override Task<TypeReaderResult> ReadAsync(RoosterCommandContext context, string input, IServiceProvider services) {
+		protected override ValueTask<TypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();
-			ResourceService resources = services.GetService<ResourceService>();
+			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
 			CultureInfo culture = context.Culture;
 			if (input == resources.GetString(culture, "DayOfWeekReader_Today")) {
-				return Task.FromResult(TypeReaderResult.FromSuccess(DateTime.Today.DayOfWeek));
+				return new ValueTask<TypeParserResult<DayOfWeek>>(TypeParserResult<DayOfWeek>.Successful(DateTime.Today.DayOfWeek));
 			} else if (input == resources.GetString(culture, "DayOfWeekReader_Tomorrow")) {
-				return Task.FromResult(TypeReaderResult.FromSuccess(DateTime.Today.AddDays(1).DayOfWeek));
+				return new ValueTask<TypeParserResult<DayOfWeek>>(TypeParserResult<DayOfWeek>.Successful(DateTime.Today.AddDays(1).DayOfWeek));
 			}
 
 			string[] weekdays = culture.DateTimeFormat.DayNames;
@@ -28,15 +26,15 @@ namespace RoosterBot.DateTimeUtils {
 					if (result == null) {
 						result = i;
 					} else {
-						return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "#DayOfWeekReader_CheckFailed"));
+						return new ValueTask<TypeParserResult<DayOfWeek>>(TypeParserResult<DayOfWeek>.Unsuccessful("#DayOfWeekReader_CheckFailed"));
 					}
 				}
 			}
 
 			if (result.HasValue) {
-				return Task.FromResult(TypeReaderResult.FromSuccess(((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value]));
+				return new ValueTask<TypeParserResult<DayOfWeek>>(TypeParserResult<DayOfWeek>.Successful(((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value]));
 			} else {
-				return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "#DayOfWeekReader_CheckFailed"));
+				return new ValueTask<TypeParserResult<DayOfWeek>>(TypeParserResult<DayOfWeek>.Unsuccessful("#DayOfWeekReader_CheckFailed"));
 			}
 		}
 	}
