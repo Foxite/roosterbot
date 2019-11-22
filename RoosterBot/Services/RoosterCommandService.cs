@@ -34,8 +34,8 @@ namespace RoosterBot {
 			return false;
 		}
 
-		public Module[] AddLocalizedModuleAsync<T>() => AddLocalizedModuleAsync(typeof(T));
-		public Module[] AddLocalizedModuleAsync(Type module) {
+		public Module[] AddLocalizedModule<T>() => AddLocalizedModule(typeof(T));
+		public Module[] AddLocalizedModule(Type module) {
 			object[] localizedAttributes = module.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
 			if (localizedAttributes.Length == 1) {
 				ComponentBase? component = Program.Instance.Components.GetComponentFromAssembly(module.Assembly);

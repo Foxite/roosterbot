@@ -39,7 +39,7 @@ namespace RoosterBot.Weather {
 
 			commandService.AddTypeReader<CityInfo>(new CityInfoReader());
 
-			registerModuleFunction(await commandService.AddLocalizedModuleAsync<WeatherModule>());
+			registerModuleFunction(await commandService.AddLocalizedModule<WeatherModule>());
 
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 		}

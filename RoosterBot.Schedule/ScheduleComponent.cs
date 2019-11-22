@@ -54,8 +54,8 @@ namespace RoosterBot.Schedule {
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<TeacherListModule>(services)
 			));
-			registerModules(await commandService.AddLocalizedModuleAsync<ScheduleModule>());
-			registerModules(await commandService.AddLocalizedModuleAsync<UserClassModule>());
+			registerModules(await commandService.AddLocalizedModule<ScheduleModule>());
+			registerModules(await commandService.AddLocalizedModule<UserClassModule>());
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
