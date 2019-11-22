@@ -48,6 +48,8 @@ namespace RoosterBot {
 					var culture = CultureInfo.GetCultureInfo(locale);
 
 					localizedModules[i] = AddModule(module, (builder) => {
+						builder.AddCheck(new RequireCultureAttribute(locale, true));
+
 						foreach (string alias in m_ResourceService.ResolveString(culture, component, builder.Name + "_Aliases").Split('|')) {
 							builder.AddAlias(alias);
 						}
