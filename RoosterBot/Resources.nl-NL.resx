@@ -174,4 +174,9 @@
   <data name="RequireContextAttribute_GuildOnly" xml:space="preserve">
     <value>Deze command werkt alleen in een server.</value>
   </data>
+  <data name="CommandHandling_ParamCheckFailed" xml:space="preserve">
+    <value>Parameter {0}: {1}</value>
+    <comment>0: Parameter name
+1: failure reason</comment>
+  </data>
 </root>

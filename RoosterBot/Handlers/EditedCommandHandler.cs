@@ -8,15 +8,13 @@ namespace RoosterBot {
 	internal sealed class EditedCommandHandler {
 		private readonly DiscordSocketClient m_Client;
 		private readonly RoosterCommandService m_Commands;
-		private readonly ConfigService m_Config;
 		private readonly GuildConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
 		private readonly SequentialPostCommandHandler m_SPCH;
 
-		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService config, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
+		internal EditedCommandHandler(DiscordSocketClient client, RoosterCommandService commands, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
 			m_Client = client;
 			m_Commands = commands;
-			m_Config = config;
 			m_GCS = gcs;
 			m_UCS = ucs;
 			m_SPCH = spch;

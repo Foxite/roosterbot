@@ -2,8 +2,8 @@
 using Qmmands;
 
 namespace RoosterBot {
-	internal sealed class ParallelPostCommandSuccessHandler : ParallelPostCommandHandler {
-		internal ParallelPostCommandSuccessHandler(RoosterCommandService commands) {
+	internal sealed class CommandSuccessHandler : PostCommandHandler {
+		internal CommandSuccessHandler(RoosterCommandService commands) {
 			commands.CommandExecuted += OnCommandExecuted;
 		}
 

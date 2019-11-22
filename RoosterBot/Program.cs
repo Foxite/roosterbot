@@ -153,8 +153,8 @@ namespace RoosterBot {
 			var ucs = Components.Services.GetService<UserConfigService>();
 
 			var spch = new SequentialPostCommandHandler(resources, configService);
-			new ParallelPostCommandFailedHandler(commands, configService, resources);
-			new ParallelPostCommandSuccessHandler(commands);
+			new CommandExecutionFailedHandler(commands, configService, resources);
+			new CommandSuccessHandler(commands);
 
 			new NewCommandHandler(client, commands, configService, gcs, ucs, spch);
 			new EditedCommandHandler(client, commands, configService, gcs, ucs, spch);

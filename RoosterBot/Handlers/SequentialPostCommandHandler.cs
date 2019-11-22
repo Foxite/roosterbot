@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Qmmands;
@@ -16,7 +17,8 @@ namespace RoosterBot {
 		public async Task HandleResultAsync(IResult result, RoosterCommandContext context) {
 			if (result is FailedResult) {
 				string response = "";
-				bool unknownResult = false;
+				bool bad = false;
+				ComponentBase? component;
 
 				switch (result) {
 					case CommandDisabledResult _:
@@ -35,15 +37,47 @@ namespace RoosterBot {
 						response += string.Join('\n', overloads.FailedOverloads.Select(kvp => "`" + context.GuildConfig.CommandPrefix + kvp.Key.GetSignature(m_Resources, context.Culture) + "`: " +
 							m_Resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentForModule(kvp.Key.Module), kvp.Value.Reason)));
 						break;
+					case ArgumentParseFailedResult argument:
+						response = m_Resources.GetString(context.Culture, "RoosterBot_FatalError"); // Not actually sure what to do with this
+						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
+						break;
+					case TypeParseFailedResult type:
+						component = null; // TODO (fix) Get component for resolution
+						//Program.Instance.Components.GetComponentFromAssembly(type.GetType().Assembly);
+						response += m_Resources.ResolveString(context.Culture, component, type.Reason);
+						break;
+					case ExecutionFailedResult execution:
+						if (execution.Exception == null) {
+							response = m_Resources.GetString(context.Culture, "RoosterBot_FatalError");
+						} else {
+							bad = true;
+							response = "Exception\n" + execution.Exception.ToStringDemystified();
+						}
+						break;
+					case ChecksFailedResult check:
+						foreach ((CheckAttribute Check, CheckResult Result) in check.FailedChecks) {
+							component = Program.Instance.Components.GetComponentFromAssembly(check.FailedChecks.First().Check.GetType().Assembly);
+							response = m_Resources.ResolveString(context.Culture, component, check.Reason) + "\n";
+						}
+						break;
+					case ParameterChecksFailedResult paramCheck:
+						foreach ((ParameterCheckAttribute Check, CheckResult Result) in paramCheck.FailedChecks) {
+							component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
+							response += string.Format(m_Resources.GetString(context.Culture, "CommandHandling_ParamCheckFailed"), paramCheck.Parameter.Name,
+								m_Resources.ResolveString(context.Culture, component, Result.Reason)) + "\n";
+						}
+						break;
 					default:
-						unknownResult = true;
+						bad = true;
+						response = "PostCommandHandler got an unknown result: " + result.GetType().FullName + ". This is the ToString: " + result.ToString();
 						break;
 				}
 
-				if (unknownResult) {
-					await m_ConfigService.BotOwner.SendMessageAsync("NewCommandHandler got an unknown result: " + result.GetType().FullName + ". This is the ToString: " + result.ToString());
+				if (bad) {
+					await m_ConfigService.BotOwner.SendMessageAsync(response);
+					await context.RespondAsync(Util.Error + m_Resources.GetString(context.Culture, "RoosterBot_FatalError"));
 				} else {
-					await context.RespondAsync(response);
+					await context.RespondAsync(Util.Error + response);
 				}
 			}
 		}

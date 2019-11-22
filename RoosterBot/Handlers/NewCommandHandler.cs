@@ -8,15 +8,13 @@ namespace RoosterBot {
 	internal sealed class NewCommandHandler {
 		private readonly DiscordSocketClient m_Client;
 		private readonly RoosterCommandService m_Commands;
-		private readonly ConfigService m_ConfigService;
 		private readonly GuildConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
 		private readonly SequentialPostCommandHandler m_SPCH;
 
-		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, ConfigService configService, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
+		internal NewCommandHandler(DiscordSocketClient client, RoosterCommandService commands, GuildConfigService gcs, UserConfigService ucs, SequentialPostCommandHandler spch) {
 			m_Client = client;
 			m_Commands = commands;
-			m_ConfigService = configService;
 			m_GCS = gcs;
 			m_UCS = ucs;
 			m_SPCH = spch;

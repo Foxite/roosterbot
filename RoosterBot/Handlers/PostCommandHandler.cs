@@ -2,7 +2,7 @@
 using Qmmands;
 
 namespace RoosterBot {
-	internal abstract class ParallelPostCommandHandler {
+	internal abstract class PostCommandHandler {
 		protected void ForeignContext(Command? command, CommandContext context, IResult result) {
 			var nse = new NotSupportedException($"A command has been executed that used a context of type {context.GetType().Name}. RoosterBot does not support this as of version 2.1. " +
 								"All command context objects must be derived from RoosterCommandContext. " +
