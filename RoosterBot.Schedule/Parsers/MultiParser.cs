@@ -34,9 +34,11 @@ namespace RoosterBot.Schedule {
 				dynamic result = await reader.ReadAsync(parameter, value, context);
 				if (result.IsSuccessful) {
 					return TypeParserResult<T>.Successful((T) result.Value);
-				} else if (false /* TODO (feature) If failure reason is not standard */) {
-					return TypeParserResult<T>.Unsuccessful(result.Reason);
 				}
+				/* TODO (feature) If failure reason is not standard
+				else if ( ... ) {
+					return TypeParserResult<T>.Unsuccessful(result.Reason);
+				}*/
 			}
 			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
 			return TypeParserResult<T>.Unsuccessful(resources.ResolveString(context.Culture, m_ResourcesComponent, m_ErrorMessage));
