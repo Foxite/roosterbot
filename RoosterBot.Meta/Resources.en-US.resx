@@ -178,6 +178,22 @@
   <data name="InfoModule_InfoCommand_Summary" xml:space="preserve">
     <value>Technical information about the bot.</value>
   </data>
+  <data name="InfoModule_Uptime" xml:space="preserve">
+    <value>uptime</value>
+  </data>
+  <data name="InfoModule_Uptime_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="InfoModule_Uptime_Response" xml:space="preserve">
+    <value>This instance has been running for {0} days, {1} hours, {2} minutes and {3} seconds.</value>
+    <comment>0: days
+1: hours
+2: minutes
+3: seconds</comment>
+  </data>
+  <data name="InfoModule_Uptime_Summary" xml:space="preserve">
+    <value>See how long this bot has been online.</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
     <value>Use `{0}commands &lt;category&gt;` to get a list of commands. Available categories are:</value>
   </data>

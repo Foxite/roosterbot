@@ -178,6 +178,22 @@
   <data name="InfoModule_InfoCommand_Summary" xml:space="preserve">
     <value>Technische informatie over de bot.</value>
   </data>
+  <data name="InfoModule_Uptime" xml:space="preserve">
+    <value>uptime</value>
+  </data>
+  <data name="InfoModule_Uptime_Aliases" xml:space="preserve">
+    <value />
+  </data>
+  <data name="InfoModule_Uptime_Response" xml:space="preserve">
+    <value>Deze instance draait al {0} dagen, {1} uur, {2} minuten en {3} seconden.</value>
+    <comment>0: days
+1: hours
+2: minutes
+3: seconds</comment>
+  </data>
+  <data name="InfoModule_Uptime_Summary" xml:space="preserve">
+    <value>Kijk hoe lang de bot online is</value>
+  </data>
   <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
     <value>Gebruik `{0}commands &lt;categorie&gt;` om een lijst te zien. Beschikbare categorieën zijn:</value>
     <comment>0: command prefix</comment>

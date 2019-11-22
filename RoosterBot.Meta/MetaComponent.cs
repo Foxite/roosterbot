@@ -28,12 +28,12 @@ namespace RoosterBot.Meta {
 
 			registerModules(await Task.WhenAll(
 				commandService.AddModuleAsync<HelpModule>(services),
-				commandService.AddModuleAsync<ControlModule>(services),
-				commandService.AddModuleAsync<InfoModule>(services)
+				commandService.AddModuleAsync<ControlModule>(services)
 			));
 
 			registerModules(await commandService.AddLocalizedModuleAsync<GuildConfigModule>());
 			registerModules(await commandService.AddLocalizedModuleAsync<UserConfigModule>());
+			registerModules(await commandService.AddLocalizedModuleAsync<InfoModule>());
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 		}

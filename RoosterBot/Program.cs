@@ -21,6 +21,7 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 
 		public ComponentManager Components { get; private set; }
+		public DateTime StartTime { get; } = DateTime.Now;
 
 		private DiscordSocketClient m_Client;
 		private ConfigService m_ConfigService;
