@@ -535,4 +535,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
   </data>
+  <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
+    <value>aantal</value>
+  </data>
 </root>

@@ -531,4 +531,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>hours, days, or weeks</value>
   </data>
+  <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
+    <value>amount</value>
+  </data>
 </root>
