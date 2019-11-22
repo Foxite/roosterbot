@@ -21,21 +21,16 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
-			commandService.AddTypeParser<CultureInfo>(new CultureInfoReader());
+			commandService.AddTypeParser(new CultureInfoReader());
 
-			registerModules(
-				new[] {
-					commandService.AddModule<HelpModule>(),
-					commandService.AddModule<ControlModule>()
-				}.Concat(LinqExtensions.Pack(
-					commandService.AddLocalizedModule<GuildConfigModule>(),
-					commandService.AddLocalizedModule<UserConfigModule>(),
-					commandService.AddLocalizedModule<InfoModule>()
-				).SelectMany(m => m)).ToArray()
-			);
+			commandService.AddModule<HelpModule>();
+			commandService.AddModule<ControlModule>();
+			commandService.AddLocalizedModule<GuildConfigModule>();
+			commandService.AddLocalizedModule<UserConfigModule>();
+			commandService.AddLocalizedModule<InfoModule>();
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 

@@ -45,7 +45,7 @@ namespace RoosterBot.AWS {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules _) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 #if !DEBUG
 			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
 #endif

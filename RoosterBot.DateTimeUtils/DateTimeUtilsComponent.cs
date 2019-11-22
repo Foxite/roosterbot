@@ -14,13 +14,11 @@ namespace RoosterBot.DateTimeUtils {
 		internal static ResourceService ResourceService { get; private set; }
 #nullable restore
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModuleFunction) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			ResourceService = services.GetService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
-			// This is bullshit, but it works, trust me.
-			// https://github.com/discord-net/Discord.Net/issues/1425
-			commandService.AddTypeParser<DayOfWeek>(new DayOfWeekReader(), false);
+			commandService.AddTypeParser(new DayOfWeekReader());
 
 			return Task.CompletedTask;
 		}

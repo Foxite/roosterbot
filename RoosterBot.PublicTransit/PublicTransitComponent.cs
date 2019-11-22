@@ -31,12 +31,12 @@ namespace RoosterBot.PublicTransit {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			var stationInfoReader = new StationInfoReader();
-			commandService.AddTypeParser<StationInfo>(stationInfoReader);
-			commandService.AddTypeParser<StationInfo[]>(new ArrayParser<StationInfo>(stationInfoReader));
+			commandService.AddTypeParser(stationInfoReader);
+			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
 
-			registerModules(new[] { commandService.AddModule<PTModule>() });
+			commandService.AddModule<PTModule>();
 
 			string helpText = "Met `{0}ov` kan je informatie opzoeken via de NS reisplanner.\n";
 			helpText += "Dit ondersteunt alleen treinreizen, dus geen bussen. Ook kan je alleen treinstations in Nederland opzoeken, en geen steden, adressen, of andere plaatsen.\n";

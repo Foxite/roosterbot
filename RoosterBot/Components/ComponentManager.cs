@@ -13,7 +13,6 @@ using Module = Qmmands.Module;
 namespace RoosterBot {
 	public sealed class ComponentManager {
 		private readonly List<ComponentBase> m_Components;
-		private readonly ConcurrentDictionary<Module, ComponentBase> m_ComponentsByModule;
 		private readonly ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
 
 #nullable disable
@@ -31,7 +30,6 @@ namespace RoosterBot {
 
 		internal ComponentManager() {
 			m_Components = new List<ComponentBase>();
-			m_ComponentsByModule = new ConcurrentDictionary<Module, ComponentBase>();
 			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
 		}
 
@@ -76,14 +74,14 @@ namespace RoosterBot {
 		}
 
 		private List<Assembly> LoadAssemblies(IEnumerable<string> componentNames) {
-			List<Assembly> assemblies = new List<Assembly>();
+			var assemblies = new List<Assembly>();
 			foreach (string componentName in componentNames) {
 				string path = Path.Combine(AppContext.BaseDirectory, "Components", componentName, componentName + ".dll");
 
 				if (File.Exists(path)) {
 					Logger.Debug("ComponentManager", "Loading assembly " + componentName);
 
-					Assembly assembly = Assembly.LoadFrom(path);
+					var assembly = Assembly.LoadFrom(path);
 					assemblies.Add(assembly);
 				} else {
 					Logger.Error("ComponentManager", "Component " + componentName + " could not be found");
@@ -164,11 +162,7 @@ namespace RoosterBot {
 #else
 					modulesLoading[moduleIndex] = 
 #endif
-						component.AddModulesAsync(services, commands, help, (modules) => {
-							foreach (Module module in modules) {
-								m_ComponentsByModule[module] = component;
-							}
-						});
+						component.AddModulesAsync(services, commands, help);
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
@@ -191,7 +185,9 @@ namespace RoosterBot {
 		}
 
 		public ComponentBase GetComponentForModule(Module module) {
-			if (m_ComponentsByModule.TryGetValue(module, out ComponentBase? result)) {
+			if (module.Type == null) {
+				throw new ArgumentException($"Module named {module.Name} was built manually. This is not supported since RoosterBot 2.2.");
+			} else if (m_ComponentsByAssembly.TryGetValue(module.Type.Assembly, out ComponentBase? result)) {
 				return result;
 			} else {
 				throw new ArgumentException($"Module of type {module.Name} is not registered");
@@ -206,6 +202,4 @@ namespace RoosterBot {
 			}
 		}
 	}
-
-	public delegate void RegisterModules(params Module[] modules);
 }

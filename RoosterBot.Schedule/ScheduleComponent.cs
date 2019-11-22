@@ -37,10 +37,10 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModules) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
-			var ssir = new StudentSetInfoParser();
 
+			var ssir = new StudentSetInfoParser();
 			commandService.AddTypeParser(ssir);
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
@@ -50,9 +50,9 @@ namespace RoosterBot.Schedule {
 			IdentifierReaders.AddReader(ssir);
 			IdentifierReaders.AddReader(new RoomInfoParser());
 
-			registerModules(new[] { commandService.AddModule<TeacherListModule>() });
-			registerModules(commandService.AddLocalizedModule<ScheduleModule>());
-			registerModules(commandService.AddLocalizedModule<UserClassModule>());
+			commandService.AddModule<TeacherListModule>();
+			commandService.AddLocalizedModule<ScheduleModule>();
+			commandService.AddLocalizedModule<UserClassModule>();
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");

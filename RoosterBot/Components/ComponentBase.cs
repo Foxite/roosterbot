@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Qmmands;
 
 namespace RoosterBot {
 	public abstract class ComponentBase : IDisposable {
@@ -24,7 +23,7 @@ namespace RoosterBot {
 
 		public virtual DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) => new DependencyResult();
 		public virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
-		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModuleFunction) => Task.CompletedTask;
+		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) => Task.CompletedTask;
 
 		#region IDisposable Support
 		protected virtual void Dispose(bool disposing) { }

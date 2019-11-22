@@ -33,12 +33,12 @@ namespace RoosterBot.Weather {
 			services.AddSingleton(cityService);
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help, RegisterModules registerModuleFunction) {
+		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
 			commandService.AddTypeParser<CityInfo>(new CityInfoReader());
 
-			registerModuleFunction(commandService.AddLocalizedModule<WeatherModule>());
+			commandService.AddLocalizedModule<WeatherModule>();
 
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 

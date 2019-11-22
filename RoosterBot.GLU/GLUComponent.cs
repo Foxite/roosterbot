@@ -61,11 +61,9 @@ namespace RoosterBot.GLU {
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help, RegisterModules registerModules) {
-			registerModules(
-				commands.AddModule<MiscModule>(),
-				commands.AddModule<UserListModule>()
-			);
+		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help) {
+			commands.AddModule<MiscModule>();
+			commands.AddModule<UserListModule>();
 
 			// Teachers
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
