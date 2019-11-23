@@ -247,26 +247,26 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>0: identifier display text
 		1: amount of weeks</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
+  <data name="UserClassModule_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_UserIsInClass" xml:space="preserve">
+  <data name="UserClassModule_UserIsInClass" xml:space="preserve">
     <value>You are in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
+  <data name="UserClassModule_ChangeHint" xml:space="preserve">
     <value>Use `{0}i am in &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserClassModule_ConfirmUserIsInClass" xml:space="preserve">
     <value>Noted: you are in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserClassModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
     <value>Noted: you are in {0}, and not in {1} anymore.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>
   </data>
-  <data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
+  <data name="UserClassModule_InvalidClass" xml:space="preserve">
     <value>That's not a class.</value>
   </data>
   <data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
@@ -312,16 +312,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
     <value>A list of all teachers, their abbreviations, and their Discord names (if known). You can filter by name.</value>
   </data>
-  <data name="UserClassModule_Summary" xml:space="preserve">
+  <data name="UserClassModule_ModuleSummary" xml:space="preserve">
     <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_Summary" xml:space="preserve">
-    <value>See what class you are in, according to my records.</value>
+  <data name="UserClassModule_CommandSummary" xml:space="preserve">
+    <value>Change what class you are in, or see what class you are in according to my records.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_Summary" xml:space="preserve">
-    <value>Change what class you are in.</value>
-  </data>
-  <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
+  <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>class</value>
   </data>
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
@@ -336,7 +333,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>See on what days a class or teacher is present, or when a room is in use.</value>
   </data>
-  <data name="UserClassModule_Name" xml:space="preserve">
+  <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
@@ -390,57 +387,29 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_AfterCommand" xml:space="preserve">
     <value>after</value>
   </data>
-  <data name="ScheduleModule_AfterCommand_Aliases" xml:space="preserve">
-    <value>after that</value>
-  </data>
   <data name="ScheduleModule_DayCommand" xml:space="preserve">
     <value>day</value>
-  </data>
-  <data name="ScheduleModule_DayCommand_Aliases" xml:space="preserve">
-    <value />
   </data>
   <data name="ScheduleModule_FutureCommand" xml:space="preserve">
     <value>in</value>
   </data>
-  <data name="ScheduleModule_FutureCommand_Aliases" xml:space="preserve">
-    <value />
-  </data>
   <data name="ScheduleModule_NextCommand" xml:space="preserve">
-    <value>next</value>
-  </data>
-  <data name="ScheduleModule_NextCommand_Aliases" xml:space="preserve">
-    <value>later|after this</value>
+    <value>next|later</value>
   </data>
   <data name="ScheduleModule_NextWeekCommand" xml:space="preserve">
-    <value>next week</value>
-  </data>
-  <data name="ScheduleModule_NextWeekCommand_Aliases" xml:space="preserve">
-    <value />
+    <value>nextweek</value>
   </data>
   <data name="ScheduleModule_NowCommand" xml:space="preserve">
-    <value>now</value>
-  </data>
-  <data name="ScheduleModule_NowCommand_Aliases" xml:space="preserve">
-    <value>schedule</value>
-    <comment>Separate aliases with |</comment>
+    <value>now|schedule</value>
   </data>
   <data name="ScheduleModule_ThisWeekCommand" xml:space="preserve">
-    <value>this week</value>
-  </data>
-  <data name="ScheduleModule_ThisWeekCommand_Aliases" xml:space="preserve">
-    <value />
+    <value>thisweek</value>
   </data>
   <data name="ScheduleModule_TodayCommand" xml:space="preserve">
     <value>today</value>
   </data>
-  <data name="ScheduleModule_TodayCommand_Aliases" xml:space="preserve">
-    <value />
-  </data>
   <data name="ScheduleModule_TomorrowCommand" xml:space="preserve">
     <value>tomorrow</value>
-  </data>
-  <data name="ScheduleModule_TomorrowCommand_Aliases" xml:space="preserve">
-    <value />
   </data>
   <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
     <value>I don't know that user.</value>
@@ -490,24 +459,15 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
     <value>schedule</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmNoChange" xml:space="preserve">
+  <data name="UserClassModule_ConfirmNoChange" xml:space="preserve">
     <value>You're already in {0}!</value>
     <comment>0: student set</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser" xml:space="preserve">
-    <value>am in</value>
-  </data>
   <data name="UserClassModule_Group" xml:space="preserve">
-    <value>i</value>
+    <value>my</value>
   </data>
-  <data name="UserClassModule_SetClassForUser" xml:space="preserve">
-    <value>am in</value>
-  </data>
-  <data name="UserClassModule_GetClassForUser_Aliases" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserClassModule_SetClassForUser_Aliases" xml:space="preserve">
-    <value />
+  <data name="UserClassModule_CommandName" xml:space="preserve">
+    <value>class</value>
   </data>
   <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
     <value>room</value>

@@ -4,8 +4,8 @@ using Qmmands;
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	public class MiscModule : RoosterModuleBase {
-		[Command("dank u", "danku", "dankje", "dankjewel", "dank je wel", "dank je", "bedankt", "dank",
-				 "goed", "goedzo", "good bot",
+		[Command("danku", "dankje", "dankjewel", "bedankt", "dank",
+				 "goed", "goedzo", "goodbot",
 				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
 		public async Task ThankYouCommand() {
 			string response;

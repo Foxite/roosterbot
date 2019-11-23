@@ -86,13 +86,12 @@ namespace RoosterBot.Meta {
 		private IEnumerable<IGrouping<string, (Command command, ComponentBase component)>> GetCategories() {
 			bool shouldNotHide(dynamic moduleOrCommand) {
 				return !((IEnumerable<Attribute>) moduleOrCommand.Attributes).Any(attr => attr is HiddenFromListAttribute) 
-					&& !((IEnumerable<CheckAttribute>) moduleOrCommand.Preconditions).Any(attr => attr is RequireCultureAttribute rca && rca.Culture != Culture);
+					&& !((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).Any(attr => attr is RequireCultureAttribute rca && rca.Culture != Culture);
 			}
 
 			return
-				from module in CmdService.TopLevelModules
+				from module in CmdService.GetAllModules(Context.Culture)
 				from command in module.Commands
-				// TODO (feature) submodules
 				where shouldNotHide(command.Module)
 				where shouldNotHide(command)
 				let component = Program.Instance.Components.GetComponentForModule(command.Module)

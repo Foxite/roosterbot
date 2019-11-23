@@ -1,21 +1,36 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Discord;
 using Qmmands;
+using Qommon.Events;
 
 namespace RoosterBot {
-	public sealed class RoosterCommandService : CommandService {
+	/// <summary>
+	/// This class wraps multiple Qmmands.CommandService objects, one for each supported culture.
+	/// </summary>
+	public sealed class RoosterCommandService {
+		// Null CultureInfo represents unlocalized modules
+		private readonly ConcurrentDictionary<CultureKey, CommandService> m_ServicesByCulture;
 		private readonly ResourceService m_ResourceService;
+		private readonly CommandServiceConfiguration m_Config;
+		
+		public event AsynchronousEventHandler<CommandExecutedEventArgs>? CommandExecuted;
+		public event AsynchronousEventHandler<CommandExecutionFailedEventArgs>? CommandExecutionFailed;
 
-		internal RoosterCommandService(ResourceService resourceService) {
+		internal RoosterCommandService(ResourceService resourceService) : this(resourceService, new CommandServiceConfiguration()) { }
+
+		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
+			m_ServicesByCulture = new ConcurrentDictionary<CultureKey, CommandService>();
 			m_ResourceService = resourceService;
+			m_Config = config;
 		}
 
-		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) : base(config) {
-			m_ResourceService = resourceService;
-		}
-
+		// TODO (refactor) Move this to a Util file
 		internal bool IsMessageCommand(IMessage message, string prefix, out int argPos) {
 			argPos = 0;
 			if (message.Content != null && // Message objects created for MessageUpdated events only contain what was modified. Content may be null in certain cases. https://github.com/discord-net/Discord.Net/issues/1409
@@ -34,10 +49,34 @@ namespace RoosterBot {
 			return false;
 		}
 
-		public Module[] AddLocalizedModule<T>() => AddLocalizedModule(typeof(T));
-		public Module[] AddLocalizedModule(Type module) {
+		private CommandService GetService(CultureInfo? culture) => m_ServicesByCulture.GetOrAdd(culture, (c) => {
+			var ret = new CommandService(m_Config);
+			ret.CommandExecuted += (args) => CommandExecuted?.Invoke(args) ?? Task.CompletedTask;
+			ret.CommandExecutionFailed += (args) => CommandExecutionFailed?.Invoke(args) ?? Task.CompletedTask;
+			return ret;
+		});
+
+		private void AllServices(Action<CommandService> action) {
+			foreach (CommandService service in m_ServicesByCulture.Select(kvp => kvp.Value)) {
+				action(service);
+			}
+		}
+
+		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
+			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
+			if (result.IsSuccessful) {
+				return result;
+			} else {
+				return await GetService(null).ExecuteAsync(input, context);
+			}
+		}
+
+		public Module[] AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
+		public Module[] AddModule(Type module, Action<ModuleBuilder>? postBuild = null) {
 			object[] localizedAttributes = module.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
-			if (localizedAttributes.Length == 1) {
+			if (localizedAttributes.Length == 0) {
+				return new[] { GetService(null).AddModule(module, postBuild) };
+			} else if (localizedAttributes.Length == 1) {
 				ComponentBase? component = Program.Instance.Components.GetComponentFromAssembly(module.Assembly);
 				IReadOnlyList<string> locales = ((LocalizedModuleAttribute) localizedAttributes[0]).Locales;
 
@@ -47,27 +86,142 @@ namespace RoosterBot {
 					string locale = locales[i];
 					var culture = CultureInfo.GetCultureInfo(locale);
 
-					localizedModules[i] = AddModule(module, (builder) => {
+					// A factory is more performant because it won't create a whole new service if it's not going to be used
+					CommandService service = m_ServicesByCulture.GetOrAdd(culture, (culture) => new CommandService(m_Config));
+
+					localizedModules[i] = service.AddModule(module, (builder) => {
 						// TODO (refactor) Localize everything here, not just command names, and don't resolve strings when generating command signatures
 						builder.AddCheck(new RequireCultureAttribute(locale, true));
 
-						foreach (string alias in m_ResourceService.ResolveString(culture, component, builder.Name + "_Aliases").Split('|')) {
-							builder.AddAlias(alias);
+						if (builder.Aliases.Count > 0) {
+							string aliasKey = builder.Aliases.Single();
+							builder.Aliases.Remove(aliasKey);
+							foreach (string alias in m_ResourceService.ResolveString(culture, component, aliasKey).Split('|')) {
+								builder.AddAlias(alias);
+							}
 						}
-						builder.Name = builder.Name == null ? builder.Name : m_ResourceService.ResolveString(culture, component, builder.Name);
 
 						foreach (CommandBuilder command in builder.Commands) {
-							foreach (string alias in m_ResourceService.ResolveString(culture, component, command.Name + "_Aliases").Split('|')) {
-								command.AddAlias(alias);
+							if (command.Aliases.Count > 0) {
+								string aliasKey = command.Aliases.Single();
+								command.Aliases.Remove(aliasKey);
+								foreach (string alias in m_ResourceService.ResolveString(culture, component, aliasKey).Split('|')) {
+									command.AddAlias(alias);
+								}
 							}
 							command.Name = command.Name == null ? command.Name : m_ResourceService.ResolveString(culture, component, command.Name);
 						}
+
+						postBuild?.Invoke(builder);
 					});
 				}
 				return localizedModules;
 			} else {
 				throw new ArgumentException("Module class " + module.FullName + " can not be localized because it does not have " + nameof(LocalizedModuleAttribute));
 			}
+		}
+
+		#region CommandService wrappers
+		public void AddArgumentParser(IArgumentParser ap) {
+			AllServices((service) => service.AddArgumentParser(ap));
+		}
+
+		public void AddTypeParser<T>(TypeParser<T> parser, bool replacePrimitive = false) {
+			AllServices((service) => service.AddTypeParser<T>(parser, replacePrimitive));
+		}
+
+		public IReadOnlyList<CommandMatch> FindCommands(CultureInfo? culture, string path) {
+			return GetService(culture).FindCommands(path);
+		}
+
+		public IReadOnlyList<Command> GetAllCommands(CultureInfo? culture) {
+			return GetService(culture).GetAllCommands();
+		}
+
+		public IReadOnlyList<Module> GetAllModules(CultureInfo? culture) {
+			IEnumerable<Module> modules = GetService(culture).GetAllModules();
+			if (culture != null) {
+				modules = modules.Concat(GetService(null).GetAllModules());
+			}
+			return modules.ToList().AsReadOnly();
+		}
+
+		public IArgumentParser GetArgumentParser<T>() => GetArgumentParser(typeof(T));
+		public IArgumentParser GetArgumentParser(Type type) {
+			return GetService(null).GetArgumentParser(type);
+		}
+
+		public TParser GetSpecificTypeParser<T, TParser>() where TParser : TypeParser<T> {
+			return GetService(null).GetSpecificTypeParser<T, TParser>();
+		}
+
+		public TypeParser<T> GetTypeParser<T>(bool replacingPrimitive = false) {
+			return GetService(null).GetTypeParser<T>(replacingPrimitive);
+		}
+
+		public void RemoveAllModules() {
+			AllServices((service) => service.RemoveAllModules());
+		}
+
+		public void RemoveAllTypeParsers() {
+			AllServices((service) => service.RemoveAllTypeParsers());
+		}
+
+		public void RemoveArgumentParser<T>() => RemoveArgumentParser(typeof(T));
+		public void RemoveArgumentParser(Type type) {
+			AllServices((service) => service.RemoveArgumentParser(type));
+		}
+
+		public void RemoveTypeParser<T>(TypeParser<T> typeParser) {
+			AllServices((service) => service.RemoveTypeParser(typeParser));
+		}
+
+		public void SetDefaultArgumentParser<T>() => SetDefaultArgumentParser(typeof(T));
+		public void SetDefaultArgumentParser(Type type) {
+			AllServices((service) => service.SetDefaultArgumentParser(type)) ;
+		}
+
+		public void SetDefaultArgumentParser(IArgumentParser parser) {
+			AllServices((service) => service.SetDefaultArgumentParser(parser));
+		}
+		#endregion
+
+		/// <summary>
+		/// A non-nullable wrapper for a nullable CultureInfo that we can use as a dictionary key.
+		/// </summary>
+		[DebuggerDisplay("{ToString()}")]
+		private struct CultureKey : IEquatable<CultureKey>, IEquatable<CultureInfo> {
+			public CultureInfo? Culture { get; }
+
+			public CultureKey(CultureInfo? culture) {
+				Culture = culture;
+			}
+
+			public override bool Equals(object? obj) {
+				if (obj != null && obj is CultureKey key) {
+					return Equals(key);
+				} else {
+					return false;
+				}
+			}
+
+			public override int GetHashCode() => Culture?.GetHashCode() ?? 0;
+
+			public bool Equals(CultureInfo? other) => Culture == other;
+			public bool Equals(CultureKey other) =>   Culture == other.Culture;
+
+			public static bool operator ==(CultureKey   left, CultureInfo? right) => left .Culture == right;
+			public static bool operator ==(CultureInfo? left, CultureKey right)   => right.Culture == left;
+			public static bool operator ==(CultureKey   left, CultureKey right)   => left.Equals(right);
+
+			public static bool operator !=(CultureKey   left, CultureInfo? right) => !(left == right);
+			public static bool operator !=(CultureInfo? left, CultureKey right)   => !(left == right);
+			public static bool operator !=(CultureKey   left, CultureKey right)   => !(left == right);
+			
+			public static implicit operator CultureInfo?(CultureKey key) => key.Culture;
+			public static implicit operator CultureKey(CultureInfo? info) => new CultureKey(info);
+
+			public override string ToString() => Culture?.ToString() ?? "null";
 		}
 	}
 }

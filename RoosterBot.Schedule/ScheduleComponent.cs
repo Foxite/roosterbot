@@ -49,8 +49,8 @@ namespace RoosterBot.Schedule {
 			IdentifierReaders.AddReader(new RoomInfoParser());
 
 			commandService.AddModule<TeacherListModule>();
-			commandService.AddLocalizedModule<ScheduleModule>();
-			commandService.AddLocalizedModule<UserClassModule>();
+			commandService.AddModule<ScheduleModule>();
+			commandService.AddModule<UserClassModule>();
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");

@@ -2,28 +2,28 @@
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_Name"), Description("#UserClassModule_Summary"), Group("#UserClassModule_Group")]
+	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_ModuleName"), Description("#UserClassModule_ModuleSummary"), Group("#UserClassModule_Group")]
 	public class UserClassModule : RoosterModuleBase {
-		[Command("#UserClassModule_SetClassForUser"), RunMode(RunMode.Parallel), Description("#UserClassModule_SetClassForUser_Summary"), RequireContext(ContextType.Guild)]
-		public async Task SetClassForUser([Name("#UserClassModule_SetClassForUser_class_Name")] StudentSetInfo? newStudentSet = null) {
+		[Command("#UserClassModule_CommandName"), RunMode(RunMode.Parallel), Description("#UserClassModule_CommandSummary"), RequireContext(ContextType.Guild)]
+		public async Task SetClassForUser([Name("#UserClassModule_class_Name")] StudentSetInfo? newStudentSet = null) {
 			if (newStudentSet == null) {
 				StudentSetInfo? ssi = UserConfig.GetStudentSet();
 				string response;
 				if (ssi == null) {
-					response = GetString("UserClassModule_GetClassForUser_UserNotKnown");
+					response = GetString("UserClassModule_UserNotKnown");
 				} else {
-					response = GetString("UserClassModule_GetClassForUser_UserIsInClass", ssi.DisplayText);
+					response = GetString("UserClassModule_UserIsInClass", ssi.DisplayText);
 				}
-				response += GetString("UserClassModule_GetClassForUser_ChangeHint", GuildConfig.CommandPrefix);
+				response += GetString("UserClassModule_ChangeHint", GuildConfig.CommandPrefix);
 				ReplyDeferred(response);
 			} else {
 				StudentSetInfo? oldStudentSet = await UserConfig.SetStudentSetAsync(newStudentSet);
 				if (oldStudentSet == null) {
-					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClass", newStudentSet.DisplayText));
+					ReplyDeferred(GetString("UserClassModule_ConfirmUserIsInClass", newStudentSet.DisplayText));
 				} else if (oldStudentSet == newStudentSet) {
-					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmNoChange", newStudentSet.DisplayText));
+					ReplyDeferred(GetString("UserClassModule_ConfirmNoChange", newStudentSet.DisplayText));
 				} else {
-					ReplyDeferred(GetString("UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
+					ReplyDeferred(GetString("UserClassModule_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 				}
 			}
 		}

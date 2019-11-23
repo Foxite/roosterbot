@@ -22,8 +22,9 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 
 		public ComponentManager Components { get; private set; }
-		public DateTime StartTime { get; } = DateTime.Now;
 #nullable restore
+		public DateTime StartTime { get; } = DateTime.Now;
+
 		private bool m_BeforeStart;
 		private bool m_StopFlagSet;
 

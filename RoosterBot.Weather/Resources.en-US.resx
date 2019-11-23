@@ -269,16 +269,10 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
 1: cardinal direction, localized</comment>
   </data>
   <data name="WeatherModule_CurrentWeather" xml:space="preserve">
-    <value />
-  </data>
-  <data name="WeatherModule_CurrentWeather_Aliases" xml:space="preserve">
-    <value>now|in</value>
+    <value>|now|in</value>
   </data>
   <data name="WeatherModule_DayForecast" xml:space="preserve">
-    <value />
-  </data>
-  <data name="WeatherModule_DayForecast_Aliases" xml:space="preserve">
-    <value>on</value>
+    <value>|on</value>
   </data>
   <data name="WeatherModule_DayForecast_PretextCity" xml:space="preserve">
     <value>{0}: Weather {1}\n</value>
@@ -304,16 +298,10 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
     <value>I can't predict the weather beyond 7 days.</value>
   </data>
   <data name="WeatherModule_TimeForecast" xml:space="preserve">
-    <value />
-  </data>
-  <data name="WeatherModule_TimeForecast_Aliases" xml:space="preserve">
-    <value>on</value>
+    <value>|on</value>
   </data>
   <data name="WeatherModule_UnitForecast" xml:space="preserve">
     <value>in</value>
-  </data>
-  <data name="WeatherModule_UnitForecast_Aliases" xml:space="preserve">
-    <value />
   </data>
   <data name="WeatherModule_Unit_Days" xml:space="preserve">
     <value>day|days</value>

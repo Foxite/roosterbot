@@ -25,7 +25,7 @@ namespace RoosterBot {
 						response = m_Resources.GetString(context.Culture, "CommandHandling_Disabled");
 						break;
 					case CommandNotFoundResult _:
-						response = m_Resources.GetString(context.Culture, "CommandHandling_NotFound");
+						response = string.Format(m_Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.GuildConfig.CommandPrefix);
 						break;
 					case CommandOnCooldownResult cooldown:
 						// TODO (feature) Display cooldown time left

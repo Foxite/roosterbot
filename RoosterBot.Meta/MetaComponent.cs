@@ -28,9 +28,9 @@ namespace RoosterBot.Meta {
 
 			commandService.AddModule<HelpModule>();
 			commandService.AddModule<ControlModule>();
-			commandService.AddLocalizedModule<GuildConfigModule>();
-			commandService.AddLocalizedModule<UserConfigModule>();
-			commandService.AddLocalizedModule<InfoModule>();
+			commandService.AddModule<GuildConfigModule>();
+			commandService.AddModule<UserConfigModule>();
+			commandService.AddModule<InfoModule>();
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 

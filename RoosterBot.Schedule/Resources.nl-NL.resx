@@ -248,26 +248,26 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: identifier display text
 		  1: amount of weeks</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_UserNotKnown" xml:space="preserve">
+  <data name="UserClassModule_UserNotKnown" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_UserIsInClass" xml:space="preserve">
+  <data name="UserClassModule_UserIsInClass" xml:space="preserve">
     <value>Jij zit in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
-  <data name="UserClassModule_GetClassForUser_ChangeHint" xml:space="preserve">
+  <data name="UserClassModule_ChangeHint" xml:space="preserve">
     <value> Gebruik `{0}ik zit in &lt;klas&gt;` om dit te veranderen.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserClassModule_ConfirmUserIsInClass" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserClassModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}, en niet meer in {1}.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>
   </data>
-  <data name="UserClassModule_SetClassForUser_InvalidClass" xml:space="preserve">
+  <data name="UserClassModule_InvalidClass" xml:space="preserve">
     <value>Dat is geen klas.</value>
   </data>
   <data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
@@ -313,16 +313,13 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
     <value>Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.</value>
   </data>
-  <data name="UserClassModule_Summary" xml:space="preserve">
+  <data name="UserClassModule_ModuleSummary" xml:space="preserve">
     <value>Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.</value>
   </data>
-  <data name="UserClassModule_GetClassForUser_Summary" xml:space="preserve">
-    <value>Kijk in welke klas jij zit, volgens mijn gegevens.</value>
+  <data name="UserClassModule_CommandSummary" xml:space="preserve">
+    <value>Stel in in welke klas jij zit, of kijk welke je in zit volgens mijn gegevens.</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_Summary" xml:space="preserve">
-    <value>Stel in in welke klas jij zit.</value>
-  </data>
-  <data name="UserClassModule_SetClassForUser_class_Name" xml:space="preserve">
+  <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>klas</value>
   </data>
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
@@ -337,7 +334,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
   </data>
-  <data name="UserClassModule_Name" xml:space="preserve">
+  <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Instellingen</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
@@ -391,58 +388,29 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_AfterCommand" xml:space="preserve">
     <value>daarna</value>
   </data>
-  <data name="ScheduleModule_AfterCommand_Aliases" xml:space="preserve">
-    <value />
-  </data>
   <data name="ScheduleModule_DayCommand" xml:space="preserve">
     <value>dag</value>
-  </data>
-  <data name="ScheduleModule_DayCommand_Aliases" xml:space="preserve">
-    <value />
   </data>
   <data name="ScheduleModule_FutureCommand" xml:space="preserve">
     <value>over</value>
   </data>
-  <data name="ScheduleModule_FutureCommand_Aliases" xml:space="preserve">
-    <value />
-  </data>
   <data name="ScheduleModule_NextCommand" xml:space="preserve">
-    <value>hierna</value>
-  </data>
-  <data name="ScheduleModule_NextCommand_Aliases" xml:space="preserve">
-    <value>later|straks|zometeen</value>
-    <comment>Separate aliases with |</comment>
+    <value>hierna|later|straks|zometeen</value>
   </data>
   <data name="ScheduleModule_NextWeekCommand" xml:space="preserve">
-    <value>volgende week</value>
-  </data>
-  <data name="ScheduleModule_NextWeekCommand_Aliases" xml:space="preserve">
-    <value />
+    <value>volgendeweek</value>
   </data>
   <data name="ScheduleModule_NowCommand" xml:space="preserve">
-    <value>nu</value>
-  </data>
-  <data name="ScheduleModule_NowCommand_Aliases" xml:space="preserve">
-    <value>rooster</value>
-    <comment>Separate aliases with |</comment>
+    <value>nu|rooster</value>
   </data>
   <data name="ScheduleModule_ThisWeekCommand" xml:space="preserve">
-    <value>deze week</value>
-  </data>
-  <data name="ScheduleModule_ThisWeekCommand_Aliases" xml:space="preserve">
-    <value />
+    <value>dezeweek</value>
   </data>
   <data name="ScheduleModule_TodayCommand" xml:space="preserve">
     <value>vandaag</value>
   </data>
-  <data name="ScheduleModule_TodayCommand_Aliases" xml:space="preserve">
-    <value />
-  </data>
   <data name="ScheduleModule_TomorrowCommand" xml:space="preserve">
     <value>morgen</value>
-  </data>
-  <data name="ScheduleModule_TomorrowCommand_Aliases" xml:space="preserve">
-    <value />
   </data>
   <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
     <value>Ik ken die gebruiker niet.</value>
@@ -492,7 +460,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
     <value>rooster</value>
   </data>
-  <data name="UserClassModule_SetClassForUser_ConfirmNoChange" xml:space="preserve">
+  <data name="UserClassModule_ConfirmNoChange" xml:space="preserve">
     <value>Je zit al in {0}!</value>
     <comment>0: student set</comment>
   </data>
@@ -508,20 +476,11 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
     <value>leraar</value>
   </data>
-  <data name="UserClassModule_GetClassForUser" xml:space="preserve">
-    <value>zit in</value>
-  </data>
   <data name="UserClassModule_Group" xml:space="preserve">
-    <value>ik</value>
+    <value>mijn</value>
   </data>
-  <data name="UserClassModule_SetClassForUser" xml:space="preserve">
-    <value>zit in</value>
-  </data>
-  <data name="UserClassModule_GetClassForUser_Aliases" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserClassModule_SetClassForUser_Aliases" xml:space="preserve">
-    <value />
+  <data name="UserClassModule_CommandName" xml:space="preserve">
+    <value>klas</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
