@@ -48,6 +48,7 @@ namespace RoosterBot {
 					var culture = CultureInfo.GetCultureInfo(locale);
 
 					localizedModules[i] = AddModule(module, (builder) => {
+						// TODO (refactor) Localize everything here, not just command names, and don't resolve strings when generating command signatures
 						builder.AddCheck(new RequireCultureAttribute(locale, true));
 
 						foreach (string alias in m_ResourceService.ResolveString(culture, component, builder.Name + "_Aliases").Split('|')) {
