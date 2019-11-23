@@ -156,8 +156,8 @@ namespace RoosterBot {
 			new CommandExecutionFailedHandler(commands, configService, resources);
 			new CommandSuccessHandler(commands);
 
-			new NewCommandHandler(client, commands, configService, gcs, ucs, spch);
-			new EditedCommandHandler(client, commands, configService, gcs, ucs, spch);
+			new NewCommandHandler(client, commands, gcs, ucs, spch);
+			new EditedCommandHandler(client, commands, gcs, ucs, spch);
 			new DeletedCommandHandler(client, ucs);
 		}
 
