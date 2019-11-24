@@ -5,6 +5,9 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	// TODO (refactor) I really hate the Qmmands version of this class, find a better way to do this under Qmmands without using dynamic all over the place
+	// I've had this problem before where I needed to have a generic type for a variable but didn't have anything to give as a parameter. I didn't need to use any of the members
+	//  that had any generic type in them, it was like having a List<T> but only caring about it's Count property.
+	// I think this should totally be possible but I don't know any way to do it, other than using dynamic typing.
 	public class MultiParser<T> : RoosterTypeParser<T> {
 		private readonly List<dynamic> m_Readers;
 		private readonly string m_ErrorMessage;
