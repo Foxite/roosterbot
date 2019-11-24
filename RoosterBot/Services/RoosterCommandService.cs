@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,12 +73,12 @@ namespace RoosterBot {
 		}
 
 		public Module[] AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
-		public Module[] AddModule(Type module, Action<ModuleBuilder>? postBuild = null) {
-			object[] localizedAttributes = module.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
+		public Module[] AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
+			object[] localizedAttributes = moduleType.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
 			if (localizedAttributes.Length == 0) {
-				return new[] { GetService(null).AddModule(module, postBuild) };
+				return new[] { GetService(null).AddModule(moduleType, postBuild) };
 			} else if (localizedAttributes.Length == 1) {
-				ComponentBase? component = Program.Instance.Components.GetComponentFromAssembly(module.Assembly);
+				ComponentBase? component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly);
 				IReadOnlyList<string> locales = ((LocalizedModuleAttribute) localizedAttributes[0]).Locales;
 
 				Module[] localizedModules = new Module[locales.Count];
@@ -89,35 +90,57 @@ namespace RoosterBot {
 					// A factory is more performant because it won't create a whole new service if it's not going to be used
 					CommandService service = GetService(culture);
 
-					localizedModules[i] = service.AddModule(module, (builder) => {
-						// TODO (refactor) Localize everything here, not just command names, and don't resolve strings when generating command signatures
-						builder.AddCheck(new RequireCultureAttribute(locale, true));
+					string? resolveString(string? key) {
+						return key == null ? null : m_ResourceService.ResolveString(culture, component, key);
+					}
 
-						if (builder.Aliases.Count > 0) {
-							string aliasKey = builder.Aliases.Single();
-							builder.Aliases.Remove(aliasKey);
-							foreach (string alias in m_ResourceService.ResolveString(culture, component, aliasKey).Split('|')) {
-								builder.AddAlias(alias);
+					localizedModules[i] = service.AddModule(moduleType, (module) => {
+						// TODO (review) Is this function called for all submodules of the {moduleType} we're adding?
+						// Otherwise we need to foreach module.Submodules
+
+						// TODO (feature) Attributes like TypeDisplayAttribute that contain a single string property should all implement an interface with the property
+						// Then we should foreach module.Attributes.OfType<IRoosterTextAttribute> and resolve the text
+						// Also do this for commands and parameters
+						module.AddCheck(new RequireCultureAttribute(locale, true));
+
+						module.Description = resolveString(module.Description);
+						module.Remarks = resolveString(module.Remarks);
+						module.Name = resolveString(module.Name);
+
+						if (module.Aliases.Count > 0) {
+							string aliasKey = module.Aliases.Single();
+							module.Aliases.Remove(aliasKey);
+							foreach (string alias in resolveString(aliasKey)!.Split('|')) {
+								module.AddAlias(alias);
 							}
 						}
 
-						foreach (CommandBuilder command in builder.Commands) {
+						foreach (CommandBuilder command in module.Commands) {
 							if (command.Aliases.Count > 0) {
 								string aliasKey = command.Aliases.Single();
 								command.Aliases.Remove(aliasKey);
-								foreach (string alias in m_ResourceService.ResolveString(culture, component, aliasKey).Split('|')) {
+								foreach (string alias in resolveString(aliasKey)!.Split('|')) {
 									command.AddAlias(alias);
 								}
 							}
-							command.Name = command.Name == null ? command.Name : m_ResourceService.ResolveString(culture, component, command.Name);
+
+							command.Description = resolveString(command.Description);
+							command.Remarks = resolveString(command.Remarks);
+							command.Name = resolveString(command.Name);
+
+							foreach (ParameterBuilder parameter in command.Parameters) {
+								parameter.Description = resolveString(parameter.Description);
+								parameter.Remarks = resolveString(parameter.Remarks);
+								parameter.Name = resolveString(parameter.Name);
+							}
 						}
 
-						postBuild?.Invoke(builder);
+						postBuild?.Invoke(module);
 					});
 				}
 				return localizedModules;
 			} else {
-				throw new ArgumentException("Module class " + module.FullName + " can not be localized because it does not have " + nameof(LocalizedModuleAttribute));
+				throw new ArgumentException("Module class " + moduleType.FullName + " can not be localized because it does not have " + nameof(LocalizedModuleAttribute));
 			}
 		}
 

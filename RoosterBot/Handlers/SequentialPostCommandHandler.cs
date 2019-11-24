@@ -34,18 +34,18 @@ namespace RoosterBot {
 						break;
 					case OverloadsFailedResult overloads:
 						response = m_Resources.GetString(context.Culture, "CommandHandling_OverloadsFailed") + "\n";
-						response += string.Join('\n', overloads.FailedOverloads.Select(kvp => "`" + context.GuildConfig.CommandPrefix + kvp.Key.GetSignature(m_Resources, context.Culture) + "`: " +
+						response += string.Join('\n', overloads.FailedOverloads.Select(kvp => "`" + context.GuildConfig.CommandPrefix + kvp.Key.GetSignature() + "`: " +
 							m_Resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentForModule(kvp.Key.Module), kvp.Value.Reason)));
 						break;
 					case ArgumentParseFailedResult argument:
 						response = m_Resources.GetString(context.Culture, "RoosterBot_FatalError"); // Not actually sure what to do with this
 						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
 						break;
-					case TypeParseFailedResult type:
-						response += type.Reason;
-						break;
 					case IRoosterTypeParserResult type:
 						response += string.Format(m_Resources.ResolveString(context.Culture, type.ErrorReasonComponent, type.Reason), type.ErrorReasonObjects);
+						break;
+					case TypeParseFailedResult type:
+						response += type.Reason;
 						break;
 					case ExecutionFailedResult execution:
 						if (execution.Exception == null) {

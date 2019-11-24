@@ -5,6 +5,7 @@ using Qmmands;
 
 namespace RoosterBot {
 	public static class CommandUtil {
+		// TODO (localize) These nice names
 		private static string GetNiceName(Type type) => type.Name switch {
 			"Byte" => "integer",
 			"SByte" => "integer",
@@ -25,16 +26,16 @@ namespace RoosterBot {
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.
 		/// </summary>
-		public static string GetSignature(this Command command, ResourceService resources, CultureInfo culture) {
-			ComponentBase moduleComponent = Program.Instance.Components.GetComponentForModule(command.Module);
+		public static string GetSignature(this Command command) {
 			string ret = command.FullAliases.First() + " ";
 
 			foreach (Parameter param in command.Parameters) {
 				if (param.Name != "ignored") {
-					string paramText = resources.ResolveString(culture, moduleComponent, param.Name) + ": ";
+					string paramText = param.Name + ": ";
 
 					TypeDisplayAttribute? typeDisplayAttr = param.Attributes.OfType<TypeDisplayAttribute>().SingleOrDefault();
-					paramText += typeDisplayAttr != null ? resources.ResolveString(culture, moduleComponent, typeDisplayAttr.TypeDisplayName) : GetNiceName(param.Type);
+					paramText += typeDisplayAttr != null ? typeDisplayAttr.TypeDisplayName : GetNiceName(param.Type);
+
 					if (param.IsMultiple) {
 						paramText += "...";
 					}

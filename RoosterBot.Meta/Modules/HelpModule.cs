@@ -68,9 +68,9 @@ namespace RoosterBot.Meta {
 					if (!containsOptionalParameters) {
 						containsOptionalParameters = command.Parameters.Any(param => param.IsOptional);
 					}
-					response += "`" + GuildConfig.CommandPrefix + command.GetSignature(ResourcesService, Culture) + "`";
+					response += "`" + GuildConfig.CommandPrefix + command.GetSignature() + "`";
 					if (command.Description != null) {
-						response += ": " + string.Format(ResourcesService.ResolveString(Culture, component, command.Description), GuildConfig.CommandPrefix);
+						response += ": " + string.Format(command.Description, GuildConfig.CommandPrefix);
 					}
 					response += "\n";
 				}
