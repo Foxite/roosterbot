@@ -26,7 +26,6 @@ namespace RoosterBot {
 
 		private readonly StringBuilder m_Response = new StringBuilder();
 
-		// TODO (fix) This function is async because I don't know what to return, and we don't have an await here
 		protected override ValueTask BeforeExecutedAsync() {
 			Log = new ModuleLogger(GetType().Name);
 
