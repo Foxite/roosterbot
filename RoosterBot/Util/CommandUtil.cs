@@ -27,16 +27,8 @@ namespace RoosterBot {
 		/// </summary>
 		public static string GetSignature(this Command command, ResourceService resources, CultureInfo culture) {
 			ComponentBase moduleComponent = Program.Instance.Components.GetComponentForModule(command.Module);
+			string ret = command.FullAliases.First() + " ";
 
-			string ret = "";
-			// TODO (review) Are groups even a thing in Qmmands?
-			/*if (!string.IsNullOrWhiteSpace(command.Module.Group)) {
-				ret += resources.ResolveString(culture, moduleComponent, command.Module.Group) + " ";
-			}*/
-
-			if (!string.IsNullOrWhiteSpace(command.Name)) {
-				ret += resources.ResolveString(culture, moduleComponent, command.Name) + " ";
-			}
 			foreach (Parameter param in command.Parameters) {
 				if (param.Name != "ignored") {
 					string paramText = resources.ResolveString(culture, moduleComponent, param.Name) + ": ";
