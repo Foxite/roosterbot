@@ -15,7 +15,7 @@
 		<PackageReference Include="Discord.Net.WebSocket" Version="2.1.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
-		<PackageReference Include="Qmmands" Version="3.0.0-nightly-00232" />
+		<PackageReference Include="Qmmands" Version="3.0.0" />
 	</ItemGroup>
 
 </Project>
