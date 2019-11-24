@@ -15,7 +15,7 @@ namespace RoosterBot {
 		}
 
 		public async Task HandleResultAsync(IResult result, RoosterCommandContext context) {
-			if (result is FailedResult) {
+			if (!result.IsSuccessful) {
 				string response = "";
 				bool bad = false;
 				ComponentBase? component;
@@ -42,9 +42,10 @@ namespace RoosterBot {
 						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
 						break;
 					case TypeParseFailedResult type:
-						component = null; // TODO (fix) Get component for resolution
-						//Program.Instance.Components.GetComponentFromAssembly(type.GetType().Assembly);
-						response += m_Resources.ResolveString(context.Culture, component, type.Reason);
+						response += type.Reason;
+						break;
+					case IRoosterTypeParserResult type:
+						response += string.Format(m_Resources.ResolveString(context.Culture, type.ErrorReasonComponent, type.Reason), type.ErrorReasonObjects);
 						break;
 					case ExecutionFailedResult execution:
 						if (execution.Exception == null) {
@@ -56,15 +57,23 @@ namespace RoosterBot {
 						break;
 					case ChecksFailedResult check:
 						foreach ((CheckAttribute Check, CheckResult Result) in check.FailedChecks) {
-							component = Program.Instance.Components.GetComponentFromAssembly(check.FailedChecks.First().Check.GetType().Assembly);
-							response = m_Resources.ResolveString(context.Culture, component, check.Reason) + "\n";
+							if (Result is RoosterCheckResult rcr) {
+								component = Program.Instance.Components.GetComponentFromAssembly(check.FailedChecks.First().Check.GetType().Assembly);
+								response = m_Resources.ResolveString(context.Culture, component, check.Reason) + "\n";
+							} else {
+								response = Result.Reason;
+							}
 						}
 						break;
 					case ParameterChecksFailedResult paramCheck:
 						foreach ((ParameterCheckAttribute Check, CheckResult Result) in paramCheck.FailedChecks) {
-							component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
-							response += string.Format(m_Resources.GetString(context.Culture, "CommandHandling_ParamCheckFailed"), paramCheck.Parameter.Name,
-								m_Resources.ResolveString(context.Culture, component, Result.Reason)) + "\n";
+							if (Result is RoosterCheckResult rcr) {
+								component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
+								response += string.Format(m_Resources.GetString(context.Culture, "CommandHandling_ParamCheckFailed"), paramCheck.Parameter.Name,
+									m_Resources.ResolveString(context.Culture, component, Result.Reason)) + "\n";
+							} else {
+								response = Result.Reason;
+							}
 						}
 						break;
 					default:
@@ -79,6 +88,8 @@ namespace RoosterBot {
 				} else {
 					await context.RespondAsync(Util.Error + response);
 				}
+			} else {
+				await context.UserConfig.UpdateAsync();
 			}
 		}
 	}
