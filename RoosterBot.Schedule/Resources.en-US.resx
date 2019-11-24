@@ -228,7 +228,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
 		  1: relative date reference</comment>
   </data>
   <data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
-    <value>{0}: Not on schedule right now</value>
+    <value>{0}: Not on schedule right now.</value>
     <comment>0: identifier info display text</comment>
   </data>
   <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
