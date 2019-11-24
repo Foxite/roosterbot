@@ -87,7 +87,7 @@ namespace RoosterBot {
 					var culture = CultureInfo.GetCultureInfo(locale);
 
 					// A factory is more performant because it won't create a whole new service if it's not going to be used
-					CommandService service = m_ServicesByCulture.GetOrAdd(culture, (culture) => new CommandService(m_Config));
+					CommandService service = GetService(culture);
 
 					localizedModules[i] = service.AddModule(module, (builder) => {
 						// TODO (refactor) Localize everything here, not just command names, and don't resolve strings when generating command signatures
