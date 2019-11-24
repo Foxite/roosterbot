@@ -8,7 +8,7 @@ namespace RoosterBot {
 
 		public async sealed override ValueTask<CheckResult> CheckAsync(object argument, CommandContext context) {
 			if (context is RoosterCommandContext rcc) {
-				return await CheckAsync(argument, context);
+				return await CheckAsync(argument, rcc);
 			} else if (ThrowOnInvalidContext) {
 				throw new InvalidOperationException($"{nameof(RoosterParameterCheckAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
