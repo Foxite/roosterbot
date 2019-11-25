@@ -1,10 +1,28 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
+using Discord;
 using Qmmands;
 
 namespace RoosterBot {
 	public static class CommandUtil {
+		public static bool IsMessageCommand(IMessage message, string prefix, out int argPos) {
+			argPos = 0;
+			if (message.Content != null && // Message objects created for MessageUpdated events only contain what was modified. Content may be null in certain cases. https://github.com/discord-net/Discord.Net/issues/1409
+				message.Source == MessageSource.User &&
+				message is IUserMessage userMessage &&
+				message.Content.Length > prefix.Length &&
+				userMessage.Content.StartsWith(prefix)) {
+				// First char after prefix
+				char firstChar = message.Content.Substring(prefix.Length)[0];
+				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
+					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		// TODO (localize) These nice names
 		private static string GetNiceName(Type type) => type.Name switch {
 			"Byte" => "integer",

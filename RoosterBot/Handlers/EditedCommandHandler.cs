@@ -28,7 +28,7 @@ namespace RoosterBot {
 				UserConfig userConfig = await m_UCS.GetConfigAsync(messageAfter.Author);
 				CommandResponsePair? crp = userConfig.GetResponse(userMessageAfter);
 
-				if (m_Commands.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
+				if (CommandUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
 					var context = new RoosterCommandContext(m_Client, userMessageAfter, userConfig, guildConfig, Program.Instance.Components.Services);
 					IResult result = await m_Commands.ExecuteAsync(userMessageAfter.Content.Substring(argPos + 1), context);
 					await m_SPCH.HandleResultAsync(result, context);

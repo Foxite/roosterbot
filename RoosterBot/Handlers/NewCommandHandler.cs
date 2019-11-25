@@ -26,7 +26,7 @@ namespace RoosterBot {
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			if (socketMessage is IUserMessage userMessage) {
 				GuildConfig guildConfig = await m_GCS.GetConfigAsync((socketMessage.Channel as IGuildChannel)?.Guild ?? socketMessage.Author.MutualGuilds.First());
-				if (m_Commands.IsMessageCommand(userMessage, guildConfig.CommandPrefix, out int argPos)) {
+				if (CommandUtil.IsMessageCommand(userMessage, guildConfig.CommandPrefix, out int argPos)) {
 					UserConfig userConfig = await m_UCS.GetConfigAsync(userMessage.Author);
 
 					var context = new RoosterCommandContext(m_Client, userMessage, userConfig, guildConfig, Program.Instance.Components.Services);
