@@ -487,4 +487,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
     <value>amount</value>
   </data>
+  <data name="TeacherListModule_CommandName" xml:space="preserve">
+    <value>teachers|teacher|staff</value>
+  </data>
 </root>

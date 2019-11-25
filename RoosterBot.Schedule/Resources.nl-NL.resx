@@ -491,4 +491,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
     <value>aantal</value>
   </data>
+  <data name="TeacherListModule_CommandName" xml:space="preserve">
+    <value>leraren|docenten|docent</value>
+  </data>
 </root>

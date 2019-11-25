@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	[Name("#TeacherListModule_Name")]
+	[Name("#TeacherListModule_Name"), LocalizedModule("nl-NL", "en-US")]
 	public class TeacherListModule : RoosterModuleBase {
 		public TeacherNameService Teachers { get; set; } = null!;
 
-		// TODO (localize) These aliases
-		[Command("leraren", "docenten", "docent"), Description("#TeacherListModule_TeacherListCommand_Summary")]
+		[Command("#TeacherListModule_CommandName"), Description("#TeacherListModule_TeacherListCommand_Summary")]
 		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
