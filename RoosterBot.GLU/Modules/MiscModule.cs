@@ -7,7 +7,7 @@ namespace RoosterBot.GLU {
 		[Command("danku", "dankje", "dankjewel", "bedankt", "dank",
 				 "goed", "goedzo", "goodbot",
 				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
-		public async Task ThankYouCommand() {
+		public Task ThankYouCommand() {
 			string response;
 			if (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
 				response = "<:wsjoram:570601561072467969>";
@@ -21,7 +21,8 @@ namespace RoosterBot.GLU {
 				response = responses[Util.RNG.Next(0, responses.Length)];
 			}
 
-			await ReplyAsync(response);
+			ReplyDeferred(response);
+			return Task.CompletedTask;
 		}
 
 		[Command("altijdJoram"), RequireContext(ContextType.DM)]
