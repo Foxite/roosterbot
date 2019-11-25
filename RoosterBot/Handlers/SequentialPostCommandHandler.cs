@@ -28,9 +28,10 @@ namespace RoosterBot {
 						response = string.Format(m_Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.GuildConfig.CommandPrefix);
 						break;
 					case CommandOnCooldownResult cooldown:
-						// TODO (feature) Display cooldown time left
-						// cooldown seems to contain the right data for this, but I haven't looked into how it works yet
-						response = string.Format(m_Resources.GetString(context.Culture, "CommandHandling_Cooldown"), "`TODO`");
+						// Cooldowns don't actually work because we never set the cooldown bucket generator delegate,
+						//  (not like I actually understand how that works),
+						//  but just for completeness' sake we have this case for cooldowns.
+						response = string.Format(m_Resources.GetString(context.Culture, "CommandHandling_Cooldown"), cooldown.Cooldowns.First().RetryAfter);
 						break;
 					case OverloadsFailedResult overloads:
 						response = m_Resources.GetString(context.Culture, "CommandHandling_OverloadsFailed") + "\n";
