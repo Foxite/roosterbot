@@ -308,7 +308,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Wat er vandaag op het rooster staat.</value>
   </data>
   <data name="TeacherListModule_Name" xml:space="preserve">
-    <value>Leraren</value>
+    <value>Rooster</value>
   </data>
   <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
     <value>Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.</value>

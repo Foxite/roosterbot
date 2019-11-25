@@ -307,7 +307,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>See the schedule for today.</value>
   </data>
   <data name="TeacherListModule_Name" xml:space="preserve">
-    <value>Teachers</value>
+    <value>Schedule</value>
   </data>
   <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
     <value>A list of all teachers, their abbreviations, and their Discord names (if known). You can filter by name.</value>
