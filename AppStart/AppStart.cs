@@ -56,7 +56,6 @@ namespace RoosterBot.Automation {
 				if (pipeServer.IsConnected) {
 					using (StreamReader sr = new StreamReader(pipeServer)) {
 						string input = sr.ReadLine();
-						// TODO (investigate) find out if it is possible for a process to send a simple "ping" rather than arbitrary data
 						// This will fuck up if the received data is anything other than "ready", although that shouldn't happen (at the time of writing)
 						if (input == "ready") {
 							return true;
