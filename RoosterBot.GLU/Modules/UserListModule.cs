@@ -21,7 +21,7 @@ namespace RoosterBot.GLU {
 		[Command("rolecount"), RequireContext(ContextType.Guild), UserIsModerator]
 		public async Task GetUnrankedUsers(string comparison, int count, params IRole[] roles) {
 			if (!TryGetCompareFunc(comparison, out Func<int, int, bool>? compare)) {
-				await MinorError("Invalid comparison.");
+				MinorError("Invalid comparison.");
 				return;
 			}
 

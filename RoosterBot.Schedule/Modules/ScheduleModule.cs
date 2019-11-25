@@ -105,7 +105,7 @@ namespace RoosterBot.Schedule {
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
 					await RespondWeek(info, amount);
 				} else {
-					await MinorError(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits"));
+					MinorError(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits"));
 				}
 			}
 		}
@@ -258,7 +258,7 @@ namespace RoosterBot.Schedule {
 				query = UserConfig.GetLastScheduleCommand(Context.Channel);
 			}
 			if (query == null) {
-				await MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
+				MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
 				ReturnValue<ScheduleRecord> nextRecord = await GetRecordAfterDateTime(query.Identifier, (query.RecordEndTime == null ? DateTime.Now : query.RecordEndTime.Value) - TimeSpan.FromSeconds(1));
 
@@ -285,17 +285,17 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Convenience
-		private async Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
+		private Task<IdentifierInfo?> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
 				StudentSetInfo? ssi = Context.UserConfig.GetStudentSet();
 				if (ssi != null) {
-					return ssi;
+					return Task.FromResult((IdentifierInfo?) ssi);
 				} else {
-					await MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf"));
-					return null;
+					MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf"));
+					return Task.FromResult((IdentifierInfo?) null);
 				}
 			} else {
-				return info;
+				return Task.FromResult((IdentifierInfo?) info);
 			}
 		}
 
@@ -319,11 +319,11 @@ namespace RoosterBot.Schedule {
 			try {
 				return new ReturnValue<T>(await action());
 			} catch (IdentifierNotFoundException) {
-				await MinorError(GetString("ScheduleModule_HandleError_NotFound"));
+				MinorError(GetString("ScheduleModule_HandleError_NotFound"));
 			} catch (RecordsOutdatedException) {
-				await MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
+				MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
 			} catch (NoAllowedGuildsException) {
-				await MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
+				MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
 			}
 			return new ReturnValue<T>();
 		}

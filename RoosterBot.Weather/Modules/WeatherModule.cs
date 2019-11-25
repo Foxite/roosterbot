@@ -51,17 +51,17 @@ namespace RoosterBot.Weather {
 		[Command("#WeatherModule_UnitForecast"), RunMode(RunMode.Parallel)]
 		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
-				await MinorError(GetString("#WeatherModule_NoLookBack"));
+				MinorError(GetString("#WeatherModule_NoLookBack"));
 			} else if (GetString("WeatherModule_Unit_Days").Split('|').Contains(unit)) {
 				if (amount > 7) {
-					await MinorError(GetString("WeatherModule_SevenDayLimit"));
+					MinorError(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 					Attribution();
 				}
 			} else if (GetString("WeatherModule_Unit_Hours").Split('|').Contains(unit)) {
 				if (amount > 168) {
-					await MinorError(GetString("WeatherModule_SevenDayLimit"));
+					MinorError(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					WeatherInfo weather;
 					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -72,7 +72,7 @@ namespace RoosterBot.Weather {
 					Attribution();
 				}
 			} else {
-				await MinorError(GetString("WeatherModule_UnknownUnit"));
+				MinorError(GetString("WeatherModule_UnknownUnit"));
 			}
 		}
 
