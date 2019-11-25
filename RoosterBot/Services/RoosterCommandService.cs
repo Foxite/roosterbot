@@ -97,11 +97,11 @@ namespace RoosterBot {
 					localizedModules[i] = service.AddModule(moduleType, (module) => {
 						// TODO (review) Is this function called for all submodules of the {moduleType} we're adding?
 						// Otherwise we need to foreach module.Submodules
-
-						// TODO (feature) Attributes like TypeDisplayAttribute that contain a single string property should all implement an interface with the property
-						// Then we should foreach module.Attributes.OfType<IRoosterTextAttribute> and resolve the text
-						// Also do this for commands and parameters
 						module.AddCheck(new RequireCultureAttribute(locale, true));
+
+						foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+							rta.Text = resolveString(rta.Text)!;
+						}
 
 						module.Description = resolveString(module.Description);
 						module.Remarks = resolveString(module.Remarks);
@@ -116,6 +116,10 @@ namespace RoosterBot {
 						}
 
 						foreach (CommandBuilder command in module.Commands) {
+							foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+								rta.Text = resolveString(rta.Text)!;
+							}
+
 							if (command.Aliases.Count > 0) {
 								string aliasKey = command.Aliases.Single();
 								command.Aliases.Remove(aliasKey);
@@ -129,6 +133,10 @@ namespace RoosterBot {
 							command.Name = resolveString(command.Name);
 
 							foreach (ParameterBuilder parameter in command.Parameters) {
+								foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+									rta.Text = resolveString(rta.Text)!;
+								}
+
 								parameter.Description = resolveString(parameter.Description);
 								parameter.Remarks = resolveString(parameter.Remarks);
 								parameter.Name = resolveString(parameter.Name);
