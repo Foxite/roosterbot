@@ -10,7 +10,7 @@ namespace RoosterBot.Meta {
 		public HelpService Help { get; set; } = null!;
 
 		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Summary")]
-		public Task HelpCommand() {
+		public Task<CommandResult> HelpCommand() {
 			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n";
 			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
 			response += string.Join(", ", Help.GetSectionNames(Culture)) + "\n\n";
@@ -18,12 +18,11 @@ namespace RoosterBot.Meta {
 			response += GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix);
 
 			ReplyDeferred(response);
-
-			return Task.CompletedTask;
+			return Result(Ok(null));
 		}
 
 		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Section_Summary")]
-		public Task HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
+		public Task<CommandResult> HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
 			string response = "";
 			if (Help.HelpSectionExists(Culture, section)) {
 				string helpText = Help.GetHelpSection(Culture, section);
@@ -33,35 +32,35 @@ namespace RoosterBot.Meta {
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
 				response += string.Join(", ", Help.GetSectionNames(Culture));
 			}
-			ReplyDeferred(response);
 
-			return Task.CompletedTask;
+			ReplyDeferred(response);
+			return Result(Ok(null));
 		}
 
 		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Summary")]
-		public Task CommandListCommand() {
-			string ret = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
-			ret += string.Join(", ", GetCategories().Select(grouping => grouping.Key));
+		public Task<CommandResult> CommandListCommand() {
+			string response = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
+			response += string.Join(", ", GetCategories().Select(grouping => grouping.Key));
 
-			ReplyDeferred(ret);
-			return Task.CompletedTask;
+			ReplyDeferred(response);
+			return Result(Ok(null));
 		}
 
 		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Category_Summary")]
-		public Task CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string query) {
+		public Task<CommandResult> CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string query) {
 			query = query.ToLower();
+			string response;
 
 			IEnumerable<(Command command, ComponentBase component)>? commands = GetCategories()
 				.Where(category => category.Key.ToLower() == query)
 				.Select(category => category as IEnumerable<(Command command, ComponentBase component)>)
 				.SingleOrDefault();
-			
+
 			if (commands == null) {
-				string response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n";
+				response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n";
 				response += GetCategories();
-				base.ReplyDeferred(response);
 			} else {
-				string response = "";
+				response = "";
 				bool containsOptionalParameters = false;
 
 				foreach ((Command command, ComponentBase component) in commands) {
@@ -78,9 +77,11 @@ namespace RoosterBot.Meta {
 				if (containsOptionalParameters) {
 					response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
 				}
-				ReplyDeferred(response);
+				
 			}
-			return Task.CompletedTask;
+			
+			ReplyDeferred(response);
+			return Result(Ok(null));
 		}
 
 		private IEnumerable<IGrouping<string, (Command command, ComponentBase component)>> GetCategories() {
