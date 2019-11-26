@@ -16,7 +16,7 @@ namespace RoosterBot {
 
 		public override bool IsSuccessful => throw new NotImplementedException();
 
-		private TextResult(Emote? prefixEmote, string response) {
+		public TextResult(Emote? prefixEmote, string response) {
 			PrefixEmote = prefixEmote;
 			Response = response;
 		}
