@@ -35,14 +35,8 @@ namespace RoosterBot {
 			return default;
 		}
 
-		protected async override ValueTask AfterExecutedAsync() {
-			// Can't return this task because ValueTask.
-			// ValueTask has a constructor that takes Task, should we use that? Don't do anything unless you know how ValueTask works
-			await SendDeferredResponseAsync();
-		}
-
 		/// <summary>
-		/// Queues a message to be sent after the command has finished executing.
+		/// Adds a line to the command's response. If you use this, you should have <code>return <see cref="Ok(Emote)"/></code> at the end of your command.
 		/// </summary>
 		protected virtual void ReplyDeferred(string message) {
 			lock (m_Response) {
@@ -50,44 +44,24 @@ namespace RoosterBot {
 			}
 		}
 
-		protected async virtual Task<IUserMessage?> SendDeferredResponseAsync() {
-			if (m_Response.Length != 0) {
-				string message = m_Response.ToString();
-				m_Response.Clear();
-				// Ending with `return await` is not preferred because it creates an unnecessary async state machine, but ReplyAsync never returns null but this function might.
-				// The only way to make it work without warnings is to make this an async function and await ReplyAsync. I initially tried returning Task.FromResult(null) but Task<T> cannot be used in place of Task<T?>.
-				// This is by design. Consider this:
-				// 
-				//     List<string?> list = new List<string>();
-				//     list.Add(null); // List that doesn't handle null types now contains a null item
-				// 
-				// The opposite doesn't work either:
-				// 
-				//     List<string> list = new List<string?>();
-				//     foreach (string item in list) { ... } // item may be null despite not being nullable
-				return await ReplyAsync(message);
+		/// <summary>
+		/// Gets a TextResult based on the strings passed to <see cref="ReplyDeferred(string)"/>
+		/// </summary>
+		/// <remarks>
+		/// If <see cref="ReplyDeferred(string)"/>, then the TextResult will inform the user that the command returned no response.
+		/// </remarks>
+		protected TextResult Ok(Emote? emote) {
+			if (m_Response.Length > 0) {
+				return new TextResult(emote, m_Response.ToString());
 			} else {
-				return null;
+				// TODO (localize) This message
+				return TextResult.Info("The command returned no response.");
 			}
 		}
 
-		// TODO (refactor) This function shouldn't be used anymore, we should use ReplyDeferred. Multiple responses is bad UI.
-		protected virtual Task<IUserMessage> ReplyAsync(string message, bool isTTS = false, Embed? embed = null, RequestOptions? options = null) {
-			if (m_Response.Length != 0) {
-				message = m_Response
-					.AppendLine(message)
-					.ToString();
-				m_Response.Clear();
-			}
+		protected virtual TextResult MinorError(string message) => TextResult.Error(message);
 
-			return CommandResponseUtil.RespondAsync(Context, message, isTTS, embed, options);
-		}
-
-		protected virtual void MinorError(string message) {
-			ReplyDeferred(Util.Error + message);
-		}
-
-		protected async virtual Task FatalError(string message, Exception? exception = null) {
+		protected async Task<TextResult> Error(string message, Exception? exception = null) {
 			string report = $"Fatal error executing {Context}\nAttached error message: {message}";
 
 			Log.Error(report, exception);
@@ -99,10 +73,22 @@ namespace RoosterBot {
 			if (Config.BotOwner != null) {
 				await Config.BotOwner.SendMessageAsync(report);
 			}
-			
-			string response = Util.Error + GetString("RoosterBot_FatalError");
-			ReplyDeferred(response);
+
+			return TextResult.Error(GetString("RoosterBot_FatalError"));
 		}
+
+		/// <summary>
+		/// In non-async methods, this function serves as a shortcut for this:
+		/// <code>
+		/// return Task.FromResult((CommandResult) new RoosterCommandResult(...))
+		/// </code>
+		/// Instead, you can do this:
+		/// <code>
+		/// return Result(new RoosterCommandResult(...));
+		/// </code>
+		/// In async mmethods you should not use this function, simply return the result directly.
+		/// </summary>
+		protected Task<CommandResult> Result(RoosterCommandResult result) => Task.FromResult((CommandResult) result);
 
 		protected string GetString(string name) {
 			return ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name);
@@ -112,8 +98,8 @@ namespace RoosterBot {
 			return string.Format(ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
 		}
 
-		protected class ModuleLogger {
-			protected internal string m_Tag = "ErrorModule";
+		protected sealed class ModuleLogger {
+			private readonly string m_Tag;
 
 			internal ModuleLogger(string tag) {
 				m_Tag = tag;
