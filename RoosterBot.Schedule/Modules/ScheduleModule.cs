@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RoosterBot.DateTimeUtils;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
 	// TODO (refactor) reduce the size of this file (it has 353 lines right now)
+	// TODO (feature) Use the new Result system for this module, it is non functional until we use it
 	[Name("#ScheduleModule_Name")]
 	[Description("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
-		private IdentifierInfo? m_LookedUpIdentifier;
-		private DateTime? m_LookedUpRecordEndTime;
+		private LastScheduleCommandInfo? m_LookedUpData;
 
 		public ScheduleService Schedules { get; set; } = null!;
 
@@ -252,8 +251,8 @@ namespace RoosterBot.Schedule {
 
 		protected async Task RespondAfter(int recursion = 0) {
 			LastScheduleCommandInfo? query;
-			if (m_LookedUpIdentifier != null) {
-				query = new LastScheduleCommandInfo(m_LookedUpIdentifier, m_LookedUpRecordEndTime);
+			if (m_LookedUpData != null) {
+				query = new LastScheduleCommandInfo(m_LookedUpData.Identifier, m_LookedUpData.RecordEndTime);
 			} else {
 				query = UserConfig.GetLastScheduleCommand(Context.Channel);
 			}
@@ -330,24 +329,19 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Overrides
-		/// <summary>
-		/// Posts a message in Context.Channel with the given text, and records the given identifier and record end time for use in the !daarna command.
-		/// </summary>
 		protected void ReplyDeferred(string message, IdentifierInfo identifier, DateTime recordEndTime) {
 			base.ReplyDeferred(message);
 
-			m_LookedUpIdentifier = identifier;
-			m_LookedUpRecordEndTime = recordEndTime;
+			m_LookedUpData = new LastScheduleCommandInfo(identifier, recordEndTime);
 		}
 
-		protected async override Task<IUserMessage?> SendDeferredResponseAsync() {
-			if (m_LookedUpIdentifier != null && m_LookedUpRecordEndTime != null) {
-				UserConfig.OnScheduleRequestByUser(Context.Channel, m_LookedUpIdentifier, m_LookedUpRecordEndTime.Value);
+		protected override ValueTask AfterExecutedAsync() {
+			if (m_LookedUpData != null) {
+				UserConfig.OnScheduleRequestByUser(Context.Channel, m_LookedUpData);
 			} else {
 				UserConfig.RemoveLastScheduleCommand(Context.Channel);
 			}
-
-			return await base.SendDeferredResponseAsync();
+			return default;
 		}
 		#endregion
 	}
