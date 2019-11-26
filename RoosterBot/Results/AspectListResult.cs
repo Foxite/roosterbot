@@ -39,6 +39,6 @@ namespace RoosterBot {
 			Value = value;
 		}
 
-		public string Present(bool includeName) => PrefixEmote.ToString() + (includeName ? Name + ": " : " ") + Value
+		public string Present(bool includeName) => PrefixEmote.ToString() + (includeName ? Name + ": " : " ") + Value;
 	}
 }
