@@ -36,9 +36,6 @@ namespace RoosterBot.Schedule {
 				$"{(Break == null ? "no break" : ("a break from " + Break.Start.ToString() + " to " + Break.End.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 
-		/// <summary>
-		/// Convert this instance to a string that can be sent to Discord.
-		/// </summary>
-		public abstract string Present(IdentifierInfo relevantIdentifier);
+		public abstract IEnumerable<AspectListItem> Present(IdentifierInfo relevantIdentifier);
 	}
 }
