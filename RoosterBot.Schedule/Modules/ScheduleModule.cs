@@ -13,13 +13,14 @@ namespace RoosterBot.Schedule {
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
 	public class ScheduleModule : RoosterModuleBase {
+		private readonly CompoundResult m_Result = new CompoundResult("\n");
 		private LastScheduleCommandInfo? m_LookedUpData;
 
 		public ScheduleService Schedules { get; set; } = null!;
 
 		#region Commands
 		[Command("#ScheduleModule_NowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
-		public async Task CurrentCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.Now);
@@ -32,17 +33,18 @@ namespace RoosterBot.Schedule {
 							response += GetString("ScheduleModule_ItIsWeekend");
 						}
 
-						ReplyDeferred(response, info, DateTime.Now);
+						m_Result.AddResult(new TextResult(null, response));
 						await NextCommand(info);
 					} else {
 						await RespondRecord(GetString("ScheduleModule_PretextNow", info.DisplayText), info, record);
 					}
 				}
 			}
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_NextCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultNextCommand_Summary")]
-		public async Task NextCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.Now);
@@ -57,35 +59,41 @@ namespace RoosterBot.Schedule {
 					await RespondRecord(pretext, info, record);
 				}
 			}
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_DayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
-		public async Task WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_TodayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
-		public async Task TodayCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> TodayCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_TomorrowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
-		public async Task TomorrowCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> TomorrowCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_ThisWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
-		public async Task ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 0);
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
-		public async Task ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_FutureCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
-		public async Task ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				unit = unit.ToLower();
@@ -96,7 +104,9 @@ namespace RoosterBot.Schedule {
 						if (record != null) {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
-							ReplyDeferred(GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"), info, DateTime.Now + TimeSpan.FromHours(amount));
+							m_Result.AddResult(new TextResult(null, GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime")));
+							m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Now + TimeSpan.FromHours(amount));
+							await GetAfterCommand();
 						}
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
@@ -107,20 +117,22 @@ namespace RoosterBot.Schedule {
 					MinorError(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits"));
 				}
 			}
+			return m_Result;
 		}
 
 		[Command("#ScheduleModule_AfterCommand"), RunMode(RunMode.Parallel), IgnoresExtraArguments, Description("#ScheduleModule_AfterCommand_Summary")]
-		public async Task GetAfterCommand() {
+		public async Task<CommandResult> GetAfterCommand() {
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();
+			return m_Result;
 		}
 		#endregion
 
 		#region Record response functions
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
-			string response = pretext + "\n";
-			response += record.Present(info);
-			ReplyDeferred(response, info, record.End);
+			m_LookedUpData = new LastScheduleCommandInfo(info, record.End);
+			IEnumerable<AspectListItem> aspects = record.Present(info);
+			m_Result.AddResult(new AspectListResult(pretext, aspects));
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
 				await RespondAfter(0);
@@ -145,12 +157,13 @@ namespace RoosterBot.Schedule {
 								response += GetString("ScheduleModule_ThatIsWeekend");
 							}
 						}
-						ReplyDeferred(response, info, date);
+						m_Result.AddResult(new TextResult(null, response));
+						m_LookedUpData = new LastScheduleCommandInfo(info, date);
 					} else if (records.Length == 1) {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
 					} else {
-						string response = GetString("ScheduleModule_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
+						string pretext = GetString("ScheduleModule_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
 						string[][] cells = new string[records.Length + 1][];
 						cells[0] = new string[] {
@@ -173,8 +186,8 @@ namespace RoosterBot.Schedule {
 
 							recordIndex++;
 						}
-						response += StringUtil.FormatTextTable(cells);
-						ReplyDeferred(response, info, records.Last().End);
+						m_LookedUpData = new LastScheduleCommandInfo(info, records.Last().End);
+						m_Result.AddResult(new TableResult(pretext, cells));
 					}
 				}
 			}
@@ -183,18 +196,18 @@ namespace RoosterBot.Schedule {
 		protected async Task RespondWeek(IdentifierInfo? info, int weeksFromNow) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
-				string response;
 				ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 				if (weekRecords.Length > 0) {
+					string caption;
 					if (weeksFromNow == 0) {
-						response = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
+						caption = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
 					} else if (weeksFromNow == 1) {
-						response = GetString("ScheduleModule_RespondWeek_ScheduleNextWeek", info);
+						caption = GetString("ScheduleModule_RespondWeek_ScheduleNextWeek", info);
 					} else {
-						response = GetString("ScheduleModule_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
+						caption = GetString("ScheduleModule_RespondWeek_ScheduleInXWeeks", info, weeksFromNow);
 					}
 
-					Dictionary<DayOfWeek, ScheduleRecord[]> dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
+					var dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
 						/* Key select */ group => group.Key,
 						/* Val select */ group => group.ToArray()
 					);
@@ -234,8 +247,9 @@ namespace RoosterBot.Schedule {
 						}
 					}
 
-					response += StringUtil.FormatTextTable(cells);
+					m_Result.AddResult(new TableResult(caption, cells));
 				} else {
+					string response;
 					if (weeksFromNow == 0) {
 						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek", info);
 					} else if (weeksFromNow == 1) {
@@ -243,9 +257,8 @@ namespace RoosterBot.Schedule {
 					} else {
 						response = GetString("ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks", info, weeksFromNow);
 					}
+					m_Result.AddResult(new TextResult(null, response));
 				}
-				ReplyDeferred(response);
-
 			}
 		}
 
@@ -329,10 +342,10 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Overrides
-		protected void ReplyDeferred(string message, IdentifierInfo identifier, DateTime recordEndTime) {
-			base.ReplyDeferred(message);
-
-			m_LookedUpData = new LastScheduleCommandInfo(identifier, recordEndTime);
+		protected override TextResult MinorError(string message) {
+			TextResult result = base.MinorError(message);
+			m_Result.AddResult(result);
+			return result;
 		}
 
 		protected override ValueTask AfterExecutedAsync() {
