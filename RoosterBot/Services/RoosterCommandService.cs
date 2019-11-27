@@ -19,9 +19,28 @@ namespace RoosterBot {
 		private readonly ConcurrentDictionary<CultureKey, CommandService> m_ServicesByCulture;
 		private readonly ResourceService m_ResourceService;
 		private readonly CommandServiceConfiguration m_Config;
+
+		// These events are copied from https://github.com/Quahu/Qmmands/blob/master/src/Qmmands/CommandService.cs
+        private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>();
+        private readonly AsynchronousEvent<CommandExecutionFailedEventArgs> m_CommandExecutionFailed = new AsynchronousEvent<CommandExecutionFailedEventArgs>();
 		
-		public event AsynchronousEventHandler<CommandExecutedEventArgs>? CommandExecuted;
-		public event AsynchronousEventHandler<CommandExecutionFailedEventArgs>? CommandExecutionFailed;
+		/// <summary>
+        /// Fires after a <see cref="Command"/> was successfully executed.
+        /// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
+        /// </summary>
+        public event AsynchronousEventHandler<CommandExecutedEventArgs> CommandExecuted {
+            add => m_CommandExecuted.Hook(value);
+            remove => m_CommandExecuted.Unhook(value);
+        }
+
+        /// <summary>
+        /// Fires after a <see cref="Command"/> failed to execute.
+        /// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
+        /// </summary>
+        public event AsynchronousEventHandler<CommandExecutionFailedEventArgs> CommandExecutionFailed {
+            add => m_CommandExecutionFailed.Hook(value);
+            remove => m_CommandExecutionFailed.Unhook(value);
+        }
 
 		internal RoosterCommandService(ResourceService resourceService) : this(resourceService, new CommandServiceConfiguration()) { }
 
@@ -33,8 +52,8 @@ namespace RoosterBot {
 
 		private CommandService GetService(CultureInfo? culture) => m_ServicesByCulture.GetOrAdd(culture, (c) => {
 			var ret = new CommandService(m_Config);
-			ret.CommandExecuted += (args) => CommandExecuted?.Invoke(args) ?? Task.CompletedTask;
-			ret.CommandExecutionFailed += (args) => CommandExecutionFailed?.Invoke(args) ?? Task.CompletedTask;
+			ret.CommandExecuted += async (args) => await m_CommandExecuted.InvokeAsync(args);
+			ret.CommandExecutionFailed += async (args) => await m_CommandExecutionFailed.InvokeAsync(args);
 			return ret;
 		});
 
@@ -46,10 +65,10 @@ namespace RoosterBot {
 
 		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
 			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
-			if (result.IsSuccessful) {
-				return result;
-			} else {
+			if (result is CommandNotFoundResult) {
 				return await GetService(null).ExecuteAsync(input, context);
+			} else {
+				return result;
 			}
 		}
 
