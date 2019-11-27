@@ -2,11 +2,11 @@
 
 namespace RoosterBot {
 	public static class Util {
-		public static readonly string Error = "<:error:636213609919283238> ";
-		public static readonly string Success = "<:ok:636213617825546242> ";
-		public static readonly string Warning = "<:warning:636213630114856962> ";
-		public static readonly string Unknown = "<:unknown:636213624460935188> ";
-		public static readonly string Info = "<:info:644251874010202113> ";
-		public static readonly Random RNG = new Random();
+		public static readonly string Error   = Constants.Error  .ToString() + " ";
+		public static readonly string Success = Constants.Success.ToString() + " ";
+		public static readonly string Warning = Constants.Warning.ToString() + " ";
+		public static readonly string Unknown = Constants.Unknown.ToString() + " ";
+		public static readonly string Info    = Constants.Info   .ToString() + " ";
+		public static readonly Random RNG     = new Random();
 	}
 }
