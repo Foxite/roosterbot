@@ -6,8 +6,7 @@ using RoosterBot.DateTimeUtils;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	// TODO (refactor) reduce the size of this file (it has 353 lines right now)
-	// TODO (feature) Use the new Result system for this module, it is non functional until we use it
+	// TODO (refactor) reduce the size of this file (it has 359 lines right now)
 	[Name("#ScheduleModule_Name")]
 	[Description("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
