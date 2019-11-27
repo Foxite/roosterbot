@@ -11,7 +11,7 @@ namespace RoosterBot.PublicTransit {
 		public StationInfoService Stations { get; set; } = null!;
 
 		[Command("ov"), RunMode(RunMode.Parallel), Description("Bereken een route van een station naar een andere (standaard vanaf Utrecht Vaartsche Rijn). Gebruik een komma tussen stations. Voorbeeld: `{0}ov amsterdam sloterdijk, utrecht centraal`")]
-		public async Task GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {
+		public async Task<CommandResult> GetTrainRouteCommand([Name("vertrekstation, bestemming"), Count(1, 2), Remainder] StationInfo[] stops) {
 			StationInfo stationFrom;
 			StationInfo stationTo;
 			if (stops.Length == 2) {
@@ -24,16 +24,14 @@ namespace RoosterBot.PublicTransit {
 
 			using IDisposable typingState = Context.Channel.EnterTypingState();
 
-			ReplyDeferred($"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName}:");
-
 			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
 
-			ReplyDeferred($"{Context.User.Mention} Mogelijkheden: (elke optie is in een aparte tabel, en elke rij is één overstap)");
+			var result = new CompoundResult("\n", new TextResult(null, $"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName}:"));
 
 			foreach (Journey journey in journeys) {
-				string pretext = "";
+				string caption = "";
 				if (journey.Status != JourneyStatus.OnSchedule) {
-					pretext = JourneyStatusFunctions.HumanStringFromJStatus(journey.Status);
+					caption = JourneyStatusFunctions.HumanStringFromJStatus(journey.Status);
 				}
 
 				string[][] cells = new string[journey.Components.Count + 1][];
@@ -76,13 +74,14 @@ namespace RoosterBot.PublicTransit {
 
 					recordIndex++;
 				}
-				ReplyDeferred(pretext + "\n" + StringUtil.FormatTextTable(cells));
+				result.AddResult(new TableResult(caption, cells));
 			}
+			return result;
 		}
 
 		[Command("stations"), Description("Zoek een station op in de lijst.")]
-		public Task GetStationInfo([Remainder, Name("zoekterm")] string input) {
-			string response = "Gevonden stations zijn (beste match eerst):\n\n";
+		public Task<CommandResult> GetStationInfo([Remainder, Name("zoekterm")] string input) {
+			string response = "Gevonden stations (beste match eerst):\n\n";
 
 			IReadOnlyList<StationMatchInfo> matches = Stations.Lookup(input, 3);
 			int i = 1;
@@ -114,8 +113,7 @@ namespace RoosterBot.PublicTransit {
 				response += $". Code: {matchInfo.Station.Code}\n";
 				i++;
 			}
-			ReplyDeferred(response);
-			return Task.CompletedTask;
+			return Result(TextResult.Info(response));
 		}
 	}
 }
