@@ -7,7 +7,7 @@ namespace RoosterBot.GLU {
 		[Command("danku", "dankje", "dankjewel", "bedankt", "dank",
 				 "goed", "goedzo", "goodbot",
 				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
-		public Task ThankYouCommand() {
+		public Task<CommandResult> ThankYouCommand() {
 			string response;
 			if (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
 				response = "<:wsjoram:570601561072467969>";
@@ -21,21 +21,18 @@ namespace RoosterBot.GLU {
 				response = responses[Util.RNG.Next(0, responses.Length)];
 			}
 
-			ReplyDeferred(response);
-			return Task.CompletedTask;
+			return Result(new TextResult(null, response));
 		}
 
 		[Command("altijdJoram"), RequireContext(ContextType.DM)]
-		public async Task AlwaysJoramCommand(bool value) {
+		public Task<CommandResult> AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
-			await UserConfig.UpdateAsync();
-			ReplyDeferred($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
+			return Result(TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt."));
 		}
 
 		[Command("kut"), IgnoresExtraArguments]
-		public Task BoazBas() {
-			ReplyDeferred("Kut " + Context.User.Mention);
-			return Task.CompletedTask;
+		public Task<CommandResult> BoazBas() {
+			return Result(new TextResult(null, "Kut " + Context.User.Mention));
 		}
 	}
 }

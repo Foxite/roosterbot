@@ -7,25 +7,24 @@ using Discord;
 using Qmmands;
 
 namespace RoosterBot.GLU {
-	[HiddenFromList, Group("users")]
+	[HiddenFromList, Group("users"), RequireContext(ContextType.Guild), UserIsModerator]
 	public class UserListModule : RoosterModuleBase {
-		[Command("nonickname"), RequireContext(ContextType.Guild), UserIsModerator]
-		public async Task GetUnnamedUsers() {
-			await ReplyList(
+		[Command("nonickname")]
+		public async Task<CommandResult> GetUnnamedUsers() {
+			return ReplyList(
 				from user in await Context.Guild!.GetUsersAsync()
 				where !user.IsBot && user.Nickname == null
 				select user
 			);
 		}
 
-		[Command("rolecount"), RequireContext(ContextType.Guild), UserIsModerator]
-		public async Task GetUnrankedUsers(string comparison, int count, params IRole[] roles) {
+		[Command("rolecount")]
+		public async Task<CommandResult> GetUnrankedUsers(string comparison, int count, params IRole[] roles) {
 			if (!TryGetCompareFunc(comparison, out Func<int, int, bool>? compare)) {
-				MinorError("Invalid comparison.");
-				return;
+				return MinorError("Invalid comparison.");
 			}
 
-			await ReplyList(
+			return ReplyList(
 				from user in await Context.Guild!.GetUsersAsync()
 				where !user.IsBot
 				let roleCount =
@@ -49,7 +48,7 @@ namespace RoosterBot.GLU {
 			}
 		}
 
-		private Task ReplyList(IEnumerable<IGuildUser> unnamedUsers) {
+		private TableResult ReplyList(IEnumerable<IGuildUser> unnamedUsers) {
 			IEnumerable<string[]> userRows =
 				from user in unnamedUsers
 				orderby user.JoinedAt?.Date
@@ -63,8 +62,7 @@ namespace RoosterBot.GLU {
 			table[0] = new[] { "Username", "Joined", "Roles" };
 			userRows.CopyTo(table, 1);
 
-			ReplyDeferred(StringUtil.FormatTextTable(table));
-			return Task.CompletedTask;
+			return new TableResult("", table);
 		}
 	}
 }
