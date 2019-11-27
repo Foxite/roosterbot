@@ -48,7 +48,7 @@ namespace RoosterBot {
 		/// Gets a TextResult based on the strings passed to <see cref="ReplyDeferred(string)"/>
 		/// </summary>
 		/// <remarks>
-		/// If <see cref="ReplyDeferred(string)"/>, then the TextResult will inform the user that the command returned no response.
+		/// If <see cref="ReplyDeferred(string)"/> was not used, then the TextResult will inform the user that the command returned no response.
 		/// </remarks>
 		protected TextResult Ok(Emote? emote) {
 			if (m_Response.Length > 0) {
