@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 		public TeacherNameService Teachers { get; set; } = null!;
 
 		[Command("#TeacherListModule_CommandName"), Description("#TeacherListModule_TeacherListCommand_Summary")]
-		public Task TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
+		public Task<CommandResult> TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords(Context.GuildConfig.GuildId);
@@ -18,9 +18,9 @@ namespace RoosterBot.Schedule {
 			}
 
 			if (!records.Any()) {
-				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
+				return Result(new TextResult(Constants.Info, GetString("TeacherListModule_TeacherListCommand_NoTeachersFound")));
 			} else if (records.Count() > 25) {
-				ReplyDeferred(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
+				return Result(new TextResult(Constants.Warning, GetString("TeacherListModule_TeacherListCommand_TooManyResults")));
 			} else {
 				string[][] cells = new string[records.Count() + 1][];
 				cells[0] = new string[] {
@@ -37,12 +37,8 @@ namespace RoosterBot.Schedule {
 
 					recordIndex++;
 				}
-				string response = StringUtil.FormatTextTable(cells);
-
-				ReplyDeferred(response);
+				return Result(new TableResult($"Resultaten voor `{name}`", cells));
 			}
-
-			return Task.CompletedTask;
 		}
 	}
 }
