@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 		protected async override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			foreach (dynamic reader in m_Readers) {
 				// This is a TypeParserResult<extends T>
-				dynamic result = await reader.ReadAsync(parameter, value, context);
+				dynamic result = await reader.ParseAsync(parameter, value, context);
 				if (result.IsSuccessful) {
 					return TypeParserResult<T>.Successful((T) result.Value);
 				}
