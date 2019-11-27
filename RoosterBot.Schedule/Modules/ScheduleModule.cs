@@ -342,10 +342,8 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region Overrides
-		protected override TextResult MinorError(string message) {
-			TextResult result = base.MinorError(message);
-			m_Result.AddResult(result);
-			return result;
+		private void MinorError(string message) {
+			m_Result.AddResult(TextResult.Error(message));
 		}
 
 		protected override ValueTask AfterExecutedAsync() {

@@ -21,7 +21,7 @@ namespace RoosterBot.GLU {
 		[Command("rolecount")]
 		public async Task<CommandResult> GetUnrankedUsers(string comparison, int count, params IRole[] roles) {
 			if (!TryGetCompareFunc(comparison, out Func<int, int, bool>? compare)) {
-				return MinorError("Invalid comparison.");
+				return TextResult.Error("Invalid comparison.");
 			}
 
 			return ReplyList(

@@ -8,6 +8,7 @@ namespace RoosterBot.Meta {
 	[Name("#MetaCommandsModule_Name")]
 	public class HelpModule : RoosterModuleBase {
 		public HelpService Help { get; set; } = null!;
+		public RoosterCommandService CmdService { get; set; } = null!;
 
 		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Summary")]
 		public Task<CommandResult> HelpCommand() {
@@ -17,8 +18,7 @@ namespace RoosterBot.Meta {
 
 			response += GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix);
 
-			ReplyDeferred(response);
-			return Result(Ok(null));
+			return Result(new TextResult(null, response));
 		}
 
 		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Section_Summary")]
@@ -32,18 +32,16 @@ namespace RoosterBot.Meta {
 				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
 				response += string.Join(", ", Help.GetSectionNames(Culture));
 			}
-
-			ReplyDeferred(response);
-			return Result(Ok(null));
+			
+			return Result(new TextResult(null, response));
 		}
 
 		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Summary")]
 		public Task<CommandResult> CommandListCommand() {
 			string response = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
 			response += string.Join(", ", GetCategories().Select(grouping => grouping.Key));
-
-			ReplyDeferred(response);
-			return Result(Ok(null));
+			
+			return Result(new TextResult(null, response));
 		}
 
 		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Category_Summary")]
@@ -51,9 +49,8 @@ namespace RoosterBot.Meta {
 			query = query.ToLower();
 			string response;
 
-			IEnumerable<(Command command, ComponentBase component)>? commands = GetCategories()
+			IEnumerable<Command>? commands = GetCategories()
 				.Where(category => category.Key.ToLower() == query)
-				.Select(category => category as IEnumerable<(Command command, ComponentBase component)>)
 				.SingleOrDefault();
 
 			if (commands == null) {
@@ -63,7 +60,7 @@ namespace RoosterBot.Meta {
 				response = "";
 				bool containsOptionalParameters = false;
 
-				foreach ((Command command, ComponentBase component) in commands) {
+				foreach (Command command in commands) {
 					if (!containsOptionalParameters) {
 						containsOptionalParameters = command.Parameters.Any(param => param.IsOptional);
 					}
@@ -80,14 +77,13 @@ namespace RoosterBot.Meta {
 				
 			}
 			
-			ReplyDeferred(response);
-			return Result(Ok(null));
+			return Result(new TextResult(null, response));
 		}
 
-		private IEnumerable<IGrouping<string, (Command command, ComponentBase component)>> GetCategories() {
+		private IEnumerable<IGrouping<string, Command>> GetCategories() {
 			bool shouldNotHide(dynamic moduleOrCommand) {
-				return !((IEnumerable<Attribute>) moduleOrCommand.Attributes).Any(attr => attr is HiddenFromListAttribute) 
-					&& !((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).Any(attr => attr is RequireCultureAttribute rca && rca.Culture != Culture);
+				return !(((IEnumerable<Attribute>) moduleOrCommand.Attributes).OfType<HiddenFromListAttribute>().Any() || 
+						 ((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).OfType<RequireCultureAttribute>().Any(attr => attr.Culture != Culture));
 			}
 
 			return
@@ -95,9 +91,7 @@ namespace RoosterBot.Meta {
 				from command in module.Commands
 				where shouldNotHide(command.Module)
 				where shouldNotHide(command)
-				let component = Program.Instance.Components.GetComponentForModule(command.Module)
-				let moduleName = ResourcesService.ResolveString(Culture, component, command.Module.Name)
-				group (command, component) by moduleName;
+				group command by command.Module.Name;
 		}
 	}
 }
