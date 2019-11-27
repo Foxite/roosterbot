@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Discord;
+﻿using Discord;
 
 namespace RoosterBot {
 	/// <summary>
@@ -9,12 +7,6 @@ namespace RoosterBot {
 	public class TextResult : RoosterCommandResult {
 		public IEmote? PrefixEmote { get; }
 		public string Response { get; }
-
-		public override IReadOnlyList<object> ErrorReasonObjects => throw new NotImplementedException();
-
-		public override ComponentBase? ErrorReasonComponent => throw new NotImplementedException();
-
-		public override bool IsSuccessful => throw new NotImplementedException();
 
 		public TextResult(IEmote? prefixEmote, string response) {
 			PrefixEmote = prefixEmote;
