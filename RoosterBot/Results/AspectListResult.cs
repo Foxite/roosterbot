@@ -29,11 +29,12 @@ namespace RoosterBot {
 	/// An presented AspectListItem must start with its <see cref="PrefixEmote"/> and end with its <see cref="Value"/>. It name is optional, but if shown it must come between PrefixEmote and Value.
 	/// </summary>
 	public class AspectListItem {
-		public Emote PrefixEmote { get; }
+		public IEmote PrefixEmote { get; }
 		public string Name { get; }
 		public string Value { get; }
 
-		public AspectListItem(Emote prefixEmote, string name, string value) {
+		public AspectListItem(IEmote prefixEmote, string name, string value) {
+			
 			PrefixEmote = prefixEmote;
 			Name = name;
 			Value = value;
