@@ -8,24 +8,24 @@ namespace RoosterBot.Meta {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
 		[Command("#GuildConfigModule_Prefix"), RequireBotManager]
-		public async Task CommandPrefix(string? prefix = null) {
+		public async Task<CommandResult> CommandPrefix(string? prefix = null) {
 			if (prefix == null) {
-				ReplyDeferred(GetString("GuildConfigModule_GetPrefix", GuildConfig.CommandPrefix));
+				return TextResult.Info(GetString("GuildConfigModule_GetPrefix", GuildConfig.CommandPrefix));
 			} else {
 				GuildConfig.CommandPrefix = prefix;
 				await GuildConfig.UpdateAsync();
-				ReplyDeferred(Util.Success + GetString("GuildConfigModule_SetPrefix", GuildConfig.CommandPrefix));
+				return TextResult.Success(GetString("GuildConfigModule_SetPrefix", GuildConfig.CommandPrefix));
 			}
 		}
 
 		[Command("#GuildConfigModule_Language"), RequireBotManager]
-		public async Task Language(CultureInfo? culture = null) {
+		public async Task<CommandResult> Language(CultureInfo? culture = null) {
 			if (culture == null) {
-				ReplyDeferred(GetString("GuildConfigModule_GetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+				return TextResult.Info(GetString("GuildConfigModule_GetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
 			} else {
 				GuildConfig.Culture = culture;
 				await GuildConfig.UpdateAsync();
-				ReplyDeferred(Util.Success + GetString("GuildConfigModule_SetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+				return TextResult.Success(Util.Success + GetString("GuildConfigModule_SetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
 			}
 		}
 	}

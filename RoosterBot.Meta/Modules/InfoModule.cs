@@ -12,16 +12,13 @@ namespace RoosterBot.Meta {
 				response += "\n" + GetString("InfoModule_InfoCommand_ListItem", component.Name, component.ComponentVersion.ToString());
 			}
 			response += "\n" + GetString("InfoModule_InfoCommand_PostText", "https://github.com/Foxite/roosterbot"); // Hardcoded for now
-			ReplyDeferred(response);
-
-			return Task.CompletedTask;
+			return Result(TextResult.Info(response));
 		}
 		
 		[Command("#InfoModule_Uptime"), Description("#InfoModule_Uptime_Summary")]
-		public Task UptimeCommand() {
+		public Task<CommandResult> UptimeCommand() {
 			TimeSpan uptime = DateTime.Now - Program.Instance.StartTime;
-			ReplyDeferred(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds));
-			return Task.CompletedTask;
+			return Result(TextResult.Info(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds)));
 		}
 	}
 }
