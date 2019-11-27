@@ -152,118 +152,118 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <value>over</value>
   </data>
   <data name="WeatherBit_Code_200" xml:space="preserve">
-    <value>:cloud_lightning: Onweer met lichte regen</value>
+    <value>Onweer met lichte regen</value>
   </data>
   <data name="WeatherBit_Code_201" xml:space="preserve">
-    <value>:thunder_cloud_rain: Onweer met regen</value>
+    <value>Onweer met regen</value>
   </data>
   <data name="WeatherBit_Code_202" xml:space="preserve">
-    <value>:thunder_cloud_rain: Onweer met zware regen</value>
+    <value>Onweer met zware regen</value>
   </data>
   <data name="WeatherBit_Code_230" xml:space="preserve">
-    <value>:cloud_lightning: Onweer met lichte motregen</value>
+    <value>Onweer met lichte motregen</value>
   </data>
   <data name="WeatherBit_Code_231" xml:space="preserve">
-    <value>:thunder_cloud_rain: Onweer met motregen</value>
+    <value>Onweer met motregen</value>
   </data>
   <data name="WeatherBit_Code_232" xml:space="preserve">
-    <value>:thunder_cloud_rain: Onweer met hevige motregen</value>
+    <value>Onweer met hevige motregen</value>
   </data>
   <data name="WeatherBit_Code_233" xml:space="preserve">
-    <value>:thunder_cloud_rain: Onweer met hagel</value>
+    <value>Onweer met hagel</value>
   </data>
   <data name="WeatherBit_Code_300" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Lichte motregen</value>
+    <value>Lichte motregen</value>
   </data>
   <data name="WeatherBit_Code_301" xml:space="preserve">
-    <value>:cloud_rain: Motregen</value>
+    <value>Motregen</value>
   </data>
   <data name="WeatherBit_Code_302" xml:space="preserve">
-    <value>:cloud_rain: Hevige motregen</value>
+    <value>Hevige motregen</value>
   </data>
   <data name="WeatherBit_Code_500" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Lichte regen</value>
+    <value>Lichte regen</value>
   </data>
   <data name="WeatherBit_Code_501" xml:space="preserve">
-    <value>:cloud_rain: Regen</value>
+    <value>Regen</value>
   </data>
   <data name="WeatherBit_Code_502" xml:space="preserve">
-    <value>:cloud_rain: Zware regen</value>
+    <value>Zware regen</value>
   </data>
   <data name="WeatherBit_Code_511" xml:space="preserve">
-    <value>:cloud_rain: Vriezende regen</value>
+    <value>Vriezende regen</value>
   </data>
   <data name="WeatherBit_Code_520" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Lichte buien</value>
+    <value>Lichte buien</value>
   </data>
   <data name="WeatherBit_Code_521" xml:space="preserve">
-    <value>:cloud_rain: Buien</value>
+    <value>Buien</value>
   </data>
   <data name="WeatherBit_Code_522" xml:space="preserve">
-    <value>:cloud_rain: Hevige buien</value>
+    <value>Hevige buien</value>
   </data>
   <data name="WeatherBit_Code_600" xml:space="preserve">
-    <value>:cloud_snow: Lichte sneeuw</value>
+    <value>Lichte sneeuw</value>
   </data>
   <data name="WeatherBit_Code_601" xml:space="preserve">
-    <value>:cloud_snow: Sneeuw</value>
+    <value>Sneeuw</value>
   </data>
   <data name="WeatherBit_Code_602" xml:space="preserve">
-    <value>:cloud_snow: Hevige sneeuw</value>
+    <value>Hevige sneeuw</value>
   </data>
   <data name="WeatherBit_Code_610" xml:space="preserve">
-    <value>:cloud_snow: Sneeuw en regen</value>
+    <value>Sneeuw en regen</value>
   </data>
   <data name="WeatherBit_Code_611" xml:space="preserve">
-    <value>:snowflake: Ijzel</value>
+    <value>Ijzel</value>
   </data>
   <data name="WeatherBit_Code_612" xml:space="preserve">
-    <value>:snowflake: Hevige ijzel</value>
+    <value>Hevige ijzel</value>
   </data>
   <data name="WeatherBit_Code_621" xml:space="preserve">
-    <value>:cloud_snow: Sneeuwbuien</value>
+    <value>Sneeuwbuien</value>
   </data>
   <data name="WeatherBit_Code_622" xml:space="preserve">
-    <value>:cloud_snow: Zware sneeuwbuien</value>
+    <value>Zware sneeuwbuien</value>
   </data>
   <data name="WeatherBit_Code_623" xml:space="preserve">
-    <value>:cloud_snow: Sneeuwvlagen</value>
+    <value>Sneeuwvlagen</value>
   </data>
   <data name="WeatherBit_Code_700" xml:space="preserve">
-    <value>:foggy: Mist</value>
+    <value>Mist</value>
   </data>
   <data name="WeatherBit_Code_711" xml:space="preserve">
-    <value>:warning: Rook</value>
+    <value>Rook</value>
   </data>
   <data name="WeatherBit_Code_721" xml:space="preserve">
-    <value>:foggy: Nevel</value>
+    <value>Nevel</value>
   </data>
   <data name="WeatherBit_Code_731" xml:space="preserve">
-    <value>:warning: Zand/stof</value>
+    <value>Zand/stof</value>
   </data>
   <data name="WeatherBit_Code_741" xml:space="preserve">
-    <value>:foggy: Mist</value>
+    <value>Mist</value>
   </data>
   <data name="WeatherBit_Code_751" xml:space="preserve">
-    <value>:foggy: :snowflake: Vriezende mist</value>
+    <value>Vriezende mist</value>
   </data>
   <data name="WeatherBit_Code_800" xml:space="preserve">
-    <value>:sunny: Klare lucht</value>
+    <value>Klare lucht</value>
   </data>
   <data name="WeatherBit_Code_801" xml:space="preserve">
-    <value>:white_sun_small_cloud: Enkele wolken</value>
+    <value>Enkele wolken</value>
   </data>
   <data name="WeatherBit_Code_802" xml:space="preserve">
-    <value>:white_sun_small_cloud: Licht bewolkt</value>
+    <value>Licht bewolkt</value>
   </data>
   <data name="WeatherBit_Code_803" xml:space="preserve">
-    <value>:white_sun_cloud: Overwegend bewolkt</value>
+    <value>Overwegend bewolkt</value>
   </data>
   <data name="WeatherBit_Code_804" xml:space="preserve">
-    <value>:cloud: Bewolkt</value>
+    <value>Bewolkt</value>
   </data>
   <data name="WeatherBit_Code_900" xml:space="preserve">
-    <value>:question: Onbekend</value>
+    <value>Onbekend</value>
   </data>
   <data name="WeatherBit_Code_Unknown" xml:space="preserve">
     <value>Gefeliciteerd, je krijgt een gratis Mars-reep van de bot eigenaar. Foutcode</value>
@@ -273,10 +273,10 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <comment>0: apparent temperature, unit included</comment>
   </data>
   <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
-    <value>:wind_blowing_face: Geen wind</value>
+    <value>Geen wind</value>
   </data>
   <data name="WeatherInfo_Present_Wind" xml:space="preserve">
-    <value>:wind_blowing_face: {0} vanuit {1}</value>
+    <value>{0} vanuit {1}</value>
     <comment>0: wind speed, unit included
 1: cardinal direction, localized</comment>
   </data>

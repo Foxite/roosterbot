@@ -9,21 +9,24 @@ namespace RoosterBot.Weather {
 	// should request just that, instead of being shown a per-hour forecast of the entire day (24 calls), while they only care about one data point.
 	[Name("#WeatherModule_Name"), Group("#WeatherModule_Group"), LocalizedModule("nl-NL", "en-US")]
 	public class WeatherModule : RoosterModuleBase {
+		private readonly CompoundResult m_Result = new CompoundResult("\n");
+
 		public WeatherService Weather { get; set; } = null!;
 
 		[Command("#WeatherModule_CurrentWeather"), RunMode(RunMode.Parallel)]
-		public async Task GetCurrentWeatherCommand([Remainder] CityInfo city) {
+		public async Task<CommandResult> GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 				weather = await Weather.GetCurrentWeatherAsync(city);
 			}
 			GuildConfig.TryGetData("metric", out bool metric, true);
-			ReplyDeferred(weather.Present(DateTime.Now, Culture, metric));
+			m_Result.AddResult(weather.Present(DateTime.Now, Culture, metric));
 			Attribution();
+			return m_Result;
 		}
 
 		[Command("#WeatherModule_DayForecast"), RunMode(RunMode.Parallel)]
-		public async Task GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
+		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			int daysFromNow = day - DateTime.Today.DayOfWeek;
 			if (daysFromNow < 0) {
@@ -32,10 +35,11 @@ namespace RoosterBot.Weather {
 			DateTime date = DateTime.Today.AddDays(daysFromNow);
 			await RespondDayForecast(city, date);
 			Attribution();
+			return m_Result;
 		}
 
 		[Command("#WeatherModule_TimeForecast"), RunMode(RunMode.Parallel)]
-		public async Task GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
+		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -44,63 +48,68 @@ namespace RoosterBot.Weather {
 				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			}
 			GuildConfig.TryGetData("metric", out bool metric, true);
-			ReplyDeferred(weather.Present(datetime, Culture, metric));
+			m_Result.AddResult(weather.Present(datetime, Culture, metric));
 			Attribution();
+			return m_Result;
 		}
 
 		[Command("#WeatherModule_UnitForecast"), RunMode(RunMode.Parallel)]
-		public async Task GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
+		public async Task<CommandResult> GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
-				MinorError(GetString("#WeatherModule_NoLookBack"));
+				return TextResult.Error(GetString("#WeatherModule_NoLookBack"));
 			} else if (GetString("WeatherModule_Unit_Days").Split('|').Contains(unit)) {
 				if (amount > 7) {
-					MinorError(GetString("WeatherModule_SevenDayLimit"));
+					return TextResult.Error(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
 					Attribution();
+					return m_Result;
 				}
 			} else if (GetString("WeatherModule_Unit_Hours").Split('|').Contains(unit)) {
 				if (amount > 168) {
-					MinorError(GetString("WeatherModule_SevenDayLimit"));
+					return TextResult.Error(GetString("WeatherModule_SevenDayLimit"));
 				} else {
 					WeatherInfo weather;
 					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
 						weather = await Weather.GetWeatherForecastAsync(city, amount);
 					}
 					GuildConfig.TryGetData("metric", out bool metric, true);
-					ReplyDeferred(weather.Present(DateTime.Now.AddHours(amount), Culture, metric));
+					m_Result.AddResult(weather.Present(DateTime.Now.AddHours(amount), Culture, metric));
 					Attribution();
+					return m_Result;
 				}
 			} else {
-				MinorError(GetString("WeatherModule_UnknownUnit"));
+				return TextResult.Error(GetString("WeatherModule_UnknownUnit"));
 			}
 		}
 
 		private async Task RespondDayForecast(CityInfo city, DateTime date) {
-			string response;
-			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-				WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
+			using IDisposable typingState = Context.Channel.EnterTypingState();
 
-				string pretext;
-				if (dayForecast[0].City.Name == dayForecast[0].City.Region.Name) {
-					pretext = GetString("WeatherModule_DayForecast_PretextRegion", dayForecast[0].City.Name, dayForecast[0].City.Region.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
-				} else {
-					pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
-				}
+			WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
 
-				GuildConfig.TryGetData("metric", out bool metric, true);
+			string pretext;
+			if (dayForecast[0].City.Name == dayForecast[0].City.Region.Name) {
+				pretext = GetString("WeatherModule_DayForecast_PretextRegion", dayForecast[0].City.Name, dayForecast[0].City.Region.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
+			} else {
+				pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
+			}
+			m_Result.AddResult(new TextResult(null, pretext));
 
-				response  = DateTime.Today.AddHours(08).ToShortTimeString(Culture) + "\n" + dayForecast[0].Present(Culture, metric);
-				response += DateTime.Today.AddHours(12).ToShortTimeString(Culture) + "\n" + dayForecast[1].Present(Culture, metric);
-				response += DateTime.Today.AddHours(18).ToShortTimeString(Culture) + "\n" + dayForecast[2].Present(Culture, metric);
+			GuildConfig.TryGetData("metric", out bool metric, true);
+
+			void addItem(int hours, int item) {
+				m_Result.AddResult(dayForecast[item].Present(DateTime.Today.AddHours(hours).ToShortTimeString(Culture), Culture, metric));
 			}
 
-			ReplyDeferred(response);
+			addItem(08, 0);
+			addItem(12, 1);
+			addItem(18, 2);
 		}
 
 		private void Attribution() {
 			if (Weather.Attribution) {
-				ReplyDeferred(GetString("WeatherComponent_Attribution"));
+				m_Result.AddResult(new TextResult(null, GetString("WeatherComponent_Attribution")));
 			}
 		}
 	}

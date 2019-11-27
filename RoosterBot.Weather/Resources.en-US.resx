@@ -124,118 +124,118 @@
     <value>town</value>
   </data>
   <data name="WeatherBit_Code_200" xml:space="preserve">
-    <value>:cloud_lightning: Thunderstorm with light rain</value>
+    <value>Thunderstorm with light rain</value>
   </data>
   <data name="WeatherBit_Code_201" xml:space="preserve">
-    <value>:thunder_cloud_rain: Thunderstorm with rain</value>
+    <value>Thunderstorm with rain</value>
   </data>
   <data name="WeatherBit_Code_202" xml:space="preserve">
-    <value>:thunder_cloud_rain: Thunderstorm with heavy rain</value>
+    <value>Thunderstorm with heavy rain</value>
   </data>
   <data name="WeatherBit_Code_230" xml:space="preserve">
-    <value>:cloud_lightning: Thunderstorm with light drizzle</value>
+    <value>Thunderstorm with light drizzle</value>
   </data>
   <data name="WeatherBit_Code_231" xml:space="preserve">
-    <value>:thunder_cloud_rain: Thunderstorm with drizzle</value>
+    <value>Thunderstorm with drizzle</value>
   </data>
   <data name="WeatherBit_Code_232" xml:space="preserve">
-    <value>:thunder_cloud_rain: Thunderstorm with heavy drizzle</value>
+    <value>Thunderstorm with heavy drizzle</value>
   </data>
   <data name="WeatherBit_Code_233" xml:space="preserve">
-    <value>:thunder_cloud_rain: Thunderstorm with Hail</value>
+    <value>Thunderstorm with Hail</value>
   </data>
   <data name="WeatherBit_Code_300" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Light Drizzle</value>
+    <value>Light Drizzle</value>
   </data>
   <data name="WeatherBit_Code_301" xml:space="preserve">
-    <value>:cloud_rain: Drizzle</value>
+    <value>Drizzle</value>
   </data>
   <data name="WeatherBit_Code_302" xml:space="preserve">
-    <value>:cloud_rain: Heavy Drizzle</value>
+    <value>Heavy Drizzle</value>
   </data>
   <data name="WeatherBit_Code_500" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Light Rain</value>
+    <value>Light Rain</value>
   </data>
   <data name="WeatherBit_Code_501" xml:space="preserve">
-    <value>:cloud_rain: Moderate Rain</value>
+    <value>Moderate Rain</value>
   </data>
   <data name="WeatherBit_Code_502" xml:space="preserve">
-    <value>:cloud_rain: Heavy Rain</value>
+    <value>Heavy Rain</value>
   </data>
   <data name="WeatherBit_Code_511" xml:space="preserve">
-    <value>:cloud_rain: Freezing rain</value>
+    <value>Freezing rain</value>
   </data>
   <data name="WeatherBit_Code_520" xml:space="preserve">
-    <value>:white_sun_rain_cloud: Light shower rain</value>
+    <value>Light shower rain</value>
   </data>
   <data name="WeatherBit_Code_521" xml:space="preserve">
-    <value>:cloud_rain: Shower rain</value>
+    <value>Shower rain</value>
   </data>
   <data name="WeatherBit_Code_522" xml:space="preserve">
-    <value>:cloud_rain: Heavy shower rain</value>
+    <value>Heavy shower rain</value>
   </data>
   <data name="WeatherBit_Code_600" xml:space="preserve">
-    <value>:cloud_snow: Light snow</value>
+    <value>Light snow</value>
   </data>
   <data name="WeatherBit_Code_601" xml:space="preserve">
-    <value>:cloud_snow: Snow</value>
+    <value>Snow</value>
   </data>
   <data name="WeatherBit_Code_602" xml:space="preserve">
-    <value>:cloud_snow: Heavy Snow</value>
+    <value>Heavy Snow</value>
   </data>
   <data name="WeatherBit_Code_610" xml:space="preserve">
-    <value>:cloud_snow: Mix snow/rain</value>
+    <value>Mix snow/rain</value>
   </data>
   <data name="WeatherBit_Code_611" xml:space="preserve">
-    <value>:snowflake: Sleet</value>
+    <value>Sleet</value>
   </data>
   <data name="WeatherBit_Code_612" xml:space="preserve">
-    <value>:snowflake: Heavy sleet</value>
+    <value>Heavy sleet</value>
   </data>
   <data name="WeatherBit_Code_621" xml:space="preserve">
-    <value>:cloud_snow: Snow shower</value>
+    <value>Snow shower</value>
   </data>
   <data name="WeatherBit_Code_622" xml:space="preserve">
-    <value>:cloud_snow: Heavy snow shower</value>
+    <value>Heavy snow shower</value>
   </data>
   <data name="WeatherBit_Code_623" xml:space="preserve">
-    <value>:cloud_snow: Flurries</value>
+    <value>Flurries</value>
   </data>
   <data name="WeatherBit_Code_700" xml:space="preserve">
-    <value>:foggy: Mist</value>
+    <value>Mist</value>
   </data>
   <data name="WeatherBit_Code_711" xml:space="preserve">
-    <value>:warning: Smoke</value>
+    <value>Smoke</value>
   </data>
   <data name="WeatherBit_Code_721" xml:space="preserve">
-    <value>:foggy: Haze</value>
+    <value>Haze</value>
   </data>
   <data name="WeatherBit_Code_731" xml:space="preserve">
-    <value>:warning: Sand/dust</value>
+    <value>Sand/dust</value>
   </data>
   <data name="WeatherBit_Code_741" xml:space="preserve">
-    <value>:foggy: Fog</value>
+    <value>Fog</value>
   </data>
   <data name="WeatherBit_Code_751" xml:space="preserve">
-    <value>:foggy: Freezing Fog</value>
+    <value>Freezing Fog</value>
   </data>
   <data name="WeatherBit_Code_800" xml:space="preserve">
-    <value>:sunny: Clear sky</value>
+    <value>Clear sky</value>
   </data>
   <data name="WeatherBit_Code_801" xml:space="preserve">
-    <value>:white_sun_small_cloud: Few clouds</value>
+    <value>Few clouds</value>
   </data>
   <data name="WeatherBit_Code_802" xml:space="preserve">
-    <value>:white_sun_small_cloud: Scattered clouds</value>
+    <value>Scattered clouds</value>
   </data>
   <data name="WeatherBit_Code_803" xml:space="preserve">
-    <value>:white_sun_cloud: Broken clouds</value>
+    <value>Broken clouds</value>
   </data>
   <data name="WeatherBit_Code_804" xml:space="preserve">
-    <value>:cloud: Overcast clouds</value>
+    <value>Overcast clouds</value>
   </data>
   <data name="WeatherBit_Code_900" xml:space="preserve">
-    <value>&lt;:unknown:636213624460935188&gt; Unknown</value>
+    <value>Unknown</value>
   </data>
   <data name="WeatherBit_Code_Unknown" xml:space="preserve">
     <value>Congratulations, you are eligible for a free Mars bar. Please contact the bot owner. Error code</value>
@@ -261,10 +261,10 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
     <comment>0: apparent temperature, unit included</comment>
   </data>
   <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
-    <value>:wind_blowing_face: No wind</value>
+    <value>No wind</value>
   </data>
   <data name="WeatherInfo_Present_Wind" xml:space="preserve">
-    <value>:wind_blowing_face: {0} wind {1}</value>
+    <value>{0} wind {1}</value>
     <comment>0: wind speed, unit included
 1: cardinal direction, localized</comment>
   </data>
