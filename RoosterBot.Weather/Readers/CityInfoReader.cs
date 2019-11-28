@@ -12,7 +12,6 @@ namespace RoosterBot.Weather {
 			CityInfo? cityResult = await cities.Lookup(input);
 
 			if (cityResult == null) {
-				// TODO (feature) problem-reporting command, this could be a useful alternative to "contacting the bot owner" if we ever go beyond servers that any dev is in
 				return TypeParserResult<CityInfo>.Unsuccessful("#CityInfoReader_ParseFailed");
 			} else {
 				return TypeParserResult<CityInfo>.Successful(cityResult);

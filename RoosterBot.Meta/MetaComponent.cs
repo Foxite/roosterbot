@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -11,12 +9,14 @@ namespace RoosterBot.Meta {
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			JObject jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
 			if (jsonConfig["useFileConfig"].ToObject<bool>()) {
 				services.AddSingleton<GuildConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
 				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
 			}
+
+			services.AddSingleton(new MetaInfoService(jsonConfig["githubLink"].ToObject<string>(), jsonConfig["discordLink"].ToObject<string>()));
 
 			return Task.CompletedTask;
 		}

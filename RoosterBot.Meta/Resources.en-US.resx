@@ -150,6 +150,18 @@
     <value>This server's command prefix is now `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
+  <data name="InfoModule_DiscordInvite" xml:space="preserve">
+    <value>RoosterBot has its own Discord server where you can report bugs or request features.
+New features will also be announced here.
+&lt;{0}&gt;</value>
+    <comment>0: discord invite link</comment>
+  </data>
+  <data name="InfoModule_DiscordInvite_CommandName" xml:space="preserve">
+    <value>discord|github|report|bug|feature|subscribe</value>
+  </data>
+  <data name="InfoModule_DiscordInvite_Description" xml:space="preserve">
+    <value>Get the link to my Discord server.</value>
+  </data>
   <data name="InfoModule_InfoCommand" xml:space="preserve">
     <value>info</value>
   </data>
@@ -157,10 +169,6 @@
     <value>- {0} {1}</value>
     <comment>0: component name
 1: component version</comment>
-  </data>
-  <data name="InfoModule_InfoCommand_PostText" xml:space="preserve">
-    <value>All code is available on GitHub: {0}</value>
-    <comment>Github link</comment>
   </data>
   <data name="InfoModule_InfoCommand_Pretext" xml:space="preserve">
     <value>This bot is based on RoosterBot {0}. Installed components:</value>
