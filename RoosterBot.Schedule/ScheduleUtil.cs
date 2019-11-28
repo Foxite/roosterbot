@@ -10,10 +10,6 @@ namespace RoosterBot.Schedule {
 			return lsci;
 		}
 
-		public static void OnScheduleRequestByUser(this UserConfig userConfig, IChannel channel, IdentifierInfo identifier, DateTime? recordEndTime) {
-			OnScheduleRequestByUser(userConfig, channel, new LastScheduleCommandInfo(identifier, recordEndTime));
-		}
-
 		public static void OnScheduleRequestByUser(this UserConfig userConfig, IChannel channel, LastScheduleCommandInfo lsci) {
 			userConfig.SetData("schedule.lastCommand." + channel.Id, lsci);
 		}
