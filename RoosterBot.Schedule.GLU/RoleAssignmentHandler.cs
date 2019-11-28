@@ -34,41 +34,43 @@ namespace RoosterBot.Schedule.GLU {
 		}
 
 		private async void OnUserChangedClass(IGuildUser user, StudentSetInfo oldSSI, StudentSetInfo newSSI) {
-			// Assign roles
-			try {
-				IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
-				IEnumerable<IRole> oldRoles;
-				if (oldSSI != null) {
-					oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
-				} else {
-					// Check if the user has any roles that belong to a student set, even though they didn't have a known student set
-					List<ulong> oldRoleList = new List<ulong>();
-					foreach (ulong role in m_Roles.SelectMany(kvp => kvp.Value)) {
-						if (user.HasRole(role)) {
-							oldRoleList.Add(role);
+			if (user.GuildId == GLUScheduleComponent.GLUGuildId) {
+				// Assign roles
+				try {
+					IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
+					IEnumerable<IRole> oldRoles;
+					if (oldSSI != null) {
+						oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+					} else {
+						// Check if the user has any roles that belong to a student set, even though they didn't have a known student set
+						List<ulong> oldRoleList = new List<ulong>();
+						foreach (ulong role in m_Roles.SelectMany(kvp => kvp.Value)) {
+							if (user.HasRole(role)) {
+								oldRoleList.Add(role);
+							}
 						}
+						if (user.HasRole(NewUserRanks)) {
+							oldRoleList.Add(NewUserRanks);
+						}
+
+						oldRoles = oldRoleList.Select(role => user.Guild.GetRole(role));
 					}
-					if (user.HasRole(NewUserRanks)) {
-						oldRoleList.Add(NewUserRanks);
+					IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
+
+					oldRoles = oldRoles.Except(keptRoles);
+					newRoles = newRoles.Except(keptRoles);
+
+					if (oldRoles.Any()) {
+						await user.RemoveRolesAsync(oldRoles);
 					}
 
-					oldRoles = oldRoleList.Select(role => user.Guild.GetRole(role));
+					if (newRoles.Any()) {
+						await user.AddRolesAsync(newRoles);
+					}
+				} catch (Exception e) {
+					Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
+					await m_Config.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
 				}
-				IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
-
-				oldRoles = oldRoles.Except(keptRoles);
-				newRoles = newRoles.Except(keptRoles);
-
-				if (oldRoles.Any()) {
-					await user.RemoveRolesAsync(oldRoles);
-				}
-
-				if (newRoles.Any()) {
-					await user.AddRolesAsync(newRoles);
-				}
-			} catch (Exception e) {
-				Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
-				await m_Config.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
 			}
 		}
 
