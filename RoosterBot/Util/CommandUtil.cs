@@ -23,24 +23,6 @@ namespace RoosterBot {
 			return false;
 		}
 
-		// TODO (localize) These nice names
-		private static string GetNiceName(Type type) => type.Name switch {
-			"Byte" => "integer",
-			"SByte" => "integer",
-			"Int16" => "integer",
-			"Int32" => "integer",
-			"Int64" => "integer",
-			"UInt16" => "integer",
-			"UInt32" => "integer",
-			"UInt64" => "integer",
-			"Single" => "decimal",
-			"Double" => "decimal",
-			"Decimal" => "decimal",
-			"Char" => "character",
-			"String" => "text",
-			_ => type.Name,
-		};
-
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.
 		/// </summary>
@@ -49,10 +31,12 @@ namespace RoosterBot {
 
 			foreach (Parameter param in command.Parameters) {
 				if (param.Name != "ignored") {
-					string paramText = param.Name + ": ";
+					string paramText = param.Name;
 
 					TypeDisplayAttribute? typeDisplayAttr = param.Attributes.OfType<TypeDisplayAttribute>().SingleOrDefault();
-					paramText += typeDisplayAttr != null ? typeDisplayAttr.TypeDisplayName : GetNiceName(param.Type);
+					if (typeDisplayAttr != null) {
+						paramText += ": " + typeDisplayAttr.TypeDisplayName;
+					}
 
 					if (param.IsMultiple) {
 						paramText += "...";
