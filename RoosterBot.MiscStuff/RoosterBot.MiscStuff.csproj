@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.0</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Modules\CounterModule.cs" />
     <Compile Include="MiscStuffComponent.cs" />
+    <Compile Include="Modules\EmoteTheftModule.cs" />
     <Compile Include="Modules\MiscModule.cs" />
     <Compile Include="Modules\UserListModule.cs" />
     <Compile Include="Handlers\PropagationHandler.cs" />
