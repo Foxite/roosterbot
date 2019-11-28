@@ -263,10 +263,19 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
   <data name="WeatherInfo_Present_NoWind" xml:space="preserve">
     <value>No wind</value>
   </data>
+  <data name="WeatherInfo_Present_TemperatureAspect" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="WeatherInfo_Present_WeatherAspect" xml:space="preserve">
+    <value>Weather</value>
+  </data>
   <data name="WeatherInfo_Present_Wind" xml:space="preserve">
     <value>{0} wind {1}</value>
     <comment>0: wind speed, unit included
 1: cardinal direction, localized</comment>
+  </data>
+  <data name="WeatherInfo_Present_WindAspect" xml:space="preserve">
+    <value>Wind</value>
   </data>
   <data name="WeatherModule_CurrentWeather" xml:space="preserve">
     <value>|now|in</value>

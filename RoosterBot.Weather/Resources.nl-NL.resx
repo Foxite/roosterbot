@@ -325,4 +325,13 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="CityInfo_TypeDisplayName" xml:space="preserve">
     <value>stad</value>
   </data>
+  <data name="WeatherInfo_Present_TemperatureAspect" xml:space="preserve">
+    <value>Temperatuur</value>
+  </data>
+  <data name="WeatherInfo_Present_WeatherAspect" xml:space="preserve">
+    <value>Weer</value>
+  </data>
+  <data name="WeatherInfo_Present_WindAspect" xml:space="preserve">
+    <value>Wind</value>
+  </data>
 </root>

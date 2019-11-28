@@ -66,7 +66,6 @@ namespace RoosterBot.Weather {
 
 		public AspectListResult Present(string caption, CultureInfo culture, bool useMetric) {
 			IEnumerable<AspectListItem> getAspects() {
-				// TODO (localize) Aspect names
 				string temperature;
 				if (useMetric) {
 					temperature = Math.Round(Temperature, 1).ToString() + " °C";
@@ -84,7 +83,7 @@ namespace RoosterBot.Weather {
 
 					temperature += string.Format(m_Resources.GetString(culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
 				}
-				yield return new AspectListItem(new Emoji("🌡️"), "Temperatuur", temperature);
+				yield return new AspectListItem(new Emoji("🌡️"), m_Resources.GetString(culture, "WeatherInfo_Present_TemperatureAspect"), temperature);
 				yield return new AspectListItem(WeatherCode switch
 				{
 					200 => new Emoji("🌩️"),
@@ -126,10 +125,10 @@ namespace RoosterBot.Weather {
 					804 => new Emoji("☁️"),
 					900 => Emote.Parse("<:unknown:636213624460935188>"),
 					_   => Emote.Parse("<:error:636213609919283238>")
-				}, "Weer", m_WeatherService.GetDescription(culture, WeatherCode));
+				}, m_Resources.GetString(culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(culture, WeatherCode));
 
 				if (WindSpeed == 0) {
-					yield return new AspectListItem(new Emoji("🌬️"), "Wind", m_Resources.GetString(culture, "WeatherInfo_Present_NoWind"));
+					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(culture, "WeatherInfo_Present_WindAspect"), m_Resources.GetString(culture, "WeatherInfo_Present_NoWind"));
 				} else {
 					string windSpeedString;
 					if (useMetric) {
@@ -138,7 +137,7 @@ namespace RoosterBot.Weather {
 						windSpeedString = Math.Round(WindSpeed * 1.609, 1).ToString() + " mph";
 					}
 
-					yield return new AspectListItem(new Emoji("🌬️"), "Wind", windSpeedString);
+					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(culture, "WeatherInfo_Present_WindAspect"), windSpeedString);
 				}
 			}
 
