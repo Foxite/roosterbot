@@ -26,7 +26,7 @@ namespace RoosterBot.GLU {
 					if (respond) {
 						await msg.Channel.SendMessageAsync(msg.Author.Mention +
 							", je hoeft niet meer handmatig aan te geven aan Dyno in welke jaar/opleiding je zit. " +
-						   "Dit wordt nu automatisch gedaan als je je klas instelt met `!ik zit in <klas>`.");
+						   "Dit wordt nu automatisch gedaan als je je klas instelt met `!mijn klas <klas>`.");
 					}
 				}
 			}
