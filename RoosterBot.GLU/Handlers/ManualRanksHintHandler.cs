@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace RoosterBot.GLU {
@@ -8,7 +9,7 @@ namespace RoosterBot.GLU {
 		}
 
 		private async Task HintManualRanks(SocketMessage msg) {
-			if (msg is SocketUserMessage sum) {
+			if (msg is SocketUserMessage sum && msg.Channel is IGuildChannel igu && igu.GuildId == GLUComponent.GLUGuildId) {
 				int argPos = 0;
 				if (sum.Content.StartsWith("?rank ")) {
 					string normalContent = sum.Content.ToLower();
