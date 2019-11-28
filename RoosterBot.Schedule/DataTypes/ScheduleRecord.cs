@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
 	public abstract class ScheduleRecord {
 		// TODO (review) Do all these properties need to be in Schedule component? It's better to move everything into GLUScheduleRecord, and all identifiers types into Schedule.GLU
-		// An abstract PresentRowAsync will be necessary for this
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
 		public DateTime End { get; set; }
@@ -36,6 +36,7 @@ namespace RoosterBot.Schedule {
 				$"{(Break == null ? "no break" : ("a break from " + Break.Start.ToString() + " to " + Break.End.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 
-		public abstract IEnumerable<AspectListItem> Present(IdentifierInfo relevantIdentifier);
+		public abstract IEnumerable<AspectListItem> Present(CultureInfo culture);
+		public abstract IReadOnlyList<string> PresentRow(CultureInfo culture);
 	}
 }

@@ -13,31 +13,26 @@ namespace RoosterBot.GLU {
 		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
 			: base(activity, start, end, studentSets, staffMember, room) { }
 
-		public override IEnumerable<AspectListItem> Present(IdentifierInfo info) {
+		public override IEnumerable<AspectListItem> Present(CultureInfo culture) {
+			// TODO (localize) This Present function
 			yield return new AspectListItem(new Emoji("🗒️"), "Activiteit", Activity.DisplayText);
 
 			if (Activity.ScheduleCode != "stdag doc") {
 				if (Activity.ScheduleCode != "pauze") {
-					if (!(info is TeacherInfo)) {
-						if (StaffMember.Count == 1 && StaffMember[0].IsUnknown) {
-							yield return new AspectListItem(new Emoji("👤"), "Leraar", StaffMember[0].ScheduleCode);
-						}
+					if (StaffMember.Count == 1 && StaffMember[0].IsUnknown) {
+						yield return new AspectListItem(new Emoji("👤"), "Leraar", StaffMember[0].ScheduleCode);
+					}
 
-						string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
-						if (!string.IsNullOrWhiteSpace(teachers)) {
-							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
-								yield return new AspectListItem(new Emoji("<:VRjoram:392762653367336960>"), "Leraar", teachers);
-							} else {
-								yield return new AspectListItem(new Emoji("👤"), "Leraar", teachers);
-							}
+					string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
+					if (!string.IsNullOrWhiteSpace(teachers)) {
+						if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
+							yield return new AspectListItem(new Emoji("<:VRjoram:392762653367336960>"), "Leraar", teachers);
+						} else {
+							yield return new AspectListItem(new Emoji("👤"), "Leraar", teachers);
 						}
 					}
-					if (!(info is StudentSetInfo) && !string.IsNullOrWhiteSpace(StudentSetsString)) {
-						yield return new AspectListItem(new Emoji("👥"), "Klas", StudentSetsString);
-					}
-					if (!(info is RoomInfo) && !string.IsNullOrWhiteSpace(RoomString)) {
-						yield return new AspectListItem(new Emoji("📍"), "Lokaal", RoomString);
-					}
+					yield return new AspectListItem(new Emoji("👥"), "Klas", StudentSetsString);
+					yield return new AspectListItem(new Emoji("📍"), "Lokaal", RoomString);
 				}
 
 				if (Start.Date != DateTime.Today) {
@@ -63,6 +58,16 @@ namespace RoosterBot.GLU {
 					yield return new AspectListItem(new Emoji("☕"), "Pauze", $"{Break.Start.ToString("HH:mm")} - {Break.End.ToString("HH:mm")}");
 				}
 			}
+		}
+
+		public override IReadOnlyList<string> PresentRow(CultureInfo culture) {
+			return new[] {
+				Activity.DisplayText.ToString(),
+				$"{Start.ToShortTimeString(culture)} - {End.ToShortTimeString(culture)}",
+				StudentSetsString,
+				StaffMemberString,
+				RoomString
+			};
 		}
 	}
 }
