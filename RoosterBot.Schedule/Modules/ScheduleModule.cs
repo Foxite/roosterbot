@@ -334,7 +334,7 @@ namespace RoosterBot.Schedule {
 		#region Convenience
 		private async Task<IdentifierInfo> ResolveNullInfo(IdentifierInfo info) {
 			if (info == null) {
-				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, "ik", Program.Instance.Components.Services);
+				TypeReaderResult infoResult = await ScheduleComponent.s_IdentifierReaders.ReadAsync(Context, GetString("IdentifierInfoReader_Self"), Program.Instance.Components.Services);
 				if (infoResult.IsSuccess) {
 					return (IdentifierInfo) infoResult.BestMatch;
 				} else {
