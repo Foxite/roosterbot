@@ -104,7 +104,7 @@ namespace RoosterBot.Schedule {
 							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
 						} else {
 							m_Result.AddResult(new TextResult(null, GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime")));
-							m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Now + TimeSpan.FromHours(amount));
+							m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Now + TimeSpan.FromHours(amount), ScheduleResultKind.Single);
 							await GetAfterCommand();
 						}
 					}
@@ -129,8 +129,8 @@ namespace RoosterBot.Schedule {
 
 		#region Record response functions
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
-			m_LookedUpData = new LastScheduleCommandInfo(info, record.End);
-			IEnumerable<AspectListItem> aspects = record.Present(info);
+			m_LookedUpData = new LastScheduleCommandInfo(info, record.End, ScheduleResultKind.Single);
+			IEnumerable<AspectListItem> aspects = record.Present(Culture);
 			m_Result.AddResult(new AspectListResult(pretext, aspects));
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
@@ -157,14 +157,15 @@ namespace RoosterBot.Schedule {
 							}
 						}
 						m_Result.AddResult(new TextResult(null, response));
-						m_LookedUpData = new LastScheduleCommandInfo(info, date);
+						m_LookedUpData = new LastScheduleCommandInfo(info, date, ScheduleResultKind.Day);
 					} else if (records.Length == 1) {
 						string pretext = GetString("ScheduleModule_RespondDay_OnlyRecordForDay", info.DisplayText, relativeDateReference);
 						await RespondRecord(pretext, info, records[0]);
+						m_LookedUpData!.Kind = ScheduleResultKind.Day;
 					} else {
 						string pretext = GetString("ScheduleModule_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
-						string[][] cells = new string[records.Length + 1][];
+						IReadOnlyList<string>[] cells = new IReadOnlyList<string>[records.Length + 1];
 						cells[0] = new string[] {
 							GetString("ScheduleModule_RespondDay_ColumnActivity"),
 							GetString("ScheduleModule_RespondDay_ColumnTime"),
@@ -175,17 +176,10 @@ namespace RoosterBot.Schedule {
 
 						int recordIndex = 1;
 						foreach (ScheduleRecord record in records) {
-							cells[recordIndex] = new string[] {
-								record.Activity.DisplayText,
-								$"{record.Start.ToShortTimeString(Culture)} - {record.End.ToShortTimeString(Culture)}",
-								record.StudentSetsString,
-								record.StaffMemberString,
-								record.RoomString
-							};
-
+							cells[recordIndex] = record.PresentRow(Culture);
 							recordIndex++;
 						}
-						m_LookedUpData = new LastScheduleCommandInfo(info, records.Last().End);
+						m_LookedUpData = new LastScheduleCommandInfo(info, records.First().End.Date, ScheduleResultKind.Day);
 						m_Result.AddResult(new TableResult(pretext, cells));
 					}
 				}
@@ -198,6 +192,7 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 				if (weekRecords.Length > 0) {
 					string caption;
+					// TODO (feature) Negative numbers should be "x weeks ago" not "in -x weeks"
 					if (weeksFromNow == 0) {
 						caption = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
 					} else if (weeksFromNow == 1) {
@@ -258,38 +253,46 @@ namespace RoosterBot.Schedule {
 					}
 					m_Result.AddResult(new TextResult(null, response));
 				}
+				m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Today.AddDays(7 * weeksFromNow), ScheduleResultKind.Week);
 			}
 		}
 
 		protected async Task RespondAfter(int recursion = 0) {
-			LastScheduleCommandInfo? query;
-			if (m_LookedUpData != null) {
-				query = new LastScheduleCommandInfo(m_LookedUpData.Identifier, m_LookedUpData.RecordEndTime);
-			} else {
-				query = UserConfig.GetLastScheduleCommand(Context.Channel);
+			if (recursion >= 5) {
+				return;
 			}
+
+			LastScheduleCommandInfo? query = m_LookedUpData ?? UserConfig.GetLastScheduleCommand(Context.Channel);
+
 			if (query == null) {
 				MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
-				ReturnValue<ScheduleRecord> nextRecord = await GetRecordAfterDateTime(query.Identifier, (query.RecordEndTime == null ? DateTime.Now : query.RecordEndTime.Value) - TimeSpan.FromSeconds(1));
+				switch (query.Kind) {
+					case ScheduleResultKind.Single:
+						ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime ?? DateTime.Now);
 
-				if (nextRecord.Success) {
-					string pretext;
-					if (query.RecordEndTime == null) {
-						pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
-					} else if (query.RecordEndTime.Value.Date != nextRecord.Value.Start.Date) {
-						pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, nextRecord.Value.Start.DayOfWeek));
-					} else {
-						pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
-					}
+						if (result.Success) {
+							string pretext;
+							if (query.RecordEndTime == null) {
+								pretext = GetString("ScheduleModule_PretextNext", query.Identifier.DisplayText);
+							} else if (query.RecordEndTime.Value.Date != result.Value.Start.Date) {
+								pretext = GetString("ScheduleModule_Pretext_FirstOn", query.Identifier.DisplayText, DateTimeUtil.GetStringFromDayOfWeek(Culture, result.Value.Start.DayOfWeek));
+							} else {
+								pretext = GetString("ScheduleModule_PretextAfterPrevious", query.Identifier.DisplayText);
+							}
 
-					// Avoid RespondRecord automatically calling this function again because we do it ourselves
-					// We don't use RespondRecord's handling because we have our own recursion limit, which RespondRecord can't use
-					await RespondRecord(pretext, query.Identifier, nextRecord.Value, false);
-
-					if (nextRecord.Value.ShouldCallNextCommand && recursion <= 5) {
-						await RespondAfter(recursion + 1);
-					}
+							await RespondRecord(pretext, query.Identifier, result.Value, false);
+							if (result.Value.ShouldCallNextCommand) {
+								await RespondAfter(recursion + 1);
+							}
+						}
+						break;
+					case ScheduleResultKind.Day:
+						await RespondDay(query.Identifier, query.RecordEndTime ?? DateTime.Today.AddDays(1));
+						break;
+					case ScheduleResultKind.Week:
+						await RespondWeek(query.Identifier, (int) ((query.RecordEndTime - DateTime.Now)?.TotalDays ?? 7) / 7);
+						break;
 				}
 			}
 		}
