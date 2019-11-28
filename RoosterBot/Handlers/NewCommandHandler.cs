@@ -22,6 +22,8 @@ namespace RoosterBot {
 		}
 
 		private async Task HandleNewCommand(SocketMessage socketMessage) {
+			// TODO (refactor) Remove all RunMode usages, set default to Sequential, and do this in a Task.Run
+
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
 			if (socketMessage is IUserMessage userMessage) {
