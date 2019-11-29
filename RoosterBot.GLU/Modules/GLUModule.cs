@@ -3,7 +3,7 @@ using Qmmands;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
-	public class MiscModule : RoosterModule {
+	public class GLUModule : RoosterModule {
 		[Command("danku", "dankje", "dankjewel", "bedankt", "dank",
 				 "goed", "goedzo", "goodbot",
 				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
