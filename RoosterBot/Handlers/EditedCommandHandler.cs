@@ -23,7 +23,7 @@ namespace RoosterBot {
 		}
 
 		private async Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
-			if (messageAfter is SocketUserMessage userMessageAfter && messageAfter.Source == MessageSource.User) {
+			if (messageAfter.Content != messageBefore.Value.Content && messageAfter is SocketUserMessage userMessageAfter && messageAfter.Source == MessageSource.User) {
 				GuildConfig guildConfig = await m_GCS.GetConfigAsync((channel as IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First());
 				UserConfig userConfig = await m_UCS.GetConfigAsync(messageAfter.Author);
 				CommandResponsePair? crp = userConfig.GetResponse(userMessageAfter);
