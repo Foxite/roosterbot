@@ -9,28 +9,29 @@ namespace RoosterBot {
 	/// <summary>
 	/// This handler makes sure the bot will restart if it is disconnected for more than a specified time.
 	/// </summary>
-	internal sealed class DeadlockHandler {
-		private readonly NotificationService m_Notificationervice;
+	internal sealed class DeadlockHandler : RoosterHandler {
+		public NotificationService NotificationService { get; set; } = null!;
+		public DiscordSocketClient Client { get; set; } = null!;
+
+		private readonly int m_MaxDisconnectMillis;
+
 		private Timer? m_Timer;
 		private bool m_TimerRunning;
 
-		internal int MaxDisconnectMillis { get; }
+		public DeadlockHandler(IServiceProvider isp, int maxDisconnectMillis) : base(isp) {
+			m_MaxDisconnectMillis = maxDisconnectMillis;
 
-		internal DeadlockHandler(DiscordSocketClient discord, NotificationService notificationService, int maxDisconnectMillis) {
-			m_Notificationervice = notificationService;
-			MaxDisconnectMillis = maxDisconnectMillis;
-
-			discord.Disconnected += (e) => {
+			Client.Disconnected += (e) => {
 				if (m_Timer != null) {
 					m_Timer.Dispose();
 					m_Timer = null;
 				}
-				m_Timer = new Timer(TimerCallback, e, MaxDisconnectMillis, -1);
+				m_Timer = new Timer(TimerCallback, e, m_MaxDisconnectMillis, -1);
 				m_TimerRunning = true;
 				return Task.CompletedTask;
 			};
 
-			discord.Connected += () => {
+			Client.Connected += () => {
 				m_TimerRunning = false;
 				if (m_Timer != null) {
 					m_Timer.Dispose();
@@ -48,7 +49,7 @@ namespace RoosterBot {
 		}
 
 		private async Task Restart(Exception? e) {
-			string report = $"RoosterBot has failed to reconnect after {MaxDisconnectMillis / 1000} seconds.\n\n";
+			string report = $"RoosterBot has failed to reconnect after {m_MaxDisconnectMillis / 1000} seconds.\n\n";
 
 			if (e != null) {
 				report += $"The exception is: {e.ToString()}";
@@ -57,7 +58,7 @@ namespace RoosterBot {
 			}
 
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
-			await m_Notificationervice.AddNotificationAsync(report);
+			await NotificationService.AddNotificationAsync(report);
 
 			Process.Start(new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, @"..\AppStart\AppStart.exe"), "delay 20000"));
 			Program.Instance.Shutdown();

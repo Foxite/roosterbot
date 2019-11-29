@@ -75,7 +75,7 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
 
-			CreateHandlers(client, configService);
+			CreateHandlers();
 
 			await client.LoginAsync(TokenType.Bot, authToken);
 			await client.StartAsync();
@@ -132,9 +132,6 @@ namespace RoosterBot {
 			// I don't know what is the least bad of these options.
 			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
 			//  that use the object's fields.
-			new RestartHandler(m_Client, notificationService, 5);
-			new DeadlockHandler(m_Client, notificationService, 60000);
-			new ReadyHandler(configService, m_Client);
 
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(configService)
@@ -147,16 +144,19 @@ namespace RoosterBot {
 			return serviceCollection;
 		}
 
-		private void CreateHandlers(DiscordSocketClient client, ConfigService configService) {
-			var commands = Components.Services.GetService<RoosterCommandService>();
-			var resources = Components.Services.GetService<ResourceService>();
-			var gcs = Components.Services.GetService<GuildConfigService>();
-			var ucs = Components.Services.GetService<UserConfigService>();
+		private void CreateHandlers() {
+			IServiceProvider isp = Components.Services;
 
-			new MessageReceivedHandler(client, commands, gcs, ucs);
-			new MessageUpdatedHandler(client, commands, gcs, ucs);
-			new CommandDeletedHandler(client, ucs);
-			new CommandExecutedHandler(resources, configService);
+			new RestartHandler(isp, 5);
+			new DeadlockHandler(isp, 60000);
+
+			var ceh = new CommandExecutionHandler(isp);
+			new MessageReceivedHandler(isp, ceh);
+			new MessageUpdatedHandler (isp, ceh);
+			new MessageDeletedHandler (isp);
+			new CommandExecutedHandler(isp);
+			new CommandExceptionHandler(isp);
+			new ReadyHandler(isp);
 		}
 
 		private async Task WaitForQuitCondition() {

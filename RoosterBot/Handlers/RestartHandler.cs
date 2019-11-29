@@ -7,31 +7,32 @@ namespace RoosterBot {
 	/// <summary>
 	/// This handler will make sure the bot restarts after more than a specified amount of connection attempts, if the connection is lost.
 	/// </summary>
-	internal sealed class RestartHandler {
-		private readonly NotificationService m_Notifications;
+	internal sealed class RestartHandler : RoosterHandler {
+		public NotificationService Notifications { get; set; } = null!;
+		public DiscordSocketClient Discord { get; set; } = null!;
+
+		private readonly int m_MaxAttempts;
+
 		private int m_Attempts;
 		private Exception? m_InitialException;
 
-		public int MaxAttempts { get; }
-
-		public RestartHandler(DiscordSocketClient discord, NotificationService notif, int maxAttempts) {
+		public RestartHandler(IServiceProvider isp, int maxAttempts) : base(isp) {
 			m_Attempts = 0;
-			MaxAttempts = maxAttempts;
-			m_Notifications = notif;
+			m_MaxAttempts = maxAttempts;
 
-			discord.Disconnected += async (e) => {
+			Discord.Disconnected += async (e) => {
 				if (m_Attempts == 0) {
 					m_InitialException = e;
 				}
 
 				m_Attempts++;
 
-				if (m_Attempts > MaxAttempts) {
+				if (m_Attempts > m_MaxAttempts) {
 					await Restart(e);
 				}
 			};
 
-			discord.Connected += () => {
+			Discord.Connected += () => {
 				m_Attempts = 0;
 				m_InitialException = null;
 				return Task.CompletedTask;
@@ -53,7 +54,7 @@ namespace RoosterBot {
 			}
 
 			report += "\n\nThe bot will attempt to restart in 20 seconds.";
-			await m_Notifications.AddNotificationAsync(report);
+			await Notifications.AddNotificationAsync(report);
 
 			Program.Instance.Restart();
 		}

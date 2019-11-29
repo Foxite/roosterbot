@@ -6,27 +6,24 @@ using Discord;
 using Discord.WebSocket;
 
 namespace RoosterBot {
-	internal sealed class ReadyHandler {
-		private readonly ConfigService m_ConfigService;
-		private readonly DiscordSocketClient m_Client;
+	internal sealed class ReadyHandler : RoosterHandler {
+		public ConfigService Config { get; set; } = null!;
+		public DiscordSocketClient Client { get; set; } = null!;
 
 		private bool m_VersionNotReported;
 
-		public ReadyHandler(ConfigService configService, DiscordSocketClient client) {
-			m_ConfigService = configService;
-			m_Client = client;
-
-			client.Ready += OnClientReady;
+		public ReadyHandler(IServiceProvider isp) : base(isp) {
+			Client.Ready += OnClientReady;
 		}
 
 		private async Task OnClientReady() {
-			await m_ConfigService.LoadDiscordInfo(m_Client);
-			await m_Client.SetGameAsync(m_ConfigService.GameString, type: m_ConfigService.ActivityType);
-			Logger.Info("Main", $"Username is {m_Client.CurrentUser.Username}#{m_Client.CurrentUser.Discriminator}");
+			await Config.LoadDiscordInfo(Client);
+			await Client.SetGameAsync(Config.GameString, type: Config.ActivityType);
+			Logger.Info("Main", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
-			if (m_VersionNotReported && m_ConfigService.ReportStartupVersionToOwner) {
+			if (m_VersionNotReported && Config.ReportStartupVersionToOwner) {
 				m_VersionNotReported = false;
-				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
+				IDMChannel ownerDM = await Config.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {
