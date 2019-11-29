@@ -16,5 +16,11 @@ namespace RoosterBot.Meta {
 
 			return Task.CompletedTask;
 		}
+
+		[Command("discord"), Alias("github", "report", "bug", "feature", "subscribe")]
+		public Task DiscordServerInvite() {
+			ReplyDeferred("RoosterBot heeft zijn eigen Discord server waar je bugs kunt melden of features kunt aanvragen.\nNieuwe features worden hier ook aangekondigd.\n");
+			ReplyDeferred(MetaComponent.DiscordServerInvite);
+		}
 	}
 }
