@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
-	public abstract class RoosterModuleBase<T> : ModuleBase<T> where T : RoosterCommandContext {
+	public abstract class RoosterModule<T> : ModuleBase<T> where T : RoosterCommandContext {
 		// Initializing a property with `null!` will prevent a warning about non-nullable properties being unassigned.
 		// They will be assigned through reflection, and this is the best way to tell the compiler that it's fine.
 		// https://stackoverflow.com/a/57343485/3141917
@@ -63,5 +63,5 @@ namespace RoosterBot {
 		}
 	}
 
-	public abstract class RoosterModuleBase : RoosterModuleBase<RoosterCommandContext> { }
+	public abstract class RoosterModule : RoosterModule<RoosterCommandContext> { }
 }

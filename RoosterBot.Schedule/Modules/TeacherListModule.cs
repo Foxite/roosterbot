@@ -5,7 +5,7 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	[Name("#TeacherListModule_Name"), LocalizedModule("nl-NL", "en-US")]
-	public class TeacherListModule : RoosterModuleBase {
+	public class TeacherListModule : RoosterModule {
 		public TeacherNameService Teachers { get; set; } = null!;
 
 		[Command("#TeacherListModule_CommandName"), Description("#TeacherListModule_TeacherListCommand_Summary")]

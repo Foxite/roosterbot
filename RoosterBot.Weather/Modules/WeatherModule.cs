@@ -8,7 +8,7 @@ namespace RoosterBot.Weather {
 	// The free license for Weatherbit allows 500 calls per month, so we shouldn't try to show too much data at once. If the user wants to know the weather 3 hours from now, they
 	// should request just that, instead of being shown a per-hour forecast of the entire day (24 calls), while they only care about one data point.
 	[Name("#WeatherModule_Name"), Group("#WeatherModule_Group"), LocalizedModule("nl-NL", "en-US")]
-	public class WeatherModule : RoosterModuleBase {
+	public class WeatherModule : RoosterModule {
 		private readonly CompoundResult m_Result = new CompoundResult("\n");
 
 		public WeatherService Weather { get; set; } = null!;

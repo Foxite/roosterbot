@@ -8,7 +8,7 @@ using Qmmands;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList, Group("users"), RequireContext(ContextType.Guild), UserIsModerator]
-	public class UserListModule : RoosterModuleBase {
+	public class UserListModule : RoosterModule {
 		[Command("nonickname")]
 		public async Task<CommandResult> GetUnnamedUsers() {
 			return ReplyList(

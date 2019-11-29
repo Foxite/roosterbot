@@ -4,7 +4,7 @@ using Qmmands;
 
 namespace RoosterBot.Meta {
 	[LocalizedModule("nl-NL", "en-US"), Group("#GuildConfigModule_Group"), HiddenFromList]
-	public class GuildConfigModule : RoosterModuleBase {
+	public class GuildConfigModule : RoosterModule {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
 		[Command("#GuildConfigModule_Prefix"), RequireBotManager]

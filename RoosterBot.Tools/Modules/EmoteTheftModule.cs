@@ -10,7 +10,7 @@ using Qmmands;
 
 namespace RoosterBot.Tools {
 	[Group("emote"), HiddenFromList]
-	public class EmoteTheftModule : RoosterModuleBase {
+	public class EmoteTheftModule : RoosterModule {
 		[Command("steal"), RunMode(RunMode.Parallel), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand() {
 			// Get last message before command

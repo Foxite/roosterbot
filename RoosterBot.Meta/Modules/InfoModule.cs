@@ -4,13 +4,13 @@ using Qmmands;
 
 namespace RoosterBot.Meta {
 	[Name("#MetaCommandsModule_Name"), LocalizedModule("nl-NL", "en-US")]
-	public class InfoModule : RoosterModuleBase {
+	public class InfoModule : RoosterModule {
 		public MetaInfoService InfoService { get; set; } = null!;
 
 		[Command("#InfoModule_InfoCommand"), Description("#InfoModule_InfoCommand_Summary")]
 		public Task<CommandResult> InfoCommand() {
 			string response = GetString("InfoModule_InfoCommand_Pretext", Constants.VersionString);
-			foreach (ComponentBase component in Program.Instance.Components.GetComponents()) {
+			foreach (Component component in Program.Instance.Components.GetComponents()) {
 				response += "\n" + GetString("InfoModule_InfoCommand_ListItem", component.Name, component.ComponentVersion.ToString());
 			}
 			return Result(TextResult.Info(response));

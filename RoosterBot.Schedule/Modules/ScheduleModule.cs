@@ -11,7 +11,7 @@ namespace RoosterBot.Schedule {
 	[Description("#ScheduleModule_Summary")]
 	[Remarks("#ScheduleModule_Remarks")]
 	[LocalizedModule("nl-NL", "en-US")]
-	public class ScheduleModule : RoosterModuleBase {
+	public class ScheduleModule : RoosterModule {
 		private readonly CompoundResult m_Result = new CompoundResult("\n");
 		private LastScheduleCommandInfo? m_LookedUpData;
 

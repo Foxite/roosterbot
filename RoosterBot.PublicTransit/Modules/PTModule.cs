@@ -6,7 +6,7 @@ using Qmmands;
 namespace RoosterBot.PublicTransit {
 	[RequireCulture("nl-NL", false)]
 	[Name("OV")]
-	public class PTModule : RoosterModuleBase {
+	public class PTModule : RoosterModule {
 		public NSAPI NSAPI { get; set; } = null!;
 		public StationInfoService Stations { get; set; } = null!;
 

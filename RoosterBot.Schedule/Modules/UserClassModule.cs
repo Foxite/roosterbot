@@ -3,7 +3,7 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	[LocalizedModule("nl-NL", "en-US"), Name("#UserClassModule_ModuleName"), Description("#UserClassModule_ModuleSummary"), Group("#UserClassModule_Group")]
-	public class UserClassModule : RoosterModuleBase {
+	public class UserClassModule : RoosterModule {
 		[Command("#UserClassModule_CommandName"), RunMode(RunMode.Parallel), Description("#UserClassModule_CommandSummary"), RequireContext(ContextType.Guild)]
 		public async Task<CommandResult> UserClass([Name("#UserClassModule_class_Name")] StudentSetInfo? newStudentSet = null) {
 			if (newStudentSet == null) {
