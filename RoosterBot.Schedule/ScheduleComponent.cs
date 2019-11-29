@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
-	public class ScheduleComponent : ComponentBase {
+	public class ScheduleComponent : Component {
 #nullable disable // None of the code in this component executes before this is assigned
 		internal static ScheduleComponent Instance { get; private set; }
 #nullable enable
@@ -19,7 +19,7 @@ namespace RoosterBot.Schedule {
 			IdentifierReaders = new MultiParser<IdentifierInfo>("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName", this);
 		}
 
-		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireTag("ScheduleProvider")
 				.RequireTag("DayOfWeekReader")

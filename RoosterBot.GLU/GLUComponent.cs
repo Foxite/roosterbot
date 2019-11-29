@@ -12,7 +12,7 @@ using RoosterBot.Schedule;
 namespace RoosterBot.GLU {
 	// This component has a lot of hardcoded snowflake IDs. Normally I'd get all that from a config file, but this component is specifically made for a particular guild,
 	//  so generalizing the code does not make a lot of sense.
-	public class GLUComponent : ComponentBase {
+	public class GLUComponent : Component {
 		public const long GLUGuildId = 278586698877894657;
 
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
@@ -33,7 +33,7 @@ namespace RoosterBot.GLU {
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
 
-		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireMinimumVersion<ScheduleComponent>(new Version(2, 0, 0))
 				.Check();

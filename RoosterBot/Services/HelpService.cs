@@ -13,7 +13,7 @@ namespace RoosterBot {
 			m_Resources = resources;
 		}
 
-		public void AddHelpSection(ComponentBase component, string name, string text, params CultureInfo[] restrict) {
+		public void AddHelpSection(Component component, string name, string text, params CultureInfo[] restrict) {
 			m_Sections.Add(new HelpSection(component, name, text, restrict));
 		}
 
@@ -49,12 +49,12 @@ namespace RoosterBot {
 		}
 
 		private class HelpSection {
-			public ComponentBase Component { get; }
+			public Component Component { get; }
 			public string Name { get; }
 			public string HelpText { get; }
 			public IReadOnlyCollection<CultureInfo> Cultures { get; }
 
-			internal HelpSection(ComponentBase component, string Name, string helpText, IReadOnlyCollection<CultureInfo> cultures) {
+			internal HelpSection(Component component, string Name, string helpText, IReadOnlyCollection<CultureInfo> cultures) {
 				Component = component;
 				this.Name = Name;
 				HelpText = helpText;

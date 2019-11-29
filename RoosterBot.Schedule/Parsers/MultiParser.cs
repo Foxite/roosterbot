@@ -11,7 +11,7 @@ namespace RoosterBot.Schedule {
 	public class MultiParser<T> : RoosterTypeParser<T> {
 		private readonly List<dynamic> m_Readers;
 		private readonly string m_ErrorMessage;
-		private readonly ComponentBase m_ResourcesComponent;
+		private readonly Component m_ResourcesComponent;
 
 		public override string TypeDisplayName { get; }
 
@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all readers return ParseFailed. If any reader returns another error, then that ErrorReason will be used.</param>
 		/// <param name="resourcesComponent">The component to be used when resolving the error message.</param>
-		public MultiParser(string errorMessage, string typeDisplayName, ComponentBase resourcesComponent) {
+		public MultiParser(string errorMessage, string typeDisplayName, Component resourcesComponent) {
 			m_Readers = new List<dynamic>();
 			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;

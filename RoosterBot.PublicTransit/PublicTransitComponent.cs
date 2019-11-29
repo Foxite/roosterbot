@@ -8,7 +8,7 @@ using System.Globalization;
 namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
 	// This functionality is only useful in the Netherlands.
-	public class PublicTransitComponent : ComponentBase {
+	public class PublicTransitComponent : Component {
 #nullable disable
 		private NSAPI m_NSAPI;
 #nullable restore

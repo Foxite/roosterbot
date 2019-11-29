@@ -78,7 +78,7 @@ namespace RoosterBot {
 			if (localizedAttributes.Length == 0) {
 				return new[] { GetService(null).AddModule(moduleType, postBuild) };
 			} else if (localizedAttributes.Length == 1) {
-				ComponentBase? component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly);
+				Component? component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly);
 				IReadOnlyList<string> locales = ((LocalizedModuleAttribute) localizedAttributes[0]).Locales;
 
 				Module[] localizedModules = new Module[locales.Count];

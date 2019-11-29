@@ -24,7 +24,7 @@ namespace RoosterBot {
 				} else {
 					string response = "";
 					bool bad = false;
-					ComponentBase? component;
+					Component? component;
 
 					switch (result) {
 						case CommandDisabledResult _:

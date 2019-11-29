@@ -34,7 +34,7 @@ namespace RoosterBot {
 			}
 		}
 
-		public string ResolveString(CultureInfo culture, ComponentBase? component, string str) {
+		public string ResolveString(CultureInfo culture, Component? component, string str) {
 			if (str.StartsWith("#")) {
 				Assembly? assembly;
 				if (component == null) {

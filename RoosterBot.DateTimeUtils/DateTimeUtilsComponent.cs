@@ -5,7 +5,7 @@ using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DateTimeUtils {
-	public class DateTimeUtilsComponent : ComponentBase {
+	public class DateTimeUtilsComponent : Component {
 		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public override IEnumerable<string> Tags => new[] { "DayOfWeekReader" };

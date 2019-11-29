@@ -6,11 +6,11 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
-	public class WeatherComponent : ComponentBase {
+	public class WeatherComponent : Component {
 		public override Version ComponentVersion => new Version(0, 2, 0);
 		public bool AttributionLicense { get; private set; }
 
-		public override DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) {
+		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireTag("DayOfWeekReader")
 				.Check();

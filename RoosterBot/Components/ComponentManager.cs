@@ -12,8 +12,8 @@ using Module = Qmmands.Module;
 
 namespace RoosterBot {
 	public sealed class ComponentManager {
-		private readonly List<ComponentBase> m_Components;
-		private readonly ConcurrentDictionary<Assembly, ComponentBase> m_ComponentsByAssembly;
+		private readonly List<Component> m_Components;
+		private readonly ConcurrentDictionary<Assembly, Component> m_ComponentsByAssembly;
 
 #nullable disable
 		// This is a bit similar to the problem explained in Program.cs, namely this property is set in an async "sequel" to the constructor.
@@ -29,8 +29,8 @@ namespace RoosterBot {
 #nullable restore
 
 		internal ComponentManager() {
-			m_Components = new List<ComponentBase>();
-			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, ComponentBase>();
+			m_Components = new List<Component>();
+			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, Component>();
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace RoosterBot {
 			// Look for children of ComponentBase in the loaded assemblies
 			Type[] componentTypes = (from domainAssembly in assemblies
 									 from assemblyType in domainAssembly.GetExportedTypes()
-									 where assemblyType.IsSubclassOf(typeof(ComponentBase))
+									 where assemblyType.IsSubclassOf(typeof(Component))
 									 select assemblyType).ToArray();
 
 			return componentTypes;
@@ -106,7 +106,7 @@ namespace RoosterBot {
 			var assembliesWithMultipleComponents = componentTypes.GroupBy(component => component.Assembly).Where(group => group.Count() > 1);
 			if (assembliesWithMultipleComponents.Any()) {
 				throw new InvalidOperationException(
-					$"One or more assemblies contain more than one {nameof(ComponentBase)} class. An assembly can have at most one component. The offending assemblies are:\n"
+					$"One or more assemblies contain more than one {nameof(Component)} class. An assembly can have at most one component. The offending assemblies are:\n"
 					+ string.Join('\n', assembliesWithMultipleComponents));
 			}
 		}
@@ -115,7 +115,7 @@ namespace RoosterBot {
 			foreach (Type type in componentTypes) {
 				Logger.Debug("ComponentManager", "Constructing component " + type.Name);
 				try {
-					ComponentBase component = (Activator.CreateInstance(type) as ComponentBase)!; // Can technically be null but should never happen.
+					Component component = (Activator.CreateInstance(type) as Component)!; // Can technically be null but should never happen.
 					m_Components.Add(component);
 					m_ComponentsByAssembly[type.Assembly] = component;
 				} catch (Exception ex) {
@@ -124,8 +124,8 @@ namespace RoosterBot {
 			}
 		}
 
-		private void CheckDependencies(IEnumerable<ComponentBase> components) {
-			foreach (ComponentBase component in components) {
+		private void CheckDependencies(IEnumerable<Component> components) {
+			foreach (Component component in components) {
 				DependencyResult dependencyResult = component.CheckDependencies(components);
 				if (!dependencyResult.OK) {
 					throw new ComponentDependencyException($"{component.Name} cannot satisfy dependencies:\n{dependencyResult.ErrorMessage}", component.GetType());
@@ -137,7 +137,7 @@ namespace RoosterBot {
 			Task[] servicesLoading = new Task[m_Components.Count];
 
 			int i = 0;
-			foreach (ComponentBase component in m_Components) {
+			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
 				
 				try {
@@ -165,7 +165,7 @@ namespace RoosterBot {
 			Task[] modulesLoading = new Task[m_Components.Count];
 
 			int moduleIndex = 0;
-			foreach (ComponentBase component in m_Components) {
+			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
 #if DEBUG
@@ -186,27 +186,27 @@ namespace RoosterBot {
 		}
 
 		internal void ShutdownComponents() {
-			foreach (ComponentBase component in m_Components) {
+			foreach (Component component in m_Components) {
 				component.Dispose();
 			}
 		}
 
-		public IReadOnlyList<ComponentBase> GetComponents() {
+		public IReadOnlyList<Component> GetComponents() {
 			return m_Components.AsReadOnly();
 		}
 
-		public ComponentBase GetComponentForModule(Module module) {
+		public Component GetComponentForModule(Module module) {
 			if (module.Type == null) {
 				throw new ArgumentException($"Module named {module.Name} was built manually. This is not supported since RoosterBot 2.2.");
-			} else if (m_ComponentsByAssembly.TryGetValue(module.Type.Assembly, out ComponentBase? result)) {
+			} else if (m_ComponentsByAssembly.TryGetValue(module.Type.Assembly, out Component? result)) {
 				return result;
 			} else {
 				throw new ArgumentException($"Module of type {module.Name} is not registered");
 			}
 		}
 
-		internal ComponentBase GetComponentFromAssembly(Assembly assembly) {
-			if (m_ComponentsByAssembly.TryGetValue(assembly, out ComponentBase? result)) {
+		internal Component GetComponentFromAssembly(Assembly assembly) {
+			if (m_ComponentsByAssembly.TryGetValue(assembly, out Component? result)) {
 				return result;
 			} else {
 				throw new ArgumentException($"Assembly {assembly.FullName} does not have a ComponentBase");

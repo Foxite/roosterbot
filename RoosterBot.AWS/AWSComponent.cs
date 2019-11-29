@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 using Qmmands;
 
 namespace RoosterBot.AWS {
-	public class AWSComponent : ComponentBase {
+	public class AWSComponent : Component {
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
 #nullable disable

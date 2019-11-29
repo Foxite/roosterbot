@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
-	public class MetaComponent : ComponentBase {
+	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {

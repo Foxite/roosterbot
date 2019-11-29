@@ -29,7 +29,7 @@ namespace RoosterBot {
 				IDMChannel ownerDM = await m_ConfigService.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
-				foreach (ComponentBase component in Program.Instance.Components.GetComponents()) {
+				foreach (Component component in Program.Instance.Components.GetComponents()) {
 					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
 				}
 

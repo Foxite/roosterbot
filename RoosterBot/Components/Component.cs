@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
-	public abstract class ComponentBase : IDisposable {
+	public abstract class Component : IDisposable {
 		public abstract Version ComponentVersion { get; }
 		public virtual IEnumerable<string> Tags { get; } = Enumerable.Empty<string>();
 
@@ -21,7 +21,7 @@ namespace RoosterBot {
 			}
 		}
 
-		public virtual DependencyResult CheckDependencies(IEnumerable<ComponentBase> components) => new DependencyResult();
+		public virtual DependencyResult CheckDependencies(IEnumerable<Component> components) => new DependencyResult();
 		public virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
 		public virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) => Task.CompletedTask;
 

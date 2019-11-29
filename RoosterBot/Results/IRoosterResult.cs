@@ -11,6 +11,6 @@ namespace RoosterBot {
 		/// <summary>
 		/// Component used when resolving ErrorReason.
 		/// </summary>
-		ComponentBase? ErrorReasonComponent { get; }
+		Component? ErrorReasonComponent { get; }
 	}
 }

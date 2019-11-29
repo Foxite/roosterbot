@@ -5,10 +5,10 @@ using System.Linq;
 namespace RoosterBot {
 	public partial class DependencyResult {
 		public class Builder {
-			private IEnumerable<ComponentBase> m_OtherComponents;
+			private IEnumerable<Component> m_OtherComponents;
 			private string m_ErrorMessage;
 
-			internal Builder(IEnumerable<ComponentBase> otherComponents) {
+			internal Builder(IEnumerable<Component> otherComponents) {
 				m_OtherComponents = otherComponents;
 				m_ErrorMessage = "";
 			}
@@ -21,8 +21,8 @@ namespace RoosterBot {
 				return this;
 			}
 
-			public Builder RequireMinimumVersion<T>(Version version) where T : ComponentBase {
-				ComponentBase otherComponent = m_OtherComponents.FirstOrDefault(other => other.GetType() == typeof(T));
+			public Builder RequireMinimumVersion<T>(Version version) where T : Component {
+				Component otherComponent = m_OtherComponents.FirstOrDefault(other => other.GetType() == typeof(T));
 				if (otherComponent == null || otherComponent.ComponentVersion < version) {
 					m_ErrorMessage += $"{typeof(T).Name} must be present and its version must be at least {version.ToString()}\n";
 				}
@@ -30,8 +30,8 @@ namespace RoosterBot {
 				return this;
 			}
 
-			public Builder RequireVersion<T>(VersionPredicate predicate) where T : ComponentBase {
-				ComponentBase otherComponent = m_OtherComponents.FirstOrDefault(other => other.GetType() == typeof(T));
+			public Builder RequireVersion<T>(VersionPredicate predicate) where T : Component {
+				Component otherComponent = m_OtherComponents.FirstOrDefault(other => other.GetType() == typeof(T));
 				if (otherComponent == null || !predicate.Matches(otherComponent.ComponentVersion)) {
 					m_ErrorMessage += $"{typeof(T).Name} must be present and must match {predicate.ToString()}\n";
 				}

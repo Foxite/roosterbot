@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Watson {
-	public class WatsonComponent : ComponentBase {
+	public class WatsonComponent : Component {
 		private string m_WatsonID = "";
 		private string m_WatsonKey = "";
 

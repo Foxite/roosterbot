@@ -5,11 +5,11 @@ using Qmmands;
 namespace RoosterBot {
 	public class RoosterCheckResult : CheckResult, IRoosterResult {
 		public IReadOnlyList<object> ErrorReasonObjects { get; }
-		public ComponentBase? ErrorReasonComponent { get; }
+		public Component? ErrorReasonComponent { get; }
 
 		public static new RoosterCheckResult Successful => new RoosterCheckResult();
 
-		private RoosterCheckResult(string errorReason, ComponentBase? errorReasonComponent, params object[] errorReasonObjects) : base(errorReason) {
+		private RoosterCheckResult(string errorReason, Component? errorReasonComponent, params object[] errorReasonObjects) : base(errorReason) {
 			ErrorReasonObjects = errorReasonObjects;
 			ErrorReasonComponent = errorReasonComponent;
 		}
@@ -18,7 +18,7 @@ namespace RoosterBot {
 			ErrorReasonObjects = Array.Empty<object>();
 		}
 
-		public static RoosterCheckResult Unsuccessful(string errorReason, ComponentBase errorReasonComponent, params object[] errorReasonObjects) {
+		public static RoosterCheckResult Unsuccessful(string errorReason, Component errorReasonComponent, params object[] errorReasonObjects) {
 			return new RoosterCheckResult(errorReason, errorReasonComponent, errorReasonObjects);
 		}
 
