@@ -118,7 +118,7 @@ namespace RoosterBot {
 
 			var helpService = new HelpService(resources);
 			var commands = new RoosterCommandService(resources, new CommandServiceConfiguration() {
-				DefaultRunMode = RunMode.Parallel
+				DefaultRunMode = RunMode.Sequential
 			});
 
 			// Create handlers
@@ -153,7 +153,7 @@ namespace RoosterBot {
 			var gcs = Components.Services.GetService<GuildConfigService>();
 			var ucs = Components.Services.GetService<UserConfigService>();
 
-			var spch = new SequentialPostCommandHandler(resources, configService);
+			var spch = new PostCommandHandler(resources, configService);
 			new CommandExecutionFailedHandler(commands, configService, resources);
 			new CommandSuccessHandler(commands);
 

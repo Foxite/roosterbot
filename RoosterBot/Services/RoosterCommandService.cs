@@ -2,11 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Qmmands;
 using Qommon.Events;
 
@@ -75,8 +73,18 @@ namespace RoosterBot {
 		public Module[] AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
 		public Module[] AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
 			object[] localizedAttributes = moduleType.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
+
 			if (localizedAttributes.Length == 0) {
-				return new[] { GetService(null).AddModule(moduleType, postBuild) };
+				return new[] {
+					GetService(null).AddModule(moduleType, (builder) => {
+						if (builder.Commands.SelectMany(command => command.Attributes).OfType<RunModeAttribute>().Any()) {
+							Logger.Warning("RoosterCommandService", $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
+								"This is no longer necessary as commands are always executed off-thread. " +
+								"Parallel commands cannot receive proper post-execution handling. It is highly recommended that you remove all RunMode attributes from your code.");
+						}
+						postBuild?.Invoke(builder);
+					})
+				};
 			} else if (localizedAttributes.Length == 1) {
 				Component? component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly);
 				IReadOnlyList<string> locales = ((LocalizedModuleAttribute) localizedAttributes[0]).Locales;
@@ -116,6 +124,11 @@ namespace RoosterBot {
 						}
 
 						foreach (CommandBuilder command in module.Commands) {
+							if (command.Attributes.OfType<RunModeAttribute>().Any()) {
+								Logger.Warning("RoosterCommandService", $"A command was found module `{module.Name}` that has a RunMode attribute. " +
+									"This is no longer necessary as commands are always executed off-thread.");
+							}
+
 							foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
 								rta.Text = resolveString(rta.Text)!;
 							}

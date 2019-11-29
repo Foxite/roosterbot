@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 		public ScheduleService Schedules { get; set; } = null!;
 
 		#region Commands
-		[Command("#ScheduleModule_NowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
+		[Command("#ScheduleModule_NowCommand"), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task<CommandResult> CurrentCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -42,7 +42,7 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_NextCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultNextCommand_Summary")]
+		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_DefaultNextCommand_Summary")]
 		public async Task<CommandResult> NextCommand([Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -61,37 +61,37 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_DayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task<CommandResult> WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_TodayCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task<CommandResult> TodayCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_TomorrowCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task<CommandResult> TomorrowCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_ThisWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_ThisWeekCommand"), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
 		public async Task<CommandResult> ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 0);
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_NextWeekCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
+		[Command("#ScheduleModule_NextWeekCommand"), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
 		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_FutureCommand"), RunMode(RunMode.Parallel), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
+		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
 		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
@@ -119,7 +119,7 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_AfterCommand"), RunMode(RunMode.Parallel), IgnoresExtraArguments, Description("#ScheduleModule_AfterCommand_Summary")]
+		[Command("#ScheduleModule_AfterCommand"), IgnoresExtraArguments, Description("#ScheduleModule_AfterCommand_Summary")]
 		public async Task<CommandResult> GetAfterCommand() {
 			// This allows us to call !daarna automatically in certain conditions, and prevents the recursion from causing problems.
 			await RespondAfter();

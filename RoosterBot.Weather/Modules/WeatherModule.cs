@@ -13,7 +13,7 @@ namespace RoosterBot.Weather {
 
 		public WeatherService Weather { get; set; } = null!;
 
-		[Command("#WeatherModule_CurrentWeather"), RunMode(RunMode.Parallel)]
+		[Command("#WeatherModule_CurrentWeather")]
 		public async Task<CommandResult> GetCurrentWeatherCommand([Remainder] CityInfo city) {
 			WeatherInfo weather;
 			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -25,7 +25,7 @@ namespace RoosterBot.Weather {
 			return m_Result;
 		}
 
-		[Command("#WeatherModule_DayForecast"), RunMode(RunMode.Parallel)]
+		[Command("#WeatherModule_DayForecast")]
 		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
 			// Get the forecast for the day
 			int daysFromNow = day - DateTime.Today.DayOfWeek;
@@ -38,7 +38,7 @@ namespace RoosterBot.Weather {
 			return m_Result;
 		}
 
-		[Command("#WeatherModule_TimeForecast"), RunMode(RunMode.Parallel)]
+		[Command("#WeatherModule_TimeForecast")]
 		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
 			DateTime datetime;
 			WeatherInfo weather;
@@ -53,7 +53,7 @@ namespace RoosterBot.Weather {
 			return m_Result;
 		}
 
-		[Command("#WeatherModule_UnitForecast"), RunMode(RunMode.Parallel)]
+		[Command("#WeatherModule_UnitForecast")]
 		public async Task<CommandResult> GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
 				return TextResult.Error(GetString("#WeatherModule_NoLookBack"));

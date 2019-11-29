@@ -11,7 +11,7 @@ using Qmmands;
 namespace RoosterBot.Tools {
 	[Group("emote"), HiddenFromList]
 	public class EmoteTheftModule : RoosterModule {
-		[Command("steal"), RunMode(RunMode.Parallel), RequireBotManager]
+		[Command("steal"), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand() {
 			// Get last message before command
 			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToList()).SelectMany(c => c).OfType<IUserMessage>();
@@ -30,7 +30,7 @@ namespace RoosterBot.Tools {
 			}
 		}
 		
-		[Command("steal"), RunMode(RunMode.Parallel), Priority(1), RequireBotManager]
+		[Command("steal"), Priority(1), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
 			MatchCollection matches = Regex.Matches(message.Content, @"((?<!\\)\<:[A-z0-9\-_]+?:[0-9]+?\>)");
 
