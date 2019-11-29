@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AssemblyName>Tools</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+		<PackageReference Include="YoutubeExplode" Version="4.7.10" />
+		<PackageReference Include="YoutubeExplode.Converter" Version="1.4.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+	</ItemGroup>
+
+</Project>
