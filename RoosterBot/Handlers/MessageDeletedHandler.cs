@@ -3,13 +3,12 @@ using Discord;
 using Discord.WebSocket;
 
 namespace RoosterBot {
-	internal sealed class DeletedCommandHandler {
+	internal sealed class CommandDeletedHandler {
 		private readonly UserConfigService m_UCS;
 
-		public DeletedCommandHandler(DiscordSocketClient client, UserConfigService ucs) {
-
-			client.MessageDeleted += OnMessageDeleted;
+		public CommandDeletedHandler(DiscordSocketClient client, UserConfigService ucs) {
 			m_UCS = ucs;
+			client.MessageDeleted += OnMessageDeleted;
 		}
 
 		// Delete responses when commands are deleted
