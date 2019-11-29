@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoosterBot {
 	/// <summary>
@@ -24,6 +24,10 @@ namespace RoosterBot {
 			m_IndividualResults.Add(result);
 		}
 
-		public override string Present() => string.Join(Separator, IndividualResults.Select(result => result.Present()));
+		public async override Task PresentAsync(RoosterCommandContext context) {
+			foreach (RoosterCommandResult result in IndividualResults) {
+				await result.PresentAsync(context);
+			}
+		}
 	}
 }

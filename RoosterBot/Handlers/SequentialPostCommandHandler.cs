@@ -18,7 +18,7 @@ namespace RoosterBot {
 			if (!(result is SuccessfulResult)) { // Result for async commands that is returned from ExecuteAsync
 				if (result.IsSuccessful) {
 					if (result is RoosterCommandResult rcr) {
-						await context.RespondAsync(rcr.Present());
+						await rcr.PresentAsync(context);
 					}
 					await context.UserConfig.UpdateAsync();
 				} else {

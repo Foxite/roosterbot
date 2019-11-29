@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Threading.Tasks;
+using Discord;
 
 namespace RoosterBot {
 	/// <summary>
@@ -13,7 +14,7 @@ namespace RoosterBot {
 			Response = response;
 		}
 
-		public override string Present() => (PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "") + Response;
+		public override Task PresentAsync(RoosterCommandContext context) => context.RespondAsync((PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "") + Response);
 
 		public static TextResult Success(string response) => new TextResult(Constants.Success, response);
 		public static TextResult Info   (string response) => new TextResult(Constants.Info,    response);

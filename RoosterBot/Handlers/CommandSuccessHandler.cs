@@ -11,9 +11,9 @@ namespace RoosterBot {
 			if (args.Context is RoosterCommandContext rcc) {
 				if (args.Result != null) {
 					if (args.Result is RoosterCommandResult result) {
-						await rcc.RespondAsync(result.Present());
+						await result.PresentAsync(rcc);
 					} else {
-						Logger.Warning("CommandHandler", "A successful command has returned an unknown Result type: " + args.Result.GetType().FullName + ". It will not be used.");
+						Logger.Warning("CommandHandler", $"A successful command has returned Result that does not derive from {nameof(RoosterCommandResult)}: {args.Result.GetType().FullName}. It will not be used.");
 					}
 				}
 				await rcc.UserConfig.UpdateAsync();

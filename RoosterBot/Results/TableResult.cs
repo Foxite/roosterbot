@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoosterBot {
 	/// <summary>
@@ -55,6 +56,6 @@ namespace RoosterBot {
 			}
 		}
 
-		public override string Present() => MaxColumnWidth == null ? StringUtil.FormatTextTable(Cells) : StringUtil.FormatTextTable(Cells, MaxColumnWidth.Value);
+		public override Task PresentAsync(RoosterCommandContext context) => context.RespondAsync(MaxColumnWidth == null ? StringUtil.FormatTextTable(Cells) : StringUtil.FormatTextTable(Cells, MaxColumnWidth.Value));
 	}
 }
