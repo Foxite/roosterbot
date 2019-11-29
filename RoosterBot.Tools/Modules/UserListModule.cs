@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Qmmands;
 
-namespace RoosterBot.GLU {
+namespace RoosterBot.Tools {
 	[HiddenFromList, Group("users"), RequireContext(ContextType.Guild), UserIsModerator]
 	public class UserListModule : RoosterModule {
 		[Command("nonickname")]

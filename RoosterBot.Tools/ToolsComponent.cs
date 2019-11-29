@@ -8,6 +8,7 @@ namespace RoosterBot.Tools {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			commandService.AddModule<YoutubeModule>();
 			commandService.AddModule<EmoteTheftModule>();
+			commandService.AddModule<UserListModule>();
 			return Task.CompletedTask;
 		}
 	}
