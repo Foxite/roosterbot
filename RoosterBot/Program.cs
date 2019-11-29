@@ -153,13 +153,10 @@ namespace RoosterBot {
 			var gcs = Components.Services.GetService<GuildConfigService>();
 			var ucs = Components.Services.GetService<UserConfigService>();
 
-			var spch = new PostCommandHandler(resources, configService);
-			new CommandExecutionFailedHandler(commands, configService, resources);
-			new CommandSuccessHandler(commands);
-
-			new NewCommandHandler(client, commands, gcs, ucs, spch);
-			new EditedCommandHandler(client, commands, gcs, ucs, spch);
+			new NewCommandHandler(client, commands, gcs, ucs);
+			new EditedCommandHandler(client, commands, gcs, ucs);
 			new DeletedCommandHandler(client, ucs);
+			new PostCommandHandler(resources, configService);
 		}
 
 		private async Task WaitForQuitCondition() {
