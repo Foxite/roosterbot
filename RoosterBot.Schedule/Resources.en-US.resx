@@ -498,4 +498,7 @@ You can always check what class I think you're in by just typing `{0}me`, to che
     <value>You're already in {0}!</value>
     <comment>0: student set</comment>
   </data>
+  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
+    <value> That is weekend after all.</value>
+  </data>
 </root>
