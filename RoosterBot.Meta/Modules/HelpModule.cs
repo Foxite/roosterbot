@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[Name("#MetaCommandsModule_Name")]
+	[Name("#MetaCommandsModule_Name"), LocalizedModule("nl-NL")]
 	public class HelpModule : RoosterModule {
 		public HelpService Help { get; set; } = null!;
 		public RoosterCommandService CmdService { get; set; } = null!;
 
-		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Summary")]
+		[Command("#HelpModule_HelpCommand"), Description("#MetaCommandsModule_HelpCommand_Summary")]
 		public Task<CommandResult> HelpCommand() {
 			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n";
 			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
@@ -21,7 +21,7 @@ namespace RoosterBot.Meta {
 			return Result(new TextResult(null, response));
 		}
 
-		[Command("help"), Description("#MetaCommandsModule_HelpCommand_Section_Summary")]
+		[Command("#HelpModule_HelpCommand"), Description("#MetaCommandsModule_HelpCommand_Section_Summary")]
 		public Task<CommandResult> HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
 			string response = "";
 			if (Help.HelpSectionExists(Culture, section)) {
@@ -36,7 +36,7 @@ namespace RoosterBot.Meta {
 			return Result(new TextResult(null, response));
 		}
 
-		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Summary")]
+		[Command("#HelpModule_CommandsListCommand"), Description("#MetaCommandsModule_CommandListCommand_Summary")]
 		public Task<CommandResult> CommandListCommand() {
 			string response = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
 			response += string.Join(", ", GetCategories().Select(grouping => grouping.Key));
@@ -44,7 +44,7 @@ namespace RoosterBot.Meta {
 			return Result(new TextResult(null, response));
 		}
 
-		[Command("commands"), Description("#MetaCommandsModule_CommandListCommand_Category_Summary")]
+		[Command("#HelpModule_CommandsListCommand"), Description("#MetaCommandsModule_CommandListCommand_Category_Summary")]
 		public Task<CommandResult> CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string query) {
 			query = query.ToLower();
 			string response;
