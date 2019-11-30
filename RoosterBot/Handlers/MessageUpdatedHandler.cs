@@ -9,10 +9,11 @@ namespace RoosterBot {
 		public DiscordSocketClient Client { get; set; } = null!;
 		public GuildConfigService GCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
-		public CommandExecutionHandler CEH { get; set; } = null!;
+
+		private CommandExecutionHandler m_CEH;
 
 		internal MessageUpdatedHandler(IServiceProvider isp, CommandExecutionHandler ceh) : base(isp) {
-			CEH = ceh;
+			m_CEH = ceh;
 			Client.MessageUpdated += OnMessageUpdated;
 		}
 
@@ -25,7 +26,7 @@ namespace RoosterBot {
 
 					if (CommandUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
 						//IResult result = await m_Commands.ExecuteAsync(userMessageAfter.Content.Substring(argPos + 1), context);
-						await CEH.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), userMessageAfter, guildConfig, userConfig);
+						await m_CEH.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), userMessageAfter, guildConfig, userConfig);
 					} else if (crp != null) {
 						// No longer a command
 						await channel.DeleteMessageAsync(crp.ResponseId);

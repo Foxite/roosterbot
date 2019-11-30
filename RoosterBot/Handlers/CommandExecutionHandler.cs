@@ -18,7 +18,7 @@ namespace RoosterBot {
 			var context = new RoosterCommandContext(Client, message, userConfig, guildConfig, Program.Instance.Components.Services);
 			IResult result = await Commands.ExecuteAsync(input, context);
 
-			if (!(result is ExecutionFailedResult) && !(result is SuccessfulResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
+			if (!(result.IsSuccessful || result is ExecutionFailedResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
 				string response = "";
 
 				switch (result) {

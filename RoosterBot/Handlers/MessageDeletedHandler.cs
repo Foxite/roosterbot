@@ -9,7 +9,7 @@ namespace RoosterBot {
 		public UserConfigService UCS { get; set; } = null!;
 
 		public MessageDeletedHandler(IServiceProvider isp) : base(isp) {
-			isp.GetService<BaseSocketClient>().MessageDeleted += OnMessageDeleted;
+			isp.GetService<DiscordSocketClient>().MessageDeleted += OnMessageDeleted;
 		}
 
 		// Delete responses when commands are deleted
