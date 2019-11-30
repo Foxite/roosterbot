@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.PublicTransit {
-	public class StationInfoReader : RoosterTypeParser<StationInfo> {
+	public class StationInfoParser : RoosterTypeParser<StationInfo> {
 		public override string TypeDisplayName => "treinstation";
 
-		public StationInfoReader(Component component) : base(component) { }
+		public StationInfoParser(Component component) : base(component) { }
 
 		protected override ValueTask<RoosterTypeParserResult<StationInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			StationInfoService sis = context.ServiceProvider.GetService<StationInfoService>();

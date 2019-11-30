@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.DateTimeUtils {
-	public class DayOfWeekReader : RoosterTypeParser<DayOfWeek> {
+	public class DayOfWeekParser : RoosterTypeParser<DayOfWeek> {
 		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
 
-		public DayOfWeekReader(Component component) : base(component) { }
+		public DayOfWeekParser(Component component) : base(component) { }
 
 		protected override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();

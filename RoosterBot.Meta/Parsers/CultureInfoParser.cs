@@ -6,12 +6,12 @@ using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
-	public class CultureInfoReader : RoosterTypeParser<CultureInfo> {
+	public class CultureInfoParser : RoosterTypeParser<CultureInfo> {
 		private readonly Regex m_FlagEmoteRegex;
 
 		public override string TypeDisplayName => "#CultureInfoReader_TypeDisplayName";
 
-		public CultureInfoReader(Component component) : base(component) {
+		public CultureInfoParser(Component component) : base(component) {
 			m_FlagEmoteRegex = new Regex(@"\:flag_([a-z]{2})\:");
 		}
 
