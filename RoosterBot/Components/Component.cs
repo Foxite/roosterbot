@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ namespace RoosterBot {
 	public abstract class Component : IDisposable {
 		public abstract Version ComponentVersion { get; }
 		public virtual IEnumerable<string> Tags { get; } = Enumerable.Empty<string>();
+		public virtual ICollection<CultureInfo> SupportedCultures => Array.Empty<CultureInfo>();
 
 		public string Name {
 			get {

@@ -70,98 +70,95 @@ namespace RoosterBot {
 			}
 		}
 
-		public Module[] AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
-		public Module[] AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
-			object[] localizedAttributes = moduleType.GetCustomAttributes(typeof(LocalizedModuleAttribute), true);
+		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
+		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
+			Component component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly)!;
+			ICollection<CultureInfo> locales = component.SupportedCultures;
+			var localizedModules = new List<Module>(locales.Count);
 
-			if (localizedAttributes.Length == 0) {
+
+			if (locales.Count == 0) {
 				return new[] {
 					GetService(null).AddModule(moduleType, (builder) => {
 						if (builder.Commands.SelectMany(command => command.Attributes).OfType<RunModeAttribute>().Any()) {
-							Logger.Warning("RoosterCommandService", $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
-								"This is no longer necessary as commands are always executed off-thread. " +
-								"Parallel commands cannot receive proper post-execution handling. It is highly recommended that you remove all RunMode attributes from your code.");
+							Logger.Info("RoosterCommandService", $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
+								"This is no longer necessary as commands are always executed off-thread.");
 						}
 						postBuild?.Invoke(builder);
 					})
 				};
-			} else if (localizedAttributes.Length == 1) {
-				Component? component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly);
-				IReadOnlyList<string> locales = ((LocalizedModuleAttribute) localizedAttributes[0]).Locales;
-
-				Module[] localizedModules = new Module[locales.Count];
-
-				for (int i = 0; i < locales.Count; i++) {
-					string locale = locales[i];
-					var culture = CultureInfo.GetCultureInfo(locale);
-
-					// A factory is more performant because it won't create a whole new service if it's not going to be used
+			} else {
+				foreach (CultureInfo culture in locales) {
 					CommandService service = GetService(culture);
 
-					string? resolveString(string? key) {
-						return key == null ? null : m_ResourceService.ResolveString(culture, component, key);
-					}
-
-					localizedModules[i] = service.AddModule(moduleType, (module) => {
-						// TODO (review) Is this function called for all submodules of the {moduleType} we're adding?
-						// Otherwise we need to foreach module.Submodules
-						module.AddCheck(new RequireCultureAttribute(locale, true));
-
-						foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
-							rta.Text = resolveString(rta.Text)!;
-						}
-
-						module.Description = resolveString(module.Description);
-						module.Remarks = resolveString(module.Remarks);
-						module.Name = resolveString(module.Name);
-
-						if (module.Aliases.Count > 0) {
-							string aliasKey = module.Aliases.Single();
-							module.Aliases.Remove(aliasKey);
-							foreach (string alias in resolveString(aliasKey)!.Split('|')) {
-								module.AddAlias(alias);
-							}
-						}
-
-						foreach (CommandBuilder command in module.Commands) {
-							if (command.Attributes.OfType<RunModeAttribute>().Any()) {
-								Logger.Warning("RoosterCommandService", $"A command was found module `{module.Name}` that has a RunMode attribute. " +
-									"This is no longer necessary as commands are always executed off-thread.");
-							}
-
-							foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
-								rta.Text = resolveString(rta.Text)!;
-							}
-
-							if (command.Aliases.Count > 0) {
-								string aliasKey = command.Aliases.Single();
-								command.Aliases.Remove(aliasKey);
-								foreach (string alias in resolveString(aliasKey)!.Split('|')) {
-									command.AddAlias(alias);
-								}
-							}
-
-							command.Description = resolveString(command.Description);
-							command.Remarks = resolveString(command.Remarks);
-							command.Name = resolveString(command.Name);
-
-							foreach (ParameterBuilder parameter in command.Parameters) {
-								foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
-									rta.Text = resolveString(rta.Text)!;
-								}
-
-								parameter.Description = resolveString(parameter.Description);
-								parameter.Remarks = resolveString(parameter.Remarks);
-								parameter.Name = resolveString(parameter.Name);
-							}
-						}
+					localizedModules.Add(service.AddModule(moduleType, (module) => {
+						LocalizeModule(module, culture, component);
 
 						postBuild?.Invoke(module);
-					});
+					}));
 				}
 				return localizedModules;
-			} else {
-				throw new ArgumentException("Module class " + moduleType.FullName + " can not be localized because it does not have " + nameof(LocalizedModuleAttribute));
+			}
+		}
+
+		private void LocalizeModule(ModuleBuilder module, CultureInfo culture, Component component) {
+			string? resolveString(string? key) {
+				return key == null ? null : m_ResourceService.ResolveString(culture, component, key);
+			}
+
+			module.AddCheck(new RequireCultureAttribute(culture.Name, true));
+
+			foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+				rta.Text = resolveString(rta.Text)!;
+			}
+
+			module.Description = resolveString(module.Description);
+			module.Remarks = resolveString(module.Remarks);
+			module.Name = resolveString(module.Name);
+
+			if (module.Aliases.Count > 0) {
+				string aliasKey = module.Aliases.Single();
+				module.Aliases.Remove(aliasKey);
+				foreach (string alias in resolveString(aliasKey)!.Split('|')) {
+					module.AddAlias(alias);
+				}
+			}
+
+			foreach (CommandBuilder command in module.Commands) {
+				if (command.Attributes.OfType<RunModeAttribute>().Any()) {
+					Logger.Info("RoosterCommandService", $"The command `{command.Name}` in `{module.Name}` has a RunMode attribute. " +
+						"This is no longer necessary as commands are always executed off-thread.");
+				}
+
+				foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+					rta.Text = resolveString(rta.Text)!;
+				}
+
+				if (command.Aliases.Count > 0) {
+					string aliasKey = command.Aliases.Single();
+					command.Aliases.Remove(aliasKey);
+					foreach (string alias in resolveString(aliasKey)!.Split('|')) {
+						command.AddAlias(alias);
+					}
+				}
+
+				command.Description = resolveString(command.Description);
+				command.Remarks = resolveString(command.Remarks);
+				command.Name = resolveString(command.Name);
+
+				foreach (ParameterBuilder parameter in command.Parameters) {
+					foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+						rta.Text = resolveString(rta.Text)!;
+					}
+
+					parameter.Description = resolveString(parameter.Description);
+					parameter.Remarks = resolveString(parameter.Remarks);
+					parameter.Name = resolveString(parameter.Name);
+				}
+			}
+
+			foreach (ModuleBuilder submodule in module.Submodules) {
+				LocalizeModule(submodule, culture, component);
 			}
 		}
 
