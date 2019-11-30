@@ -147,4 +147,7 @@
   <data name="GLUScheduleRecord_TimeStartEnd" xml:space="preserve">
     <value>{0} - {1}</value>
   </data>
+  <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
+    <value>Onbekende leraar met afkorting {0}</value>
+  </data>
 </root>
