@@ -7,28 +7,38 @@ namespace RoosterBot {
 		public IReadOnlyList<object> ErrorReasonObjects { get; }
 		public Component? ErrorReasonComponent { get; }
 
-		private RoosterTypeParserResult(T value) : base(value) {
+		/// <summary>
+		/// true if the input was valid for parsing <typeparamref name="T"/>, but no object could be returned due to another reason. false if the input was invalid. Undefined otherwise.
+		/// </summary>
+		public bool InputValid { get; }
+
+		object? IRoosterTypeParserResult.Value => Value;
+
+		protected RoosterTypeParserResult(T value) : base(value) {
 			ErrorReasonObjects = Array.Empty<object>();
 		}
 
-		private RoosterTypeParserResult(string reason, Component? errorReasonComponent, params object[] errorReasonObjects) : base(reason) {
+		protected RoosterTypeParserResult(string reason, bool inputValid, Component? errorReasonComponent, params object[] errorReasonObjects) : base(reason) {
 			ErrorReasonObjects = errorReasonObjects;
 			ErrorReasonComponent = errorReasonComponent;
+			InputValid = inputValid;
 		}
 
 		public static new RoosterTypeParserResult<T> Successful(T result) => new RoosterTypeParserResult<T>(result);
 
-		public static RoosterTypeParserResult<T> Unsuccessful(string reason, Component? errorReasonComponent, params object[] errorReasonObjects) {
-			return new RoosterTypeParserResult<T>(reason, errorReasonComponent, errorReasonObjects);
+		public static RoosterTypeParserResult<T> Unsuccessful(bool inputValid, string reason, Component? errorReasonComponent, params object[] errorReasonObjects) {
+			return new RoosterTypeParserResult<T>(reason, inputValid, errorReasonComponent, errorReasonObjects);
 		}
 
-		internal static RoosterTypeParserResult<T> UnsuccessfulBuiltIn(string reason, params object[] errorReasonObjects) {
-			return new RoosterTypeParserResult<T>(reason, null, errorReasonObjects);
+		internal static RoosterTypeParserResult<T> UnsuccessfulBuiltIn(bool inputValid, string reason, params object[] errorReasonObjects) {
+			return new RoosterTypeParserResult<T>(reason, inputValid, null, errorReasonObjects);
 		}
 	}
 
-	internal interface IRoosterTypeParserResult : IRoosterResult {
+	public interface IRoosterTypeParserResult : IRoosterResult {
 		public string Reason { get; }
 		public bool HasValue { get; }
+		public bool InputValid { get; }
+		public object? Value { get; }
 	}
 }

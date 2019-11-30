@@ -6,38 +6,39 @@ using Qmmands;
 namespace RoosterBot.Schedule {
 	public class StudentSetInfoParser : IdentifierInfoParserBase<StudentSetInfo> {
 		public override string TypeDisplayName => "#StudentSetInfo_TypeDisplayName";
+		
+		public StudentSetInfoParser(Component component) : base (component) { }
 
-		protected async override ValueTask<TypeParserResult<StudentSetInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			TypeParserResult<StudentSetInfo> baseResult = await base.ParseAsync(parameter, input, context);
+		protected async override ValueTask<RoosterTypeParserResult<StudentSetInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			RoosterTypeParserResult<StudentSetInfo> baseResult = await base.ParseAsync(parameter, input, context);
 			if (baseResult.IsSuccessful) {
 				return baseResult;
 			} else {
-				ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
 				bool byMention;
 				StudentSetInfo? result;
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
 					IUser user = await context.Client.GetUserAsync(id);
 					if (user == null) {
-						return TypeParserResult<StudentSetInfo>.Unsuccessful(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_InaccessibleUser"));
+						return Unsuccessful(true, "#StudentSetInfoReader_CheckFailed_InaccessibleUser");
 					}
 					result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(user)).GetStudentSet();
 					byMention = true;
-				} else if (input.ToLower() == resources.GetString(context.Culture, "IdentifierInfoReader_Self")) {
+				} else if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
 					result = context.UserConfig.GetStudentSet();
 					byMention = false;
 				} else {
-					return TypeParserResult<StudentSetInfo>.Unsuccessful(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_Direct"));
+					return Unsuccessful(false, "#StudentSetInfoReader_CheckFailed_Direct");
 				}
 				if (result is null) {
 					string message;
 					if (byMention) {
-						message = string.Format(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_MentionUser"), context.GuildConfig.CommandPrefix);
+						message = "#StudentSetInfoReader_CheckFailed_MentionUser";
 					} else {
-						message = string.Format(resources.GetString(context.Culture, "StudentSetInfoReader_CheckFailed_MentionSelf"), context.GuildConfig.CommandPrefix);
+						message = "#StudentSetInfoReader_CheckFailed_MentionSelf";
 					}
-					return TypeParserResult<StudentSetInfo>.Unsuccessful(message);
+					return Unsuccessful(true, message, context.GuildConfig.CommandPrefix);
 				} else {
-					return TypeParserResult<StudentSetInfo>.Successful(result);
+					return Successful(result);
 				}
 			}
 		}
