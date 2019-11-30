@@ -64,6 +64,8 @@ namespace RoosterBot.GLU {
 		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help) {
 			commands.AddModule<GLUModule>();
 
+			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
+
 			// Teachers
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 			await teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);

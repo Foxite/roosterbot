@@ -8,54 +8,59 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
+		private readonly ResourceService m_Resources;
+
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
-		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
-			: base(activity, start, end, studentSets, staffMember, room) { }
+		public GLUScheduleRecord(ResourceService resources, ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
+			: base(activity, start, end, studentSets, staffMember, room) {
+			m_Resources = resources;
+		}
 
+		// TODO (refactor) Mess
 		public override IEnumerable<AspectListItem> Present(CultureInfo culture) {
-			// TODO (localize) This Present function
-			yield return new AspectListItem(new Emoji("🗒️"), "Activiteit", Activity.DisplayText);
+			yield return new AspectListItem(new Emoji("🗒️"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_Activity"), Activity.DisplayText);
 
 			if (Activity.ScheduleCode != "stdag doc") {
 				if (Activity.ScheduleCode != "pauze") {
 					if (StaffMember.Count == 1 && StaffMember[0].IsUnknown) {
-						yield return new AspectListItem(new Emoji("👤"), "Leraar", StaffMember[0].ScheduleCode);
+						yield return new AspectListItem(new Emoji("👤"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_StaffMember"), StaffMember[0].ScheduleCode);
 					}
 
 					string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
 					if (!string.IsNullOrWhiteSpace(teachers)) {
 						if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
-							yield return new AspectListItem(new Emoji("<:VRjoram:392762653367336960>"), "Leraar", teachers);
+							yield return new AspectListItem(Emote.Parse("<:VRjoram:392762653367336960>"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_StaffMember"), teachers);
 						} else {
-							yield return new AspectListItem(new Emoji("👤"), "Leraar", teachers);
+							yield return new AspectListItem(new Emoji("👤"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_StaffMember"), teachers);
 						}
 					}
-					yield return new AspectListItem(new Emoji("👥"), "Klas", StudentSetsString);
-					yield return new AspectListItem(new Emoji("📍"), "Lokaal", RoomString);
+					yield return new AspectListItem(new Emoji("👥"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_StudentSets"), StudentSetsString);
+					yield return new AspectListItem(new Emoji("📍"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_Room"), RoomString);
 				}
 
 				if (Start.Date != DateTime.Today) {
-					yield return new AspectListItem(new Emoji("🗓️"), "Datum", $"{Start.DayOfWeek.GetName(CultureInfo.GetCultureInfo("nl-NL"))} {Start.ToString("dd-MM-yyyy")}");
+					yield return new AspectListItem(new Emoji("🗓️"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_Date"), Start.ToLongDateString(culture));
 				}
 
-				string timeString = $"{Start.ToString("HH:mm")} - {End.ToString("HH:mm")}";
+				string timeString = string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToString("HH:mm"), End.ToString("HH:mm"));
 				if (Start.Date == DateTime.Today && Start > DateTime.Now) {
 					TimeSpan timeTillStart = Start - DateTime.Now;
-					 timeString += $" - nog {timeTillStart.Hours}:{timeTillStart.Minutes.ToString().PadLeft(2, '0')}";
+					 timeString += string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeLeft"), timeTillStart.ToString("H:mm"));
 				}
-				yield return new AspectListItem(new Emoji("🕔"), "Tijd", timeString);
+				yield return new AspectListItem(new Emoji("🕔"), "GLUScheduleRecord_Aspect_TimeStartEnd", timeString);
 
 
-				timeString = $"{(int) Duration.TotalHours}:{Duration.Minutes.ToString().PadLeft(2, '0')}";
+				timeString = Duration.ToString("H:mm");
 				if (Start < DateTime.Now && End > DateTime.Now) {
 					TimeSpan timeLeft = End - DateTime.Now;
-					timeString += $" - nog {timeLeft.Hours}:{timeLeft.Minutes.ToString().PadLeft(2, '0')}";
+					timeString += string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeLeft"), timeLeft.ToString("H:mm"));
 				}
-				yield return new AspectListItem(new Emoji("⏱️"), "Tijd over", timeString);
+				yield return new AspectListItem(new Emoji("⏱️"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_TimeLeft"), timeString);
 
 				if (Break != null) {
-					yield return new AspectListItem(new Emoji("☕"), "Pauze", $"{Break.Start.ToString("HH:mm")} - {Break.End.ToString("HH:mm")}");
+					yield return new AspectListItem(new Emoji("☕"), m_Resources.GetString(culture, "GLUScheduleRecord_Aspect_Break"),
+						string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Break.Start.ToString("HH:mm"), Break.End.ToString("HH:mm")));
 				}
 			}
 		}
