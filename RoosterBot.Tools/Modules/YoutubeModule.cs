@@ -8,7 +8,7 @@ using YoutubeExplode.Models;
 using YoutubeExplode.Models.MediaStreams;
 
 namespace RoosterBot.Tools {
-	[Group("youtube")]
+	[Group("youtube"), Name("Youtube")]
 	public class YoutubeModule : RoosterModule {
 		[Command("mp3")]
 		public async Task<CommandResult> DownloadYoutubeAudioCommand(string url) {
