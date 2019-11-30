@@ -37,6 +37,6 @@ namespace RoosterBot {
 		async ValueTask<IRoosterTypeParserResult> IRoosterTypeParser.ParseAsync(Parameter parameter, string value, RoosterCommandContext context) => await ParseAsync(parameter, value, context);
 
 		protected RoosterTypeParserResult<T> Successful(T value) => RoosterTypeParserResult<T>.Successful(value);
-		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, string reason, params string[] objects) => RoosterTypeParserResult<T>.Unsuccessful(inputValid, reason, m_Component, objects);
+		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, string reason, params object[] objects) => RoosterTypeParserResult<T>.Unsuccessful(inputValid, reason, m_Component, objects);
 	}
 }

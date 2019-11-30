@@ -24,7 +24,7 @@ namespace RoosterBot.Meta {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
-			commandService.AddTypeParser(new CultureInfoReader());
+			commandService.AddTypeParser(new CultureInfoParser(this));
 
 			commandService.AddModule<HelpModule>();
 			commandService.AddModule<ControlModule>();

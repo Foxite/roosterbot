@@ -36,7 +36,7 @@ namespace RoosterBot.Weather {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
-			commandService.AddTypeParser<CityInfo>(new CityInfoReader());
+			commandService.AddTypeParser(new CityInfoParser(this));
 
 			commandService.AddModule<WeatherModule>();
 
