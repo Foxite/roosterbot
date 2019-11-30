@@ -7,7 +7,6 @@ using System.Linq;
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
 	public abstract class ScheduleRecord {
-		// TODO (review) Do all these properties need to be in Schedule component? It's better to move everything into GLUScheduleRecord, and all identifiers types into Schedule.GLU
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
 		public DateTime End { get; set; }
