@@ -130,7 +130,7 @@ namespace RoosterBot.Schedule {
 		#region Record response functions
 		protected async Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
 			m_LookedUpData = new LastScheduleCommandInfo(info, record.End, ScheduleResultKind.Single);
-			IEnumerable<AspectListItem> aspects = record.Present(Culture);
+			IEnumerable<AspectListItem> aspects = record.Present(Resources, Culture);
 			m_Result.AddResult(new AspectListResult(pretext, aspects));
 
 			if (callNextIfBreak && record.ShouldCallNextCommand) {
@@ -176,7 +176,7 @@ namespace RoosterBot.Schedule {
 
 						int recordIndex = 1;
 						foreach (ScheduleRecord record in records) {
-							cells[recordIndex] = record.PresentRow(Culture);
+							cells[recordIndex] = record.PresentRow(Resources, Culture);
 							recordIndex++;
 						}
 						m_LookedUpData = new LastScheduleCommandInfo(info, records.First().End.Date, ScheduleResultKind.Day);

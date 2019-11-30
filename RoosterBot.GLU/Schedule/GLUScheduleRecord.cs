@@ -8,18 +8,18 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
-		private readonly ResourceService m_Resources;
-
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
-		public GLUScheduleRecord(ResourceService resources, ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
-			: base(activity, start, end, studentSets, staffMember, room) {
-			m_Resources = resources;
-		}
+		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
+			: base(activity, start, end, studentSets, staffMember, room) { }
 
-		public override IEnumerable<AspectListItem> Present(CultureInfo culture) {
+		public override IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture) {
+			string getString(string key, params object[] objects) {
+				return string.Format(resources.GetString(culture, key), objects);
+			}
+
 			AspectListItem getAspect(IEmote emote, string nameKey, string valueKey, params string[] objects) {
-				return new AspectListItem(emote, m_Resources.GetString(culture, nameKey), string.Format(m_Resources.GetString(culture, valueKey), objects));
+				return new AspectListItem(emote, getString(nameKey), getString(valueKey, objects));
 			}
 
 			yield return getAspect(new Emoji("🗒️"), "GLUScheduleRecord_Aspect_Activity", Activity.DisplayText);
@@ -48,10 +48,10 @@ namespace RoosterBot.GLU {
 					yield return getAspect(new Emoji("🗓️"), "GLUScheduleRecord_Aspect_Date", Start.ToLongDateString(culture));
 				}
 
-				string timeString = string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToString("HH:mm"), End.ToString("HH:mm"));
+				string timeString = getString("GLUScheduleRecord_TimeStartEnd", Start.ToString("HH:mm"), End.ToString("HH:mm"));
 				if (Start.Date == DateTime.Today && Start > DateTime.Now) {
 					TimeSpan timeTillStart = Start - DateTime.Now;
-					timeString += string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeLeft"), timeTillStart.ToString("H:mm"));
+					timeString += getString("GLUScheduleRecord_TimeLeft", timeTillStart.ToString("H:mm"));
 				}
 				yield return getAspect(new Emoji("🕔"), "GLUScheduleRecord_Aspect_TimeStartEnd", timeString);
 
@@ -59,7 +59,7 @@ namespace RoosterBot.GLU {
 				timeString = Duration.ToString("H:mm");
 				if (Start < DateTime.Now && End > DateTime.Now) {
 					TimeSpan timeLeft = End - DateTime.Now;
-					timeString += string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeLeft"), timeLeft.ToString("H:mm"));
+					timeString += getString("GLUScheduleRecord_TimeLeft", timeLeft.ToString("H:mm"));
 				}
 				yield return getAspect(new Emoji("⏱️"), "GLUScheduleRecord_Aspect_TimeLeft", timeString);
 
@@ -69,10 +69,10 @@ namespace RoosterBot.GLU {
 			}
 		}
 
-		public override IReadOnlyList<string> PresentRow(CultureInfo culture) {
+		public override IReadOnlyList<string> PresentRow(ResourceService resources, CultureInfo culture) {
 			return new[] {
 				Activity.DisplayText.ToString(),
-				string.Format(m_Resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToShortTimeString(culture), End.ToShortTimeString(culture)),
+				string.Format(resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToShortTimeString(culture), End.ToShortTimeString(culture)),
 				StudentSetsString,
 				StaffMemberString,
 				RoomString

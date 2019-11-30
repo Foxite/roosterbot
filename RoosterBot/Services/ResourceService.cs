@@ -6,7 +6,7 @@ using System.Resources;
 
 namespace RoosterBot {
 	public sealed class ResourceService {
-		private Dictionary<Assembly, ResourceManager> m_ResourceManagers;
+		private readonly Dictionary<Assembly, ResourceManager> m_ResourceManagers;
 
 		internal ResourceService() {
 			m_ResourceManagers = new Dictionary<Assembly, ResourceManager>();

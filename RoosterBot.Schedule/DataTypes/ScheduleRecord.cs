@@ -35,7 +35,7 @@ namespace RoosterBot.Schedule {
 				$"{(Break == null ? "no break" : ("a break from " + Break.Start.ToString() + " to " + Break.End.ToString()))}) to {End.ToString()} by {StaffMember}";
 		}
 
-		public abstract IEnumerable<AspectListItem> Present(CultureInfo culture);
-		public abstract IReadOnlyList<string> PresentRow(CultureInfo culture);
+		public abstract IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture);
+		public abstract IReadOnlyList<string> PresentRow(ResourceService resources, CultureInfo culture);
 	}
 }

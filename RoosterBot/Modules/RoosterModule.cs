@@ -9,7 +9,7 @@ namespace RoosterBot {
 		// Initializing a property with `null!` will prevent a warning about non-nullable properties being unassigned.
 		// They will be assigned through reflection, and this is the best way to tell the compiler that it's fine.
 		// https://stackoverflow.com/a/57343485/3141917
-		public ResourceService ResourcesService { get; set; } = null!;
+		public ResourceService Resources { get; set; } = null!;
 
 		protected ModuleLogger Log { get; private set; } = null!;
 
@@ -40,11 +40,11 @@ namespace RoosterBot {
 		protected Task<CommandResult> Result(RoosterCommandResult result) => Task.FromResult((CommandResult) result);
 
 		protected string GetString(string name) {
-			return ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name);
+			return Resources.GetString(Assembly.GetCallingAssembly(), Culture, name);
 		}
 
 		protected string GetString(string name, params object[] args) {
-			return string.Format(ResourcesService.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
+			return string.Format(Resources.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
 		}
 
 		protected sealed class ModuleLogger {
