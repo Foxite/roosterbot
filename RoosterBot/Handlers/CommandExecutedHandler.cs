@@ -13,6 +13,11 @@ namespace RoosterBot {
 			if (args.Context is RoosterCommandContext rcc) {
 				if (args.Result is RoosterCommandResult rcr) {
 					await rcr.PresentAsync(rcc);
+				} else {
+					if (!(args.Result is null)) {
+						Logger.Warning("CommandHandler", $"A command has returned an unknown result of type {args.Result.GetType().Name}. It cannot be handled.");
+					}
+					await TextResult.Info("").PresentAsync(rcc);
 				}
 				await rcc.UserConfig.UpdateAsync();
 			}

@@ -71,8 +71,10 @@ namespace RoosterBot {
 						}
 						break;
 					default:
-						await Config.BotOwner.SendMessageAsync("PostCommandHandler got an unknown result: " + result.GetType().FullName + ". This is the ToString: " + result.ToString());
-						response += result.ToString();
+						string report = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result.ToString()}";
+						Logger.Warning("CommandHandler", report);
+						await Config.BotOwner.SendMessageAsync(report);
+						response = Resources.GetString(context.Culture, "RoosterBot_FatalError");
 						break;
 				}
 
