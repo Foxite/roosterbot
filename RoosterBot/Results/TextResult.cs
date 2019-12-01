@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Discord;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	/// <summary>
@@ -14,7 +15,11 @@ namespace RoosterBot {
 			Response = response;
 		}
 
-		public override Task PresentAsync(RoosterCommandContext context) => context.RespondAsync((PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "") + Response);
+		public override Task PresentAsync(RoosterCommandContext context) {
+			string prefix = (PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "");
+			string response = string.IsNullOrWhiteSpace(Response) ? context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "") : Response;
+			return context.RespondAsync(prefix + response);
+		}
 
 		public static TextResult Success(string response) => new TextResult(Constants.Success, response);
 		public static TextResult Info   (string response) => new TextResult(Constants.Info,    response);

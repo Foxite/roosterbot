@@ -179,4 +179,7 @@
     <comment>0: Parameter name
 1: failure reason</comment>
   </data>
+  <data name="Result_Empty" xml:space="preserve">
+    <value>The command returned no response.</value>
+  </data>
 </root>
