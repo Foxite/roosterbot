@@ -12,52 +12,48 @@ namespace RoosterBot.Meta {
 
 		[Command("#HelpModule_HelpCommand"), Description("#MetaCommandsModule_HelpCommand_Summary")]
 		public Task<CommandResult> HelpCommand() {
-			string response = GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n";
-			response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
-			response += string.Join(", ", Help.GetSectionNames(Culture)) + "\n\n";
-
-			response += GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix);
-
-			return Result(new TextResult(null, response));
+			return Result(new TextResult(null,
+				GetString("MetaCommandsModule_HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n"
+				+ GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n"
+				+ string.Join(", ", Help.GetSectionNames(Culture)) + "\n\n"
+				+ GetString("MetaCommandsModule_HelpCommand_PostText", GuildConfig.CommandPrefix)));
 		}
 
 		[Command("#HelpModule_HelpCommand"), Description("#MetaCommandsModule_HelpCommand_Section_Summary")]
 		public Task<CommandResult> HelpCommand([Remainder, Name("#MetaCommandsModule_HelpCommand_Section")] string section) {
-			string response = "";
 			if (Help.HelpSectionExists(Culture, section)) {
-				string helpText = Help.GetHelpSection(Culture, section);
-				response += string.Format(helpText, GuildConfig.CommandPrefix);
+				return Result(new TextResult(null, string.Format(Help.GetHelpSection(Culture, section), GuildConfig.CommandPrefix)));
 			} else {
-				response += GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n";
-				response += GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n";
-				response += string.Join(", ", Help.GetSectionNames(Culture));
+				return Result(new TextResult(null,
+					GetString("MetaCommandsModule_HelpCommand_ChapterDoesNotExist") + "\n\n"
+					+ GetString("MetaCommandsModule_HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n"
+					+ string.Join(", ", Help.GetSectionNames(Culture))));
 			}
-			
-			return Result(new TextResult(null, response));
 		}
 
 		[Command("#HelpModule_CommandsListCommand"), Description("#MetaCommandsModule_CommandListCommand_Summary")]
 		public Task<CommandResult> CommandListCommand() {
-			string response = GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n";
-			response += string.Join(", ", GetCategories().Select(grouping => grouping.Key));
-			
-			return Result(new TextResult(null, response));
+
+			return Result(new TextResult(null,
+				GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
+				+ string.Join(", ", GetCategories().Select(grouping => grouping.Key))));
 		}
 
 		[Command("#HelpModule_CommandsListCommand"), Description("#MetaCommandsModule_CommandListCommand_Category_Summary")]
 		public Task<CommandResult> CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string query) {
 			query = query.ToLower();
-			string response;
 
 			IEnumerable<Command>? commands = GetCategories()
 				.Where(category => category.Key.ToLower() == query)
 				.SingleOrDefault();
 
 			if (commands == null) {
-				response = GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n";
-				response += GetCategories();
+				return Result(new TextResult(null,
+					GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n"
+					+ GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
+					+ string.Join(", ", GetCategories().Select(grouping => grouping.Key))));
 			} else {
-				response = "";
+				string response = "";
 				bool containsOptionalParameters = false;
 
 				foreach (Command command in commands) {
@@ -74,10 +70,8 @@ namespace RoosterBot.Meta {
 				if (containsOptionalParameters) {
 					response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
 				}
-				
+				return Result(new TextResult(null, response));
 			}
-			
-			return Result(new TextResult(null, response));
 		}
 
 		private IEnumerable<IGrouping<string, Command>> GetCategories() {
