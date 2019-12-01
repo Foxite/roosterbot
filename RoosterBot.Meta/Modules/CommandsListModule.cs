@@ -20,14 +20,9 @@ namespace RoosterBot.Meta {
 		public Task<CommandResult> CommandListCommand([Remainder, Name("#MetaCommandsModule_CommandListCommand_ModuleName")] string query) {
 			query = query.ToLower();
 
-			IEnumerable<Command>? commands = GetCommands(query);
+			IEnumerable<Command> commands = GetCommands(query);
 
-			if (commands == null) {
-				return Result(new TextResult(null,
-					GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n"
-					+ GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
-					+ string.Join(", ", GetCategories())));
-			} else {
+			if (commands.Any()) {
 				string response = "";
 				bool containsOptionalParameters = false;
 
@@ -46,6 +41,11 @@ namespace RoosterBot.Meta {
 					response += GetString("MetaCommandsModule_CommandListCommand_OptionalHint");
 				}
 				return Result(new TextResult(null, response));
+			} else {
+				return Result(new TextResult(null,
+					GetString("MetaCommandsModule_CommandListCommand_CategoryDoesNotExist") + "\n\n"
+					+ GetString("MetaCommandsModule_CommandListCommand_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
+					+ string.Join(", ", GetCategories())));
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace RoosterBot.Meta {
 			((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).OfType<RequireCultureAttribute>().Any(attr => attr.Culture != Culture)
 		);
 
-		private IEnumerable<Command>? GetCommands(string moduleName) =>
+		private IEnumerable<Command> GetCommands(string moduleName) =>
 			from module in CmdService.GetAllModules(Context.Culture)
 			where ShouldNotHide(module) && module.Name.ToLower() == moduleName
 			from command in module.Commands
