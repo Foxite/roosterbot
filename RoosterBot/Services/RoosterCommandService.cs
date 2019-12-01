@@ -14,7 +14,8 @@ namespace RoosterBot {
 	/// </summary>
 	public sealed class RoosterCommandService {
 		// Null CultureInfo represents unlocalized modules
-		private readonly ConcurrentDictionary<CultureKey, CommandService> m_ServicesByCulture;
+		private readonly ConcurrentDictionary<CultureInfo, CommandService> m_ServicesByCulture;
+		private readonly CommandService m_DefaultService;
 		private readonly ResourceService m_ResourceService;
 		private readonly CommandServiceConfiguration m_Config;
 
@@ -43,17 +44,24 @@ namespace RoosterBot {
 		internal RoosterCommandService(ResourceService resourceService) : this(resourceService, new CommandServiceConfiguration()) { }
 
 		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
-			m_ServicesByCulture = new ConcurrentDictionary<CultureKey, CommandService>();
+			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
+			m_DefaultService = new CommandService(config);
 			m_ResourceService = resourceService;
 			m_Config = config;
 		}
 
-		private CommandService GetService(CultureInfo? culture) => m_ServicesByCulture.GetOrAdd(culture, (c) => {
-			var ret = new CommandService(m_Config);
-			ret.CommandExecuted += async (args) => await m_CommandExecuted.InvokeAsync(args);
-			ret.CommandExecutionFailed += async (args) => await m_CommandExecutionFailed.InvokeAsync(args);
-			return ret;
-		});
+		private CommandService GetService(CultureInfo? culture) {
+			if (culture == null) {
+				return m_DefaultService;
+			} else {
+				return m_ServicesByCulture.GetOrAdd(culture, (c) => {
+					var ret = new CommandService(m_Config);
+					ret.CommandExecuted += async (args) => await m_CommandExecuted.InvokeAsync(args);
+					ret.CommandExecutionFailed += async (args) => await m_CommandExecutionFailed.InvokeAsync(args);
+					return ret;
+				});
+			}
+		}
 
 		private void AllServices(Action<CommandService> action) {
 			foreach (CommandService service in m_ServicesByCulture.Select(kvp => kvp.Value)) {
@@ -226,43 +234,5 @@ namespace RoosterBot {
 			AllServices((service) => service.SetDefaultArgumentParser(parser));
 		}
 		#endregion
-
-		/// <summary>
-		/// A non-nullable wrapper for a nullable CultureInfo that we can use as a dictionary key.
-		/// </summary>
-		[DebuggerDisplay("{ToString()}")]
-		private struct CultureKey : IEquatable<CultureKey>, IEquatable<CultureInfo> {
-			public CultureInfo? Culture { get; }
-
-			public CultureKey(CultureInfo? culture) {
-				Culture = culture;
-			}
-
-			public override bool Equals(object? obj) {
-				if (obj != null && obj is CultureKey key) {
-					return Equals(key);
-				} else {
-					return false;
-				}
-			}
-
-			public override int GetHashCode() => Culture?.GetHashCode() ?? 0;
-
-			public bool Equals(CultureInfo? other) => Culture == other;
-			public bool Equals(CultureKey other) =>   Culture == other.Culture;
-
-			public static bool operator ==(CultureKey   left, CultureInfo? right) => left .Culture == right;
-			public static bool operator ==(CultureInfo? left, CultureKey right)   => right.Culture == left;
-			public static bool operator ==(CultureKey   left, CultureKey right)   => left.Equals(right);
-
-			public static bool operator !=(CultureKey   left, CultureInfo? right) => !(left == right);
-			public static bool operator !=(CultureInfo? left, CultureKey right)   => !(left == right);
-			public static bool operator !=(CultureKey   left, CultureKey right)   => !(left == right);
-			
-			public static implicit operator CultureInfo?(CultureKey key) => key.Culture;
-			public static implicit operator CultureKey(CultureInfo? info) => new CultureKey(info);
-
-			public override string ToString() => Culture?.ToString() ?? "null";
-		}
 	}
 }
