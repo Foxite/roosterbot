@@ -29,6 +29,7 @@ namespace RoosterBot.Meta {
 
 			commandService.AddTypeParser(new CultureInfoParser(this));
 
+			commandService.AddModule<CommandsListModule>();
 			commandService.AddModule<HelpModule>();
 			commandService.AddModule<ControlModule>();
 			commandService.AddModule<GuildConfigModule>();
