@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[Name("#MetaCommandsModule_Name"), LocalizedModule("nl-NL")]
+	[Name("#MetaCommandsModule_Name")]
 	public class HelpModule : RoosterModule {
 		public HelpService Help { get; set; } = null!;
 		public RoosterCommandService CmdService { get; set; } = null!;

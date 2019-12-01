@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ namespace RoosterBot.Schedule {
 		internal MultiParser<IdentifierInfo> IdentifierReaders { get; }
 
 		public override Version ComponentVersion => new Version(2, 0, 0);
+		public override ICollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 
 		public ScheduleComponent() {
 			Instance = this;

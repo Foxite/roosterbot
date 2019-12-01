@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	[Name("#TeacherListModule_Name"), LocalizedModule("nl-NL", "en-US")]
+	[Name("#TeacherListModule_Name")]
 	public class TeacherListModule : RoosterModule {
 		public TeacherNameService Teachers { get; set; } = null!;
 

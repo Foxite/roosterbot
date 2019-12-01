@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[LocalizedModule("nl-NL", "en-US"), Name("#UserConfigModule_Name"), Group("#UserConfigModule_Group")]
+	[Name("#UserConfigModule_Name"), Group("#UserConfigModule_Group")]
 	public class UserConfigModule : RoosterModule {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
