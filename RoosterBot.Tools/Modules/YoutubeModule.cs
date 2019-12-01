@@ -34,7 +34,7 @@ namespace RoosterBot.Tools {
 				if (new FileInfo(filePath).Length > 8e6) {
 					return TextResult.Error("Unable to upload audio: file size exceeds 8 MB");
 				} else {
-					return new AudioResult(Context.User.Mention + $" {video.Title} by {video.Author} ({(totalHours == 0 ? "" : totalHours.ToString() + ":")}{video.Duration.Minutes}:{video.Duration.Seconds})", filePath);
+					return new FileResult(Context.User.Mention + $" {video.Title} by {video.Author} ({(totalHours == 0 ? "" : totalHours.ToString() + ":")}{video.Duration.Minutes}:{video.Duration.Seconds})", filePath);
 				}
 			} else {
 				return TextResult.Error("Unable to download audio: no audio streams");

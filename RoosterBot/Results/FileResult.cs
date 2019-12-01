@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 
 namespace RoosterBot {
-	public class AudioResult : RoosterCommandResult {
+	public class FileResult : RoosterCommandResult {
 		public string Caption { get; }
 		public string FilePath { get; }
 
-		public AudioResult(string caption, string filePath) {
+		public FileResult(string caption, string filePath) {
 			Caption = caption;
 			FilePath = filePath;
 		}
