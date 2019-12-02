@@ -16,7 +16,7 @@ namespace RoosterBot {
 		}
 
 		public override Task PresentAsync(RoosterCommandContext context) {
-			string prefix = (PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "");
+			string prefix = PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "";
 			string response = string.IsNullOrWhiteSpace(Response) ? context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "") : Response;
 			return context.RespondAsync(prefix + response);
 		}

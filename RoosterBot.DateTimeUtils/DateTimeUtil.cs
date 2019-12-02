@@ -37,22 +37,6 @@ namespace RoosterBot.DateTimeUtils {
 			return IsWeekend(left) && IsWeekend(right) && Math.Abs((left.Date - right.Date).TotalDays) <= 2;
 		}
 
-		public static string ToShortTimeString(this DateTime datetime, CultureInfo culture) {
-			return datetime.ToString(culture.DateTimeFormat.ShortTimePattern, culture);
-		}
-
-		public static string ToLongTimeString(this DateTime datetime, CultureInfo culture) {
-			return datetime.ToString(culture.DateTimeFormat.LongTimePattern, culture);
-		}
-
-		public static string ToShortDateString(this DateTime datetime, CultureInfo culture) {
-			return datetime.ToString(culture.DateTimeFormat.ShortDatePattern, culture);
-		}
-
-		public static string ToLongDateString(this DateTime datetime, CultureInfo culture) {
-			return datetime.ToString(culture.DateTimeFormat.LongDatePattern, culture);
-		}
-
 		public static string GetRelativeDateReference(DateTime date, CultureInfo culture) {
 			string GetString(string key, params string[] objects) {
 				return string.Format(DateTimeUtilsComponent.ResourceService.GetString(culture, key), objects);
@@ -65,7 +49,7 @@ namespace RoosterBot.DateTimeUtils {
 			} else if ((date - DateTime.Today).TotalDays < 7) {
 				return GetString("RelativeDateReference_DayName", date.DayOfWeek.GetName(culture));
 			} else {
-				return GetString("RelativeDateReference_Date", date.ToShortDateString(culture));
+				return GetString("RelativeDateReference_Date", date.ToString("D", culture));
 			}
 		}
 	}

@@ -7,8 +7,8 @@ using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Weather {
 	public class WeatherInfo {
-		private WeatherService m_WeatherService;
-		private ResourceService m_Resources;
+		private readonly WeatherService m_WeatherService;
+		private readonly ResourceService m_Resources;
 
 		public CityInfo City { get; }
 
@@ -59,7 +59,7 @@ namespace RoosterBot.Weather {
 			if ((datetime - DateTime.Now).TotalMinutes < 1) {
 				pretext += "nu";
 			} else {
-				pretext += DateTimeUtil.GetRelativeDateReference(datetime.Date, culture) + " " + datetime.ToShortTimeString(culture);
+				pretext += DateTimeUtil.GetRelativeDateReference(datetime.Date, culture) + " " + datetime.ToString("s", culture);
 			}
 			return Present(pretext, culture, useMetric);
 		}

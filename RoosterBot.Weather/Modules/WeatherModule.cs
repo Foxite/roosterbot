@@ -99,7 +99,7 @@ namespace RoosterBot.Weather {
 			GuildConfig.TryGetData("metric", out bool metric, true);
 
 			void addItem(int hours, int item) {
-				m_Result.AddResult(dayForecast[item].Present(DateTime.Today.AddHours(hours).ToShortTimeString(Culture), Culture, metric));
+				m_Result.AddResult(dayForecast[item].Present(DateTime.Today.AddHours(hours).ToString("s", Culture), Culture, metric));
 			}
 
 			addItem(08, 0);
