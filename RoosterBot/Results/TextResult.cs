@@ -15,10 +15,10 @@ namespace RoosterBot {
 			Response = response;
 		}
 
-		public override Task PresentAsync(RoosterCommandContext context) {
+		public override string ToString() {
 			string prefix = PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "";
-			string response = string.IsNullOrWhiteSpace(Response) ? context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "") : Response;
-			return context.RespondAsync(prefix + response);
+			string response = Response;
+			return prefix + response;
 		}
 
 		public static TextResult Success(string response) => new TextResult(Constants.Success, response);

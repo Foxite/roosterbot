@@ -56,9 +56,11 @@ namespace RoosterBot {
 		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
 		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IUserMessage command) => RemoveCommand(userConfig, command.Id);
 
+		// TODO (feature) Certain commands should opt out from command editing/deletion, most notably commands that can upload files
+		// Recommend doing this with an attribute and saving the Command with the CommandResponsePair (good luck serializing it)
 		public static async Task<IUserMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
-			ulong? responseId = context.UserConfig.GetResponse(context.Message)?.ResponseId;
-			IUserMessage? response = responseId == null ? null : (IUserMessage) await context.Channel.GetMessageAsync(responseId.Value);
+			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
+			IUserMessage? response = crp == null ? null : (IUserMessage) await context.Channel.GetMessageAsync(crp.ResponseId);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
 				if (filePath == null) {
@@ -69,7 +71,9 @@ namespace RoosterBot {
 				SetResponse(context.UserConfig, context.Message, response);
 			} else {
 				// The command was edited.
-				await response.ModifyAsync(props => props.Content = message);
+				await response.ModifyAsync(props => {
+					props.Content = message;
+				});
 			}
 
 			return response;

@@ -56,6 +56,6 @@ namespace RoosterBot {
 			}
 		}
 
-		public override Task PresentAsync(RoosterCommandContext context) => context.RespondAsync(MaxColumnWidth == null ? StringUtil.FormatTextTable(Cells) : StringUtil.FormatTextTable(Cells, MaxColumnWidth.Value));
+		public override string ToString() => StringUtil.FormatTextTable(Cells, MaxColumnWidth);
 	}
 }

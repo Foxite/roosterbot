@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using Qmmands;
+﻿using Qmmands;
 
 namespace RoosterBot {
 	public abstract class RoosterCommandResult : CommandResult {
+		public string? UploadFilePath { get; set; }
+
 		public sealed override bool IsSuccessful => true;
 
-		public abstract Task PresentAsync(RoosterCommandContext context);
+		public abstract override string ToString();
 	}
 }

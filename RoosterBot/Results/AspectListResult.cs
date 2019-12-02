@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Discord;
 
 namespace RoosterBot {
@@ -20,7 +19,7 @@ namespace RoosterBot {
 			IncludeAspectNames = includeAspectNames;
 		}
 
-		public override Task PresentAsync(RoosterCommandContext context) => context.RespondAsync(Caption + "\n" + string.Join('\n', m_Aspects.Select(item => item.Present(IncludeAspectNames))));
+		public override string ToString() => Caption + "\n" + string.Join('\n', m_Aspects.Select(item => item.Present(IncludeAspectNames)));
 
 		public IEnumerator<AspectListItem> GetEnumerator() => m_Aspects.GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => m_Aspects.GetEnumerator();
@@ -35,7 +34,6 @@ namespace RoosterBot {
 		public string Value { get; }
 
 		public AspectListItem(IEmote prefixEmote, string name, string value) {
-			
 			PrefixEmote = prefixEmote;
 			Name = name;
 			Value = value;

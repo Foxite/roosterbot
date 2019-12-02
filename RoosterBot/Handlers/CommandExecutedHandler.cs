@@ -12,12 +12,16 @@ namespace RoosterBot {
 		public async Task HandleResultAsync(CommandExecutedEventArgs args) {
 			if (args.Context is RoosterCommandContext rcc) {
 				if (args.Result is RoosterCommandResult rcr) {
-					await rcr.PresentAsync(rcc);
+					if (rcr.UploadFilePath == null) {
+						await rcc.RespondAsync(rcr.ToString());
+					} else {
+						await rcc.RespondAsync(rcr.ToString(), rcr.UploadFilePath);
+					}
 				} else {
 					if (!(args.Result is null)) {
 						Logger.Warning("CommandHandler", $"A command has returned an unknown result of type {args.Result.GetType().Name}. It cannot be handled.");
 					}
-					await TextResult.Info("").PresentAsync(rcc);
+					await rcc.RespondAsync(TextResult.Info("").ToString()); // This will produce a "No result" message
 				}
 				await rcc.UserConfig.UpdateAsync();
 			}
