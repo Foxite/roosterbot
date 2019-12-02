@@ -25,14 +25,17 @@ namespace RoosterBot {
 		/// <param name="table">An array[row][column]. While it can be jagged, if it is jagged, this will not work properly.</param>
 		/// <param name="maxColumnWidth">The maximum width for any column. Cells will be broken by word into lines if the cell length exceeds this value.</param>
 		/// <returns>A string that you can send directly into a chat message.</returns>
-		public static string FormatTextTable(IReadOnlyList<IReadOnlyList<string>> table, int maxColumnWidth = 20) {
+		public static string FormatTextTable(IReadOnlyList<IReadOnlyList<string>> table, int? maxColumnWidth = null) {
 			// Split cells into lines and determine row heights
 			int[] rowHeights = new int[table.Count];
 			List<string>[][] cellLines = new List<string>[table.Count][];
+
 			for (int row = 0; row < table.Count; row++) {
 				cellLines[row] = new List<string>[table[0].Count];
 				for (int column = 0; column < table[0].Count; column++) {
-					cellLines[row][column] = BreakStringIntoLines(table[row][column], maxColumnWidth);
+					cellLines[row][column] = maxColumnWidth == null
+						? new List<string>() { table[row][column] }
+						: BreakStringIntoLines(table[row][column], maxColumnWidth.Value);
 					rowHeights[row] = Math.Max(cellLines[row][column].Count, rowHeights[row]);
 				}
 			}
