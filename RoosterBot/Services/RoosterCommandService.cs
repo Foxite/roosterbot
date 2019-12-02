@@ -20,8 +20,8 @@ namespace RoosterBot {
 		private readonly CommandServiceConfiguration m_Config;
 
 		// These events are copied from https://github.com/Quahu/Qmmands/blob/master/src/Qmmands/CommandService.cs
-        private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>();
-        private readonly AsynchronousEvent<CommandExecutionFailedEventArgs> m_CommandExecutionFailed = new AsynchronousEvent<CommandExecutionFailedEventArgs>();
+        private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>(GetEventErrorHandler(nameof(CommandExecuted)));
+		private readonly AsynchronousEvent<CommandExecutionFailedEventArgs> m_CommandExecutionFailed = new AsynchronousEvent<CommandExecutionFailedEventArgs>(GetEventErrorHandler(nameof(CommandExecutionFailed)));
 		
 		/// <summary>
         /// Fires after a <see cref="Command"/> was successfully executed.
@@ -56,8 +56,21 @@ namespace RoosterBot {
 			} else {
 				return m_ServicesByCulture.GetOrAdd(culture, (c) => {
 					var ret = new CommandService(m_Config);
-					ret.CommandExecuted += async (args) => await m_CommandExecuted.InvokeAsync(args);
-					ret.CommandExecutionFailed += async (args) => await m_CommandExecutionFailed.InvokeAsync(args);
+					ret.CommandExecuted += async (args) => {
+						Task t = m_CommandExecuted.InvokeAsync(args);
+						await t;
+						if (t.IsFaulted) {
+							Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", t.Exception);
+						}
+					};
+					ret.CommandExecutionFailed += async (args) => {
+						try {
+							await m_CommandExecutionFailed.InvokeAsync(args);
+						} catch (Exception e) {
+							Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", e);
+							throw;
+						}
+					};
 					return ret;
 				});
 			}
@@ -234,5 +247,10 @@ namespace RoosterBot {
 			AllServices((service) => service.SetDefaultArgumentParser(parser));
 		}
 		#endregion
+
+		private static Func<Exception, Task> GetEventErrorHandler(string name) {
+			string logMessage = $"A {name} handler has thrown an exception.";
+			return e => Logger.LogSync(new Discord.LogMessage(Discord.LogSeverity.Error, "RoosterCommandService", logMessage, e));
+		}
 	}
 }
