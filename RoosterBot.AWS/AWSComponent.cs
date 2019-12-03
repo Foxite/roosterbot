@@ -14,7 +14,7 @@ using Qmmands;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : Component {
-		public override Version ComponentVersion => new Version(1, 1, 0);
+		public override Version ComponentVersion => new Version(1, 2, 0);
 
 #nullable disable
 		private AmazonDynamoDBClient m_DynamoDBClient;

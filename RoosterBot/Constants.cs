@@ -2,7 +2,7 @@
 
 namespace RoosterBot {
 	public static class Constants {
-		public static readonly Version RoosterBotVersion = new Version(2, 0, 0);
+		public static readonly Version RoosterBotVersion = new Version(2, 2, 0);
 		public static string VersionString => RoosterBotVersion.ToString();
 
 		public static readonly Emote Error   = Emote.Parse("<:error:636213609919283238>");

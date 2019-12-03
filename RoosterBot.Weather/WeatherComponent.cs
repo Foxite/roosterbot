@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
-		public override Version ComponentVersion => new Version(0, 2, 0);
+		public override Version ComponentVersion => new Version(0, 3, 0);
 		public override ICollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 		public bool AttributionLicense { get; private set; }
 

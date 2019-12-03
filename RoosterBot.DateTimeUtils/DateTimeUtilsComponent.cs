@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DateTimeUtils {
 	public class DateTimeUtilsComponent : Component {
-		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public override IEnumerable<string> Tags => new[] { "DayOfWeekReader" };
 		
