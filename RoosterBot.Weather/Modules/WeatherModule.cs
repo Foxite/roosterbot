@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using RoosterBot.DateTimeUtils;
 using Qmmands;
 
 namespace RoosterBot.Weather {
@@ -15,41 +14,32 @@ namespace RoosterBot.Weather {
 
 		[Command("#WeatherModule_CurrentWeather")]
 		public async Task<CommandResult> GetCurrentWeatherCommand([Remainder] CityInfo city) {
+			using IDisposable typingState = Context.Channel.EnterTypingState();
+
 			WeatherInfo weather;
-			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-				weather = await Weather.GetCurrentWeatherAsync(city);
-			}
+			
+			weather = await Weather.GetCurrentWeatherAsync(city);
 			GuildConfig.TryGetData("metric", out bool metric, true);
 			m_Result.AddResult(weather.Present(DateTime.Now, Culture, metric));
 			Attribution();
-			return m_Result;
-		}
 
-		[Command("#WeatherModule_DayForecast")]
-		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, [Remainder] CityInfo city) {
-			// Get the forecast for the day
-			int daysFromNow = day - DateTime.Today.DayOfWeek;
-			if (daysFromNow < 0) {
-				daysFromNow += 7;
-			}
-			DateTime date = DateTime.Today.AddDays(daysFromNow);
-			await RespondDayForecast(city, date);
-			Attribution();
 			return m_Result;
 		}
 
 		[Command("#WeatherModule_TimeForecast")]
 		public async Task<CommandResult> GetDayForecastCommand(DayOfWeek day, TimeSpan timeOffset, [Remainder] CityInfo city) {
+			using IDisposable typingState = Context.Channel.EnterTypingState();
+
 			DateTime datetime;
 			WeatherInfo weather;
-			using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-				// Get the forecast for the day at the time indicated by the DateTime object (the Date is ignored)
-				datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
-				weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
-			}
+
+			// Get the forecast for the day at the time indicated by the DateTime object (the Date is ignored)
+			datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
+			weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			GuildConfig.TryGetData("metric", out bool metric, true);
 			m_Result.AddResult(weather.Present(datetime, Culture, metric));
 			Attribution();
+
 			return m_Result;
 		}
 
@@ -57,17 +47,9 @@ namespace RoosterBot.Weather {
 		public async Task<CommandResult> GetForecastCommand(int amount, string unit, [Remainder] CityInfo city) {
 			if (amount < 1) {
 				return TextResult.Error(GetString("#WeatherModule_NoLookBack"));
-			} else if (GetString("WeatherModule_Unit_Days").Split('|').Contains(unit)) {
-				if (amount > 7) {
-					return TextResult.Error(GetString("WeatherModule_SevenDayLimit"));
-				} else {
-					await RespondDayForecast(city, DateTime.Today.AddDays(amount));
-					Attribution();
-					return m_Result;
-				}
 			} else if (GetString("WeatherModule_Unit_Hours").Split('|').Contains(unit)) {
-				if (amount > 168) {
-					return TextResult.Error(GetString("WeatherModule_SevenDayLimit"));
+				if (amount > 48) {
+					return TextResult.Error(GetString("WeatherModule_TwoDayLimit"));
 				} else {
 					WeatherInfo weather;
 					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
@@ -81,30 +63,6 @@ namespace RoosterBot.Weather {
 			} else {
 				return TextResult.Error(GetString("WeatherModule_UnknownUnit"));
 			}
-		}
-
-		private async Task RespondDayForecast(CityInfo city, DateTime date) {
-			using IDisposable typingState = Context.Channel.EnterTypingState();
-
-			WeatherInfo[] dayForecast = await Weather.GetDayForecastAsync(city, date);
-
-			string pretext;
-			if (dayForecast[0].City.Name == dayForecast[0].City.Region.Name) {
-				pretext = GetString("WeatherModule_DayForecast_PretextRegion", dayForecast[0].City.Name, dayForecast[0].City.Region.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
-			} else {
-				pretext = GetString("WeatherModule_DayForecast_PretextCity", dayForecast[0].City.Name, DateTimeUtil.GetRelativeDateReference(date, Culture));
-			}
-			m_Result.AddResult(new TextResult(null, pretext));
-
-			GuildConfig.TryGetData("metric", out bool metric, true);
-
-			void addItem(int hours, int item) {
-				m_Result.AddResult(dayForecast[item].Present(DateTime.Today.AddHours(hours).ToString("s", Culture), Culture, metric));
-			}
-
-			addItem(08, 0);
-			addItem(12, 1);
-			addItem(18, 2);
 		}
 
 		private void Attribution() {

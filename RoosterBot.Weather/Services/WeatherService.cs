@@ -2,16 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
 	public class WeatherService : IDisposable {
-		private readonly string m_WeatherBitKey;
 		private const string BaseUrl = "https://api.weatherbit.io/v2.0/";
-		private WebClient m_Web;
-		private ResourceService m_Resources;
+
+		private readonly string m_WeatherBitKey;
+		private readonly WebClient m_Web;
+		private readonly ResourceService m_Resources;
 
 		/// <summary>
 		/// Indicates if the WeatherBit API is being used under a Free license, which means attribution must be provided.
@@ -36,26 +36,6 @@ namespace RoosterBot.Weather {
 				{ "city_id", city.CityId.ToString() },
 				{ "hours", hoursFromNow.ToString() }
 			}))["data"].Last.ToObject<JObject>());
-		}
-
-		public async Task<WeatherInfo[]> GetDayForecastAsync(CityInfo city, DateTime date) {
-			// TODO (feature) Change DayForecast to return a single info item for that whole day
-			// The API does not allow us to see per-hour beyond 48 hours (unless you pay), but it does let us see per-day up to 5 days in the future.
-			// If you try to view further than 48 hours it will simply not return any more data, causing an exception when we try to get the last few items.
-			int hoursForecast = (int) (date - DateTime.Today).TotalHours + 18;
-
-			JToken result = (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
-				{ "city_id", city.CityId.ToString() },
-				{ "hours", hoursForecast.ToString() }
-			}))["data"];
-
-			JToken[] resultIntervals = new[] {
-				result[hoursForecast - 11], // 8 am
-				result[hoursForecast - 7], // 12 pm
-				result[hoursForecast - 1] // 6 pm
-			};
-
-			return resultIntervals.Select(jt => new WeatherInfo(m_Resources, this, city, jt.ToObject<JObject>())).ToArray();
 		}
 
 		public string GetDescription(CultureInfo culture, short weatherCode) {
