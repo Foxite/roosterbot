@@ -298,7 +298,7 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
     <value>weather</value>
   </data>
   <data name="WeatherModule_Name" xml:space="preserve">
-    <value>weather</value>
+    <value>Weather</value>
   </data>
   <data name="WeatherModule_NoLookBack" xml:space="preserve">
     <value>I can't look back.</value>
