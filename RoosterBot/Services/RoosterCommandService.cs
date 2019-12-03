@@ -133,7 +133,7 @@ namespace RoosterBot {
 						"This is no longer necessary as commands are always executed off-thread.");
 				}
 
-				foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+				foreach (RoosterTextAttribute rta in command.Attributes.OfType<RoosterTextAttribute>()) {
 					rta.Text = resolveString(rta.Text)!;
 				}
 
@@ -150,7 +150,7 @@ namespace RoosterBot {
 				command.Name = resolveString(command.Name);
 
 				foreach (ParameterBuilder parameter in command.Parameters) {
-					foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
+					foreach (RoosterTextAttribute rta in parameter.Attributes.OfType<RoosterTextAttribute>()) {
 						rta.Text = resolveString(rta.Text)!;
 					}
 

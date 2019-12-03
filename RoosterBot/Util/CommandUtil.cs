@@ -35,7 +35,7 @@ namespace RoosterBot {
 
 					TypeDisplayAttribute? typeDisplayAttr = param.Attributes.OfType<TypeDisplayAttribute>().SingleOrDefault();
 					if (typeDisplayAttr != null) {
-						paramText += ": " + typeDisplayAttr.TypeDisplayName;
+						paramText += ": " + typeDisplayAttr.Text;
 					}
 
 					if (param.IsMultiple) {
