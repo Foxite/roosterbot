@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,11 +44,9 @@ namespace RoosterBot {
 
 		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
-			m_DefaultService = GetNewCommandService();
-
-
-			m_ResourceService = resourceService;
 			m_Config = config;
+			m_ResourceService = resourceService;
+			m_DefaultService = GetNewCommandService();
 		}
 
 		private CommandService GetService(CultureInfo? culture) {
