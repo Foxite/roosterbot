@@ -334,4 +334,19 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherInfo_Present_WindAspect" xml:space="preserve">
     <value>Wind</value>
   </data>
+  <data name="WeatherModule_CityInfo_Name" xml:space="preserve">
+    <value>stad</value>
+  </data>
+  <data name="WeatherModule_Forecast_Amount" xml:space="preserve">
+    <value>aantal</value>
+  </data>
+  <data name="WeatherModule_Forecast_Day" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="WeatherModule_Forecast_Hours" xml:space="preserve">
+    <value>uur</value>
+  </data>
+  <data name="WeatherModule_Forecast_Time" xml:space="preserve">
+    <value>tijd</value>
+  </data>
 </root>

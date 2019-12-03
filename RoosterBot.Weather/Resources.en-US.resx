@@ -277,6 +277,9 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
   <data name="WeatherInfo_Present_WindAspect" xml:space="preserve">
     <value>Wind</value>
   </data>
+  <data name="WeatherModule_CityInfo_Name" xml:space="preserve">
+    <value>city</value>
+  </data>
   <data name="WeatherModule_CurrentWeather" xml:space="preserve">
     <value>|now|in</value>
   </data>
@@ -293,6 +296,18 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
     <comment>0: city name
 1: region name
 2: relative date reference</comment>
+  </data>
+  <data name="WeatherModule_Forecast_Amount" xml:space="preserve">
+    <value>amount</value>
+  </data>
+  <data name="WeatherModule_Forecast_Day" xml:space="preserve">
+    <value>day</value>
+  </data>
+  <data name="WeatherModule_Forecast_Hours" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="WeatherModule_Forecast_Time" xml:space="preserve">
+    <value>time</value>
   </data>
   <data name="WeatherModule_Group" xml:space="preserve">
     <value>weather</value>
