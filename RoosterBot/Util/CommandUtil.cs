@@ -42,10 +42,12 @@ namespace RoosterBot {
 						paramText += "...";
 					}
 
-					if (param.IsOptional) {
-						paramText = "[" + paramText + "] ";
-					} else {
-						paramText = "<" + paramText + "> ";
+					if (!param.Attributes.OfType<GrammarParameterAttribute>().Any()) {
+						if (param.IsOptional) {
+							paramText = "[" + paramText + "] ";
+						} else {
+							paramText = "<" + paramText + "> ";
+						}
 					}
 					ret += paramText;
 				}
