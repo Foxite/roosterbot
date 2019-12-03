@@ -46,6 +46,10 @@ namespace RoosterBot {
 		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
 			m_DefaultService = new CommandService(config);
+
+			m_DefaultService.CommandExecuted += HandleCommandExecutedAsync;
+			m_DefaultService.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
+
 			m_ResourceService = resourceService;
 			m_Config = config;
 		}
@@ -56,27 +60,15 @@ namespace RoosterBot {
 			} else {
 				return m_ServicesByCulture.GetOrAdd(culture, (c) => {
 					var ret = new CommandService(m_Config);
-					ret.CommandExecuted += async (args) => {
-						Task t = m_CommandExecuted.InvokeAsync(args);
-						await t;
-						if (t.IsFaulted) {
-							Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", t.Exception);
-						}
-					};
-					ret.CommandExecutionFailed += async (args) => {
-						try {
-							await m_CommandExecutionFailed.InvokeAsync(args);
-						} catch (Exception e) {
-							Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", e);
-							throw;
-						}
-					};
+					ret.CommandExecuted += HandleCommandExecutedAsync;
+					ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
 					return ret;
 				});
 			}
 		}
 
 		private void AllServices(Action<CommandService> action) {
+			action(m_DefaultService);
 			foreach (CommandService service in m_ServicesByCulture.Select(kvp => kvp.Value)) {
 				action(service);
 			}
@@ -96,7 +88,6 @@ namespace RoosterBot {
 			Component component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly)!;
 			ICollection<CultureInfo> locales = component.SupportedCultures;
 			var localizedModules = new List<Module>(locales.Count);
-
 
 			if (locales.Count == 0) {
 				return new[] {
@@ -251,6 +242,24 @@ namespace RoosterBot {
 		private static Func<Exception, Task> GetEventErrorHandler(string name) {
 			string logMessage = $"A {name} handler has thrown an exception.";
 			return e => Logger.LogSync(new Discord.LogMessage(Discord.LogSeverity.Error, "RoosterCommandService", logMessage, e));
+		}
+
+		private async Task HandleCommandExecutedAsync(CommandExecutedEventArgs args) {
+			try {
+				await m_CommandExecuted.InvokeAsync(args);
+			} catch (Exception e) {
+				Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", e);
+				throw;
+			}
+		}
+
+		private async Task HandleCommandExecutionFailedAsync(CommandExecutionFailedEventArgs args) {
+			try {
+				await m_CommandExecutionFailed.InvokeAsync(args);
+			} catch (Exception e) {
+				Logger.Error("RoosterCommandService", "A CommandExecutionFailed handler has thrown an exception.", e);
+				throw;
+			}
 		}
 	}
 }

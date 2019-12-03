@@ -18,8 +18,6 @@ namespace RoosterBot.Tools {
 			var client = new YoutubeClient();
 			Video video = await client.GetVideoAsync(id);
 
-			int totalHours = (int) video.Duration.TotalHours;
-
 			MediaStreamInfoSet streams = await client.GetVideoMediaStreamInfosAsync(id);
 			if (streams.Audio.Any()) {
 				AudioStreamInfo selectedStream = streams.Audio.First();
@@ -31,12 +29,12 @@ namespace RoosterBot.Tools {
 				string filePath = Path.Combine(Path.GetTempPath(), video.Title + "." + selectedStream.Container.GetFileExtension());
 				await client.DownloadMediaStreamAsync(selectedStream, filePath);
 
-				typingState.Dispose();
 				if (new FileInfo(filePath).Length > 8e6) {
 					return TextResult.Error("Unable to upload audio: file size exceeds 8 MB");
 				} else {
-					//ret.UploadFilePath = filePath;
-					return TextResult.Success($"{video.Title} by {video.Author} ({video.Duration.ToString("c", Culture)}");
+					var ret = TextResult.Success($"{video.Title} by {video.Author} ({video.Duration.ToString("c", Culture)})");
+					ret.UploadFilePath = filePath;
+					return ret;
 				}
 			} else {
 				return TextResult.Error("Unable to download audio: no audio streams");
