@@ -44,12 +44,12 @@ namespace RoosterBot {
 
 					if (!param.Attributes.OfType<GrammarParameterAttribute>().Any()) {
 						if (param.IsOptional) {
-							paramText = "[" + paramText + "] ";
+							paramText = "[" + paramText + "]";
 						} else {
-							paramText = "<" + paramText + "> ";
+							paramText = "<" + paramText + ">";
 						}
 					}
-					ret += paramText;
+					ret += paramText + " ";
 				}
 			}
 			return ret.Trim();

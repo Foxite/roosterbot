@@ -349,4 +349,13 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherModule_Forecast_Time" xml:space="preserve">
     <value>tijd</value>
   </data>
+  <data name="WeatherModule_CurrentWeather_Description" xml:space="preserve">
+    <value>Bekijk het huidige weer voor een bepaalde plek.</value>
+  </data>
+  <data name="WeatherModule_TimeForecast_Description" xml:space="preserve">
+    <value>Bekijk het weer op een bepaalde dag en tijd.</value>
+  </data>
+  <data name="WeatherModule_UnitForecast_Description" xml:space="preserve">
+    <value>Kijk vooruit op uurniveau.</value>
+  </data>
 </root>

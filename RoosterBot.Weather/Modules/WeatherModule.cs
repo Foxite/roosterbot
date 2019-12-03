@@ -12,7 +12,7 @@ namespace RoosterBot.Weather {
 
 		public WeatherService Weather { get; set; } = null!;
 
-		[Command("#WeatherModule_CurrentWeather")]
+		[Command("#WeatherModule_CurrentWeather"), Description("#WeatherModule_CurrentWeather_Description")]
 		public async Task<CommandResult> GetCurrentWeatherCommand([Name("#WeatherModule_CityInfo_Name"), Remainder] CityInfo city) {
 			using IDisposable typingState = Context.Channel.EnterTypingState();
 
@@ -26,7 +26,7 @@ namespace RoosterBot.Weather {
 			return m_Result;
 		}
 
-		[Command("#WeatherModule_TimeForecast")]
+		[Command("#WeatherModule_TimeForecast"), Description("#WeatherModule_TimeForecast_Description")]
 		public async Task<CommandResult> GetDayForecastCommand([Name("#WeatherModule_Forecast_Day")] DayOfWeek day, [Name("#WeatherModule_Forecast_Time")] TimeSpan timeOffset, [Name("#WeatherModule_CityInfo_Name"), Remainder] CityInfo city) {
 			using IDisposable typingState = Context.Channel.EnterTypingState();
 
@@ -43,7 +43,7 @@ namespace RoosterBot.Weather {
 			return m_Result;
 		}
 
-		[Command("#WeatherModule_UnitForecast")]
+		[Command("#WeatherModule_UnitForecast"), Description("#WeatherModule_UnitForecast_Description")]
 		public async Task<CommandResult> GetForecastCommand([Name("#WeatherModule_Forecast_Amount")] int amount, [GrammarParameter, Name("#WeatherModule_Forecast_Hours")] string unit, [Name("#WeatherModule_CityInfo_Name"), Remainder] CityInfo city) {
 			if (amount < 1) {
 				return TextResult.Error(GetString("#WeatherModule_NoLookBack"));
