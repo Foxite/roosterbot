@@ -45,10 +45,8 @@ namespace RoosterBot {
 
 		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
-			m_DefaultService = new CommandService(config);
+			m_DefaultService = GetNewCommandService();
 
-			m_DefaultService.CommandExecuted += HandleCommandExecutedAsync;
-			m_DefaultService.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
 
 			m_ResourceService = resourceService;
 			m_Config = config;
@@ -58,12 +56,8 @@ namespace RoosterBot {
 			if (culture == null) {
 				return m_DefaultService;
 			} else {
-				return m_ServicesByCulture.GetOrAdd(culture, (c) => {
-					var ret = new CommandService(m_Config);
-					ret.CommandExecuted += HandleCommandExecutedAsync;
-					ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
-					return ret;
-				});
+				// A factory is better here because it won't call the function unless it's needed
+				return m_ServicesByCulture.GetOrAdd(culture, c => GetNewCommandService() );
 			}
 		}
 
@@ -260,6 +254,15 @@ namespace RoosterBot {
 				Logger.Error("RoosterCommandService", "A CommandExecutionFailed handler has thrown an exception.", e);
 				throw;
 			}
+		}
+
+		private CommandService GetNewCommandService() {
+			var ret = new CommandService(m_Config);
+
+			ret.CommandExecuted += HandleCommandExecutedAsync;
+			ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
+
+			return ret;
 		}
 	}
 }

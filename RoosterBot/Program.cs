@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -104,7 +105,7 @@ namespace RoosterBot {
 			return client;
 		}
 
-		private IServiceCollection CreateRBServices(DiscordSocketClient m_Client, ConfigService configService) {
+		private IServiceCollection CreateRBServices(DiscordSocketClient client, ConfigService configService) {
 			var notificationService = new NotificationService();
 
 			var resources = new ResourceService();
@@ -118,7 +119,10 @@ namespace RoosterBot {
 
 			var helpService = new HelpService(resources);
 			var commands = new RoosterCommandService(resources, new CommandServiceConfiguration() {
-				DefaultRunMode = RunMode.Sequential
+				DefaultRunMode = RunMode.Sequential,
+				CooldownBucketKeyGenerator = (type, context) => {
+					return type.ToString() + "_" + context.Command.FullAliases.First();
+				}
 			});
 
 			// Create handlers
@@ -140,7 +144,7 @@ namespace RoosterBot {
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
 				.AddSingleton(cns)
-				.AddSingleton(m_Client);
+				.AddSingleton(client);
 			return serviceCollection;
 		}
 

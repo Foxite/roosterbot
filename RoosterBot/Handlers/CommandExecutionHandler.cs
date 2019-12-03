@@ -29,8 +29,7 @@ namespace RoosterBot {
 						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.GuildConfig.CommandPrefix);
 						break;
 					case CommandOnCooldownResult cooldown:
-						// TODO (feature) Enable cooldowns by setting the bucket generator delegate
-						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_Cooldown"), cooldown.Cooldowns.First().RetryAfter);
+						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_Cooldown"), cooldown.Cooldowns.First().RetryAfter.ToString("c", context.Culture));
 						break;
 					case OverloadsFailedResult overloads:
 						response = Resources.GetString(context.Culture, "CommandHandling_OverloadsFailed") + "\n";
