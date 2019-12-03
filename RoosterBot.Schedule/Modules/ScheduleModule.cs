@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 
 		#region Commands
 		[Command("#ScheduleModule_NowCommand"), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
-		public async Task<CommandResult> CurrentCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> CurrentCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.Now);
@@ -42,7 +42,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_DefaultNextCommand_Summary")]
-		public async Task<CommandResult> NextCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> NextCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.Now);
@@ -61,37 +61,38 @@ namespace RoosterBot.Schedule {
 		}
 
 		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
-		public async Task<CommandResult> WeekdayCommand(DayOfWeek day, [Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 			return m_Result;
 		}
 
 		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
-		public async Task<CommandResult> TodayCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> TodayCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
 			return m_Result;
 		}
 
 		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
-		public async Task<CommandResult> TomorrowCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> TomorrowCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 			return m_Result;
 		}
 
 		[Command("#ScheduleModule_ThisWeekCommand"), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
-		public async Task<CommandResult> ShowThisWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowThisWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 0);
 			return m_Result;
 		}
 
+		// TODO (feature) Find a way to allow spaces in command names again
 		[Command("#ScheduleModule_NextWeekCommand"), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
-		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
 			return m_Result;
 		}
 
 		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
-		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Remainder] IdentifierInfo? info = null) {
+		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				unit = unit.ToLower();

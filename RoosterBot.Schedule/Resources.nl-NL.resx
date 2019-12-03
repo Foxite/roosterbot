@@ -494,4 +494,10 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="TeacherListModule_CommandName" xml:space="preserve">
     <value>leraren|docenten|docent</value>
   </data>
+  <data name="ScheduleModule_DayCommand_Day" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="ScheduleModule_IdentiferInfo_Name" xml:space="preserve">
+    <value>identifier</value>
+  </data>
 </root>
