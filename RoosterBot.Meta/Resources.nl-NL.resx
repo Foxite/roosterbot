@@ -264,6 +264,9 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   <data name="UserConfigModule_Language" xml:space="preserve">
     <value>spreek</value>
   </data>
+  <data name="UserConfigModule_Language_Description" xml:space="preserve">
+    <value>Stel je taal in.</value>
+  </data>
   <data name="UserConfigModule_Language_ParamName" xml:space="preserve">
     <value>language</value>
   </data>

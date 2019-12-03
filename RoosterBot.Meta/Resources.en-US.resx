@@ -262,6 +262,9 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
   <data name="UserConfigModule_Language" xml:space="preserve">
     <value>speak</value>
   </data>
+  <data name="UserConfigModule_Language_Description" xml:space="preserve">
+    <value>Set your language.</value>
+  </data>
   <data name="UserConfigModule_Language_ParamName" xml:space="preserve">
     <value>language</value>
   </data>

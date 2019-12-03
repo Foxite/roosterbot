@@ -7,7 +7,7 @@ namespace RoosterBot.Meta {
 	public class UserConfigModule : RoosterModule {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
-		[Command("#UserConfigModule_Language")]
+		[Command("#UserConfigModule_Language"), Description("#UserConfigModule_Language_Description")]
 		public Task<CommandResult> Language([Name("#UserConfigModule_Language_ParamName")] CultureInfo? culture = null) {
 			if (culture == null) {
 				if (UserConfig.Culture != null) {
