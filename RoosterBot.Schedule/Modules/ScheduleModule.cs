@@ -185,13 +185,12 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected async Task RespondWeek(IdentifierInfo? info, int weeksFromNow) {
+		protected async Task RespondWeek(IdentifierInfo? info, [Minimum(0)] int weeksFromNow) {
 			info = await ResolveNullInfo(info);
 			if (info != null) {
 				ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
 				if (weekRecords.Length > 0) {
 					string caption;
-					// TODO (feature) Negative numbers should be "x weeks ago" not "in -x weeks"
 					if (weeksFromNow == 0) {
 						caption = GetString("ScheduleModule_RespondWeek_ScheduleThisWeek", info);
 					} else if (weeksFromNow == 1) {
