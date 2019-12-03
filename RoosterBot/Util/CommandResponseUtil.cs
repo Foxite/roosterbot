@@ -14,9 +14,6 @@ namespace RoosterBot {
 					crps.Add(new CommandResponsePair(userCommandId, botResponseId));
 
 					// Remove old commands
-					// TODO (feature) The amount of commands that are remembered needs to be configurable
-					// Previously we would not remember commands older than a configured time period, but now that these methods are static we don't have a ConfigService reference anymore.
-					// For now I've hardcoded the amount to be 5.
 					if (crps.Count > 5) {
 						crps.RemoveRange(0, crps.Count - 5);
 					}
@@ -56,8 +53,6 @@ namespace RoosterBot {
 		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
 		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IUserMessage command) => RemoveCommand(userConfig, command.Id);
 
-		// TODO (feature) Certain commands should opt out from command editing/deletion, most notably commands that can upload files
-		// Recommend doing this with an attribute and saving the Command with the CommandResponsePair (good luck serializing it)
 		public static async Task<IUserMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
 			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
 			IUserMessage? response = crp == null ? null : (IUserMessage) await context.Channel.GetMessageAsync(crp.ResponseId);
