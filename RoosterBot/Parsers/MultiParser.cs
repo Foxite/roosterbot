@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
-	// TODO (refactor) I really hate the Qmmands version of this class, find a better way to do this under Qmmands without using dynamic all over the place
 	public class MultiParser<T> : RoosterTypeParser<T> {
 		private readonly List<IRoosterTypeParser> m_Readers;
 		private readonly string m_ErrorMessage;
