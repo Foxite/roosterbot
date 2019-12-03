@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 namespace RoosterBot.Tools {
+	// TODO (localize) This component
 	public class ToolsComponent : Component {
 		public override Version ComponentVersion => new Version(0, 2, 0);
 
