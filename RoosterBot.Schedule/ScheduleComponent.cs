@@ -6,20 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
-#nullable disable // None of the code in this component executes before this is assigned
-		internal static ScheduleComponent Instance { get; private set; }
-#nullable enable
-
-		// TODO (refactor) need to find a better way to do this, a service just to serve this variable to ScheduleModule seems a bit too much
-		internal MultiParser<IdentifierInfo> IdentifierReaders { get; }
-
 		public override Version ComponentVersion => new Version(2, 0, 0);
 		public override ICollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
-
-		public ScheduleComponent() {
-			Instance = this;
-			IdentifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
-		}
 
 		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
@@ -45,10 +33,11 @@ namespace RoosterBot.Schedule {
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			commandService.AddTypeParser(IdentifierReaders);
-			IdentifierReaders.AddReader(ssir);
-			IdentifierReaders.AddReader(new TeacherInfoParser(this));
-			IdentifierReaders.AddReader(new RoomInfoParser(this));
+			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
+			identifierReaders.AddReader(ssir);
+			identifierReaders.AddReader(new TeacherInfoParser(this));
+			identifierReaders.AddReader(new RoomInfoParser(this));
+			commandService.AddTypeParser(identifierReaders);
 
 			commandService.AddModule<TeacherListModule>();
 			commandService.AddModule<ScheduleModule>();
