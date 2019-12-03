@@ -118,12 +118,7 @@ namespace RoosterBot {
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
 			var helpService = new HelpService(resources);
-			var commands = new RoosterCommandService(resources, new CommandServiceConfiguration() {
-				DefaultRunMode = RunMode.Sequential,
-				CooldownBucketKeyGenerator = (type, context) => {
-					return type.ToString() + "_" + context.Command.FullAliases.First();
-				}
-			});
+			var commands = new RoosterCommandService(resources);
 
 			// Create handlers
 			// I don't know what to do with this.

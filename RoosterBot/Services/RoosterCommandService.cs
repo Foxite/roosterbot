@@ -40,11 +40,32 @@ namespace RoosterBot {
             remove => m_CommandExecutionFailed.Unhook(value);
         }
 
-		internal RoosterCommandService(ResourceService resourceService) : this(resourceService, new CommandServiceConfiguration()) { }
-
-		internal RoosterCommandService(ResourceService resourceService, CommandServiceConfiguration config) {
+		internal RoosterCommandService(ResourceService resourceService) {
+			m_Config = new CommandServiceConfiguration() {
+				DefaultRunMode = RunMode.Sequential,
+				CooldownBucketKeyGenerator = (objectType, context) => {
+					if (context is RoosterCommandContext rcc) {
+						if (objectType is CooldownType type) {
+							return type switch
+							{
+								CooldownType.User => rcc.User.Id,
+								CooldownType.Guild => rcc.GuildConfig.GuildId,
+								CooldownType.ModuleUser => rcc.User.Id + "@" + rcc.Command.Module.FullAliases.First(),
+								CooldownType.ModuleGuild => rcc.GuildConfig.GuildId + "@" + rcc.Command.Module.FullAliases.First(),
+								CooldownType.ComponentUser => rcc.User.Id + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
+								CooldownType.ComponentGuild => rcc.GuildConfig.GuildId + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
+								_ => throw new ShouldNeverHappenException("Unknown CooldownType. This should never happen.")
+							};
+						} else {
+							throw new NotSupportedException($"A command has issued a cooldown with an unknown type {objectType.GetType().FullName}. It must use {nameof(CooldownType)}.");
+						}
+					} else {
+						throw new NotSupportedException($"A command has issued a cooldown with an unknown type {context.GetType().FullName}. It must use {nameof(RoosterCommandContext)}.");
+					}
+				}
+			};
+			
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
-			m_Config = config;
 			m_ResourceService = resourceService;
 			m_DefaultService = GetNewCommandService();
 		}
