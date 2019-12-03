@@ -303,11 +303,11 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
   <data name="WeatherModule_NoLookBack" xml:space="preserve">
     <value>I can't look back.</value>
   </data>
-  <data name="WeatherModule_SevenDayLimit" xml:space="preserve">
-    <value>I can't predict the weather beyond 7 days.</value>
-  </data>
   <data name="WeatherModule_TimeForecast" xml:space="preserve">
     <value>|on</value>
+  </data>
+  <data name="WeatherModule_TwoDayLimit" xml:space="preserve">
+    <value>I can't predict the weather beyond 48 hours.</value>
   </data>
   <data name="WeatherModule_UnitForecast" xml:space="preserve">
     <value>in</value>
@@ -320,6 +320,6 @@ Certain towns (Den Bosch and The Hague) have alternative names or spellings. If 
     <value>hour|hours</value>
   </data>
   <data name="WeatherModule_UnknownUnit" xml:space="preserve">
-    <value>I can only predict the weather per hour or per day.</value>
+    <value>I can only predict the weather per hour.</value>
   </data>
 </root>

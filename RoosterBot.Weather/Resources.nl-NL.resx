@@ -300,8 +300,8 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   <data name="WeatherModule_NoLookBack" xml:space="preserve">
     <value>Ik kan niet terug kijken.</value>
   </data>
-  <data name="WeatherModule_SevenDayLimit" xml:space="preserve">
-    <value>Ik kan het weer niet verder dan 7 dagen voorspellen.</value>
+  <data name="WeatherModule_TwoDayLimit" xml:space="preserve">
+    <value>Ik kan het weer niet verder dan 48 uur voorspellen.</value>
   </data>
   <data name="WeatherModule_Unit_Days" xml:space="preserve">
     <value>dag|dagen</value>
@@ -311,7 +311,7 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
     <value>uur</value>
   </data>
   <data name="WeatherModule_UnknownUnit" xml:space="preserve">
-    <value>Ik kan alleen op uur- of dagniveau het weer voorspellen.</value>
+    <value>Ik kan alleen op uurniveau het weer voorspellen.</value>
   </data>
   <data name="WeatherComponent_HelpName" xml:space="preserve">
     <value>weer</value>
