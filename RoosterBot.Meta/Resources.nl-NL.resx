@@ -124,7 +124,7 @@
     <value>Ik ken die vlag niet.</value>
   </data>
   <data name="CultureInfoReader_TypeDisplayName" xml:space="preserve">
-    <value>language</value>
+    <value>taal</value>
   </data>
   <data name="GuildConfigModule_GetLanguage" xml:space="preserve">
     <value>De servertaal is {0}.</value>
@@ -268,7 +268,7 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
     <value>Stel je taal in.</value>
   </data>
   <data name="UserConfigModule_Language_ParamName" xml:space="preserve">
-    <value>language</value>
+    <value>taal</value>
   </data>
   <data name="UserConfigModule_Name" xml:space="preserve">
     <value>Instellingen</value>
