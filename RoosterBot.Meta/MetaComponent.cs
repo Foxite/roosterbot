@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 2, 0);
-		public override ICollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
+		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));

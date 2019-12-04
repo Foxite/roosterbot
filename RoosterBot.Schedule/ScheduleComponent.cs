@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
 		public override Version ComponentVersion => new Version(2, 1, 0);
-		public override ICollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
+		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 
 		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)

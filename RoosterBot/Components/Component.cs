@@ -9,7 +9,7 @@ namespace RoosterBot {
 	public abstract class Component : IDisposable {
 		public abstract Version ComponentVersion { get; }
 		public virtual IEnumerable<string> Tags { get; } = Enumerable.Empty<string>();
-		public virtual ICollection<CultureInfo> SupportedCultures => Array.Empty<CultureInfo>();
+		public virtual IReadOnlyCollection<CultureInfo> SupportedCultures => Array.Empty<CultureInfo>();
 
 		public string Name {
 			get {

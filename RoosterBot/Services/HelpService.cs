@@ -13,8 +13,8 @@ namespace RoosterBot {
 			m_Resources = resources;
 		}
 
-		public void AddHelpSection(Component component, string name, string text, params CultureInfo[] restrict) {
-			m_Sections.Add(new HelpSection(component, name, text, restrict));
+		public void AddHelpSection(Component component, string name, string text) {
+			m_Sections.Add(new HelpSection(component, name, text, component.SupportedCultures));
 		}
 
 		public string GetHelpSection(CultureInfo culture, string name) {

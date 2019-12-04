@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
@@ -14,6 +15,7 @@ namespace RoosterBot.PublicTransit {
 #nullable restore
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
+		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL") };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			#region Config
@@ -45,7 +47,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n\n";
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
-			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix), CultureInfo.GetCultureInfo("nl-NL"));
+			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix));
 
 			return Task.CompletedTask;
 		}
