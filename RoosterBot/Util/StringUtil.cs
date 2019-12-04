@@ -185,5 +185,29 @@ namespace RoosterBot {
 
 			return result;
 		}
+		
+		// Adapted from the previous 2 functions
+		public static ReadOnlySpan<char> TrimStart(this ReadOnlySpan<char> target, ReadOnlySpan<char> trimString) {
+			if (trimString.IsEmpty) return target;
+
+			ReadOnlySpan<char> result = target;
+			while (result.StartsWith(trimString)) {
+				result = result.Slice(trimString.Length);
+			}
+
+			return result;
+		}
+		
+		// Same
+		public static ReadOnlySpan<char> TrimEnd(this ReadOnlySpan<char> target, ReadOnlySpan<char> trimString) {
+			if (trimString.IsEmpty) return target;
+
+			ReadOnlySpan<char> result = target;
+			while (result.EndsWith(trimString)) {
+				result = result.Slice(0, result.Length - trimString.Length);
+			}
+
+			return result;
+		}
 	}
 }

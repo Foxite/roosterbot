@@ -1,75 +1,97 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
 using Qmmands;
+using System;
+using System.Diagnostics;
 
 namespace RoosterBot {
 	// If you get an error that you can't find ICommandMap, add this to your nuget sources:
 	// https://www.myget.org/F/foxite/api/v3/index.json 
+	// Then delete Qmmands from your nuget cache (usually located at ~/.nuget/packages/qmmands, or you can clear your entire cache) and do a package restore.
+	// 
 	// That feed contains a fork of Qmmands which lets you provide your own command map. The builtin command map does not support spaces in command/module aliases, and the library owner
 	//  does not want to support custom command maps nor spaces in aliases.
 	internal class MultiWordCommandMap : ICommandMap {
 		private readonly string m_Separator;
 		private readonly List<Command> m_Commands;
 
-		// I've not actually tested this with any separator other than a space but it should totally work.
-		public MultiWordCommandMap(string separator = " ") {
+		// TODO (test) Other separators
+		// It should totally work but test it anyway
+		internal MultiWordCommandMap(string separator = " ") {
 			m_Commands = new List<Command>();
 			m_Separator = separator;
 		}
 
 		public IReadOnlyList<CommandMatch> FindCommands(string input) {
-			var matches = new List<CommandMatch>();
-			// TODO (optimize) This is very slow because it is a direct copy of the proof of concept.
-			// For starters we can keep a list of modules that we've already checked, and skip re-checking those.
-			foreach (Command command in m_Commands) {
-				var path = new List<string>();
-				var checkModules = new Stack<Module>();
-				string remainingInput = input;
+			var matches = new ConcurrentBag<CommandMatch>();
+			var checkedModules = new ConcurrentDictionary<Module, bool>();
+
+			Parallel.ForEach(m_Commands, command => { // This will run for quite a lot of iterations and is pretty heavy, so making it fast is important.
+				var checkModules = new Stack<Module>(4);
 				checkModules.Push(command.Module);
-				while (checkModules.Peek().Parent != null) {
+				bool proceed = true;
+				while (checkModules.Peek().Parent != null) { // Typically no more than two iterations, almost never 4. The initial capacity of the stack is 4
+					if (checkedModules.TryGetValue(checkModules.Peek(), out proceed)) {
+						break;
+					}
+
 					checkModules.Push(checkModules.Peek().Parent);
 				}
+
+				if (!proceed) {
+					return;
+				}
+
 				bool match = false;
-				while (checkModules.TryPop(out Module? check)) {
+				var path = new List<string>();
+				ReadOnlySpan<char> remainingInput = input.AsSpan();
+				while (checkModules.TryPop(out Module? check)) { // See above, this generally does not loop more than twice
 					if (check.Aliases.Count == 0) {
 						match = true;
-						continue;
-					}
-					foreach (string alias in check.Aliases) {
-						if (remainingInput.StartsWith(alias)) {
-							remainingInput = remainingInput.Substring(alias.Length);
-							path.Add(alias);
-							match = true;
-							break;
+					} else {
+						foreach (string alias in check.Aliases) {
+							if (remainingInput.StartsWith(alias)) {
+								remainingInput = remainingInput.Slice(alias.Length);
+								path.Add(alias);
+								match = true;
+								break;
+							}
 						}
 					}
 
 					if (match) {
-						string trimmedRemainingInput = remainingInput.TrimStart(m_Separator);
+						ReadOnlySpan<char> trimmedRemainingInput = remainingInput.TrimStart(m_Separator);
 						if (trimmedRemainingInput != remainingInput) {
 							remainingInput = trimmedRemainingInput;
+							checkedModules.TryAdd(check, true);
 						} else {
 							match = false;
+							checkedModules.TryAdd(check, false);
 							break;
 						}
+					} else {
+						checkedModules.TryAdd(check, false);
 					}
 				}
 				if (match) {
 					if (command.Aliases.Count > 0) {
 						foreach (string alias in command.Aliases) {
 							if (remainingInput.StartsWith(alias)) {
-								remainingInput = remainingInput.Substring(alias.Length);
+								remainingInput = remainingInput.Slice(alias.Length);
 								if (remainingInput.Length == 0 || remainingInput.StartsWith(m_Separator)) {
-									matches.Add(new CommandMatch(command, alias, path.AsReadOnly(), remainingInput.TrimStart(m_Separator)));
+									matches.Add(new CommandMatch(command, alias, path.AsReadOnly(), new string(remainingInput.TrimStart(m_Separator))));
 									break;
 								}
 							}
 						}
 					} else {
-						matches.Add(new CommandMatch(command, "", path.AsReadOnly(), remainingInput.TrimStart(m_Separator)));
+						matches.Add(new CommandMatch(command, "", path.AsReadOnly(), new string(remainingInput.TrimStart(m_Separator))));
 					}
 				}
-			}
-			return matches.AsReadOnly();
+			});
+			return matches.ToArray();
 		}
 
 		public void MapModule(Module module) {

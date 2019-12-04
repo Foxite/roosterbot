@@ -42,8 +42,10 @@ namespace RoosterBot {
 
 		internal RoosterCommandService(ResourceService resourceService) {
 			m_Config = new CommandServiceConfiguration() {
-				DefaultRunMode = RunMode.Sequential,
+				// If you get an error here, see the comment in MultiWordCommandMap.
 				CommandMap = new MultiWordCommandMap(" "),
+
+				DefaultRunMode = RunMode.Sequential,
 				CooldownBucketKeyGenerator = (objectType, context) => {
 					if (context is RoosterCommandContext rcc) {
 						if (objectType is CooldownType type) {
