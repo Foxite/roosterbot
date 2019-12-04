@@ -398,13 +398,13 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>hierna|later|straks|zometeen</value>
   </data>
   <data name="ScheduleModule_NextWeekCommand" xml:space="preserve">
-    <value>volgendeweek</value>
+    <value>volgende week</value>
   </data>
   <data name="ScheduleModule_NowCommand" xml:space="preserve">
     <value>nu|rooster</value>
   </data>
   <data name="ScheduleModule_ThisWeekCommand" xml:space="preserve">
-    <value>dezeweek</value>
+    <value>deze week</value>
   </data>
   <data name="ScheduleModule_TodayCommand" xml:space="preserve">
     <value>vandaag</value>

@@ -397,13 +397,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>next|later</value>
   </data>
   <data name="ScheduleModule_NextWeekCommand" xml:space="preserve">
-    <value>nextweek</value>
+    <value>next week</value>
   </data>
   <data name="ScheduleModule_NowCommand" xml:space="preserve">
     <value>now|schedule</value>
   </data>
   <data name="ScheduleModule_ThisWeekCommand" xml:space="preserve">
-    <value>thisweek</value>
+    <value>this week</value>
   </data>
   <data name="ScheduleModule_TodayCommand" xml:space="preserve">
     <value>today</value>
