@@ -477,10 +477,10 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>leraar</value>
   </data>
   <data name="UserClassModule_Group" xml:space="preserve">
-    <value>mijn</value>
+    <value>ik</value>
   </data>
   <data name="UserClassModule_CommandName" xml:space="preserve">
-    <value>klas</value>
+    <value>zit in</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>

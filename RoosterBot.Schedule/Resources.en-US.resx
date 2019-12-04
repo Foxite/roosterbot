@@ -464,10 +464,10 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>0: student set</comment>
   </data>
   <data name="UserClassModule_Group" xml:space="preserve">
-    <value>my</value>
+    <value>i</value>
   </data>
   <data name="UserClassModule_CommandName" xml:space="preserve">
-    <value>class</value>
+    <value>am in</value>
   </data>
   <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
     <value>room</value>
