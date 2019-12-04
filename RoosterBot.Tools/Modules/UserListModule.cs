@@ -9,7 +9,7 @@ using Qmmands;
 namespace RoosterBot.Tools {
 	[HiddenFromList, Group("users"), RequireContext(ContextType.Guild), UserIsModerator]
 	public class UserListModule : RoosterModule {
-		[Command("nonickname")]
+		[Command("with no nickname")]
 		public async Task<CommandResult> GetUnnamedUsers() {
 			return ReplyList(
 				from user in await Context.Guild!.GetUsersAsync()
@@ -18,8 +18,8 @@ namespace RoosterBot.Tools {
 			);
 		}
 
-		[Command("rolecount")]
-		public async Task<CommandResult> GetUnrankedUsers(string comparison, int count, params IRole[] roles) {
+		[Command("with role count")]
+		public async Task<CommandResult> UsersWithRolecount(string comparison, int count, params IRole[] roles) {
 			if (!TryGetCompareFunc(comparison, out Func<int, int, bool>? compare)) {
 				return TextResult.Error("Invalid comparison.");
 			}
