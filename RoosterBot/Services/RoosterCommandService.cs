@@ -16,6 +16,7 @@ namespace RoosterBot {
 		private readonly ConcurrentDictionary<CultureInfo, CommandService> m_ServicesByCulture;
 		private readonly CommandService m_DefaultService;
 		private readonly ResourceService m_ResourceService;
+
 		private readonly CommandServiceConfiguration m_Config;
 
 		// These events are copied from https://github.com/Quahu/Qmmands/blob/master/src/Qmmands/CommandService.cs
@@ -42,9 +43,6 @@ namespace RoosterBot {
 
 		internal RoosterCommandService(ResourceService resourceService) {
 			m_Config = new CommandServiceConfiguration() {
-				// If you get an error here, see the comment in MultiWordCommandMap.
-				CommandMap = new MultiWordCommandMap(" "),
-
 				DefaultRunMode = RunMode.Sequential,
 				CooldownBucketKeyGenerator = (objectType, context) => {
 					if (context is RoosterCommandContext rcc) {
@@ -70,6 +68,7 @@ namespace RoosterBot {
 			
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
 			m_ResourceService = resourceService;
+			GetService(CultureInfo.GetCultureInfo("nl-NL"));
 			m_DefaultService = GetNewCommandService();
 		}
 
@@ -91,7 +90,8 @@ namespace RoosterBot {
 
 		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
 			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
-			if (result is CommandNotFoundResult) {
+			if (result is CommandNotFoundResult || 
+				(result is ChecksFailedResult cfr && cfr.FailedChecks.Count == 1 && cfr.FailedChecks.First().Check is RequireCultureAttribute rca && rca.Hide)) {
 				return await GetService(null).ExecuteAsync(input, context);
 			} else {
 				return result;
@@ -101,10 +101,7 @@ namespace RoosterBot {
 		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
 		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
 			Component component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly)!;
-			ICollection<CultureInfo> locales = component.SupportedCultures;
-			var localizedModules = new List<Module>(locales.Count);
-
-			if (locales.Count == 0) {
+			if (component.SupportedCultures.Count == 0) {
 				return new[] {
 					GetService(null).AddModule(moduleType, (builder) => {
 						if (builder.Commands.SelectMany(command => command.Attributes).OfType<RunModeAttribute>().Any()) {
@@ -115,7 +112,8 @@ namespace RoosterBot {
 					})
 				};
 			} else {
-				foreach (CultureInfo culture in locales) {
+				var localizedModules = new List<Module>(component.SupportedCultures.Count);
+				foreach (CultureInfo culture in component.SupportedCultures) {
 					CommandService service = GetService(culture);
 
 					localizedModules.Add(service.AddModule(moduleType, (module) => {
@@ -278,6 +276,8 @@ namespace RoosterBot {
 		}
 
 		private CommandService GetNewCommandService() {
+			// If you get an error here, see the comment in MultiWordCommandMap.
+			m_Config.CommandMap = new MultiWordCommandMap(" "); // Have to create a new instance every time, otherwise the map will be shared between all command services
 			var ret = new CommandService(m_Config);
 
 			ret.CommandExecuted += HandleCommandExecutedAsync;
