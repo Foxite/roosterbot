@@ -84,7 +84,6 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		// TODO (feature) Find a way to allow spaces in command names again
 		[Command("#ScheduleModule_NextWeekCommand"), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
 		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondWeek(info, 1);
