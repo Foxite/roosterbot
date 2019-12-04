@@ -16,7 +16,16 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-		<PackageReference Include="Qmmands" Version="3.0.0-nightly-00232" />
+		<!--
+			Download this package from this source:
+			https://www.myget.org/F/foxite/api/v3/index.json 
+			It has some small modifications to allow custom command maps.
+		-->
+		<PackageReference Include="Qmmands" Version="3.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Commands\" />
 	</ItemGroup>
 
 </Project>
