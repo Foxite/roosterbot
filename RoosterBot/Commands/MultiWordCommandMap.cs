@@ -1,10 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Threading;
 using Qmmands;
 using System;
-using System.Diagnostics;
 
 namespace RoosterBot {
 	// If you get an error that you can't find ICommandMap, add this to your nuget sources:
@@ -50,6 +48,7 @@ namespace RoosterBot {
 				while (checkModules.TryPop(out Module? check)) { // See above, this generally does not loop more than twice
 					if (check.Aliases.Count == 0) {
 						match = true;
+						continue;
 					} else {
 						foreach (string alias in check.Aliases) {
 							if (remainingInput.StartsWith(alias)) {
