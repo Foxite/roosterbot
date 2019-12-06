@@ -304,6 +304,8 @@ namespace RoosterBot {
 				i++;
 			}
 		}
+
+		public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> enumerable) => enumerable.SelectMany(item => item);
 		#endregion
 	}
 

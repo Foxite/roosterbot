@@ -37,28 +37,13 @@ namespace RoosterBot.Schedule.GLU {
 			if (user.GuildId == GLUScheduleComponent.GLUGuildId) {
 				// Assign roles
 				try {
+					// Get roles they're supposed to have
 					IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
-					IEnumerable<IRole> oldRoles;
-					if (oldSSI != null) {
-						oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
-					} else {
-						// Check if the user has any roles that belong to a student set, even though they didn't have a known student set
-						List<ulong> oldRoleList = new List<ulong>();
-						foreach (ulong role in m_Roles.SelectMany(kvp => kvp.Value)) {
-							if (user.HasRole(role)) {
-								oldRoleList.Add(role);
-							}
-						}
-						if (user.HasRole(NewUserRanks)) {
-							oldRoleList.Add(NewUserRanks);
-						}
+					// Roles that they're not supposed to have
+					IEnumerable<IRole> oldRoles = m_Roles.Values.Flatten().Distinct().Where(role => user.HasRole(role)).Select(role => user.Guild.GetRole(role));
 
-						oldRoles = oldRoleList.Select(role => user.Guild.GetRole(role));
-					}
-					IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
-
-					oldRoles = oldRoles.Except(keptRoles);
-					newRoles = newRoles.Except(keptRoles);
+					oldRoles = oldRoles.Where(role =>  user.HasRole(role.Id)); // Roles to remove
+					newRoles = newRoles.Where(role => !user.HasRole(role.Id)); // Roles to add
 
 					if (oldRoles.Any()) {
 						await user.RemoveRolesAsync(oldRoles);
