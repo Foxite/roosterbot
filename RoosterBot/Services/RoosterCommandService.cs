@@ -20,26 +20,26 @@ namespace RoosterBot {
 		private readonly CommandServiceConfiguration m_Config;
 
 		// These events are copied from https://github.com/Quahu/Qmmands/blob/master/src/Qmmands/CommandService.cs
-        private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>(GetEventErrorHandler(nameof(CommandExecuted)));
+		private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>(GetEventErrorHandler(nameof(CommandExecuted)));
 		private readonly AsynchronousEvent<CommandExecutionFailedEventArgs> m_CommandExecutionFailed = new AsynchronousEvent<CommandExecutionFailedEventArgs>(GetEventErrorHandler(nameof(CommandExecutionFailed)));
-		
-		/// <summary>
-        /// Fires after a <see cref="Command"/> was successfully executed.
-        /// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
-        /// </summary>
-        public event AsynchronousEventHandler<CommandExecutedEventArgs> CommandExecuted {
-            add => m_CommandExecuted.Hook(value);
-            remove => m_CommandExecuted.Unhook(value);
-        }
 
-        /// <summary>
-        /// Fires after a <see cref="Command"/> failed to execute.
-        /// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
-        /// </summary>
-        public event AsynchronousEventHandler<CommandExecutionFailedEventArgs> CommandExecutionFailed {
-            add => m_CommandExecutionFailed.Hook(value);
-            remove => m_CommandExecutionFailed.Unhook(value);
-        }
+		/// <summary>
+		/// Fires after a <see cref="Command"/> was successfully executed.
+		/// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
+		/// </summary>
+		public event AsynchronousEventHandler<CommandExecutedEventArgs> CommandExecuted {
+			add => m_CommandExecuted.Hook(value);
+			remove => m_CommandExecuted.Unhook(value);
+		}
+
+		/// <summary>
+		/// Fires after a <see cref="Command"/> failed to execute.
+		/// You must use this to handle <see cref="RunMode.Parallel"/> <see cref="Command"/>s.
+		/// </summary>
+		public event AsynchronousEventHandler<CommandExecutionFailedEventArgs> CommandExecutionFailed {
+			add => m_CommandExecutionFailed.Hook(value);
+			remove => m_CommandExecutionFailed.Unhook(value);
+		}
 
 		internal RoosterCommandService(ResourceService resourceService) {
 			m_Config = new CommandServiceConfiguration() {
