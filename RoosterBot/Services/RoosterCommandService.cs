@@ -58,6 +58,7 @@ namespace RoosterBot {
 								_ => throw new ShouldNeverHappenException("Unknown CooldownType. This should never happen.")
 							};
 						} else {
+							// This stuff shouldn't happen anymore with the added type safety of our wrapper functions, but we still have to return something or throw.
 							throw new NotSupportedException($"A command has issued a cooldown with an unknown type {objectType.GetType().FullName}. It must use {nameof(CooldownType)}.");
 						}
 					} else {
@@ -76,7 +77,7 @@ namespace RoosterBot {
 				return m_DefaultService;
 			} else {
 				// A factory is better here because it won't call the function unless it's needed
-				return m_ServicesByCulture.GetOrAdd(culture, c => GetNewCommandService() );
+				return m_ServicesByCulture.GetOrAdd(culture, c => GetNewCommandService());
 			}
 		}
 
@@ -89,7 +90,7 @@ namespace RoosterBot {
 
 		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
 			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
-			if (result is CommandNotFoundResult || 
+			if (result is CommandNotFoundResult ||
 				(result is ChecksFailedResult cfr && cfr.FailedChecks.Count == 1 && cfr.FailedChecks.First().Check is RequireCultureAttribute rca && rca.Hide)) {
 				return await GetService(null).ExecuteAsync(input, context);
 			} else {
@@ -97,8 +98,18 @@ namespace RoosterBot {
 			}
 		}
 
+		// Can't really have proper type checking here because RoosterModule is generic. We can still do it but we would have to add a second parameter
+		//  just for the context type which I think is undesirable.
+		// Although to be honest there are no modules right now that actually derive from RoosterModule<T>, they all use the non-generic version.
+		// HOWEVER in 3.0 we'll need a way for modules to restrict themselves to a particular platform. The current idea is that universal modules will derive RoosterModule
+		//  and platform-specific modules from RoosterModule<T> and specify their platform context type.
+		// So I'm not getting rid of the generic version yet, at least until we get to do 3.0 and if we decide to do it differently.
 		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
 		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
+			if (!IsRoosterModule(moduleType)) {
+				throw new ArgumentException("Modules must derive from RoosterModule<T>.");
+			}
+
 			Component component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly)!;
 			if (component.SupportedCultures.Count == 0) {
 				return new[] {
@@ -191,7 +202,7 @@ namespace RoosterBot {
 			AllServices((service) => service.AddArgumentParser(ap));
 		}
 
-		public void AddTypeParser<T>(TypeParser<T> parser, bool replacePrimitive = false) {
+		public void AddTypeParser<T>(RoosterTypeParser<T> parser, bool replacePrimitive = false) {
 			AllServices((service) => service.AddTypeParser<T>(parser, replacePrimitive));
 		}
 
@@ -211,17 +222,17 @@ namespace RoosterBot {
 			return modules.ToList().AsReadOnly();
 		}
 
-		public IArgumentParser GetArgumentParser<T>() => GetArgumentParser(typeof(T));
-		public IArgumentParser GetArgumentParser(Type type) {
+		public IArgumentParser? GetArgumentParser<T>() where T : IArgumentParser => GetArgumentParser(typeof(T));
+		public IArgumentParser? GetArgumentParser(Type type) {
 			return GetService(null).GetArgumentParser(type);
 		}
 
-		public TParser GetSpecificTypeParser<T, TParser>() where TParser : TypeParser<T> {
+		public TParser? GetSpecificTypeParser<T, TParser>() where TParser : RoosterTypeParser<T> {
 			return GetService(null).GetSpecificTypeParser<T, TParser>();
 		}
 
-		public TypeParser<T> GetTypeParser<T>(bool replacingPrimitive = false) {
-			return GetService(null).GetTypeParser<T>(replacingPrimitive);
+		public RoosterTypeParser<T>? GetTypeParser<T>(bool replacingPrimitive = false) {
+			return GetService(null).GetTypeParser<T>(replacingPrimitive) as RoosterTypeParser<T>;
 		}
 
 		public void RemoveAllModules() {
@@ -232,22 +243,27 @@ namespace RoosterBot {
 			AllServices((service) => service.RemoveAllTypeParsers());
 		}
 
-		public void RemoveArgumentParser<T>() => RemoveArgumentParser(typeof(T));
+		public void RemoveArgumentParser<T>() where T : IArgumentParser => RemoveArgumentParser(typeof(T));
 		public void RemoveArgumentParser(Type type) {
 			AllServices((service) => service.RemoveArgumentParser(type));
 		}
 
-		public void RemoveTypeParser<T>(TypeParser<T> typeParser) {
+		public void RemoveTypeParser<T>(RoosterTypeParser<T> typeParser) {
 			AllServices((service) => service.RemoveTypeParser(typeParser));
 		}
 
-		public void SetDefaultArgumentParser<T>() => SetDefaultArgumentParser(typeof(T));
+		public void SetDefaultArgumentParser<T>() where T : IArgumentParser => SetDefaultArgumentParser(typeof(T));
 		public void SetDefaultArgumentParser(Type type) {
-			AllServices((service) => service.SetDefaultArgumentParser(type)) ;
+			if (typeof(IArgumentParser).IsAssignableFrom(type)) {
+				AllServices((service) => service.SetDefaultArgumentParser(type));
+			} else {
+				throw new ArgumentException("Argument parsers must derive from " + nameof(IArgumentParser) + ".");
+			}
 		}
 
 		public void SetDefaultArgumentParser(IArgumentParser parser) {
 			AllServices((service) => service.SetDefaultArgumentParser(parser));
+
 		}
 		#endregion
 
@@ -260,6 +276,7 @@ namespace RoosterBot {
 			try {
 				await m_CommandExecuted.InvokeAsync(args);
 			} catch (Exception e) {
+				// TODO (review) Is this necessary? The handler itself already takes care of any exceptions through GetEventErrorHandler, this may result in duplicate logs
 				Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", e);
 				throw;
 			}
@@ -283,6 +300,17 @@ namespace RoosterBot {
 			ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
 
 			return ret;
+		}
+
+		private bool IsRoosterModule(Type objectType) {
+			while (objectType.BaseType != null) {
+				if (objectType.BaseType.IsGenericType && typeof(RoosterModule<>).Equals(objectType.BaseType.GetGenericTypeDefinition())) {
+					return true;
+				} else {
+					objectType = objectType.BaseType;
+				}
+			}
+			return false;
 		}
 	}
 }
