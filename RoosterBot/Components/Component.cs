@@ -9,6 +9,9 @@ namespace RoosterBot {
 	public abstract class Component : IDisposable {
 		public abstract Version ComponentVersion { get; }
 		public virtual IEnumerable<string> Tags { get; } = Enumerable.Empty<string>();
+
+		// TODO (feature) Just use all available resource files instead of declaring which ones are supported
+		// This allows people to translate components without the original dev having to explicitly support it, by simply adding the sattelite assembly to the folder
 		public virtual IReadOnlyCollection<CultureInfo> SupportedCultures => Array.Empty<CultureInfo>();
 
 		public string Name {

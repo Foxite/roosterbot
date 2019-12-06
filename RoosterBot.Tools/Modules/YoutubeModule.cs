@@ -9,37 +9,38 @@ using YoutubeExplode.Models;
 using YoutubeExplode.Models.MediaStreams;
 
 namespace RoosterBot.Tools {
-	[Name("Youtube")]
+	[Name("#YoutubeModule_Name")]
 	public class YoutubeModule : RoosterModule {
-		[Command("youtube")]
-		public async Task<CommandResult> DownloadYoutubeAudioCommand(string format, string url) {
+		public YoutubeClient Client { get; set; } = null!;
+		public YoutubeConverter Converter { get; set; } = null!;
+
+		[Command("#YoutubeModule_Convert")]
+		public async Task<CommandResult> DownloadYoutubeAudioCommand([Name("#YoutubeModule_Convert_Format")] string format, [Name("#YoutubeModule_Convert_Url")] string url) {
 			string[] formats = new[] { "mp3", "m4a", "wav", "wma", "ogg", "aac", "opus" };
 			if (formats.Contains(format)) {
 				using IDisposable typingState = Context.Channel.EnterTypingState();
 
 				string id = YoutubeClient.ParseVideoId(url);
-				var client = new YoutubeClient();
-				Video video = await client.GetVideoAsync(id);
+				Video video = await Client.GetVideoAsync(id);
 
-				MediaStreamInfoSet streams = await client.GetVideoMediaStreamInfosAsync(id);
+				MediaStreamInfoSet streams = await Client.GetVideoMediaStreamInfosAsync(id);
 				if (streams.Audio.Any()) {
 					DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 					string filePath = Path.Combine(Path.GetTempPath(), directory.FullName, video.Title + ".mp3");
-					// TODO (feature) Get this hardcoded exe path from config
-					await new YoutubeConverter(client, "C:/RoosterBot/ffmpeg.exe").DownloadAndProcessMediaStreamsAsync(streams.Audio, filePath, "mp3");
+					await Converter.DownloadAndProcessMediaStreamsAsync(streams.Audio, filePath, "mp3");
 
 					if (new FileInfo(filePath).Length > 8e6) {
-						return TextResult.Error("Unable to upload audio: file size exceeds 8 MB");
+						return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Filesize"));
 					} else {
-						var ret = TextResult.Success($"{video.Title} by {video.Author} ({video.Duration.ToString("c", Culture)})");
+						var ret = TextResult.Success(GetString("YoutubeModule_Convert_Success", video.Title, video.Author, video.Duration.ToString("c", Culture)));
 						ret.UploadFilePath = filePath;
 						return ret;
 					}
 				} else {
-					return TextResult.Error("Unable to download audio: no audio streams");
+					return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Streams"));
 				}
 			} else {
-				return TextResult.Error("Unable to download audio: unrecognized format\nValid formats: " + string.Join(", ", formats));
+				return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Format", string.Join(", ", formats)));
 			}
 		}
 	}
