@@ -65,10 +65,9 @@ namespace RoosterBot {
 					}
 				}
 			};
-			
+
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
 			m_ResourceService = resourceService;
-			GetService(CultureInfo.GetCultureInfo("nl-NL"));
 			m_DefaultService = GetNewCommandService();
 		}
 
