@@ -52,12 +52,14 @@ namespace RoosterBot {
 			public Component Component { get; }
 			public string Name { get; }
 			public string HelpText { get; }
-			public IReadOnlyCollection<CultureInfo> Cultures => ResourceService.GetAvailableCultures(Component);
+			public IReadOnlyCollection<CultureInfo> Cultures { get; }
 
 			internal HelpSection(Component component, string Name, string helpText) {
 				Component = component;
 				this.Name = Name;
 				HelpText = helpText;
+
+				Cultures = ResourceService.GetAvailableCultures(component);
 			}
 
 		}
