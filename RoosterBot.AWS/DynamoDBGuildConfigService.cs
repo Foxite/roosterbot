@@ -37,7 +37,7 @@ namespace RoosterBot.AWS {
 					string commandPrefix = prefixEntry.AsString();
 					JObject customData = JObject.Parse(customDataEntry.AsString());
 
-					return new GuildConfig(this, commandPrefix, timezone, culture, guild.Id, customData);
+					return new GuildConfig(this, commandPrefix, culture, guild.Id, customData);
 				}
 			} else {
 				return GetDefaultConfig(guild.Id);
@@ -51,14 +51,12 @@ namespace RoosterBot.AWS {
 				await m_Table.PutItemAsync(new Document(new Dictionary<string, DynamoDBEntry>() {
 					{ "id", config.GuildId },
 					{ "culture", config.Culture.Name },
-					{ "timezone", config.TimeZone.Id },
 					{ "commandPrefix", config.CommandPrefix },
 					{ "customData", config.GetRawData().ToString(Formatting.None) }
 				}));
 			} else {
 				// We can assume the guild ID won't change
 				document["culture"] = config.Culture.Name;
-				document["timezone"] = config.TimeZone.Id;
 				document["commandPrefix"] = config.CommandPrefix;
 				document["customData"] = config.GetRawData().ToString(Formatting.None);
 

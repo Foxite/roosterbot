@@ -19,7 +19,7 @@ namespace RoosterBot {
 		}
 
 		protected GuildConfig GetDefaultConfig(ulong guildId) {
-			return new GuildConfig(this, m_Config.DefaultCommandPrefix, TimeZoneInfo.Utc, m_Config.DefaultCulture, guildId, new Dictionary<string, JToken>());
+			return new GuildConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, guildId, new Dictionary<string, JToken>());
 		}
 
 		public abstract Task UpdateGuildAsync(GuildConfig config);
@@ -37,15 +37,13 @@ namespace RoosterBot {
 		private IDictionary<string, JToken> m_CustomData;
 
 		public string CommandPrefix { get; set; }
-		public TimeZoneInfo TimeZone { get; set; }
 		public CultureInfo Culture { get; set; }
 		public ulong GuildId { get; }
 
-		public GuildConfig(GuildConfigService guildConfigService, string commandPrefix, TimeZoneInfo tzi, CultureInfo culture, ulong guildId, IDictionary<string, JToken> customData) {
+		public GuildConfig(GuildConfigService guildConfigService, string commandPrefix, CultureInfo culture, ulong guildId, IDictionary<string, JToken> customData) {
 			m_Service = guildConfigService;
 			CommandPrefix = commandPrefix;
 			Culture = culture;
-			TimeZone = tzi;
 			GuildId = guildId;
 			m_CustomData = customData;
 		}
