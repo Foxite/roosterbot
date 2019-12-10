@@ -16,8 +16,8 @@ namespace RoosterBot {
 		private readonly ConcurrentDictionary<CultureInfo, CommandService> m_ServicesByCulture;
 		private readonly CommandService m_DefaultService;
 		private readonly ResourceService m_ResourceService;
-
 		private readonly CommandServiceConfiguration m_Config;
+		private readonly List<Action<CommandService>> m_SetupActions;
 
 		// These events are copied from https://github.com/Quahu/Qmmands/blob/master/src/Qmmands/CommandService.cs
 		private readonly AsynchronousEvent<CommandExecutedEventArgs> m_CommandExecuted = new AsynchronousEvent<CommandExecutedEventArgs>(GetEventErrorHandler(nameof(CommandExecuted)));
@@ -42,6 +42,8 @@ namespace RoosterBot {
 		}
 
 		internal RoosterCommandService(ResourceService resourceService) {
+			m_SetupActions = new List<Action<CommandService>>();
+
 			m_Config = new CommandServiceConfiguration() {
 				DefaultRunMode = RunMode.Sequential,
 				CooldownBucketKeyGenerator = (objectType, context) => {
@@ -83,9 +85,10 @@ namespace RoosterBot {
 
 		private void AllServices(Action<CommandService> action) {
 			action(m_DefaultService);
-			foreach (CommandService service in m_ServicesByCulture.Select(kvp => kvp.Value)) {
+			foreach (CommandService service in m_ServicesByCulture.Values) {
 				action(service);
 			}
+			m_SetupActions.Add(action);
 		}
 
 		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
@@ -111,7 +114,8 @@ namespace RoosterBot {
 			}
 
 			Component component = Program.Instance.Components.GetComponentFromAssembly(moduleType.Assembly)!;
-			if (component.SupportedCultures.Count == 0) {
+			IReadOnlyCollection<CultureInfo> cultures = ResourceService.GetAvailableCultures(component);
+			if (cultures.Count == 0) {
 				return new[] {
 					GetService(null).AddModule(moduleType, (builder) => {
 						if (builder.Commands.SelectMany(command => command.Attributes).OfType<RunModeAttribute>().Any()) {
@@ -122,8 +126,8 @@ namespace RoosterBot {
 					})
 				};
 			} else {
-				var localizedModules = new List<Module>(component.SupportedCultures.Count);
-				foreach (CultureInfo culture in component.SupportedCultures) {
+				var localizedModules = new List<Module>(cultures.Count);
+				foreach (CultureInfo culture in cultures) {
 					CommandService service = GetService(culture);
 
 					localizedModules.Add(service.AddModule(moduleType, (module) => {
@@ -152,7 +156,7 @@ namespace RoosterBot {
 			module.Name = resolveString(module.Name);
 
 			if (module.Aliases.Count > 0) {
-				string aliasKey = module.Aliases.Single();
+				string aliasKey = module.Aliases.First();
 				module.Aliases.Remove(aliasKey);
 				foreach (string alias in resolveString(aliasKey)!.Split('|')) {
 					module.AddAlias(alias);
@@ -170,7 +174,7 @@ namespace RoosterBot {
 				}
 
 				if (command.Aliases.Count > 0) {
-					string aliasKey = command.Aliases.Single();
+					string aliasKey = command.Aliases.First();
 					command.Aliases.Remove(aliasKey);
 					foreach (string alias in resolveString(aliasKey)!.Split('|')) {
 						command.AddAlias(alias);
@@ -203,7 +207,7 @@ namespace RoosterBot {
 		}
 
 		public void AddTypeParser<T>(RoosterTypeParser<T> parser, bool replacePrimitive = false) {
-			AllServices((service) => service.AddTypeParser<T>(parser, replacePrimitive));
+			AllServices((service) => service.AddTypeParser(parser, replacePrimitive));
 		}
 
 		public IReadOnlyList<CommandMatch> FindCommands(CultureInfo? culture, string path) {
@@ -298,6 +302,10 @@ namespace RoosterBot {
 
 			ret.CommandExecuted += HandleCommandExecutedAsync;
 			ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
+
+			foreach (Action<CommandService> action in m_SetupActions) {
+				action(ret);
+			}
 
 			return ret;
 		}

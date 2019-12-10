@@ -3,8 +3,6 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Threading.Tasks;
-using System.Globalization;
-using System.Collections.Generic;
 
 namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
@@ -15,7 +13,6 @@ namespace RoosterBot.PublicTransit {
 #nullable restore
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
-		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL") };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			#region Config

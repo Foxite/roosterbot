@@ -2,14 +2,12 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
 		public override Version ComponentVersion => new Version(0, 3, 0);
-		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 		public bool AttributionLicense { get; private set; }
 
 		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {

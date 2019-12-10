@@ -5,8 +5,8 @@ using System.Linq;
 
 namespace RoosterBot {
 	public sealed class HelpService {
-		private List<HelpSection> m_Sections;
-		private ResourceService m_Resources;
+		private readonly List<HelpSection> m_Sections;
+		private readonly ResourceService m_Resources;
 
 		internal HelpService(ResourceService resources) {
 			m_Sections = new List<HelpSection>();
@@ -14,7 +14,7 @@ namespace RoosterBot {
 		}
 
 		public void AddHelpSection(Component component, string name, string text) {
-			m_Sections.Add(new HelpSection(component, name, text, component.SupportedCultures));
+			m_Sections.Add(new HelpSection(component, name, text));
 		}
 
 		public string GetHelpSection(CultureInfo culture, string name) {
@@ -52,14 +52,14 @@ namespace RoosterBot {
 			public Component Component { get; }
 			public string Name { get; }
 			public string HelpText { get; }
-			public IReadOnlyCollection<CultureInfo> Cultures { get; }
+			public IReadOnlyCollection<CultureInfo> Cultures => ResourceService.GetAvailableCultures(Component);
 
-			internal HelpSection(Component component, string Name, string helpText, IReadOnlyCollection<CultureInfo> cultures) {
+			internal HelpSection(Component component, string Name, string helpText) {
 				Component = component;
 				this.Name = Name;
 				HelpText = helpText;
-				Cultures = cultures;
 			}
+
 		}
 	}
 }

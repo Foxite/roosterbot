@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +9,6 @@ using YoutubeExplode.Converter;
 namespace RoosterBot.Tools {
 	public class ToolsComponent : Component {
 		public override Version ComponentVersion => new Version(0, 2, 0);
-		public override IReadOnlyCollection<CultureInfo> SupportedCultures => new[] { CultureInfo.GetCultureInfo("nl-NL"), CultureInfo.GetCultureInfo("en-US") };
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			var config = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));

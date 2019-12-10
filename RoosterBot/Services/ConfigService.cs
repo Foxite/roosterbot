@@ -18,7 +18,7 @@ namespace RoosterBot {
 		public   IUser BotOwner { get; private set; }
 #nullable restore
 
-		private  ulong m_BotOwnerId;
+		private readonly ulong m_BotOwnerId;
 
 		internal ConfigService(string jsonPath, out string authToken) {
 			if (!Directory.Exists(Program.DataPath)) {

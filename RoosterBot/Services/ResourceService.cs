@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.Serialization;
 
 namespace RoosterBot {
 	public sealed class ResourceService {
@@ -13,10 +17,10 @@ namespace RoosterBot {
 		}
 
 		public void RegisterResources(string baseName) {
-			Assembly assembly = Assembly.GetCallingAssembly();
+			var assembly = Assembly.GetCallingAssembly();
 			m_ResourceManagers[assembly] = new ResourceManager(baseName, assembly);
 		}
-		
+
 		public string GetString(CultureInfo culture, string name) {
 			var assembly = Assembly.GetCallingAssembly();
 			try {
@@ -34,6 +38,21 @@ namespace RoosterBot {
 			}
 		}
 
+		public static IReadOnlyCollection<CultureInfo> GetAvailableCultures(Component component) => GetAvailableCultures(component.GetType().Assembly);
+
+		public static IReadOnlyCollection<CultureInfo> GetAvailableCultures(Assembly componentAssembly) {
+			// https://stackoverflow.com/a/3227549
+			string programLocation = componentAssembly.Location;
+			var resourceFileName = Path.GetFileNameWithoutExtension(programLocation) + ".resources.dll";
+		    var rootDir = new DirectoryInfo(Path.GetDirectoryName(programLocation));
+			return new List<CultureInfo>(
+				from c in CultureInfo.GetCultures(CultureTypes.AllCultures)
+				join d in rootDir.EnumerateDirectories() on c.IetfLanguageTag equals d.Name
+				where d.EnumerateFiles(resourceFileName).Any()
+				select c
+			);
+		}
+
 		public string ResolveString(CultureInfo culture, Component? component, string str) {
 			if (str.StartsWith("#")) {
 				Assembly? assembly;
@@ -46,19 +65,16 @@ namespace RoosterBot {
 			} else if (str.StartsWith('\\')) {
 				return str.Substring(1); // If a string is not meant to be resolved but needs to start with a # then it can be escaped with \.
 			} else {
-				return str; // If the string needs to start with \# then you can use \\# and so on.
+				return str; // If the string needs to start with a \ then you can use \\ and so on.
 			}
 		}
 	}
-
 
 	[Serializable]
 	public class MissingResourceException : Exception {
 		public MissingResourceException() { }
 		public MissingResourceException(string message) : base(message) { }
 		public MissingResourceException(string message, Exception inner) : base(message, inner) { }
-		protected MissingResourceException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+		protected MissingResourceException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
