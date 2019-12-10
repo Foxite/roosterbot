@@ -14,7 +14,7 @@ namespace RoosterBot {
 		/// </summary>
 		/// <param name="errorMessage">Error reason to be returned if all parsers return an unsuccessful result with InputValid == false.. If any parser returns with InputValid == true, then its result will be returned.</param>
 		/// <param name="component">The component to be used when resolving the error message.</param>
-		public MultiParser(Component component, string errorMessage, string typeDisplayName) : base(component) {
+		public MultiParser(string errorMessage, string typeDisplayName) {
 			m_Readers = new List<IRoosterTypeParser>();
 			TypeDisplayName = typeDisplayName;
 			m_ErrorMessage = errorMessage;
@@ -26,15 +26,14 @@ namespace RoosterBot {
 
 		protected async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			foreach (IRoosterTypeParser reader in m_Readers) {
-				// This is a TypeParserResult<extends T>
-				IRoosterTypeParserResult result = await reader.ParseAsync(parameter, value, context);
+				var result = (IRoosterTypeParserResult) await ((dynamic) reader).ParseAsync(parameter, value, context);
 				if (result.IsSuccessful) {
 					return Successful((T) result.Value!); // should never throw -- see AddReader, there's no way to add an invalid parser
 				} else if (result.InputValid) {
-					return Unsuccessful(true, result.Reason);
+					return Unsuccessful(true, context, result.Reason);
 				}
 			}
-			return Unsuccessful(false, m_ErrorMessage);
+			return Unsuccessful(false, context, m_ErrorMessage);
 		}
 	}
 }

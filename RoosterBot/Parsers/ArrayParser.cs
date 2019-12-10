@@ -7,7 +7,7 @@ namespace RoosterBot {
 
 		public override string TypeDisplayName { get; }
 
-		public ArrayParser(Component component, RoosterTypeParser<T> indivReader, string? typeDisplayName = null) : base(component) {
+		public ArrayParser(RoosterTypeParser<T> indivReader, string? typeDisplayName = null) {
 			m_IndivReader = indivReader;
 			TypeDisplayName = typeDisplayName ?? (m_IndivReader.TypeDisplayName + "[]");
 		}
@@ -20,7 +20,7 @@ namespace RoosterBot {
 				if (indivResult.IsSuccessful) {
 					results[i] = indivResult.Value;
 				} else {
-					return Unsuccessful(indivResult.InputValid, indivResult.Reason, indivResult.ErrorReasonObjects);
+					return Unsuccessful(indivResult.InputValid, context, indivResult.Reason);
 				}
 			}
 			return Successful(results);
