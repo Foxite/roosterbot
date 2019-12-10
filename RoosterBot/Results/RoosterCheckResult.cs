@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Qmmands;
 
 namespace RoosterBot {
-	public class RoosterCheckResult : CheckResult, IRoosterResult {
+	public class RoosterCheckResult : CheckResult {
 		public IReadOnlyList<object> ErrorReasonObjects { get; }
 		public Component? ErrorReasonComponent { get; }
 

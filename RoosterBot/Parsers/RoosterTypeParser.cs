@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
 	public abstract class RoosterTypeParser<T> : TypeParser<T>, IRoosterTypeParser {
-		private readonly Component m_Component;
-
-		/// <summary>
-		/// If the given command context is not a RoosterCommandContext, then this indicates if an exception should be thrown, or a ParseFailed result should be returned.
-		/// </summary>
-		public bool ThrowOnInvalidContext { get; set; }
-
 		public Type Type => typeof(T);
 
 		/// <summary>
@@ -18,25 +12,31 @@ namespace RoosterBot {
 		/// </summary>
 		public abstract string TypeDisplayName { get; }
 
-		protected RoosterTypeParser(Component component) {
-			m_Component = component;
-		}
-
+		/// <summary>
+		/// Always returns an object of type ValueTask<RoosterTypeParserResult<T>>.
+		/// </summary>
+		/// <param name="parameter"></param>
+		/// <param name="value"></param>
+		/// <param name="context"></param>
+		/// <returns></returns>
 		public async sealed override ValueTask<TypeParserResult<T>> ParseAsync(Parameter parameter, string value, CommandContext context) {
 			if (context is RoosterCommandContext rcc) {
 				return await ParseAsync(parameter, value, rcc);
-			} else if (ThrowOnInvalidContext) {
-				throw new InvalidOperationException($"{GetType().Name} requires a CommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return Unsuccessful(false, "If you see this, then you may slap the programmer.");
+				throw new InvalidOperationException($"{GetType().Name} requires a CommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			}
 		}
 
 		protected abstract ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context);
 
-		async ValueTask<IRoosterTypeParserResult> IRoosterTypeParser.ParseAsync(Parameter parameter, string value, RoosterCommandContext context) => await ParseAsync(parameter, value, context);
+		async ValueTask<IRoosterTypeParserResult> IRoosterTypeParser.ParseAsync(Parameter parameter, string value, RoosterCommandContext context) =>
+			(IRoosterTypeParserResult) await ParseAsync(parameter, value, context as CommandContext);
 
 		protected RoosterTypeParserResult<T> Successful(T value) => RoosterTypeParserResult<T>.Successful(value);
-		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, string reason, params object[] objects) => RoosterTypeParserResult<T>.Unsuccessful(inputValid, reason, m_Component, objects);
+		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, RoosterCommandContext context, string reason, params string[] objects) {
+			ResourceService Resources = context.ServiceProvider.GetService<ResourceService>();
+			Component component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
+			return RoosterTypeParserResult<T>.Unsuccessful(inputValid, string.Format(Resources.ResolveString(context.Culture, component, reason), objects));
+		}
 	}
 }
