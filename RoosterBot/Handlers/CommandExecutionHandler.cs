@@ -37,13 +37,15 @@ namespace RoosterBot {
 							Resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentForModule(kvp.Key.Module), kvp.Value.Reason)));
 						break;
 					case ArgumentParseFailedResult argument:
-						response = Resources.GetString(context.Culture, "RoosterBot_FatalError"); // Not actually sure what to do with this
+						// TODO (feature) Correctly handle ArgumentParseFailedResult
+						// It can happen when you have unmatched quotes, for example. This is a common error that should not be thrown in the "Fatal error" pile
+						response = Resources.GetString(context.Culture, "RoosterBot_FatalError");
 						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
 						break;
-					case IRoosterTypeParserResult type:
-						response = string.Format(Resources.ResolveString(context.Culture, type.ErrorReasonComponent, type.Reason), type.ErrorReasonObjects);
-						break;
 					case TypeParseFailedResult type:
+						// This cannot be resolved here because Qmmands does not give us the TypeParserResult.
+						// It creates an instance of the sealed TypeParseFailedResult from the reason of TypeParserResult.
+						// Therefore we can't know which TypeParser created this result and there is no way to get the assembly to resolve it.
 						response = type.Reason;
 						break;
 					case ChecksFailedResult check:
