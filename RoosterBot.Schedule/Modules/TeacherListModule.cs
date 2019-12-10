@@ -18,9 +18,9 @@ namespace RoosterBot.Schedule {
 			}
 
 			if (!records.Any()) {
-				return Result(new TextResult(Constants.Info, GetString("TeacherListModule_TeacherListCommand_NoTeachersFound")));
+				return Result(TextResult.Info(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound")));
 			} else if (records.Count() > 25) {
-				return Result(new TextResult(Constants.Warning, GetString("TeacherListModule_TeacherListCommand_TooManyResults")));
+				return Result(TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults")));
 			} else {
 				string[][] cells = new string[records.Count() + 1][];
 				cells[0] = new string[] {

@@ -25,7 +25,7 @@ namespace RoosterBot.Meta {
 			} else {
 				GuildConfig.Culture = culture;
 				await GuildConfig.UpdateAsync();
-				return TextResult.Success(Util.Success + GetString("GuildConfigModule_SetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+				return TextResult.Success(GetString("GuildConfigModule_SetLanguage", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
 			}
 		}
 	}
