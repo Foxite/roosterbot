@@ -10,8 +10,6 @@ namespace RoosterBot.Schedule {
 	public class TeacherInfoParser : IdentifierInfoParserBase<TeacherInfo> {
 		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
 
-		public TeacherInfoParser(Component component) : base (component) { }
-
 		protected async override ValueTask<RoosterTypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			RoosterTypeParserResult<TeacherInfo> baseResult = await base.ParseAsync(parameter, input, context);
 			if (baseResult.IsSuccessful) {
@@ -46,7 +44,7 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (result == null) {
-					return Unsuccessful(false, "#TeacherInfoReader_CheckFailed");
+					return Unsuccessful(false, context, "#TeacherInfoReader_CheckFailed");
 				} else {
 					return Successful(result);
 				}

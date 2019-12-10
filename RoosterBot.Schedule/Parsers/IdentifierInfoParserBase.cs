@@ -4,12 +4,10 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfoParserBase<T> : RoosterTypeParser<T> where T : IdentifierInfo {
-		protected IdentifierInfoParserBase(Component component) : base (component) { }
-
 		protected async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			T? result = await context.ServiceProvider.GetService<IdentifierValidationService>().ValidateAsync<T>(context, input);
 			if (result is null) {
-				return Unsuccessful(false, "#IdentifierInfoReaderBase_ErrorMessage");
+				return Unsuccessful(false, context, "#IdentifierInfoReaderBase_ErrorMessage");
 			} else {
 				return Successful(result);
 			}

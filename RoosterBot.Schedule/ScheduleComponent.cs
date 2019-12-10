@@ -26,15 +26,15 @@ namespace RoosterBot.Schedule {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
-			var ssir = new StudentSetInfoParser(this);
+			var ssir = new StudentSetInfoParser();
 			commandService.AddTypeParser(ssir);
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
+			var identifierReaders = new MultiParser<IdentifierInfo>("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
 			identifierReaders.AddReader(ssir);
-			identifierReaders.AddReader(new TeacherInfoParser(this));
-			identifierReaders.AddReader(new RoomInfoParser(this));
+			identifierReaders.AddReader(new TeacherInfoParser());
+			identifierReaders.AddReader(new RoomInfoParser());
 			commandService.AddTypeParser(identifierReaders);
 
 			commandService.AddModule<TeacherListModule>();

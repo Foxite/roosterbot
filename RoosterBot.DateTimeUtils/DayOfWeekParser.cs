@@ -8,8 +8,6 @@ namespace RoosterBot.DateTimeUtils {
 	public class DayOfWeekParser : RoosterTypeParser<DayOfWeek> {
 		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
 
-		public DayOfWeekParser(Component component) : base(component) { }
-
 		protected override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();
 			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
@@ -28,7 +26,7 @@ namespace RoosterBot.DateTimeUtils {
 					if (result == null) {
 						result = i;
 					} else {
-						return ValueTaskUtil.FromResult(Unsuccessful(false, "#DayOfWeekReader_CheckFailed"));
+						return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#DayOfWeekReader_CheckFailed"));
 					}
 				}
 			}
@@ -36,7 +34,7 @@ namespace RoosterBot.DateTimeUtils {
 			if (result.HasValue) {
 				return ValueTaskUtil.FromResult(Successful(((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value]));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, "#DayOfWeekReader_CheckFailed"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#DayOfWeekReader_CheckFailed"));
 			}
 		}
 	}

@@ -31,9 +31,9 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			var stationInfoReader = new StationInfoParser(this);
+			var stationInfoReader = new StationInfoParser();
 			commandService.AddTypeParser(stationInfoReader);
-			commandService.AddTypeParser(new ArrayParser<StationInfo>(this, stationInfoReader));
+			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
 
 			commandService.AddModule<PTModule>();
 

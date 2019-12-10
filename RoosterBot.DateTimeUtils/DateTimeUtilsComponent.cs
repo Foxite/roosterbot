@@ -18,7 +18,7 @@ namespace RoosterBot.DateTimeUtils {
 			ResourceService = services.GetService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
-			commandService.AddTypeParser(new DayOfWeekParser(this));
+			commandService.AddTypeParser(new DayOfWeekParser());
 
 			return Task.CompletedTask;
 		}

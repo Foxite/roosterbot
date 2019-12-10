@@ -11,7 +11,7 @@ namespace RoosterBot.Meta {
 
 		public override string TypeDisplayName => "#CultureInfoReader_TypeDisplayName";
 
-		public CultureInfoParser(Component component) : base(component) {
+		public CultureInfoParser() {
 			m_FlagEmoteRegex = new Regex(@"\:flag_([a-z]{2})\:");
 		}
 
@@ -26,7 +26,7 @@ namespace RoosterBot.Meta {
 				if (TryGetCultureInfo(countryCode, out info)) {
 					return ValueTaskUtil.FromResult(Successful(info));
 				} else {
-					return ValueTaskUtil.FromResult(Unsuccessful(true, "#CultureInfoReader_ParseFailed_UnknownFlag"));
+					return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#CultureInfoReader_ParseFailed_UnknownFlag"));
 				}
 			}
 
@@ -36,7 +36,7 @@ namespace RoosterBot.Meta {
 				return ValueTaskUtil.FromResult(Successful(CultureInfo.GetCultureInfo(resultCode)));
 			}
 
-			return ValueTaskUtil.FromResult(Unsuccessful(false, "#CultureInfoReader_ParseFailed"));
+			return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#CultureInfoReader_ParseFailed"));
 		}
 
 		private bool TryGetCultureInfo(string name, [NotNullWhen(true), MaybeNullWhen(false)] out CultureInfo? info) {
