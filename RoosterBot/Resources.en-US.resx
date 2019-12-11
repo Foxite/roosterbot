@@ -182,4 +182,7 @@
   <data name="Result_Empty" xml:space="preserve">
     <value>The command returned no response.</value>
   </data>
+  <data name="Error_ResponseTooLong" xml:space="preserve">
+    <value>Something has gone horribly wrong, and the error message was longer than 2000 characters.</value>
+  </data>
 </root>

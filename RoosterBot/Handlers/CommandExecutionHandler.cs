@@ -74,12 +74,20 @@ namespace RoosterBot {
 					default:
 						string report = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result.ToString()}";
 						Logger.Warning("CommandHandler", report);
+						if (report.Length > 2000) {
+							const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
+							report = TooLong + report.Substring(0, 1999 - TooLong.Length);
+						}
 						await Config.BotOwner.SendMessageAsync(report);
 						response = Resources.GetString(context.Culture, "RoosterBot_FatalError");
 						break;
 				}
 
-				await context.RespondAsync(Util.Error + response);
+				response = Util.Error + response;
+				if (response.Length >= 2000) {
+					response = Util.Error + Resources.GetString(context.Culture, "Error_ResponseTooLong");
+				}
+				await context.RespondAsync(response);
 			}
 		}
 	}
