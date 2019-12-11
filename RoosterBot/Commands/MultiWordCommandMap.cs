@@ -86,7 +86,7 @@ namespace RoosterBot {
 							}
 						}
 					} else {
-						matches.Add(new CommandMatch(command, "", path.AsReadOnly(), new string(remainingInput.TrimStart(m_Separator))));
+						matches.Add(new CommandMatch(command, string.Empty, path.AsReadOnly(), new string(remainingInput.TrimStart(m_Separator))));
 					}
 				}
 			});

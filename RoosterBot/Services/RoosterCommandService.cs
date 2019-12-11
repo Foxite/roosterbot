@@ -276,32 +276,13 @@ namespace RoosterBot {
 			return e => Logger.LogSync(new Discord.LogMessage(Discord.LogSeverity.Error, "RoosterCommandService", logMessage, e));
 		}
 
-		private async Task HandleCommandExecutedAsync(CommandExecutedEventArgs args) {
-			try {
-				await m_CommandExecuted.InvokeAsync(args);
-			} catch (Exception e) {
-				// TODO (review) Is this necessary? The handler itself already takes care of any exceptions through GetEventErrorHandler, this may result in duplicate logs
-				Logger.Error("RoosterCommandService", "A CommandExecuted handler has thrown an exception.", e);
-				throw;
-			}
-		}
-
-		private async Task HandleCommandExecutionFailedAsync(CommandExecutionFailedEventArgs args) {
-			try {
-				await m_CommandExecutionFailed.InvokeAsync(args);
-			} catch (Exception e) {
-				Logger.Error("RoosterCommandService", "A CommandExecutionFailed handler has thrown an exception.", e);
-				throw;
-			}
-		}
-
 		private CommandService GetNewCommandService() {
 			// If you get an error here, see the comment in MultiWordCommandMap.
 			m_Config.CommandMap = new MultiWordCommandMap(" "); // Have to create a new instance every time, otherwise the map will be shared between all command services
 			var ret = new CommandService(m_Config);
 
-			ret.CommandExecuted += HandleCommandExecutedAsync;
-			ret.CommandExecutionFailed += HandleCommandExecutionFailedAsync;
+			ret.CommandExecuted += async (args) => await m_CommandExecuted.InvokeAsync(args);
+			ret.CommandExecutionFailed += async (args) => await m_CommandExecutionFailed.InvokeAsync(args);
 
 			foreach (Action<CommandService> action in m_SetupActions) {
 				action(ret);
