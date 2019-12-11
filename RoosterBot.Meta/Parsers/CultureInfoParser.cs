@@ -4,30 +4,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
+using Discord;
+using System;
+using System.Text;
 
 namespace RoosterBot.Meta {
 	public class CultureInfoParser : RoosterTypeParser<CultureInfo> {
-		private readonly Regex m_FlagEmoteRegex;
-
 		public override string TypeDisplayName => "#CultureInfoReader_TypeDisplayName";
-
-		public CultureInfoParser() {
-			m_FlagEmoteRegex = new Regex(@"\:flag_([a-z]{2})\:");
-		}
 
 		protected override ValueTask<RoosterTypeParserResult<CultureInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			if (TryGetCultureInfo(input, out CultureInfo? info)) {
 				return ValueTaskUtil.FromResult(Successful(info));
-			}
-
-			Match flagMatch = m_FlagEmoteRegex.Match(input);
-			if (flagMatch.Success) {
-				string countryCode = flagMatch.Groups[0].Value;
-				if (TryGetCultureInfo(countryCode, out info)) {
-					return ValueTaskUtil.FromResult(Successful(info));
-				} else {
-					return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#CultureInfoReader_ParseFailed_UnknownFlag"));
-				}
 			}
 
 			CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
