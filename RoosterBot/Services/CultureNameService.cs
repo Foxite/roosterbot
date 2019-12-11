@@ -8,6 +8,10 @@ namespace RoosterBot {
 		/// <summary>
 		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
 		/// </summary>
+		/// <example>
+		/// m_Table[("en-US", "es-ES")] == "inglés" // The name of the English language in Spanish
+		/// m_Table[("nl-NL", "en-US")] == "Dutch" // The name of Dutch in English
+		/// </example>
 		private readonly Dictionary<(string, string), string> m_Table;
 
 		public CultureNameService() {
