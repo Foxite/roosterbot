@@ -1,8 +1,8 @@
-﻿using CsvHelper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
 
 namespace RoosterBot.Weather {
 	public class CityService {

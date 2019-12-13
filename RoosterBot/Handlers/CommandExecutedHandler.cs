@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
+using Qmmands;
 
 namespace RoosterBot {
 	internal sealed class CommandExecutedHandler : RoosterHandler {

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
 	public class WeatherService : IDisposable {

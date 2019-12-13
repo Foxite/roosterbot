@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
+﻿using System.Linq;
 
 namespace RoosterBot.Schedule {
 	public class RoomInfo : IdentifierInfo {

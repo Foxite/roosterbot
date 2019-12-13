@@ -10,7 +10,6 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using Qmmands;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : Component {

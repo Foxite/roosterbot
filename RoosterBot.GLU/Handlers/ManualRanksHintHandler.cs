@@ -1,6 +1,6 @@
-﻿using Discord;
+﻿using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
-using System.Threading.Tasks;
 
 namespace RoosterBot.GLU {
 	internal sealed class ManualRanksHintHandler {

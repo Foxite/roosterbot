@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using RoosterBot.DateTimeUtils;
 using Qmmands;
+using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule {
 	[Name("#ScheduleModule_Name")]

@@ -1,8 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Qmmands;
-using System;
 
 namespace RoosterBot {
 	// If you get an error that you can't find ICommandMap, add this to your nuget sources:

@@ -1,12 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Qmmands;
 using Microsoft.Extensions.DependencyInjection;
-using Discord;
-using System;
-using System.Text;
+using Qmmands;
 
 namespace RoosterBot.Meta {
 	public class CultureInfoParser : RoosterTypeParser<CultureInfo> {

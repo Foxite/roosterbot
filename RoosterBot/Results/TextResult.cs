@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Discord;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Discord;
 
 namespace RoosterBot {
 	/// <summary>
