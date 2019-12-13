@@ -15,5 +15,14 @@
 			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources.en-US.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources.nl-NL.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	</ItemGroup>
 
 </Project>

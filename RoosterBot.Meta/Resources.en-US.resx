@@ -150,10 +150,10 @@
     <value>This server's command prefix is now `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
-  <data name="HelpModule_CommandsListCommand" xml:space="preserve">
+  <data name="Commands" xml:space="preserve">
     <value>commands</value>
   </data>
-  <data name="HelpModule_HelpCommand" xml:space="preserve">
+  <data name="HelpCommand" xml:space="preserve">
     <value>help</value>
   </data>
   <data name="InfoModule_DiscordInvite" xml:space="preserve">
@@ -196,46 +196,46 @@ New features will also be announced here.
   <data name="InfoModule_Uptime_Summary" xml:space="preserve">
     <value>See how long this bot has been online.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
+  <data name="Commands_CategoriesPretext" xml:space="preserve">
     <value>Use `{0}commands &lt;category&gt;` to get a list of commands. Available categories are:</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
+  <data name="Commands_CategoryDoesNotExist" xml:space="preserve">
     <value>That category doesn't exist.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_Category_Summary" xml:space="preserve">
+  <data name="Commands_Category_Summary" xml:space="preserve">
     <value>List of commands in a category.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_ModuleName" xml:space="preserve">
+  <data name="Commands_ModuleName" xml:space="preserve">
     <value>category</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
+  <data name="Commands_OptionalHint" xml:space="preserve">
     <value>Parameters surrounded with `[]` are optional.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
+  <data name="Commands_Summary" xml:space="preserve">
     <value>List of categories with commands.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_ChapterDoesNotExist" xml:space="preserve">
+  <data name="HelpCommand_ChapterDoesNotExist" xml:space="preserve">
     <value>Sorry, that section does not exist.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
+  <data name="HelpCommand_HelpPretext" xml:space="preserve">
     <value>All my commands start with `{0}`.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
+  <data name="HelpCommand_HelpSectionsPretext" xml:space="preserve">
     <value>Use `{0}help &lt;section&gt;` to get help. Available sections are:</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
+  <data name="HelpCommand_PostText" xml:space="preserve">
     <value>You can also use `{0}commands` to get a list of categories, and `{0}commands &lt;category&gt;` to see all commands for a certain category.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
+  <data name="HelpCommand_Section" xml:space="preserve">
     <value>section</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Section_Summary" xml:space="preserve">
+  <data name="HelpCommand_Section_Summary" xml:space="preserve">
     <value>Explanation for a part of the bot.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Summary" xml:space="preserve">
+  <data name="HelpCommand_Summary" xml:space="preserve">
     <value>Explanation for the bot.</value>
   </data>
-  <data name="MetaCommandsModule_Name" xml:space="preserve">
+  <data name="Meta_Name" xml:space="preserve">
     <value>Meta</value>
   </data>
   <data name="Meta_HelpName_Edit" xml:space="preserve">

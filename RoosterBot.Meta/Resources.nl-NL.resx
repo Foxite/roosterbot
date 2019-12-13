@@ -150,10 +150,10 @@
     <value>Deze servercommandprefix is nu `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
-  <data name="HelpModule_CommandsListCommand" xml:space="preserve">
+  <data name="Commands" xml:space="preserve">
     <value>commands</value>
   </data>
-  <data name="HelpModule_HelpCommand" xml:space="preserve">
+  <data name="HelpCommand" xml:space="preserve">
     <value>help</value>
   </data>
   <data name="InfoModule_DiscordInvite" xml:space="preserve">
@@ -196,48 +196,48 @@ Nieuwe features worden hier ook aangekondigd.
   <data name="InfoModule_Uptime_Summary" xml:space="preserve">
     <value>Kijk hoe lang de bot online is</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoriesPretext" xml:space="preserve">
+  <data name="Commands_CategoriesPretext" xml:space="preserve">
     <value>Gebruik `{0}commands &lt;categorie&gt;` om een lijst te zien. Beschikbare categorieën zijn:</value>
     <comment>0: command prefix</comment>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_CategoryDoesNotExist" xml:space="preserve">
+  <data name="Commands_CategoryDoesNotExist" xml:space="preserve">
     <value>Die categorie bestaat niet.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_Category_Summary" xml:space="preserve">
+  <data name="Commands_Category_Summary" xml:space="preserve">
     <value>Lijst van alle commands in een categorie.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_ModuleName" xml:space="preserve">
+  <data name="Commands_ModuleName" xml:space="preserve">
     <value>categorie</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_OptionalHint" xml:space="preserve">
+  <data name="Commands_OptionalHint" xml:space="preserve">
     <value>Parameters omringd met `[]` zijn optioneel.</value>
   </data>
-  <data name="MetaCommandsModule_CommandListCommand_Summary" xml:space="preserve">
+  <data name="Commands_Summary" xml:space="preserve">
     <value>Alle categorieën van commands.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_ChapterDoesNotExist" xml:space="preserve">
+  <data name="HelpCommand_ChapterDoesNotExist" xml:space="preserve">
     <value>Sorry, dat hoofdstuk bestaat niet.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_HelpPretext" xml:space="preserve">
+  <data name="HelpCommand_HelpPretext" xml:space="preserve">
     <value>Al mijn commands beginnen met `{0}`.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_HelpSectionsPretext" xml:space="preserve">
+  <data name="HelpCommand_HelpSectionsPretext" xml:space="preserve">
     <value>Gebruik `{0}help &lt;hoofdstuk&gt;` om uitleg te krijgen. Beschikbare hoofdstukken zijn:</value>
     <comment>0: command prefix</comment>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_PostText" xml:space="preserve">
+  <data name="HelpCommand_PostText" xml:space="preserve">
     <value>Je kunt ook `{0}commands` gebruiken om een lijst van categorieën te zien, en `{0}commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Section" xml:space="preserve">
+  <data name="HelpCommand_Section" xml:space="preserve">
     <value>hoofdstuk</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Section_Summary" xml:space="preserve">
+  <data name="HelpCommand_Section_Summary" xml:space="preserve">
     <value>Uitleg over een onderdeel van de bot.</value>
   </data>
-  <data name="MetaCommandsModule_HelpCommand_Summary" xml:space="preserve">
+  <data name="HelpCommand_Summary" xml:space="preserve">
     <value>Uitleg over de bot.</value>
   </data>
-  <data name="MetaCommandsModule_Name" xml:space="preserve">
+  <data name="Meta_Name" xml:space="preserve">
     <value>Meta</value>
   </data>
   <data name="Meta_HelpName_Edit" xml:space="preserve">

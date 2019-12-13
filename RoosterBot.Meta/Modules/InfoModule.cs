@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[Name("#MetaCommandsModule_Name")]
+	[Name("#Meta_Name")]
 	public class InfoModule : RoosterModule {
 		public MetaInfoService InfoService { get; set; } = null!;
 
