@@ -24,6 +24,14 @@ namespace RoosterBot.Meta {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
+			// TODO (feature) bool and char parsers
+			commandService.AddTypeParser(new PrimitiveParser<byte   >(byte   .TryParse, "Integer"), true);
+			commandService.AddTypeParser(new PrimitiveParser<short  >(short  .TryParse, "Integer"), true);
+			commandService.AddTypeParser(new PrimitiveParser<int    >(int    .TryParse, "Integer"), true);
+			commandService.AddTypeParser(new PrimitiveParser<long   >(long   .TryParse, "Integer"), true);
+			commandService.AddTypeParser(new PrimitiveParser<float  >(float  .TryParse, "Decimal"), true);
+			commandService.AddTypeParser(new PrimitiveParser<double >(double .TryParse, "Decimal"), true);
+			commandService.AddTypeParser(new PrimitiveParser<decimal>(decimal.TryParse, "Decimal"), true);
 			commandService.AddTypeParser(new CultureInfoParser());
 
 			commandService.AddModule<CommandsListModule>();

@@ -275,4 +275,12 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
     <value>Your language is now {0}.</value>
     <comment>0: new language name, localized</comment>
   </data>
+  <data name="Meta_PrimitiveFail_Decimal" xml:space="preserve">
+    <value>{0} is not an integer or fractional number.</value>
+    <comment>0: erroneous input, sanitized</comment>
+  </data>
+  <data name="Meta_PrimitiveFail_Integer" xml:space="preserve">
+    <value>{0} is not an integer.</value>
+    <comment>0: erroneous input, sanitized</comment>
+  </data>
 </root>
