@@ -31,7 +31,7 @@ namespace RoosterBot.Schedule {
 
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
-			var identifierReaders = new MultiParser<IdentifierInfo>("#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
+			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
 			identifierReaders.AddReader(ssir);
 			identifierReaders.AddReader(new TeacherInfoParser());
 			identifierReaders.AddReader(new RoomInfoParser());
