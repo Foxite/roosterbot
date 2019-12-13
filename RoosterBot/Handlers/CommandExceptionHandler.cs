@@ -23,7 +23,7 @@ namespace RoosterBot {
 					report = TooLong + report.Substring(0, 1999 - TooLong.Length);
 				}
 				await Config.BotOwner.SendMessageAsync(report);
-				await rcc.RespondAsync(Util.Error + Resources.GetString(rcc.Culture, "RoosterBot_FatalError"));
+				await rcc.RespondAsync(Util.Error + Resources.GetString(rcc.Culture, "CommandHandling_FatalError"));
 				await rcc.UserConfig.UpdateAsync();
 			}
 		}

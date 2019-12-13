@@ -39,7 +39,7 @@ namespace RoosterBot {
 					case ArgumentParseFailedResult argument:
 						// TODO (feature) Correctly handle ArgumentParseFailedResult
 						// It can happen when you have unmatched quotes, for example. This is a common error that should not be thrown in the "Fatal error" pile
-						response = Resources.GetString(context.Culture, "RoosterBot_FatalError");
+						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
 						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
 						break;
 					case TypeParseFailedResult type:
@@ -79,13 +79,13 @@ namespace RoosterBot {
 							report = TooLong + report.Substring(0, 1999 - TooLong.Length);
 						}
 						await Config.BotOwner.SendMessageAsync(report);
-						response = Resources.GetString(context.Culture, "RoosterBot_FatalError");
+						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
 						break;
 				}
 
 				response = Util.Error + response;
 				if (response.Length >= 2000) {
-					response = Util.Error + Resources.GetString(context.Culture, "Error_ResponseTooLong");
+					response = Util.Error + Resources.GetString(context.Culture, "CommandHandling_ResponseTooLong");
 				}
 				await context.RespondAsync(response);
 			}
