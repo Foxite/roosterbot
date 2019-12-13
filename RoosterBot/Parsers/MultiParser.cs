@@ -4,11 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
-	public class MultiParser<T> : RoosterTypeParser<T> {
+	public class MultiParser<T> : RoosterTypeParser<T>, IExternalResultStringParser {
 		private readonly List<IRoosterTypeParser> m_Readers;
-		private readonly Component m_ResourceComponent;
 		private readonly string m_ErrorMessage;
 		public override string TypeDisplayName { get; }
+
+		public Component ErrorReasonComponent { get; }
 
 		/// <summary>
 		/// Allows multiple type parsers to be used for a single type.
@@ -18,7 +19,7 @@ namespace RoosterBot {
 		public MultiParser(Component resourceComponent, string errorMessage, string typeDisplayName) {
 			m_Readers = new List<IRoosterTypeParser>();
 			TypeDisplayName = typeDisplayName;
-			m_ResourceComponent = resourceComponent;
+			ErrorReasonComponent = resourceComponent;
 			m_ErrorMessage = errorMessage;
 		}
 
@@ -33,12 +34,16 @@ namespace RoosterBot {
 				if (result.IsSuccessful) {
 					return Successful((T) result.Value!); // should never throw -- see AddReader, there's no way to add an invalid parser
 				} else if (result.InputValid) {
-					// TODO (fix) Combined MultiParsers/ArrayParsers; They need to be able to access each other's ResourceComponent
-					// This should be possible for external parsers that outsource error messages as well, do it with an interface
-					return RoosterTypeParserResult<T>.Unsuccessful(true, resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentFromAssembly(result.GetType().Assembly), result.Reason));
+					Component resourceComponent;
+					if (reader is IExternalResultStringParser ersp) {
+						resourceComponent = ersp.ErrorReasonComponent;
+					} else {
+						resourceComponent = Program.Instance.Components.GetComponentFromAssembly(result.GetType().Assembly);
+					}
+					return RoosterTypeParserResult<T>.Unsuccessful(true, resources.ResolveString(context.Culture, resourceComponent, result.Reason));
 				}
 			}
-			return RoosterTypeParserResult<T>.Unsuccessful(false, resources.ResolveString(context.Culture, m_ResourceComponent, m_ErrorMessage));
+			return RoosterTypeParserResult<T>.Unsuccessful(false, resources.ResolveString(context.Culture, ErrorReasonComponent, m_ErrorMessage));
 		}
 	}
 }

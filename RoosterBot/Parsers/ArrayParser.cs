@@ -2,10 +2,20 @@
 using Qmmands;
 
 namespace RoosterBot {
-	public class ArrayParser<T> : RoosterTypeParser<T[]> {
+	public class ArrayParser<T> : RoosterTypeParser<T[]>, IExternalResultStringParser {
 		private readonly RoosterTypeParser<T> m_IndivReader;
 
 		public override string TypeDisplayName { get; }
+		public Component ErrorReasonComponent {
+			get {
+				if (m_IndivReader is IExternalResultStringParser ersp) {
+					return ersp.ErrorReasonComponent;
+				} else {
+					return Program.Instance.Components.GetComponentFromAssembly(m_IndivReader.GetType().Assembly);
+				}
+			}
+		}
+
 
 		public ArrayParser(RoosterTypeParser<T> indivReader, string? typeDisplayName = null) {
 			m_IndivReader = indivReader;
