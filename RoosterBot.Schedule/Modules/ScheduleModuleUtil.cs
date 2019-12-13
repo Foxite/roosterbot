@@ -9,7 +9,7 @@ namespace RoosterBot.Schedule {
 				if (ssi != null) {
 					return ssi;
 				} else {
-					MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf"));
+					MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", GuildConfig.CommandPrefix));
 					return null;
 				}
 			} else {
