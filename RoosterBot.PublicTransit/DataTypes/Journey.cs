@@ -79,81 +79,51 @@ namespace RoosterBot.PublicTransit {
 
 	public static class JourneyStatusFunctions {
 		public static JourneyStatus JStatusFromString(string input) {
-			switch (input) {
-			case "GEWIJZIGD":
-				return JourneyStatus.Changed;
-			case "VERTRAAGD":
-				return JourneyStatus.Delayed;
-			case "NIEUW":
-				return JourneyStatus.New;
-			case "NIET-OPTIMAAL":
-				return JourneyStatus.NotOptimal;
-			case "NIET-MOGELIJK":
-				return JourneyStatus.NotPossible;
-			case "PLAN-GEWIJZIGD":
-				return JourneyStatus.PlanChanged;
-			case "VOLGENS-PLAN":
-			default:
-				return JourneyStatus.OnSchedule;
-			}
+			return input switch {
+				"GEWIJZIGD" => JourneyStatus.Changed,
+				"VERTRAAGD" => JourneyStatus.Delayed,
+				"NIEUW" => JourneyStatus.New,
+				"NIET-OPTIMAAL" => JourneyStatus.NotOptimal,
+				"NIET-MOGELIJK" => JourneyStatus.NotPossible,
+				"PLAN-GEWIJZIGD" => JourneyStatus.PlanChanged,
+				_ => JourneyStatus.OnSchedule,
+			};
 		}
 
 		public static JourneyComponentStatus JCStatusFromString(string input) {
-			switch (input) {
-			case "GEANNULEERD":
-				return JourneyComponentStatus.Cancelled;
-			case "GEWIJZIGD":
-				return JourneyComponentStatus.Changed;
-			case "OVERSTAP-NIET-MOGELIJK":
-				return JourneyComponentStatus.TransferNotPossible;
-			case "VERTRAAGD":
-				return JourneyComponentStatus.Delayed;
-			case "NIEUW":
-				return JourneyComponentStatus.New;
-			case "VOLGENS-PLAN":
-			default:
-				return JourneyComponentStatus.OnSchedule;
-			}
+			return input switch {
+				"GEANNULEERD" => JourneyComponentStatus.Cancelled,
+				"GEWIJZIGD" => JourneyComponentStatus.Changed,
+				"OVERSTAP-NIET-MOGELIJK" => JourneyComponentStatus.TransferNotPossible,
+				"VERTRAAGD" => JourneyComponentStatus.Delayed,
+				"NIEUW" => JourneyComponentStatus.New,
+				_ => JourneyComponentStatus.OnSchedule,
+			};
 		}
 
 		public static string HumanStringFromJStatus(JourneyStatus status) {
-			switch (status) {
-			case JourneyStatus.OnSchedule:
-				return "Op tijd";
-			case JourneyStatus.Changed:
-				return "Gewijzigd";
-			case JourneyStatus.Delayed:
-				return "Vertraagd";
-			case JourneyStatus.New:
-				return "Nieuw";
-			case JourneyStatus.NotOptimal:
-				return "Niet optimaal";
-			case JourneyStatus.NotPossible:
-				return "Niet mogelijk";
-			case JourneyStatus.PlanChanged:
-				return "Plan gewijzigd";
-			default:
-				return "ERROR";
-			}
+			return status switch {
+				JourneyStatus.OnSchedule => "Op tijd",
+				JourneyStatus.Changed => "Gewijzigd",
+				JourneyStatus.Delayed => "Vertraagd",
+				JourneyStatus.New => "Nieuw",
+				JourneyStatus.NotOptimal => "Niet optimaal",
+				JourneyStatus.NotPossible => "Niet mogelijk",
+				JourneyStatus.PlanChanged => "Plan gewijzigd",
+				_ => "ERROR",
+			};
 		}
 
 		public static string HummanStringFromJCStatus(JourneyComponentStatus status) {
-			switch (status) {
-			case JourneyComponentStatus.OnSchedule:
-				return "Op tijd";
-			case JourneyComponentStatus.Cancelled:
-				return "Geannulleerd";
-			case JourneyComponentStatus.Changed:
-				return "Gewijzigd";
-			case JourneyComponentStatus.TransferNotPossible:
-				return "Overstap niet mogelijk";
-			case JourneyComponentStatus.Delayed:
-				return "Vertraagd";
-			case JourneyComponentStatus.New:
-				return "Nieuw";
-			default:
-				return "ERROR";
-			}
+			return status switch {
+				JourneyComponentStatus.OnSchedule => "Op tijd",
+				JourneyComponentStatus.Cancelled => "Geannulleerd",
+				JourneyComponentStatus.Changed => "Gewijzigd",
+				JourneyComponentStatus.TransferNotPossible => "Overstap niet mogelijk",
+				JourneyComponentStatus.Delayed => "Vertraagd",
+				JourneyComponentStatus.New => "Nieuw",
+				_ => "ERROR",
+			};
 		}
 	}
 }

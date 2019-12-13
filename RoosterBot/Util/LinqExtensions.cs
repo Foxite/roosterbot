@@ -44,8 +44,8 @@ namespace RoosterBot {
 		/// <param name="predicate"></param>
 		/// <returns></returns>
 		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
-			List<T> outA = new List<T>();
-			List<T> outB = new List<T>();
+			var outA = new List<T>();
+			var outB = new List<T>();
 
 			foreach (T item in source) {
 				List<T> outInto = predicate(item) ? outB : outA;

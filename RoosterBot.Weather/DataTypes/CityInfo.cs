@@ -9,7 +9,7 @@ namespace RoosterBot.Weather {
 		public IReadOnlyList<string> Aliases { get; }
 		public RegionInfo Region { get; }
 
-		private string m_NormalName;
+		private readonly string m_NormalName;
 
 		public CityInfo(int cityId, string name, RegionInfo region, params string[] aliases) {
 			CityId = cityId;

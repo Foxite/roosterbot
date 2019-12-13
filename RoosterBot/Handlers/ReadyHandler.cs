@@ -38,7 +38,7 @@ namespace RoosterBot {
 			try {
 				pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
 				await pipeClient.ConnectAsync(1);
-				using StreamWriter sw = new StreamWriter(pipeClient);
+				using var sw = new StreamWriter(pipeClient);
 				pipeClient = null;
 				sw.WriteLine("ready");
 			} catch (TimeoutException) {

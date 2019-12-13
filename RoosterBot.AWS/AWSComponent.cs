@@ -25,7 +25,7 @@ namespace RoosterBot.AWS {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
+			var jsonConfig = JObject.Parse(jsonFile);
 
 			string accessKey  = jsonConfig["accessKey" ].ToObject<string>();
 			string secretKey  = jsonConfig["secretKey" ].ToObject<string>();
@@ -33,9 +33,9 @@ namespace RoosterBot.AWS {
 			string userTable  = jsonConfig["userTable" ].ToObject<string>();
 			string guildTable = jsonConfig["guildTable"].ToObject<string>();
 
-			RegionEndpoint endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
+			var endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
 
-			AWSConfigService awsConfig = new AWSConfigService(accessKey, secretKey, endpoint);
+			var awsConfig = new AWSConfigService(accessKey, secretKey, endpoint);
 			services.AddSingleton(awsConfig);
 
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);

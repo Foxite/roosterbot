@@ -8,8 +8,8 @@ using System.Xml;
 namespace RoosterBot.PublicTransit {
 	public class NSAPI : IDisposable {
 		// Documentation: https://www.ns.nl/en/travel-information/ns-api/
-		private XmlRestApi m_RestApi;
-		private Regex m_DelayRegex;
+		private readonly XmlRestApi m_RestApi;
+		private readonly Regex m_DelayRegex;
 
 		public NSAPI(string username, string password) {
 			m_RestApi = new XmlRestApi("http://webservices.ns.nl/ns-api-", username, password);
@@ -24,7 +24,7 @@ namespace RoosterBot.PublicTransit {
 			});
 
 			XmlNodeList xmlOptions = response["ReisMogelijkheden"].ChildNodes;
-			Journey[] journeys = new Journey[amount];
+			var journeys = new Journey[amount];
 
 			for (int i = 0; i < amount; i++) {
 				XmlNode xmlJourney = xmlOptions[i];
@@ -75,7 +75,7 @@ namespace RoosterBot.PublicTransit {
 						};
 					}
 
-					JourneyComponent component = new JourneyComponent() {
+					var component = new JourneyComponent() {
 						Carrier = xmlComponent["Vervoerder"].InnerText,
 						TransportType = xmlComponent["VervoerType"].InnerText,
 						Status = JourneyStatusFunctions.JCStatusFromString(xmlComponent["Status"].InnerText),

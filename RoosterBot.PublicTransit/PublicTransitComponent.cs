@@ -16,8 +16,7 @@ namespace RoosterBot.PublicTransit {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			#region Config
-			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
+			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 			string username = jsonConfig["username"].ToObject<string>();
 			string password = jsonConfig["password"].ToObject<string>();
 			string defaultDepartureCode = jsonConfig["defaultDepartureCode"].ToObject<string>();

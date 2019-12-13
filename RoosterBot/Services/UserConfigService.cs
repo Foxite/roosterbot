@@ -19,8 +19,8 @@ namespace RoosterBot {
 	}
 
 	public class UserConfig {
-		private UserConfigService m_Service;
-		private IDictionary<string, JToken> m_CustomData;
+		private readonly UserConfigService m_Service;
+		private readonly IDictionary<string, JToken> m_CustomData;
 
 		public ulong UserId { get; }
 		public CultureInfo? Culture { get; set; }

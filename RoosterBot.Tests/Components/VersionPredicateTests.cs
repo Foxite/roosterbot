@@ -14,7 +14,7 @@ namespace RoosterBot.Tests {
 
 		[TestMethod]
 		public void MatchTest() {
-			VersionPredicate predicate = new VersionPredicate(1, 2, 3);
+			var predicate = new VersionPredicate(1, 2, 3);
 
 			Assert.IsTrue (predicate.Matches(new Version(1, 2, 3)));
 

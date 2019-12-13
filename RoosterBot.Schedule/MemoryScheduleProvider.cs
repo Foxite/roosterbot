@@ -9,8 +9,8 @@ namespace RoosterBot.Schedule {
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
 	public class MemoryScheduleProvider : ScheduleProvider {
-		private List<ScheduleRecord> m_Schedule;
-		private string m_Name;
+		private readonly List<ScheduleRecord> m_Schedule;
+		private readonly string m_Name;
 
 		private MemoryScheduleProvider(ulong[] allowedGuilds, string name, List<ScheduleRecord> schedule) : base(allowedGuilds) {
 			m_Name = name;
@@ -63,7 +63,7 @@ namespace RoosterBot.Schedule {
 		});
 
 		public override Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
-			List<ScheduleRecord> records = new List<ScheduleRecord>();
+			var records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
 
@@ -112,7 +112,7 @@ namespace RoosterBot.Schedule {
 				.AddDays(7 * weeksFromNow); // First date in the week n weeks from now
 			DateTime targetLastDate = targetFirstDate.AddDays(4); // Friday
 
-			List<ScheduleRecord> weekRecords = new List<ScheduleRecord>();
+			var weekRecords = new List<ScheduleRecord>();
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {

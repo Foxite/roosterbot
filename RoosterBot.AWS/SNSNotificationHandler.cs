@@ -4,8 +4,8 @@ using Amazon.SimpleNotificationService;
 
 namespace RoosterBot.AWS {
 	public class SNSNotificationHandler : IDisposable {
-		private AmazonSimpleNotificationServiceClient m_SNSClient;
-		private string m_ARN;
+		private readonly AmazonSimpleNotificationServiceClient m_SNSClient;
+		private readonly string m_ARN;
 
 		public SNSNotificationHandler(NotificationService notificationService, AWSConfigService config, string arn) {
 			m_SNSClient = new AmazonSimpleNotificationServiceClient(config.Credentials, new AmazonSimpleNotificationServiceConfig() {

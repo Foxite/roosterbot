@@ -14,7 +14,7 @@ namespace RoosterBot.Watson {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
+			var jsonConfig = JObject.Parse(jsonFile);
 
 			m_WatsonID = jsonConfig["watsonid"].ToObject<string>();
 			m_WatsonKey = jsonConfig["watsonkey"].ToObject<string>();

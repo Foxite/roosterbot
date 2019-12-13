@@ -10,7 +10,7 @@ namespace RoosterBot.Schedule {
 		public abstract bool Matches(ScheduleRecord info);
 
 		public override bool Equals(object? other) {
-			IdentifierInfo? otherInfo = other as IdentifierInfo;
+			var otherInfo = other as IdentifierInfo;
 			if (other == null)
 				return false;
 

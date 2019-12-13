@@ -30,7 +30,7 @@ namespace RoosterBot {
 			}
 
 			string jsonFile = File.ReadAllText(jsonPath);
-			JObject jsonConfig = JObject.Parse(jsonFile);
+			var jsonConfig = JObject.Parse(jsonFile);
 			
 			authToken                   = jsonConfig["token"]                      .ToObject<string>();
 			GameString                  = jsonConfig["gameString"]                 .ToObject<string>();

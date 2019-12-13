@@ -22,7 +22,7 @@ namespace RoosterBot.Automation {
 			}
 			Log("Starting app");
 
-			ProcessStartInfo psi = new ProcessStartInfo() {
+			var psi = new ProcessStartInfo() {
 				FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "../RoosterBot/RoosterBot.exe"),
 				CreateNoWindow = false,
 				UseShellExecute = true,
@@ -31,7 +31,7 @@ namespace RoosterBot.Automation {
 
 			Log("App started, monitoring");
 
-			CancellationTokenSource cts = new CancellationTokenSource();
+			var cts = new CancellationTokenSource();
 			CancellationToken token = cts.Token;
 			bool waitResult = await await Task.WhenAny(
 				WaitForReport(token),
@@ -51,15 +51,14 @@ namespace RoosterBot.Automation {
 
 		/// <returns>true if the process has sent a ready report</returns>
 		private async Task<bool> WaitForReport(CancellationToken token) {
-			using (NamedPipeServerStream pipeServer = new NamedPipeServerStream("roosterbotReady", PipeDirection.In)) {
+			using (var pipeServer = new NamedPipeServerStream("roosterbotReady", PipeDirection.In)) {
 				await pipeServer.WaitForConnectionAsync(token);
 				if (pipeServer.IsConnected) {
-					using (StreamReader sr = new StreamReader(pipeServer)) {
-						string input = sr.ReadLine();
-						// This will fuck up if the received data is anything other than "ready", although that shouldn't happen (at the time of writing)
-						if (input == "ready") {
-							return true;
-						}
+					using var sr = new StreamReader(pipeServer);
+					string input = sr.ReadLine();
+					// This will fuck up if the received data is anything other than "ready", although that shouldn't happen (at the time of writing)
+					if (input == "ready") {
+						return true;
 					}
 				}
 			}

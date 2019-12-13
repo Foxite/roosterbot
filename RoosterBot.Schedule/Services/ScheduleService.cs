@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleService {
-		private Dictionary<Type, List<ScheduleProvider>> m_Schedules;
+		private readonly Dictionary<Type, List<ScheduleProvider>> m_Schedules;
 
 		public ScheduleService() {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();

@@ -14,7 +14,7 @@ namespace RoosterBot.Watson {
 
 		public WatsonClient(string apiKey, string assistantId) {
 			m_AssistantId = assistantId;
-			TokenOptions ibmToken = new TokenOptions() {
+			var ibmToken = new TokenOptions() {
 				IamApiKey = apiKey,
 				ServiceUrl = "https://gateway-lon.watsonplatform.net/assistant/api"
 			};
@@ -38,7 +38,7 @@ namespace RoosterBot.Watson {
 						}
 					}
 					Logger.Debug(LogTag, $"Selected {maxConfidence.Intent}");
-					List<(string, string)> parsedEntities = new List<(string, string)>();
+					var parsedEntities = new List<(string, string)>();
 					foreach (RuntimeEntity entity in result.Output.Entities) {
 						for (int i = 0; i < entity.Location.Count; i++) {
 							// The C# API says this is a nullable long, but the API documentation says its an "integer[]"

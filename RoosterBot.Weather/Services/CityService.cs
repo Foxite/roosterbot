@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RoosterBot.Weather {
 	public class CityService {
 		private readonly string m_ConfigPath;
-		private List<CityInfo> m_Cities;
+		private readonly List<CityInfo> m_Cities;
 
 		public CityService(string configPath) {
 			m_ConfigPath = configPath;
@@ -19,9 +19,9 @@ namespace RoosterBot.Weather {
 
 			string csvPath = Path.Combine(m_ConfigPath, "cities.csv");
 			using StreamReader reader = File.OpenText(csvPath);
-			using CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
+			using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
 
-			Dictionary<int, RegionInfo> regions = new Dictionary<int, RegionInfo>();
+			var regions = new Dictionary<int, RegionInfo>();
 
 			await csv.ReadAsync();
 			csv.ReadHeader();
@@ -32,7 +32,7 @@ namespace RoosterBot.Weather {
 					region = new RegionInfo(stateCode, csv["state_name"]);
 					regions[stateCode] = region;
 				}
-				CityInfo city = new CityInfo(
+				var city = new CityInfo(
 					int.Parse(csv["city_id"]),
 					csv["city_name"],
 					region,

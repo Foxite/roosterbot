@@ -15,18 +15,7 @@ namespace RoosterBot {
 		private readonly List<Component> m_Components;
 		private readonly ConcurrentDictionary<Assembly, Component> m_ComponentsByAssembly;
 
-#nullable disable
-		// This is a bit similar to the problem explained in Program.cs, namely this property is set in an async "sequel" to the constructor.
-		// There's only a single instance of this class in the entire program and it needs to await stuff in its constructor, so we make an essentially empty constructor
-		//  and do all the things in an async method that's supposed to be called right after construction.
-		// There wasn't a problem with this approach until we switched to .NET Core 3.0 and enabled nullable reference types. The compiler doesn't know about SetupComponents.
-		// Again simple solution is to ignore or disable the warnings.
-		// That said I'd really love to get rid of this property, or even make this entire class internal, as it doesn't feel like something any component should be using.
-		// But the few (currently 4) uses outside of the main project aren't easily worked around. Removing the need for this property in all those places are each todo items on their own.
-		// Since the entire command system is likely to be thrown over its head once we switch to Qmmands for 3.0, it may be better to not fix those issues for now, as the staging branch won't
-		//  be released until 3.0 is done.
-		public IServiceProvider Services { get; private set; }
-#nullable restore
+		public IServiceProvider Services { get; private set; } = null!;
 
 		internal ComponentManager() {
 			m_Components = new List<Component>();
@@ -54,7 +43,7 @@ namespace RoosterBot {
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
-			List<string> componentNames = new List<string>();
+			var componentNames = new List<string>();
 			string filePath = Path.Combine(Program.DataPath, "Config", "Components.json");
 
 			if (!File.Exists(filePath)) {
@@ -134,7 +123,7 @@ namespace RoosterBot {
 		}
 
 		private async Task<IServiceProvider> AddComponentServicesAsync(IServiceCollection serviceCollection) {
-			Task[] servicesLoading = new Task[m_Components.Count];
+			var servicesLoading = new Task[m_Components.Count];
 
 			int i = 0;
 			foreach (Component component in m_Components) {
@@ -162,7 +151,7 @@ namespace RoosterBot {
 		private async Task AddComponentModulesAsync(IServiceProvider services) {
 			RoosterCommandService commands = services.GetService<RoosterCommandService>();
 			HelpService help = services.GetService<HelpService>();
-			Task[] modulesLoading = new Task[m_Components.Count];
+			var modulesLoading = new Task[m_Components.Count];
 
 			int moduleIndex = 0;
 			foreach (Component component in m_Components) {

@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfoService {
-		private List<StationInfo> m_Stations;
+		private readonly List<StationInfo> m_Stations;
 
 		public StationInfo DefaultDeparture { get; private set; }
 
@@ -19,10 +19,10 @@ namespace RoosterBot.PublicTransit {
 
 			m_Stations = new List<StationInfo>();
 
-			XElement xml = XElement.Load(stationXmlPath);
+			var xml = XElement.Load(stationXmlPath);
 			
 			foreach (XElement xStation in xml.Elements()) {
-				StationInfo station = new StationInfo(xStation);
+				var station = new StationInfo(xStation);
 				m_Stations.Add(station);
 
 				if (station.Code == defaultDepartureCode) {
@@ -42,7 +42,7 @@ namespace RoosterBot.PublicTransit {
 
 		public StationMatchInfo[] Lookup(string input, int count) {
 			string inputLower = input.ToLower();
-			LinkedList<StationMatchInfo> matches = new LinkedList<StationMatchInfo>();
+			var matches = new LinkedList<StationMatchInfo>();
 			
 			void insertMatch(StationMatchInfo match) {
 				LinkedListNode<StationMatchInfo>? insertAfter = null;

@@ -6,15 +6,14 @@ using System.Xml;
 
 namespace RoosterBot.PublicTransit {
 	public class XmlRestApi : IRestApiAsync, IDisposable {
-		private string m_CallDomain;
-
-		private WebClient m_Web;
+		private readonly string m_CallDomain;
+		private readonly WebClient m_Web;
 
 		public XmlRestApi(string callDomain, string username, string password) {
 			m_CallDomain = callDomain;
 
 			m_Web = new WebClient();
-			CredentialCache creds = new CredentialCache {
+			var creds = new CredentialCache {
 				{ new Uri(new Uri(callDomain).GetLeftPart(UriPartial.Authority)), "Basic", new NetworkCredential(username, password) }
 			};
 			m_Web.Credentials = creds;
@@ -34,14 +33,14 @@ namespace RoosterBot.PublicTransit {
 
 		public XmlDocument GetXmlOutput(string call, IDictionary<string, string> parameters) {
 			string result = GetDirectOutput(call, parameters);
-			XmlDocument xmlResult = new XmlDocument();
+			var xmlResult = new XmlDocument();
 			xmlResult.LoadXml(result);
 			return xmlResult;
 		}
 
 		public async Task<XmlDocument> GetXmlOutputAsync(string call, IDictionary<string, string> parameters) {
 			string result = await GetDirectOutputAsync(call, parameters);
-			XmlDocument xmlResult = new XmlDocument();
+			var xmlResult = new XmlDocument();
 			xmlResult.LoadXml(result);
 			return xmlResult;
 		}

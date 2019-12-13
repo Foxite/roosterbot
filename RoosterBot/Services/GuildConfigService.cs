@@ -33,8 +33,8 @@ namespace RoosterBot {
 	/// be serializable with Newtonsoft.Json. Read its documentation to learn more.
 	/// </summary>
 	public class GuildConfig {
-		private GuildConfigService m_Service;
-		private IDictionary<string, JToken> m_CustomData;
+		private readonly GuildConfigService m_Service;
+		private readonly IDictionary<string, JToken> m_CustomData;
 
 		public string CommandPrefix { get; set; }
 		public CultureInfo Culture { get; set; }

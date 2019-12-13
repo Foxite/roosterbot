@@ -5,7 +5,7 @@ using System.Linq;
 namespace RoosterBot {
 	public partial class DependencyResult {
 		public class Builder {
-			private IEnumerable<Component> m_OtherComponents;
+			private readonly IEnumerable<Component> m_OtherComponents;
 			private string m_ErrorMessage;
 
 			internal Builder(IEnumerable<Component> otherComponents) {

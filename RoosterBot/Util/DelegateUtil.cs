@@ -24,7 +24,7 @@ namespace RoosterBot {
 			CheckAsyncDelegate(asyncEvent, parameters);
 
 			Delegate[] invocationList = asyncEvent.GetInvocationList();
-			Task[] invocationTasks = new Task[invocationList.Length];
+			var invocationTasks = new Task[invocationList.Length];
 
 			for (int i = 0; i < invocationList.Length; i++) {
 				invocationTasks[i] = (Task) invocationList[i].DynamicInvoke(parameters)!;

@@ -13,7 +13,7 @@ namespace RoosterBot {
 				message.Content.Length > prefix.Length &&
 				userMessage.Content.StartsWith(prefix)) {
 				// First char after prefix
-				char firstChar = message.Content.Substring(prefix.Length)[0];
+				char firstChar = message.Content[prefix.Length];
 				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
 					return true;

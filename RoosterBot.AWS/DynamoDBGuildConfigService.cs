@@ -33,9 +33,9 @@ namespace RoosterBot.AWS {
 					} catch (TimeZoneNotFoundException) {
 						return GetDefaultConfig(guild.Id);
 					}
-					CultureInfo culture = CultureInfo.GetCultureInfo(cultureEntry.AsString());
+					var culture = CultureInfo.GetCultureInfo(cultureEntry.AsString());
 					string commandPrefix = prefixEntry.AsString();
-					JObject customData = JObject.Parse(customDataEntry.AsString());
+					var customData = JObject.Parse(customDataEntry.AsString());
 
 					return new GuildConfig(this, commandPrefix, culture, guild.Id, customData);
 				}

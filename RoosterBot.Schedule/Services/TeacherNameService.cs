@@ -8,7 +8,7 @@ using Discord;
 
 namespace RoosterBot.Schedule {
 	public class TeacherNameService {
-		private List<GuildTeacherList> m_Records = new List<GuildTeacherList>();
+		private readonly List<GuildTeacherList> m_Records = new List<GuildTeacherList>();
 		
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
@@ -17,11 +17,11 @@ namespace RoosterBot.Schedule {
 			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
-				using CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
+				using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
 				await csv.ReadAsync();
 				csv.ReadHeader();
 
-				List<TeacherInfo> currentRecords = new List<TeacherInfo>();
+				var currentRecords = new List<TeacherInfo>();
 
 				while (await csv.ReadAsync()) {
 					string altSpellingsString = csv["AltSpellings"];
@@ -31,7 +31,7 @@ namespace RoosterBot.Schedule {
 						altSpellings = altSpellingsString.Split(',');
 					};
 
-					TeacherInfo record = new TeacherInfo(
+					var record = new TeacherInfo(
 						scheduleCode: csv["Abbreviation"],
 						displayText: csv["FullName"],
 						isUnknown: false,
@@ -55,7 +55,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
-			List<TeacherInfo> records = new List<TeacherInfo>();
+			var records = new List<TeacherInfo>();
 			for (int i = 0; i < abbrs.Length; i++) {
 				TeacherInfo record = GetRecordFromAbbr(guild, abbrs[i]);
 				if (record != null) {
@@ -77,7 +77,7 @@ namespace RoosterBot.Schedule {
 		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
 			nameInput = nameInput.ToLower();
 
-			List<TeacherMatch> records = new List<TeacherMatch>();
+			var records = new List<TeacherMatch>();
 
 			foreach (TeacherInfo record in GetAllowedRecordsForGuild(guild)) {
 				if (skipNoLookup && record.NoLookup)
@@ -111,7 +111,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		private class GuildTeacherList : GuildSpecificInfo {
-			private List<TeacherInfo> m_Teachers;
+			private readonly List<TeacherInfo> m_Teachers;
 
 			public IReadOnlyList<TeacherInfo> Teachers => m_Teachers;
 

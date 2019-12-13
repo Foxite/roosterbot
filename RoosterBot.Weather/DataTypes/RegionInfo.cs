@@ -3,7 +3,7 @@
 		public int Id { get; }
 		public string Name { get; }
 
-		private string m_NormalName;
+		private readonly string m_NormalName;
 
 		public RegionInfo(int id, string name) {
 			Id = id;

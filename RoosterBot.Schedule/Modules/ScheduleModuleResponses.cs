@@ -45,7 +45,7 @@ namespace RoosterBot.Schedule {
 					} else {
 						string pretext = GetString("ScheduleModule_ResondDay_ScheduleForRelative", info.DisplayText, relativeDateReference);
 
-						IReadOnlyList<string>[] cells = new IReadOnlyList<string>[records.Length + 1];
+						var cells = new IReadOnlyList<string>[records.Length + 1];
 						cells[0] = new string[] {
 							GetString("ScheduleModule_RespondDay_ColumnActivity"),
 							GetString("ScheduleModule_RespondDay_ColumnTime"),

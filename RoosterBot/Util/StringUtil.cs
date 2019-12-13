@@ -28,7 +28,7 @@ namespace RoosterBot {
 		public static string FormatTextTable(IReadOnlyList<IReadOnlyList<string>> table, int? maxColumnWidth = null) {
 			// Split cells into lines and determine row heights
 			int[] rowHeights = new int[table.Count];
-			List<string>[][] cellLines = new List<string>[table.Count][];
+			var cellLines = new List<string>[table.Count][];
 
 			for (int row = 0; row < table.Count; row++) {
 				cellLines[row] = new List<string>[table[0].Count];
@@ -80,7 +80,7 @@ namespace RoosterBot {
 
 		public static List<string> BreakStringIntoLines(string input, int maxLineLength) {
 			string[] words = input.Split(' ', (char) 0x200B); // 200B == zero width space
-			List<string> lines = new List<string>();
+			var lines = new List<string>();
 
 			for (int i = 0; i < words.Length; i++) {
 				string lastLine = lines.Count == 0 ? "" : lines[lines.Count - 1];
@@ -122,7 +122,7 @@ namespace RoosterBot {
 		}
 
 		public static string EscapeString(string input) {
-			List<(string replace, string with)> replacements = new List<(string replace, string with)>() {
+			var replacements = new List<(string replace, string with)>() {
 				("\\", "\\\\"), // Needs to be done first
 				("_", @"\_"),
 				("*", @"\*"), // Also covers **, which need only their *first* side escaped, or all of the asterisks in *both* sides

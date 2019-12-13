@@ -14,7 +14,7 @@ namespace RoosterBot {
 
 		protected async override ValueTask<RoosterTypeParserResult<T[]>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			string[] inputs = input.Split(',');
-			T[] results = new T[inputs.Length];
+			var results = new T[inputs.Length];
 			for (int i = 0; i < inputs.Length; i++) {
 				var indivResult = (RoosterTypeParserResult<T>) await m_IndivReader.ParseAsync(parameter, inputs[i].Trim(), context);
 				if (indivResult.IsSuccessful) {

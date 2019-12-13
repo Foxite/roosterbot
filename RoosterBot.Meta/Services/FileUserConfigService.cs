@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 namespace RoosterBot.Meta {
 	public class FileUserConfigService : UserConfigService {
 		private readonly string m_ConfigFilePath;
-		private IDictionary<ulong, UserConfig> m_Configs;
+		private readonly IDictionary<ulong, UserConfig> m_Configs;
 
 		public FileUserConfigService(string configPath) {
 			Logger.Info("FileGuildConfigService", "Loading guild config json");
@@ -44,10 +44,10 @@ namespace RoosterBot.Meta {
 
 		public override Task UpdateUserAsync(UserConfig config) {
 			m_Configs[config.UserId] = config;
-			JObject jsonConfig = new JObject();
+			var jsonConfig = new JObject();
 
 			foreach (KeyValuePair<ulong, UserConfig> kvp in m_Configs) {
-				JObject jsonConfigItem = new JObject();
+				var jsonConfigItem = new JObject();
 
 				if (kvp.Value.Culture != null) {
 					jsonConfigItem["culture"] = kvp.Value.Culture.Name;

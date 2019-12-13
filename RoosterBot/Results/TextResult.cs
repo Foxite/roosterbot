@@ -16,9 +16,7 @@ namespace RoosterBot {
 		}
 
 		public override string ToString() {
-			string prefix = PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "";
-			string response = Response;
-			return prefix + response;
+			return (PrefixEmote != null ? (PrefixEmote.ToString() + " ") : "") + Response;
 		}
 
 		public static TextResult Success(string response) => new TextResult(Constants.Success, response);

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public class IdentifierValidationService {
-		private ConcurrentBag<IdentifierValidatorAsync> m_RegisteredValidators;
+		private readonly ConcurrentBag<IdentifierValidatorAsync> m_RegisteredValidators;
 
 		public IdentifierValidationService() {
 			m_RegisteredValidators = new ConcurrentBag<IdentifierValidatorAsync>();

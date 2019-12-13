@@ -42,7 +42,7 @@ namespace RoosterBot.Meta {
 
 		public override Task UpdateGuildAsync(GuildConfig config) {
 			m_Configs[config.GuildId] = config;
-			JObject jsonConfig = new JObject();
+			var jsonConfig = new JObject();
 
 			foreach (KeyValuePair<ulong, GuildConfig> kvp in m_Configs) {
 				jsonConfig[kvp.Key.ToString()] = new JObject {

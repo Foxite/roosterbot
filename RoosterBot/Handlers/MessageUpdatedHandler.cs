@@ -10,7 +10,7 @@ namespace RoosterBot {
 		public GuildConfigService GCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
 
-		private CommandExecutionHandler m_CEH;
+		private readonly CommandExecutionHandler m_CEH;
 
 		internal MessageUpdatedHandler(IServiceProvider isp, CommandExecutionHandler ceh) : base(isp) {
 			m_CEH = ceh;

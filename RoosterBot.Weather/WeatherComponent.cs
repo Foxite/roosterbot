@@ -18,11 +18,11 @@ namespace RoosterBot.Weather {
 
 		public async override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			Logger.Debug("Weather", "Loading cities file");
-			CityService cityService = new CityService(configPath);
+			var cityService = new CityService(configPath);
 			await cityService.ReadCityCSVAsync();
 			Logger.Debug("Weather", "Finished loading cities file");
 
-			JObject jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
 			string weatherBitKey = jsonConfig["weatherbit_key"].ToObject<string>();
 			bool attributionLicense = jsonConfig["attribution"].ToObject<bool>();

@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace RoosterBot.Schedule {
 	public abstract class GuildSpecificInfo {
-		private IEnumerable<ulong> m_AllowedGuilds;
+		private readonly IEnumerable<ulong> m_AllowedGuilds;
 
 		protected GuildSpecificInfo(IEnumerable<ulong> allowedGuilds) {
 			m_AllowedGuilds = allowedGuilds;

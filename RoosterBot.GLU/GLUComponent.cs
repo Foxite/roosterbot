@@ -41,7 +41,7 @@ namespace RoosterBot.GLU {
 
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			JObject jsonConfig = JObject.Parse(jsonFile);
+			var jsonConfig = JObject.Parse(jsonFile);
 			m_SkipPastRecords = jsonConfig["skipPastRecords"].ToObject<bool>();
 
 			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();

@@ -28,20 +28,20 @@ namespace RoosterBot.GLU {
 			try {
 				List<ScheduleRecord> schedule;
 				using (StreamReader reader = File.OpenText(m_Path))
-				using (CsvReader csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
+				using (var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
 					await csv.ReadAsync();
 					csv.ReadHeader();
 
-					Dictionary<ActivityInfo, ScheduleRecord> lastRecords = new Dictionary<ActivityInfo, ScheduleRecord>();
+					var lastRecords = new Dictionary<ActivityInfo, ScheduleRecord>();
 
 					DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
 					schedule = new List<ScheduleRecord>();
-					CultureInfo culture = CultureInfo.GetCultureInfo("en-US");
+					var culture = CultureInfo.GetCultureInfo("en-US");
 
 					while (await csv.ReadAsync()) {
 						line++;
-						DateTime date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
+						var date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
 
 						if (m_SkipPastRecords && date < lastMonday) { // Only store past records for this week
 							continue;
