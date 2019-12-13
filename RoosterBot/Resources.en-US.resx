@@ -185,4 +185,19 @@
   <data name="CommandHandling_ResponseTooLong" xml:space="preserve">
     <value>Something has gone horribly wrong, and the error message was longer than 2000 characters.</value>
   </data>
+  <data name="CommandHandling_Arguments_NoWhitespaceBetweenArguments" xml:space="preserve">
+    <value>No space between parameters.</value>
+  </data>
+  <data name="CommandHandling_Arguments_TooFewArguments" xml:space="preserve">
+    <value>Not enough parameters.</value>
+  </data>
+  <data name="CommandHandling_Arguments_TooManyArguments" xml:space="preserve">
+    <value>Too many parameters.</value>
+  </data>
+  <data name="CommandHandling_Arguments_UnclosedQuote" xml:space="preserve">
+    <value>Unclosed quote.</value>
+  </data>
+  <data name="CommandHandling_Arguments_UnexpectedQuote" xml:space="preserve">
+    <value>Unexpected quote.</value>
+  </data>
 </root>

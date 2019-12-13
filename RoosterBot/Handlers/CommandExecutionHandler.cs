@@ -37,10 +37,21 @@ namespace RoosterBot {
 							Resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentForModule(kvp.Key.Module), kvp.Value.Reason)));
 						break;
 					case ArgumentParseFailedResult argument:
-						// TODO (feature) Correctly handle ArgumentParseFailedResult
-						// It can happen when you have unmatched quotes, for example. This is a common error that should not be thrown in the "Fatal error" pile
-						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
-						Logger.Error("PostHandler", "Executing " + context.ToString() + " resulted in ArgumentParseFailedResult: " + argument.Reason);
+						if (argument.ParserResult is DefaultArgumentParserResult parseResult) {
+							response = Resources.GetString(context.Culture, "CommandHandling_Arguments_" + parseResult.Failure.ToString()) + "\n";
+							if (parseResult.FailurePosition != null) {
+								response += "`" + context.Message.Content + "`\n`" + new string(' ', context.Message.Content.Length - context.RawArguments.Length + parseResult.FailurePosition.Value) + "^`";
+							}
+						} else {
+							response = $"PostCommandHandler got ArgumentParseFailedResult but it has an unknown ParserResult: {argument.ParserResult.GetType().FullName}. This is the ToString: {argument.ParserResult.ToString()}";
+							Logger.Warning("CommandHandler", response);
+							if (response.Length > 2000) {
+								const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
+								response = TooLong + response.Substring(0, 1999 - TooLong.Length);
+							}
+							await Config.BotOwner.SendMessageAsync(response);
+							response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
+						}
 						break;
 					case TypeParseFailedResult type:
 						// This cannot be resolved here because Qmmands does not give us the TypeParserResult.
@@ -72,13 +83,13 @@ namespace RoosterBot {
 						}
 						break;
 					default:
-						string report = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result.ToString()}";
-						Logger.Warning("CommandHandler", report);
-						if (report.Length > 2000) {
+						response = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result.ToString()}";
+						Logger.Warning("CommandHandler", response);
+						if (response.Length > 2000) {
 							const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
-							report = TooLong + report.Substring(0, 1999 - TooLong.Length);
+							response = TooLong + response.Substring(0, 1999 - TooLong.Length);
 						}
-						await Config.BotOwner.SendMessageAsync(report);
+						await Config.BotOwner.SendMessageAsync(response);
 						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
 						break;
 				}
