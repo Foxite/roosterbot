@@ -202,28 +202,10 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
   </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
-    <value>Er is op dat moment niets.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
-    <value>Ik ondersteun alleen uren, dagen, en weken.</value>
-  </data>
   <data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
     <value>{0}: Niet op het rooster {1}.</value>
     <comment>0: identifier display text
 		1: relative date reference</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnActivity" xml:space="preserve">
-    <value>Activiteit</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTime" xml:space="preserve">
-    <value>Tijd</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTeacher" xml:space="preserve">
-    <value>Leraar</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
-    <value>Lokaal</value>
   </data>
   <data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
     <value>{0}: Rooster voor {1}
@@ -234,19 +216,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>{0}: Niet op het rooster op dit moment.</value>
     <comment>0: identifier info display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Rooster deze week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Rooster volgende week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Rooster over {1} weken</value>
-    <comment>0: identifier display text
-		  1: amount of weeks</comment>
   </data>
   <data name="UserClassModule_UserNotKnown" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit.</value>
@@ -282,9 +251,6 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   </data>
   <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
     <value>Discord naam</value>
-  </data>
-  <data name="ScheduleModule_Remarks" xml:space="preserve">
-    <value>Met `{0}ik zit in &lt;klas&gt;` kun je instellen in welke klas jij zit, zodat je hier niets hoeft in te vullen.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt.</value>
@@ -325,23 +291,11 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>Kijk wat er gebeurt na het laatste wat je hebt bekeken.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
-  </data>
   <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Instellingen</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
-    <value>Klas</value>
   </data>
   <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek" xml:space="preserve">
     <value>{0}: Niet op het rooster deze week</value>

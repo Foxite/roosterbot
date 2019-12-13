@@ -199,28 +199,10 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>0: Identifier display text
 		  1: Amount of hours</comment>
   </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_NoRecordAtThatTime" xml:space="preserve">
-    <value>There is nothing at that time.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
-    <value>I only support hours, days, and weeks.</value>
-  </data>
   <data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
     <value>{1}: Not on schedule {0}.</value>
     <comment>0: relative date reference
 	1: identifier info display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnActivity" xml:space="preserve">
-    <value>Activity</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTime" xml:space="preserve">
-    <value>Time</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnTeacher" xml:space="preserve">
-    <value>Teacher</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnRoom" xml:space="preserve">
-    <value>Room</value>
   </data>
   <data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
     <value>{0}: Schedule for {1}</value>
@@ -233,19 +215,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
     <value> That is in the weekend after all.</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Rooster deze week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Schedule for next week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModuleBase_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Schedule in {1} weeks</value>
-    <comment>0: identifier display text
-		1: amount of weeks</comment>
   </data>
   <data name="UserClassModule_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
@@ -281,9 +250,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
     <value>Discord name</value>
-  </data>
-  <data name="ScheduleModule_Remarks" xml:space="preserve">
-    <value>You can use `{0}i am in &lt;class&gt;` to tell me what class you are in, so you don't have to tell me every time.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
     <value>Automatically understands if you're talking about a class, teacher, or room.</value>
@@ -324,23 +290,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
     <value>See what happens after the last thing you looked up.</value>
   </data>
-  <data name="ScheduleModuleBase_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
-    <value>See when a class or teacher is present next week, or when a room is in use.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
-    <value>See when a class or teacher is present in *x* weeks, or when a room is in use.</value>
-  </data>
-  <data name="ScheduleModuleBase_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
-    <value>See on what days a class or teacher is present, or when a room is in use.</value>
-  </data>
   <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>That does not match anything.</value>
-  </data>
-  <data name="ScheduleModuleBase_RespondDay_ColumnStudentSets" xml:space="preserve">
-    <value>Class</value>
   </data>
   <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek" xml:space="preserve">
     <value>{0}: Not on schedule this week</value>

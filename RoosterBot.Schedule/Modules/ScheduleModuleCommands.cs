@@ -7,7 +7,6 @@ using RoosterBot.DateTimeUtils;
 namespace RoosterBot.Schedule {
 	[Name("#ScheduleModule_Name")]
 	[Description("#ScheduleModule_Summary")]
-	[Remarks("#ScheduleModule_Remarks")]
 	public partial class ScheduleModule : RoosterModule {
 		private readonly CompoundResult m_Result = new CompoundResult("\n");
 		private LastScheduleCommandInfo? m_LookedUpData;
