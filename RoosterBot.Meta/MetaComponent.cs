@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
@@ -24,14 +25,22 @@ namespace RoosterBot.Meta {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
-			// TODO (feature) bool and char parsers
-			commandService.AddTypeParser(new PrimitiveParser<byte   >(byte   .TryParse, "Integer"), true);
-			commandService.AddTypeParser(new PrimitiveParser<short  >(short  .TryParse, "Integer"), true);
-			commandService.AddTypeParser(new PrimitiveParser<int    >(int    .TryParse, "Integer"), true);
-			commandService.AddTypeParser(new PrimitiveParser<long   >(long   .TryParse, "Integer"), true);
-			commandService.AddTypeParser(new PrimitiveParser<float  >(float  .TryParse, "Decimal"), true);
-			commandService.AddTypeParser(new PrimitiveParser<double >(double .TryParse, "Decimal"), true);
-			commandService.AddTypeParser(new PrimitiveParser<decimal>(decimal.TryParse, "Decimal"), true);
+			void addPrimitiveParser<T>(string typeKey) {
+				// https://riptutorial.com/csharp/example/17807/get-a-strongly-typed-delegate-to-a-method-or-property-via-reflection
+				MethodInfo tryParseFunction = typeof(T).GetMethod("TryParse", new Type[] { typeof(string), typeof(T).MakeByRefType() })!;
+				var tryParseDelegate = (TryParsePrimitive<T>) Delegate.CreateDelegate(typeof(TryParsePrimitive<T>), null, tryParseFunction);
+				commandService.AddTypeParser(new PrimitiveParser<T>(tryParseDelegate, typeKey), true);
+			}
+			
+			addPrimitiveParser<byte   >("Integer");
+			addPrimitiveParser<short  >("Integer");
+			addPrimitiveParser<int    >("Integer");
+			addPrimitiveParser<long   >("Integer");
+			addPrimitiveParser<float  >("Decimal");
+			addPrimitiveParser<double >("Decimal");
+			addPrimitiveParser<decimal>("Decimal");
+			commandService.AddTypeParser(new CharParser());
+			commandService.AddTypeParser(new BoolParser());
 			commandService.AddTypeParser(new CultureInfoParser());
 
 			commandService.AddModule<CommandsListModule>();

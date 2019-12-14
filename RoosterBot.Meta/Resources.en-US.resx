@@ -283,4 +283,22 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
     <value>{0} is not an integer.</value>
     <comment>0: erroneous input, sanitized</comment>
   </data>
+  <data name="CharParser_Name" xml:space="preserve">
+    <value>character</value>
+  </data>
+  <data name="CharParser_TooLong" xml:space="preserve">
+    <value>You can enter one character at most.</value>
+  </data>
+  <data name="BoolParser_False" xml:space="preserve">
+    <value>false|0|off|n|no</value>
+  </data>
+  <data name="BoolParser_Name" xml:space="preserve">
+    <value>boolean</value>
+  </data>
+  <data name="BoolParser_True" xml:space="preserve">
+    <value>true|1|on|yes|y</value>
+  </data>
+  <data name="BoolParser_Invalid" xml:space="preserve">
+    <value>Geef `ja` of `nee` aan.</value>
+  </data>
 </root>

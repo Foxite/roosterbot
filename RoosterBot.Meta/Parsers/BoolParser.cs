@@ -1,0 +1,24 @@
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Qmmands;
+
+namespace RoosterBot.Meta {
+	public class BoolParser : RoosterTypeParser<bool> {
+		public override string TypeDisplayName => "#BoolParser_Name";
+
+		protected override ValueTask<RoosterTypeParserResult<bool>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			ResourceService resourceService = context.ServiceProvider.GetService<ResourceService>();
+			bool matches(string key) {
+				return resourceService.GetString(context.Culture, key).Split("|").Contains(input);
+			}
+			if (matches("BoolParser_True")) {
+				return ValueTaskUtil.FromResult(Successful(true));
+			} else if (matches("BoolParser_False")) {
+				return ValueTaskUtil.FromResult(Successful(false));
+			} else {
+				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#BoolParser_Invalid"));
+			}
+		}
+	}
+}
