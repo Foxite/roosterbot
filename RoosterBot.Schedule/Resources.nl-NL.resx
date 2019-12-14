@@ -208,8 +208,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
 		1: relative date reference</comment>
   </data>
   <data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
-    <value>{0}: Rooster voor {1}
-</value>
+    <value>{0}: Rooster voor {1}</value>
     <comment>0: Identifier display text
 		  1: relative date reference</comment>
   </data>
