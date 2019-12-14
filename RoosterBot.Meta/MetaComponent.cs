@@ -25,20 +25,17 @@ namespace RoosterBot.Meta {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
-			void addPrimitiveParser<T>(string typeKey) {
-				// https://riptutorial.com/csharp/example/17807/get-a-strongly-typed-delegate-to-a-method-or-property-via-reflection
-				MethodInfo tryParseFunction = typeof(T).GetMethod("TryParse", new Type[] { typeof(string), typeof(T).MakeByRefType() })!;
-				var tryParseDelegate = (TryParsePrimitive<T>) Delegate.CreateDelegate(typeof(TryParsePrimitive<T>), null, tryParseFunction);
-				commandService.AddTypeParser(new PrimitiveParser<T>(tryParseDelegate, typeKey), true);
+			void addPrimitive<T>(string typeKey) {
+				commandService.AddTypeParser(new PrimitiveParser<T>(typeKey), true);
 			}
-			
-			addPrimitiveParser<byte   >("Integer");
-			addPrimitiveParser<short  >("Integer");
-			addPrimitiveParser<int    >("Integer");
-			addPrimitiveParser<long   >("Integer");
-			addPrimitiveParser<float  >("Decimal");
-			addPrimitiveParser<double >("Decimal");
-			addPrimitiveParser<decimal>("Decimal");
+
+			addPrimitive<byte   >("Integer");
+			addPrimitive<short  >("Integer");
+			addPrimitive<int    >("Integer");
+			addPrimitive<long   >("Integer");
+			addPrimitive<float  >("Decimal");
+			addPrimitive<double >("Decimal");
+			addPrimitive<decimal>("Decimal");
 			commandService.AddTypeParser(new CharParser());
 			commandService.AddTypeParser(new BoolParser());
 			commandService.AddTypeParser(new CultureInfoParser());
