@@ -38,7 +38,7 @@ namespace RoosterBot {
 					if (reader is IExternalResultStringParser ersp) {
 						resourceComponent = ersp.ErrorReasonComponent;
 					} else {
-						resourceComponent = Program.Instance.Components.GetComponentFromAssembly(result.GetType().Assembly);
+						resourceComponent = Program.Instance.Components.GetComponentFromAssembly(reader.GetType().Assembly);
 					}
 					return RoosterTypeParserResult<T>.Unsuccessful(true, resources.ResolveString(context.Culture, resourceComponent, result.Reason));
 				}
