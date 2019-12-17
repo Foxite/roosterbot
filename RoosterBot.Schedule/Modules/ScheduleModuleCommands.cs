@@ -149,10 +149,12 @@ namespace RoosterBot.Schedule {
 						}
 						break;
 					case ScheduleResultKind.Day:
-						await RespondDay(query.Identifier, query.RecordEndTime ?? DateTime.Today.AddDays(1));
+						await RespondDay(query.Identifier, (query.RecordEndTime ?? DateTime.Today).Date.AddDays(1));
 						break;
 					case ScheduleResultKind.Week:
-						await RespondWeek(query.Identifier, (int) ((query.RecordEndTime - DateTime.Now)?.TotalDays ?? 7) / 7);
+						// The total days between the the RecordEndTime and the current date, divided by 7 (integer division) to get the amount of weeks, plus 1 to get the next week.
+						var weeksFromNow = (int) ((query.RecordEndTime ?? DateTime.Today) - DateTime.Today).TotalDays / 7 + 1; 
+						await RespondWeek(query.Identifier, weeksFromNow);
 						break;
 				}
 			}
