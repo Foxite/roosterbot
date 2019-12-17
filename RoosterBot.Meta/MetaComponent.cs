@@ -36,8 +36,8 @@ namespace RoosterBot.Meta {
 			addPrimitive<float  >("Decimal");
 			addPrimitive<double >("Decimal");
 			addPrimitive<decimal>("Decimal");
-			commandService.AddTypeParser(new CharParser());
-			commandService.AddTypeParser(new BoolParser());
+			commandService.AddTypeParser(new CharParser(), true);
+			commandService.AddTypeParser(new BoolParser(), true);
 			commandService.AddTypeParser(new CultureInfoParser());
 
 			commandService.AddModule<CommandsListModule>();
