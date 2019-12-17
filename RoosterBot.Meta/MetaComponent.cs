@@ -65,6 +65,10 @@ namespace RoosterBot.Meta {
 			commandService.AddTypeParser(new UserParser<IGuildUser>());
 			commandService.AddTypeParser(new UserParser<IGroupUser>());
 			commandService.AddTypeParser(new UserParser<IWebhookUser>());
+			
+			commandService.AddTypeParser(new MessageParser<IMessage>());
+			commandService.AddTypeParser(new MessageParser<ISystemMessage>());
+			commandService.AddTypeParser(new MessageParser<IUserMessage>());
 
 			commandService.AddTypeParser(new RoleParser<IRole>());
 			#endregion

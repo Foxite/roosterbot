@@ -336,4 +336,16 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   <data name="DiscordParser_InvalidType" xml:space="preserve">
     <value>Dat is niet het juiste type.</value>
   </data>
+  <data name="MessageParser_InvalidUri" xml:space="preserve">
+    <value>Dat is geen URL naar een Discord-bericht.</value>
+  </data>
+  <data name="MessageParser_InvalidMention" xml:space="preserve">
+    <value>Daar kan ik geen bericht uit halen.</value>
+  </data>
+  <data name="MessageParser_Name" xml:space="preserve">
+    <value>Discord-bericht</value>
+  </data>
+  <data name="MessageParser_UnknownMessage" xml:space="preserve">
+    <value>Ik ken dat bericht niet. Uit een entity-ID kan ik alleen berichten halen uit dit kanaal.</value>
+  </data>
 </root>

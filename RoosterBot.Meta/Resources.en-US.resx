@@ -334,4 +334,16 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
   <data name="DiscordParser_InvalidType" xml:space="preserve">
     <value>That is not the correct type.</value>
   </data>
+  <data name="MessageParser_InvalidUri" xml:space="preserve">
+    <value>That is not a URL to a Discord-message.</value>
+  </data>
+  <data name="MessageParser_InvalidMention" xml:space="preserve">
+    <value>I can't get a message from that.</value>
+  </data>
+  <data name="MessageParser_Name" xml:space="preserve">
+    <value>Discord message</value>
+  </data>
+  <data name="MessageParser_UnknownMessage" xml:space="preserve">
+    <value>I don't know that message. I can only get a message from the current channel from an entity ID.</value>
+  </data>
 </root>
