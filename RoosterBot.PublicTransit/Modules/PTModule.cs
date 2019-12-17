@@ -80,7 +80,7 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		[Command("stations"), Description("Zoek een station op in de lijst.")]
-		public Task<CommandResult> GetStationInfo([Remainder, Name("zoekterm")] string input) {
+		public CommandResult GetStationInfo([Remainder, Name("zoekterm")] string input) {
 			string response = "Gevonden stations (beste match eerst):\n\n";
 
 			IReadOnlyList<StationMatchInfo> matches = Stations.Lookup(input, 3);
@@ -113,7 +113,7 @@ namespace RoosterBot.PublicTransit {
 				response += $". Code: {matchInfo.Station.Code}\n";
 				i++;
 			}
-			return Result(TextResult.Info(response));
+			return TextResult.Info(response);
 		}
 	}
 }

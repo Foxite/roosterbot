@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Meta {
@@ -10,11 +9,11 @@ namespace RoosterBot.Meta {
 		public RoosterCommandService CmdService { get; set; } = null!;
 
 		[Command("#Commands"), Description("#Commands_Category_Summary")]
-		public Task<CommandResult> Commands([Remainder, Name("#Commands_ModuleName")] string? query = null) {
+		public CommandResult Commands([Remainder, Name("#Commands_ModuleName")] string? query = null) {
 			if (query == null) {
-				return Result(new TextResult(null,
+				return new TextResult(null,
 					GetString("Commands_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
-					+ string.Join(", ", GetCategories())));
+					+ string.Join(", ", GetCategories()));
 			} else {
 				query = query.ToLower();
 
@@ -38,12 +37,12 @@ namespace RoosterBot.Meta {
 					if (containsOptionalParameters) {
 						response += GetString("Commands_OptionalHint");
 					}
-					return Result(new TextResult(null, response));
+					return new TextResult(null, response);
 				} else {
-					return Result(new TextResult(null,
+					return new TextResult(null,
 						GetString("Commands_CategoryDoesNotExist") + "\n\n"
 						+ GetString("Commands_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
-						+ string.Join(", ", GetCategories())));
+						+ string.Join(", ", GetCategories()));
 				}
 			}
 		}

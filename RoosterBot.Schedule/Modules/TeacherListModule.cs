@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
@@ -9,7 +8,7 @@ namespace RoosterBot.Schedule {
 		public TeacherNameService Teachers { get; set; } = null!;
 
 		[Command("#TeacherListModule_CommandName"), Description("#TeacherListModule_TeacherListCommand_Summary")]
-		public Task<CommandResult> TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
+		public CommandResult TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
 				records = Teachers.GetAllRecords(Context.GuildConfig.GuildId);
@@ -18,9 +17,9 @@ namespace RoosterBot.Schedule {
 			}
 
 			if (!records.Any()) {
-				return Result(TextResult.Info(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound")));
+				return TextResult.Info(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
 			} else if (records.Count() > 25) {
-				return Result(TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults")));
+				return TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
 			} else {
 				string[][] cells = new string[records.Count() + 1][];
 				cells[0] = new string[] {
@@ -37,7 +36,7 @@ namespace RoosterBot.Schedule {
 
 					recordIndex++;
 				}
-				return Result(new TableResult($"Resultaten voor `{name}`", cells));
+				return new TableResult($"Resultaten voor `{name}`", cells);
 			}
 		}
 	}

@@ -26,19 +26,6 @@ namespace RoosterBot {
 			return default;
 		}
 
-		/// <summary>
-		/// In non-async methods, this function serves as a shortcut for this:
-		/// <code>
-		/// return Task.FromResult((CommandResult) new RoosterCommandResult(...))
-		/// </code>
-		/// Instead, you can do this:
-		/// <code>
-		/// return Result(new RoosterCommandResult(...));
-		/// </code>
-		/// In async methods you should not use this function, simply return the result directly.
-		/// </summary>
-		protected Task<CommandResult> Result(RoosterCommandResult result) => Task.FromResult((CommandResult) result);
-
 		protected string GetString(string name) {
 			return Resources.GetString(Assembly.GetCallingAssembly(), Culture, name);
 		}
