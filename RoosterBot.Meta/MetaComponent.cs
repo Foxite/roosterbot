@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord;
+using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
@@ -24,6 +26,9 @@ namespace RoosterBot.Meta {
 		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
+			commandService.AddTypeParser(new CultureInfoParser());
+
+			#region Primitive types
 			void addPrimitive<T>(string typeKey) {
 				commandService.AddTypeParser(new PrimitiveParser<T>(typeKey), true);
 			}
@@ -37,7 +42,32 @@ namespace RoosterBot.Meta {
 			addPrimitive<decimal>("Decimal");
 			commandService.AddTypeParser(new CharParser(), true);
 			commandService.AddTypeParser(new BoolParser(), true);
-			commandService.AddTypeParser(new CultureInfoParser());
+			#endregion
+
+			#region Discord entities
+			void addChannelParser<T>() where T : class, IChannel {
+				commandService.AddTypeParser(new ChannelParser<T>());
+			}
+
+			addChannelParser<IAudioChannel>();
+			addChannelParser<ICategoryChannel>();
+			addChannelParser<IChannel>();
+			addChannelParser<IDMChannel>();
+			addChannelParser<IGroupChannel>();
+			addChannelParser<IGuildChannel>();
+			addChannelParser<IMessageChannel>();
+			addChannelParser<INestedChannel>();
+			addChannelParser<IPrivateChannel>();
+			addChannelParser<ITextChannel>();
+			addChannelParser<IVoiceChannel>();
+			
+			commandService.AddTypeParser(new UserParser<IUser>());
+			commandService.AddTypeParser(new UserParser<IGuildUser>());
+			commandService.AddTypeParser(new UserParser<IGroupUser>());
+			commandService.AddTypeParser(new UserParser<IWebhookUser>());
+
+			commandService.AddTypeParser(new RoleParser<IRole>());
+			#endregion
 
 			commandService.AddModule<CommandsListModule>();
 			commandService.AddModule<HelpModule>();
