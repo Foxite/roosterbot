@@ -453,4 +453,8 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
   <data name="ScheduleModule_IdentiferInfo_Name" xml:space="preserve">
     <value>identifier</value>
   </data>
+  <data name="TeacherInfoReader_MultipleMatches" xml:space="preserve">
+    <value>Ik weet niet wie je bedoelt: {0}</value>
+    <comment>0: list of match display texts</comment>
+  </data>
 </root>

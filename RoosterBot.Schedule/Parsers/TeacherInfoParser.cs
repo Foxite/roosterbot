@@ -25,15 +25,13 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (user == null) {
-					IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.GuildConfig.GuildId, input);
-					TeacherMatch bestMatch = lookupResults.FirstOrDefault();
-					if (bestMatch != null) {
-						foreach (TeacherMatch match in lookupResults.Skip(1)) {
-							if (match.Score > bestMatch.Score) {
-								bestMatch = match;
-							}
+					if (input.Length >= 3) {
+						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.GuildConfig.GuildId, input);
+						if (lookupResults.Count == 1) {
+							result = lookupResults.First().Teacher;
+						} else if (lookupResults.Count > 1) {
+							return Unsuccessful(true, context, "#TeacherInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.Teacher.DisplayText)));
 						}
-						result = bestMatch.Teacher;
 					}
 				} else if (context.Guild != null) {
 					TeacherInfo? teacher = tns.GetTeacherByDiscordUser(context.Guild, user);

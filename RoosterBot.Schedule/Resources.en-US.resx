@@ -450,4 +450,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_IdentiferInfo_Name" xml:space="preserve">
     <value>identifier</value>
   </data>
+  <data name="TeacherInfoReader_MultipleMatches" xml:space="preserve">
+    <value>I don't know who you mean: {0}</value>
+    <comment>0: list of match display texts</comment>
+  </data>
 </root>
