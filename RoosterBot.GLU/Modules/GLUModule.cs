@@ -4,9 +4,10 @@ using Qmmands;
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	public class GLUModule : RoosterModule {
-		[Command("danku", "dankje", "dankjewel", "bedankt", "dank",
-				 "goed", "goedzo", "goodbot",
-				 "thanks", "thnx", "thx", "ty", "thank"), IgnoresExtraArguments]
+		[IgnoresExtraArguments, Priority(-1),
+		 Command("danku", "dankje", "dankjewel", "bedankt", "dank",
+				 "goed", "goedzo", "goodbot", "good",
+				 "thanks", "thnx", "thx", "ty", "thank")]
 		public Task<CommandResult> ThankYouCommand() {
 			string response;
 			if (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
