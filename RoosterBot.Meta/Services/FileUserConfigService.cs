@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		private readonly IDictionary<ulong, UserConfig> m_Configs;
 
 		public FileUserConfigService(string configPath) {
-			Logger.Info("FileGuildConfigService", "Loading guild config json");
+			Logger.Info("FileUserConfigService", "Loading user config json");
 
 			m_ConfigFilePath = configPath;
 
@@ -31,7 +31,7 @@ namespace RoosterBot.Meta {
 				}
 			);
 
-			Logger.Info("FileGuildConfigService", "Finished loading guild config json");
+			Logger.Info("FileUserConfigService", "Finished loading user config json");
 		}
 
 		public override Task<UserConfig> GetConfigAsync(IUser user) {
