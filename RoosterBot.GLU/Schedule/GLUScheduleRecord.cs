@@ -39,8 +39,14 @@ namespace RoosterBot.GLU {
 							yield return getAspect(teacherEmote, "GLUScheduleRecord_Aspect_StaffMember", teachers);
 						}
 					}
-					yield return getAspect(new Emoji("👥"), "GLUScheduleRecord_Aspect_StudentSets", StudentSetsString);
-					yield return getAspect(new Emoji("📍"), "GLUScheduleRecord_Aspect_Room", RoomString);
+
+					if (StudentSets.Count > 0) {
+						yield return getAspect(new Emoji("👥"), "GLUScheduleRecord_Aspect_StudentSets", StudentSetsString);
+					}
+
+					if (Room.Count > 0) {
+						yield return getAspect(new Emoji("📍"), "GLUScheduleRecord_Aspect_Room", RoomString);
+					}
 				}
 
 				if (Start.Date != DateTime.Today) {
