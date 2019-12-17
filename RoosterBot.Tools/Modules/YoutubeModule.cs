@@ -16,7 +16,7 @@ namespace RoosterBot.Tools {
 
 		[Command("#YoutubeModule_Convert")]
 		public async Task<CommandResult> DownloadYoutubeAudioCommand([Name("#YoutubeModule_Convert_Format")] string format, [Name("#YoutubeModule_Convert_Url")] string url) {
-			string[] formats = new[] { "mp3", "m4a", "wav", "wma", "ogg", "aac", "opus" };
+			string[] formats = new[] { "mp3", "ogg" };
 			if (formats.Contains(format)) {
 				using IDisposable typingState = Context.Channel.EnterTypingState();
 
@@ -26,8 +26,8 @@ namespace RoosterBot.Tools {
 				MediaStreamInfoSet streams = await Client.GetVideoMediaStreamInfosAsync(id);
 				if (streams.Audio.Any()) {
 					DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-					string filePath = Path.Combine(Path.GetTempPath(), directory.FullName, video.Title + ".mp3");
-					await Converter.DownloadAndProcessMediaStreamsAsync(streams.Audio, filePath, "mp3");
+					string filePath = Path.Combine(Path.GetTempPath(), directory.FullName, video.Title + "." + format);
+					await Converter.DownloadAndProcessMediaStreamsAsync(streams.Audio, filePath, format);
 
 					if (new FileInfo(filePath).Length > 8e6) {
 						return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Filesize"));
