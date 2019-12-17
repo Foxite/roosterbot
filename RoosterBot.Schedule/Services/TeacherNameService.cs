@@ -75,6 +75,13 @@ namespace RoosterBot.Schedule {
 		}
 		
 		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
+			// TODO (feature) Improve multiple match resolution
+			// Consider a number of teachers, two of which:
+			// "Mar Lastname", "MLA"
+			// "Martin Othername", "MOT"
+			// If given the input "mar", this should return MLA, and not [ MLA, MOT ]
+			// If given the input "ma", this should return [ MLA, MOT ] (along with whatever other teachers match)
+			// However if there's two "Martin"s then when given the input "martin" this should still return all matches.
 			nameInput = nameInput.ToLower();
 
 			var records = new List<TeacherMatch>();
