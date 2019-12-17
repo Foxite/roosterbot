@@ -39,6 +39,7 @@ namespace RoosterBot.Tools {
 
 			if (matches.Count > 0) {
 				IEnumerable<IGuild> storageGuilds = await Task.WhenAll(new ulong[] {
+					// Currently hardcoded IDs for my private emote storage servers
 					346682476149866497, 649728161281736704
 				}.Select(id => Context.Client.GetGuildAsync(id)));
 				
