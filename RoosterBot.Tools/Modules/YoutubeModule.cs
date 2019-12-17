@@ -14,7 +14,7 @@ namespace RoosterBot.Tools {
 		public YoutubeClient Client { get; set; } = null!;
 		public YoutubeConverter Converter { get; set; } = null!;
 
-		[Command("#YoutubeModule_Convert")]
+		[Command("#YoutubeModule_Convert"), Description("#YoutubeModule_Convert_Description")]
 		public async Task<CommandResult> DownloadYoutubeAudioCommand([Name("#YoutubeModule_Convert_Format")] string format, [Name("#YoutubeModule_Convert_Url")] string url) {
 			string[] formats = new[] { "mp3", "ogg" };
 			if (formats.Contains(format)) {

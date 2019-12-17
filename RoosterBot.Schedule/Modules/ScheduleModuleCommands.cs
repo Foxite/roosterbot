@@ -63,13 +63,13 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
 		public async Task<CommandResult> TodayCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today);
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
 		public async Task<CommandResult> TomorrowCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTime.Today.AddDays(1));
 			return m_Result;
@@ -87,7 +87,7 @@ namespace RoosterBot.Schedule {
 			return m_Result;
 		}
 
-		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowNWeeksWorkingDays_Summary")]
+		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowFutureCommand_Summary")]
 		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			info = ResolveNullInfo(info);
 			if (info != null) {

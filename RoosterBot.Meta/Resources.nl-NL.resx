@@ -194,7 +194,7 @@ Nieuwe features worden hier ook aangekondigd.
 3: seconds</comment>
   </data>
   <data name="InfoModule_Uptime_Summary" xml:space="preserve">
-    <value>Kijk hoe lang de bot online is</value>
+    <value>Kijk hoe lang de bot online is.</value>
   </data>
   <data name="Commands_CategoriesPretext" xml:space="preserve">
     <value>Gebruik `{0}commands &lt;categorie&gt;` om een lijst te zien. Beschikbare categorieën zijn:</value>

@@ -134,7 +134,7 @@ Met `{0}over 2 weken martijn kunstman` zie je het rooster van Martijn Kunstman, 
 
 Verder kun je zien wat er op het rooster staat na het laatste item wat je hebt bekeken. Gebruik hiervoor `{0}daarna`.
 
-Ten slotte kun je ook instellen in welke klas jij zit, zodat je niet je eigen klas in hoeft te vullen. Gebruik `{0}help jouw klas` voor meer informatie.
+Ten slotte kun je ook instellen in welke klas jij zit, zodat je niet je eigen klas in hoeft te vullen. Gebruik `{0}help klas` voor meer informatie.
 Sterker nog: als ik weet in welke klas een persoon zit, kun je die persoon mentionen in mijn commands. Hou er rekening mee dat die persoon een ping krijgt als je dit doet.</value>
     <comment>0: command prefix</comment>
   </data>
@@ -142,9 +142,7 @@ Sterker nog: als ik weet in welke klas een persoon zit, kun je die persoon menti
     <value>Ik kan onthouden in welke klas jij zit, zodat je dit niet elke keer er bij hoeft te zetten.
 Stel je klas in met: `{0}ik zit in &lt;klas&gt;`, bijvoorbeeld `{0}ik zit in 2gd1`.
 Daarna hoef je niet meer je klas in commands te zetten. Je kan dus alleen maar `{0}nu` typen en dan weet ik wat ik moet opzoeken.
-Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)
-
-Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
+Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)</value>
     <comment>0: command prefix</comment>
   </data>
   <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
@@ -261,7 +259,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Kijk wat er nu op het rooster staat.</value>
   </data>
   <data name="ScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
-    <value>Kijk wat er hierna op het rooster staat</value>
+    <value>Kijk wat er hierna op het rooster staat.</value>
   </data>
   <data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
     <value>Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `{0}vandaag` doet dit niet.</value>
@@ -282,7 +280,7 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.</value>
   </data>
   <data name="UserClassModule_CommandSummary" xml:space="preserve">
-    <value>Stel in in welke klas jij zit, of kijk welke je in zit volgens mijn gegevens.</value>
+    <value>Stel in in welke klas jij zit.</value>
   </data>
   <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>klas</value>
@@ -396,13 +394,13 @@ Dit werkt ook met taalcommando's: `@RoosterBot wat heb ik nu?`</value>
     <value>{0}: Rooster over {1} weken</value>
   </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen in volgende week een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+    <value>Kijk wat er volgende week op een rooster staat.</value>
   </data>
-  <data name="ScheduleModule_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen over *x* weken een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+  <data name="ScheduleModule_ShowFutureCommand_Summary" xml:space="preserve">
+    <value>Bekijk het rooster over een aantal uren, dagen, of weken.</value>
   </data>
   <data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
-    <value>Kijk op welke dagen een klas of leraar aanwezig is, of een lokaal in gebruik is.</value>
+    <value>Kijk wat er deze week op een rooster staat.</value>
   </data>
   <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
     <value>Klas</value>

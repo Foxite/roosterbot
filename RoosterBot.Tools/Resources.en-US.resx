@@ -120,6 +120,9 @@
   <data name="YoutubeModule_Convert" xml:space="preserve">
     <value>youtube</value>
   </data>
+  <data name="YoutubeModule_Convert_Description" xml:space="preserve">
+    <value>Download and convert a Youtube video. Currently only supports mp3 and ogg.</value>
+  </data>
   <data name="YoutubeModule_Convert_Fail_Filesize" xml:space="preserve">
     <value>Unable to upload audio: file size exceeds 8 MB</value>
   </data>

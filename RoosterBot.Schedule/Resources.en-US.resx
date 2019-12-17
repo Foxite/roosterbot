@@ -282,7 +282,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
   </data>
   <data name="UserClassModule_CommandSummary" xml:space="preserve">
-    <value>Change what class you are in, or see what class you are in according to my records.</value>
+    <value>Change what class you are in.</value>
   </data>
   <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>class</value>
@@ -396,13 +396,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>{0}: Schedule in {1} weeks</value>
   </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
-    <value>See when a class or teacher is present next week, or when a room is in use.</value>
+    <value>See what is on a schedule next week.</value>
   </data>
-  <data name="ScheduleModule_ShowNWeeksWorkingDays_Summary" xml:space="preserve">
-    <value>See when a class or teacher is present in *x* weeks, or when a room is in use.</value>
+  <data name="ScheduleModule_ShowFutureCommand_Summary" xml:space="preserve">
+    <value>Check the schedule in a number of hours, days, or weeks.</value>
   </data>
   <data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
-    <value>See on what days a class or teacher is present, or when a room is in use.</value>
+    <value>See what is on a schedule for this week.</value>
   </data>
   <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
     <value>Class</value>
