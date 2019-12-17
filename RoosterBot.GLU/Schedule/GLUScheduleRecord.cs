@@ -69,7 +69,7 @@ namespace RoosterBot.GLU {
 				yield return getAspect(new Emoji("⏱️"), "GLUScheduleRecord_Aspect_TimeLeft", timeString);
 
 				if (Break != null) {
-					yield return getAspect(new Emoji("⏱️"), "GLUScheduleRecord_Aspect_Break", getString("GLUScheduleRecord_TimeStartEnd", Break.Start.ToString("t", culture), Break.End.ToString("t", culture)));
+					yield return getAspect(new Emoji("☕"), "GLUScheduleRecord_Aspect_Break", getString("GLUScheduleRecord_TimeStartEnd", Break.Start.ToString("t", culture), Break.End.ToString("t", culture)));
 				}
 			}
 		}
