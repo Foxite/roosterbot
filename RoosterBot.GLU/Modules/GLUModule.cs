@@ -16,7 +16,8 @@ namespace RoosterBot.GLU {
 					":smile:",
 					":thumbsup:",
 					"<:wsjoram:570601561072467969>",
-					":blush:"
+					":blush:",
+					":heart:"
 				};
 				response = responses[Util.RNG.Next(0, responses.Length)];
 			}
