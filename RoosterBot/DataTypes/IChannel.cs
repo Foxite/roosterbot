@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace RoosterBot {
 	/// <summary>
@@ -10,12 +9,6 @@ namespace RoosterBot {
 		/// Gets the display name of this channel.
 		/// </summary>
 		string Name { get; }
-
-		/// <summary>
-		/// Obtains an amount of messages from the Platform, with an optional amount of messages to be downloaded at once.
-		/// </summary>
-		/// <param name="batchCount">The amount of messages that will be downloaded at once. This can accelerate enumeration if the amount of messages needed is known.</param>
-		IAsyncEnumerable<IMessage> GetMessagesAsync(int batchCount = 1);
 
 		/// <summary>
 		/// Sends a message into the IChannel. Optionally includes a file attachment.

@@ -63,6 +63,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Tools", "Rooster
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Statistics", "RoosterBot.Statistics\RoosterBot.Statistics.csproj", "{E73A393D-0A24-447F-A7A7-C77AECA702D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Console", "RoosterBot.Console\RoosterBot.Console.csproj", "{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Console.App", "RoosterBot.Console.App\RoosterBot.Console.App.csproj", "{E53983B2-52F6-4080-BAFC-796E115044C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +129,14 @@ Global
 		{E73A393D-0A24-447F-A7A7-C77AECA702D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E73A393D-0A24-447F-A7A7-C77AECA702D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E73A393D-0A24-447F-A7A7-C77AECA702D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E53983B2-52F6-4080-BAFC-796E115044C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53983B2-52F6-4080-BAFC-796E115044C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53983B2-52F6-4080-BAFC-796E115044C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53983B2-52F6-4080-BAFC-796E115044C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
