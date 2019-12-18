@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Qmmands;
 
@@ -26,6 +27,7 @@ namespace RoosterBot {
 			var matches = new ConcurrentBag<CommandMatch>();
 			var checkedModules = new ConcurrentDictionary<Module, bool>();
 
+			// This might be faster if we only keep a list of top level modules, and iterate over that, recursively checking the submodules.
 			Parallel.ForEach(m_Commands, command => { // This will run for quite a lot of iterations and is pretty heavy, so making it fast is important.
 				var checkModules = new Stack<Module>(4);
 				checkModules.Push(command.Module);
@@ -51,7 +53,7 @@ namespace RoosterBot {
 						continue;
 					} else {
 						foreach (string alias in check.Aliases) {
-							if (remainingInput.StartsWith(alias)) {
+							if (remainingInput.StartsWith(alias, StringComparison.InvariantCultureIgnoreCase)) {
 								remainingInput = remainingInput.Slice(alias.Length);
 								path.Add(alias);
 								match = true;
@@ -77,9 +79,9 @@ namespace RoosterBot {
 				if (match) {
 					if (command.Aliases.Count > 0) {
 						foreach (string alias in command.Aliases) {
-							if (remainingInput.StartsWith(alias)) {
+							if (remainingInput.StartsWith(alias, StringComparison.InvariantCultureIgnoreCase)) {
 								remainingInput = remainingInput.Slice(alias.Length);
-								if (remainingInput.Length == 0 || remainingInput.StartsWith(m_Separator)) {
+								if (remainingInput.Length == 0 || remainingInput.StartsWith(m_Separator, StringComparison.InvariantCultureIgnoreCase)) {
 									matches.Add(new CommandMatch(command, alias, path.AsReadOnly(), new string(remainingInput.TrimStart(m_Separator))));
 									break;
 								}
