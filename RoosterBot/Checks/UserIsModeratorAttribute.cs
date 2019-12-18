@@ -1,13 +1,13 @@
-﻿/* // TODO Discord
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 
 namespace RoosterBot {
 	public sealed class UserIsModeratorAttribute : RoosterPreconditionAttribute {
 		public override string Summary => "#UserIsModeratorAttribute_Summary";
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
+			/* // TODO Discord
 			if (context.User is IGuildUser user) {
 				//if (context.ServiceProvider.GetService<ConfigService>().StaffRoles.Intersect(user.RoleIds).Any()) {
 				if (new[] {
@@ -23,7 +23,8 @@ namespace RoosterBot {
 			} else {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_GuildsOnly"));
 			}
+			*/
+			throw new NotImplementedException();
 		}
 	}
 }
-*/

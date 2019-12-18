@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Cooldown is specific to this guild and shared by all commands.
 		/// </summary>
-		Guild,
+		Channel,
 
 		/// <summary>
 		/// Cooldown is specific to this user and shared by all commands in your module.
@@ -18,7 +18,7 @@
 		/// <summary>
 		/// Cooldown is specific to this guild and shared by all commands in your module.
 		/// </summary>
-		ModuleGuild,
+		ModuleChannel,
 
 		/// <summary>
 		/// Cooldown is specific to this user shared by all commands in your component.
@@ -28,6 +28,6 @@
 		/// <summary>
 		/// Cooldown is specific to this guild shared by all command in your component.
 		/// </summary>
-		ComponentGuild
+		ComponentChannel
 	}
 }

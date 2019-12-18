@@ -18,10 +18,10 @@ namespace RoosterBot {
 			if (Culture == context.Culture) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else if (Hide) {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_UnknownCommand", context.GuildConfig.CommandPrefix));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_UnknownCommand", context.ChannelConfig.CommandPrefix));
 			} else {
 				CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
-				string localizedName = cns.GetLocalizedName(Culture, context.GuildConfig.Culture);
+				string localizedName = cns.GetLocalizedName(Culture, context.ChannelConfig.Culture);
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RequireCultureAttribute_CheckFailed", localizedName));
 			}
 		}

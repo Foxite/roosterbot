@@ -5,45 +5,44 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
-	// TODO (refactor) Rename to ChannelConfigService
-	public abstract class GuildConfigService {
+	public abstract class ChannelConfigService {
 		private readonly ConfigService m_Config;
 
-		protected GuildConfigService(ConfigService config) {
+		protected ChannelConfigService(ConfigService config) {
 			m_Config = config;
 		}
 
-		public GuildConfig GetDefaultConfig() {
+		public ChannelConfig GetDefaultConfig() {
 			return GetDefaultConfig(0);
 		}
 
-		protected GuildConfig GetDefaultConfig(ulong guildId) {
-			return new GuildConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, guildId, new Dictionary<string, JToken>());
+		protected ChannelConfig GetDefaultConfig(object channelId) {
+			return new ChannelConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, channelId, new Dictionary<string, JToken>());
 		}
 
-		public abstract Task UpdateGuildAsync(GuildConfig config);
-		public abstract Task<GuildConfig> GetConfigAsync(IChannel guild);
+		public abstract Task UpdateGuildAsync(ChannelConfig config);
+		public abstract Task<ChannelConfig> GetConfigAsync(IChannel guild);
 	}
 
 	/// <summary>
-	/// This class stores data about a guild's preferences with this bot. Built-in are the language and command prefix, and it can store arbitrary custom data.
+	/// This class stores data about a channel's preferences with this bot. Built-in are the language and command prefix, and it can store arbitrary custom data.
 	/// 
 	/// This arbitrary data is serialized using Newtonsoft.Json. This means most built-in .NET types will work, and any custom data structure that you store must
 	/// be serializable with Newtonsoft.Json. Read its documentation to learn more.
 	/// </summary>
-	public class GuildConfig {
-		private readonly GuildConfigService m_Service;
+	public class ChannelConfig {
+		private readonly ChannelConfigService m_Service;
 		private readonly IDictionary<string, JToken> m_CustomData;
 
 		public string CommandPrefix { get; set; }
 		public CultureInfo Culture { get; set; }
-		public ulong GuildId { get; }
+		public object ChannelId { get; }
 
-		public GuildConfig(GuildConfigService guildConfigService, string commandPrefix, CultureInfo culture, ulong guildId, IDictionary<string, JToken> customData) {
+		public ChannelConfig(ChannelConfigService guildConfigService, string commandPrefix, CultureInfo culture, object channelId, IDictionary<string, JToken> customData) {
 			m_Service = guildConfigService;
 			CommandPrefix = commandPrefix;
 			Culture = culture;
-			GuildId = guildId;
+			ChannelId = channelId;
 			m_CustomData = customData;
 		}
 

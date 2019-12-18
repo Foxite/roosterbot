@@ -96,7 +96,7 @@ namespace RoosterBot.GLU {
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
-			if (m_AllowedGuilds.Contains(context.GuildConfig.GuildId)) {
+			if (m_AllowedGuilds.Contains(context.ChannelConfig.GuildId)) {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {

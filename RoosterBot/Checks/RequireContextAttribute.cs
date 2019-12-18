@@ -1,5 +1,4 @@
-﻿/* // TODO Discord
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -14,6 +13,7 @@ namespace RoosterBot {
 		}
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
+			/* // TODO Discord
 			string? errorReason = null;
 			switch (RequiredContext) {
 				case ContextType.DM:
@@ -24,6 +24,8 @@ namespace RoosterBot {
 					break;
 			}
 			return new ValueTask<RoosterCheckResult>(errorReason == null ? RoosterCheckResult.Successful : RoosterCheckResult.UnsuccessfulBuiltIn(errorReason));
+			*/
+			throw new NotImplementedException();
 		}
 	}
 
@@ -31,4 +33,3 @@ namespace RoosterBot {
 		DM, Guild
 	}
 }
-*/

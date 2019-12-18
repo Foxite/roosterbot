@@ -10,16 +10,16 @@ namespace RoosterBot {
 		public bool IsPrivate { get; }
 
 		public UserConfig UserConfig { get; }
-		public GuildConfig GuildConfig { get; }
-		public CultureInfo Culture => UserConfig.Culture ?? GuildConfig.Culture;
+		public ChannelConfig ChannelConfig { get; }
+		public CultureInfo Culture => UserConfig.Culture ?? ChannelConfig.Culture;
 
-		public RoosterCommandContext(IMessage message, UserConfig userConfig, GuildConfig guildConfig, IServiceProvider isp) : base(isp) {
+		public RoosterCommandContext(IMessage message, UserConfig userConfig, ChannelConfig guildConfig, IServiceProvider isp) : base(isp) {
 			Message = message;
 			User = message.User;
 			Channel = message.Channel;
 
 			UserConfig = userConfig;
-			GuildConfig = guildConfig;
+			ChannelConfig = guildConfig;
 		}
 
 		public override string ToString() {

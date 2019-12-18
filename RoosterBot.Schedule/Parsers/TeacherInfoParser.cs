@@ -26,7 +26,7 @@ namespace RoosterBot.Schedule {
 
 				if (user == null) {
 					if (input.Length >= 3) {
-						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.GuildConfig.GuildId, input);
+						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.ChannelConfig.GuildId, input);
 						if (lookupResults.Count == 1) {
 							result = lookupResults.First().Teacher;
 						} else if (lookupResults.Count > 1) {

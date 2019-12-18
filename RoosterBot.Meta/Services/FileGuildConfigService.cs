@@ -3,13 +3,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
-	public class FileGuildConfigService : GuildConfigService {
+	public class FileGuildConfigService : ChannelConfigService {
 		private readonly string m_ConfigFilePath;
-		private readonly IDictionary<ulong, GuildConfig> m_Configs;
+		private readonly IDictionary<object, ChannelConfig> m_Configs;
 
 		public FileGuildConfigService(ConfigService config, string configPath) : base(config) {
 			Logger.Info("FileGuildConfigService", "Loading guild config json");
@@ -17,34 +16,34 @@ namespace RoosterBot.Meta {
 			m_ConfigFilePath = configPath;
 
 			// Read config file and populate m_Configs
-			IDictionary<string, JToken> jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath));
+			IDictionary<string, JToken> jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath))!;
 			m_Configs = jsonConfig.ToDictionary(
-				/* Key */ kvp => ulong.Parse(kvp.Key),
-				/* Val */ kvp => new GuildConfig(this,
-					kvp.Value["commandPrefix"].ToObject<string>(),
-					CultureInfo.GetCultureInfo(kvp.Value["culture"].ToObject<string>()),
-					ulong.Parse(kvp.Key),
-					kvp.Value.ToObject<JObject>()["customData"].ToObject<JObject>()
+				/* Key */ kvp => (object) kvp.Key, // TODO doesn't atually work (see below)
+				/* Val */ kvp => new ChannelConfig(this,
+					kvp.Value["commandPrefix"]!.ToObject<string>()!,
+					CultureInfo.GetCultureInfo(kvp.Value["culture"]!.ToObject<string>()!),
+					kvp.Key, // See above
+					kvp.Value.ToObject<JObject>()!["customData"]!.ToObject<JObject>()!
 				)
 			);
 
 			Logger.Info("FileGuildConfigService", "Finished loading guild config json");
 		}
 
-		public override Task<GuildConfig> GetConfigAsync(IGuild guild) {
-			if (!m_Configs.TryGetValue(guild.Id, out GuildConfig? gc)) {
-				gc = GetDefaultConfig(guild.Id);
+		public override Task<ChannelConfig> GetConfigAsync(IChannel channel) {
+			if (!m_Configs.TryGetValue(channel.Id, out ChannelConfig? gc)) {
+				gc = GetDefaultConfig(channel.Id);
 			}
 			
 			return Task.FromResult(gc);
 		}
 
-		public override Task UpdateGuildAsync(GuildConfig config) {
-			m_Configs[config.GuildId] = config;
+		public override Task UpdateGuildAsync(ChannelConfig config) {
+			m_Configs[config.ChannelId] = config;
 			var jsonConfig = new JObject();
 
-			foreach (KeyValuePair<ulong, GuildConfig> kvp in m_Configs) {
-				jsonConfig[kvp.Key.ToString()] = new JObject {
+			foreach (KeyValuePair<object, ChannelConfig> kvp in m_Configs) {
+				jsonConfig[kvp.Key] = new JObject {
 					["culture"] = kvp.Value.Culture.Name,
 					["commandPrefix"] = kvp.Value.CommandPrefix,
 					["customData"] = kvp.Value.GetRawData()

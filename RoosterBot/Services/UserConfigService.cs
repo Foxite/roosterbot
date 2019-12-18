@@ -12,7 +12,7 @@ namespace RoosterBot {
 		public abstract Task<UserConfig> GetConfigAsync(IUser user);
 		public abstract Task UpdateUserAsync(UserConfig config);
 
-		protected UserConfig GetDefaultConfig(ulong id) {
+		protected UserConfig GetDefaultConfig(object id) {
 			return new UserConfig(this, null, id, new Dictionary<string, JToken>());
 		}
 	}
@@ -21,10 +21,10 @@ namespace RoosterBot {
 		private readonly UserConfigService m_Service;
 		private readonly IDictionary<string, JToken> m_CustomData;
 
-		public ulong UserId { get; }
+		public object UserId { get; }
 		public CultureInfo? Culture { get; set; }
 
-		public UserConfig(UserConfigService userConfigService, CultureInfo? culture, ulong userId, IDictionary<string, JToken> customData) {
+		public UserConfig(UserConfigService userConfigService, CultureInfo? culture, object userId, IDictionary<string, JToken> customData) {
 			m_Service = userConfigService;
 			Culture = culture;
 			UserId = userId;

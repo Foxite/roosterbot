@@ -40,7 +40,7 @@ namespace RoosterBot.AWS {
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
 
 			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, userTable));
-			services.AddSingleton<GuildConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<ConfigService>(), m_DynamoDBClient, guildTable));
+			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<ConfigService>(), m_DynamoDBClient, guildTable));
 			return Task.CompletedTask;
 		}
 

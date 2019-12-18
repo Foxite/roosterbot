@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot.Meta {
@@ -21,7 +20,7 @@ namespace RoosterBot.Meta {
 		}
 
 		[Command("send"), RequireBotManager]
-		public async Task SendMessageCommand(IMessageChannel channel, [Remainder] string message) {
+		public async Task SendMessageCommand(IChannel channel, [Remainder] string message) {
 			await channel.SendMessageAsync(message);
 		}
 

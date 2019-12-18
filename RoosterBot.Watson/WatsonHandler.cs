@@ -10,13 +10,13 @@ namespace RoosterBot.Watson {
 	/// </summary>
 	internal sealed class WatsonHandler {
 		private readonly DiscordSocketClient m_Discord;
-		private readonly GuildConfigService m_GCS;
+		private readonly ChannelConfigService m_GCS;
 		private readonly UserConfigService m_UCS;
 		private readonly ResourceService m_Resources;
 		private readonly RoosterCommandService m_CommandService;
 		private readonly WatsonClient m_Watson;
 
-		public WatsonHandler(DiscordSocketClient client, UserConfigService ucs, GuildConfigService guildConfig, WatsonClient watson, RoosterCommandService commandService, ResourceService resources) {
+		public WatsonHandler(DiscordSocketClient client, UserConfigService ucs, ChannelConfigService guildConfig, WatsonClient watson, RoosterCommandService commandService, ResourceService resources) {
 			m_Discord = client;
 			m_GCS = guildConfig;
 			m_UCS = ucs;
@@ -36,7 +36,7 @@ namespace RoosterBot.Watson {
 						bool process = false;
 						int argPos = 0;
 						IGuild guild = msg.Channel is IGuildChannel guildChannel ? guildChannel.Guild : msg.Author.MutualGuilds.First();
-						GuildConfig guildConfig = await m_GCS.GetConfigAsync(guild);
+						ChannelConfig guildConfig = await m_GCS.GetConfigAsync(guild);
 						string commandPrefix = guildConfig.CommandPrefix;
 
 						if (msg.Channel is IGuildChannel) { // If in guild: Message starts with mention to bot

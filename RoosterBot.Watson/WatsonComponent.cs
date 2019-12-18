@@ -28,7 +28,7 @@ namespace RoosterBot.Watson {
 			new WatsonHandler(
 				services.GetService<DiscordSocketClient>(),
 				services.GetService<UserConfigService>(),
-				services.GetService<GuildConfigService>(),
+				services.GetService<ChannelConfigService>(),
 				new WatsonClient(m_WatsonKey, m_WatsonID),
 				commandService,
 				resourceService);

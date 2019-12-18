@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿/* // TODO Discord
+using System.Threading.Tasks;
 using Discord;
 using Qmmands;
 
@@ -26,3 +27,4 @@ namespace RoosterBot.Meta {
 		}
 	}
 }
+*/

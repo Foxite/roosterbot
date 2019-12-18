@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
-	public class DynamoDBGuildConfigService : GuildConfigService {
+	public class DynamoDBGuildConfigService : ChannelConfigService {
 		private readonly Table m_Table;
 
 		public DynamoDBGuildConfigService(ConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
@@ -18,7 +18,7 @@ namespace RoosterBot.AWS {
 			Logger.Info("DynamoDBGuild", "Finished loading guild table");
 		}
 
-		public async override Task<GuildConfig> GetConfigAsync(IGuild guild) {
+		public async override Task<ChannelConfig> GetConfigAsync(IGuild guild) {
 			Document document = await m_Table.GetItemAsync(guild.Id);
 			if (document != null) {
 				if (!document.TryGetValue("culture", out DynamoDBEntry cultureEntry) ||
@@ -37,7 +37,7 @@ namespace RoosterBot.AWS {
 					string commandPrefix = prefixEntry.AsString();
 					var customData = JObject.Parse(customDataEntry.AsString());
 
-					return new GuildConfig(this, commandPrefix, culture, guild.Id, customData);
+					return new ChannelConfig(this, commandPrefix, culture, guild.Id, customData);
 				}
 			} else {
 				return GetDefaultConfig(guild.Id);
@@ -45,7 +45,7 @@ namespace RoosterBot.AWS {
 		}
 
 		// In the future, guild staff will modify their settings on a website, and there will be no way to update this through commands.
-		public async override Task UpdateGuildAsync(GuildConfig config) {
+		public async override Task UpdateGuildAsync(ChannelConfig config) {
 			Document document = await m_Table.GetItemAsync(config.GuildId);
 			if (document is null) {
 				await m_Table.PutItemAsync(new Document(new Dictionary<string, DynamoDBEntry>() {

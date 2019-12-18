@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
@@ -13,12 +11,13 @@ namespace RoosterBot.Meta {
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
-			if (jsonConfig["useFileConfig"].ToObject<bool>()) {
-				services.AddSingleton<GuildConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
+			// TODO Json deserialization
+			if (jsonConfig["useFileConfig"]!.ToObject<bool>()) {
+				services.AddSingleton<ChannelConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
 				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
 			}
 
-			services.AddSingleton(new MetaInfoService(jsonConfig["githubLink"].ToObject<string>(), jsonConfig["discordLink"].ToObject<string>()));
+			services.AddSingleton(new MetaInfoService(jsonConfig["githubLink"]!.ToObject<string>()!, jsonConfig["discordLink"]!.ToObject<string>()!));
 
 			return Task.CompletedTask;
 		}
@@ -45,6 +44,7 @@ namespace RoosterBot.Meta {
 			#endregion
 
 			#region Discord entities
+			/*
 			void addChannelParser<T>() where T : class, IChannel {
 				commandService.AddTypeParser(new ChannelParser<T>());
 			}
@@ -71,6 +71,7 @@ namespace RoosterBot.Meta {
 			commandService.AddTypeParser(new MessageParser<IUserMessage>());
 
 			commandService.AddTypeParser(new RoleParser<IRole>());
+			*/
 			#endregion
 
 			commandService.AddModule<CommandsListModule>();

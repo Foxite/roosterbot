@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot.Meta {
 	public class MessageParser<TMessage> : RoosterTypeParser<TMessage> where TMessage : class, IMessage {
 		public override string TypeDisplayName => "#MessageParser_Name";
 
-		protected async override ValueTask<RoosterTypeParserResult<TMessage>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		protected override ValueTask<RoosterTypeParserResult<TMessage>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			/* // TODO Discord
 			if (MentionUtils.TryParseChannel(input, out ulong messageId) || ulong.TryParse(input, out messageId)) {
 				// By id
 				var channel = (TMessage?) await context.Channel.GetMessageAsync(messageId);
@@ -41,6 +41,8 @@ namespace RoosterBot.Meta {
 			} else {
 				return Unsuccessful(false, context, "#MessageParser_InvalidMention");
 			}
+			*/
+			throw new NotImplementedException();
 		}
 	}
 }

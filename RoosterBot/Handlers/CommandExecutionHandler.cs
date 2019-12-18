@@ -12,7 +12,7 @@ namespace RoosterBot {
 
 		public CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
 
-		public async Task ExecuteCommandAsync(string input, IMessage message, GuildConfig guildConfig, UserConfig userConfig) {
+		public async Task ExecuteCommandAsync(string input, IMessage message, ChannelConfig guildConfig, UserConfig userConfig) {
 			var context = new RoosterCommandContext(message, userConfig, guildConfig, Program.Instance.Components.Services);
 			IResult result = await Commands.ExecuteAsync(input, context);
 
@@ -24,14 +24,14 @@ namespace RoosterBot {
 						response = Resources.GetString(context.Culture, "CommandHandling_Disabled");
 						break;
 					case CommandNotFoundResult _:
-						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.GuildConfig.CommandPrefix);
+						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.ChannelConfig.CommandPrefix);
 						break;
 					case CommandOnCooldownResult cooldown:
 						response = string.Format(Resources.GetString(context.Culture, "CommandHandling_Cooldown"), cooldown.Cooldowns.First().RetryAfter.ToString("c", context.Culture));
 						break;
 					case OverloadsFailedResult overloads:
 						response = Resources.GetString(context.Culture, "CommandHandling_OverloadsFailed") + "\n";
-						response += string.Join('\n', overloads.FailedOverloads.Select(kvp => "`" + context.GuildConfig.CommandPrefix + kvp.Key.GetSignature() + "`: " +
+						response += string.Join('\n', overloads.FailedOverloads.Select(kvp => "`" + context.ChannelConfig.CommandPrefix + kvp.Key.GetSignature() + "`: " +
 							Resources.ResolveString(context.Culture, Program.Instance.Components.GetComponentForModule(kvp.Key.Module), kvp.Value.Reason)));
 						break;
 					case ArgumentParseFailedResult argument:

@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 					} else {
 						message = "#StudentSetInfoReader_CheckFailed_MentionSelf";
 					}
-					return Unsuccessful(true, context, message, context.GuildConfig.CommandPrefix);
+					return Unsuccessful(true, context, message, context.ChannelConfig.CommandPrefix);
 				} else {
 					return Successful(result);
 				}
