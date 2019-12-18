@@ -20,7 +20,6 @@ namespace RoosterBot {
 			string jsonFile = File.ReadAllText(jsonPath);
 			var jsonConfig = JObject.Parse(jsonFile);
 
-			// TODO (feature) Use deserialization
 			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]!.ToObject<string>()!;
 			DefaultCulture              = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"]!.ToObject<string>()!);
 		}
