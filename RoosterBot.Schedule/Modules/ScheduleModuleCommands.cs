@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 using RoosterBot.DateTimeUtils;
 
@@ -128,6 +129,10 @@ namespace RoosterBot.Schedule {
 			if (query == null) {
 				MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
+				if (query.Identifier is TeacherInfo) {
+					query.Identifier = Context.ServiceProvider.GetService<TeacherNameService>().GetRecordFromAbbr(Context.GuildConfig.GuildId, query.Identifier.ScheduleCode);
+				}
+
 				switch (query.Kind) {
 					case ScheduleResultKind.Single:
 						ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime ?? DateTime.Now);
