@@ -61,16 +61,27 @@ namespace RoosterBot.GLU {
 							end: end
 						);
 
-						if (lastRecords.TryGetValue(record.Activity, out ScheduleRecord? lastRecord) &&
-							record.Start.Date == lastRecord.Start.Date &&
-							record.StudentSets.SequenceEqual(lastRecord.StudentSets) &&
-							record.StaffMember.SequenceEqual(lastRecord.StaffMember) &&
-							record.Room.SequenceEqual(lastRecord.Room)) {
-							// Note: This does not support records with multiple breaks. If that happens, it will result in only the last break being displayed.
-							lastRecord.Break = new BreakTime(lastRecord.End, record.Start);
-							lastRecord.End = record.End;
+						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
+							// Disabled because it's broken until I figure out how to fix it.
+							// The old code would merge records even if there's a record in between them. I only want to do this if there's a gap in the schedule.
+							/*foreach (ScheduleRecord tryMerge in schedule) {
+								if (tryMerge.Start.Date == mergeThis.Start.Date &&
+									tryMerge.Activity == mergeThis.Activity &&
+									tryMerge.StudentSetsString == mergeThis.StudentSetsString &&
+									tryMerge.StaffMemberString == mergeThis.StaffMemberString &&
+									tryMerge.RoomString == mergeThis.RoomString) {
+									result = mergeThis;
+									return true;
+								}
+							}*/
+							into = null;
+							return false;
+						}
+
+						if (shouldMerge(record, out ScheduleRecord? mergeInto)) {
+							mergeInto!.Break = new BreakTime(mergeInto.End, record.Start);
+							mergeInto.End = record.End;
 						} else {
-							lastRecords[record.Activity] = record;
 							schedule.Add(record);
 						}
 					}
