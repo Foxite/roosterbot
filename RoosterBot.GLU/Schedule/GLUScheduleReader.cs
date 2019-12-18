@@ -49,18 +49,25 @@ namespace RoosterBot.GLU {
 						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], @"hh\:mm", culture);
 						DateTime end = date + TimeSpan.ParseExact(csv["EndTime"], @"hh\:mm", culture); // Under the assumption that nobody works overnight
 
-						var studentsets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo(code));
-						IEnumerable<RoomInfo> room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo(code));
+						string[]? studentsets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None);
+						// Rooms often have " (0)" behind them. unknown reason.
+						// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
+						string[]? room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None);
+
+						if (studentsets.Length == 1 && studentsets[0].Length == 0) {
+							studentsets = null;
+						}
+						if (room.Length == 1 && room[0].Length == 0) {
+							room = null;
+						}
 
 						ScheduleRecord record = new GLUScheduleRecord(
 							activity: new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
 							start: start,
 							end: end,
-							studentSets: studentsets.Any() ? studentsets.ToArray() : Array.Empty<StudentSetInfo>(),
+							studentSets: studentsets != null ? studentsets.Select(code => new StudentSetInfo(code)).ToArray() : Array.Empty<StudentSetInfo>(),
 							staffMember: m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-							// Rooms often have " (0)" behind them. unknown reason.
-							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							room: room.Any() ? room.ToArray() : Array.Empty<RoomInfo>()
+							room: room != null ? room.Select(code => new RoomInfo(code)).ToArray() : Array.Empty<RoomInfo>()
 						);
 
 						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
