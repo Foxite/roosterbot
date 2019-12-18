@@ -1,4 +1,5 @@
-﻿using System;
+﻿/* // TODO Still necessary? Hasn't been triggered in months
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -65,3 +66,4 @@ namespace RoosterBot {
 		}
 	}
 }
+*/

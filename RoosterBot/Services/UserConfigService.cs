@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
-using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {

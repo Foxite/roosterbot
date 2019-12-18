@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot {
@@ -9,6 +8,7 @@ namespace RoosterBot {
 		public ConfigService Config { get; set; } = null!;
 		public ResourceService Resources { get; set; } = null!;
 		public RoosterCommandService Commands { get; set; } = null!;
+		public NotificationService Notification { get; set; } = null!;
 
 		public CommandExceptionHandler(IServiceProvider isp) : base(isp) {
 			Commands.CommandExecutionFailed += HandleError;
@@ -22,7 +22,7 @@ namespace RoosterBot {
 					const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
 					report = TooLong + report.Substring(0, 1999 - TooLong.Length);
 				}
-				await Config.BotOwner.SendMessageAsync(report);
+				await Notification.AddNotificationAsync(report);
 				await rcc.RespondAsync(Util.Error + Resources.GetString(rcc.Culture, "CommandHandling_FatalError"));
 				await rcc.UserConfig.UpdateAsync();
 			}

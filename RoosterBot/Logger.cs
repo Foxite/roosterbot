@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 
 namespace RoosterBot {
 	public static class Logger {
@@ -68,12 +67,8 @@ namespace RoosterBot {
 			}
 		}
 
-		/// <summary>
-		/// This is called LogSync because it is not async, but Discord.NET requires a Log function that returns Task. None of the other functions here are async.
-		/// </summary>
-		internal static Task LogSync(LogMessage msg) {
-			Log(msg.Severity, msg.Source, msg.Message, msg.Exception);
-			return Task.CompletedTask;
+		private enum LogSeverity {
+			Verbose, Debug, Info, Warning, Error, Critical
 		}
 	}
 }

@@ -2,10 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
-using Discord;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
+	// TODO (refactor) Rename to ChannelConfigService
 	public abstract class GuildConfigService {
 		private readonly ConfigService m_Config;
 
@@ -22,7 +22,7 @@ namespace RoosterBot {
 		}
 
 		public abstract Task UpdateGuildAsync(GuildConfig config);
-		public abstract Task<GuildConfig> GetConfigAsync(IGuild guild);
+		public abstract Task<GuildConfig> GetConfigAsync(IChannel guild);
 	}
 
 	/// <summary>
@@ -58,7 +58,11 @@ namespace RoosterBot {
 		}
 
 		public void SetData<T>(string key, T data) {
-			m_CustomData[key] = JToken.FromObject(data);
+			if (data is null) {
+				m_CustomData.Remove(key);
+			} else {
+				m_CustomData[key] = JToken.FromObject(data);
+			}
 		}
 
 		public Task UpdateAsync() {

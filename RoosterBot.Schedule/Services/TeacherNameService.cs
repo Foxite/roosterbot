@@ -100,7 +100,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public TeacherInfo? GetTeacherByDiscordUser(IGuild guild, IUser user) {
-			string findDiscordUser = $"{user.Username}#{user.Discriminator}";
+			string findDiscordUser = $"{user.Name}#{user.Discriminator}";
 			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(guild.Id)) {
 				if (findDiscordUser == teacher.DiscordUser) {
 					return teacher;

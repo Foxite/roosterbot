@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Discord;
 
 namespace RoosterBot {
 	public static class LinqExtensions {
@@ -53,10 +52,6 @@ namespace RoosterBot {
 			}
 			moveInto = outB;
 			return outA;
-		}
-
-		public static bool HasRole(this IGuildUser user, ulong roleId) {
-			return user.RoleIds.Any(id => id == roleId);
 		}
 
 		/// <summary>

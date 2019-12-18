@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 		private ScheduleProvider GetSchedule(IdentifierInfo info, RoosterCommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider>? list)) {
 				return list.FirstOrDefault(schedule => schedule.IsGuildAllowed(context.GuildConfig.GuildId)) ??
-					throw new NoAllowedGuildsException($"No schedules are allowed for guild {(context.Guild == null ? ("from " + context.User.Username + "#" + context.User.Discriminator) : context.Guild.Name)}");
+					throw new NoAllowedGuildsException($"No schedules are allowed for guild {(context.Guild == null ? ("from " + context.User.Name + "#" + context.User.Discriminator) : context.Guild.Name)}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}

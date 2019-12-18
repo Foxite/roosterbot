@@ -11,8 +11,6 @@ using System.IO.Pipes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -71,45 +69,21 @@ namespace RoosterBot {
 			m_BeforeStart = true;
 
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
-			var configService = new ConfigService(configFile, out string authToken);
+			var configService = new ConfigService(configFile);
 
-			DiscordSocketClient client = SetupClient();
-
-			IServiceCollection serviceCollection = CreateRBServices(client, configService);
+			IServiceCollection serviceCollection = CreateRBServices(configService);
 
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
-
-			CreateHandlers();
-
-			await client.LoginAsync(TokenType.Bot, authToken);
-			await client.StartAsync();
 
 			await WaitForQuitCondition();
 
 			Logger.Info("Main", "Stopping program");
 
-			await client.StopAsync();
-			await client.LogoutAsync();
-
 			Components.ShutdownComponents();
-			client.Dispose();
 		}
 
-		private DiscordSocketClient SetupClient() {
-			var client = new DiscordSocketClient(new DiscordSocketConfig() {
-				WebSocketProvider = Discord.Net.Providers.WS4Net.WS4NetProvider.Instance,
-				MessageCacheSize = 5
-			});
-			client.Log += Logger.LogSync;
-			client.Ready += () => {
-				m_BeforeStart = false;
-				return Task.CompletedTask;
-			};
-			return client;
-		}
-
-		private IServiceCollection CreateRBServices(DiscordSocketClient client, ConfigService configService) {
+		private IServiceCollection CreateRBServices(ConfigService configService) {
 			var notificationService = new NotificationService();
 
 			var resources = new ResourceService();
@@ -142,24 +116,8 @@ namespace RoosterBot {
 				.AddSingleton(commands)
 				.AddSingleton(resources)
 				.AddSingleton(helpService)
-				.AddSingleton(cns)
-				.AddSingleton(client);
+				.AddSingleton(cns);
 			return serviceCollection;
-		}
-
-		private void CreateHandlers() {
-			IServiceProvider isp = Components.Services;
-
-			new RestartHandler(isp, 5);
-			new DeadlockHandler(isp, 60000);
-
-			var ceh = new CommandExecutionHandler(isp);
-			new MessageReceivedHandler(isp, ceh);
-			new MessageUpdatedHandler (isp, ceh);
-			new MessageDeletedHandler (isp);
-			new CommandExecutedHandler(isp);
-			new CommandExceptionHandler(isp);
-			new ReadyHandler(isp);
 		}
 
 		private async Task WaitForQuitCondition() {

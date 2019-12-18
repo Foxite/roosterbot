@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿/* // TODO Discord
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Net;
 
 namespace RoosterBot {
 	public static class DiscordUtil {
@@ -63,3 +62,4 @@ namespace RoosterBot {
 		}
 	}
 }
+*/

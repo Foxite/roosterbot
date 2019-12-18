@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using Qmmands;
 
 namespace RoosterBot {
 	internal sealed class CommandExecutionHandler : RoosterHandler {
-		public DiscordSocketClient Client { get; set; } = null!;
 		public RoosterCommandService Commands { get; set; } = null!;
 		public ResourceService Resources { get; set; } = null!;
 		public ConfigService Config { get; set; } = null!;
+		public NotificationService Notifications { get; set; } = null!;
 
 		public CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
 
-		public async Task ExecuteCommandAsync(string input, IUserMessage message, GuildConfig guildConfig, UserConfig userConfig) {
-			var context = new RoosterCommandContext(Client, message, userConfig, guildConfig, Program.Instance.Components.Services);
+		public async Task ExecuteCommandAsync(string input, IMessage message, GuildConfig guildConfig, UserConfig userConfig) {
+			var context = new RoosterCommandContext(message, userConfig, guildConfig, Program.Instance.Components.Services);
 			IResult result = await Commands.ExecuteAsync(input, context);
 
 			if (!(result.IsSuccessful || result is ExecutionFailedResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
@@ -49,7 +47,7 @@ namespace RoosterBot {
 								const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
 								response = TooLong + response.Substring(0, 1999 - TooLong.Length);
 							}
-							await Config.BotOwner.SendMessageAsync(response);
+							await Notifications.AddNotificationAsync(response);
 							response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
 						}
 						break;
@@ -89,7 +87,7 @@ namespace RoosterBot {
 							const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
 							response = TooLong + response.Substring(0, 1999 - TooLong.Length);
 						}
-						await Config.BotOwner.SendMessageAsync(response);
+						await Notifications.AddNotificationAsync(response);
 						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
 						break;
 				}

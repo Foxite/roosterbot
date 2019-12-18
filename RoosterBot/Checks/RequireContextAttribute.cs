@@ -1,4 +1,5 @@
-﻿using System;
+﻿/* // TODO Discord
+using System;
 using System.Threading.Tasks;
 
 namespace RoosterBot {
@@ -30,3 +31,4 @@ namespace RoosterBot {
 		DM, Guild
 	}
 }
+*/

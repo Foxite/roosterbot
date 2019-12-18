@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 
 namespace RoosterBot {
 	public static class CommandResponseUtil {
 		private const string CommandResponseJsonKey = "command_response";
 
-		public static void SetResponse(this UserConfig userConfig, ulong userCommandId, ulong botResponseId) {
+		public static void SetResponse(this UserConfig userConfig, object userCommandId, object botResponseId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.CommandId == userCommandId);
 				if (relevantCRP == null) {
@@ -26,7 +25,7 @@ namespace RoosterBot {
 			}
 		}
 
-		public static CommandResponsePair? GetResponse(this UserConfig userConfig, ulong messageId) {
+		public static CommandResponsePair? GetResponse(this UserConfig userConfig, object messageId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out CommandResponsePair[]? crps)) {
 				return crps.SingleOrDefault(crp => crp.CommandId == messageId);
 			} else {
@@ -34,7 +33,7 @@ namespace RoosterBot {
 			}
 		}
 
-		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, ulong commandId) {
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, object commandId) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				for (int i = 0; i < crps.Count; i++) {
 					if (crps[i].CommandId == commandId) {
@@ -49,26 +48,20 @@ namespace RoosterBot {
 			}
 		}
 
-		public static void SetResponse(this UserConfig userConfig, IUserMessage userMessage, IUserMessage botResponse) => SetResponse(userConfig, userMessage.Id, botResponse.Id);
-		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IUserMessage message) => GetResponse(userConfig, message.Id);
-		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IUserMessage command) => RemoveCommand(userConfig, command.Id);
+		public static void SetResponse(this UserConfig userConfig, IMessage userMessage, IMessage botResponse) => SetResponse(userConfig, userMessage.Id, botResponse.Id);
+		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IMessage message) => GetResponse(userConfig, message.Id);
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IMessage command) => RemoveCommand(userConfig, command.Id);
 
-		public static async Task<IUserMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
+		public static async Task<IMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
 			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
-			IUserMessage? response = crp == null ? null : (IUserMessage) await context.Channel.GetMessageAsync(crp.ResponseId);
+			IMessage? response = crp == null ? null : (IMessage) await context.Channel.GetMessageAsync(crp.ResponseId);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
-				if (filePath == null) {
-					response = await context.Channel.SendMessageAsync(message);
-				} else {
-					response = await context.Channel.SendFileAsync(filePath, message);
-				}
+				response = await context.Channel.SendMessageAsync(message, filePath);
 				SetResponse(context.UserConfig, context.Message, response);
 			} else {
 				// The command was edited.
-				await response.ModifyAsync(props => {
-					props.Content = message;
-				});
+				await response.ModifyAsync(message, filePath);
 			}
 
 			return response;

@@ -58,7 +58,8 @@ namespace RoosterBot {
 			}
 
 			try {
-				return json["components"].ToObject<JArray>().Select(jt => jt.ToObject<string>());
+				// TODO (refactor) Use Newtonsoft.Json deserialization instead
+				return json["components"]!.ToObject<JArray>().Select(jt => jt.ToObject<string>()!);
 			} catch (Exception e) {
 				throw new FormatException("Components.json contains invalid data.", e);
 			}

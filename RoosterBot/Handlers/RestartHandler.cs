@@ -1,4 +1,5 @@
-﻿using System;
+﻿/* // TODO Still necessary?
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -60,3 +61,4 @@ namespace RoosterBot {
 		}
 	}
 }
+*/

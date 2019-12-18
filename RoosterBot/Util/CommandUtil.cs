@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot {
 	public static class CommandUtil {
+		/* // TODO Discord
 		public static bool IsMessageCommand(IMessage message, string prefix, out int argPos) {
 			argPos = 0;
 			if (message.Content != null && // Message objects created for MessageUpdated events only contain what was modified. Content may be null in certain cases. https://github.com/discord-net/Discord.Net/issues/1409
@@ -20,7 +20,7 @@ namespace RoosterBot {
 			}
 
 			return false;
-		}
+		}*/
 
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.

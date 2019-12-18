@@ -29,7 +29,7 @@ namespace RoosterBot.Watson {
 
 		private Task OnMessageReceived(SocketMessage socketMsg) {
 			_ = Task.Run(async () => {
-				// TODO (refactor) This is a mess
+				//-TODO (refactor) This is a mess
 				// I know this will crash the CLR if it throws an exception, although I can hardly do all this work on the gateway thread.
 				try {
 					if (socketMsg is SocketUserMessage msg && !msg.Author.IsBot) {

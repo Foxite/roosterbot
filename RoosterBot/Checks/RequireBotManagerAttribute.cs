@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿/* // TODO Discord
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -14,3 +15,4 @@ namespace RoosterBot {
 		}
 	}
 }
+*/

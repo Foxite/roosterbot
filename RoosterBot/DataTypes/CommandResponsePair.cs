@@ -1,9 +1,9 @@
 ﻿namespace RoosterBot {
 	public class CommandResponsePair {
-		public ulong CommandId { get; internal set; }
-		public ulong ResponseId { get; internal set; }
+		public object CommandId { get; internal set; }
+		public object ResponseId { get; internal set; }
 
-		public CommandResponsePair(ulong commandId, ulong responseId) {
+		public CommandResponsePair(object commandId, object responseId) {
 			CommandId = commandId;
 			ResponseId = responseId;
 		}

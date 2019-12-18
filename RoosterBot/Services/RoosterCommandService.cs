@@ -273,7 +273,10 @@ namespace RoosterBot {
 
 		private static Func<Exception, Task> GetEventErrorHandler(string name) {
 			string logMessage = $"A {name} handler has thrown an exception.";
-			return e => Logger.LogSync(new Discord.LogMessage(Discord.LogSeverity.Error, "RoosterCommandService", logMessage, e));
+			return e => {
+				Logger.Error("RoosterCommandService", logMessage, e);
+				return Task.CompletedTask;
+			};
 		}
 
 		private CommandService GetNewCommandService() {
