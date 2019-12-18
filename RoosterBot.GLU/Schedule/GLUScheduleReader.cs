@@ -49,15 +49,18 @@ namespace RoosterBot.GLU {
 						DateTime start = date + TimeSpan.ParseExact(csv["StartTime"], @"hh\:mm", culture);
 						DateTime end = date + TimeSpan.ParseExact(csv["EndTime"], @"hh\:mm", culture); // Under the assumption that nobody works overnight
 
+						var studentsets = csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo(code));
+						IEnumerable<RoomInfo> room = csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo(code));
+
 						ScheduleRecord record = new GLUScheduleRecord(
-							activity:  new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
+							activity: new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
+							start: start,
+							end: end,
+							studentSets: studentsets.Any() ? studentsets.ToArray() : Array.Empty<StudentSetInfo>(),
 							staffMember: m_Teachers.GetRecordsFromAbbrs(m_Guild, csv["StaffMember"].Split(new[] { ", " }, StringSplitOptions.None)),
-							studentSets: csv["StudentSets"].Split(new[] { ", " }, StringSplitOptions.None).Select(code => new StudentSetInfo(code)).ToArray(),
 							// Rooms often have " (0)" behind them. unknown reason.
 							// Just remove them for now. This is the simplest way. We can't trim from the end, because multiple rooms may be listed and they will all have this suffix.
-							room: csv["Room"].Replace(" (0)", "").Split(new[] { ", " }, StringSplitOptions.None).Select(code => new RoomInfo(code)).ToArray(),
-							start: start,
-							end: end
+							room: room.Any() ? room.ToArray() : Array.Empty<RoomInfo>()
 						);
 
 						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
