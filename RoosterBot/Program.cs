@@ -28,7 +28,6 @@ namespace RoosterBot {
 #nullable restore
 		public DateTime StartTime { get; } = DateTime.Now;
 
-		private bool m_BeforeStart;
 		private bool m_StopFlagSet;
 
 		private Program() { }
@@ -66,7 +65,6 @@ namespace RoosterBot {
 
 		private async Task MainAsync() {
 			Logger.Info("Main", "Starting program");
-			m_BeforeStart = true;
 
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			var configService = new ConfigService(configFile);
@@ -159,7 +157,7 @@ namespace RoosterBot {
 							}
 						})
 					});
-				} while (m_BeforeStart || keepRunning); // Program cannot be stopped before initialization is complete
+				} while (keepRunning);
 			}
 			cts.Cancel();
 			cts.Dispose();
