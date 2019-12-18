@@ -129,6 +129,8 @@ namespace RoosterBot.Schedule {
 			if (query == null) {
 				MinorError(GetString("ScheduleModule_GetAfterCommand_NoContext"));
 			} else {
+				// TODO (refactor) This is a temporary hack fix
+				// The problem is that the identifier is serialized and only contain the code, while we need the full info for lookup and display
 				if (query.Identifier is TeacherInfo) {
 					query.Identifier = Context.ServiceProvider.GetService<TeacherNameService>().GetRecordFromAbbr(Context.GuildConfig.GuildId, query.Identifier.ScheduleCode);
 				}
