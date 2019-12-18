@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CsvHelper;
 using RoosterBot.Schedule;
@@ -32,8 +33,6 @@ namespace RoosterBot.GLU {
 					await csv.ReadAsync();
 					csv.ReadHeader();
 
-					var lastRecords = new Dictionary<ActivityInfo, ScheduleRecord>();
-
 					DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
 					schedule = new List<ScheduleRecord>();
@@ -62,19 +61,23 @@ namespace RoosterBot.GLU {
 						);
 
 						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
-							// Disabled because it's broken until I figure out how to fix it.
-							// The old code would merge records even if there's a record in between them. I only want to do this if there's a gap in the schedule.
-							/*foreach (ScheduleRecord tryMerge in schedule) {
-								if (tryMerge.Start.Date == mergeThis.Start.Date &&
-									tryMerge.Activity == mergeThis.Activity &&
-									tryMerge.StudentSetsString == mergeThis.StudentSetsString &&
-									tryMerge.StaffMemberString == mergeThis.StaffMemberString &&
-									tryMerge.RoomString == mergeThis.RoomString) {
-									result = mergeThis;
-									return true;
-								}
-							}*/
 							into = null;
+							for (int i = schedule.Count - 1; i >= 0; i--) {
+								ScheduleRecord item = schedule[i];
+								if (item.StaffMember.Intersect(mergeThis.StaffMember).Any() ||
+									item.StudentSets.Intersect(mergeThis.StudentSets).Any() ||
+									item.Room.Intersect(mergeThis.Room).Any()) {
+									if (item.StaffMember.SequenceEqual(mergeThis.StaffMember) &&
+										item.StudentSets.SequenceEqual(mergeThis.StudentSets) &&
+										item.Room.SequenceEqual(mergeThis.Room)) {
+										into = item;
+										return true;
+									} else {
+										return false;
+									}
+								}
+							}
+
 							return false;
 						}
 
