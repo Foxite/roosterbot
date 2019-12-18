@@ -20,7 +20,7 @@ namespace RoosterBot.AWS {
 		public async override Task<UserConfig> GetConfigAsync(IUser user) {
 			Document document = await m_Table.GetItemAsync(user.Id);
 			if (document != null) {
-				CultureInfo? culture = document.TryGetValue("culture", out DynamoDBEntry cultureEntry) ? CultureInfo.GetCultureInfo(cultureEntry.AsString()) : null;
+				CultureInfo? culture = (document.TryGetValue("culture", out DynamoDBEntry cultureEntry) && cultureEntry.AsString() != " " ) ? CultureInfo.GetCultureInfo(cultureEntry.AsString()) : null;
 				document.TryGetValue("customData", out DynamoDBEntry customDataEntry);
 				var customData = JObject.Parse(customDataEntry.ToString());
 				return new UserConfig(this, culture, user.Id, customData);
