@@ -11,6 +11,7 @@ namespace RoosterBot {
 		public   string DefaultCommandPrefix { get; }
 		public   string GameString { get; }
 		public   ActivityType ActivityType { get; }
+		// TODO (feature) This really needs to be provided by GuildConfigService, or better yet based on permissions
 		public   IReadOnlyCollection<ulong> StaffRoles { get; }
 		internal bool ReportStartupVersionToOwner { get; }
 		public   CultureInfo DefaultCulture { get; }
