@@ -31,40 +31,32 @@ namespace RoosterBot.Console {
 			_ = Task.Run(async () => {
 				try {
 					using var pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
-					Logger.Debug("Console", "AAA");
 					pipeServer.WaitForConnection();
-					Logger.Debug("Console", "BBB");
 
 					using var sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
 					using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
-						Logger.Debug("Console", "CCC");
+						Logger.Info("Console", "Console interface connected");
 						string input = sr.ReadLine()!;
-						Logger.Debug("Console", "DDD");
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
-						Logger.Debug("Console", "EEE");
 						var result = await commandService.ExecuteAsync(consoleMessage.Content, new RoosterCommandContext(
 							consoleMessage,
 							await ucs.GetConfigAsync(TheConsoleUser),
 							await ccs.GetConfigAsync(TheConsoleChannel),
 							services
 						));
-						Logger.Debug("Console", "FFF");
 						string resultString = result.ToString()!;
 						await TheConsoleChannel.SendMessageAsync(resultString);
-						Logger.Debug("Console", "GGG");
 						sw.WriteLine(resultString);
 						sw.Flush();
-						Logger.Debug("Console", "HHH");
 					}
 				} catch (Exception e) {
-					Logger.Error("Console", "XXX", e);
+					Logger.Error("Console", "Console handler caught an exception: ", e);
 				} finally {
-					Logger.Debug("Console", "III");
+					Logger.Debug("Console", "Console handler exiting");
 					if (m_CTS.IsCancellationRequested) {
-						Logger.Debug("Console", "JJJ");
 						m_CTS.Dispose();
 					}
 				}
