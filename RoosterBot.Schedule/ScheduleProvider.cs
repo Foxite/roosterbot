@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
-	public abstract class ScheduleProvider : GuildSpecificInfo {
-		protected ScheduleProvider(ulong[] allowedGuilds) : base(allowedGuilds) { }
+	public abstract class ScheduleProvider : ChannelSpecificInfo {
+		protected ScheduleProvider(object[] allowedGuilds) : base(allowedGuilds) { }
 
 		public abstract Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime datetime);

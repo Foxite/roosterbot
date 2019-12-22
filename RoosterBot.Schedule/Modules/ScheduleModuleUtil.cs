@@ -40,7 +40,7 @@ namespace RoosterBot.Schedule {
 				MinorError(GetString("ScheduleModule_HandleError_NotFound"));
 			} catch (RecordsOutdatedException) {
 				MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
-			} catch (NoAllowedGuildsException) {
+			} catch (NoAllowedChannelsException) {
 				MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
 			}
 			return new ReturnValue<T>();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Discord;
 
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {

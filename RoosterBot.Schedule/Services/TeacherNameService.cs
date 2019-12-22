@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
-using Discord;
 
 namespace RoosterBot.Schedule {
 	public class TeacherNameService {
@@ -13,7 +12,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
-		public async Task ReadAbbrCSV(string path, ulong[] allowedGuilds) {
+		public async Task ReadAbbrCSV(string path, object[] allowedGuilds) {
 			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
@@ -50,8 +49,8 @@ namespace RoosterBot.Schedule {
 			Logger.Info("TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
 		}
 
-		public TeacherInfo GetRecordFromAbbr(ulong guild, string abbr) {
-			return GetAllowedRecordsForGuild(guild).FirstOrDefault(record => record.ScheduleCode == abbr);
+		public TeacherInfo GetRecordFromAbbr(object channelId, string abbr) {
+			return GetAllowedRecordsForGuild(channelId).FirstOrDefault(record => record.ScheduleCode == abbr);
 		}
 
 		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
@@ -74,7 +73,7 @@ namespace RoosterBot.Schedule {
 			return records.ToArray();
 		}
 		
-		public IReadOnlyCollection<TeacherMatch> Lookup(ulong guild, string nameInput, bool skipNoLookup = true) {
+		public IReadOnlyCollection<TeacherMatch> Lookup(object channelId, string nameInput, bool skipNoLookup = true) {
 			// TODO (feature) Improve multiple match resolution
 			// Consider a number of teachers, two of which:
 			// "Mar Lastname", "MLA"
@@ -86,7 +85,7 @@ namespace RoosterBot.Schedule {
 
 			var records = new List<TeacherMatch>();
 
-			foreach (TeacherInfo record in GetAllowedRecordsForGuild(guild)) {
+			foreach (TeacherInfo record in GetAllowedRecordsForGuild(channelId)) {
 				if (skipNoLookup && record.NoLookup)
 					continue;
 
@@ -99,9 +98,9 @@ namespace RoosterBot.Schedule {
 			return records.AsReadOnly();
 		}
 
-		public TeacherInfo? GetTeacherByDiscordUser(IGuild guild, IUser user) {
-			string findDiscordUser = $"{user.Name}#{user.Discriminator}";
-			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(guild.Id)) {
+		public TeacherInfo? GetTeacherByDiscordUser(object channelId, IUser user) {
+			string findDiscordUser = user.UserName;
+			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(channelId)) {
 				if (findDiscordUser == teacher.DiscordUser) {
 					return teacher;
 				}
@@ -109,20 +108,20 @@ namespace RoosterBot.Schedule {
 			return null;
 		}
 		
-		public IEnumerable<TeacherInfo> GetAllRecords(ulong guild) {
-			return GetAllowedRecordsForGuild(guild);
+		public IEnumerable<TeacherInfo> GetAllRecords(object channelId) {
+			return GetAllowedRecordsForGuild(channelId);
 		}
 
-		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(ulong guild) {
-			return m_Records.Where(gtl => gtl.IsGuildAllowed(guild)).SelectMany(gtl => gtl.Teachers);
+		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(object channelId) {
+			return m_Records.Where(gtl => gtl.IsGuildAllowed(channelId)).SelectMany(gtl => gtl.Teachers);
 		}
 
-		private class GuildTeacherList : GuildSpecificInfo {
+		private class GuildTeacherList : ChannelSpecificInfo {
 			private readonly List<TeacherInfo> m_Teachers;
 
 			public IReadOnlyList<TeacherInfo> Teachers => m_Teachers;
 
-			public GuildTeacherList(ulong[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
+			public GuildTeacherList(object[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
 				m_Teachers = teachers;
 			}
 		}

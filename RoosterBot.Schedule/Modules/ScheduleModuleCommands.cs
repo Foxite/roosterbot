@@ -132,7 +132,7 @@ namespace RoosterBot.Schedule {
 				// TODO (refactor) This is a temporary hack
 				// The problem is that the identifier is serialized and only contain the code, while we need the full info for lookup and display
 				if (query.Identifier is TeacherInfo) {
-					query.Identifier = Context.ServiceProvider.GetService<TeacherNameService>().GetRecordFromAbbr(Context.ChannelConfig.GuildId, query.Identifier.ScheduleCode);
+					query.Identifier = Context.ServiceProvider.GetService<TeacherNameService>().GetRecordFromAbbr(Context.ChannelConfig.ChannelId, query.Identifier.ScheduleCode);
 				}
 
 				switch (query.Kind) {

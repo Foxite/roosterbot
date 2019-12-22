@@ -12,13 +12,13 @@ namespace RoosterBot.Schedule {
 		private readonly List<ScheduleRecord> m_Schedule;
 		private readonly string m_Name;
 
-		private MemoryScheduleProvider(ulong[] allowedGuilds, string name, List<ScheduleRecord> schedule) : base(allowedGuilds) {
+		private MemoryScheduleProvider(object[] allowedGuilds, string name, List<ScheduleRecord> schedule) : base(allowedGuilds) {
 			m_Name = name;
 			m_Schedule = schedule;
 		}
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public static async Task<MemoryScheduleProvider> CreateAsync(string name, ScheduleReader reader, ulong[] allowedGuildIds) {
+		public static async Task<MemoryScheduleProvider> CreateAsync(string name, ScheduleReader reader, object[] allowedGuildIds) {
 			// Unfortunately we can't have async constructors (for good reasons), so this'll do.
 			return new MemoryScheduleProvider(allowedGuildIds, name, await reader.GetSchedule());
 		}

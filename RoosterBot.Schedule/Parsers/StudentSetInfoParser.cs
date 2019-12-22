@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Discord;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
@@ -14,6 +13,7 @@ namespace RoosterBot.Schedule {
 			} else {
 				bool byMention;
 				StudentSetInfo? result;
+				/* TODO discord (mention)
 				if (MentionUtils.TryParseUser(input, out ulong id)) {
 					IUser user = await context.Client.GetUserAsync(id);
 					if (user == null) {
@@ -21,7 +21,7 @@ namespace RoosterBot.Schedule {
 					}
 					result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(user)).GetStudentSet();
 					byMention = true;
-				} else if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
+				} else */ if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
 					result = context.UserConfig.GetStudentSet();
 					byMention = false;
 				} else {
