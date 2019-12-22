@@ -6,9 +6,14 @@ namespace RoosterBot {
 	/// </summary>
 	public interface IUser : ISnowflake {
 		/// <summary>
+		/// Gets the user's system name.
+		/// </summary>
+		string UserName { get; }
+
+		/// <summary>
 		/// Gets the user's display name.
 		/// </summary>
-		string Name { get; }
+		string DisplayName { get; }
 
 		/// <summary>
 		/// Gets a special string used to explicitly mention this user.

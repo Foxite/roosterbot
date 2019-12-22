@@ -7,14 +7,14 @@ namespace RoosterBot.Meta {
 	public class ControlModule : RoosterModule {
 		[Command("shutdown"), RequireBotManager]
 		public Task ShutdownCommand() {
-			Log.Info($"Shutdown command used by {Context.User.Name}");
+			Log.Info($"Shutdown command used by {Context.User.UserName}");
 			Program.Instance.Shutdown();
 			return Task.CompletedTask;
 		}
 
 		[Command("restart"), RequireBotManager]
 		public Task RestartCommand() {
-			Log.Info($"Restart command used by {Context.User.Name}");
+			Log.Info($"Restart command used by {Context.User.UserName}");
 			Program.Instance.Restart();
 			return Task.CompletedTask;
 		}

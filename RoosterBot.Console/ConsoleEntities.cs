@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Console {
 	public class ConsoleUser : IUser {
-		public string Name {get;}
+		public string UserName { get; }
 		public object Id { get; }
-		public string Mention => "@" + Name;
+		public string Mention => "@" + UserName;
 		public string Platform => "Console";
+		public string DisplayName => "ConsoleGuy";
 
 		public ConsoleUser(object id, string name) {
-			Name = name;
+			UserName = name;
 			Id = id;
 		}
 

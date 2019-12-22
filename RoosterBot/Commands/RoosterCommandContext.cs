@@ -23,7 +23,7 @@ namespace RoosterBot {
 		}
 
 		public override string ToString() {
-			return $"{User.Name} in channel `{Channel.Name}`: {Message.Content}";
+			return $"{User.UserName} in channel `{Channel.Name}`: {Message.Content}";
 		}
 	}
 }
