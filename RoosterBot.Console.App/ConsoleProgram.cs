@@ -13,13 +13,18 @@ namespace RoosterBot.ConsoleApp {
 				using var sr = new StreamReader(pipeClient, Encoding.UTF8, true, 2047, true);
 
 				string input;
+				char[] buffer = new char[2047];
 				do {
 					Console.Write("Input: ");
 					input = Console.ReadLine();
 					sw.WriteLine(input);
 					sw.Flush();
-					Console.Write("Response: ");
-					Console.WriteLine(sr.ReadLine());
+					var response = new StringBuilder();
+					int c = 0;
+					while ((c = sr.Read()) != '\0') {
+						response.Append((char) c);
+					}
+					Console.WriteLine("Response: " + response.ToString());
 					Console.WriteLine("----------");
 				} while (input != "!quit");
 			} catch (Exception e) {

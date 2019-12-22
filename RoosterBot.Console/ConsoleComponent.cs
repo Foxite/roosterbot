@@ -28,15 +28,22 @@ namespace RoosterBot.Console {
 			UserConfigService ucs = services.GetService<UserConfigService>();
 			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
 
+			//*
+			Process.Start(new ProcessStartInfo() {
+				FileName = @"C:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
+				CreateNoWindow = false,
+				UseShellExecute = true
+			});//*/
+
 			_ = Task.Run(async () => {
 				try {
 					using var pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
 					pipeServer.WaitForConnection();
+					Logger.Info("Console", "Console interface connected");
 
 					using var sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
 					using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
-						Logger.Info("Console", "Console interface connected");
 						string input = sr.ReadLine()!;
 
 						var consoleMessage = new ConsoleMessage(input, false);
@@ -49,7 +56,7 @@ namespace RoosterBot.Console {
 						));
 						string resultString = result.ToString()!;
 						await TheConsoleChannel.SendMessageAsync(resultString);
-						sw.WriteLine(resultString);
+						sw.Write(resultString + '\0');
 						sw.Flush();
 					}
 				} catch (Exception e) {
