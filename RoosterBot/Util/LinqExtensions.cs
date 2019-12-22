@@ -69,5 +69,38 @@ namespace RoosterBot {
 				i++;
 			}
 		}
+
+		/// <summary>
+		/// Enumerates all duplicate items in an enumeration.
+		/// If a duplicate occurs more than twice in an enumeration it will be yielded one time less than the amount of times it occurs in the source enumeration.
+		/// For example, a duplicate occuring 4 times will be yielded 3 times.
+		/// You can combine this with .Distinct() to avoid this.
+		/// </summary>
+		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
+		public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> enumerable, IEqualityComparer<T>? equalityComparer = null) {
+			var d = new HashSet<T>(equalityComparer ?? EqualityComparer<T>.Default);
+			foreach (var t in enumerable) {
+				if (!d.Add(t)) {
+					yield return t;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Enumerates all duplicate items in an enumerable.
+		/// If a duplicate occurs more than twice in an enumeration it will be yielded one time less than the amount of times it occurs in the source enumeration.
+		/// For example, a duplicate occuring 4 times will be yielded 3 times.
+		/// You can combine this with .Distinct() to avoid this.
+		/// </summary>
+		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
+		/// <param name="selector">Determine equality based on this selector.</param>
+		public static IEnumerable<TSource> Duplicates<TSource, TValue>(this IEnumerable<TSource> enumerable, Func<TSource, TValue> selector, IEqualityComparer<TValue>? equalityComparer = null) {
+			var d = new HashSet<TValue>(equalityComparer ?? EqualityComparer<TValue>.Default);
+			foreach (var t in enumerable) {
+				if (!d.Add(selector(t))) {
+					yield return t;
+				}
+			}
+		}
 	}
 }

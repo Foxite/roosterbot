@@ -30,6 +30,7 @@ namespace RoosterBot {
 
 			// Load assemblies and find classes deriving from ComponentBase
 			IEnumerable<string> componentNames = ReadComponentsFile();
+			EnsureNoDuplicates(componentNames);
 			List<Assembly> assemblies = LoadAssemblies(componentNames);
 			Type[] types = FindComponentClasses(assemblies);
 			EnsureNoMultiComponentAssemblies(types);
@@ -62,6 +63,13 @@ namespace RoosterBot {
 				return json["components"]!.ToObject<JArray>().Select(jt => jt.ToObject<string>()!);
 			} catch (Exception e) {
 				throw new FormatException("Components.json contains invalid data.", e);
+			}
+		}
+		
+		private void EnsureNoDuplicates(IEnumerable<string> componentNames) {
+			IEnumerable<string> duplicates = componentNames.Duplicates();
+			if (duplicates.Any()) {
+				throw new InvalidOperationException("One or more components was listed more than once in Components.json:\n" + string.Join("\n", duplicates));
 			}
 		}
 
