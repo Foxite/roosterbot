@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿/* TODO discord
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
@@ -33,3 +34,4 @@ namespace RoosterBot.GLU {
 		}
 	}
 }
+*/

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord.WebSocket;
+//using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot.Schedule;
@@ -18,7 +18,7 @@ namespace RoosterBot.GLU {
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
 		private readonly Regex m_StudentSetRegex;
 		private readonly Regex m_RoomRegex;
-		private ulong[] m_AllowedGuilds;
+		private object[] m_AllowedGuilds;
 		private string m_TeacherPath;
 		private bool m_SkipPastRecords;
 
@@ -27,7 +27,7 @@ namespace RoosterBot.GLU {
 
 		public GLUComponent() {
 			m_Schedules = new List<ScheduleRegistryInfo>();
-			m_AllowedGuilds = Array.Empty<ulong>();
+			m_AllowedGuilds = Array.Empty<object>();
 			m_TeacherPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
@@ -42,19 +42,23 @@ namespace RoosterBot.GLU {
 		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			var jsonConfig = JObject.Parse(jsonFile);
-			m_SkipPastRecords = jsonConfig["skipPastRecords"].ToObject<bool>();
+			// TODO null
+			m_SkipPastRecords = jsonConfig["skipPastRecords"]!.ToObject<bool>();
 
-			JObject scheduleContainer = jsonConfig["schedules"].ToObject<JObject>();
+			// TODO null
+			JObject scheduleContainer = jsonConfig["schedules"]!.ToObject<JObject>()!;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
-				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name].ToObject<string>())));
+				// TODO null
+				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name]!.ToObject<string>()!)));
 			}
 
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
 			addSchedule<TeacherInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
-			m_AllowedGuilds = jsonConfig["allowedGuilds"].ToObject<JArray>().Select((token) => token.ToObject<ulong>()).ToArray();
+			// TODO null
+			m_AllowedGuilds = jsonConfig["allowedGuilds"]!.ToObject<JArray>()!.Select((token) => (object) token.ToObject<ulong>()).ToArray();
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 
@@ -88,15 +92,15 @@ namespace RoosterBot.GLU {
 
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
-			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
+			/*DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 
 			new RoleAssignmentHandler(client, services.GetService<ConfigService>());
 			new ManualRanksHintHandler(client);
-			new NewUserHandler(client);
+			new NewUserHandler(client);*/
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
-			if (m_AllowedGuilds.Contains(context.ChannelConfig.GuildId)) {
+			if (m_AllowedGuilds.Contains(context.ChannelConfig.ChannelId)) {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {

@@ -53,7 +53,7 @@ namespace RoosterBot.Schedule {
 			return GetAllowedRecordsForGuild(channelId).FirstOrDefault(record => record.ScheduleCode == abbr);
 		}
 
-		public TeacherInfo[] GetRecordsFromAbbrs(ulong guild, string[] abbrs) {
+		public TeacherInfo[] GetRecordsFromAbbrs(object guild, string[] abbrs) {
 			var records = new List<TeacherInfo>();
 			for (int i = 0; i < abbrs.Length; i++) {
 				TeacherInfo record = GetRecordFromAbbr(guild, abbrs[i]);

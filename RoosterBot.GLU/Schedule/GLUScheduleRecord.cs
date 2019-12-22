@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Discord;
+//using Discord;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
@@ -31,11 +31,12 @@ namespace RoosterBot.GLU {
 						} else {
 							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
 							IEmote teacherEmote;
+							/* TODO discord
 							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
 								teacherEmote = Emote.Parse("<:VRjoram:392762653367336960>");
-							} else {
+							} else {*/
 								teacherEmote = new Emoji("👤");
-							}
+							//}
 							yield return getAspect(teacherEmote, "GLUScheduleRecord_Aspect_StaffMember", teachers);
 						}
 					}
