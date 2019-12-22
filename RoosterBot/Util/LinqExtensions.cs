@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RoosterBot {
+namespace System.Linq {
 	public static class LinqExtensions {
+		/// <summary>
+		/// Yields all items in the source enumeration that are not <see langword="null"/>. This function offers null safety when using C# 8.0 nullable reference types.
+		/// </summary>
 		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class {
 			foreach (T? item in enumerable) {
 				if (!(item is null)) {
@@ -11,19 +14,13 @@ namespace RoosterBot {
 				}
 			}
 		}
-		
+
 		/// <summary>
-		/// Returns the params list as an IEnumerable.
+		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, as opposed to all <typeparamref name="T"/>.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="items"></param>
+		/// <param name="list"></param>
 		/// <returns></returns>
-		public static IEnumerable<T> Pack<T>(params T[] items) {
-			for (int i = 0; i < items.Length; i++) {
-				yield return items[i];
-			}
-		}
-
 		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
 			if (list.Count > 0) {
 				LinkedListNode<T>? node = list.First;
