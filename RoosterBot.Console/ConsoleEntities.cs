@@ -5,10 +5,15 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Console {
 	public class ConsoleUser : IUser {
-		public string Name => "User";
-		public string Mention => "@User";
-		public object Id => 1;
+		public string Name {get;}
+		public object Id { get; }
+		public string Mention => "@" + Name;
 		public string Platform => "Console";
+
+		public ConsoleUser(object id, string name) {
+			Name = name;
+			Id = id;
+		}
 
 		public Task<IChannel?> GetPrivateChannel() => Task.FromResult((IChannel?) ConsoleComponent.Instance.TheConsoleChannel);
 	}
@@ -31,7 +36,7 @@ namespace RoosterBot.Console {
 
 	public class ConsoleMessage : IMessage {
 		public ConsoleChannel Channel => ConsoleComponent.Instance.TheConsoleChannel;
-		public ConsoleUser User => ConsoleComponent.Instance.TheConsoleUser;
+		public ConsoleUser User { get; }
 		public object Id { get; } = DateTime.Now.Ticks;
 		public string Platform => "Console";
 		public bool SentByRoosterBot { get; }
@@ -43,6 +48,7 @@ namespace RoosterBot.Console {
 		public ConsoleMessage(string content, bool sentByRoosterBot) {
 			Content = content;
 			SentByRoosterBot = sentByRoosterBot;
+			User = SentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;
 		}
 
 		public Task DeleteAsync() {

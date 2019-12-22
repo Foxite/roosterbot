@@ -7,19 +7,19 @@ namespace RoosterBot.ConsoleApp {
 	public class ConsoleProgram {
 		private static void Main() {
 			try {
-				using var pipeClient = new NamedPipeClientStream(".", "roosterBotConsolePipe", PipeDirection.InOut);
+				using var pipeClient = new NamedPipeClientStream(".", "roosterBotConsolePipe", PipeDirection.InOut, PipeOptions.WriteThrough);
+				pipeClient.Connect();
 				using var sw = new StreamWriter(pipeClient, Encoding.UTF8, 2047, true);
 				using var sr = new StreamReader(pipeClient, Encoding.UTF8, true, 2047, true);
-				pipeClient.Connect();
 
 				string input;
-				var buffer = new char[2047].AsSpan();
 				do {
 					Console.Write("Input: ");
 					input = Console.ReadLine();
-					sw.Write(input);
-					sr.Read(buffer);
-					Console.WriteLine(buffer.ToString());
+					sw.WriteLine(input);
+					sw.Flush();
+					Console.Write("Response: ");
+					Console.WriteLine(sr.ReadLine());
 					Console.WriteLine("----------");
 				} while (input != "!quit");
 			} catch (Exception e) {

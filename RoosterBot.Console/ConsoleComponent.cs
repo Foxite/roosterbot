@@ -15,7 +15,8 @@ namespace RoosterBot.Console {
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
 		internal static ConsoleComponent Instance { get; private set; } = null!;
-		internal ConsoleUser TheConsoleUser { get; } = new ConsoleUser();
+		internal ConsoleUser TheConsoleUser { get; } = new ConsoleUser(1, "User");
+		internal ConsoleUser ConsoleBotUser { get; } = new ConsoleUser(2, "RoosterBot");
 		internal ConsoleChannel TheConsoleChannel { get; } = new ConsoleChannel();
 
 		public ConsoleComponent() {
@@ -27,29 +28,21 @@ namespace RoosterBot.Console {
 			UserConfigService ucs = services.GetService<UserConfigService>();
 			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
 
-			/*/
-			Process.Start(new ProcessStartInfo() {
-				FileName = @"C:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
-				CreateNoWindow = false,
-				UseShellExecute = true,
-			});//*/
-
 			_ = Task.Run(async () => {
 				try {
-					using var pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut);
-					using var sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
-					using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
+					using var pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
 					Logger.Debug("Console", "AAA");
-					await pipeServer.WaitForConnectionAsync();
+					pipeServer.WaitForConnection();
 					Logger.Debug("Console", "BBB");
 
-					var buffer = new Memory<char>(new char[1024]);
-					while (!m_CTS.IsCancellationRequested) {
+					using var sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
+					using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
+					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
 						Logger.Debug("Console", "CCC");
-						await sr.ReadAsync(buffer, m_CTS.Token);
+						string input = sr.ReadLine()!;
 						Logger.Debug("Console", "DDD");
 
-						var consoleMessage = new ConsoleMessage(buffer.ToString(), false);
+						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
 						Logger.Debug("Console", "EEE");
 						var result = await commandService.ExecuteAsync(consoleMessage.Content, new RoosterCommandContext(
@@ -62,7 +55,8 @@ namespace RoosterBot.Console {
 						string resultString = result.ToString()!;
 						await TheConsoleChannel.SendMessageAsync(resultString);
 						Logger.Debug("Console", "GGG");
-						await sw.WriteAsync(resultString);
+						sw.WriteLine(resultString);
+						sw.Flush();
 						Logger.Debug("Console", "HHH");
 					}
 				} catch (Exception e) {
