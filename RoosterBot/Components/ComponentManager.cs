@@ -97,7 +97,7 @@ namespace RoosterBot {
 			if (assembliesWithMultipleComponents.Any()) {
 				throw new InvalidOperationException(
 					$"One or more assemblies contain more than one {nameof(Component)} class. An assembly can have at most one component. The offending assemblies are:\n"
-					+ string.Join('\n', assembliesWithMultipleComponents));
+					+ string.Join('\n', assembliesWithMultipleComponents.Select(grp => grp.Key.FullName + "\n" + string.Join("\n", grp.Select(type => "- " + type.FullName)))));
 			}
 		}
 
