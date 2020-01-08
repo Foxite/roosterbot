@@ -6,10 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Qmmands;
 
 namespace RoosterBot.Console {
-	public class ConsoleComponent : Component {
+	public class ConsoleComponent : PlatformComponent {
 		private readonly CancellationTokenSource m_CTS;
 
 		public override Version ComponentVersion => new Version(0, 1, 0);
@@ -19,21 +18,23 @@ namespace RoosterBot.Console {
 		internal ConsoleUser ConsoleBotUser { get; } = new ConsoleUser(2, "RoosterBot");
 		internal ConsoleChannel TheConsoleChannel { get; } = new ConsoleChannel();
 
+		public override string PlatformName => "Console";
+
 		public ConsoleComponent() {
 			Instance = this;
 			m_CTS = new CancellationTokenSource();
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			UserConfigService ucs = services.GetService<UserConfigService>();
-			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
-
-			//*
+		protected override Task ConnectAsync(IServiceProvider services) {
 			Process.Start(new ProcessStartInfo() {
 				FileName = @"C:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
 				CreateNoWindow = false,
 				UseShellExecute = true
-			});//*/
+			});
+
+			UserConfigService ucs = services.GetService<UserConfigService>();
+			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
+			RoosterCommandService commandService = services.GetService<RoosterCommandService>();
 
 			_ = Task.Run(async () => {
 				try {
@@ -70,6 +71,13 @@ namespace RoosterBot.Console {
 			});
 			return Task.CompletedTask;
 		}
+
+		protected override Task DisconnectAsync() {
+			m_CTS.Cancel();
+			return Task.CompletedTask;
+		}
+
+		public override object GetSnowflakeIdFromString(string input) => ulong.Parse(input);
 
 		protected override void Dispose(bool disposing) {
 			if (disposing) {

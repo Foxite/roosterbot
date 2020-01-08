@@ -4,27 +4,33 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Console {
-	public class ConsoleUser : IUser {
-		public string UserName { get; }
+	public abstract class ConsoleSnowflake : ISnowflake {
+		public PlatformComponent Platform => ConsoleComponent.Instance;
 		public object Id { get; }
+
+		protected ConsoleSnowflake(long id) {
+			Id = id;
+		}
+	}
+
+	public class ConsoleUser : ConsoleSnowflake, IUser {
+		public string UserName { get; }
 		public string Mention => "@" + UserName;
-		public string Platform => "Console";
 		public string DisplayName => "ConsoleGuy";
 
-		public ConsoleUser(object id, string name) {
+		public ConsoleUser(long id, string name) : base(id) {
 			UserName = name;
-			Id = id;
 		}
 
 		public Task<IChannel?> GetPrivateChannel() => Task.FromResult((IChannel?) ConsoleComponent.Instance.TheConsoleChannel);
 	}
 
-	public class ConsoleChannel : IChannel {
+	public class ConsoleChannel : ConsoleSnowflake, IChannel {
 		internal List<ConsoleMessage> m_Messages = new List<ConsoleMessage>();
 
 		public string Name => "Window";
-		public object Id => 2;
-		public string Platform => "Console";
+
+		public ConsoleChannel() : base(DateTime.Now.Ticks) { }
 
 		public Task<IMessage> GetMessageAsync(object id) => Task.FromResult((IMessage) m_Messages.First(message => message.Id == Id));
 
@@ -35,18 +41,16 @@ namespace RoosterBot.Console {
 		}
 	}
 
-	public class ConsoleMessage : IMessage {
+	public class ConsoleMessage : ConsoleSnowflake, IMessage {
 		public ConsoleChannel Channel => ConsoleComponent.Instance.TheConsoleChannel;
 		public ConsoleUser User { get; }
-		public object Id { get; } = DateTime.Now.Ticks;
-		public string Platform => "Console";
 		public bool SentByRoosterBot { get; }
 		public string Content { get; private set; }
 
 		IChannel IMessage.Channel => Channel;
 		IUser IMessage.User => User;
 
-		public ConsoleMessage(string content, bool sentByRoosterBot) {
+		public ConsoleMessage(string content, bool sentByRoosterBot) : base(DateTime.Now.Ticks) {
 			Content = content;
 			SentByRoosterBot = sentByRoosterBot;
 			User = SentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;
