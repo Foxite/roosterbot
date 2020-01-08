@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public abstract class ScheduleProvider : ChannelSpecificInfo {
-		protected ScheduleProvider(object[] allowedGuilds) : base(allowedGuilds) { }
+		protected ScheduleProvider(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
 
 		public abstract Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime datetime);

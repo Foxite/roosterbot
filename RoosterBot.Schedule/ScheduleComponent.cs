@@ -7,14 +7,14 @@ namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
 		public override Version ComponentVersion => new Version(2, 1, 0);
 
-		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
+		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireTag("ScheduleProvider")
 				.RequireTag("DayOfWeekReader")
 				.Check();
 		}
 
-		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			services
 				.AddSingleton<TeacherNameService>()
 				.AddSingleton<ScheduleService>()
@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			var ssir = new StudentSetInfoParser();

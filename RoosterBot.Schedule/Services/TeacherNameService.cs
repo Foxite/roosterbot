@@ -12,7 +12,7 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
-		public async Task ReadAbbrCSV(string path, object[] allowedGuilds) {
+		public async Task ReadAbbrCSV(string path, IEnumerable<SnowflakeReference> allowedGuilds) {
 			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
@@ -49,11 +49,11 @@ namespace RoosterBot.Schedule {
 			Logger.Info("TeacherNameService", $"Successfully loaded abbreviation CSV file {Path.GetFileName(path)}");
 		}
 
-		public TeacherInfo GetRecordFromAbbr(object channelId, string abbr) {
-			return GetAllowedRecordsForGuild(channelId).FirstOrDefault(record => record.ScheduleCode == abbr);
+		public TeacherInfo GetRecordFromAbbr(SnowflakeReference channel, string abbr) {
+			return GetAllowedRecordsForGuild(channel).FirstOrDefault(record => record.ScheduleCode == abbr);
 		}
 
-		public TeacherInfo[] GetRecordsFromAbbrs(object guild, string[] abbrs) {
+		public TeacherInfo[] GetRecordsFromAbbrs(SnowflakeReference guild, string[] abbrs) {
 			var records = new List<TeacherInfo>();
 			for (int i = 0; i < abbrs.Length; i++) {
 				TeacherInfo record = GetRecordFromAbbr(guild, abbrs[i]);
@@ -73,7 +73,7 @@ namespace RoosterBot.Schedule {
 			return records.ToArray();
 		}
 		
-		public IReadOnlyCollection<TeacherMatch> Lookup(object channelId, string nameInput, bool skipNoLookup = true) {
+		public IReadOnlyCollection<TeacherMatch> Lookup(SnowflakeReference channel, string nameInput, bool skipNoLookup = true) {
 			// TODO (feature) Improve multiple match resolution
 			// Consider a number of teachers, two of which:
 			// "Mar Lastname", "MLA"
@@ -85,7 +85,7 @@ namespace RoosterBot.Schedule {
 
 			var records = new List<TeacherMatch>();
 
-			foreach (TeacherInfo record in GetAllowedRecordsForGuild(channelId)) {
+			foreach (TeacherInfo record in GetAllowedRecordsForGuild(channel)) {
 				if (skipNoLookup && record.NoLookup)
 					continue;
 
@@ -98,9 +98,9 @@ namespace RoosterBot.Schedule {
 			return records.AsReadOnly();
 		}
 
-		public TeacherInfo? GetTeacherByDiscordUser(object channelId, IUser user) {
+		public TeacherInfo? GetTeacherByDiscordUser(SnowflakeReference channel, IUser user) {
 			string findDiscordUser = user.UserName;
-			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(channelId)) {
+			foreach (TeacherInfo teacher in GetAllowedRecordsForGuild(channel)) {
 				if (findDiscordUser == teacher.DiscordUser) {
 					return teacher;
 				}
@@ -108,12 +108,12 @@ namespace RoosterBot.Schedule {
 			return null;
 		}
 		
-		public IEnumerable<TeacherInfo> GetAllRecords(object channelId) {
-			return GetAllowedRecordsForGuild(channelId);
+		public IEnumerable<TeacherInfo> GetAllRecords(SnowflakeReference channel) {
+			return GetAllowedRecordsForGuild(channel);
 		}
 
-		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(object channelId) {
-			return m_Records.Where(gtl => gtl.IsGuildAllowed(channelId)).SelectMany(gtl => gtl.Teachers);
+		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(SnowflakeReference channel) {
+			return m_Records.Where(gtl => gtl.IsGuildAllowed(channel)).SelectMany(gtl => gtl.Teachers);
 		}
 
 		private class GuildTeacherList : ChannelSpecificInfo {
@@ -121,7 +121,7 @@ namespace RoosterBot.Schedule {
 
 			public IReadOnlyList<TeacherInfo> Teachers => m_Teachers;
 
-			public GuildTeacherList(object[] allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
+			public GuildTeacherList(IEnumerable<SnowflakeReference> allowedGuilds, List<TeacherInfo> teachers) : base(allowedGuilds) {
 				m_Teachers = teachers;
 			}
 		}

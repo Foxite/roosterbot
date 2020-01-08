@@ -5,14 +5,14 @@ using System.Runtime.Serialization;
 
 namespace RoosterBot.Schedule {
 	public abstract class ChannelSpecificInfo {
-		private readonly IEnumerable<object> m_AllowedChannels;
+		private readonly IEnumerable<SnowflakeReference> m_AllowedChannels;
 
-		protected ChannelSpecificInfo(IEnumerable<object> allowedChannels) {
+		protected ChannelSpecificInfo(IEnumerable<SnowflakeReference> allowedChannels) {
 			m_AllowedChannels = allowedChannels;
 		}
 
-		public bool IsGuildAllowed(object channelId) => m_AllowedChannels.Contains(channelId);
-		public bool IsGuildAllowed(IChannel channel) => IsGuildAllowed(channel.Id);
+		public bool IsGuildAllowed(SnowflakeReference reference) => m_AllowedChannels.Contains(reference);
+		public bool IsGuildAllowed(IChannel channel) => IsGuildAllowed(new SnowflakeReference(channel.Platform, channel.Id));
 	}
 
 

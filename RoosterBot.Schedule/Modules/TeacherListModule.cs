@@ -11,9 +11,9 @@ namespace RoosterBot.Schedule {
 		public CommandResult TeacherListCommand([Remainder, Name("#TeacherListModule_ListCommand_NameParameterName")] string name = "") {
 			IEnumerable<TeacherInfo> records;
 			if (string.IsNullOrWhiteSpace(name)) {
-				records = Teachers.GetAllRecords(Context.ChannelConfig.ChannelId);
+				records = Teachers.GetAllRecords(Context.ChannelConfig.ChannelReference);
 			} else {
-				records = Teachers.Lookup(Context.ChannelConfig.ChannelId, name).Select(match => match.Teacher);
+				records = Teachers.Lookup(Context.ChannelConfig.ChannelReference, name).Select(match => match.Teacher);
 			}
 
 			if (!records.Any()) {

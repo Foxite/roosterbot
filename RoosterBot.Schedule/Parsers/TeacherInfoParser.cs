@@ -26,7 +26,7 @@ namespace RoosterBot.Schedule {
 
 				if (user == null) {
 					if (input.Length >= 3) {
-						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.ChannelConfig.ChannelId, input);
+						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.ChannelConfig.ChannelReference, input);
 						if (lookupResults.Count == 1) {
 							result = lookupResults.First().Teacher;
 						} else if (lookupResults.Count > 1) {
@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 						}
 					}
 				} else if (context.IsPrivate) {
-					result = tns.GetTeacherByDiscordUser(context.Channel, user);
+					result = tns.GetTeacherByDiscordUser(context.Channel.GetReference(), user);
 				}
 
 				if (result == null) {
