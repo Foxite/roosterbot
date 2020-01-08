@@ -43,6 +43,59 @@ namespace System.Linq {
 		}
 
 		/// <summary>
+		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, in reversed order, as opposed to all <typeparamref name="T"/>.
+		/// </summary>
+		/// <remarks>
+		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
+		/// and then yielding that in reverse. This function yields <see cref="LinkedList{T}.Last"/> and then yields that node's <see cref="LinkedListNode{T}.Previous"/>
+		/// until there are no more items.
+		/// </remarks>
+		public static IEnumerable<LinkedListNode<T>> GetNodesBackwards<T>(this LinkedList<T> list) {
+			if (list.Count > 0) {
+				LinkedListNode<T>? node = list.Last;
+				while (node != null) {
+					yield return node;
+					node = node.Previous;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, in reversed order, as opposed to all <typeparamref name="T"/>.
+		/// </summary>
+		/// <remarks>
+		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
+		/// and then yielding that in reverse. This function yields <see cref="LinkedList{T}.Last"/> and then yields the previous node's <see cref="LinkedListNode{T}.Previous"/>
+		/// until there are no more items.
+		/// 
+		/// This function is not called Reverse to avoid naming conflicts with the aforementioned function.
+		/// </remarks>
+		public static IEnumerable<LinkedListNode<T>> Backwards<T>(this LinkedList<T> list) {
+			if (list.Count > 0) {
+				LinkedListNode<T>? node = list.Last;
+				while (node != null) {
+					yield return node;
+					node = node.Previous;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Enumerates all items in an <see cref="IList{T}"/> in reverse order.
+		/// </summary>
+		/// <remarks>
+		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
+		/// and then yielding that in reverse. This function utilizes a reverse for loop over the IList<T>.
+		/// 
+		/// This function is not called Reverse to avoid naming conflicts with the aforementioned function.
+		/// </remarks>
+		public static IEnumerable<T> Backwards<T>(this IList<T> list) {
+			for (int i = list.Count - 1; i >= 0; i--) {
+				yield return list[i];
+			}
+		}
+
+		/// <summary>
 		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
