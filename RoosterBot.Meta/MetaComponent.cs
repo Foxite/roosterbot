@@ -8,7 +8,7 @@ namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
-		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
 			// TODO Json deserialization
@@ -22,7 +22,7 @@ namespace RoosterBot.Meta {
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
