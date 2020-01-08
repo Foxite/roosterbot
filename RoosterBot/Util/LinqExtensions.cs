@@ -16,6 +16,17 @@ namespace System.Linq {
 		}
 
 		/// <summary>
+		/// Yields all items in the source enumeration that have a value. This function offers safety when using <see cref="Nullable{T}"/>
+		/// </summary>
+		public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : struct {
+			foreach (T? item in enumerable) {
+				if (item.HasValue) {
+					yield return item.Value;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, as opposed to all <typeparamref name="T"/>.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
