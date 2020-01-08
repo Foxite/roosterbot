@@ -12,12 +12,8 @@ namespace RoosterBot {
 			m_Config = config;
 		}
 
-		public ChannelConfig GetDefaultConfig() {
-			return GetDefaultConfig(0);
-		}
-
-		protected ChannelConfig GetDefaultConfig(object channelId) {
-			return new ChannelConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, channelId, new Dictionary<string, JToken>());
+		protected ChannelConfig GetDefaultConfig(SnowflakeReference channel) {
+			return new ChannelConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, channel, new Dictionary<string, JToken>());
 		}
 
 		public abstract Task UpdateGuildAsync(ChannelConfig config);
@@ -34,16 +30,17 @@ namespace RoosterBot {
 		private readonly ChannelConfigService m_Service;
 		private readonly IDictionary<string, JToken> m_CustomData;
 
+		public SnowflakeReference ChannelReference { get; }
+		public object ChannelId => ChannelReference.Id;
 		public string CommandPrefix { get; set; }
 		public CultureInfo Culture { get; set; }
-		public object ChannelId { get; }
 
-		public ChannelConfig(ChannelConfigService guildConfigService, string commandPrefix, CultureInfo culture, object channelId, IDictionary<string, JToken> customData) {
+		public ChannelConfig(ChannelConfigService guildConfigService, string commandPrefix, CultureInfo culture, SnowflakeReference channel, IDictionary<string, JToken> customData) {
 			m_Service = guildConfigService;
 			CommandPrefix = commandPrefix;
 			Culture = culture;
-			ChannelId = channelId;
 			m_CustomData = customData;
+			ChannelReference = channel;
 		}
 
 		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data, T defaultValue = default) {
