@@ -18,7 +18,7 @@ namespace RoosterBot.GLU {
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
 		private readonly Regex m_StudentSetRegex;
 		private readonly Regex m_RoomRegex;
-		private object[] m_AllowedGuilds;
+		private SnowflakeReference[] m_AllowedGuilds;
 		private string m_TeacherPath;
 		private bool m_SkipPastRecords;
 
@@ -27,19 +27,19 @@ namespace RoosterBot.GLU {
 
 		public GLUComponent() {
 			m_Schedules = new List<ScheduleRegistryInfo>();
-			m_AllowedGuilds = Array.Empty<object>();
+			m_AllowedGuilds = Array.Empty<SnowflakeReference>();
 			m_TeacherPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
 
-		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
+		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireMinimumVersion<ScheduleComponent>(new Version(2, 0, 0))
 				.Check();
 		}
 
-		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
 			var jsonConfig = JObject.Parse(jsonFile);
 			// TODO null
@@ -58,14 +58,17 @@ namespace RoosterBot.GLU {
 			addSchedule<RoomInfo>("GLU-Rooms");
 
 			// TODO null
-			m_AllowedGuilds = jsonConfig["allowedGuilds"]!.ToObject<JArray>()!.Select((token) => (object) token.ToObject<ulong>()).ToArray();
+			m_AllowedGuilds = jsonConfig["allowedGuilds"]!.ToObject<JArray>()!.Select((token) => {
+				JObject jo = token.ToObject<JObject>()!;
+				return PlatformUtil.GetSnowflakeReference(jo["platform"]!.ToObject<string>()!, jo["id"]!.ToObject<string>()!);
+			}).ToArray();
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 
 			return Task.CompletedTask;
 		}
 
-		public override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help) {
+		protected override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help) {
 			commands.AddModule<GLUModule>();
 
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");

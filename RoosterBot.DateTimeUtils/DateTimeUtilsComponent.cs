@@ -13,7 +13,7 @@ namespace RoosterBot.DateTimeUtils {
 		internal static ResourceService ResourceService { get; private set; }
 #nullable restore
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			ResourceService = services.GetService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 

@@ -12,10 +12,10 @@ namespace RoosterBot.GLU {
 	public class GLUScheduleReader : ScheduleReader {
 		private readonly string m_Path;
 		private readonly TeacherNameService m_Teachers;
-		private readonly object m_Guild;
+		private readonly SnowflakeReference m_Guild;
 		private readonly bool m_SkipPastRecords;
 
-		public GLUScheduleReader(string path, TeacherNameService teachers, object guild, bool skipPastRecords) {
+		public GLUScheduleReader(string path, TeacherNameService teachers, SnowflakeReference guild, bool skipPastRecords) {
 			m_Path = path;
 			m_Teachers = teachers;
 			m_Guild = guild;
