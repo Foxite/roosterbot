@@ -11,6 +11,6 @@
 		/// <summary>
 		/// Gets the platform that originated this snowflake.
 		/// </summary>
-		string Platform { get; }
+		PlatformComponent Platform { get; }
 	}
 }
