@@ -183,7 +183,17 @@ namespace RoosterBot {
 #endif
 		}
 
-		internal void ShutdownComponents() {
+		private async Task ConnectPlatformsAsync() {
+			foreach (var component in m_Components.OfType<PlatformComponent>()) {
+				await component.ConnectInternalAsync(Services);
+			}
+		}
+
+		internal async Task ShutdownComponentsAsync() {
+			foreach (var component in m_Components.OfType<PlatformComponent>()) {
+				await component.DisconnectInternalAsync();
+			}
+
 			foreach (Component component in m_Components) {
 				component.Dispose();
 			}

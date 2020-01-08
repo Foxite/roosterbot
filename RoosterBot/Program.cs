@@ -78,7 +78,7 @@ namespace RoosterBot {
 
 			Logger.Info("Main", "Stopping program");
 
-			Components.ShutdownComponents();
+			await Components.ShutdownComponentsAsync();
 		}
 
 		private IServiceCollection CreateRBServices(ConfigService configService) {
