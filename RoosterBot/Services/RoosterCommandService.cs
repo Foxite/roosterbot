@@ -12,7 +12,6 @@ namespace RoosterBot {
 	/// This class wraps multiple Qmmands.CommandService objects, one for each supported culture.
 	/// </summary>
 	public sealed class RoosterCommandService {
-		// Null CultureInfo represents unlocalized modules
 		private readonly ConcurrentDictionary<CultureInfo, CommandService> m_ServicesByCulture;
 		private readonly CommandService m_DefaultService;
 		private readonly ResourceService m_ResourceService;
