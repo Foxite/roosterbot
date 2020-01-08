@@ -124,7 +124,7 @@ namespace RoosterBot {
 
 		private void CheckDependencies(IEnumerable<Component> components) {
 			foreach (Component component in components) {
-				DependencyResult dependencyResult = component.CheckDependencies(components);
+				DependencyResult dependencyResult = component.CheckDependenciesInternal(components);
 				if (!dependencyResult.OK) {
 					throw new ComponentDependencyException($"{component.Name} cannot satisfy dependencies:\n{dependencyResult.ErrorMessage}", component.GetType());
 				}
@@ -144,7 +144,7 @@ namespace RoosterBot {
 #else
 					servicesLoading[i] = 
 #endif               
-						component.AddServicesAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
+						component.AddServicesInternalAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
 					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", component.GetType(), ex);
 				}
@@ -171,7 +171,7 @@ namespace RoosterBot {
 #else
 					modulesLoading[moduleIndex] = 
 #endif
-						component.AddModulesAsync(services, commands, help);
+						component.AddModulesInternalAsync(services, commands, help);
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
