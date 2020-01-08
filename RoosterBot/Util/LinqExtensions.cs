@@ -98,11 +98,6 @@ namespace System.Linq {
 		/// <summary>
 		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="source"></param>
-		/// <param name="moveInto"></param>
-		/// <param name="predicate"></param>
-		/// <returns></returns>
 		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
 			var outA = new List<T>();
 			var outB = new List<T>();
@@ -118,11 +113,6 @@ namespace System.Linq {
 		/// <summary>
 		/// Does effectively the same as enumerable.ToArray().CopyTo(...), but does not convert the enumerable to an array.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="enumerable"></param>
-		/// <param name="array"></param>
-		/// <param name="index"></param>
-		/// <param name="amount"></param>
 		public static void CopyTo<T>(this IEnumerable<T> enumerable, T[] array, int index) {
 			int i = index;
 			foreach (T item in enumerable) {
