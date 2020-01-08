@@ -1,9 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace System.Linq {
 	public static class LinqExtensions {
+		/// <summary>
+		/// This will enumerate <paramref name="source"/> and determine if the count is equal to <paramref name="count"/>.
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// </summary>
+		/// <remarks>
+		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
+		/// will not be enumerated.
+		/// </remarks>
+		public static bool CountEquals<T>(this IEnumerable<T> source, int count) {
+			if (source is ICollection<T> ico) {
+				return ico.Count == count;
+			}
+
+			int i = 0;
+			foreach (T _ in source) {
+				i++;
+				if (i > count) {
+					// There were more than {count}
+					return false;
+				}
+			}
+			if (i == count) {
+				// There were exactly {count}
+				return true;
+			} else {
+				// There were less then {count}
+				return false;
+			}
+		}
+		
+		/// <summary>
+		/// This will enumerate <paramref name="source"/> and determine if the count is greater than or equal to <paramref name="count"/>.
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// </summary>
+		/// <remarks>
+		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
+		/// will not be enumerated.
+		/// </remarks>
+		public static bool CountIsGreaterThanOrEquals<T>(this IEnumerable<T> source, int count) {
+			if (source is ICollection<T> ico) {
+				return ico.Count >= count;
+			}
+
+			int i = 0;
+			foreach (T _ in source) {
+				i++;
+				if (i >= count) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		/// <summary>
+		/// This will enumerate <paramref name="source"/> and determine if the count is greater than <paramref name="count"/>.
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// </summary>
+		/// <remarks>
+		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
+		/// will not be enumerated.
+		/// </remarks>
+		public static bool CountIsGreaterThan<T>(this IEnumerable<T> source, int count) {
+			if (source is ICollection<T> ico) {
+				return ico.Count > count;
+			}
+
+			int i = 0;
+			foreach (T _ in source) {
+				i++;
+				if (i > count) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		/// <summary>
+		/// This will enumerate <paramref name="source"/> and determine if the count is less than or equal to <paramref name="count"/>.
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// </summary>
+		/// <remarks>
+		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
+		/// will not be enumerated.
+		/// </remarks>
+		public static bool CountIsLessThanOrEquals<T>(this IEnumerable<T> source, int count) {
+			if (source is ICollection<T> ico) {
+				return ico.Count <= count;
+			}
+
+			int i = 0;
+			foreach (T _ in source) {
+				i++;
+				if (i > count) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		/// <summary>
+		/// This will enumerate <paramref name="source"/> and determine if the count is less than <paramref name="count"/>.
+		/// It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>
+		/// </summary>
+		/// <remarks>
+		/// If <paramref name="source"/> implements <see cref="ICollection{T}"/>, then <see cref="ICollection{T}.Count"/> will be used and <paramref name="source"/>
+		/// will not be enumerated.
+		/// </remarks>
+		public static bool CountIsLessThan<T>(this IEnumerable<T> source, int count) {
+			if (source is ICollection<T> ico) {
+				return ico.Count < count;
+			}
+
+			int i = 0;
+			foreach (T _ in source) {
+				i++;
+				if (i >= count) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		/// <summary>
 		/// Yields all items in the source enumeration that are not <see langword="null"/>. This function offers null safety when using C# 8.0 nullable reference types.
 		/// </summary>
