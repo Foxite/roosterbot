@@ -14,8 +14,6 @@ namespace RoosterBot.Weather {
 
 		[Command("#WeatherModule_CurrentWeather"), Description("#WeatherModule_CurrentWeather_Description")]
 		public async Task<CommandResult> GetCurrentWeatherCommand([Name("#WeatherModule_CityInfo_Name"), Remainder] CityInfo city) {
-			using IDisposable typingState = Context.Channel.EnterTypingState();
-
 			WeatherInfo weather;
 
 			weather = await Weather.GetCurrentWeatherAsync(city);
@@ -28,8 +26,6 @@ namespace RoosterBot.Weather {
 
 		[Command("#WeatherModule_TimeForecast"), Description("#WeatherModule_TimeForecast_Description")]
 		public async Task<CommandResult> GetDayForecastCommand([Name("#WeatherModule_Forecast_Day")] DayOfWeek day, [Name("#WeatherModule_Forecast_Time")] TimeSpan timeOffset, [Name("#WeatherModule_CityInfo_Name"), Remainder] CityInfo city) {
-			using IDisposable typingState = Context.Channel.EnterTypingState();
-
 			DateTime datetime;
 			WeatherInfo weather;
 
@@ -52,9 +48,7 @@ namespace RoosterBot.Weather {
 					return TextResult.Error(GetString("WeatherModule_TwoDayLimit"));
 				} else {
 					WeatherInfo weather;
-					using (IDisposable typingState = Context.Channel.EnterTypingState()) {
-						weather = await Weather.GetWeatherForecastAsync(city, amount);
-					}
+					weather = await Weather.GetWeatherForecastAsync(city, amount);
 					GuildConfig.TryGetData("metric", out bool metric, true);
 					m_Result.AddResult(weather.Present(DateTime.Now.AddHours(amount), Culture, metric));
 					Attribution();

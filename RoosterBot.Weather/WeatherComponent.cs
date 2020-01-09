@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
@@ -10,30 +11,25 @@ namespace RoosterBot.Weather {
 		public override Version ComponentVersion => new Version(0, 3, 0);
 		public bool AttributionLicense { get; private set; }
 
-		public override DependencyResult CheckDependencies(IEnumerable<Component> components) {
+		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
 				.RequireTag("DayOfWeekReader")
 				.Check();
 		}
 
-		public async override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected async override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			Logger.Debug("Weather", "Loading cities file");
 			var cityService = new CityService(configPath);
 			await cityService.ReadCityCSVAsync();
 			Logger.Debug("Weather", "Finished loading cities file");
 
-			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var jsonConfig = JsonConvert.DeserializeObject<WeatherJsonConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
-			string weatherBitKey = jsonConfig["weatherbit_key"].ToObject<string>();
-			bool attributionLicense = jsonConfig["attribution"].ToObject<bool>();
-
-			services.AddSingleton(provider => { // Do it like this because we need a dependency service, but we can't access those yet
-				return new WeatherService(provider.GetService<ResourceService>(), weatherBitKey, attributionLicense);
-			});
+			services.AddSingleton(isp => new WeatherService(isp.GetService<ResourceService>(), jsonConfig.Key, jsonConfig.Attribution));
 			services.AddSingleton(cityService);
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
 			commandService.AddTypeParser(new CityInfoParser());
@@ -43,6 +39,16 @@ namespace RoosterBot.Weather {
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 
 			return Task.CompletedTask;
+		}
+
+		private class WeatherJsonConfig {
+			public string Key { get; }
+			public bool Attribution { get; }
+
+			public WeatherJsonConfig(string weatherbit_key, bool attribution) {
+				Key = weatherbit_key;
+				Attribution = attribution;
+			}
 		}
 	}
 }

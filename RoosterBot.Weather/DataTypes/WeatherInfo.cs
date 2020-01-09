@@ -35,13 +35,13 @@ namespace RoosterBot.Weather {
 			m_WeatherService = service;
 			City = city;
 
-			Temperature = jsonInfo["temp"].ToObject<float>();
-			ApparentTemperature = jsonInfo["app_temp"].ToObject<float>();
+			Temperature = jsonInfo["temp"]!.ToObject<float>();
+			ApparentTemperature = jsonInfo["app_temp"]!.ToObject<float>();
 
-			WindSpeed = jsonInfo["wind_spd"].ToObject<float>() * 3.6f; // m/s -> km/h
-			WindDirection = jsonInfo["wind_cdir_full"].ToObject<string>();
+			WindSpeed = jsonInfo["wind_spd"]!.ToObject<float>() * 3.6f; // m/s -> km/h
+			WindDirection = jsonInfo["wind_cdir_full"]!.ToObject<string>()!;
 
-			WeatherCode = jsonInfo["weather"]["code"].ToObject<short>();
+			WeatherCode = jsonInfo["weather"]!["code"]!.ToObject<short>();
 		}
 
 		/// <summary>
@@ -123,8 +123,8 @@ namespace RoosterBot.Weather {
 					802 => new Emoji("🌤️"),
 					803 => new Emoji("⛅"),
 					804 => new Emoji("☁️"),
-					900 => Emote.Parse("<:unknown:636213624460935188>"),
-					_   => Emote.Parse("<:error:636213609919283238>")
+					900 => Constants.Unknown,
+					_   => Constants.Error
 				}, m_Resources.GetString(culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(culture, WeatherCode));
 
 				if (WindSpeed == 0) {

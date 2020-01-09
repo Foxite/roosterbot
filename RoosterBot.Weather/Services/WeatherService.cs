@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
+	// TODO this should be split into a full WeatherBit C# api, which could actually become an entirely new library that this component uses
 	public class WeatherService : IDisposable {
 		private const string BaseUrl = "https://api.weatherbit.io/v2.0/";
 
@@ -28,14 +29,14 @@ namespace RoosterBot.Weather {
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {
 			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("current", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() }
-			}))["data"][0].ToObject<JObject>());
+			}))!["data"]![0]!.ToObject<JObject>()!);
 		}
 
 		public async Task<WeatherInfo> GetWeatherForecastAsync(CityInfo city, int hoursFromNow) {
 			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() },
 				{ "hours", hoursFromNow.ToString() }
-			}))["data"].Last.ToObject<JObject>());
+			}))!["data"]!.Last!.ToObject<JObject>()!);
 		}
 
 		public string GetDescription(CultureInfo culture, short weatherCode) {
