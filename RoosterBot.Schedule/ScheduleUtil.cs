@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Qmmands;
+using Qommon.Events;
 
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
@@ -19,7 +21,12 @@ namespace RoosterBot.Schedule {
 		#endregion
 
 		#region User classes
-		public static event Func<ulong, StudentSetInfo?, StudentSetInfo, Task>? UserChangedClass;
+		private static readonly AsynchronousEvent<UserChangedStudentSetEventArgs> ClassChangedEvent = new AsynchronousEvent<UserChangedStudentSetEventArgs>();
+
+		public static event AsynchronousEventHandler<UserChangedStudentSetEventArgs> UserChangedClass {
+			add => ClassChangedEvent.Hook(value);
+			remove => ClassChangedEvent.Unhook(value);
+		}
 
 		public static StudentSetInfo? GetStudentSet(this UserConfig config) {
 			config.TryGetData("schedule.userClass", out StudentSetInfo? ssi);
@@ -30,11 +37,23 @@ namespace RoosterBot.Schedule {
 		public static async Task<StudentSetInfo?> SetStudentSetAsync(this UserConfig config, StudentSetInfo ssi) {
 			StudentSetInfo? old = GetStudentSet(config);
 			config.SetData("schedule.userClass", ssi);
-			if (old != ssi && UserChangedClass != null) {
-				await DelegateUtil.InvokeAsyncEventSequential(UserChangedClass, config.UserId, old, ssi);
+			if (old != ssi) {
+				await ClassChangedEvent.InvokeAsync(new UserChangedStudentSetEventArgs(config.UserReference, old, ssi));
 			}
 			return old;
 		}
 		#endregion
+	}
+
+	public class UserChangedStudentSetEventArgs : EventArgs {
+		public SnowflakeReference UserReference { get; }
+		public StudentSetInfo? OldSet { get; }
+		public StudentSetInfo NewSet { get; }
+
+		public UserChangedStudentSetEventArgs(SnowflakeReference userReference, StudentSetInfo? oldSet, StudentSetInfo newSet) {
+			UserReference = userReference;
+			OldSet = oldSet;
+			NewSet = newSet;
+		}
 	}
 }
