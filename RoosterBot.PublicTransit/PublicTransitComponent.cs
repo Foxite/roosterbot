@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
@@ -14,22 +14,17 @@ namespace RoosterBot.PublicTransit {
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
-		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			#region Config
-			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
-			string username = jsonConfig["username"].ToObject<string>();
-			string password = jsonConfig["password"].ToObject<string>();
-			string defaultDepartureCode = jsonConfig["defaultDepartureCode"].ToObject<string>();
-			#endregion Config
+		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+			PTJsonConfig config = JsonConvert.DeserializeObject<PTJsonConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
-			m_NSAPI = new NSAPI(username, password);
+			m_NSAPI = new NSAPI(config.Username, config.Password);
 			services.AddSingleton(m_NSAPI);
-			services.AddSingleton(new StationInfoService(Path.Combine(configPath, "stations.xml"), defaultDepartureCode));
+			services.AddSingleton(new StationInfoService(Path.Combine(configPath, "stations.xml"), config.DefaultDepartureCode));
 
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			var stationInfoReader = new StationInfoParser();
 			commandService.AddTypeParser(stationInfoReader);
 			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
@@ -50,6 +45,18 @@ namespace RoosterBot.PublicTransit {
 
 		protected override void Dispose(bool disposing) {
 			m_NSAPI?.Dispose();
+		}
+
+		private class PTJsonConfig {
+			public string Username { get; set; }
+			public string Password { get; set; }
+			public string DefaultDepartureCode { get; set; }
+
+			public PTJsonConfig(string username, string password, string defaultDepartureCode) {
+				Username = username;
+				Password = password;
+				DefaultDepartureCode = defaultDepartureCode;
+			}
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Qmmands;
 
@@ -21,8 +20,6 @@ namespace RoosterBot.PublicTransit {
 				stationFrom = Stations.DefaultDeparture;
 				stationTo = stops[0];
 			}
-
-			using IDisposable typingState = Context.Channel.EnterTypingState();
 
 			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
 
