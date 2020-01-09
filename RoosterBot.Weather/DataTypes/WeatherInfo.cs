@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Discord;
 using Newtonsoft.Json.Linq;
 using RoosterBot.DateTimeUtils;
 
