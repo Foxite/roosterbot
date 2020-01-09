@@ -41,6 +41,7 @@ namespace RoosterBot {
 			Services = await AddComponentServicesAsync(serviceCollection);
 			await AddComponentModulesAsync(Services);
 			Logger.Info("ComponentManager", "Components ready");
+			await ConnectPlatformsAsync();
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
