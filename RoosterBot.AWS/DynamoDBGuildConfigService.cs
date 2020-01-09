@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.AWS {
+	// TODO Improve database structure
+	// This currently indexes SnowflakeReferences by sr.Platform.PlatformName + "/" + sr.Id.ToString().
+	// That's not great and to change it requires changing the database structure.
 	public class DynamoDBGuildConfigService : ChannelConfigService {
 		private readonly Table m_Table;
 
