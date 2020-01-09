@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -18,12 +17,8 @@ namespace RoosterBot.Meta {
 
 			m_ConfigFilePath = configPath;
 
-			var jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath)).ToObject<IDictionary<string, IDictionary<string, FileUserConfig>>>();
+			var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileUserConfig>>>(File.ReadAllText(m_ConfigFilePath));
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, UserConfig>();
-
-			if (jsonConfig is null) {
-				throw new FormatException("Guild config map could not be deserialized."); // TODO useful error message
-			}
 
 			foreach (KeyValuePair<string, IDictionary<string, FileUserConfig>> platformKvp in jsonConfig) {
 				PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
