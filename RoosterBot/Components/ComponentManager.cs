@@ -52,6 +52,7 @@ namespace RoosterBot {
 				throw new FileNotFoundException("Components.json was not found in the DataPath.");
 			}
 
+			// TODO proper deserialization
 			JObject json;
 			try {
 				json = JObject.Parse(File.ReadAllText(filePath));

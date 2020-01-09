@@ -41,15 +41,13 @@ namespace RoosterBot.GLU {
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
+			// TODO proper deserialization
 			var jsonConfig = JObject.Parse(jsonFile);
-			// TODO null
 			m_SkipPastRecords = jsonConfig["skipPastRecords"]!.ToObject<bool>();
 
-			// TODO null
 			JObject scheduleContainer = jsonConfig["schedules"]!.ToObject<JObject>()!;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
-				// TODO null
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name]!.ToObject<string>()!)));
 			}
 
@@ -57,7 +55,6 @@ namespace RoosterBot.GLU {
 			addSchedule<TeacherInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
-			// TODO null
 			m_AllowedGuilds = jsonConfig["allowedGuilds"]!.ToObject<JArray>()!.Select((token) => {
 				JObject jo = token.ToObject<JObject>()!;
 				return PlatformUtil.GetSnowflakeReference(jo["platform"]!.ToObject<string>()!, jo["id"]!.ToObject<string>()!);

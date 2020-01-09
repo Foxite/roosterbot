@@ -9,9 +9,9 @@ namespace RoosterBot.Meta {
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+			// TODO proper deserialization
 			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
-			// TODO Json deserialization
 			if (jsonConfig["useFileConfig"]!.ToObject<bool>()) {
 				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
 				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
