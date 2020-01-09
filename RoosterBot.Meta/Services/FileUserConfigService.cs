@@ -1,62 +1,84 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	public class FileUserConfigService : UserConfigService {
 		private readonly string m_ConfigFilePath;
-		private readonly IDictionary<object, UserConfig> m_Configs;
+		private readonly ConcurrentDictionary<SnowflakeReference, UserConfig> m_ConfigMap;
 
 		public FileUserConfigService(string configPath) {
 			Logger.Info("FileUserConfigService", "Loading user config json");
 
 			m_ConfigFilePath = configPath;
 
-			IDictionary<string, JToken> jsonConfig = JObject.Parse(File.ReadAllText(configPath))!;
-			m_Configs = jsonConfig.ToDictionary(
-				/* Key */ kvp => (object) kvp.Key,
-				/* Val */ kvp => {
-					JObject userJO = kvp.Value.ToObject<JObject>()!;
-					string? cultureString = userJO["culture"]?.ToObject<string>();
-					return new UserConfig(
-						this,
-						cultureString != null ? CultureInfo.GetCultureInfo(cultureString) : null,
-						kvp.Key,
-						userJO["customData"]!.ToObject<JObject>()!
+			var jsonConfig = JObject.Parse(File.ReadAllText(m_ConfigFilePath)).ToObject<IDictionary<string, IDictionary<string, FileUserConfig>>>();
+			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, UserConfig>();
+
+			if (jsonConfig is null) {
+				throw new FormatException("Guild config map could not be deserialized."); // TODO useful error message
+			}
+
+			foreach (KeyValuePair<string, IDictionary<string, FileUserConfig>> platformKvp in jsonConfig) {
+				PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
+				if (platform is null) {
+					// TODO optional skip instead of crash
+					throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+				}
+
+				foreach (KeyValuePair<string, FileUserConfig> configItem in platformKvp.Value) {
+					var userRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
+					m_ConfigMap.TryAdd(
+						userRef,
+						new UserConfig(
+							this,
+							configItem.Value.Culture is null ? null : CultureInfo.GetCultureInfo(configItem.Value.Culture),
+							userRef,
+							configItem.Value.CustomData
+						)
 					);
 				}
-			);
+			}
 
 			Logger.Info("FileUserConfigService", "Finished loading user config json");
 		}
 
-		public override Task<UserConfig> GetConfigAsync(IUser user) {
-			if (!m_Configs.TryGetValue(user.Id, out UserConfig? gc)) {
-				gc = GetDefaultConfig(user.Id);
-			}
-			
-			return Task.FromResult(gc);
+		public override Task<UserConfig> GetConfigAsync(SnowflakeReference user) {
+			return Task.FromResult(m_ConfigMap.GetOrAdd(user, GetDefaultConfig));
 		}
 
 		public override Task UpdateUserAsync(UserConfig config) {
-			m_Configs[config.UserId] = config;
-			var jsonConfig = new JObject();
+			m_ConfigMap.AddOrUpdate(config.UserReference, config, (channel, old) => config);
 
-			foreach (KeyValuePair<object, UserConfig> kvp in m_Configs) {
-				var jsonConfigItem = new JObject();
+			return File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(
+				m_ConfigMap.GroupBy(kvp => kvp.Key.Platform.PlatformName).ToDictionary(
+					grp => grp.Key,
+					grp => JObject.FromObject(grp.ToDictionary(
+						kvp => kvp.Key.Id.ToString() ?? "null",
+						kvp => new FileUserConfig() {
+							Culture = kvp.Value.Culture?.Name ?? null,
+							CustomData = (kvp.Value.GetRawData() as IDictionary<string, JToken?>).ToDictionary(
+								innerKvp => innerKvp.Key,
+								innerKvp => innerKvp.Value ?? (JToken) JValue.CreateNull()
+							)
+						}
+					))
+				)
+			).ToString(Formatting.None));
+		}
 
-				if (kvp.Value.Culture != null) {
-					jsonConfigItem["culture"] = kvp.Value.Culture.Name;
-				}
+		private class FileUserConfig {
+			[JsonProperty("culture")]
+			public string? Culture { get; set; } = null!;
 
-				jsonConfigItem["customData"] = kvp.Value.GetRawData();
-				jsonConfig[kvp.Key] = jsonConfigItem;
-			}
-
-			return File.WriteAllTextAsync(m_ConfigFilePath, jsonConfig.ToString(Newtonsoft.Json.Formatting.None));
+			[JsonProperty("customData")]
+			public IDictionary<string, JToken> CustomData { get; set; } = null!;
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace RoosterBot.Meta {
 
 			// TODO Json deserialization
 			if (jsonConfig["useFileConfig"]!.ToObject<bool>()) {
-				services.AddSingleton<ChannelConfigService, FileGuildConfigService>(isp => new FileGuildConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
+				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<ConfigService>(), Path.Combine(configPath, "Guilds.json")));
 				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
 			}
 
