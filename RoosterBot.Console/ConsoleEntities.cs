@@ -37,6 +37,11 @@ namespace RoosterBot.Console {
 		public Task<IMessage> SendMessageAsync(string content, string? filePath = null) {
 			var message = new ConsoleMessage(content, true);
 			m_Messages.Add(message);
+			string msg = "Response: ```" + content + "```";
+			if (!(filePath is null)) {
+				msg += " File path: " + filePath;
+			}
+			Logger.Info("Console", msg);
 			return Task.FromResult((IMessage) message);
 		}
 	}
