@@ -31,7 +31,7 @@ namespace RoosterBot.GLU {
 						} else {
 							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
 							IEmote teacherEmote;
-							/* TODO discord
+							/* TODO Move into GLU.Discord or delete
 							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
 								teacherEmote = Emote.Parse("<:VRjoram:392762653367336960>");
 							} else {*/

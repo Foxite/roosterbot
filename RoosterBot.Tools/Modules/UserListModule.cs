@@ -1,4 +1,4 @@
-﻿/* TODO discord
+﻿/* TODO move into Tools.Discord or Discord
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

@@ -1,4 +1,4 @@
-﻿/* // TODO Discord
+﻿/* // TODO Ready handler
 using System;
 using System.IO;
 using System.IO.Pipes;

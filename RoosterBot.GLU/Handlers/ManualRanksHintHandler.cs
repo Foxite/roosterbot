@@ -1,4 +1,4 @@
-﻿/* TODO discord
+﻿/* TODO Move into GLU.Discord
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;

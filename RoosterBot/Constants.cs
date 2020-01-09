@@ -3,7 +3,7 @@
 		public static readonly Version RoosterBotVersion = new Version(2, 2, 0);
 		public static string VersionString => RoosterBotVersion.ToString();
 
-		// TODO Discord
+		// TODO Get standard emotes from platform
 		public static readonly IEmote Error   = null!;//Emote.Parse("<:error:636213609919283238>");
 		public static readonly IEmote Success = null!;//Emote.Parse("<:ok:636213617825546242>");
 		public static readonly IEmote Warning = null!;//Emote.Parse("<:warning:636213630114856962>");

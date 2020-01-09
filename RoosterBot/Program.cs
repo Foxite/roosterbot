@@ -1,8 +1,8 @@
-﻿// TODO 2.3 (refactor) The program currently throws a ton of boneheaded exceptions: https://blogs.msdn.microsoft.com/ericlippert/2008/09/10/vexing-exceptions/
+﻿// TODO (refactor) The program currently throws a ton of boneheaded exceptions: https://blogs.msdn.microsoft.com/ericlippert/2008/09/10/vexing-exceptions/
 // We really should avoid that wherever possible. Instead of trying to index an array and letting the caller deal with a mysterious "IndexOutOfRangeException",
 //  we should catch that before doing anything else and throw an ArgumentException with an actual explanation.
 
-// TODO 2.3 (refactor) Add docstrings to all public things. There's a way to have VS raise a warning for missing docstrings; Qmmands has this enabled, so go steal it from them.
+// TODO (refactor) Add docstrings to all public things. There's a way to have VS raise a warning for missing docstrings; Qmmands has this enabled, so go steal it from them.
 
 using System;
 using System.Diagnostics;
@@ -79,6 +79,8 @@ namespace RoosterBot {
 			ExecuteHandler = new CommandExecutionHandler(Components.Services);
 			new CommandExecutedHandler(Components.Services);
 			new CommandExceptionHandler(Components.Services);
+
+			// TODO something needs to notify the ready pipe
 
 			await WaitForQuitCondition();
 
