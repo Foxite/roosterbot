@@ -33,6 +33,27 @@ namespace RoosterBot.DiscordNet {
 
 		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			// TODO create handlers
+
+			Client.Log += (msg) => {
+				Action<string, string, Exception?> logFunc = msg.Severity switch {
+					Discord.LogSeverity.Verbose  => Logger.Verbose,
+					Discord.LogSeverity.Debug    => Logger.Debug,
+					Discord.LogSeverity.Info     => Logger.Info,
+					Discord.LogSeverity.Warning  => Logger.Warning,
+					Discord.LogSeverity.Error    => Logger.Error,
+					Discord.LogSeverity.Critical => Logger.Critical,
+					_                            => Logger.Info,
+				};
+				logFunc(msg.Source, msg.Message, msg.Exception);
+				return Task.CompletedTask;
+			};
+
+			Client.MessageReceived += async (msg) => {
+				if (msg is Discord.IUserMessage && msg.Source == Discord.MessageSource.User && msg.Content.ToLower() == "ping") {
+					await msg.Channel.SendMessageAsync("Pong!");
+				}
+			};
+
 			return Task.CompletedTask;
 		}
 
