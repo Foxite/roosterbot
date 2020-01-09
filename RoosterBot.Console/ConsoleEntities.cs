@@ -8,7 +8,7 @@ namespace RoosterBot.Console {
 		public PlatformComponent Platform => ConsoleComponent.Instance;
 		public object Id { get; }
 
-		protected ConsoleSnowflake(long id) {
+		protected ConsoleSnowflake(ulong id) {
 			Id = id;
 		}
 	}
@@ -18,7 +18,7 @@ namespace RoosterBot.Console {
 		public string Mention => "@" + UserName;
 		public string DisplayName => "ConsoleGuy";
 
-		public ConsoleUser(long id, string name) : base(id) {
+		public ConsoleUser(ulong id, string name) : base(id) {
 			UserName = name;
 		}
 
@@ -55,7 +55,7 @@ namespace RoosterBot.Console {
 		IChannel IMessage.Channel => Channel;
 		IUser IMessage.User => User;
 
-		public ConsoleMessage(string content, bool sentByRoosterBot) : base(DateTime.Now.Ticks) {
+		public ConsoleMessage(string content, bool sentByRoosterBot) : base((ulong) DateTime.Now.Ticks) {
 			Content = content;
 			SentByRoosterBot = sentByRoosterBot;
 			User = SentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;
