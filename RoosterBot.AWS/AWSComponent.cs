@@ -1,15 +1,10 @@
-﻿#if DEBUG
-#pragma warning disable IDE0052 // Private member assigned but never used
-#pragma warning disable CS0649 // Field never assigned to
-#endif
-
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : Component {
@@ -22,38 +17,55 @@ namespace RoosterBot.AWS {
 		private SNSNotificationHandler? m_SNS;
 		private string m_NotificationARN = "";
 
-		public override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			var jsonConfig = JObject.Parse(jsonFile);
+		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+			var jsonConfig = JsonConvert.DeserializeObject<JsonAWSConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
 
-			string accessKey  = jsonConfig["accessKey" ].ToObject<string>();
-			string secretKey  = jsonConfig["secretKey" ].ToObject<string>();
-			m_NotificationARN = jsonConfig["sns_arn"   ].ToObject<string>();
-			string userTable  = jsonConfig["userTable" ].ToObject<string>();
-			string guildTable = jsonConfig["guildTable"].ToObject<string>();
+			m_NotificationARN = jsonConfig.NotificationArn;
 
-			var endpoint = RegionEndpoint.GetBySystemName(jsonConfig["endpoint"].ToObject<string>());
-
-			var awsConfig = new AWSConfigService(accessKey, secretKey, endpoint);
+			var awsConfig = new AWSConfigService(jsonConfig.AccessKey, jsonConfig.SecretKey, RegionEndpoint.GetBySystemName(jsonConfig.Endpoint));
 			services.AddSingleton(awsConfig);
 
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
 
-			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, userTable));
-			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<ConfigService>(), m_DynamoDBClient, guildTable));
+			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, jsonConfig.UserTable));
+			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<ConfigService>(), m_DynamoDBClient, jsonConfig.GuildTable));
 			return Task.CompletedTask;
 		}
 
-		public override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-#if !DEBUG
-			m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+			bool production = true;
+			// This way, there will be no warnings about unused fields.
+#if DEBUG
+			production = false;
 #endif
+			if (production) {
+				m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
+			}
+
 			return Task.CompletedTask;
 		}
 
 		protected override void Dispose(bool disposing) {
 			m_DynamoDBClient.Dispose();
 			m_SNS?.Dispose();
+		}
+
+		private class JsonAWSConfig {
+			public string AccessKey  { get; }
+			public string SecretKey  { get; }
+			public string NotificationArn    { get; }
+			public string UserTable  { get; }
+			public string GuildTable { get; }
+			public string Endpoint   { get; }
+
+			public JsonAWSConfig(string accessKey, string secretKey, string sns_arn, string userTable, string guildTable, string endpoint) {
+				AccessKey = accessKey;
+				SecretKey = secretKey;
+				NotificationArn = sns_arn;
+				UserTable = userTable;
+				GuildTable = guildTable;
+				Endpoint = endpoint;
+			}
 		}
 	}
 }

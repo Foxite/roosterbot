@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using Discord;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,38 +17,40 @@ namespace RoosterBot.AWS {
 			Logger.Info("DynamoDBGuild", "Finished loading guild table");
 		}
 
-		public async override Task<ChannelConfig> GetConfigAsync(IGuild guild) {
-			Document document = await m_Table.GetItemAsync(guild.Id);
+		public async override Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel) {
+			string id = channel.Platform.PlatformName + "/" + channel.Id.ToString();
+			Document document = await m_Table.GetItemAsync(id);
 			if (document != null) {
 				if (!document.TryGetValue("culture", out DynamoDBEntry cultureEntry) ||
 					!document.TryGetValue("commandPrefix", out DynamoDBEntry prefixEntry) ||
 					!document.TryGetValue("timeZoneId", out DynamoDBEntry timeZoneEntry) ||
 					!document.TryGetValue("customData", out DynamoDBEntry customDataEntry)) {
-					return GetDefaultConfig(guild.Id);
+					return GetDefaultConfig(channel);
 				} else {
 					TimeZoneInfo timezone;
 					try {
 						timezone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneEntry.AsString());
 					} catch (TimeZoneNotFoundException) {
-						return GetDefaultConfig(guild.Id);
+						return GetDefaultConfig(channel);
 					}
 					var culture = CultureInfo.GetCultureInfo(cultureEntry.AsString());
 					string commandPrefix = prefixEntry.AsString();
-					var customData = JObject.Parse(customDataEntry.AsString());
+					var customData = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(customDataEntry.AsString());
 
-					return new ChannelConfig(this, commandPrefix, culture, guild.Id, customData);
+					return new ChannelConfig(this, commandPrefix, culture, channel, customData);
 				}
 			} else {
-				return GetDefaultConfig(guild.Id);
+				return GetDefaultConfig(channel);
 			}
 		}
 
 		// In the future, guild staff will modify their settings on a website, and there will be no way to update this through commands.
 		public async override Task UpdateGuildAsync(ChannelConfig config) {
-			Document document = await m_Table.GetItemAsync(config.GuildId);
+			string id = config.ChannelReference.Platform.PlatformName + "/" + config.ChannelReference.Id.ToString();
+			Document document = await m_Table.GetItemAsync(id);
 			if (document is null) {
 				await m_Table.PutItemAsync(new Document(new Dictionary<string, DynamoDBEntry>() {
-					{ "id", config.GuildId },
+					{ "id", id },
 					{ "culture", config.Culture.Name },
 					{ "commandPrefix", config.CommandPrefix },
 					{ "customData", config.GetRawData().ToString(Formatting.None) }

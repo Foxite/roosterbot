@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using Discord;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,23 +16,24 @@ namespace RoosterBot.AWS {
 			Logger.Info("DynamoDBUser", "Finished loading user table");
 		}
 
-		public async override Task<UserConfig> GetConfigAsync(IUser user) {
-			Document document = await m_Table.GetItemAsync(user.Id);
+		public async override Task<UserConfig> GetConfigAsync(SnowflakeReference user) {
+			Document document = await m_Table.GetItemAsync(user.Platform.PlatformName + "/" + user.Id.ToString());
 			if (document != null) {
 				CultureInfo? culture = (document.TryGetValue("culture", out DynamoDBEntry cultureEntry) && cultureEntry.AsString() != " " ) ? CultureInfo.GetCultureInfo(cultureEntry.AsString()) : null;
 				document.TryGetValue("customData", out DynamoDBEntry customDataEntry);
-				var customData = JObject.Parse(customDataEntry.ToString());
-				return new UserConfig(this, culture, user.Id, customData);
+				var customData = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(customDataEntry.AsString());
+				return new UserConfig(this, culture, user, customData);
 			} else {
-				return GetDefaultConfig(user.Id);
+				return GetDefaultConfig(user);
 			}
 		}
 
 		public async override Task UpdateUserAsync(UserConfig config) {
-			Document document = await m_Table.GetItemAsync(config.UserId);
+			string id = config.UserReference.Platform.PlatformName + "/" + config.UserReference.Id.ToString();
+			Document document = await m_Table.GetItemAsync(id);
 			if (document is null) {
 				document = new Document(new Dictionary<string, DynamoDBEntry>() {
-					{ "id", config.UserId },
+					{ "id", id },
 					{ "customData", config.GetRawData().ToString(Formatting.None) }
 				});
 				

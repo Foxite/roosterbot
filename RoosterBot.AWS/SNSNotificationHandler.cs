@@ -16,10 +16,10 @@ namespace RoosterBot.AWS {
 			notificationService.NotificationAdded += SendCriticalErrorNotificationAsync;
 		}
 
-		private async Task SendCriticalErrorNotificationAsync(string message) {
+		private async Task SendCriticalErrorNotificationAsync(NotificationEventArgs nea) {
 			Logger.Info("SNSService", "Sending error report to SNS");
 			try {
-				await m_SNSClient.PublishAsync(m_ARN, message);
+				await m_SNSClient.PublishAsync(m_ARN, nea.Message);
 			} catch (AmazonSimpleNotificationServiceException ex) {
 				Logger.Error("SNSService", "Failed to send error report to SNS", ex);
 			}
