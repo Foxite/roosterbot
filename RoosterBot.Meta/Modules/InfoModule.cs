@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Qmmands;
 
 namespace RoosterBot.Meta {
@@ -17,7 +18,7 @@ namespace RoosterBot.Meta {
 		
 		[Command("#InfoModule_Uptime"), Description("#InfoModule_Uptime_Summary")]
 		public CommandResult UptimeCommand() {
-			TimeSpan uptime = DateTime.Now - Program.Instance.StartTime;
+			TimeSpan uptime = DateTime.Now - Process.GetCurrentProcess().StartTime;
 			return TextResult.Info(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds));
 		}
 

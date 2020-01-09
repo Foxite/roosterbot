@@ -29,7 +29,6 @@ namespace RoosterBot {
 		// TODO find better way of letting components use the standard execution handler
 		public CommandExecutionHandler ExecuteHandler { get; private set; }
 #nullable restore
-		public DateTime StartTime { get; } = DateTime.Now;
 
 		private bool m_StopFlagSet;
 
