@@ -18,7 +18,6 @@ namespace RoosterBot.Tools {
 		public async Task<CommandResult> DownloadYoutubeAudioCommand([Name("#YoutubeModule_Convert_Format")] string format, [Name("#YoutubeModule_Convert_Url")] string url) {
 			string[] formats = new[] { "mp3", "ogg" };
 			if (formats.Contains(format)) {
-				using IDisposable typingState = Context.Channel.EnterTypingState();
 
 				string id = YoutubeClient.ParseVideoId(url);
 				Video video = await Client.GetVideoAsync(id);

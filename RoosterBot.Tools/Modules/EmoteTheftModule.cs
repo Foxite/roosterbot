@@ -1,11 +1,11 @@
-﻿using System;
+﻿/* TODO discord
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Discord;
 using Qmmands;
 
 namespace RoosterBot.Tools {
@@ -97,3 +97,4 @@ namespace RoosterBot.Tools {
 		}
 	}
 }
+*/
