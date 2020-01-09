@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AssemblyName>RoosterBot.DiscordNet</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Discord.Net" Version="2.1.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+			<Private>false</Private>
+			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+	</ItemGroup>
+
+</Project>

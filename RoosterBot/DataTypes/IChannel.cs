@@ -16,6 +16,9 @@ namespace RoosterBot {
 		/// <param name="filePath">Path to the attached file, or null if no attachment.</param>
 		/// <returns>The <see cref="IMessage"/> object that was created.</returns>
 		Task<IMessage> SendMessageAsync(string content, string? filePath = null);
+
+		/// <summary>Retrieves a message in a channel.</summary>
+		/// <exception cref="SnowflakeNotFoundException">When no message with the given id exists in the channel.</exception>
 		Task<IMessage> GetMessageAsync(object id);
 	}
 }
