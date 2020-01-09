@@ -39,11 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.GLU", "RoosterBo
 		{32AF9309-CE53-473B-9FB3-A9B2541E5633} = {32AF9309-CE53-473B-9FB3-A9B2541E5633}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Watson", "RoosterBot.Watson\RoosterBot.Watson.csproj", "{82E3F144-E53E-41F2-88FA-D9B230088301}"
-	ProjectSection(ProjectDependencies) = postProject
-		{63D120EC-21E7-4FC0-8B5C-75895690BA37} = {63D120EC-21E7-4FC0-8B5C-75895690BA37}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Weather", "RoosterBot.Weather\RoosterBot.Weather.csproj", "{D93F1D7C-D77F-4015-8FF0-5B29442712E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7BD87AB2-4DE7-48FE-89BF-2419E46FA027} = {7BD87AB2-4DE7-48FE-89BF-2419E46FA027}
@@ -63,9 +58,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Tools", "Rooster
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Statistics", "RoosterBot.Statistics\RoosterBot.Statistics.csproj", "{E73A393D-0A24-447F-A7A7-C77AECA702D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Console", "RoosterBot.Console\RoosterBot.Console.csproj", "{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Console", "RoosterBot.Console\RoosterBot.Console.csproj", "{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Console.App", "RoosterBot.Console.App\RoosterBot.Console.App.csproj", "{E53983B2-52F6-4080-BAFC-796E115044C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Console.App", "RoosterBot.Console.App\RoosterBot.Console.App.csproj", "{E53983B2-52F6-4080-BAFC-796E115044C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,10 +104,6 @@ Global
 		{B85E1D8C-A4EF-4B3D-90ED-9E647DC96C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B85E1D8C-A4EF-4B3D-90ED-9E647DC96C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B85E1D8C-A4EF-4B3D-90ED-9E647DC96C6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82E3F144-E53E-41F2-88FA-D9B230088301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82E3F144-E53E-41F2-88FA-D9B230088301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82E3F144-E53E-41F2-88FA-D9B230088301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82E3F144-E53E-41F2-88FA-D9B230088301}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
