@@ -26,33 +26,39 @@ namespace RoosterBot.Console {
 		}
 
 		protected override Task ConnectAsync(IServiceProvider services) {
+			UserConfigService ucs = services.GetService<UserConfigService>();
+
 			Process.Start(new ProcessStartInfo() {
-				FileName = @"C:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
+				FileName = @"E:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
 				CreateNoWindow = false,
 				UseShellExecute = true
 			});
 
-			UserConfigService ucs = services.GetService<UserConfigService>();
 			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
 			RoosterCommandService commandService = services.GetService<RoosterCommandService>();
 
 			_ = Task.Run(async () => {
+				NamedPipeServerStream? pipeServer = null;
+				StreamWriter? sw = null;
+				StreamReader? sr = null;
+				bool wasConnected = false;
 				try {
-					using var pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
+					pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
 					pipeServer.WaitForConnection();
 					Logger.Info("Console", "Console interface connected");
 
-					using var sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
-					using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
+					sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
+					sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
+						wasConnected = true;
 						string input = sr.ReadLine()!;
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
 						var result = await commandService.ExecuteAsync(consoleMessage.Content, new RoosterCommandContext(
 							consoleMessage,
-							await ucs.GetConfigAsync(TheConsoleUser),
-							await ccs.GetConfigAsync(TheConsoleChannel),
+							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
+							await ccs.GetConfigAsync(TheConsoleChannel.GetReference()),
 							services
 						));
 						string resultString = result.ToString()!;
@@ -61,12 +67,29 @@ namespace RoosterBot.Console {
 						sw.Flush();
 					}
 				} catch (Exception e) {
-					Logger.Error("Console", "Console handler caught an exception: ", e);
+					if (e is IOException && pipeServer != null && !pipeServer.IsConnected && wasConnected) {
+						Logger.Info("Console", "Console interface disconnected");
+					} else {
+						Logger.Error("Console", "Console handler caught an exception: ", e);
+					}
 				} finally {
 					Logger.Debug("Console", "Console handler exiting");
 					if (m_CTS.IsCancellationRequested) {
 						m_CTS.Dispose();
 					}
+					if (sr != null) {
+						sr.Dispose();
+						sr = null;
+					}
+					if (sw != null) {
+						sw.Dispose();
+						sw = null;
+					}
+					if (pipeServer != null) {
+						pipeServer.Dispose();
+						pipeServer = null;
+					}
+
 				}
 			});
 			return Task.CompletedTask;
