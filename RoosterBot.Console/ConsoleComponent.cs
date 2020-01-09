@@ -39,32 +39,31 @@ namespace RoosterBot.Console {
 
 			_ = Task.Run(async () => {
 				NamedPipeServerStream? pipeServer = null;
-				StreamWriter? sw = null;
 				StreamReader? sr = null;
 				bool wasConnected = false;
 				try {
-					pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
+					pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
 					pipeServer.WaitForConnection();
 					Logger.Info("Console", "Console interface connected");
 
-					sw = new StreamWriter(pipeServer, Encoding.UTF8, 2047, true);
 					sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
 						wasConnected = true;
-						string input = sr.ReadLine()!;
+						string? input = sr.ReadLine();
+
+						if (input == null) {
+							Logger.Info("Console", "Console handler disconnected");
+							return;
+						}
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
-						var result = await commandService.ExecuteAsync(consoleMessage.Content, new RoosterCommandContext(
+						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(
+							consoleMessage.Content,
 							consoleMessage,
-							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
 							await ccs.GetConfigAsync(TheConsoleChannel.GetReference()),
-							services
-						));
-						string resultString = result.ToString()!;
-						await TheConsoleChannel.SendMessageAsync(resultString);
-						sw.Write(resultString + '\0');
-						sw.Flush();
+							await ucs.GetConfigAsync(TheConsoleUser.GetReference())
+						);
 					}
 				} catch (Exception e) {
 					if (e is IOException && pipeServer != null && !pipeServer.IsConnected && wasConnected) {
@@ -80,10 +79,6 @@ namespace RoosterBot.Console {
 					if (sr != null) {
 						sr.Dispose();
 						sr = null;
-					}
-					if (sw != null) {
-						sw.Dispose();
-						sw = null;
 					}
 					if (pipeServer != null) {
 						pipeServer.Dispose();

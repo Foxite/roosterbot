@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
-	internal sealed class CommandExecutionHandler : RoosterHandler {
+	public sealed class CommandExecutionHandler : RoosterHandler {
 		public RoosterCommandService Commands { get; set; } = null!;
 		public ResourceService Resources { get; set; } = null!;
 		public ConfigService Config { get; set; } = null!;

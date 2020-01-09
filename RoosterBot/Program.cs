@@ -25,6 +25,9 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 
 		public ComponentManager Components { get; private set; }
+
+		// TODO find better way of letting components use the standard execution handler
+		public CommandExecutionHandler ExecuteHandler { get; private set; }
 #nullable restore
 		public DateTime StartTime { get; } = DateTime.Now;
 
@@ -73,6 +76,10 @@ namespace RoosterBot {
 
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
+
+			ExecuteHandler = new CommandExecutionHandler(Components.Services);
+			new CommandExecutedHandler(Components.Services);
+			new CommandExceptionHandler(Components.Services);
 
 			await WaitForQuitCondition();
 
