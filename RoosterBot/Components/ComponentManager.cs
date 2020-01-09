@@ -221,5 +221,9 @@ namespace RoosterBot {
 				throw new ArgumentException($"Assembly {assembly.FullName} does not have a ComponentBase");
 			}
 		}
+
+		public PlatformComponent? GetPlatform(string name) {
+			return m_Components.OfType<PlatformComponent>().SingleOrDefault(platform => platform.PlatformName == name);
+		}
 	}
 }
