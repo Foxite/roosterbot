@@ -17,7 +17,7 @@ namespace RoosterBot {
 		}
 
 		public abstract Task UpdateGuildAsync(ChannelConfig config);
-		public abstract Task<ChannelConfig> GetConfigAsync(IChannel guild);
+		public abstract Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel);
 	}
 
 	/// <summary>
@@ -31,7 +31,6 @@ namespace RoosterBot {
 		private readonly IDictionary<string, JToken> m_CustomData;
 
 		public SnowflakeReference ChannelReference { get; }
-		public object ChannelId => ChannelReference.Id;
 		public string CommandPrefix { get; set; }
 		public CultureInfo Culture { get; set; }
 

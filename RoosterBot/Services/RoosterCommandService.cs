@@ -50,12 +50,12 @@ namespace RoosterBot {
 						if (objectType is CooldownType type) {
 							return type switch
 							{
-								CooldownType.User => rcc.User.Id.ToString(),
-								CooldownType.Channel => rcc.ChannelConfig.ChannelId.ToString(),
-								CooldownType.ModuleUser => rcc.User.Id + "@" + rcc.Command.Module.FullAliases.First(),
-								CooldownType.ModuleChannel => rcc.ChannelConfig.ChannelId.ToString() + "@" + rcc.Command.Module.FullAliases.First(),
-								CooldownType.ComponentUser => rcc.User.Id + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
-								CooldownType.ComponentChannel => rcc.ChannelConfig.ChannelId.ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
+								CooldownType.User => rcc.User.GetReference().ToString(),
+								CooldownType.Channel => rcc.ChannelConfig.ChannelReference.ToString(),
+								CooldownType.ModuleUser => rcc.User.GetReference().ToString() + "@" + rcc.Command.Module.FullAliases.First(),
+								CooldownType.ModuleChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + rcc.Command.Module.FullAliases.First(),
+								CooldownType.ComponentUser => rcc.User.GetReference().ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
+								CooldownType.ComponentChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
 								_ => throw new ShouldNeverHappenException("Unknown CooldownType. This should never happen.")
 							};
 						} else {

@@ -9,11 +9,11 @@ namespace RoosterBot {
 	/// Provides user-specific overrides for the GuildConfigService.
 	/// </summary>
 	public abstract class UserConfigService {
-		public abstract Task<UserConfig> GetConfigAsync(IUser user);
+		public abstract Task<UserConfig> GetConfigAsync(SnowflakeReference user);
 		public abstract Task UpdateUserAsync(UserConfig config);
 
-		protected UserConfig GetDefaultConfig(object id) {
-			return new UserConfig(this, null, id, new Dictionary<string, JToken>());
+		protected UserConfig GetDefaultConfig(SnowflakeReference user) {
+			return new UserConfig(this, null, user, new Dictionary<string, JToken>());
 		}
 	}
 
@@ -21,13 +21,13 @@ namespace RoosterBot {
 		private readonly UserConfigService m_Service;
 		private readonly IDictionary<string, JToken> m_CustomData;
 
-		public object UserId { get; }
+		public SnowflakeReference UserReference { get; }
 		public CultureInfo? Culture { get; set; }
 
-		public UserConfig(UserConfigService userConfigService, CultureInfo? culture, object userId, IDictionary<string, JToken> customData) {
+		public UserConfig(UserConfigService userConfigService, CultureInfo? culture, SnowflakeReference user, IDictionary<string, JToken> customData) {
 			m_Service = userConfigService;
 			Culture = culture;
-			UserId = userId;
+			UserReference = user;
 			m_CustomData = customData;
 		}
 
