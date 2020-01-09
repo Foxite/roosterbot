@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordUser : IUser {
@@ -9,11 +10,25 @@ namespace RoosterBot.DiscordNet {
 		public string UserName => DiscordEntity.Username + "#" + DiscordEntity.Discriminator;
 		public string DisplayName => (DiscordEntity is Discord.IGuildUser igu) ? igu.Nickname : DiscordEntity.Username;
 		public string Mention => DiscordEntity.Mention;
-
-		public async Task<IChannel?> GetPrivateChannel() => new DiscordChannel(await DiscordEntity.GetOrCreateDMChannelAsync());
+		public bool IsBotAdmin => false; // TODO bot admin id from config file
 
 		internal DiscordUser(Discord.IUser discordUser) {
 			DiscordEntity = discordUser;
+		}
+
+		public async Task<IChannel?> GetPrivateChannel() => new DiscordChannel(await DiscordEntity.GetOrCreateDMChannelAsync());
+
+		public bool IsChannelAdmin(IChannel ic) {
+			if (ic is DiscordChannel channel && DiscordEntity is Discord.IGuildUser user) {
+				return new[] {
+					user.GuildPermissions.Administrator,
+					user.GuildPermissions.ManageGuild,
+					user.GuildPermissions.KickMembers,
+					user.GuildPermissions.BanMembers
+				}.Any(p => p);
+			} else {
+				return false;
+			}
 		}
 	}
 }

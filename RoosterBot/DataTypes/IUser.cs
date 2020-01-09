@@ -25,5 +25,8 @@ namespace RoosterBot {
 		/// This can return null if it is not possible to create a private channel with this user.
 		/// </summary>
 		Task<IChannel?> GetPrivateChannel();
+
+		bool IsBotAdmin { get; }
+		bool IsChannelAdmin(IChannel channel);
 	}
 }
