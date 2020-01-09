@@ -54,6 +54,10 @@ namespace RoosterBot.DiscordNet {
 				}
 			};
 
+			new MessageReceivedHandler(services);
+			new MessageUpdatedHandler (services);
+			new MessageDeletedHandler (services);
+
 			return Task.CompletedTask;
 		}
 

@@ -1,33 +1,28 @@
-﻿/* // TODO Discord
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using Discord;
 using Discord.WebSocket;
 
-namespace RoosterBot {
+namespace RoosterBot.DiscordNet {
 	internal sealed class MessageReceivedHandler : RoosterHandler {
-		public GuildConfigService GCS { get; set; } = null!;
+		public ChannelConfigService CCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
-		public DiscordSocketClient Client { get; set; } = null!;
+		public BaseSocketClient Client { get; set; } = null!;
 
-		private readonly CommandExecutionHandler m_CEH;
-
-		internal MessageReceivedHandler(IServiceProvider isp, CommandExecutionHandler ceh) : base(isp) {
-			m_CEH = ceh;
-
+		internal MessageReceivedHandler(IServiceProvider isp) : base(isp) {
 			Client.MessageReceived += HandleNewCommand;
 		}
 
-		private Task HandleNewCommand(SocketMessage socketMessage) {
+		private Task HandleNewCommand(SocketMessage dsm) {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
-			if (socketMessage is IUserMessage userMessage) {
+			if (dsm is Discord.IUserMessage dum) {
 				_ = Task.Run(async () => {
-					GuildConfig guildConfig = await GCS.GetConfigAsync((socketMessage.Channel as IGuildChannel)?.Guild ?? socketMessage.Author.MutualGuilds.First());
-					if (CommandUtil.IsMessageCommand(userMessage, guildConfig.CommandPrefix, out int argPos)) {
-						UserConfig userConfig = await UCS.GetConfigAsync(userMessage.Author);
-						await m_CEH.ExecuteCommandAsync(userMessage.Content.Substring(argPos + 1), userMessage, guildConfig, userConfig);
+					// RoosterBot doesn't have a concept of guilds, and in Discord it's not convention to have different config per channel.
+					// So we secretly use guilds instead of channels for channel config.
+					ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, (dum.Channel is Discord.IGuildChannel igc) ? igc.GuildId : dum.Channel.Id));
+					if (DiscordUtil.IsMessageCommand(dum, guildConfig.CommandPrefix, out int argPos)) {
+						UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
+						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordMessage(dum), guildConfig, userConfig);
 					}
 				});
 			}
@@ -35,4 +30,3 @@ namespace RoosterBot {
 		}
 	}
 }
-*/

@@ -21,7 +21,13 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 
-		public Task<IMessage> SendMessageAsync(string content, string? filePath = null) => throw new NotImplementedException();
+		public async Task<IMessage> SendMessageAsync(string content, string? filePath = null) {
+			if (filePath == null) {
+				return new DiscordMessage(await DiscordEntity.SendMessageAsync(content));
+			} else {
+				return new DiscordMessage(await DiscordEntity.SendFileAsync(filePath, content));
+			}
+		}
 
 		internal DiscordChannel(Discord.IMessageChannel discordChannel) {
 			DiscordEntity = discordChannel;

@@ -1,36 +1,36 @@
-﻿/* // TODO Discord
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Discord.WebSocket;
 
-namespace RoosterBot {
+namespace RoosterBot.DiscordNet {
 	internal sealed class MessageUpdatedHandler : RoosterHandler {
-		public DiscordSocketClient Client { get; set; } = null!;
-		public GuildConfigService GCS { get; set; } = null!;
+		public BaseSocketClient Client { get; set; } = null!;
+		public ChannelConfigService CCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
 
-		private readonly CommandExecutionHandler m_CEH;
-
-		internal MessageUpdatedHandler(IServiceProvider isp, CommandExecutionHandler ceh) : base(isp) {
-			m_CEH = ceh;
+		internal MessageUpdatedHandler(IServiceProvider isp) : base(isp) {
 			Client.MessageUpdated += OnMessageUpdated;
 		}
 
-		private Task OnMessageUpdated(Cacheable<IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
-			if (messageAfter.Content != messageBefore.Value.Content && messageAfter is SocketUserMessage userMessageAfter && messageAfter.Source == MessageSource.User) {
+		private Task OnMessageUpdated(Discord.Cacheable<Discord.IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
+			if (messageBefore.HasValue &&
+				messageAfter.Content != null && 
+				messageAfter.Content != messageBefore.Value.Content &&
+				messageAfter is SocketUserMessage userMessageAfter &&
+				messageAfter.Source == Discord.MessageSource.User) {
 				_ = Task.Run(async () => {
-					GuildConfig guildConfig = await GCS.GetConfigAsync((channel as IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First());
-					UserConfig userConfig = await UCS.GetConfigAsync(messageAfter.Author);
+					ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance,
+						((channel as Discord.IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First()).Id));
+
+					UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
 					CommandResponsePair? crp = userConfig.GetResponse(userMessageAfter);
 
-					if (CommandUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-						//IResult result = await m_Commands.ExecuteAsync(userMessageAfter.Content.Substring(argPos + 1), context);
-						await m_CEH.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), userMessageAfter, guildConfig, userConfig);
+					if (DiscordUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
+						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), new DiscordMessage(userMessageAfter), guildConfig, userConfig);
 					} else if (crp != null) {
 						// No longer a command
-						await channel.DeleteMessageAsync(crp.ResponseId);
+						await channel.DeleteMessageAsync((ulong) crp.ResponseId);
 						userConfig.RemoveCommand(crp.CommandId);
 					} // else: was not a command, is not a command
 				});
@@ -39,4 +39,3 @@ namespace RoosterBot {
 		}
 	}
 }
-*/
