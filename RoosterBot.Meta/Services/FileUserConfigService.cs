@@ -69,10 +69,7 @@ namespace RoosterBot.Meta {
 		}
 
 		private class FileUserConfig {
-			[JsonProperty("culture")]
 			public string? Culture { get; set; } = null!;
-
-			[JsonProperty("customData")]
 			public IDictionary<string, JToken> CustomData { get; set; } = null!;
 		}
 	}
