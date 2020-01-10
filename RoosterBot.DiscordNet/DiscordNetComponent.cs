@@ -59,34 +59,38 @@ namespace RoosterBot.DiscordNet {
 			#endregion Handlers
 
 			#region Discord entities
-			void addChannelParser<T>() where T : class, Discord.IChannel {
-				commandService.AddTypeParser(new ChannelParser<T>());
-			}
+			var userParser = new UserParser<Discord.IUser>();
+			var messageParser = new MessageParser<Discord.IUserMessage>();
+			var channelParser = new ChannelParser<Discord.IMessageChannel>();
 
-			addChannelParser<Discord.IAudioChannel>();
-			addChannelParser<Discord.ICategoryChannel>();
-			addChannelParser<Discord.IChannel>();
-			addChannelParser<Discord.IDMChannel>();
-			addChannelParser<Discord.IGroupChannel>();
-			addChannelParser<Discord.IGuildChannel>();
-			addChannelParser<Discord.IMessageChannel>();
-			addChannelParser<Discord.INestedChannel>();
-			addChannelParser<Discord.IPrivateChannel>();
-			addChannelParser<Discord.ITextChannel>();
-			addChannelParser<Discord.IVoiceChannel>();
-			
-			commandService.AddTypeParser(new UserParser<Discord.IUser>());
+			commandService.AddTypeParser(userParser);
+			commandService.AddTypeParser(messageParser);
+			commandService.AddTypeParser(channelParser);
+
+			commandService.AddTypeParser(new ChannelParser<Discord.IAudioChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.ICategoryChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IDMChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IGroupChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IGuildChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.INestedChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IPrivateChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.ITextChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IVoiceChannel>());
+
 			commandService.AddTypeParser(new UserParser<Discord.IGuildUser>());
 			commandService.AddTypeParser(new UserParser<Discord.IGroupUser>());
 			commandService.AddTypeParser(new UserParser<Discord.IWebhookUser>());
 			
 			commandService.AddTypeParser(new MessageParser<Discord.IMessage>());
 			commandService.AddTypeParser(new MessageParser<Discord.ISystemMessage>());
-			commandService.AddTypeParser(new MessageParser<Discord.IUserMessage>());
 
 			commandService.AddTypeParser(new RoleParser<Discord.IRole>());
-			#endregion
 
+			commandService.AddTypeParser(new ConversionParser<Discord.IUser, IUser>("Discord user", userParser, discordUser => new DiscordUser(discordUser)));
+			commandService.AddTypeParser(new ConversionParser<Discord.IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
+			commandService.AddTypeParser(new ConversionParser<Discord.IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
+			#endregion
 
 			return Task.CompletedTask;
 		}
