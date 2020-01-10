@@ -113,7 +113,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		private IEnumerable<TeacherInfo> GetAllowedRecordsForGuild(SnowflakeReference channel) {
-			return m_Records.Where(gtl => gtl.IsGuildAllowed(channel)).SelectMany(gtl => gtl.Teachers);
+			return m_Records.Where(gtl => gtl.IsChannelAllowed(channel)).SelectMany(gtl => gtl.Teachers);
 		}
 
 		private class GuildTeacherList : ChannelSpecificInfo {

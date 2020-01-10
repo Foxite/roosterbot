@@ -11,10 +11,9 @@ namespace RoosterBot.Schedule {
 			m_AllowedChannels = allowedChannels;
 		}
 
-		public bool IsGuildAllowed(SnowflakeReference reference) => m_AllowedChannels.Contains(reference);
-		public bool IsGuildAllowed(IChannel channel) => IsGuildAllowed(new SnowflakeReference(channel.Platform, channel.Id));
+		public bool IsChannelAllowed(SnowflakeReference reference) => m_AllowedChannels.Contains(reference);
+		public bool IsChannelAllowed(IChannel channel) => IsChannelAllowed(new SnowflakeReference(channel.Platform, channel.Id));
 	}
-
 
 	[Serializable]
 	public class NoAllowedChannelsException : Exception {
