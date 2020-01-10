@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : Component {
@@ -18,7 +17,7 @@ namespace RoosterBot.AWS {
 		private string m_NotificationARN = "";
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			var jsonConfig = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				AccessKey = "",
 				SecretKey = "",
 				NotificationArn = "",

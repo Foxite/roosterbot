@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace RoosterBot {
@@ -23,23 +23,19 @@ namespace RoosterBot {
 		public bool IgnoreUnknownPlatforms { get; }
 
 		internal GlobalConfigService(string jsonPath) {
-			if (!Directory.Exists(Program.DataPath)) {
-				throw new DirectoryNotFoundException("Data folder did not exist.");
+			try {
+				var jsonConfig = Util.LoadJsonConfigFromTemplate(jsonPath, new {
+					DefaultCommandPrefix = "!",
+					DefaultCulture = "en-US",
+					IgnoreUnknownPlatforms = false
+				});
+
+				DefaultCommandPrefix = jsonConfig.DefaultCommandPrefix;
+				DefaultCulture = CultureInfo.GetCultureInfo(jsonConfig.DefaultCulture);
+				IgnoreUnknownPlatforms = jsonConfig.IgnoreUnknownPlatforms;
+			} catch (JsonReaderException e) {
+				throw new FormatException("Config.json contains invalid data.", e);
 			}
-
-			if (!File.Exists(jsonPath)) {
-				throw new FileNotFoundException("Config file did not exist.");
-			}
-
-			var jsonConfig = JsonConvert.DeserializeAnonymousType(File.ReadAllText(jsonPath), new {
-				DefaultCommandPrefix = "",
-				DefaultCulture = "",
-				IgnoreUnknownPlatforms = false
-			});
-
-			DefaultCommandPrefix = jsonConfig.DefaultCommandPrefix;
-			DefaultCulture       = CultureInfo.GetCultureInfo(jsonConfig.DefaultCulture);
-			IgnoreUnknownPlatforms = jsonConfig.IgnoreUnknownPlatforms;
 		}
 	}
 }

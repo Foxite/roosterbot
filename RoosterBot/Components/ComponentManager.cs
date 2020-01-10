@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Module = Qmmands.Module;
 
 namespace RoosterBot {
@@ -45,15 +44,8 @@ namespace RoosterBot {
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
-			string filePath = Path.Combine(Program.DataPath, "Config", "Components.json");
-
-			// TODO create default files when config files are not found
-			if (!File.Exists(filePath)) {
-				throw new FileNotFoundException("Components.json was not found in the DataPath.");
-			}
-
 			try {
-				return JsonConvert.DeserializeAnonymousType(File.ReadAllText(filePath), new { Components = Array.Empty<string>() }).Components;
+				return Util.LoadJsonConfigFromTemplate(Path.Combine(Program.DataPath, "Config", "Components.json"), new { Components = Array.Empty<string>() }).Components;
 			} catch (JsonReaderException e) {
 				throw new FormatException("Components.json contains invalid data.", e);
 			}

@@ -66,6 +66,10 @@ namespace RoosterBot {
 		private async Task MainAsync() {
 			Logger.Info("Main", "Starting program");
 
+			if (!Directory.Exists(DataPath)) {
+				Directory.CreateDirectory(DataPath);
+			}
+
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
 			var configService = new GlobalConfigService(configFile);
 

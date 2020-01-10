@@ -2,14 +2,13 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			var config = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				UseFileConfig = false,
 				GithubLink = "",
 				DiscordLink = ""

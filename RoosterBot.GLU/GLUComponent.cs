@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
@@ -39,8 +38,7 @@ namespace RoosterBot.GLU {
 		}
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			var config = JsonConvert.DeserializeAnonymousType(jsonFile, new {
+			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				SkipPastRecords = false,
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),

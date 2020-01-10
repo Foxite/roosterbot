@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
@@ -23,7 +21,7 @@ namespace RoosterBot.Weather {
 			await cityService.ReadCityCSVAsync();
 			Logger.Debug("Weather", "Finished loading cities file");
 
-			var jsonConfig = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				WeatherBitKey = "",
 				Attribution = false
 			});

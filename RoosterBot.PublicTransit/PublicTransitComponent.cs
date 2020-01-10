@@ -15,7 +15,7 @@ namespace RoosterBot.PublicTransit {
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			var config = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				Username = "",
 				Password = "",
 				DefaultDepartureCode = ""

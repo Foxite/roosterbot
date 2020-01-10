@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
@@ -20,7 +19,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			m_Token = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+			m_Token = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				Token = ""
 			}).Token;
 
