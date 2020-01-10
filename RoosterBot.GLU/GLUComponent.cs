@@ -45,11 +45,12 @@ namespace RoosterBot.GLU {
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),
 				AllowedGuilds = new[] {
-					new { Platform = "", ID = new object() }
+					new SnowflakeReference(null!, null!)
 				}
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
+			m_AllowedGuilds = config.AllowedGuilds;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
@@ -58,11 +59,6 @@ namespace RoosterBot.GLU {
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
 			addSchedule<TeacherInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
-
-			m_AllowedGuilds = config.AllowedGuilds.Select((rawSR) => {
-				// TODO it would be nice to have Newtonsoft.Json deserialize SnowflakeReferences, as that can be done without any service references
-				return PlatformUtil.GetSnowflakeReference(rawSR.Platform, rawSR.ID.ToString()!);
-			}).ToArray();
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 
