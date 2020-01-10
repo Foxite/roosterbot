@@ -117,7 +117,7 @@ namespace RoosterBot {
 			//  that use the object's fields.
 
 			IServiceCollection serviceCollection = new ServiceCollection()
-				.AddSingleton<EmoteService>()
+				.AddSingleton(new EmoteService())
 				.AddSingleton(configService)
 				.AddSingleton(notificationService)
 				.AddSingleton(commands)
