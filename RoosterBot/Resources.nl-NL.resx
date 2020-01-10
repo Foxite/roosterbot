@@ -168,11 +168,11 @@
     <value>Gebruik: {0}</value>
     <comment>0: command signature</comment>
   </data>
-  <data name="RequireContextAttribute_DMOnly" xml:space="preserve">
-    <value>Deze command werkt alleen in een DM-kanaal.</value>
+  <data name="RequireContextAttribute_PrivateOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een privé-kanaal.</value>
   </data>
-  <data name="RequireContextAttribute_GuildOnly" xml:space="preserve">
-    <value>Deze command werkt alleen in een server.</value>
+  <data name="RequireContextAttribute_PublicOnly" xml:space="preserve">
+    <value>Deze command werkt alleen in een openbaar kanaal.</value>
   </data>
   <data name="CommandHandling_ParamCheckFailed" xml:space="preserve">
     <value>Parameter {0}: {1}</value>

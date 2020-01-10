@@ -18,8 +18,8 @@ namespace RoosterBot {
 				? RoosterCheckResult.Successful
 				: RoosterCheckResult.UnsuccessfulBuiltIn(
 					RequirePrivate
-					? "#RequireContextAttribute_DMOnly" // TODO rename keys and values
-					: "#RequireContextAttribute_GuildOnly"
+					? "#RequireContextAttribute_PrivateOnly"
+					: "#RequireContextAttribute_PublicOnly"
 				)
 			);
 		}
