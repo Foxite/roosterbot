@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
@@ -27,13 +28,12 @@ namespace RoosterBot.Console {
 		protected override Task ConnectAsync(IServiceProvider services) {
 			UserConfigService ucs = services.GetService<UserConfigService>();
 
-			/*
 			Process.Start(new ProcessStartInfo() {
-				FileName = @"E:\Development\RoosterBot\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
+				FileName = @"..\..\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
 				CreateNoWindow = false,
 				UseShellExecute = true
-			});//*/
-
+			});
+			
 			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
 			RoosterCommandService commandService = services.GetService<RoosterCommandService>();
 
