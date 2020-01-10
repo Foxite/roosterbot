@@ -91,6 +91,9 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddTypeParser(new ConversionParser<Discord.IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
 			commandService.AddTypeParser(new ConversionParser<Discord.IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
 			#endregion
+			
+			commandService.AddModule<EmoteTheftModule>();
+			commandService.AddModule<UserListModule>();
 
 			return Task.CompletedTask;
 		}
