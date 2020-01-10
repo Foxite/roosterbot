@@ -3,7 +3,6 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
-	// TODO (refactor) No longer necessary, components providing User/GuildConfigService should implement their own way of getting default
 	public sealed class ConfigService {
 		public string DefaultCommandPrefix { get; }
 		public CultureInfo DefaultCulture { get; }
@@ -20,8 +19,8 @@ namespace RoosterBot {
 			string jsonFile = File.ReadAllText(jsonPath);
 			var jsonConfig = JObject.Parse(jsonFile);
 
-			DefaultCommandPrefix        = jsonConfig["defaultCommandPrefix"]!.ToObject<string>()!;
-			DefaultCulture              = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"]!.ToObject<string>()!);
+			DefaultCommandPrefix = jsonConfig["defaultCommandPrefix"]!.ToObject<string>()!;
+			DefaultCulture       = CultureInfo.GetCultureInfo(jsonConfig["defaultCulture"]!.ToObject<string>()!);
 		}
 	}
 }
