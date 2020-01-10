@@ -32,8 +32,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			// TODO create handlers
-
+			#region Handlers
 			Client.Log += (msg) => {
 				Action<string, string, Exception?> logFunc = msg.Severity switch {
 					Discord.LogSeverity.Verbose  => Logger.Verbose,
@@ -57,6 +56,37 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
 			new MessageDeletedHandler (services);
+			#endregion Handlers
+
+			#region Discord entities
+			void addChannelParser<T>() where T : class, Discord.IChannel {
+				commandService.AddTypeParser(new ChannelParser<T>());
+			}
+
+			addChannelParser<Discord.IAudioChannel>();
+			addChannelParser<Discord.ICategoryChannel>();
+			addChannelParser<Discord.IChannel>();
+			addChannelParser<Discord.IDMChannel>();
+			addChannelParser<Discord.IGroupChannel>();
+			addChannelParser<Discord.IGuildChannel>();
+			addChannelParser<Discord.IMessageChannel>();
+			addChannelParser<Discord.INestedChannel>();
+			addChannelParser<Discord.IPrivateChannel>();
+			addChannelParser<Discord.ITextChannel>();
+			addChannelParser<Discord.IVoiceChannel>();
+			
+			commandService.AddTypeParser(new UserParser<Discord.IUser>());
+			commandService.AddTypeParser(new UserParser<Discord.IGuildUser>());
+			commandService.AddTypeParser(new UserParser<Discord.IGroupUser>());
+			commandService.AddTypeParser(new UserParser<Discord.IWebhookUser>());
+			
+			commandService.AddTypeParser(new MessageParser<Discord.IMessage>());
+			commandService.AddTypeParser(new MessageParser<Discord.ISystemMessage>());
+			commandService.AddTypeParser(new MessageParser<Discord.IUserMessage>());
+
+			commandService.AddTypeParser(new RoleParser<Discord.IRole>());
+			#endregion
+
 
 			return Task.CompletedTask;
 		}

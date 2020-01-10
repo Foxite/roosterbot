@@ -2,21 +2,21 @@
 using System.Threading.Tasks;
 using Qmmands;
 
-namespace RoosterBot.Meta {
-	public class MessageParser<TMessage> : RoosterTypeParser<TMessage> where TMessage : class, IMessage {
+namespace RoosterBot.DiscordNet {
+	public class MessageParser<TMessage> : RoosterTypeParser<TMessage> where TMessage : class, Discord.IMessage {
 		public override string TypeDisplayName => "#MessageParser_Name";
 
-		protected override ValueTask<RoosterTypeParserResult<TMessage>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			/* // TODO Discord
-			if (MentionUtils.TryParseChannel(input, out ulong messageId) || ulong.TryParse(input, out messageId)) {
+		protected async override ValueTask<RoosterTypeParserResult<TMessage>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			// TODO restrict to discord (and proper error message)
+			if (context.Channel is DiscordChannel channel && (Discord.MentionUtils.TryParseChannel(input, out ulong messageId) || ulong.TryParse(input, out messageId))) {
 				// By id
-				var channel = (TMessage?) await context.Channel.GetMessageAsync(messageId);
-				if (channel == null) {
+				Discord.IMessage message = await channel.DiscordEntity.GetMessageAsync(messageId);
+				if (message == null) {
 					return Unsuccessful(true, context, "#MessageParser_UnknownChannel");
-				} else if (!(channel is TMessage)) {
+				} else if (!(message is TMessage tMessage)) {
 					return Unsuccessful(true, context, "#DiscordParser_InvalidType");
 				} else {
-					return Successful(channel);
+					return Successful(tMessage);
 				}
 			} else if (Uri.TryCreate(input, UriKind.Absolute, out Uri? result)) {
 				// By message link
@@ -26,8 +26,8 @@ namespace RoosterBot.Meta {
 						ulong.TryParse(pathComponents[1], out _) &&
 						ulong.TryParse(pathComponents[2], out ulong channelId) &&
 						ulong.TryParse(pathComponents[3], out messageId)) {
-						if (await context.Client.GetChannelAsync(channelId) is IMessageChannel channel) {
-							if (await channel.GetMessageAsync(messageId) is TMessage message) {
+						if (DiscordNetComponent.Instance.Client.GetChannel(channelId) is Discord.IMessageChannel messageChannel) {
+							if (await messageChannel.GetMessageAsync(messageId) is TMessage message) {
 								return Successful(message);
 							} else {
 								return Unsuccessful(true, context, "#DiscordParser_InvalidType");
@@ -41,8 +41,6 @@ namespace RoosterBot.Meta {
 			} else {
 				return Unsuccessful(false, context, "#MessageParser_InvalidMention");
 			}
-			*/
-			throw new NotImplementedException();
 		}
 	}
 }

@@ -1,22 +1,21 @@
-﻿/* // TODO Discord
-using System.Threading.Tasks;
-using Discord;
+﻿using System.Threading.Tasks;
 using Qmmands;
 
-namespace RoosterBot.Meta {
-	public class RoleParser<TRole> : RoosterTypeParser<TRole> where TRole : class, IRole {
+namespace RoosterBot.DiscordNet {
+	public class RoleParser<TRole> : RoosterTypeParser<TRole> where TRole : class, Discord.IRole {
 		public override string TypeDisplayName => "#RoleParser_Name";
 
 		protected override ValueTask<RoosterTypeParserResult<TRole>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			if (context.Guild != null) {
-				if (MentionUtils.TryParseRole(input, out ulong roleId) || ulong.TryParse(input, out roleId)) {
-					var role = (TRole?) context.Guild.GetRole(roleId);
+			// TODO restrict to discord contexts (and proper error message)
+			if (context.Channel is DiscordChannel channel && channel.DiscordEntity is Discord.IGuildChannel igc) {
+				if (Discord.MentionUtils.TryParseRole(input, out ulong roleId) || ulong.TryParse(input, out roleId)) {
+					Discord.IRole role = igc.Guild.GetRole(roleId);
 					if (role == null) {
 						return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#RoleParser_UnknownRole"));
-					} else if (!(role is TRole)) {
+					} else if (!(role is TRole tRole)) {
 						return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#DiscordParser_InvalidType"));
 					} else {
-						return ValueTaskUtil.FromResult(Successful(role));
+						return ValueTaskUtil.FromResult(Successful(tRole));
 					}
 				} else {
 					return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#RoleParser_InvalidMention"));
@@ -27,4 +26,3 @@ namespace RoosterBot.Meta {
 		}
 	}
 }
-*/

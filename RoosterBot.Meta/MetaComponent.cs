@@ -43,37 +43,6 @@ namespace RoosterBot.Meta {
 			commandService.AddTypeParser(new BoolParser(), true);
 			#endregion
 
-			#region Discord entities
-			/*
-			void addChannelParser<T>() where T : class, IChannel {
-				commandService.AddTypeParser(new ChannelParser<T>());
-			}
-
-			addChannelParser<IAudioChannel>();
-			addChannelParser<ICategoryChannel>();
-			addChannelParser<IChannel>();
-			addChannelParser<IDMChannel>();
-			addChannelParser<IGroupChannel>();
-			addChannelParser<IGuildChannel>();
-			addChannelParser<IMessageChannel>();
-			addChannelParser<INestedChannel>();
-			addChannelParser<IPrivateChannel>();
-			addChannelParser<ITextChannel>();
-			addChannelParser<IVoiceChannel>();
-			
-			commandService.AddTypeParser(new UserParser<IUser>());
-			commandService.AddTypeParser(new UserParser<IGuildUser>());
-			commandService.AddTypeParser(new UserParser<IGroupUser>());
-			commandService.AddTypeParser(new UserParser<IWebhookUser>());
-			
-			commandService.AddTypeParser(new MessageParser<IMessage>());
-			commandService.AddTypeParser(new MessageParser<ISystemMessage>());
-			commandService.AddTypeParser(new MessageParser<IUserMessage>());
-
-			commandService.AddTypeParser(new RoleParser<IRole>());
-			*/
-			#endregion
-
 			commandService.AddModule<CommandsListModule>();
 			commandService.AddModule<HelpModule>();
 			commandService.AddModule<ControlModule>();
