@@ -38,7 +38,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n\n";
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
-			help.AddHelpSection(this, "trein", string.Format(helpText, services.GetService<ConfigService>().DefaultCommandPrefix));
+			help.AddHelpSection(this, "trein", helpText);
 
 			return Task.CompletedTask;
 		}
