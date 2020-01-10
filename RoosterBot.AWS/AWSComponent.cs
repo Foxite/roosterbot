@@ -18,7 +18,14 @@ namespace RoosterBot.AWS {
 		private string m_NotificationARN = "";
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			var jsonConfig = JsonConvert.DeserializeObject<JsonAWSConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var jsonConfig = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+				AccessKey = "",
+				SecretKey = "",
+				NotificationArn = "",
+				UserTable = "",
+				GuildTable = "",
+				Endpoint  = "",
+			});
 
 			m_NotificationARN = jsonConfig.NotificationArn;
 
@@ -48,24 +55,6 @@ namespace RoosterBot.AWS {
 		protected override void Dispose(bool disposing) {
 			m_DynamoDBClient.Dispose();
 			m_SNS?.Dispose();
-		}
-
-		private class JsonAWSConfig {
-			public string AccessKey  { get; }
-			public string SecretKey  { get; }
-			public string NotificationArn    { get; }
-			public string UserTable  { get; }
-			public string GuildTable { get; }
-			public string Endpoint   { get; }
-
-			public JsonAWSConfig(string accessKey, string secretKey, string sns_arn, string userTable, string guildTable, string endpoint) {
-				AccessKey = accessKey;
-				SecretKey = secretKey;
-				NotificationArn = sns_arn;
-				UserTable = userTable;
-				GuildTable = guildTable;
-				Endpoint = endpoint;
-			}
 		}
 	}
 }

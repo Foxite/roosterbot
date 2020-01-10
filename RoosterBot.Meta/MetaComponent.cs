@@ -2,22 +2,25 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			// TODO proper deserialization
-			var jsonConfig = JObject.Parse(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var config = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+				UseFileConfig = false,
+				GithubLink = "",
+				DiscordLink = ""
+			});
 
-			if (jsonConfig["useFileConfig"]!.ToObject<bool>()) {
+			if (config.UseFileConfig) {
 				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Guilds.json")));
-				services.AddSingleton<UserConfigService, FileUserConfigService>(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
+				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
 			}
 
-			services.AddSingleton(new MetaInfoService(jsonConfig["githubLink"]!.ToObject<string>()!, jsonConfig["discordLink"]!.ToObject<string>()!));
+			services.AddSingleton(new MetaInfoService(config.GithubLink, config.DiscordLink));
 
 			return Task.CompletedTask;
 		}

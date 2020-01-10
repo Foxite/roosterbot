@@ -23,9 +23,12 @@ namespace RoosterBot.Weather {
 			await cityService.ReadCityCSVAsync();
 			Logger.Debug("Weather", "Finished loading cities file");
 
-			var jsonConfig = JsonConvert.DeserializeObject<WeatherJsonConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var jsonConfig = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+				WeatherBitKey = "",
+				Attribution = false
+			});
 
-			services.AddSingleton(isp => new WeatherService(isp.GetService<ResourceService>(), jsonConfig.Key, jsonConfig.Attribution));
+			services.AddSingleton(isp => new WeatherService(isp.GetService<ResourceService>(), jsonConfig.WeatherBitKey, jsonConfig.Attribution));
 			services.AddSingleton(cityService);
 		}
 
@@ -39,16 +42,6 @@ namespace RoosterBot.Weather {
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 
 			return Task.CompletedTask;
-		}
-
-		private class WeatherJsonConfig {
-			public string Key { get; }
-			public bool Attribution { get; }
-
-			public WeatherJsonConfig(string weatherbit_key, bool attribution) {
-				Key = weatherbit_key;
-				Attribution = attribution;
-			}
 		}
 	}
 }

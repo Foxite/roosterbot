@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-//using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
@@ -41,23 +40,28 @@ namespace RoosterBot.GLU {
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
 			string jsonFile = File.ReadAllText(Path.Combine(configPath, "Config.json"));
-			// TODO proper deserialization
-			var jsonConfig = JObject.Parse(jsonFile);
-			m_SkipPastRecords = jsonConfig["skipPastRecords"]!.ToObject<bool>();
+			var config = JsonConvert.DeserializeAnonymousType(jsonFile, new {
+				SkipPastRecords = false,
+				TimezoneId = "",
+				Schedules = new Dictionary<string, string>(),
+				AllowedGuilds = new[] {
+					new { Platform = "", ID = new object() }
+				}
+			});
 
-			JObject scheduleContainer = jsonConfig["schedules"]!.ToObject<JObject>()!;
+			m_SkipPastRecords = config.SkipPastRecords;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
-				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, scheduleContainer[name]!.ToObject<string>()!)));
+				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
 			}
 
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
 			addSchedule<TeacherInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
-			m_AllowedGuilds = jsonConfig["allowedGuilds"]!.ToObject<JArray>()!.Select((token) => {
-				JObject jo = token.ToObject<JObject>()!;
-				return PlatformUtil.GetSnowflakeReference(jo["platform"]!.ToObject<string>()!, jo["id"]!.ToObject<string>()!);
+			m_AllowedGuilds = config.AllowedGuilds.Select((rawSR) => {
+				// TODO it would be nice to have Newtonsoft.Json deserialize SnowflakeReferences, as that can be done without any service references
+				return PlatformUtil.GetSnowflakeReference(rawSR.Platform, rawSR.ID.ToString()!);
 			}).ToArray();
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");

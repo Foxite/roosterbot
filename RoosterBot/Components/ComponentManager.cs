@@ -45,24 +45,16 @@ namespace RoosterBot {
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
-			var componentNames = new List<string>();
 			string filePath = Path.Combine(Program.DataPath, "Config", "Components.json");
 
+			// TODO create default files when config files are not found
 			if (!File.Exists(filePath)) {
 				throw new FileNotFoundException("Components.json was not found in the DataPath.");
 			}
 
-			// TODO proper deserialization
-			JObject json;
 			try {
-				json = JObject.Parse(File.ReadAllText(filePath));
+				return JsonConvert.DeserializeAnonymousType(File.ReadAllText(filePath), new { Components = Array.Empty<string>() }).Components;
 			} catch (JsonReaderException e) {
-				throw new FormatException("Components.json contains invalid JSON.", e);
-			}
-
-			try {
-				return json["components"]!.ToObject<JArray>().Select(jt => jt.ToObject<string>()!);
-			} catch (Exception e) {
 				throw new FormatException("Components.json contains invalid data.", e);
 			}
 		}

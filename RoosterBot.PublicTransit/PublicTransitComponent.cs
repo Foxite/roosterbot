@@ -15,7 +15,11 @@ namespace RoosterBot.PublicTransit {
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			PTJsonConfig config = JsonConvert.DeserializeObject<PTJsonConfig>(File.ReadAllText(Path.Combine(configPath, "Config.json")));
+			var config = JsonConvert.DeserializeAnonymousType(File.ReadAllText(Path.Combine(configPath, "Config.json")), new {
+				Username = "",
+				Password = "",
+				DefaultDepartureCode = ""
+			});
 
 			m_NSAPI = new NSAPI(config.Username, config.Password);
 			services.AddSingleton(m_NSAPI);
@@ -45,18 +49,6 @@ namespace RoosterBot.PublicTransit {
 
 		protected override void Dispose(bool disposing) {
 			m_NSAPI?.Dispose();
-		}
-
-		private class PTJsonConfig {
-			public string Username { get; set; }
-			public string Password { get; set; }
-			public string DefaultDepartureCode { get; set; }
-
-			public PTJsonConfig(string username, string password, string defaultDepartureCode) {
-				Username = username;
-				Password = password;
-				DefaultDepartureCode = defaultDepartureCode;
-			}
 		}
 	}
 }
