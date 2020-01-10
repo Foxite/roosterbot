@@ -15,7 +15,7 @@ namespace RoosterBot {
 		private readonly List<Component> m_Components;
 		private readonly ConcurrentDictionary<Assembly, Component> m_ComponentsByAssembly;
 
-		public IServiceProvider Services { get; private set; } = null!;
+		internal IServiceProvider Services { get; private set; } = null!;
 
 		internal ComponentManager() {
 			m_Components = new List<Component>();

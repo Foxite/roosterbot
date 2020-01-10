@@ -90,7 +90,7 @@ namespace RoosterBot {
 			m_SetupActions.Add(action);
 		}
 
-		public async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
+		internal async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
 			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
 			if (result is CommandNotFoundResult ||
 				(result is ChecksFailedResult cfr && cfr.FailedChecks.Count == 1 && cfr.FailedChecks.First().Check is RequireCultureAttribute rca && rca.Hide)) {
