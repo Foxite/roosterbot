@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
@@ -27,7 +26,7 @@ namespace RoosterBot.DiscordNet {
 
 			// TODO full support for DiscordSocketConfig through the config file
 			Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				
+				MessageCacheSize = 10
 			});
 
 			services.AddSingleton(Client);

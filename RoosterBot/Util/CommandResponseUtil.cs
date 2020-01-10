@@ -54,7 +54,7 @@ namespace RoosterBot {
 
 		public static async Task<IMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
 			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
-			IMessage? response = crp == null ? null : await context.Channel.GetMessageAsync(crp.Response);
+			IMessage? response = crp == null ? null : await context.Channel.GetMessageAsync(crp.Response.Id);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
 				response = await context.Channel.SendMessageAsync(message, filePath);

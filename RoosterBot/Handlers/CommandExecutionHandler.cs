@@ -13,7 +13,6 @@ namespace RoosterBot {
 		internal CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
 
 		public async Task ExecuteCommandAsync(string input, RoosterCommandContext context) {
-			//var context = new RoosterCommandContext(platform, message, userConfig, guildConfig, Program.Instance.Components.Services);
 			IResult result = await Commands.ExecuteAsync(input, context);
 
 			if (!(result.IsSuccessful || result is ExecutionFailedResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
