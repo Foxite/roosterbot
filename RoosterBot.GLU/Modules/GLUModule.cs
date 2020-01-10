@@ -25,7 +25,7 @@ namespace RoosterBot.GLU {
 			return new TextResult(null, response);
 		}
 
-		[Command("altijdJoram"), RequireContext(ContextType.DM)]
+		[Command("altijdJoram"), RequirePrivate(true)]
 		public CommandResult AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");

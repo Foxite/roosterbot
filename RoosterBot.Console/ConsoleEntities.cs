@@ -17,12 +17,14 @@ namespace RoosterBot.Console {
 		public string UserName { get; }
 		public string Mention => "@" + UserName;
 		public string DisplayName => "ConsoleGuy";
+		public bool IsBotAdmin => ((ulong) Id) == 1UL;
 
 		public ConsoleUser(ulong id, string name) : base(id) {
 			UserName = name;
 		}
 
 		public Task<IChannel?> GetPrivateChannel() => Task.FromResult((IChannel?) ConsoleComponent.Instance.TheConsoleChannel);
+		public bool IsChannelAdmin(IChannel channel) => true;
 	}
 
 	public class ConsoleChannel : ConsoleSnowflake, IChannel {
