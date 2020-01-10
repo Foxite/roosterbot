@@ -104,18 +104,6 @@ namespace RoosterBot {
 			var helpService = new HelpService(resources);
 			var commands = new RoosterCommandService(resources);
 
-			// Create handlers
-			// I don't know what to do with this.
-			// We construct a class that fully takes care of itself, does everything it needs to in its constructor (ie subscribing events)
-			//  and has no other methods that need to be called, at all.
-			// We have a few options with it:
-			// - Call the constructor without assigning it to a variable (seems bad form)
-			// - Assigning it to a variable without ever using the variable (emits compiler warning)
-			// - Adding the object to the ServiceCollection (never used, and nothing you could possibly do with it)
-			// I don't know what is the least bad of these options.
-			// Though it's really just a style problem, as it does not really affect anything, and the object is never garbage colleted because it creates event handlers
-			//  that use the object's fields.
-
 			IServiceCollection serviceCollection = new ServiceCollection()
 				.AddSingleton(new EmoteService())
 				.AddSingleton(configService)
