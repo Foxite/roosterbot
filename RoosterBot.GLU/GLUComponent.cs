@@ -70,6 +70,10 @@ namespace RoosterBot.GLU {
 
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
+			if (services.GetService<GlobalConfigService>().IgnoreUnknownPlatforms) {
+				m_AllowedGuilds = m_AllowedGuilds.Where(sr => sr.Platform != null).ToArray();
+			}
+
 			// Teachers
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 			await teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);

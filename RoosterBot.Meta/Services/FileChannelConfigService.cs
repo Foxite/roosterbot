@@ -23,8 +23,11 @@ namespace RoosterBot.Meta {
 			foreach (KeyValuePair<string, IDictionary<string, FileChannelConfig>> platformKvp in jsonConfig) {
 				PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
 				if (platform is null) {
-					// TODO optional skip instead of crash
-					throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+					if (config.IgnoreUnknownPlatforms) {
+						continue;
+					} else {
+						throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+					}
 				}
 
 				foreach (KeyValuePair<string, FileChannelConfig> configItem in platformKvp.Value) {

@@ -17,7 +17,7 @@ namespace RoosterBot.Meta {
 
 			if (config.UseFileConfig) {
 				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Guilds.json")));
-				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService(Path.Combine(configPath, "Users.json")));
+				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService   (isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Users.json")));
 			}
 
 			services.AddSingleton(new MetaInfoService(config.GithubLink, config.DiscordLink));
