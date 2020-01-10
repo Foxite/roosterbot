@@ -16,34 +16,38 @@ namespace RoosterBot.Meta {
 			Logger.Info("FileUserConfigService", "Loading user config json");
 
 			m_ConfigFilePath = configPath;
-
-			var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileUserConfig>>>(File.ReadAllText(m_ConfigFilePath));
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, UserConfig>();
 
-			foreach (KeyValuePair<string, IDictionary<string, FileUserConfig>> platformKvp in jsonConfig) {
-				PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
-				if (platform is null) {
-					if (config.IgnoreUnknownPlatforms) {
-						continue;
-					} else {
-						throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+			if (File.Exists(m_ConfigFilePath)) {
+				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileUserConfig>>>(File.ReadAllText(m_ConfigFilePath));
+
+				foreach (KeyValuePair<string, IDictionary<string, FileUserConfig>> platformKvp in jsonConfig) {
+					PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
+					if (platform is null) {
+						if (config.IgnoreUnknownPlatforms) {
+							continue;
+						} else {
+							throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+						}
+					}
+
+					foreach (KeyValuePair<string, FileUserConfig> configItem in platformKvp.Value) {
+						var userRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
+						m_ConfigMap.TryAdd(
+							userRef,
+							new UserConfig(
+								this,
+								configItem.Value.Culture is null ? null : CultureInfo.GetCultureInfo(configItem.Value.Culture),
+								userRef,
+								configItem.Value.CustomData
+							)
+						);
 					}
 				}
-
-				foreach (KeyValuePair<string, FileUserConfig> configItem in platformKvp.Value) {
-					var userRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
-					m_ConfigMap.TryAdd(
-						userRef,
-						new UserConfig(
-							this,
-							configItem.Value.Culture is null ? null : CultureInfo.GetCultureInfo(configItem.Value.Culture),
-							userRef,
-							configItem.Value.CustomData
-						)
-					);
-				}
+			} else {
+				using var sw = File.CreateText(m_ConfigFilePath);
+				sw.Write("{}");
 			}
-
 			Logger.Info("FileUserConfigService", "Finished loading user config json");
 		}
 

@@ -16,27 +16,32 @@ namespace RoosterBot.Meta {
 			Logger.Info("FileGuildConfigService", "Loading guild config json");
 
 			m_ConfigFilePath = configPath;
-
-			var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileChannelConfig>>>(File.ReadAllText(m_ConfigFilePath));
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, ChannelConfig>();
 
-			foreach (KeyValuePair<string, IDictionary<string, FileChannelConfig>> platformKvp in jsonConfig) {
-				PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
-				if (platform is null) {
-					if (config.IgnoreUnknownPlatforms) {
-						continue;
-					} else {
-						throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+			if (File.Exists(m_ConfigFilePath)) {
+				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileChannelConfig>>>(File.ReadAllText(m_ConfigFilePath));
+
+				foreach (KeyValuePair<string, IDictionary<string, FileChannelConfig>> platformKvp in jsonConfig) {
+					PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
+					if (platform is null) {
+						if (config.IgnoreUnknownPlatforms) {
+							continue;
+						} else {
+							throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
+						}
+					}
+
+					foreach (KeyValuePair<string, FileChannelConfig> configItem in platformKvp.Value) {
+						var channelRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
+						m_ConfigMap.TryAdd(
+							channelRef,
+							new ChannelConfig(this, configItem.Value.CommandPrefix, CultureInfo.GetCultureInfo(configItem.Value.Culture), channelRef, configItem.Value.CustomData)
+						);
 					}
 				}
-
-				foreach (KeyValuePair<string, FileChannelConfig> configItem in platformKvp.Value) {
-					var channelRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
-					m_ConfigMap.TryAdd(
-						channelRef,
-						new ChannelConfig(this, configItem.Value.CommandPrefix, CultureInfo.GetCultureInfo(configItem.Value.Culture), channelRef, configItem.Value.CustomData)
-					);
-				}
+			} else {
+				using var sw = File.CreateText(m_ConfigFilePath);
+				sw.Write("{}");
 			}
 
 			Logger.Info("FileGuildConfigService", "Finished loading guild config json");
