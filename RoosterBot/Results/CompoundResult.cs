@@ -24,8 +24,8 @@ namespace RoosterBot {
 			m_IndividualResults.Add(result);
 		}
 
-		public override string ToString(RoosterCommandContext r) {
-			return string.Join(Separator, IndividualResults.Select(result => result.ToString()));
+		public override string ToString(RoosterCommandContext rcc) {
+			return string.Join(Separator, IndividualResults.Select(result => result.ToString(rcc)));
 		}
 	}
 }
