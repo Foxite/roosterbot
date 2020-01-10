@@ -25,9 +25,7 @@ namespace RoosterBot {
 		public static Program Instance { get; private set; }
 
 		public ComponentManager Components { get; private set; }
-
-		// TODO find better way of letting components use the standard execution handler
-		public CommandExecutionHandler ExecuteHandler { get; private set; }
+		public CommandExecutionHandler CommandHandler { get; private set; }
 #nullable restore
 
 		private bool m_StopFlagSet;
@@ -36,18 +34,18 @@ namespace RoosterBot {
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log crash and exit")]
 		private static int Main(string[] args) {
-			Console.CancelKeyPress += (o, e) => {
-				e.Cancel = true;
-				Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
-			};
+				Console.CancelKeyPress += (o, e) => {
+					e.Cancel = true;
+					Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
+				};
 
-			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
+				if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
+					Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
 #if DEBUG
 				Console.ReadKey();
 #endif
-				return 1;
-			}
+					return 1;
+				}
 
 			try {
 				Instance = new Program();
@@ -58,10 +56,10 @@ namespace RoosterBot {
 				// At one point someone will notice that the bot is offline and restart it manually.
 				// Or if the crash occurred during startup it's likely that the deploy system saw the crash and is doing something about it.
 #if DEBUG
-				Console.ReadKey();
+					Console.ReadKey();
 #endif
 				return 2;
-			}
+				}
 			return 0;
 		}
 
@@ -76,7 +74,7 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			await Components.SetupComponents(serviceCollection);
 
-			ExecuteHandler = new CommandExecutionHandler(Components.Services);
+			CommandHandler = new CommandExecutionHandler(Components.Services);
 			new CommandExecutedHandler(Components.Services);
 			new CommandExceptionHandler(Components.Services);
 

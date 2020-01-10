@@ -58,7 +58,7 @@ namespace RoosterBot.Console {
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
-						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(consoleMessage.Content, new RoosterCommandContext(this, consoleMessage,
+						await Program.Instance.CommandHandler.ExecuteCommandAsync(consoleMessage.Content, new RoosterCommandContext(this, consoleMessage,
 							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
 							await ccs.GetConfigAsync(TheConsoleChannel.GetReference())
 						));

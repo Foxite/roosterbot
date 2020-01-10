@@ -25,7 +25,7 @@ namespace RoosterBot.DiscordNet {
 						// TODO it's better UX to use EnterTypingState instead, and dispose it when execution finishes.
 						// not sure about the best way to so.
 						await dum.Channel.TriggerTypingAsync();
-						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(dum), userConfig, guildConfig));
+						await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(dum), userConfig, guildConfig));
 					}
 				});
 			}
