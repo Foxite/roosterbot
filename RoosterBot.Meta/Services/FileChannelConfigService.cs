@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		private readonly string m_ConfigFilePath;
 		private readonly ConcurrentDictionary<SnowflakeReference, ChannelConfig> m_ConfigMap;
 
-		public FileChannelConfigService(ConfigService config, string configPath) : base(config) {
+		public FileChannelConfigService(GlobalConfigService config, string configPath) : base(config) {
 			Logger.Info("FileGuildConfigService", "Loading guild config json");
 
 			m_ConfigFilePath = configPath;

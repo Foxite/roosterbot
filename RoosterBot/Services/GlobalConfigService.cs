@@ -3,11 +3,11 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
-	public sealed class ConfigService {
+	public sealed class GlobalConfigService {
 		public string DefaultCommandPrefix { get; }
 		public CultureInfo DefaultCulture { get; }
 
-		internal ConfigService(string jsonPath) {
+		internal GlobalConfigService(string jsonPath) {
 			if (!Directory.Exists(Program.DataPath)) {
 				throw new DirectoryNotFoundException("Data folder did not exist.");
 			}

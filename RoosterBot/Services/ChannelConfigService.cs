@@ -6,9 +6,9 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	public abstract class ChannelConfigService {
-		private readonly ConfigService m_Config;
+		private readonly GlobalConfigService m_Config;
 
-		protected ChannelConfigService(ConfigService config) {
+		protected ChannelConfigService(GlobalConfigService config) {
 			m_Config = config;
 		}
 

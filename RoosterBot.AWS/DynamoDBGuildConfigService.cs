@@ -14,7 +14,7 @@ namespace RoosterBot.AWS {
 	public class DynamoDBGuildConfigService : ChannelConfigService {
 		private readonly Table m_Table;
 
-		public DynamoDBGuildConfigService(ConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
+		public DynamoDBGuildConfigService(GlobalConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
 			Logger.Info("DynamoDBGuild", "Loading guild table");
 			m_Table = Table.LoadTable(client, tableName);
 			Logger.Info("DynamoDBGuild", "Finished loading guild table");

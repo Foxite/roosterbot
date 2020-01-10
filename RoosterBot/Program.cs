@@ -67,7 +67,7 @@ namespace RoosterBot {
 			Logger.Info("Main", "Starting program");
 
 			string configFile = Path.Combine(DataPath, "Config", "Config.json");
-			var configService = new ConfigService(configFile);
+			var configService = new GlobalConfigService(configFile);
 
 			IServiceCollection serviceCollection = CreateRBServices(configService);
 
@@ -87,7 +87,7 @@ namespace RoosterBot {
 			await Components.ShutdownComponentsAsync();
 		}
 
-		private IServiceCollection CreateRBServices(ConfigService configService) {
+		private IServiceCollection CreateRBServices(GlobalConfigService configService) {
 			var notificationService = new NotificationService();
 
 			var resources = new ResourceService();
