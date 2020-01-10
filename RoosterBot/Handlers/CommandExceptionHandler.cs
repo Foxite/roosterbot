@@ -9,6 +9,7 @@ namespace RoosterBot {
 		public ResourceService Resources { get; set; } = null!;
 		public RoosterCommandService Commands { get; set; } = null!;
 		public NotificationService Notification { get; set; } = null!;
+		public EmoteService Emotes { get; set; } = null!;
 
 		public CommandExceptionHandler(IServiceProvider isp) : base(isp) {
 			Commands.CommandExecutionFailed += HandleError;
@@ -23,7 +24,7 @@ namespace RoosterBot {
 					report = TooLong + report.Substring(0, 1999 - TooLong.Length);
 				}
 				await Notification.AddNotificationAsync(report);
-				await rcc.RespondAsync(Util.Error + Resources.GetString(rcc.Culture, "CommandHandling_FatalError"));
+				await rcc.RespondAsync(Emotes.Error(rcc.Platform) + Resources.GetString(rcc.Culture, "CommandHandling_FatalError"));
 				await rcc.UserConfig.UpdateAsync();
 			}
 		}

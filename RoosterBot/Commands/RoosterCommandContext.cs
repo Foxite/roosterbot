@@ -4,6 +4,7 @@ using Qmmands;
 
 namespace RoosterBot {
 	public class RoosterCommandContext : CommandContext {
+		public PlatformComponent Platform { get; }
 		public IMessage Message { get; }
 		public IUser User { get; }
 		public IChannel Channel { get; }
@@ -13,7 +14,8 @@ namespace RoosterBot {
 		public ChannelConfig ChannelConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? ChannelConfig.Culture;
 
-		public RoosterCommandContext(IMessage message, UserConfig userConfig, ChannelConfig guildConfig, IServiceProvider isp) : base(isp) {
+		public RoosterCommandContext(PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig guildConfig, IServiceProvider isp) : base(isp) {
+			Platform = platform;
 			Message = message;
 			User = message.User;
 			Channel = message.Channel;

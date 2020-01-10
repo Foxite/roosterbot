@@ -95,6 +95,13 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddModule<EmoteTheftModule>();
 			commandService.AddModule<UserListModule>();
 
+			var emotes = services.GetService<EmoteService>();
+			emotes.RegisterEmote(this, "Error",   new DiscordEmote("<:error:636213609919283238>"));
+			emotes.RegisterEmote(this, "Success", new DiscordEmote("<:ok:636213617825546242>"));
+			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));
+			emotes.RegisterEmote(this, "Unknown", new DiscordEmote("<:unknown:636213624460935188>"));
+			emotes.RegisterEmote(this, "Info",    new DiscordEmote("<:info:644251874010202113>"));
+
 			return Task.CompletedTask;
 		}
 

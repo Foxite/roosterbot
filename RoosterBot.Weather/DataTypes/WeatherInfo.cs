@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot.DateTimeUtils;
 
@@ -46,7 +47,7 @@ namespace RoosterBot.Weather {
 		/// <summary>
 		/// Creates an AspectListResult that contains all information from <see cref="Present(CultureInfo, bool)"/>, as well as a pretext with the City and Region name and the DateTime.
 		/// </summary>
-		public AspectListResult Present(DateTime datetime, CultureInfo culture, bool useMetric) {
+		public AspectListResult Present(RoosterCommandContext context, DateTime datetime, bool useMetric) {
 			string pretext;
 
 			if (City.Name == City.Region.Name) {
@@ -58,12 +59,12 @@ namespace RoosterBot.Weather {
 			if ((datetime - DateTime.Now).TotalMinutes < 1) {
 				pretext += "nu";
 			} else {
-				pretext += DateTimeUtil.GetRelativeDateReference(datetime.Date, culture) + " " + datetime.ToString("s", culture);
+				pretext += DateTimeUtil.GetRelativeDateReference(datetime.Date, context.Culture) + " " + datetime.ToString("s", context.Culture);
 			}
-			return Present(pretext, culture, useMetric);
+			return Present(context, pretext, useMetric);
 		}
 
-		public AspectListResult Present(string caption, CultureInfo culture, bool useMetric) {
+		public AspectListResult Present(RoosterCommandContext context, string caption, bool useMetric) {
 			IEnumerable<AspectListItem> getAspects() {
 				string temperature;
 				if (useMetric) {
@@ -80,11 +81,10 @@ namespace RoosterBot.Weather {
 						appTempString = Math.Round(Temperature * 9 / 5 + 32, 1).ToString() + " °F";
 					}
 
-					temperature += string.Format(m_Resources.GetString(culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
+					temperature += string.Format(m_Resources.GetString(context.Culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
 				}
-				yield return new AspectListItem(new Emoji("🌡️"), m_Resources.GetString(culture, "WeatherInfo_Present_TemperatureAspect"), temperature);
-				yield return new AspectListItem(WeatherCode switch
-				{
+				yield return new AspectListItem(new Emoji("🌡️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_TemperatureAspect"), temperature);
+				yield return new AspectListItem(WeatherCode switch {
 					200 => new Emoji("🌩️"),
 					230 => new Emoji("🌩️"),
 					201 => new Emoji("⛈️"),
@@ -122,12 +122,12 @@ namespace RoosterBot.Weather {
 					802 => new Emoji("🌤️"),
 					803 => new Emoji("⛅"),
 					804 => new Emoji("☁️"),
-					900 => Constants.Unknown,
-					_   => Constants.Error
-				}, m_Resources.GetString(culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(culture, WeatherCode));
+					900 => context.ServiceProvider.GetService<EmoteService>().Unknown(context.Platform),
+					_   => context.ServiceProvider.GetService<EmoteService>().Error(context.Platform)
+				}, m_Resources.GetString(context.Culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(context.Culture, WeatherCode));
 
 				if (WindSpeed == 0) {
-					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(culture, "WeatherInfo_Present_WindAspect"), m_Resources.GetString(culture, "WeatherInfo_Present_NoWind"));
+					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_WindAspect"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_NoWind"));
 				} else {
 					string windSpeedString;
 					if (useMetric) {
@@ -136,7 +136,7 @@ namespace RoosterBot.Weather {
 						windSpeedString = Math.Round(WindSpeed * 1.609, 1).ToString() + " mph";
 					}
 
-					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(culture, "WeatherInfo_Present_WindAspect"), windSpeedString);
+					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_WindAspect"), windSpeedString);
 				}
 			}
 

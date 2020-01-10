@@ -55,6 +55,6 @@ namespace RoosterBot {
 			}
 		}
 
-		public override string ToString() => Caption + "\n" + StringUtil.FormatTextTable(Cells, MaxColumnWidth);
+		public override string ToString(RoosterCommandContext r) => Caption + "\n" + StringUtil.FormatTextTable(Cells, MaxColumnWidth);
 	}
 }

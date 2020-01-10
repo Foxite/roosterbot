@@ -18,7 +18,7 @@ namespace RoosterBot.Weather {
 
 			weather = await Weather.GetCurrentWeatherAsync(city);
 			GuildConfig.TryGetData("metric", out bool metric, true);
-			m_Result.AddResult(weather.Present(DateTime.Now, Culture, metric));
+			m_Result.AddResult(weather.Present(Context, DateTime.Now, metric));
 			Attribution();
 
 			return m_Result;
@@ -33,7 +33,7 @@ namespace RoosterBot.Weather {
 			datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
 			weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			GuildConfig.TryGetData("metric", out bool metric, true);
-			m_Result.AddResult(weather.Present(datetime, Culture, metric));
+			m_Result.AddResult(weather.Present(Context, datetime, metric));
 			Attribution();
 
 			return m_Result;
@@ -50,7 +50,7 @@ namespace RoosterBot.Weather {
 					WeatherInfo weather;
 					weather = await Weather.GetWeatherForecastAsync(city, amount);
 					GuildConfig.TryGetData("metric", out bool metric, true);
-					m_Result.AddResult(weather.Present(DateTime.Now.AddHours(amount), Culture, metric));
+					m_Result.AddResult(weather.Present(Context, DateTime.Now.AddHours(amount), metric));
 					Attribution();
 					return m_Result;
 				}

@@ -6,6 +6,6 @@ namespace RoosterBot {
 
 		public sealed override bool IsSuccessful => true;
 
-		public abstract override string ToString();
+		public abstract string ToString(RoosterCommandContext rcc);
 	}
 }

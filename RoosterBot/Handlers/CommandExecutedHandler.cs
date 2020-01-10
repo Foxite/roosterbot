@@ -12,7 +12,7 @@ namespace RoosterBot {
 		public async Task HandleResultAsync(CommandExecutedEventArgs args) {
 			if (args.Context is RoosterCommandContext rcc) {
 				if (args.Result is RoosterCommandResult rcr) {
-					string response = rcr.ToString();
+					string response = rcr.ToString(rcc);
 					if (response.Length == 0) {
 						response = rcc.ServiceProvider.GetService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
 					}
@@ -28,7 +28,7 @@ namespace RoosterBot {
 					}
 					
 					string response = rcc.ServiceProvider.GetService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
-					await rcc.RespondAsync(TextResult.Info(response).ToString());
+					await rcc.RespondAsync(TextResult.Info(response).ToString(rcc));
 				}
 				await rcc.UserConfig.UpdateAsync();
 			}

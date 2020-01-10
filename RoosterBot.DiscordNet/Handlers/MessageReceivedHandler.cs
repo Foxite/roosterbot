@@ -22,7 +22,7 @@ namespace RoosterBot.DiscordNet {
 					ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, (dum.Channel is Discord.IGuildChannel igc) ? igc.GuildId : dum.Channel.Id));
 					if (DiscordUtil.IsMessageCommand(dum, guildConfig.CommandPrefix, out int argPos)) {
 						UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
-						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordMessage(dum), guildConfig, userConfig);
+						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(DiscordNetComponent.Instance, dum.Content.Substring(argPos + 1), new DiscordMessage(dum), guildConfig, userConfig);
 					}
 				});
 			}
