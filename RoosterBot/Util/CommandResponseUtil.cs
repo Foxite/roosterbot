@@ -6,37 +6,37 @@ namespace RoosterBot {
 	public static class CommandResponseUtil {
 		private const string CommandResponseJsonKey = "command_response";
 
-		public static void SetResponse(this UserConfig userConfig, object userCommandId, object botResponseId) {
+		public static void SetResponse(this UserConfig userConfig, SnowflakeReference userCommand, SnowflakeReference botResponse) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
-				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.CommandId == userCommandId);
+				CommandResponsePair? relevantCRP = crps.SingleOrDefault(crp => crp.Command == userCommand);
 				if (relevantCRP == null) {
-					crps.Add(new CommandResponsePair(userCommandId, botResponseId));
+					crps.Add(new CommandResponsePair(userCommand, botResponse));
 
 					// Remove old commands
 					if (crps.Count > 5) {
 						crps.RemoveRange(0, crps.Count - 5);
 					}
 				} else {
-					relevantCRP.ResponseId = botResponseId;
+					relevantCRP.Response = botResponse;
 				}
 				userConfig.SetData(CommandResponseJsonKey, crps);
 			} else {
-				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommandId, botResponseId) });
+				userConfig.SetData(CommandResponseJsonKey, new[] { new CommandResponsePair(userCommand, botResponse) });
 			}
 		}
 
-		public static CommandResponsePair? GetResponse(this UserConfig userConfig, object messageId) {
+		public static CommandResponsePair? GetResponse(this UserConfig userConfig, SnowflakeReference message) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out CommandResponsePair[]? crps)) {
-				return crps.SingleOrDefault(crp => crp.CommandId == messageId);
+				return crps.SingleOrDefault(crp => crp.Command == message);
 			} else {
 				return null;
 			}
 		}
 
-		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, object commandId) {
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, SnowflakeReference command) {
 			if (userConfig.TryGetData(CommandResponseJsonKey, out List<CommandResponsePair>? crps)) {
 				for (int i = 0; i < crps.Count; i++) {
-					if (crps[i].CommandId == commandId) {
+					if (crps[i].Command == command) {
 						CommandResponsePair ret = crps[i];
 						crps.RemoveAt(i);
 						return ret;
@@ -48,13 +48,13 @@ namespace RoosterBot {
 			}
 		}
 
-		public static void SetResponse(this UserConfig userConfig, IMessage userMessage, IMessage botResponse) => SetResponse(userConfig, userMessage.Id, botResponse.Id);
-		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IMessage message) => GetResponse(userConfig, message.Id);
-		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IMessage command) => RemoveCommand(userConfig, command.Id);
+		public static void SetResponse(this UserConfig userConfig, IMessage userMessage, IMessage botResponse) => SetResponse(userConfig, userMessage.GetReference(), botResponse.GetReference());
+		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IMessage message) => GetResponse(userConfig, message.GetReference());
+		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IMessage command) => RemoveCommand(userConfig, command.GetReference());
 
 		public static async Task<IMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
 			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
-			IMessage? response = crp == null ? null : await context.Channel.GetMessageAsync(crp.ResponseId);
+			IMessage? response = crp == null ? null : await context.Channel.GetMessageAsync(crp.Response);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
 				response = await context.Channel.SendMessageAsync(message, filePath);

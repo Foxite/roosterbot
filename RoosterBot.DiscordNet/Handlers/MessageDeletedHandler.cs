@@ -15,10 +15,10 @@ namespace RoosterBot.DiscordNet {
 		private async Task OnMessageDeleted(Discord.Cacheable<Discord.IMessage, ulong> message, Discord.IMessageChannel channel) {
 			if (message.HasValue && message.Value is Discord.IUserMessage userMessage) {
 				UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(message.Value.Author).GetReference());
-				CommandResponsePair? crp = userConfig.GetResponse(userMessage.Id);
+				CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessage.Id));
 				if (crp != null) {
-					await channel.DeleteMessageAsync((ulong) crp.ResponseId);
-					userConfig.RemoveCommand(crp.CommandId);
+					await channel.DeleteMessageAsync((ulong) crp.Response.Id);
+					userConfig.RemoveCommand(crp.Command);
 				}
 			}
 		}
