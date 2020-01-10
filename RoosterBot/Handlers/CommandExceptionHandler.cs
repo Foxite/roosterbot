@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
 	internal sealed class CommandExceptionHandler : RoosterHandler {
-		public ConfigService Config { get; set; } = null!;
 		public ResourceService Resources { get; set; } = null!;
-		public RoosterCommandService Commands { get; set; } = null!;
 		public NotificationService Notification { get; set; } = null!;
 		public EmoteService Emotes { get; set; } = null!;
 
 		public CommandExceptionHandler(IServiceProvider isp) : base(isp) {
-			Commands.CommandExecutionFailed += HandleError;
+			isp.GetService<RoosterCommandService>().CommandExecutionFailed += HandleError;
 		}
 
 		private async Task HandleError(CommandExecutionFailedEventArgs args) {

@@ -7,11 +7,10 @@ namespace RoosterBot {
 	public sealed class CommandExecutionHandler : RoosterHandler {
 		public RoosterCommandService Commands { get; set; } = null!;
 		public ResourceService Resources { get; set; } = null!;
-		public ConfigService Config { get; set; } = null!;
 		public NotificationService Notifications { get; set; } = null!;
 		public EmoteService Emotes { get; set; } = null!;
 
-		public CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
+		internal CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
 
 		public async Task ExecuteCommandAsync(string input, RoosterCommandContext context) {
 			//var context = new RoosterCommandContext(platform, message, userConfig, guildConfig, Program.Instance.Components.Services);
