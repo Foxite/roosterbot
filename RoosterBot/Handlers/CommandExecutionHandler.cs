@@ -13,8 +13,8 @@ namespace RoosterBot {
 
 		public CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
 
-		public async Task ExecuteCommandAsync(PlatformComponent platform, string input, IMessage message, ChannelConfig guildConfig, UserConfig userConfig) {
-			var context = new RoosterCommandContext(platform, message, userConfig, guildConfig, Program.Instance.Components.Services);
+		public async Task ExecuteCommandAsync(string input, RoosterCommandContext context) {
+			//var context = new RoosterCommandContext(platform, message, userConfig, guildConfig, Program.Instance.Components.Services);
 			IResult result = await Commands.ExecuteAsync(input, context);
 
 			if (!(result.IsSuccessful || result is ExecutionFailedResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
@@ -93,9 +93,9 @@ namespace RoosterBot {
 						break;
 				}
 
-				response = Emotes.Error(platform) + response;
+				response = Emotes.Error(context.Platform) + response;
 				if (response.Length >= 2000) {
-					response = Emotes.Error(platform) + Resources.GetString(context.Culture, "CommandHandling_ResponseTooLong");
+					response = Emotes.Error(context.Platform) + Resources.GetString(context.Culture, "CommandHandling_ResponseTooLong");
 				}
 				await context.RespondAsync(response);
 			}

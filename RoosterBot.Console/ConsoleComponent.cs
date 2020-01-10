@@ -58,13 +58,10 @@ namespace RoosterBot.Console {
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
-						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(
-							this,
-							consoleMessage.Content,
-							consoleMessage,
-							await ccs.GetConfigAsync(TheConsoleChannel.GetReference()),
-							await ucs.GetConfigAsync(TheConsoleUser.GetReference())
-						);
+						await Program.Instance.ExecuteHandler.ExecuteCommandAsync(consoleMessage.Content, new RoosterCommandContext(this, consoleMessage,
+							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
+							await ccs.GetConfigAsync(TheConsoleChannel.GetReference())
+						));
 					}
 				} catch (Exception e) {
 					if (e is IOException && pipeServer != null && !pipeServer.IsConnected && wasConnected) {
