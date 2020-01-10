@@ -1,5 +1,4 @@
-﻿/* TODO move into Tools.Discord or Discord
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -7,9 +6,9 @@ using System.Threading.Tasks;
 using Discord;
 using Qmmands;
 
-namespace RoosterBot.Tools {
-	[HiddenFromList, Group("users"), RequireContext(ContextType.Guild), UserIsModerator]
-	public class UserListModule : RoosterModule {
+namespace RoosterBot.DiscordNet {
+	[HiddenFromList, Group("users"), RequirePrivate(false), UserIsModerator]
+	public class UserListModule : RoosterModule<DiscordCommandContext> {
 		[Command("with no nickname")]
 		public async Task<CommandResult> GetUnnamedUsers() {
 			return ReplyList(
@@ -67,4 +66,3 @@ namespace RoosterBot.Tools {
 		}
 	}
 }
-*/

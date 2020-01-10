@@ -1,16 +1,16 @@
-﻿/* TODO move into Tools.Discord
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
 using Qmmands;
 
-namespace RoosterBot.Tools {
+namespace RoosterBot.DiscordNet {
 	[Group("emote"), HiddenFromList]
-	public class EmoteTheftModule : RoosterModule {
+	public class EmoteTheftModule : RoosterModule<DiscordCommandContext> {
 		[Command("steal"), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand() {
 			// Get last message before command
@@ -38,10 +38,10 @@ namespace RoosterBot.Tools {
 			static bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  emote.Animated) < 50;
 
 			if (matches.Count > 0) {
-				IEnumerable<IGuild> storageGuilds = await Task.WhenAll(new ulong[] {
+				IEnumerable<IGuild> storageGuilds = new ulong[] {
 					// Currently hardcoded IDs for my private emote storage servers
 					346682476149866497, 649728161281736704
-				}.Select(id => Context.Client.GetGuildAsync(id)));
+				}.Select(id => Context.Client.GetGuild(id));
 				
 				string stolenEmotes = "";
 				int animatedStealFails = 0;
@@ -97,4 +97,3 @@ namespace RoosterBot.Tools {
 		}
 	}
 }
-*/
