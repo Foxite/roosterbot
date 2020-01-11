@@ -25,6 +25,17 @@ namespace RoosterBot.Console {
 			m_CTS = new CancellationTokenSource();
 		}
 
+		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+			var emotes = services.GetService<EmoteService>();
+			emotes.RegisterEmote(this, "Info",    new Emoji("i "));
+			emotes.RegisterEmote(this, "Error",   new Emoji("x "));
+			emotes.RegisterEmote(this, "Success", new Emoji("v "));
+			emotes.RegisterEmote(this, "Warning", new Emoji("! "));
+			emotes.RegisterEmote(this, "Unknown", new Emoji("? "));
+
+			return Task.CompletedTask;
+		}
+
 		protected override Task ConnectAsync(IServiceProvider services) {
 			UserConfigService ucs = services.GetService<UserConfigService>();
 
@@ -33,7 +44,7 @@ namespace RoosterBot.Console {
 				CreateNoWindow = false,
 				UseShellExecute = true
 			});
-			
+
 			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
 			RoosterCommandService commandService = services.GetService<RoosterCommandService>();
 
