@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
@@ -22,12 +21,12 @@ namespace RoosterBot {
 		}
 
 		protected virtual DependencyResult CheckDependencies(IEnumerable<Component> components) => new DependencyResult();
-		protected virtual Task AddServicesAsync(IServiceCollection services, string configPath) => Task.CompletedTask;
-		protected virtual Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) => Task.CompletedTask;
+		protected virtual void AddServices(IServiceCollection services, string configPath) { }
+		protected virtual void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) { }
 
 		internal DependencyResult CheckDependenciesInternal(IEnumerable<Component> components) => CheckDependencies(components);
-		internal Task AddServicesInternalAsync(IServiceCollection services, string configPath) => AddServicesAsync(services, configPath);
-		internal Task AddModulesInternalAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) => AddModulesAsync(services, commandService, help);
+		internal void AddServicesInternal(IServiceCollection services, string configPath) => AddServices(services, configPath);
+		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService, HelpService help) => AddModules(services, commandService, help);
 		
 		#region IDisposable Support
 		protected virtual void Dispose(bool disposing) { }

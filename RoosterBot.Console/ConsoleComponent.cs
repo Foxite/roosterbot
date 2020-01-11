@@ -25,18 +25,16 @@ namespace RoosterBot.Console {
 			m_CTS = new CancellationTokenSource();
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			var emotes = services.GetService<EmoteService>();
 			emotes.RegisterEmote(this, "Info",    new Emoji("i "));
 			emotes.RegisterEmote(this, "Error",   new Emoji("x "));
 			emotes.RegisterEmote(this, "Success", new Emoji("v "));
 			emotes.RegisterEmote(this, "Warning", new Emoji("! "));
 			emotes.RegisterEmote(this, "Unknown", new Emoji("? "));
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task ConnectAsync(IServiceProvider services) {
+		protected override void Connect(IServiceProvider services) {
 			UserConfigService ucs = services.GetService<UserConfigService>();
 
 			Process.Start(new ProcessStartInfo() {
@@ -96,12 +94,10 @@ namespace RoosterBot.Console {
 
 				}
 			});
-			return Task.CompletedTask;
 		}
 
-		protected override Task DisconnectAsync() {
+		protected override void Disconnect() {
 			m_CTS.Cancel();
-			return Task.CompletedTask;
 		}
 
 		public override object GetSnowflakeIdFromString(string input) => ulong.Parse(input);

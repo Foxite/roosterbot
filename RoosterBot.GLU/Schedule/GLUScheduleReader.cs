@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using CsvHelper;
 using RoosterBot.Schedule;
 
@@ -22,7 +20,7 @@ namespace RoosterBot.GLU {
 			m_SkipPastRecords = skipPastRecords;
 		}
 
-		public async override Task<List<ScheduleRecord>> GetSchedule() {
+		public override List<ScheduleRecord> GetSchedule() {
 			Logger.Info("GLUScheduleReader", $"Loading CSV file from {m_Path}");
 
 			int line = 1;
@@ -30,7 +28,7 @@ namespace RoosterBot.GLU {
 				List<ScheduleRecord> schedule;
 				using (StreamReader reader = File.OpenText(m_Path))
 				using (var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
-					await csv.ReadAsync();
+					csv.Read();
 					csv.ReadHeader();
 
 					DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
@@ -38,7 +36,7 @@ namespace RoosterBot.GLU {
 					schedule = new List<ScheduleRecord>();
 					var culture = CultureInfo.GetCultureInfo("en-US");
 
-					while (await csv.ReadAsync()) {
+					while (csv.Read()) {
 						line++;
 						var date = DateTime.ParseExact(csv["StartDate"], @"yyyy\-MM\-dd", culture);
 

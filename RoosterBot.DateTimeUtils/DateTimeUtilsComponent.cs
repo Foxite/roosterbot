@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DateTimeUtils {
@@ -13,13 +12,11 @@ namespace RoosterBot.DateTimeUtils {
 		internal static ResourceService ResourceService { get; private set; }
 #nullable restore
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			ResourceService = services.GetService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
 			commandService.AddTypeParser(new DayOfWeekParser());
-
-			return Task.CompletedTask;
 		}
 	}
 }

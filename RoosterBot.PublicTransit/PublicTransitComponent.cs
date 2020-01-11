@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
 namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
@@ -14,7 +12,7 @@ namespace RoosterBot.PublicTransit {
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				Username = "",
 				Password = "",
@@ -24,11 +22,9 @@ namespace RoosterBot.PublicTransit {
 			m_NSAPI = new NSAPI(config.Username, config.Password);
 			services.AddSingleton(m_NSAPI);
 			services.AddSingleton(new StationInfoService(Path.Combine(configPath, "stations.xml"), config.DefaultDepartureCode));
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			var stationInfoReader = new StationInfoParser();
 			commandService.AddTypeParser(stationInfoReader);
 			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
@@ -43,8 +39,6 @@ namespace RoosterBot.PublicTransit {
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
 			help.AddHelpSection(this, "trein", helpText);
-
-			return Task.CompletedTask;
 		}
 
 		protected override void Dispose(bool disposing) {

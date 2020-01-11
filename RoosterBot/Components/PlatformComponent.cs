@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace RoosterBot {
 	/// <summary>
@@ -8,11 +7,11 @@ namespace RoosterBot {
 	public abstract class PlatformComponent : Component {
 		public abstract string PlatformName { get; }
 
-		protected abstract Task ConnectAsync(IServiceProvider services);
-		protected abstract Task DisconnectAsync();
+		protected abstract void Connect(IServiceProvider services);
+		protected abstract void Disconnect();
 
-		internal Task ConnectInternalAsync(IServiceProvider services) => ConnectAsync(services);
-		internal Task DisconnectInternalAsync() => DisconnectAsync();
+		internal void ConnectInternal(IServiceProvider services) => Connect(services);
+		internal void DisconnectInternal() => Disconnect();
 
 		public abstract object GetSnowflakeIdFromString(string input);
 	}

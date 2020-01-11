@@ -14,16 +14,14 @@ namespace RoosterBot.Schedule {
 				.Check();
 		}
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			services
 				.AddSingleton<TeacherNameService>()
 				.AddSingleton<ScheduleService>()
 				.AddSingleton<IdentifierValidationService>();
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			var ssir = new StudentSetInfoParser();
@@ -43,8 +41,6 @@ namespace RoosterBot.Schedule {
 
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
-
-			return Task.CompletedTask;
 		}
 	}
 }

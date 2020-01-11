@@ -24,7 +24,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Runs the full initialization process for components.
 		/// </summary>
-		internal async Task SetupComponents(IServiceCollection serviceCollection) {
+		internal void SetupComponents(IServiceCollection serviceCollection) {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
@@ -37,10 +37,10 @@ namespace RoosterBot {
 			// Start components
 			ConstructComponents(types);
 			CheckDependencies(m_Components);
-			Services = await AddComponentServicesAsync(serviceCollection);
-			await AddComponentModulesAsync(Services);
+			Services = AddComponentServices(serviceCollection);
+			AddComponentModules(Services);
 			Logger.Info("ComponentManager", "Components ready");
-			await ConnectPlatformsAsync();
+			ConnectPlatforms();
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
@@ -116,67 +116,42 @@ namespace RoosterBot {
 			}
 		}
 
-		private async Task<IServiceProvider> AddComponentServicesAsync(IServiceCollection serviceCollection) {
-			var servicesLoading = new Task[m_Components.Count];
-
-			int i = 0;
+		private IServiceProvider AddComponentServices(IServiceCollection serviceCollection) {
 			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
 				
 				try {
-#if DEBUG
-					await
-#else
-					servicesLoading[i] = 
-#endif               
-						component.AddServicesInternalAsync(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
+					component.AddServicesInternal(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
 					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", component.GetType(), ex);
 				}
-				i++;
 			}
-#if !DEBUG
-			await Task.WhenAll(servicesLoading);
-#endif
-
 			return serviceCollection.BuildServiceProvider();
 		}
 
-		private async Task AddComponentModulesAsync(IServiceProvider services) {
+		private void AddComponentModules(IServiceProvider services) {
 			RoosterCommandService commands = services.GetService<RoosterCommandService>();
 			HelpService help = services.GetService<HelpService>();
-			var modulesLoading = new Task[m_Components.Count];
 
-			int moduleIndex = 0;
 			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
-#if DEBUG
-					await
-#else
-					modulesLoading[moduleIndex] = 
-#endif
-						component.AddModulesInternalAsync(services, commands, help);
+					component.AddModulesInternal(services, commands, help);
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
-				moduleIndex++;
-			}
-
-#if !DEBUG
-			await Task.WhenAll(modulesLoading);
-#endif
-		}
-
-		private async Task ConnectPlatformsAsync() {
-			foreach (var component in m_Components.OfType<PlatformComponent>()) {
-				await component.ConnectInternalAsync(Services);
 			}
 		}
 
-		internal async Task ShutdownComponentsAsync() {
+		private void ConnectPlatforms() {
 			foreach (var component in m_Components.OfType<PlatformComponent>()) {
-				await component.DisconnectInternalAsync();
+				component.ConnectInternal(Services);
+			}
+		}
+
+		internal void ShutdownComponents() {
+			foreach (var component in m_Components.OfType<PlatformComponent>()) {
+				component.DisconnectInternal();
 			}
 
 			foreach (Component component in m_Components) {

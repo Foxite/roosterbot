@@ -12,15 +12,10 @@ namespace RoosterBot.Schedule {
 		private readonly List<ScheduleRecord> m_Schedule;
 		private readonly string m_Name;
 
-		private MemoryScheduleProvider(IEnumerable<SnowflakeReference> allowedChannels, string name, List<ScheduleRecord> schedule) : base(allowedChannels) {
-			m_Name = name;
-			m_Schedule = schedule;
-		}
-
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public static async Task<MemoryScheduleProvider> CreateAsync(string name, ScheduleReader reader, IEnumerable<SnowflakeReference> allowedChannels) {
-			// Unfortunately we can't have async constructors (for good reasons), so this'll do.
-			return new MemoryScheduleProvider(allowedChannels, name, await reader.GetSchedule());
+		public MemoryScheduleProvider(string name, ScheduleReader reader, IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) {
+			m_Name = name;
+			m_Schedule = reader.GetSchedule();
 		}
 
 		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {

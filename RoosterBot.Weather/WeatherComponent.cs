@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
@@ -15,10 +14,10 @@ namespace RoosterBot.Weather {
 				.Check();
 		}
 
-		protected async override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			Logger.Debug("Weather", "Loading cities file");
 			var cityService = new CityService(configPath);
-			await cityService.ReadCityCSVAsync();
+			cityService.ReadCityCSV();
 			Logger.Debug("Weather", "Finished loading cities file");
 
 			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
@@ -30,7 +29,7 @@ namespace RoosterBot.Weather {
 			services.AddSingleton(cityService);
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
 			commandService.AddTypeParser(new CityInfoParser());
@@ -38,8 +37,6 @@ namespace RoosterBot.Weather {
 			commandService.AddModule<WeatherModule>();
 
 			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
-
-			return Task.CompletedTask;
 		}
 	}
 }

@@ -12,17 +12,17 @@ namespace RoosterBot.Schedule {
 		/// <summary>
 		/// Loads a CSV with teacher abbreviations into memory.
 		/// </summary>
-		public async Task ReadAbbrCSV(string path, IEnumerable<SnowflakeReference> allowedGuilds) {
+		public void ReadAbbrCSV(string path, IEnumerable<SnowflakeReference> allowedGuilds) {
 			Logger.Info("TeacherNameService", $"Loading abbreviation CSV file {Path.GetFileName(path)}");
 
 			using (StreamReader reader = File.OpenText(path)) {
 				using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
-				await csv.ReadAsync();
+				csv.Read();
 				csv.ReadHeader();
 
 				var currentRecords = new List<TeacherInfo>();
 
-				while (await csv.ReadAsync()) {
+				while (csv.Read()) {
 					string altSpellingsString = csv["AltSpellings"];
 					string[]? altSpellings = null;
 

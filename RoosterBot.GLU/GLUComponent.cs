@@ -37,7 +37,7 @@ namespace RoosterBot.GLU {
 				.Check();
 		}
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				SkipPastRecords = false,
 				TimezoneId = "",
@@ -59,11 +59,9 @@ namespace RoosterBot.GLU {
 			addSchedule<RoomInfo>("GLU-Rooms");
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
-
-			return Task.CompletedTask;
 		}
 
-		protected override async Task AddModulesAsync(IServiceProvider services, RoosterCommandService commands, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
 			commands.AddModule<GLUModule>();
 
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
@@ -74,27 +72,20 @@ namespace RoosterBot.GLU {
 
 			// Teachers
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
-			await teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
+			teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
 			#region Read schedules
-			var tasks = new List<(Type identifierType, Task<MemoryScheduleProvider> scheduleTask)>();
-
-			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				tasks.Add((sri.IdentifierType, MemoryScheduleProvider.CreateAsync(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds)));
-			}
-
-			await Task.WhenAll(tasks.Select(item => item.scheduleTask));
-
 			ScheduleService provider = services.GetService<ScheduleService>();
 
-			foreach ((Type identifierType, Task<MemoryScheduleProvider> scheduleTask) in tasks) {
-				provider.RegisterProvider(identifierType, await scheduleTask);
+			foreach (ScheduleRegistryInfo sri in m_Schedules) {
+				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds));
 			}
 			#endregion
 
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
-			/*DiscordSocketClient client = services.GetService<DiscordSocketClient>();
+			/* TODO discord
+			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 
 			new RoleAssignmentHandler(client, services.GetService<ConfigService>());
 			new ManualRanksHintHandler(client);

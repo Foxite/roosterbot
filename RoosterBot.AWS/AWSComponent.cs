@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +15,7 @@ namespace RoosterBot.AWS {
 		private SNSNotificationHandler? m_SNS;
 		private string m_NotificationARN = "";
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				AccessKey = "",
 				SecretKey = "",
@@ -35,10 +34,9 @@ namespace RoosterBot.AWS {
 
 			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, jsonConfig.UserTable));
 			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<GlobalConfigService>(), m_DynamoDBClient, jsonConfig.GuildTable));
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			bool production = true;
 			// This way, there will be no warnings about unused fields.
 #if DEBUG
@@ -47,8 +45,6 @@ namespace RoosterBot.AWS {
 			if (production) {
 				m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
 			}
-
-			return Task.CompletedTask;
 		}
 
 		protected override void Dispose(bool disposing) {

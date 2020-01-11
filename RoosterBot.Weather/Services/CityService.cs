@@ -14,7 +14,7 @@ namespace RoosterBot.Weather {
 			m_Cities = new List<CityInfo>();
 		}
 
-		public async Task ReadCityCSVAsync() {
+		public void ReadCityCSV() {
 			Logger.Info("CityService", "Loading cities.csv");
 
 			string csvPath = Path.Combine(m_ConfigPath, "cities.csv");
@@ -23,10 +23,10 @@ namespace RoosterBot.Weather {
 
 			var regions = new Dictionary<int, RegionInfo>();
 
-			await csv.ReadAsync();
+			csv.Read();
 			csv.ReadHeader();
 
-			while (await csv.ReadAsync()) {
+			while (csv.Read()) {
 				int stateCode = int.Parse(csv["state_code"]);
 				if (!regions.TryGetValue(stateCode, out RegionInfo? region)) {
 					region = new RegionInfo(stateCode, csv["state_name"]);

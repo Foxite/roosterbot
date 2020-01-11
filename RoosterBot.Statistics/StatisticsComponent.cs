@@ -6,13 +6,11 @@ namespace RoosterBot.Statistics {
 	public class StatisticsComponent : Component {
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			services.AddSingleton((isp) => new StatisticsService(isp.GetService<ResourceService>()));
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			StatisticsService stats = services.GetService<StatisticsService>();
 
 
@@ -29,8 +27,6 @@ namespace RoosterBot.Statistics {
 			stats.AddStatistic(commandsExecuted);
 
 			commandService.AddModule<StatisticsModule>();
-
-			return Task.CompletedTask;
 		}
 	}
 }

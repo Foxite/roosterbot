@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				UseFileConfig = false,
 				GithubLink = "",
@@ -20,11 +19,9 @@ namespace RoosterBot.Meta {
 			}
 
 			services.AddSingleton(new MetaInfoService(config.GithubLink, config.DiscordLink));
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
@@ -53,8 +50,6 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<InfoModule>();
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
-
-			return Task.CompletedTask;
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace RoosterBot.DiscordNet {
 			Instance = this;
 		}
 
-		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
+		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				Token = "",
 				GameString = "",
@@ -43,11 +43,9 @@ namespace RoosterBot.DiscordNet {
 			});
 
 			services.AddSingleton(Client);
-
-			return Task.CompletedTask;
 		}
 
-		protected override Task AddModulesAsync(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			#region Handlers
 			Client.Log += (msg) => {
 				Action<string, string, Exception?> logFunc = msg.Severity switch {
@@ -118,16 +116,16 @@ namespace RoosterBot.DiscordNet {
 			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));
 			emotes.RegisterEmote(this, "Unknown", new DiscordEmote("<:unknown:636213624460935188>"));
 			emotes.RegisterEmote(this, "Info",    new DiscordEmote("<:info:644251874010202113>"));
-
-			return Task.CompletedTask;
 		}
 
-		protected async override Task ConnectAsync(IServiceProvider services) {
+		// Async void, but does it matter? StartAsync spawns a thread that manages the connection and returns immediately.
+		// If this was actually awaited it would hardly matter.
+		protected async override void Connect(IServiceProvider services) {
 			await Client.LoginAsync(TokenType.Bot, m_Token);
 			await Client.StartAsync();
 		}
 
-		protected async override Task DisconnectAsync() {
+		protected async override void Disconnect() {
 			await Client.StopAsync();
 			await Client.LogoutAsync();
 		}

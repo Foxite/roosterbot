@@ -8,62 +8,55 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
 	public sealed class Program {
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
+
 #nullable disable
-		// These are set during the static Main and MainAsync, but the compiler can't use these methods to determine if they are always set.
-		// I would solve this by moving all MainAsync code into the constructor, but:
-		// - Constructors can't be async so we can't await anything, which is definitely necessary
-		// - You would have to remove all single-use functions like SetupClient, creating a huge constructor which is basically a regression to the pre-2.0 codebase.
-		// So I just disable nullable here, because I know it's fine.
 		public static Program Instance { get; private set; }
+#nullable restore
 
 		public ComponentManager Components { get; private set; }
 		public CommandExecutionHandler CommandHandler { get; private set; }
-#nullable restore
 
 		private bool m_StopFlagSet;
-
-		private Program() { }
-
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log crash and exit")]
 		private static int Main(string[] args) {
-				Console.CancelKeyPress += (o, e) => {
-					e.Cancel = true;
-					Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
-				};
+			Console.CancelKeyPress += (o, e) => {
+				e.Cancel = true;
+				Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
+			};
 
-				if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-					Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
+			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
+				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
 #if DEBUG
 				Console.ReadKey();
 #endif
-					return 1;
-				}
+				return 1;
+			}
 
 			try {
 				Instance = new Program();
-				Instance.MainAsync().GetAwaiter().GetResult();
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
 				// At this point it can not be assumed that literally any part of the program is functional, so there's no reporting this crash to Discord or Notification endpoints.
 				// At one point someone will notice that the bot is offline and restart it manually.
 				// Or if the crash occurred during startup it's likely that the deploy system saw the crash and is doing something about it.
 #if DEBUG
-					Console.ReadKey();
+				Console.ReadKey();
 #endif
 				return 2;
-				}
+			}
 			return 0;
 		}
 
-		private async Task MainAsync() {
+		private Program() {
 			Logger.Info("Main", "Starting program");
 
 			if (!Directory.Exists(DataPath)) {
@@ -76,7 +69,7 @@ namespace RoosterBot {
 			IServiceCollection serviceCollection = CreateRBServices(configService);
 
 			Components = new ComponentManager();
-			await Components.SetupComponents(serviceCollection);
+			Components.SetupComponents(serviceCollection);
 
 			CommandHandler = new CommandExecutionHandler(Components.Services);
 			new CommandExecutedHandler(Components.Services);
@@ -101,11 +94,11 @@ namespace RoosterBot {
 			} 
 			*/
 
-			await WaitForQuitCondition();
+			WaitForQuitCondition();
 
 			Logger.Info("Main", "Stopping program");
 
-			await Components.ShutdownComponentsAsync();
+			Components.ShutdownComponents();
 		}
 
 		private IServiceCollection CreateRBServices(GlobalConfigService configService) {
@@ -134,46 +127,52 @@ namespace RoosterBot {
 			return serviceCollection;
 		}
 
-		private async Task WaitForQuitCondition() {
-			bool keepRunning = true;
-
+		private void WaitForQuitCondition() {
 			var cts = new CancellationTokenSource();
 			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
 			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
 				_ = pipeServer.WaitForConnectionAsync(cts.Token);
 
-				do {
-					keepRunning = true;
-					await Task.WhenAny(new Task[] {
-						Task.Delay(500).ContinueWith((t) => {
-							// Ctrl-Q pressed by user
-							if (Console.KeyAvailable) {
-								ConsoleKeyInfo keyPress = Console.ReadKey(true);
-								if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-									keepRunning = false;
-									Logger.Info("Main", "Ctrl-Q pressed");
-								}
+				var quitConditions = new Func<bool>[] {
+					() => {
+						// Ctrl-Q pressed by user
+						if (Console.KeyAvailable) {
+							ConsoleKeyInfo keyPress = Console.ReadKey(true);
+							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+								Logger.Info("Main", "Ctrl-Q pressed");
+								return true;
 							}
-						}),
-						Task.Delay(500).ContinueWith((t) => {
-							// Stop flag set by RoosterBot or components
-							if (m_StopFlagSet) {
-								keepRunning = false;
-								Logger.Info("Main", "Stop flag set");
+						}
+						return false;
+					}, () => {
+						// Shutdown() called
+						if (m_StopFlagSet) {
+							Logger.Info("Main", "Shutdown() or Restart() has been called");
+							return true;
+						} else {
+							return false;
+						}
+					}, () => {
+						// Pipe connection by stop executable
+						if (pipeServer.IsConnected) {
+							string? input = sr.ReadLine();
+							if (input == "stop") {
+								Logger.Info("Main", "Stop command received from external process");
+								pipeServer.Disconnect();
+								return true;
+							} else {
+								pipeServer.Disconnect();
+								_ = pipeServer.WaitForConnectionAsync(cts.Token);
 							}
-						}),
-						Task.Delay(500).ContinueWith((t) => {
-							// Pipe connection by stop executable
-							if (pipeServer.IsConnected) {
-								string? input = sr.ReadLine();
-								if (input == "stop") {
-									Logger.Info("Main", "Stop command received from external process");
-									keepRunning = false;
-								}
-							}
-						})
-					});
-				} while (keepRunning);
+						}
+						return false;
+					}
+				};
+
+				while (!quitConditions.Any(condition => condition())) {
+					// This could make the console window seem unresponsive. Is there a better way?
+					Thread.Sleep(500);
+				}
 			}
 			cts.Cancel();
 			cts.Dispose();
