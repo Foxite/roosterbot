@@ -22,6 +22,8 @@ namespace RoosterBot.Meta {
 			return TextResult.Info(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds));
 		}
 
+		// TODO move to DiscordNet
+		// Do not restrict it to Discord though
 		[Command("#InfoModule_DiscordInvite_CommandName"), Description("#InfoModule_DiscordInvite_Description")]
 		public CommandResult DiscordServerLinkCommand() {
 			return TextResult.Info(GetString("InfoModule_DiscordInvite", InfoService.DiscordLink));
