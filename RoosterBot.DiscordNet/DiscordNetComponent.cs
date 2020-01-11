@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,10 @@ namespace RoosterBot.DiscordNet {
 				GameString = "",
 				Activity = ActivityType.Playing,
 				ReportStartupVersionToOwner = true,
-				BotOwnerId = 0UL
+				BotOwnerId = 0UL,
+				DiscordConfig = new DiscordSocketConfig() {
+					MessageCacheSize = 5
+				}
 			});
 			m_Token = config.Token;
 			m_GameString = config.GameString;
@@ -37,42 +39,12 @@ namespace RoosterBot.DiscordNet {
 			m_ReportVersion = config.ReportStartupVersionToOwner;
 			m_BotOwnerId = config.BotOwnerId;
 
-			// TODO full support for DiscordSocketConfig through the config file
-			Client = new DiscordSocketClient(new DiscordSocketConfig() {
-				MessageCacheSize = 10
-			});
+			Client = new DiscordSocketClient(config.DiscordConfig);
 
 			services.AddSingleton(Client);
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			#region Handlers
-			Client.Log += (msg) => {
-				Action<string, string, Exception?> logFunc = msg.Severity switch {
-					LogSeverity.Verbose  => Logger.Verbose,
-					LogSeverity.Debug    => Logger.Debug,
-					LogSeverity.Info     => Logger.Info,
-					LogSeverity.Warning  => Logger.Warning,
-					LogSeverity.Error    => Logger.Error,
-					LogSeverity.Critical => Logger.Critical,
-					_                            => Logger.Info,
-				};
-				logFunc(msg.Source, msg.Message, msg.Exception);
-				return Task.CompletedTask;
-			};
-
-			Client.MessageReceived += async (msg) => {
-				if (msg is IUserMessage && msg.Source == MessageSource.User && msg.Content.ToLower() == "ping") {
-					await msg.Channel.SendMessageAsync("Pong!");
-				}
-			};
-
-			new MessageReceivedHandler(services);
-			new MessageUpdatedHandler (services);
-			new MessageDeletedHandler (services);
-			new ReadyHandler          (services, m_GameString, m_Activity, m_ReportVersion, m_BotOwnerId);
-			#endregion Handlers
-			
 			#region Discord parsers
 			var userParser = new UserParser<Discord.IUser>();
 			var messageParser = new MessageParser<IUserMessage>();
@@ -116,6 +88,12 @@ namespace RoosterBot.DiscordNet {
 			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));
 			emotes.RegisterEmote(this, "Unknown", new DiscordEmote("<:unknown:636213624460935188>"));
 			emotes.RegisterEmote(this, "Info",    new DiscordEmote("<:info:644251874010202113>"));
+			
+			new MessageReceivedHandler(services);
+			new MessageUpdatedHandler (services);
+			new MessageDeletedHandler (services);
+			new ReadyHandler          (services, m_GameString, m_Activity, m_ReportVersion, m_BotOwnerId);
+			new LogHandler            (Client);
 		}
 
 		// Async void, but does it matter? StartAsync spawns a thread that manages the connection and returns immediately.
