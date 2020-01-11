@@ -67,7 +67,7 @@ namespace RoosterBot.Meta {
 							Culture = kvp.Value.Culture?.Name ?? null,
 							CustomData = (kvp.Value.GetRawData() as IDictionary<string, JToken?>).ToDictionary(
 								innerKvp => innerKvp.Key,
-								innerKvp => innerKvp.Value ?? (JToken) JValue.CreateNull()
+								innerKvp => innerKvp.Value ?? JValue.CreateNull()
 							)
 						}
 					))

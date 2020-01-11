@@ -1,14 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
-		private string m_Token = null!;
-
 		public static DiscordNetComponent Instance { get; private set; } = null!;
+
+		private string m_Token = null!;
+		private string m_GameString = "";
+		private ActivityType m_Activity;
+		private bool m_ReportVersion;
+		private ulong m_BotOwnerId;
 
 		public BaseSocketClient Client { get; set; } = null!;
 		public override string PlatformName => "Discord";
@@ -19,9 +24,18 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected override Task AddServicesAsync(IServiceCollection services, string configPath) {
-			m_Token = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
-				Token = ""
-			}).Token;
+			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
+				Token = "",
+				GameString = "",
+				Activity = ActivityType.Playing,
+				ReportStartupVersionToOwner = true,
+				BotOwnerId = 0UL
+			});
+			m_Token = config.Token;
+			m_GameString = config.GameString;
+			m_Activity = config.Activity;
+			m_ReportVersion = config.ReportStartupVersionToOwner;
+			m_BotOwnerId = config.BotOwnerId;
 
 			// TODO full support for DiscordSocketConfig through the config file
 			Client = new DiscordSocketClient(new DiscordSocketConfig() {
@@ -37,12 +51,12 @@ namespace RoosterBot.DiscordNet {
 			#region Handlers
 			Client.Log += (msg) => {
 				Action<string, string, Exception?> logFunc = msg.Severity switch {
-					Discord.LogSeverity.Verbose  => Logger.Verbose,
-					Discord.LogSeverity.Debug    => Logger.Debug,
-					Discord.LogSeverity.Info     => Logger.Info,
-					Discord.LogSeverity.Warning  => Logger.Warning,
-					Discord.LogSeverity.Error    => Logger.Error,
-					Discord.LogSeverity.Critical => Logger.Critical,
+					LogSeverity.Verbose  => Logger.Verbose,
+					LogSeverity.Debug    => Logger.Debug,
+					LogSeverity.Info     => Logger.Info,
+					LogSeverity.Warning  => Logger.Warning,
+					LogSeverity.Error    => Logger.Error,
+					LogSeverity.Critical => Logger.Critical,
 					_                            => Logger.Info,
 				};
 				logFunc(msg.Source, msg.Message, msg.Exception);
@@ -50,7 +64,7 @@ namespace RoosterBot.DiscordNet {
 			};
 
 			Client.MessageReceived += async (msg) => {
-				if (msg is Discord.IUserMessage && msg.Source == Discord.MessageSource.User && msg.Content.ToLower() == "ping") {
+				if (msg is IUserMessage && msg.Source == MessageSource.User && msg.Content.ToLower() == "ping") {
 					await msg.Channel.SendMessageAsync("Pong!");
 				}
 			};
@@ -58,40 +72,41 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
 			new MessageDeletedHandler (services);
+			new ReadyHandler          (services, m_GameString, m_Activity, m_ReportVersion, m_BotOwnerId);
 			#endregion Handlers
-
-			#region Discord entities
+			
+			#region Discord parsers
 			var userParser = new UserParser<Discord.IUser>();
-			var messageParser = new MessageParser<Discord.IUserMessage>();
-			var channelParser = new ChannelParser<Discord.IMessageChannel>();
+			var messageParser = new MessageParser<IUserMessage>();
+			var channelParser = new ChannelParser<IMessageChannel>();
 
 			commandService.AddTypeParser(userParser);
 			commandService.AddTypeParser(messageParser);
 			commandService.AddTypeParser(channelParser);
-
-			commandService.AddTypeParser(new ChannelParser<Discord.IAudioChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.ICategoryChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IDMChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IGroupChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IGuildChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.INestedChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IPrivateChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.ITextChannel>());
-			commandService.AddTypeParser(new ChannelParser<Discord.IVoiceChannel>());
-
-			commandService.AddTypeParser(new UserParser<Discord.IGuildUser>());
-			commandService.AddTypeParser(new UserParser<Discord.IGroupUser>());
-			commandService.AddTypeParser(new UserParser<Discord.IWebhookUser>());
 			
-			commandService.AddTypeParser(new MessageParser<Discord.IMessage>());
-			commandService.AddTypeParser(new MessageParser<Discord.ISystemMessage>());
+			commandService.AddTypeParser(new RoleParser<IRole>());
 
-			commandService.AddTypeParser(new RoleParser<Discord.IRole>());
+			commandService.AddTypeParser(new UserParser<IGuildUser>());
+			commandService.AddTypeParser(new UserParser<IGroupUser>());
+			commandService.AddTypeParser(new UserParser<IWebhookUser>());
+			
+			commandService.AddTypeParser(new MessageParser<ISystemMessage>());
+			commandService.AddTypeParser(new MessageParser<Discord.IMessage>());
+			
+			commandService.AddTypeParser(new ChannelParser<IDMChannel>());
+			commandService.AddTypeParser(new ChannelParser<ITextChannel>());
+			commandService.AddTypeParser(new ChannelParser<IAudioChannel>());
+			commandService.AddTypeParser(new ChannelParser<IGroupChannel>());
+			commandService.AddTypeParser(new ChannelParser<IGuildChannel>());
+			commandService.AddTypeParser(new ChannelParser<IVoiceChannel>());
+			commandService.AddTypeParser(new ChannelParser<INestedChannel>());
+			commandService.AddTypeParser(new ChannelParser<IPrivateChannel>());
+			commandService.AddTypeParser(new ChannelParser<ICategoryChannel>());
+			commandService.AddTypeParser(new ChannelParser<Discord.IChannel>());
 
 			commandService.AddTypeParser(new ConversionParser<Discord.IUser, IUser>("Discord user", userParser, discordUser => new DiscordUser(discordUser)));
-			commandService.AddTypeParser(new ConversionParser<Discord.IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
-			commandService.AddTypeParser(new ConversionParser<Discord.IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
+			commandService.AddTypeParser(new ConversionParser<IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
+			commandService.AddTypeParser(new ConversionParser<IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
 			#endregion
 			
 			commandService.AddModule<EmoteTheftModule>();
@@ -108,7 +123,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected async override Task ConnectAsync(IServiceProvider services) {
-			await Client.LoginAsync(Discord.TokenType.Bot, m_Token);
+			await Client.LoginAsync(TokenType.Bot, m_Token);
 			await Client.StartAsync();
 		}
 

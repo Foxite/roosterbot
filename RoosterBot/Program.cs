@@ -82,7 +82,24 @@ namespace RoosterBot {
 			new CommandExecutedHandler(Components.Services);
 			new CommandExceptionHandler(Components.Services);
 
-			// TODO something needs to notify the ready pipe
+			/* TODO something needs to notify the ready pipe
+			 * Old code for notifying pipe:
+			// Find an open Ready pipe and report
+			NamedPipeClientStream? pipeClient = null;
+			try {
+				pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
+				await pipeClient.ConnectAsync(1);
+				using var sw = new StreamWriter(pipeClient);
+				pipeClient = null;
+				sw.WriteLine("ready");
+			} catch (TimeoutException) {
+				// Pass
+			} finally {
+				if (pipeClient != null) {
+					pipeClient.Dispose();
+				}
+			} 
+			*/
 
 			await WaitForQuitCondition();
 

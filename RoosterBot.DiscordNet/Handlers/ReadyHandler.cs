@@ -1,30 +1,34 @@
-﻿/* // TODO Ready handler
-using System;
-using System.IO;
-using System.IO.Pipes;
+﻿using System;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
-namespace RoosterBot {
+namespace RoosterBot.DiscordNet {
 	internal sealed class ReadyHandler : RoosterHandler {
-		public ConfigService Config { get; set; } = null!;
 		public DiscordSocketClient Client { get; set; } = null!;
 
-		private bool m_VersionNotReported;
+		private bool m_VersionNotReported = true;
+		private readonly string m_GameString;
+		private readonly ActivityType m_ActivityType;
+		private readonly bool m_ReportVersion;
+		private readonly ulong m_BotOwnerId;
 
-		public ReadyHandler(IServiceProvider isp) : base(isp) {
+		public ReadyHandler(IServiceProvider isp, string gameString, ActivityType activityType, bool reportVersion, ulong botOwnerId) : base(isp) {
 			Client.Ready += OnClientReady;
+
+			m_GameString = gameString;
+			m_ActivityType = activityType;
+			m_ReportVersion = reportVersion;
+			m_BotOwnerId = botOwnerId;
 		}
 
 		private async Task OnClientReady() {
-			await Config.LoadDiscordInfo(Client);
-			await Client.SetGameAsync(Config.GameString, type: Config.ActivityType);
+			await Client.SetGameAsync(m_GameString, type: m_ActivityType);
 			Logger.Info("Main", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
-			if (m_VersionNotReported && Config.ReportStartupVersionToOwner) {
+			if (m_VersionNotReported && m_ReportVersion) {
 				m_VersionNotReported = false;
-				IDMChannel ownerDM = await Config.BotOwner.GetOrCreateDMChannelAsync();
+				IDMChannel ownerDM = await Client.GetUser(m_BotOwnerId).GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {
@@ -33,23 +37,6 @@ namespace RoosterBot {
 
 				await ownerDM.SendMessageAsync(startReport);
 			}
-
-			// Find an open Ready pipe and report
-			NamedPipeClientStream? pipeClient = null;
-			try {
-				pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
-				await pipeClient.ConnectAsync(1);
-				using var sw = new StreamWriter(pipeClient);
-				pipeClient = null;
-				sw.WriteLine("ready");
-			} catch (TimeoutException) {
-				// Pass
-			} finally {
-				if (pipeClient != null) {
-					pipeClient.Dispose();
-				}
-			}
 		}
 	}
 }
-*/
