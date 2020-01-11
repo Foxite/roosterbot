@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace RoosterBot {
 	/// <summary>
 	/// Contains data needed to obtain an <see cref="ISnowflake"/> object.
 	/// This class can be instantiated before a platform connection is available, allowing it to be deserialized from config data at startup.
 	/// </summary>
+	[JsonConverter(typeof(SnowflakeReferenceConverter))]
+	[DebuggerDisplay("{Platform.PlatformName}:{Id.ToString()}")]
 	public class SnowflakeReference : IEquatable<SnowflakeReference> {
 		public PlatformComponent Platform { get; }
 
@@ -20,16 +25,7 @@ namespace RoosterBot {
 		public bool Equals(SnowflakeReference? other) {
 			if (!(other is null)) {
 				return Platform.PlatformName == other.Platform.PlatformName &&
-					   // Here's the problem:
-					   // When you serialize a ulong, it gets stored as a number.
-					   // When you serialize an sbyte, it gets stored as a number.
-					   // When you deserialize a number into a variable typed object, it will pick the smallest type that fits it.
-					   // This means you can't serialize a ulong and expect to get back a ulong. That won't happen unless it's bigger than 2^63.
-					   // When you compare a deserialized SnowflakeReference, to an SR obtained from a "live" snowflake, it may not work.
-					   // As a solution, we compare the actual numeric value of the IDs (if it's a numeric type), which sidesteps the problem.
-					   // But this is not ideal. An ideal solution allows us to store the type of the ID along with it, but it doesn't seem that Newtonsoft.Json
-					   //  supports this, at least not for primitive types.
-					   Util.CompareNumeric(Id, other.Id);
+					   Id.Equals(other.Id);
 			} else {
 				return false;
 			}
@@ -51,6 +47,37 @@ namespace RoosterBot {
 
 		public static bool operator !=(SnowflakeReference? left, SnowflakeReference? right) {
 			return !(left == right);
+		}
+	}
+
+	internal class SnowflakeReferenceConverter : JsonConverter<SnowflakeReference> {
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Anonymous type cannot be used as generic type, must be inferred")]
+		public override SnowflakeReference ReadJson(JsonReader reader, Type objectType, SnowflakeReference? existingValue, bool hasExistingValue, JsonSerializer serializer) {
+			T deserializeAnonymous<T>(T template) {
+				return serializer.Deserialize<T>(reader);
+			}
+
+			var rawResult = deserializeAnonymous(new {
+				Platform = "",
+				Id = ""
+			});
+
+			PlatformComponent? platform = Program.Instance.Components.GetPlatform(rawResult.Platform);
+			if (platform == null) {
+				throw new KeyNotFoundException($"Platform named {rawResult.Platform} is not installed. Cannot deserialize a SnowflakeReference for this platform.");
+			}
+			return new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(rawResult.Id));
+		}
+
+		public override void WriteJson(JsonWriter writer, SnowflakeReference? value, JsonSerializer serializer) {
+			if (value == null) {
+				throw new InvalidOperationException("Cannot deserialize a null SnowflakeReference");
+			}
+
+			serializer.Serialize(writer, new {
+				Platform = value.Platform.PlatformName,
+				Id = value.Id.ToString()
+			});
 		}
 	}
 }
