@@ -1,0 +1,1 @@
+﻿This component, along with RoosterBot.Console.App, provides a very simple console window to test RoosterBot.

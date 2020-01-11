@@ -1,2 +1,2 @@
-RoosterBot.AWS provides AWS functionality to RoosterBot. This includes an SNS endpoint to NotificationService and a DynamoDB client to provide user and guild data.
+RoosterBot.AWS provides AWS functionality to RoosterBot. This includes an SNS endpoint to NotificationService and a DynamoDB client to provide user and channel configuration.
 It also provides its AWS credentials to other components via AWSConfigService.

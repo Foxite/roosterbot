@@ -1,0 +1,1 @@
+﻿This component connects RoosterBot to Discord. It uses [Discord.NET](https://github.com/discord-net/Discord.Net) for this.

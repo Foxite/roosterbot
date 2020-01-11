@@ -1,0 +1,1 @@
+﻿This component is meant to be an assortment of utility commands. It currently only provides a youtube downloader, for which it uses [YoutubeExplode](https://github.com/Tyrrrz/YoutubeExplode).

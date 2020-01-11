@@ -1,1 +1,2 @@
-This project is the base Discord bot program that loads Components that provide bot features. This project provides a foundation for those components to work without duplicating code.
+This project is the base bot program that loads Components that provide bot features, or connect the bot to chat platforms.
+This project provides a foundation for those components to work without duplicating code.
