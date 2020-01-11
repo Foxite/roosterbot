@@ -1,16 +1,16 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordUser : IUser {
 		public Discord.IUser DiscordEntity { get; }
 		public PlatformComponent Platform => DiscordNetComponent.Instance;
 
-		public object Id => DiscordEntity.Id;
+		object ISnowflake.Id => DiscordEntity.Id;
+		public ulong  Id     => DiscordEntity.Id;
 		public string UserName => DiscordEntity.Username + "#" + DiscordEntity.Discriminator;
 		public string DisplayName => (DiscordEntity is Discord.IGuildUser igu) ? igu.Nickname : DiscordEntity.Username;
 		public string Mention => DiscordEntity.Mention;
-		public bool IsBotAdmin => false; // TODO bot admin id from config file
+		public bool IsBotAdmin => Id == DiscordNetComponent.Instance.BotOwnerId;
 
 		internal DiscordUser(Discord.IUser discordUser) {
 			DiscordEntity = discordUser;
