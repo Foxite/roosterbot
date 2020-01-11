@@ -102,10 +102,6 @@ namespace RoosterBot {
 
 		// Can't really have proper type checking here because RoosterModule is generic. We can still do it but we would have to add a second parameter
 		//  just for the context type which I think is undesirable.
-		// Although to be honest there are no modules right now that actually derive from RoosterModule<T>, they all use the non-generic version.
-		// HOWEVER in 3.0 we'll need a way for modules to restrict themselves to a particular platform. The current idea is that universal modules will derive RoosterModule
-		//  and platform-specific modules from RoosterModule<T> and specify their platform context type.
-		// So I'm not getting rid of the generic version yet, at least until we get to do 3.0 and if we decide to do it differently.
 		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
 		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
 			if (!IsRoosterModule(moduleType)) {
