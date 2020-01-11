@@ -20,12 +20,10 @@ namespace RoosterBot.DiscordNet {
 
 		public bool IsChannelAdmin(IChannel ic) {
 			if (ic is DiscordChannel channel && DiscordEntity is Discord.IGuildUser user) {
-				return new[] {
-					user.GuildPermissions.Administrator,
-					user.GuildPermissions.ManageGuild,
-					user.GuildPermissions.KickMembers,
-					user.GuildPermissions.BanMembers
-				}.Any(p => p);
+				return user.GuildPermissions.Administrator
+					|| user.GuildPermissions.ManageGuild
+					|| user.GuildPermissions.KickMembers
+					|| user.GuildPermissions.BanMembers;
 			} else {
 				return false;
 			}
