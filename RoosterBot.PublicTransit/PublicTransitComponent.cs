@@ -10,7 +10,7 @@ namespace RoosterBot.PublicTransit {
 		private NSAPI m_NSAPI;
 #nullable restore
 
-		public override Version ComponentVersion => new Version(1, 1, 0);
+		public override Version ComponentVersion => new Version(1, 1, 1);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {

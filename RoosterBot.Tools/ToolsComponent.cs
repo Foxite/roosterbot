@@ -7,7 +7,7 @@ using YoutubeExplode.Converter;
 
 namespace RoosterBot.Tools {
 	public class ToolsComponent : Component {
-		public override Version ComponentVersion => new Version(0, 2, 0);
+		public override Version ComponentVersion => new Version(0, 3, 0);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {

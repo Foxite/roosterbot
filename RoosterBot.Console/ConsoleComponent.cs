@@ -11,7 +11,7 @@ namespace RoosterBot.Console {
 	public class ConsoleComponent : PlatformComponent {
 		private readonly CancellationTokenSource m_CTS;
 
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		internal static ConsoleComponent Instance { get; private set; } = null!;
 		internal ConsoleUser TheConsoleUser { get; } = new ConsoleUser(1, "User");

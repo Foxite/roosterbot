@@ -20,7 +20,7 @@ namespace RoosterBot.GLU {
 		private string m_TeacherPath;
 		private bool m_SkipPastRecords;
 
-		public override Version ComponentVersion => new Version(1, 1, 0);
+		public override Version ComponentVersion => new Version(1, 1, 1);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
 		public GLUComponent() {

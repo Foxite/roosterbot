@@ -17,7 +17,7 @@ namespace RoosterBot.DiscordNet {
 
 		public BaseSocketClient Client { get; set; } = null!;
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(0, 2, 0);
 
 		public DiscordNetComponent() {
 			Instance = this;

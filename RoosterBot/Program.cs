@@ -24,7 +24,7 @@ namespace RoosterBot {
 		public ComponentManager Components { get; private set; }
 		public CommandExecutionHandler CommandHandler { get; private set; }
 
-		private bool m_StopFlagSet;
+		private bool m_ShutDown;
 		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log crash and exit")]
 		private static int Main(string[] args) {
@@ -146,7 +146,7 @@ namespace RoosterBot {
 						return false;
 					}, () => {
 						// Shutdown() called
-						if (m_StopFlagSet) {
+						if (m_ShutDown) {
 							Logger.Info("Main", "Shutdown() or Restart() has been called");
 							return true;
 						} else {
@@ -179,7 +179,7 @@ namespace RoosterBot {
 		}
 
 		public void Shutdown() {
-			m_StopFlagSet = true;
+			m_ShutDown = true;
 		}
 
 		public void Restart() {

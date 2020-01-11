@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
-		public override Version ComponentVersion => new Version(2, 1, 0);
+		public override Version ComponentVersion => new Version(2, 1, 1);
 
 		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
 			return DependencyResult.Build(components)
