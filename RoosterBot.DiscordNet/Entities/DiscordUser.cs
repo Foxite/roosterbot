@@ -16,8 +16,6 @@ namespace RoosterBot.DiscordNet {
 			DiscordEntity = discordUser;
 		}
 
-		public async Task<IChannel?> GetPrivateChannel() => new DiscordChannel(await DiscordEntity.GetOrCreateDMChannelAsync());
-
 		public bool IsChannelAdmin(IChannel ic) {
 			if (ic is DiscordChannel channel && DiscordEntity is Discord.IGuildUser user) {
 				return user.GuildPermissions.Administrator

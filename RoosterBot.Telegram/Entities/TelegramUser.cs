@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Telegram.Bot.Types;
 
 namespace RoosterBot.Telegram {
@@ -27,7 +25,5 @@ namespace RoosterBot.Telegram {
 				return false;
 			}
 		}
-
-		public Task<IChannel?> GetPrivateChannel() => throw new NotImplementedException(); // TODO
 	}
 }
