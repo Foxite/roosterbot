@@ -17,11 +17,9 @@ namespace RoosterBot.Schedule {
 				TeacherInfo? result = null;
 
 				IUser? user = null;
-				/* TODO discord (mention)
-				if (context.Guild != null && MentionUtils.TryParseUser(input, out ulong id)) {
-					user = await context.Guild.GetUserAsync(id);
-				} else*/ if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
-					user = context.User;
+				TypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+				if (userResult.IsSuccessful) {
+					user = userResult.Value;
 				}
 
 				if (user == null) {

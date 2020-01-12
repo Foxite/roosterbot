@@ -13,20 +13,20 @@ namespace RoosterBot.Schedule {
 			} else {
 				bool byMention;
 				StudentSetInfo? result;
-				/* TODO discord (mention)
-				if (MentionUtils.TryParseUser(input, out ulong id)) {
-					IUser user = await context.Client.GetUserAsync(id);
-					if (user == null) {
-						return Unsuccessful(true, context, "#StudentSetInfoReader_CheckFailed_InaccessibleUser");
-					}
-					result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(user)).GetStudentSet();
-					byMention = true;
-				} else */ if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
+
+				if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
 					result = context.UserConfig.GetStudentSet();
 					byMention = false;
 				} else {
-					return Unsuccessful(false, context, "#StudentSetInfoReader_CheckFailed_Direct");
+					TypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+					if (userResult.IsSuccessful) {
+						result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetStudentSet();
+						byMention = true;
+					} else {
+						return Unsuccessful(false, context, "#StudentSetInfoReader_CheckFailed_Direct");
+					}
 				}
+
 				if (result is null) {
 					string message;
 					if (byMention) {
