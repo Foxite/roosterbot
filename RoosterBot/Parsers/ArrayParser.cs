@@ -22,11 +22,11 @@ namespace RoosterBot {
 			TypeDisplayName = typeDisplayName ?? (m_IndivReader.TypeDisplayName + "[]");
 		}
 
-		protected async override ValueTask<RoosterTypeParserResult<T[]>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public async override ValueTask<RoosterTypeParserResult<T[]>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			string[] inputs = input.Split(',');
 			var results = new T[inputs.Length];
 			for (int i = 0; i < inputs.Length; i++) {
-				var indivResult = (RoosterTypeParserResult<T>) await m_IndivReader.ParseAsync(parameter, inputs[i].Trim(), context);
+				var indivResult = await m_IndivReader.ParseAsync(parameter, inputs[i].Trim(), context);
 				if (indivResult.IsSuccessful) {
 					results[i] = indivResult.Value;
 				} else {

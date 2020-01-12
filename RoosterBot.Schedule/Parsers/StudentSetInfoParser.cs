@@ -6,7 +6,7 @@ namespace RoosterBot.Schedule {
 	public class StudentSetInfoParser : IdentifierInfoParserBase<StudentSetInfo> {
 		public override string TypeDisplayName => "#StudentSetInfo_TypeDisplayName";
 
-		protected async override ValueTask<RoosterTypeParserResult<StudentSetInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public async override ValueTask<RoosterTypeParserResult<StudentSetInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			RoosterTypeParserResult<StudentSetInfo> baseResult = await base.ParseAsync(parameter, input, context);
 			if (baseResult.IsSuccessful) {
 				return baseResult;
@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 					result = context.UserConfig.GetStudentSet();
 					byMention = false;
 				} else {
-					TypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+					RoosterTypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
 					if (userResult.IsSuccessful) {
 						result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetStudentSet();
 						byMention = true;

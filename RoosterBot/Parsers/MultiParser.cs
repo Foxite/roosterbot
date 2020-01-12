@@ -27,10 +27,10 @@ namespace RoosterBot {
 			m_Readers.Add(reader);
 		}
 
-		protected async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
+		public async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
 			foreach (IRoosterTypeParser reader in m_Readers) {
-				var result = (IRoosterTypeParserResult) await ((dynamic) reader).ParseAsync(parameter, value, context);
+				IRoosterTypeParserResult result = await reader.ParseAsync(parameter, value, context);
 				if (result.IsSuccessful) {
 					return Successful((T) result.Value!); // should never throw -- see AddReader, there's no way to add an invalid parser
 				} else if (result.InputValid) {

@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 			m_TypeKey = typeKey;
 		}
 
-		protected override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			try {
 				var result = (T) Convert.ChangeType(input, typeof(T));
 				return ValueTaskUtil.FromResult(Successful((T) result));

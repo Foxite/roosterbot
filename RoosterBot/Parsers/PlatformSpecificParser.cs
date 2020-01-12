@@ -20,9 +20,9 @@ namespace RoosterBot {
 			m_Parsers.Add(platform, add);
 		}
 
-		protected async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
+		public async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			if (m_Parsers.TryGetValue(context.Platform, out var parser)) {
-				return (RoosterTypeParserResult<T>) await parser.ParseAsync(parameter, value, context); // should never throw. Also it must be awaited like this because otherwise you get conversion errors.
+				return await parser.ParseAsync(parameter, value, context); // should never throw. Also it must be awaited like this because otherwise you get conversion errors.
 			} else {
 				return Unsuccessful(false, context, "Type cannot be parsed under this platform"); // TODO user-friendly, localized error message
 			}

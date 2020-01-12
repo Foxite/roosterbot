@@ -8,7 +8,7 @@ namespace RoosterBot.DateTimeUtils {
 	public class DayOfWeekParser : RoosterTypeParser<DayOfWeek> {
 		public override string TypeDisplayName => "#DayOfWeek_DisplayName";
 
-		protected override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();
 			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
 			CultureInfo culture = context.Culture;

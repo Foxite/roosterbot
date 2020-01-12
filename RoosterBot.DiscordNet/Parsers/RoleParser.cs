@@ -5,7 +5,7 @@ namespace RoosterBot.DiscordNet {
 	public class RoleParser<TRole> : RoosterTypeParser<TRole> where TRole : class, Discord.IRole {
 		public override string TypeDisplayName => "#RoleParser_Name";
 
-		protected override ValueTask<RoosterTypeParserResult<TRole>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<TRole>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			// TODO restrict to discord contexts (and proper error message)
 			if (context.Channel is DiscordChannel channel && channel.DiscordEntity is Discord.IGuildChannel igc) {
 				if (Discord.MentionUtils.TryParseRole(input, out ulong roleId) || ulong.TryParse(input, out roleId)) {

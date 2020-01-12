@@ -5,7 +5,7 @@ namespace RoosterBot.Console {
 	public class UserParser : RoosterTypeParser<ConsoleUser> {
 		public override string TypeDisplayName => "Console user";
 
-		protected override ValueTask<RoosterTypeParserResult<ConsoleUser>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<ConsoleUser>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			if (value.ToLower() == "me") {
 				return ValueTaskUtil.FromResult(Successful(ConsoleComponent.Instance.TheConsoleUser));
 			} else if (value.ToLower() == "you") {

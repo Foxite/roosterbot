@@ -7,7 +7,7 @@ namespace RoosterBot.PublicTransit {
 	public class StationInfoParser : RoosterTypeParser<StationInfo> {
 		public override string TypeDisplayName => "treinstation";
 
-		protected override ValueTask<RoosterTypeParserResult<StationInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<StationInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			StationInfoService sis = context.ServiceProvider.GetService<StationInfoService>();
 			RoosterTypeParserResult<StationInfo> result;
 			if (input.StartsWith("$")) {

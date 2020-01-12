@@ -5,7 +5,7 @@ namespace RoosterBot.DiscordNet {
 	public class ChannelParser<TChannel> : RoosterTypeParser<TChannel> where TChannel : class, Discord.IChannel {
 		public override string TypeDisplayName => "#ChannelParser_Name";
 
-		protected override ValueTask<RoosterTypeParserResult<TChannel>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<TChannel>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			// TODO restrict to discord contexts
 			if (Discord.MentionUtils.TryParseChannel(input, out ulong channelId) || ulong.TryParse(input, out channelId)) {
 				Discord.IChannel? channel = DiscordNetComponent.Instance.Client.GetChannel(channelId);

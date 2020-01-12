@@ -8,7 +8,7 @@ namespace RoosterBot.Meta {
 	public class CultureInfoParser : RoosterTypeParser<CultureInfo> {
 		public override string TypeDisplayName => "#CultureInfoReader_TypeDisplayName";
 
-		protected override ValueTask<RoosterTypeParserResult<CultureInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<CultureInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			if (TryGetCultureInfo(input, out CultureInfo? info)) {
 				return ValueTaskUtil.FromResult(Successful(info));
 			}

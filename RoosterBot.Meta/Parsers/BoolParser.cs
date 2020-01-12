@@ -7,7 +7,7 @@ namespace RoosterBot.Meta {
 	public class BoolParser : RoosterTypeParser<bool> {
 		public override string TypeDisplayName => "#BoolParser_Name";
 
-		protected override ValueTask<RoosterTypeParserResult<bool>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public override ValueTask<RoosterTypeParserResult<bool>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			ResourceService resourceService = context.ServiceProvider.GetService<ResourceService>();
 			bool matches(string key) {
 				return resourceService.GetString(context.Culture, key).Split("|").Contains(input);

@@ -19,8 +19,8 @@ namespace RoosterBot {
 			m_Converter = converter;
 		}
 
-		protected async override ValueTask<RoosterTypeParserResult<TOut>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
-			var result = (RoosterTypeParserResult<TIn>) await m_Inner.ParseAsync(parameter, value, context);
+		public async override ValueTask<RoosterTypeParserResult<TOut>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
+			var result = await m_Inner.ParseAsync(parameter, value, context);
 
 			if (result.IsSuccessful) {
 				return Successful(m_Converter(result.Value));

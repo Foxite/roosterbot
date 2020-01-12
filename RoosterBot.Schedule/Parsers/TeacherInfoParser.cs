@@ -8,7 +8,7 @@ namespace RoosterBot.Schedule {
 	public class TeacherInfoParser : IdentifierInfoParserBase<TeacherInfo> {
 		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
 
-		protected async override ValueTask<RoosterTypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+		public async override ValueTask<RoosterTypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			RoosterTypeParserResult<TeacherInfo> baseResult = await base.ParseAsync(parameter, input, context);
 			if (baseResult.IsSuccessful) {
 				return baseResult;
