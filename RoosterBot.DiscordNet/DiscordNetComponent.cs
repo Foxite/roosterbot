@@ -75,10 +75,11 @@ namespace RoosterBot.DiscordNet {
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			#region Discord parsers
+			// TODO move resources for these parsers from Meta into this project
 			var userParser = new UserParser<Discord.IUser>();
 			var messageParser = new MessageParser<IUserMessage>();
 			var channelParser = new ChannelParser<IMessageChannel>();
-
+			
 			commandService.AddTypeParser(userParser);
 			commandService.AddTypeParser(messageParser);
 			commandService.AddTypeParser(channelParser);

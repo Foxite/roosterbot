@@ -4,7 +4,7 @@ using Qmmands;
 namespace RoosterBot.DiscordNet {
 	public class RoleParser<TRole> : RoosterTypeParser<TRole> where TRole : class, Discord.IRole {
 		public override string TypeDisplayName => "#RoleParser_Name";
-
+		
 		public override ValueTask<RoosterTypeParserResult<TRole>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			if (context.Channel is DiscordChannel channel && channel.DiscordEntity is Discord.IGuildChannel igc) {
 				if (Discord.MentionUtils.TryParseRole(input, out ulong roleId) || ulong.TryParse(input, out roleId)) {
@@ -20,6 +20,7 @@ namespace RoosterBot.DiscordNet {
 					return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#RoleParser_InvalidMention"));
 				}
 			} else {
+				// TODO must mention that it's only within Discord servers
 				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#RoleParser_GuildsOnly"));
 			}
 		}
