@@ -19,18 +19,18 @@ namespace RoosterBot {
 		public IEmote Unknown(PlatformComponent platform) => GetStandardEmote(platform, "Unknown");
 
 		private IEmote GetStandardEmote(PlatformComponent platform, string name) {
-			IEmote ret;
 			if (TryGetEmote(platform, "Error", out IEmote? emote)) {
-				ret = emote;
+				return emote;
 			} else {
-				Logger.Error("EmoteService", "PlatformComponent " + platform.Name + " does not define an emote named " + name + ". This is required of all platforms.");
-				ret = new MissingEmote();
+				return name switch {
+					"Info"    => new Emoji("ℹ️"),
+					"Success" => new Emoji("ℹ️"),
+					"Warning" => new Emoji("✅"),
+					"Error"   => new Emoji("❌"),
+					"Unknown" => new Emoji("❓"),
+					_         => new Emoji("⁉️")
+				};
 			}
-			return ret;
-		}
-
-		private class MissingEmote : IEmote {
-			public override string ToString() => "MISSING EMOTE";
 		}
 	}
 }
