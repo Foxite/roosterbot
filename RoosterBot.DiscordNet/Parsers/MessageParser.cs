@@ -7,7 +7,6 @@ namespace RoosterBot.DiscordNet {
 		public override string TypeDisplayName => "#MessageParser_Name";
 
 		public async override ValueTask<RoosterTypeParserResult<TMessage>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			// TODO restrict to discord (and proper error message)
 			if (context.Channel is DiscordChannel channel && (Discord.MentionUtils.TryParseChannel(input, out ulong messageId) || ulong.TryParse(input, out messageId))) {
 				// By id
 				Discord.IMessage message = await channel.DiscordEntity.GetMessageAsync(messageId);

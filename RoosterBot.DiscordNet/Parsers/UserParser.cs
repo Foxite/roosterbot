@@ -6,7 +6,6 @@ namespace RoosterBot.DiscordNet {
 		public override string TypeDisplayName => "#UserParser_Name";
 
 		public override ValueTask<RoosterTypeParserResult<TUser>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			// TODO restrict to discord contexts
 			if (Discord.MentionUtils.TryParseUser(input, out ulong userId) || ulong.TryParse(input, out userId)) {
 				Discord.IUser? user = DiscordNetComponent.Instance.Client.GetUser(userId);
 				if (user == null) {
