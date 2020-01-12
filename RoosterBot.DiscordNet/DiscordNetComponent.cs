@@ -24,14 +24,28 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
+			#region Config
+			var discordConfig = new DiscordSocketConfig();
+
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				Token = "",
 				GameString = "",
 				Activity = ActivityType.Playing,
 				ReportStartupVersionToOwner = true,
 				BotOwnerId = 0UL,
-				DiscordConfig = new DiscordSocketConfig() { // TODO this doesn't work properly because of reference types in DSC
-					MessageCacheSize = 5
+				Discord = new {
+					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
+					discordConfig.GatewayHost,
+					discordConfig.ConnectionTimeout,
+					discordConfig.ShardId,
+					discordConfig.TotalShards,
+					discordConfig.MessageCacheSize,
+					discordConfig.LargeThreshold,
+					discordConfig.AlwaysDownloadUsers,
+					discordConfig.HandlerTimeout,
+					discordConfig.ExclusiveBulkDelete,
+					discordConfig.DefaultRetryMode,
+					discordConfig.LogLevel
 				}
 			});
 			m_Token = config.Token;
@@ -40,7 +54,20 @@ namespace RoosterBot.DiscordNet {
 			m_ReportVersion = config.ReportStartupVersionToOwner;
 			BotOwnerId = config.BotOwnerId;
 
-			Client = new DiscordSocketClient(config.DiscordConfig);
+			discordConfig.GatewayHost         = config.Discord.GatewayHost;
+			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
+			discordConfig.ShardId             = config.Discord.ShardId;
+			discordConfig.TotalShards         = config.Discord.TotalShards;
+			discordConfig.MessageCacheSize    = config.Discord.MessageCacheSize;
+			discordConfig.LargeThreshold      = config.Discord.LargeThreshold;
+			discordConfig.AlwaysDownloadUsers = config.Discord.AlwaysDownloadUsers;
+			discordConfig.HandlerTimeout      = config.Discord.HandlerTimeout;
+			discordConfig.ExclusiveBulkDelete = config.Discord.ExclusiveBulkDelete;
+			discordConfig.DefaultRetryMode    = config.Discord.DefaultRetryMode;
+			discordConfig.LogLevel            = config.Discord.LogLevel;
+			#endregion
+
+			Client = new DiscordSocketClient(discordConfig);
 
 			services.AddSingleton(Client);
 		}
@@ -74,7 +101,6 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddTypeParser(new ChannelParser<IPrivateChannel>());
 			commandService.AddTypeParser(new ChannelParser<ICategoryChannel>());
 			commandService.AddTypeParser(new ChannelParser<Discord.IChannel>());
-
 
 			commandService.GetPlatformSpecificParser<IUser>().RegisterParser(this, new ConversionParser<Discord.IUser, IUser>("Discord user", userParser, discordUser => new DiscordUser(discordUser)));
 			commandService.GetPlatformSpecificParser<IMessage>().RegisterParser(this, new ConversionParser<IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
