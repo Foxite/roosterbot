@@ -76,25 +76,7 @@ namespace RoosterBot {
 			CommandHandler = new CommandExecutionHandler(Components.Services);
 			new CommandExecutedHandler(Components.Services);
 			new CommandExceptionHandler(Components.Services);
-
-			/* TODO something needs to notify the ready pipe
-			 * Old code for notifying pipe:
-			// Find an open Ready pipe and report
-			NamedPipeClientStream? pipeClient = null;
-			try {
-				pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
-				await pipeClient.ConnectAsync(1);
-				using var sw = new StreamWriter(pipeClient);
-				pipeClient = null;
-				sw.WriteLine("ready");
-			} catch (TimeoutException) {
-				// Pass
-			} finally {
-				if (pipeClient != null) {
-					pipeClient.Dispose();
-				}
-			} 
-			*/
+			NotifyAppStart();
 
 			WaitForQuitCondition();
 
@@ -104,29 +86,43 @@ namespace RoosterBot {
 		}
 
 		private IServiceCollection CreateRBServices(GlobalConfigService configService) {
-			var notificationService = new NotificationService();
-
 			var resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
 
 			var cns = new CultureNameService();
+			// TODO This should be obtained from resource files
+			// Allow any locale to define as many translations as it wants, and just use the first one that is found.
 			cns.AddLocalizedName("nl-NL", "nl-NL", "nederlands");
 			cns.AddLocalizedName("nl-NL", "en-US", "Dutch");
 			cns.AddLocalizedName("en-US", "nl-NL", "engels");
 			cns.AddLocalizedName("en-US", "en-US", "English");
 
-			var helpService = new HelpService(resources);
-			var commands = new RoosterCommandService(resources);
-
-			IServiceCollection serviceCollection = new ServiceCollection()
+			return new ServiceCollection()
+				.AddSingleton(new RoosterCommandService(resources))
+				.AddSingleton(new HelpService(resources))
+				.AddSingleton(new NotificationService())
 				.AddSingleton(new EmoteService())
 				.AddSingleton(configService)
-				.AddSingleton(notificationService)
-				.AddSingleton(commands)
 				.AddSingleton(resources)
-				.AddSingleton(helpService)
 				.AddSingleton(cns);
-			return serviceCollection;
+		}
+
+		private static void NotifyAppStart() {
+			// Find an open Ready pipe and report
+			NamedPipeClientStream? pipeClient = null;
+			try {
+				pipeClient = new NamedPipeClientStream(".", "roosterbotReady", PipeDirection.Out);
+				pipeClient.Connect(1);
+				using var sw = new StreamWriter(pipeClient);
+				pipeClient = null;
+				sw.WriteLine("ready");
+			} catch (TimeoutException) {
+				// Pass
+			} finally {
+				if (pipeClient != null) {
+					pipeClient.Dispose();
+				}
+			}
 		}
 
 		private void WaitForQuitCondition() {
