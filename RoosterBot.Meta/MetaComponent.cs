@@ -4,13 +4,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
+		private bool m_EnableHelp;
+		private bool m_EnableCommandsList;
+
 		public override Version ComponentVersion => new Version(1, 2, 1);
+
+#nullable disable
+		public static MetaComponent Instance { get; private set; }
+#nullable restore
+
+		public MetaComponent() {
+			Instance = this;
+		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				UseFileConfig = false,
-				GithubLink = "",
-				DiscordLink = ""
+				EnableHelp = true,
+				EnableCommandsList = true
 			});
 
 			if (config.UseFileConfig) {
@@ -18,7 +29,8 @@ namespace RoosterBot.Meta {
 				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService   (isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Users.json")));
 			}
 
-			services.AddSingleton(new MetaInfoService(config.GithubLink, config.DiscordLink));
+			m_EnableHelp = config.EnableHelp;
+			m_EnableCommandsList = config.EnableCommandsList;
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
@@ -42,8 +54,13 @@ namespace RoosterBot.Meta {
 			commandService.AddTypeParser(new BoolParser(), true);
 			#endregion
 
-			commandService.AddModule<CommandsListModule>();
-			commandService.AddModule<HelpModule>();
+			if (m_EnableCommandsList) {
+				commandService.AddModule<CommandsListModule>();
+			}
+			if (m_EnableHelp) {
+				commandService.AddModule<HelpModule>();
+			}
+
 			commandService.AddModule<ControlModule>();
 			commandService.AddModule<GuildConfigModule>();
 			commandService.AddModule<UserConfigModule>();

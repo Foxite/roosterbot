@@ -5,8 +5,6 @@ using Qmmands;
 namespace RoosterBot.Meta {
 	[Name("#Meta_Name")]
 	public class InfoModule : RoosterModule {
-		public MetaInfoService InfoService { get; set; } = null!;
-
 		[Command("#InfoModule_InfoCommand"), Description("#InfoModule_InfoCommand_Summary")]
 		public CommandResult InfoCommand() {
 			string response = GetString("InfoModule_InfoCommand_Pretext", Constants.VersionString);
