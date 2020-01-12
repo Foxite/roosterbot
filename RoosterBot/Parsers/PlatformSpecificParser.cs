@@ -24,7 +24,7 @@ namespace RoosterBot {
 			if (m_Parsers.TryGetValue(context.Platform, out var parser)) {
 				return (RoosterTypeParserResult<T>) await parser.ParseAsync(parameter, value, context); // should never throw. Also it must be awaited like this because otherwise you get conversion errors.
 			} else {
-				return Unsuccessful(false, context, "Type cannot be parsed under any known platforms"); // TODO useful, localized error message
+				return Unsuccessful(false, context, "Type cannot be parsed under this platform"); // TODO user-friendly, localized error message
 			}
 		}
 	}
