@@ -6,7 +6,7 @@ namespace RoosterBot {
 	public sealed class RequirePrivateAttribute : RoosterPreconditionAttribute {
 		public bool RequirePrivate { get; }
 
-		public override string Summary => throw new NotImplementedException();
+		public override string Summary => throw new NotImplementedException(); // TODO RequirePrivate summary
 
 		public RequirePrivateAttribute(bool requirePrivate) {
 			RequirePrivate = requirePrivate;
