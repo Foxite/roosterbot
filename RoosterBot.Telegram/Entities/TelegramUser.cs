@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
@@ -19,7 +20,14 @@ namespace RoosterBot.Telegram {
 			TelegramEntity = telegramEntity;
 		}
 
-		public bool IsChannelAdmin(IChannel ic) => false; // TODO
+		public bool IsChannelAdmin(IChannel ic) {
+			if (ic is TelegramChannel channel) {
+				return TelegramComponent.Instance.Client.GetChatAdministratorsAsync(channel.TelegramEntity).Result.Any(member => member.User == TelegramEntity);
+			} else {
+				return false;
+			}
+		}
+
 		public Task<IChannel?> GetPrivateChannel() => throw new NotImplementedException(); // TODO
 	}
 }
