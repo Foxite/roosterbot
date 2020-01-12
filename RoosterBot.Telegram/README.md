@@ -1,0 +1,1 @@
+﻿This component integrates RoosterBot with Telegram via [Telegram.Bot](https://github.com/TelegramBots/Telegram.Bot).
