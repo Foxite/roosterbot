@@ -90,8 +90,7 @@ namespace RoosterBot {
 		public PlatformSpecificParser<T> GetPlatformSpecificParser<T>() where T : ISnowflake {
 			PlatformSpecificParser<T>? psp = GetSpecificTypeParser<T, PlatformSpecificParser<T>>();
 			if (psp == null) {
-				psp = new PlatformSpecificParser<T>("TODO"); // TODO
-				AddTypeParser(psp);
+				throw new InvalidOperationException("A PlatformSpecificParser has not been registered for type " + typeof(T).FullName + ". This shouldn't happen if you're using IUser, IChannel, or IMessage.");
 			}
 			return psp;
 		}
