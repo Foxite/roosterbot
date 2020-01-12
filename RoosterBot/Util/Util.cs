@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace RoosterBot {
 	public static class Util {
@@ -13,8 +14,11 @@ namespace RoosterBot {
 			if (File.Exists(filePath)) {
 				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss);
 			} else {
+				jss ??= new JsonSerializerSettings();
+				jss.Converters.Add(new StringEnumConverter());
+
 				using var sw = File.CreateText(filePath);
-				sw.Write(JsonConvert.SerializeObject(template));
+				sw.Write(JsonConvert.SerializeObject(template, jss));
 				return template;
 			}
 		}
