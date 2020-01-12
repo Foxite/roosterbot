@@ -26,6 +26,10 @@ namespace RoosterBot.Console {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+			var userParser = new UserParser();
+			commandService.AddTypeParser(userParser);
+			commandService.GetPlatformSpecificParser<IUser>().RegisterParser(this, new ConversionParser<ConsoleUser, IUser>("Console user", userParser, user => user));
+
 			var emotes = services.GetService<EmoteService>();
 			emotes.RegisterEmote(this, "Info",    new Emoji("i "));
 			emotes.RegisterEmote(this, "Error",   new Emoji("x "));

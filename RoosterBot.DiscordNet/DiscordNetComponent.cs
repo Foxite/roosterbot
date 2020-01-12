@@ -30,7 +30,7 @@ namespace RoosterBot.DiscordNet {
 				Activity = ActivityType.Playing,
 				ReportStartupVersionToOwner = true,
 				BotOwnerId = 0UL,
-				DiscordConfig = new DiscordSocketConfig() {
+				DiscordConfig = new DiscordSocketConfig() { // TODO this doesn't work properly because of reference types in DSC
 					MessageCacheSize = 5
 				}
 			});
@@ -75,9 +75,10 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddTypeParser(new ChannelParser<ICategoryChannel>());
 			commandService.AddTypeParser(new ChannelParser<Discord.IChannel>());
 
-			commandService.AddTypeParser(new ConversionParser<Discord.IUser, IUser>("Discord user", userParser, discordUser => new DiscordUser(discordUser)));
-			commandService.AddTypeParser(new ConversionParser<IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
-			commandService.AddTypeParser(new ConversionParser<IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
+
+			commandService.GetPlatformSpecificParser<IUser>().RegisterParser(this, new ConversionParser<Discord.IUser, IUser>("Discord user", userParser, discordUser => new DiscordUser(discordUser)));
+			commandService.GetPlatformSpecificParser<IMessage>().RegisterParser(this, new ConversionParser<IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
+			commandService.GetPlatformSpecificParser<IChannel>().RegisterParser(this, new ConversionParser<IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
 			#endregion
 			
 			commandService.AddModule<EmoteTheftModule>();

@@ -71,23 +71,10 @@ namespace RoosterBot {
 			m_ServicesByCulture = new ConcurrentDictionary<CultureInfo, CommandService>();
 			m_ResourceService = resourceService;
 			m_DefaultService = GetNewCommandService();
-		}
 
-		private CommandService GetService(CultureInfo? culture) {
-			if (culture == null) {
-				return m_DefaultService;
-			} else {
-				// A factory is better here because it won't call the function unless it's needed
-				return m_ServicesByCulture.GetOrAdd(culture, c => GetNewCommandService());
-			}
-		}
-
-		private void AllServices(Action<CommandService> action) {
-			action(m_DefaultService);
-			foreach (CommandService service in m_ServicesByCulture.Values) {
-				action(service);
-			}
-			m_SetupActions.Add(action);
+			AddTypeParser(new PlatformSpecificParser<IUser>("User")); // TODO localize TDN
+			AddTypeParser(new PlatformSpecificParser<IChannel>("Channel"));
+			AddTypeParser(new PlatformSpecificParser<IMessage>("Message"));
 		}
 
 		internal async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
@@ -100,6 +87,16 @@ namespace RoosterBot {
 			}
 		}
 
+		public PlatformSpecificParser<T> GetPlatformSpecificParser<T>() where T : ISnowflake {
+			PlatformSpecificParser<T>? psp = GetSpecificTypeParser<T, PlatformSpecificParser<T>>();
+			if (psp == null) {
+				psp = new PlatformSpecificParser<T>("TODO"); // TODO
+				AddTypeParser(psp);
+			}
+			return psp;
+		}
+
+		#region AddModule and LocalizeModule
 		// Can't really have proper type checking here because RoosterModule is generic. We can still do it but we would have to add a second parameter
 		//  just for the context type which I think is undesirable.
 		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
@@ -195,6 +192,7 @@ namespace RoosterBot {
 				LocalizeModule(submodule, culture, component);
 			}
 		}
+		#endregion
 
 		#region CommandService wrappers
 		public void AddArgumentParser(IArgumentParser ap) {
@@ -266,12 +264,30 @@ namespace RoosterBot {
 		}
 		#endregion
 
+		#region Private methods
 		private static Func<Exception, Task> GetEventErrorHandler(string name) {
 			string logMessage = $"A {name} handler has thrown an exception.";
 			return e => {
 				Logger.Error("RoosterCommandService", logMessage, e);
 				return Task.CompletedTask;
 			};
+		}
+
+		private CommandService GetService(CultureInfo? culture) {
+			if (culture == null) {
+				return m_DefaultService;
+			} else {
+				// A factory is better here because it won't call the function unless it's needed
+				return m_ServicesByCulture.GetOrAdd(culture, c => GetNewCommandService());
+			}
+		}
+
+		private void AllServices(Action<CommandService> action) {
+			action(m_DefaultService);
+			foreach (CommandService service in m_ServicesByCulture.Values) {
+				action(service);
+			}
+			m_SetupActions.Add(action);
 		}
 
 		private CommandService GetNewCommandService() {
@@ -299,5 +315,6 @@ namespace RoosterBot {
 			}
 			return false;
 		}
+		#endregion
 	}
 }
