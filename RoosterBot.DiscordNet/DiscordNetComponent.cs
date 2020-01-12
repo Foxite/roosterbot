@@ -15,6 +15,7 @@ namespace RoosterBot.DiscordNet {
 
 		public BaseSocketClient Client { get; private set; } = null!;
 		public ulong BotOwnerId { get; private set; }
+		public string DiscordLink { get; private set; } = null!;
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(0, 2, 0);
@@ -109,6 +110,7 @@ namespace RoosterBot.DiscordNet {
 			
 			commandService.AddModule<EmoteTheftModule>();
 			commandService.AddModule<UserListModule>();
+			commandService.AddModule<InfoModule>();
 
 			var emotes = services.GetService<EmoteService>();
 			emotes.RegisterEmote(this, "Error",   new DiscordEmote("<:error:636213609919283238>"));
