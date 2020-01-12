@@ -42,7 +42,7 @@ namespace RoosterBot {
 			}
 
 			try {
-				Instance = new Program();
+				new Program();
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
 				// At this point it can not be assumed that literally any part of the program is functional, so there's no reporting this crash to Discord or Notification endpoints.
@@ -57,6 +57,8 @@ namespace RoosterBot {
 		}
 
 		private Program() {
+			Instance = this;
+
 			Logger.Info("Main", "Starting program");
 
 			if (!Directory.Exists(DataPath)) {
