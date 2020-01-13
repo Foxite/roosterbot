@@ -43,7 +43,7 @@ namespace RoosterBot.Schedule {
 
 			foreach (ScheduleRecord record in m_Schedule) {
 				if (identifier.Matches(record)) {
-					if (record.Start > target) {
+					if (record.End > target) {
 						return record;
 					} else {
 						sawRecordForClass = true;
@@ -120,6 +120,19 @@ namespace RoosterBot.Schedule {
 				}
 			}
 			return weekRecords.ToArray();
+		});
+
+		public override Task<ScheduleRecord> GetRecordBeforeDateTimeAsync(IdentifierInfo identifier, DateTime datetime) => Task.Run(() => {
+			ScheduleRecord? lastMatch = null;
+
+			foreach (ScheduleRecord record in m_Schedule) {
+				if (record.End < datetime) {
+					lastMatch = record;
+				} else {
+					return lastMatch ?? throw new RecordsOutdatedException("Cannot look as far back as " + datetime.ToString());
+				}
+			}
+			return lastMatch ?? throw new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}");
 		});
 	}
 

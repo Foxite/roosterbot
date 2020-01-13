@@ -40,6 +40,10 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
+		public Task<ScheduleRecord> GetRecordBeforeDateTime(IdentifierInfo identifier, DateTime datetime, RoosterCommandContext context) {
+			return GetSchedule(identifier, context).GetRecordBeforeDateTimeAsync(identifier, datetime);
+		}
+
 		public void RegisterProvider(Type infoType, ScheduleProvider schedule) {
 			if (!typeof(IdentifierInfo).IsAssignableFrom(infoType)) {
 				throw new ArgumentException($"The given type must be a type of IdentifierInfo.", nameof(infoType));
