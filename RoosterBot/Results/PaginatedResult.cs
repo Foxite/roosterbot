@@ -27,7 +27,8 @@ namespace RoosterBot {
 		private readonly string[][] m_Cells;
 		private readonly int m_RowsPerPage;
 		private readonly int? m_MaxColumnWidth;
-		private int m_Position;
+		private readonly int m_PageCount;
+		private int m_PageIndex;
 
 		public RoosterCommandResult Current => GetPage();
 
@@ -39,31 +40,41 @@ namespace RoosterBot {
 			m_Cells = cells;
 			m_RowsPerPage = rowsPerPage;
 			m_MaxColumnWidth = maxColumnWidth;
-			m_Position = -rowsPerPage;
+			m_PageIndex = -1;
+			m_PageCount = (m_Cells.Length / m_RowsPerPage) + Math.Sign(m_Cells.Length % rowsPerPage); // Integer division, rounding up
 		}
 
 		private TableResult GetPage() {
-			var ret = new string[Math.Min(m_RowsPerPage, m_Cells.Length - m_Position - m_RowsPerPage) + 1][];
+			int pageSize = Math.Min(m_Cells.Length - m_PageIndex * m_RowsPerPage, m_RowsPerPage);
 
+			var ret = new string[pageSize + 1][];
 			ret[0] = m_Header;
-			for (int sourcePos = m_Position, targetPos = 1; sourcePos < (m_Cells.Length - m_Position - 1) && targetPos < ret.Length; sourcePos++, targetPos++) {
-				ret[targetPos] = m_Cells[sourcePos];
-			}
+			m_Cells.AsSpan(m_PageIndex * m_RowsPerPage, pageSize).CopyTo(ret.AsSpan(1));
 			return new TableResult(m_Caption, ret, m_MaxColumnWidth);
 		}
 
 		public bool MoveNext() {
-			m_Position += m_RowsPerPage;
-			return m_Position < m_Cells.Length - m_RowsPerPage;
+			if (m_PageIndex < m_PageCount) {
+				m_PageIndex++;
+				return true;
+			} else {
+				m_PageIndex = m_PageCount - 1;
+				return false;
+			}
 		}
 
 		public bool MovePrevious() {
-			m_Position -= m_RowsPerPage;
-			return m_Position > 0;
+			if (m_PageIndex > 0) {
+				m_PageIndex--;
+				return true;
+			} else {
+				m_PageIndex = 0;
+				return false;
+			}
 		}
 
 		public void Reset() {
-			m_Position = -m_RowsPerPage;
+			m_PageIndex = -1;
 		}
 
 		public void Dispose() { }

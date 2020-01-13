@@ -67,48 +67,29 @@ namespace RoosterBot.DiscordNet {
 			}
 
 			IUserMessage message = await Channel.SendMessageAsync(pr.Current.ToString(this));
-			bool stoppedAtEnd = false;
-			bool stoppedAtStart = false;
 
 			Task goPrevious() {
-				if (!stoppedAtStart) {
-					if (pr.MovePrevious()) {
-						return message.ModifyAsync(props => {
-							props.Content = pr.Current.ToString(this);
-						});
-					} else {
-						stoppedAtStart = true;
-					}
+				if (pr.MovePrevious()) {
+					return message.ModifyAsync(props => {
+						props.Content = pr.Current.ToString(this);
+					});
 				}
 				return Task.CompletedTask;
 			}
 
 			Task goNext() {
-				if (!stoppedAtEnd) {
-					if (pr.MoveNext()) {
-						return message.ModifyAsync(props => {
-							props.Content = pr.Current.ToString(this);
-						});
-					} else {
-						stoppedAtEnd = true;
-					}
+				if (pr.MoveNext()) {
+					return message.ModifyAsync(props => {
+						props.Content = pr.Current.ToString(this);
+					});
 				}
 				return Task.CompletedTask;
 			}
 
-			Task reset() {
-				pr.Reset();
-				stoppedAtEnd = false;
-				stoppedAtStart = false;
-				return Task.CompletedTask;
-			}
-
-			await reset();
-
 			new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 				{ new Discord.Emoji("⬅️"), goPrevious },
 				{ new Discord.Emoji("➡️"), goNext },
-				{ new Discord.Emoji("⏪"), reset }
+				//{ new Discord.Emoji("⏪"), reset }
 			});
 			return new DiscordMessage(message);
 		}
