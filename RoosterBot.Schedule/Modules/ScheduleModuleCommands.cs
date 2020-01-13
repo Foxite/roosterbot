@@ -137,7 +137,7 @@ namespace RoosterBot.Schedule {
 
 				switch (query.Kind) {
 					case ScheduleResultKind.Single:
-						ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(query.Identifier, query.RecordEndTime ?? DateTime.Now);
+						ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(query.Identifier, (query.RecordEndTime ?? DateTime.Now).AddSeconds(-1));
 
 						if (result.Success) {
 							string pretext;
