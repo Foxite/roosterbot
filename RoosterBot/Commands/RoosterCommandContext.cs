@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
@@ -30,6 +31,24 @@ namespace RoosterBot {
 		/// <summary>
 		/// Convert a <see cref="RoosterCommandResult"/> to a string that can be passed into this context's <see cref="IChannel.SendMessageAsync(string, string)"/>.
 		/// </summary>
-		public virtual string ConvertResult(RoosterCommandResult result) => result.ToString(this);
+		public async Task<IMessage> RespondAsync(RoosterCommandResult result) {
+			//Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
+			CommandResponsePair? crp = UserConfig.GetResponse(Message);
+			IMessage? response = crp == null ? null : await Channel.GetMessageAsync(crp.Response.Id);
+			if (response == null) {
+				// The response was already deleted, or there was no response to begin with.
+				response = await SendResultAsync(result);
+				UserConfig.SetResponse(Message, response);
+			} else {
+				// The command was edited.
+				await response.ModifyAsync(result.ToString(this), result.UploadFilePath);
+			}
+
+			return response;
+		}
+
+		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result) {
+			return Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
+		}
 	}
 }
