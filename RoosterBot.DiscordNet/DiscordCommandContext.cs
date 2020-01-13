@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -24,34 +26,79 @@ namespace RoosterBot.DiscordNet {
 		private bool IsResult<T>(RoosterCommandResult input, [MaybeNullWhen(false), NotNullWhen(true)] out T? result) where T : RoosterCommandResult {
 			                                            // Hard-to-read expression - I've laid it out here:
 			result = input as T ??                      // Simple, if result is T then return result as T.
-				((input is CompoundResult cr            // If it's not T: Is it a compound result...
+				((input is global::RoosterBot.CompoundResult cr            // If it's not T: Is it a compound result...
 				&& cr.IndividualResults.CountEquals(1)) //  with only one item?
 				? cr.IndividualResults.First() as T     //   Then return the first (and only) item as T, returning null if it's not T.
 				: null);                                // otherwise return null.
 			return result != null;
 		}
 
-		protected async override Task<IMessage> SendResultAsync(RoosterCommandResult result) {
+		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result) {
 			if (IsResult<AspectListResult>(result, out var alr)) {
-				var embed = new EmbedBuilder()
-					.WithTitle(alr.Caption)
-					.WithFields(
-						from aspect in alr
-						select new EmbedFieldBuilder()
-							.WithName(aspect.PrefixEmote.ToString() + aspect.Name)
-							.WithValue(aspect.Value)
-							.WithIsInline(true))
-					.Build();
-				if (result.UploadFilePath == null) {
-					return new DiscordMessage(await Channel.SendMessageAsync(embed: embed));
-				} else {
-					return new DiscordMessage(await Channel.SendFileAsync(result.UploadFilePath, embed: embed));
-				}
+				return SendAspectList(alr);
 			} else if (IsResult<PaginatedResult>(result, out var pr)) {
-
+				return SendPaginatedResult(pr);
 			} else {
-				return await base.SendResultAsync(result);
+				return base.SendResultAsync(result);
 			}
+		}
+
+		private async Task<IMessage> SendAspectList(AspectListResult alr) {
+			var embed = new EmbedBuilder()
+				.WithTitle(alr.Caption)
+				.WithFields(
+					from aspect in alr
+					select new EmbedFieldBuilder()
+					.WithName(aspect.PrefixEmote.ToString() + aspect.Name)
+					.WithValue(aspect.Value)
+					.WithIsInline(true))
+				.Build();
+			if (alr.UploadFilePath == null) {
+				return new DiscordMessage(await Channel.SendMessageAsync(embed: embed));
+			} else {
+				return new DiscordMessage(await Channel.SendFileAsync(alr.UploadFilePath, embed: embed));
+			}
+		}
+
+		private async Task<IMessage> SendPaginatedResult(PaginatedResult pr) {
+			if (!pr.MoveNext()) {
+				return new DiscordMessage(await Channel.SendMessageAsync("Empty result!")); // TODO
+			}
+
+			IUserMessage message = await Channel.SendMessageAsync(pr.Current.ToString(this));
+			bool stoppedAtEnd = false;
+			bool stoppedAtStart = false;
+
+			Task goPrevious() {
+				if (!stoppedAtStart) {
+					if (pr.MovePrevious()) {
+						stoppedAtStart = true;
+					} else {
+						return message.ModifyAsync(props => {
+							props.Content = pr.Current.ToString(this);
+						});
+					}
+				}
+				return Task.CompletedTask;
+			}
+
+			Task goNext() {
+				if (!stoppedAtEnd) {
+					if (pr.MoveNext()) {
+						stoppedAtEnd = true;
+					} else {
+						return message.ModifyAsync(props => {
+							props.Content = pr.Current.ToString(this);
+						});
+					}
+				}
+				return Task.CompletedTask;
+			}
+
+			new InteractiveMessageHandler(message, new Dictionary<Discord.IEmote, Func<Task>>() {
+				{ new Discord.Emoji("⬅️"), goPrevious },
+				{ new Discord.Emoji("➡️"), goNext }
+			});
 		}
 	}
 }

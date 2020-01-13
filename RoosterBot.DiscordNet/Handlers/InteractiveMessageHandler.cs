@@ -12,12 +12,12 @@ namespace RoosterBot.DiscordNet {
 	/// </summary>
 	public sealed class InteractiveMessageHandler {
 		private readonly IUserMessage m_Message;
-		private readonly Dictionary<Discord.IEmote, Action> m_Callbacks;
+		private readonly Dictionary<Discord.IEmote, Func<Task>> m_Callbacks;
 		private readonly TimeSpan m_Expiration;
 		private Timer? m_ExpiryTimer;
 
 		/// <param name="expires">5 minutes, if null.</param>
-		public InteractiveMessageHandler(IUserMessage message, Dictionary<Discord.IEmote, Action> callbacks, TimeSpan? expires = null) {
+		public InteractiveMessageHandler(IUserMessage message, Dictionary<Discord.IEmote, Func<Task>> callbacks, TimeSpan? expires = null) {
 			m_Message = message;
 			m_Callbacks = callbacks;
 			m_Expiration = expires ?? TimeSpan.FromMinutes(5);
@@ -28,7 +28,7 @@ namespace RoosterBot.DiscordNet {
 			DiscordNetComponent.Instance.Client.MessageDeleted += OnMessageDeleted;
 
 			_ = Task.Run(async () => {
-				foreach (KeyValuePair<Discord.IEmote, Action> kvp in callbacks) {
+				foreach (KeyValuePair<Discord.IEmote, Func<Task>> kvp in callbacks) {
 					await message.AddReactionAsync(kvp.Key);
 				}
 			});
@@ -46,10 +46,10 @@ namespace RoosterBot.DiscordNet {
 		private async Task OnReactionAdded(Cacheable<IUserMessage, ulong> message, IMessageChannel channel, IReaction reaction) {
 			if (message.Id == m_Message.Id) {
 				await foreach (IReadOnlyCollection<Discord.IUser> item in message.Value.GetReactionUsersAsync(reaction.Emote, message.Value.Reactions[reaction.Emote].ReactionCount + 1)) {
-					if (item.Any(user => user.Id == m_Message.Author.Id) && m_Callbacks.TryGetValue(reaction.Emote, out Action? callback)) {
+					if (item.Any(user => user.Id == m_Message.Author.Id) && m_Callbacks.TryGetValue(reaction.Emote, out Func<Task>? callback)) {
 						ResetTimer();
 						await message.Value.RemoveReactionAsync(reaction.Emote, m_Message.Author);
-						callback();
+						await callback();
 						break;
 					}
 				}
