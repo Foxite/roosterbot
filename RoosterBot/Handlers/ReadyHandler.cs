@@ -10,7 +10,7 @@ namespace RoosterBot {
 		public ConfigService Config { get; set; } = null!;
 		public DiscordSocketClient Client { get; set; } = null!;
 
-		private bool m_VersionNotReported;
+		private bool m_VersionNotReported = true;
 
 		public ReadyHandler(IServiceProvider isp) : base(isp) {
 			Client.Ready += OnClientReady;
