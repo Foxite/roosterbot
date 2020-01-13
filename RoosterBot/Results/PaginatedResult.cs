@@ -41,7 +41,7 @@ namespace RoosterBot {
 			m_RowsPerPage = rowsPerPage;
 			m_MaxColumnWidth = maxColumnWidth;
 			m_PageIndex = -1;
-			m_PageCount = (m_Cells.Length / m_RowsPerPage) + Math.Sign(m_Cells.Length % rowsPerPage); // Integer division, rounding up
+			m_PageCount = m_Cells.Length / m_RowsPerPage + Math.Sign(m_Cells.Length % rowsPerPage); // Integer division, rounding up
 		}
 
 		private TableResult GetPage() {
