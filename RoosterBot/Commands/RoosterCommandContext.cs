@@ -26,5 +26,10 @@ namespace RoosterBot {
 		public override string ToString() {
 			return $"{User.UserName} in channel `{Channel.Name}`: {Message.Content}";
 		}
+
+		/// <summary>
+		/// Convert a <see cref="RoosterCommandResult"/> to a string that can be passed into this context's <see cref="IChannel.SendMessageAsync(string, string)"/>.
+		/// </summary>
+		public virtual string ConvertResult(RoosterCommandResult result) => result.ToString(this);
 	}
 }

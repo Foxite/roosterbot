@@ -52,16 +52,16 @@ namespace RoosterBot {
 		public static CommandResponsePair? GetResponse(this UserConfig userConfig, IMessage message) => GetResponse(userConfig, message.GetReference());
 		public static CommandResponsePair? RemoveCommand(this UserConfig userConfig, IMessage command) => RemoveCommand(userConfig, command.GetReference());
 
-		public static async Task<IMessage> RespondAsync(this RoosterCommandContext context, string message, string? filePath = null) {
+		public static async Task<IMessage> RespondAsync(this RoosterCommandContext context, RoosterCommandResult result) {
 			CommandResponsePair? crp = context.UserConfig.GetResponse(context.Message);
 			IMessage? response = crp == null ? null : await context.Channel.GetMessageAsync(crp.Response.Id);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
-				response = await context.Channel.SendMessageAsync(message, filePath);
+				response = await context.Channel.SendMessageAsync(context.ConvertResult(result), result.UploadFilePath);
 				SetResponse(context.UserConfig, context.Message, response);
 			} else {
 				// The command was edited.
-				await response.ModifyAsync(message, filePath);
+				await response.ModifyAsync(context.ConvertResult(result), result.UploadFilePath);
 			}
 
 			return response;

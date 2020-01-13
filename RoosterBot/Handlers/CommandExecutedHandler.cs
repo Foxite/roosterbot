@@ -14,13 +14,9 @@ namespace RoosterBot {
 				if (args.Result is RoosterCommandResult rcr) {
 					string response = rcr.ToString(rcc);
 					if (response.Length == 0) {
-						response = rcc.ServiceProvider.GetService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
-					}
-
-					if (rcr.UploadFilePath == null) {
-						await rcc.RespondAsync(response);
+						await rcc.RespondAsync(TextResult.Info(rcc.ServiceProvider.GetService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty")));
 					} else {
-						await rcc.RespondAsync(response, rcr.UploadFilePath);
+						await rcc.RespondAsync(rcr);
 					}
 				} else {
 					if (!(args.Result is null)) {
@@ -28,7 +24,7 @@ namespace RoosterBot {
 					}
 					
 					string response = rcc.ServiceProvider.GetService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
-					await rcc.RespondAsync(TextResult.Info(response).ToString(rcc));
+					await rcc.RespondAsync(TextResult.Info(response));
 				}
 				await rcc.UserConfig.UpdateAsync();
 			}

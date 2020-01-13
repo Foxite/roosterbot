@@ -91,11 +91,10 @@ namespace RoosterBot {
 						break;
 				}
 
-				response = Emotes.Error(context.Platform) + response;
-				if (response.Length >= 2000) {
-					response = Emotes.Error(context.Platform) + Resources.GetString(context.Culture, "CommandHandling_ResponseTooLong");
+				if (response.Length >= 1950) {
+					response = Resources.GetString(context.Culture, "CommandHandling_ResponseTooLong");
 				}
-				await context.RespondAsync(response);
+				await context.RespondAsync(TextResult.Error(response));
 			}
 		}
 	}
