@@ -3,7 +3,7 @@ using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
-	public sealed class ScheduleResultPaginator : IBidirectionalEnumerator<AspectListResult> {
+	public sealed class ScheduleResultPaginator : IBidirectionalEnumerator<RoosterCommandResult> {
 		private readonly ResourceService m_Resources;
 		private readonly ScheduleService m_ScheduleService;
 		private readonly RoosterCommandContext m_Context;
@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 
 		private ScheduleRecord m_CurrentRecord;
 
-		public AspectListResult Current => new AspectListResult(m_Caption, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+		public RoosterCommandResult Current => new AspectListResult(m_Caption, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
 
 		object? IEnumerator.Current => throw new NotImplementedException();
 		

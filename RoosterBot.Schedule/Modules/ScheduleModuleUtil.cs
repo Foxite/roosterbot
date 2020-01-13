@@ -3,17 +3,19 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public partial class ScheduleModule {
-		private IdentifierInfo? ResolveNullInfo(IdentifierInfo? info) {
+		private PaginatedResult GetResult(ScheduleRecord record, IdentifierInfo identifier, string caption) =>
+			new PaginatedResult(new ScheduleResultPaginator(Context, record, identifier, m_ResponseCaption + "\n" + caption));
+
+		private ReturnValue<IdentifierInfo> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
 				StudentSetInfo? ssi = Context.UserConfig.GetStudentSet();
 				if (ssi != null) {
-					return ssi;
+					return ReturnValue<IdentifierInfo>.Successful(ssi);
 				} else {
-					MinorError(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", GuildConfig.CommandPrefix));
-					return null;
+					return ReturnValue<IdentifierInfo>.Unsuccessful(TextResult.Error(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", GuildConfig.CommandPrefix)));
 				}
 			} else {
-				return info;
+				return ReturnValue<IdentifierInfo>.Successful(info);
 			}
 		}
 
@@ -35,28 +37,15 @@ namespace RoosterBot.Schedule {
 
 		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
 			try {
-				return new ReturnValue<T>(await action());
-			} catch (IdentifierNotFoundException) {
-				MinorError(GetString("ScheduleModule_HandleError_NotFound"));
-			} catch (RecordsOutdatedException) {
-				MinorError(GetString("ScheduleModule_HandleError_RecordsOutdated"));
-			} catch (NoAllowedChannelsException) {
-				MinorError(GetString("ScheduleModule_HandleError_NoSchedulesAvailableForServer"));
+				return ReturnValue<T>.Successful(await action());
+			} catch (Exception e) {
+				return ReturnValue<T>.Unsuccessful(TextResult.Error(GetString(e switch {
+					IdentifierNotFoundException inf => "ScheduleModule_HandleError_NotFound",
+					RecordsOutdatedException re => "ScheduleModule_HandleError_RecordsOutdated",
+					NoAllowedChannelsException nac => "ScheduleModule_HandleError_NoSchedulesAvailableForServer",
+					_ => throw e
+				})));
 			}
-			return new ReturnValue<T>();
-		}
-
-		private void MinorError(string message) {
-			m_Result.AddResult(TextResult.Error(message));
-		}
-
-		protected override ValueTask AfterExecutedAsync() {
-			if (m_LookedUpData != null) {
-				UserConfig.OnScheduleRequestByUser(Context.Channel, m_LookedUpData);
-			} else {
-				UserConfig.RemoveLastScheduleCommand(Context.Channel);
-			}
-			return default;
 		}
 	}
 }

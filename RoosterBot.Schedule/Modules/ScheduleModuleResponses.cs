@@ -6,19 +6,7 @@ using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule {
 	public partial class ScheduleModule {
-		protected Task RespondRecord(string pretext, IdentifierInfo info, ScheduleRecord record, bool callNextIfBreak = true) {
-			m_LookedUpData = new LastScheduleCommandInfo(info, record.End, ScheduleResultKind.Single);
-			IEnumerable<AspectListItem> aspects = record.Present(Resources, Culture);
-			m_Result.AddResult(new AspectListResult(pretext, aspects));
-
-			if (callNextIfBreak && record.ShouldCallNextCommand) {
-				return AfterCommand();
-			} else {
-				return Task.CompletedTask;
-			}
-		}
-
-		private async Task RespondDay(IdentifierInfo? info, DateTime date) {
+		/*private PaginatedResult RespondDay(IdentifierInfo? info, DateTime date) {
 			info = ResolveNullInfo(info);
 			if (info != null) {
 				ReturnValue<ScheduleRecord[]> result = await GetSchedulesForDay(info, date);
@@ -66,7 +54,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		protected async Task RespondWeek(IdentifierInfo? info, int weeksFromNow) {
+		protected PaginatedResult RespondWeek(IdentifierInfo? info, int weeksFromNow) {
 			info = ResolveNullInfo(info);
 			if (info != null) {
 				ScheduleRecord[] weekRecords = await Schedules.GetWeekRecordsAsync(info, weeksFromNow, Context);
@@ -77,8 +65,8 @@ namespace RoosterBot.Schedule {
 						_ => "ScheduleModule_RespondWeek_ScheduleInXWeeks"
 					}, info, weeksFromNow);
 					var dayRecords = weekRecords.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
-						/* Key select */ group => group.Key,
-						/* Val select */ group => group.ToArray()
+						/* Key select */ /*group => group.Key,
+						/* Val select */ /*group => group.ToArray()
 					);
 					int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
 
@@ -127,6 +115,6 @@ namespace RoosterBot.Schedule {
 				}
 				m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Today.AddDays(7 * weeksFromNow), ScheduleResultKind.Week);
 			}
-		}
+		}*/
 	}
 }
