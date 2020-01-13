@@ -29,7 +29,13 @@ namespace RoosterBot.GLU {
 						if (StaffMember[0].IsUnknown && StaffMember.Count == 1) {
 							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", getString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
 						} else {
-							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
+							string teachers;
+							if (StaffMember.Count > 5) {
+								teachers = string.Join(", ", StaffMember.Take(5).Select(teacher => teacher.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)";
+							} else {
+								teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
+								
+							}
 							IEmote teacherEmote;
 							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
 								teacherEmote = Emote.Parse("<:VRjoram:392762653367336960>");
