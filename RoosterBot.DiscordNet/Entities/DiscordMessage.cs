@@ -8,7 +8,6 @@ namespace RoosterBot.DiscordNet {
 		public object Id => DiscordEntity.Id;
 		public IChannel Channel => new DiscordChannel(DiscordEntity.Channel);
 		public IUser User => new DiscordUser(DiscordEntity.Author);
-		public bool SentByRoosterBot => DiscordEntity.Author.Id == DiscordNetComponent.Instance.Client.CurrentUser.Id;
 		public string Content => DiscordEntity.Content;
 
 		public Task DeleteAsync() => DiscordEntity.DeleteAsync();

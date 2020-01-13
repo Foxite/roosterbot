@@ -10,7 +10,6 @@ namespace RoosterBot.Telegram {
 		public override long Id => TelegramEntity.MessageId;
 		public IChannel Channel => new TelegramChannel(TelegramEntity.Chat);
 		public IUser User => new TelegramUser(TelegramEntity.From);
-		public bool SentByRoosterBot => TelegramEntity.From.Id == TelegramComponent.Instance.Client.BotId;
 		public string Content => TelegramEntity.Text;
 
 		object ISnowflake.Id => Id;

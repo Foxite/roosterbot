@@ -11,6 +11,7 @@ namespace RoosterBot.Telegram {
 		public string DisplayName => (TelegramEntity.FirstName + " " + TelegramEntity.LastName).Trim();
 		public string Mention => "@" + TelegramEntity.Username;
 		public bool IsBotAdmin => TelegramComponent.Instance.BotOwnerId == TelegramEntity.Id;
+		public bool IsRoosterBot => Id == TelegramComponent.Instance.Client.BotId;
 
 		public TelegramUser(User telegramEntity) {
 			TelegramEntity = telegramEntity;

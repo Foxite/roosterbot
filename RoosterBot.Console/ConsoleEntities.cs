@@ -18,12 +18,12 @@ namespace RoosterBot.Console {
 		public string Mention => "@" + UserName;
 		public string DisplayName => "ConsoleGuy";
 		public bool IsBotAdmin => ((ulong) Id) == 1UL;
+		public bool IsRoosterBot => ((ulong) Id) == 2UL;
 
 		public ConsoleUser(ulong id, string name) : base(id) {
 			UserName = name;
 		}
 
-		public Task<IChannel?> GetPrivateChannel() => Task.FromResult((IChannel?) ConsoleComponent.Instance.TheConsoleChannel);
 		public bool IsChannelAdmin(IChannel channel) => true;
 	}
 
@@ -51,7 +51,6 @@ namespace RoosterBot.Console {
 	public class ConsoleMessage : ConsoleSnowflake, IMessage {
 		public ConsoleChannel Channel => ConsoleComponent.Instance.TheConsoleChannel;
 		public ConsoleUser User { get; }
-		public bool SentByRoosterBot { get; }
 		public string Content { get; private set; }
 
 		IChannel IMessage.Channel => Channel;
@@ -59,8 +58,7 @@ namespace RoosterBot.Console {
 
 		public ConsoleMessage(string content, bool sentByRoosterBot) : base((ulong) DateTime.Now.Ticks) {
 			Content = content;
-			SentByRoosterBot = sentByRoosterBot;
-			User = SentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;
+			User = sentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;
 		}
 
 		public Task DeleteAsync() {

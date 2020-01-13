@@ -24,7 +24,6 @@ Unfortunately it does not seem to be possible to obtain an actual Message object
 		public ChatId ChatId { get; }
 
 		public IUser User => throw new NotImplementedException(NotImplementedMessage);
-		public bool SentByRoosterBot => throw new NotImplementedException(NotImplementedMessage);
 		public string Content => throw new NotImplementedException(NotImplementedMessage);
 
 		public TelegramMessageFacade(TelegramChannel channel, long id) {
