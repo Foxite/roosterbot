@@ -34,7 +34,6 @@ namespace RoosterBot.GLU {
 								teachers = string.Join(", ", StaffMember.Take(5).Select(teacher => teacher.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)";
 							} else {
 								teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
-								
 							}
 							IEmote teacherEmote;
 							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
@@ -85,7 +84,9 @@ namespace RoosterBot.GLU {
 				Activity.DisplayText.ToString(),
 				string.Format(resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToString("t", culture), End.ToString("t", culture)),
 				StudentSetsString,
-				StaffMemberString,
+				StaffMember.Count > 5
+					? string.Join(", ", StaffMember.Take(5).Select(teacher => teacher.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)"
+					: string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText)),
 				RoomString
 			};
 		}
