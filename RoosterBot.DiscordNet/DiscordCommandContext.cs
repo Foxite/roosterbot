@@ -26,7 +26,7 @@ namespace RoosterBot.DiscordNet {
 		private bool IsResult<T>(RoosterCommandResult input, [MaybeNullWhen(false), NotNullWhen(true)] out T? result) where T : RoosterCommandResult {
 			                                            // Hard-to-read expression - I've laid it out here:
 			result = input as T ??                      // Simple, if result is T then return result as T.
-				((input is global::RoosterBot.CompoundResult cr            // If it's not T: Is it a compound result...
+				((input is CompoundResult cr            // If it's not T: Is it a compound result...
 				&& cr.IndividualResults.CountEquals(1)) //  with only one item?
 				? cr.IndividualResults.First() as T     //   Then return the first (and only) item as T, returning null if it's not T.
 				: null);                                // otherwise return null.
@@ -100,8 +100,10 @@ namespace RoosterBot.DiscordNet {
 				pr.Reset();
 				stoppedAtEnd = false;
 				stoppedAtStart = false;
-				return goNext();
+				return Task.CompletedTask;
 			}
+
+			await reset();
 
 			new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 				{ new Discord.Emoji("⬅️"), goPrevious },

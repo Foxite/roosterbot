@@ -18,16 +18,16 @@ namespace RoosterBot.Schedule {
 
 			if (!records.Any()) {
 				return TextResult.Info(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
-			} else if (records.Count() > 25) {
-				return TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
+			//} else if (records.Count() > 25) {
+			//	return TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
 			} else {
-				string[][] cells = new string[records.Count() + 1][];
-				cells[0] = new string[] {
+				string[][] cells = new string[records.Count()][];
+				string[] header = new string[] {
 					GetString("TeacherListModule_TeacherListCommand_ColumnFullName"),
 					GetString("TeacherListModule_TeacherListCommand_ColumnAbbreviation"),
 					GetString("TeacherListModule_TeacherListCommand_DiscordName")
 				};
-				int recordIndex = 1;
+				int recordIndex = 0;
 				foreach (TeacherInfo record in records) {
 					cells[recordIndex] = new string[3];
 					cells[recordIndex][0] = record.DisplayText;
@@ -36,7 +36,8 @@ namespace RoosterBot.Schedule {
 
 					recordIndex++;
 				}
-				return new TableResult($"Resultaten voor `{name}`", cells);
+
+				return new PaginatedResult(new PaginatedTableEnumerator("Table", header, cells));
 			}
 		}
 	}
