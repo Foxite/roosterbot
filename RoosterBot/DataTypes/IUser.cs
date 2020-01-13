@@ -18,6 +18,10 @@
 		/// </summary>
 		string Mention { get; }
 
+		/// <summary>
+		/// This user represents us.
+		/// </summary>
+		bool IsRoosterBot { get; }
 		bool IsBotAdmin { get; }
 		bool IsChannelAdmin(IChannel channel);
 	}

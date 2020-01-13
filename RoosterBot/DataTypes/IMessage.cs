@@ -14,8 +14,7 @@ namespace RoosterBot {
 		/// The <see cref="IUser"/> who sent this message.
 		/// </summary>
 		IUser User { get; }
-		
-		bool SentByRoosterBot { get; }
+
 		string Content { get; }
 
 		Task DeleteAsync();
