@@ -72,11 +72,11 @@ namespace RoosterBot.DiscordNet {
 			Task goPrevious() {
 				if (!stoppedAtStart) {
 					if (pr.MovePrevious()) {
-						stoppedAtStart = true;
-					} else {
 						return message.ModifyAsync(props => {
 							props.Content = pr.Current.ToString(this);
 						});
+					} else {
+						stoppedAtStart = true;
 					}
 				}
 				return Task.CompletedTask;
@@ -85,20 +85,29 @@ namespace RoosterBot.DiscordNet {
 			Task goNext() {
 				if (!stoppedAtEnd) {
 					if (pr.MoveNext()) {
-						stoppedAtEnd = true;
-					} else {
 						return message.ModifyAsync(props => {
 							props.Content = pr.Current.ToString(this);
 						});
+					} else {
+						stoppedAtEnd = true;
 					}
 				}
 				return Task.CompletedTask;
 			}
 
-			new InteractiveMessageHandler(message, new Dictionary<Discord.IEmote, Func<Task>>() {
+			Task reset() {
+				pr.Reset();
+				stoppedAtEnd = false;
+				stoppedAtStart = false;
+				return goNext();
+			}
+
+			new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 				{ new Discord.Emoji("⬅️"), goPrevious },
-				{ new Discord.Emoji("➡️"), goNext }
+				{ new Discord.Emoji("➡️"), goNext },
+				{ new Discord.Emoji("⏪"), reset }
 			});
+			return new DiscordMessage(message);
 		}
 	}
 }

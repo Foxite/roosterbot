@@ -12,13 +12,15 @@ namespace RoosterBot.DiscordNet {
 	/// </summary>
 	public sealed class InteractiveMessageHandler {
 		private readonly IUserMessage m_Message;
+		private readonly Discord.IUser m_User;
 		private readonly Dictionary<Discord.IEmote, Func<Task>> m_Callbacks;
 		private readonly TimeSpan m_Expiration;
 		private Timer? m_ExpiryTimer;
 
 		/// <param name="expires">5 minutes, if null.</param>
-		public InteractiveMessageHandler(IUserMessage message, Dictionary<Discord.IEmote, Func<Task>> callbacks, TimeSpan? expires = null) {
+		public InteractiveMessageHandler(IUserMessage message, Discord.IUser user, Dictionary<Discord.IEmote, Func<Task>> callbacks, TimeSpan? expires = null) {
 			m_Message = message;
+			m_User = user;
 			m_Callbacks = callbacks;
 			m_Expiration = expires ?? TimeSpan.FromMinutes(5);
 
@@ -36,25 +38,24 @@ namespace RoosterBot.DiscordNet {
 
 		private void OnExpired(object sender, ElapsedEventArgs e) => Dispose();
 
-		private Task OnMessageDeleted(Cacheable<Discord.IMessage, ulong> message, IMessageChannel channel) {
+		private Task OnMessageDeleted(Cacheable<Discord.IMessage, ulong> message, IMessageChannel channel) => _ = Task.Run(() => {
 			if (message.Id == m_Message.Id) {
 				Dispose();
 			}
-			return Task.CompletedTask;
-		}
+		});
 
-		private async Task OnReactionAdded(Cacheable<IUserMessage, ulong> message, IMessageChannel channel, IReaction reaction) {
+		private Task OnReactionAdded(Cacheable<IUserMessage, ulong> message, IMessageChannel channel, IReaction reaction) => _ = Task.Run(async () => {
 			if (message.Id == m_Message.Id) {
 				await foreach (IReadOnlyCollection<Discord.IUser> item in message.Value.GetReactionUsersAsync(reaction.Emote, message.Value.Reactions[reaction.Emote].ReactionCount + 1)) {
-					if (item.Any(user => user.Id == m_Message.Author.Id) && m_Callbacks.TryGetValue(reaction.Emote, out Func<Task>? callback)) {
+					if (item.Any(user => user.Id == m_User.Id) && m_Callbacks.TryGetValue(reaction.Emote, out Func<Task>? callback)) {
 						ResetTimer();
-						await message.Value.RemoveReactionAsync(reaction.Emote, m_Message.Author);
+						await message.Value.RemoveReactionAsync(reaction.Emote, m_User.Id);
 						await callback();
 						break;
 					}
 				}
 			}
-		}
+		});
 
 		// There seems no way to actually reset a timer so we just create a new one.
 		private void ResetTimer() {
