@@ -65,6 +65,7 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<GuildConfigModule>();
 			commandService.AddModule<UserConfigModule>();
 			commandService.AddModule<InfoModule>();
+			commandService.AddModule<TestModule>();
 
 			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 		}
