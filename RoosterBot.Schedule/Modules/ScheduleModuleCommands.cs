@@ -64,37 +64,32 @@ namespace RoosterBot.Schedule {
 				return resolve.ErrorResult;
 			}
 		}
-		/*
+		
 		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
-		public async Task<CommandResult> WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
-			return m_Result;
+		public Task<CommandResult> WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
+			return RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 		}
 
 		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
-		public async Task<CommandResult> TodayCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			await RespondDay(info, DateTime.Today);
-			return m_Result;
+		public Task<CommandResult> TodayCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
+			return RespondDay(info, DateTime.Today);
 		}
 
 		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
-		public async Task<CommandResult> TomorrowCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			await RespondDay(info, DateTime.Today.AddDays(1));
-			return m_Result;
+		public Task<CommandResult> TomorrowCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
+			return RespondDay(info, DateTime.Today.AddDays(1));
 		}
-
+		
 		[Command("#ScheduleModule_ThisWeekCommand"), Description("#ScheduleModule_ShowThisWeekWorkingDays_Summary")]
-		public async Task<CommandResult> ShowThisWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			await RespondWeek(info, 0);
-			return m_Result;
+		public Task<CommandResult> ShowThisWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
+			return RespondWeek(info, 0);
 		}
 
 		[Command("#ScheduleModule_NextWeekCommand"), Description("#ScheduleModule_ShowNextWeekWorkingDays_Summary")]
-		public async Task<CommandResult> ShowNextWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			await RespondWeek(info, 1);
-			return m_Result;
+		public Task<CommandResult> ShowNextWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
+			return RespondWeek(info, 1);
 		}
-
+		/*
 		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowFutureCommand_Summary")]
 		public async Task<CommandResult> ShowFutureCommand([Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount, [Name("#ScheduleModule_ShowFutureCommand_UnitParameterName"), TypeDisplay("#ScheduleModule_ShowFutureCommand_UnitTypeDisplayName")] string unit, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			info = ResolveNullInfo(info);

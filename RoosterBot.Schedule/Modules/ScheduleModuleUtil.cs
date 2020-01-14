@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace RoosterBot.Schedule {
 	public partial class ScheduleModule {
 		private PaginatedResult GetResult(ScheduleRecord record, IdentifierInfo identifier, string caption) =>
-			new PaginatedResult(new ScheduleResultPaginator(Context, record, identifier, m_ResponseCaption + "\n" + caption));
+			new PaginatedResult(new SingleScheduleEnumerator(Context, record, identifier, m_ResponseCaption + "\n" + caption));
 
 		private ReturnValue<IdentifierInfo> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
