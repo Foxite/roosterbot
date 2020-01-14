@@ -85,7 +85,7 @@ namespace RoosterBot.Schedule {
 		public CommandResult ShowNextWeekWorkingDaysCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			return RespondWeek(info, 1);
 		}
-		/*
+		
 		[Command("#ScheduleModule_FutureCommand"), Description("#ScheduleModule_ShowFutureCommand_Summary")]
 		public async Task<CommandResult> ShowFutureCommand(
 			[Name("#ScheduleModule_ShowFutureCommand_AmountParameterName")] int amount,
@@ -99,24 +99,25 @@ namespace RoosterBot.Schedule {
 					ReturnValue<ScheduleRecord?> result = await GetRecordAtDateTime(info, DateTime.Now + TimeSpan.FromHours(amount));
 					if (result.Success) {
 						ScheduleRecord? record = result.Value;
-						if (record != null) {
-							await RespondRecord(GetString("ScheduleModule_InXHours", info.DisplayText, amount), info, record);
+						if (record == null) {
+							// TODO allow for pagination to the next item
+							return new TextResult(null, GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime"));
 						} else {
-							m_Result.AddResult(new TextResult(null, GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime")));
-							m_LookedUpData = new LastScheduleCommandInfo(info, DateTime.Now + TimeSpan.FromHours(amount), ScheduleResultKind.Single);
-							await AfterCommand();
+							return GetSingleResult(record, info, info.DisplayText);
 						}
+					} else {
+						return result.ErrorResult;
 					}
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
-					await RespondDay(info, DateTime.Today.AddDays(amount));
+					return RespondDay(info, DateTime.Today.AddDays(amount));
 				} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
-					await RespondWeek(info, amount);
+					return RespondWeek(info, amount);
 				} else {
 					return TextResult.Error(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits"));
 				}
 			} else {
 				return resolve.ErrorResult;
 			}
-		}*/
+		}
 	}
 }
