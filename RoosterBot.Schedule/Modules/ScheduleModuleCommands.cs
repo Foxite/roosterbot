@@ -41,26 +41,30 @@ namespace RoosterBot.Schedule {
 				return resolve.ErrorResult;
 			}
 		}
-		/*
+		
 		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_DefaultNextCommand_Summary")]
 		public async Task<CommandResult> NextCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			info = ResolveNullInfo(info);
-			if (info != null) {
-				ReturnValue<ScheduleRecord> result = await GetRecordAfterDateTime(info, DateTime.Now);
-				if (result.Success) {
-					ScheduleRecord record = result.Value;
+			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
+			if (resolve.Success) {
+				info = resolve.Value;
+				ReturnValue<ScheduleRecord> recordResult = await GetRecordAfterDateTime(info, DateTime.Now);
+				if (recordResult.Success) {
+					ScheduleRecord record = recordResult.Value;
 					string pretext;
 					if (record.Start.Date == DateTime.Today) {
 						pretext = GetString("ScheduleModule_PretextNext", info.DisplayText);
 					} else {
 						pretext = GetString("ScheduleModule_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
 					}
-					await RespondRecord(pretext, info, record);
+					return GetResult(record, info, pretext);
+				} else {
+					return recordResult.ErrorResult;
 				}
+			} else {
+				return resolve.ErrorResult;
 			}
-			return m_Result;
 		}
-
+		/*
 		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
 		public async Task<CommandResult> WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			await RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
