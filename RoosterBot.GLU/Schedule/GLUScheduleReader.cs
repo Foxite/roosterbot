@@ -70,6 +70,8 @@ namespace RoosterBot.GLU {
 
 						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
 							into = null;
+							return false; // TODO this doesn't work!
+							into = null;
 							for (int i = schedule.Count - 1; i >= 0; i--) {
 								ScheduleRecord item = schedule[i];
 								if (item.StaffMember.Intersect(mergeThis.StaffMember).Any() ||
