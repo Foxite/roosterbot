@@ -86,7 +86,13 @@ namespace RoosterBot.DiscordNet {
 				return new DiscordMessage(await Channel.SendMessageAsync("Empty result!")); // TODO
 			}
 
-			IUserMessage message = await Channel.SendMessageAsync(pr.Current.ToString(this));
+			IUserMessage message;
+			RoosterCommandResult initial = pr.Current;
+			if (initial is AspectListResult alr) {
+				message = await Channel.SendMessageAsync(embed: AspectListToEmbedBuilder(alr).Build());
+			} else {
+				message = await Channel.SendMessageAsync(pr.Current.ToString(this));
+			}
 
 			Task goTo(Func<bool> moveAction) {
 				RoosterCommandResult current = pr.Current;
@@ -111,7 +117,6 @@ namespace RoosterBot.DiscordNet {
 						}
 					});
 				}
-				return Task.CompletedTask;
 			}
 
 			new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
