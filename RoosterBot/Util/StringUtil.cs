@@ -111,7 +111,7 @@ namespace RoosterBot {
 						int breakPos = maxLineLength - lastLine.Length - 2;
 						lastLine += ' ' + word.Substring(0, breakPos) + '-';
 						writeBackLastLine();
-						lines.Add(word.Substring(breakPos + 1));
+						lines.Add(word.Substring(breakPos));
 					} else { // And less than 4 characters fit
 						// Start a new line
 						lines.Add(word);
