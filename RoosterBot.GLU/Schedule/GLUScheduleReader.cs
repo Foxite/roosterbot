@@ -68,17 +68,18 @@ namespace RoosterBot.GLU {
 							room: room != null ? room.Select(code => new RoomInfo(code)).ToArray() : Array.Empty<RoomInfo>()
 						);
 
-						bool shouldMerge(ScheduleRecord mergeThis, out ScheduleRecord? into) {
+						bool shouldMerge(ScheduleRecord merge, out ScheduleRecord? into) {
 							into = null;
-							return false; // TODO this doesn't work!
 							for (int i = schedule.Count - 1; i >= 0; i--) {
 								ScheduleRecord item = schedule[i];
-								if (item.StaffMember.Intersect(mergeThis.StaffMember).Any() ||
-									item.StudentSets.Intersect(mergeThis.StudentSets).Any() ||
-									item.Room.Intersect(mergeThis.Room).Any()) {
-									if (item.StaffMember.SequenceEqual(mergeThis.StaffMember) &&
-										item.StudentSets.SequenceEqual(mergeThis.StudentSets) &&
-										item.Room.SequenceEqual(mergeThis.Room)) {
+								if (item.Activity == merge.Activity &&
+									item.Start.Date == merge.Start.Date && (
+									item.StaffMember.Intersect(merge.StaffMember).Any() ||
+									item.StudentSets.Intersect(merge.StudentSets).Any() ||
+									item.Room.Intersect(merge.Room).Any())) {
+									if (item.StaffMember.SequenceEqual(merge.StaffMember) &&
+										item.StudentSets.SequenceEqual(merge.StudentSets) &&
+										item.Room.SequenceEqual(merge.Room)) {
 										into = item;
 										return true;
 									} else {
