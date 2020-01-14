@@ -37,7 +37,7 @@ namespace RoosterBot.GLU.Discord {
 
 		private async Task OnUserChangedClass(UserChangedStudentSetEventArgs args) {
 			if (DiscordNetComponent.Instance.Client.GetUser((ulong) args.UserReference.Id) is SocketUser socketUser) {
-				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
+				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUDiscordComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
 				// Assign roles
 				if (user != null) {
 					// Assign roles
