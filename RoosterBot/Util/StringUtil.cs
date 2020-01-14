@@ -106,16 +106,8 @@ namespace RoosterBot {
 					words[i] = word[breakPos..];
 					i--;
 				} else { // If it does not fit in an existing line
-					if (maxLineLength - lastLine.Length > 5) { // And at least the first 4 characters fit (excluding the space)
-						// Break the word with a hyphen
-						int breakPos = maxLineLength - lastLine.Length - 2;
-						lastLine += ' ' + word.Substring(0, breakPos) + '-';
-						writeBackLastLine();
-						lines.Add(word.Substring(breakPos));
-					} else { // And less than 4 characters fit
-						// Start a new line
-						lines.Add(word);
-					}
+					// Start a new line
+					lines.Add(word);
 				}
 			}
 			return lines;
