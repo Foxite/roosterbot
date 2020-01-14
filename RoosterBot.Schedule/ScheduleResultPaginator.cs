@@ -32,7 +32,7 @@ namespace RoosterBot.Schedule {
 				m_CurrentRecord = m_Initial;
 			} else {
 				// TODO error handling
-				m_CurrentRecord = m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End.AddSeconds(-1), m_Context).Result;
+				m_CurrentRecord = m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End, m_Context).Result;
 			}
 			return true;
 		}
@@ -44,7 +44,7 @@ namespace RoosterBot.Schedule {
 			} else {
 				record = m_CurrentRecord;
 			}
-			m_CurrentRecord = m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, record.End.AddSeconds(-1), m_Context).Result;
+			m_CurrentRecord = m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, record.Start, m_Context).Result;
 
 			return true;
 		}
