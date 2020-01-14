@@ -132,6 +132,18 @@
   <data name="DiscordParser_InvalidType" xml:space="preserve">
     <value>That is not the correct type.</value>
   </data>
+  <data name="InfoModule_DiscordInvite" xml:space="preserve">
+    <value>RoosterBot has its own Discord server where you can report bugs or request features.
+New features will also be announced here.
+&lt;{0}&gt;</value>
+    <comment>0: discord invite link</comment>
+  </data>
+  <data name="InfoModule_DiscordInvite_CommandName" xml:space="preserve">
+    <value>discord|github|report|bug|feature|subscribe</value>
+  </data>
+  <data name="InfoModule_DiscordInvite_Description" xml:space="preserve">
+    <value>Get the link to my Discord server.</value>
+  </data>
   <data name="MessageParser_InvalidMention" xml:space="preserve">
     <value>I can't get a message from that.</value>
   </data>

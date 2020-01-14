@@ -132,6 +132,18 @@
   <data name="DiscordParser_InvalidType" xml:space="preserve">
     <value>Dat is niet het juiste type.</value>
   </data>
+  <data name="InfoModule_DiscordInvite" xml:space="preserve">
+    <value>RoosterBot heeft zijn eigen Discord server waar je bugs kunt melden of features kunt aanvragen.
+Nieuwe features worden hier ook aangekondigd.
+&lt;{0}&gt;</value>
+    <comment>0: discord invite link</comment>
+  </data>
+  <data name="InfoModule_DiscordInvite_CommandName" xml:space="preserve">
+    <value>discord|github|report|bug|feature|subscribe</value>
+  </data>
+  <data name="InfoModule_DiscordInvite_Description" xml:space="preserve">
+    <value>Zie de link naar mijn Discord-server.</value>
+  </data>
   <data name="MessageParser_InvalidMention" xml:space="preserve">
     <value>Daar kan ik geen bericht uit halen.</value>
   </data>
