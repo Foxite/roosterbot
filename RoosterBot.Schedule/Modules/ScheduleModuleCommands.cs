@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 using RoosterBot.DateTimeUtils;
 
@@ -9,18 +8,8 @@ namespace RoosterBot.Schedule {
 	[Name("#ScheduleModule_Name")]
 	[Description("#ScheduleModule_Summary")]
 	public partial class ScheduleModule : RoosterModule {
-		private string m_ResponseCaption = "";
-
 		public ScheduleService Schedules { get; set; } = null!;
-		//UserConfig.OnScheduleRequestByUser(Context.Channel, m_LookedUpData);
-
-		/* TODO Fix !now
-		 * !now can return null in which case we don't have anything to paginate.
-		 * We can simply call !next, which we have always done, but it needs to be very clear that this has happened, otherwise the user might think
-		 *  they have something on their schedule *right now*, which they don't.
-		 * The way we used to do it was sufficient, however we can no longer return a CompoundResult with more than one item if we want pagination to work.
-		 * We also have no control over the aspect list caption from this class anymore, so we can't have a caption with two lines.
-		 * I've commented this out until I think of a way to fix this problem. Removing !now is NOT an option as it is one of the most-used commands by our main client.
+		
 		[Command("#ScheduleModule_NowCommand"), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
 		public async Task<CommandResult> CurrentCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
@@ -28,15 +17,23 @@ namespace RoosterBot.Schedule {
 				info = resolve.Value;
 				ReturnValue<ScheduleRecord?> recordResult = await GetRecordAtDateTime(info, DateTime.Now);
 				if (recordResult.Success) {
-					// ScheduleModule_PretextNow
-					return RespondSingle(info, recordResult.Value);
+					if (recordResult.Value == null) {
+						string caption = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
+						if (DateTimeUtil.IsWeekend(DateTime.Today)) {
+							caption += GetString("ScheduleModule_ItIsWeekend");
+						}
+						// TODO allow for pagination to the next item
+						return new TextResult(null, caption);
+					} else {
+						return GetSingleResult(recordResult.Value, info, info.DisplayText);
+					}
 				} else {
 					return recordResult.ErrorResult;
 				}
 			} else {
 				return resolve.ErrorResult;
 			}
-		}*/
+		}
 		
 		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_DefaultNextCommand_Summary")]
 		public async Task<CommandResult> NextCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
@@ -45,14 +42,7 @@ namespace RoosterBot.Schedule {
 				info = resolve.Value;
 				ReturnValue<ScheduleRecord> recordResult = await GetRecordAfterDateTime(info, DateTime.Now);
 				if (recordResult.Success) {
-					/*
-					string pretext;
-					if (record.Start.Date == DateTime.Today) {
-						pretext = GetString("ScheduleModule_PretextNext", info.DisplayText);
-					} else {
-						pretext = GetString("ScheduleModule_Pretext_FirstOn", info.DisplayText, record.Start.DayOfWeek.GetName(Culture));
-					}*/
-					return RespondSingle(info, recordResult.Value);
+					return GetSingleResult(recordResult.Value, info, info.DisplayText);
 				} else {
 					return recordResult.ErrorResult;
 				}

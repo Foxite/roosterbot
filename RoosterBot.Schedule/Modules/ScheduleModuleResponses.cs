@@ -1,23 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Qmmands;
-using RoosterBot.DateTimeUtils;
 
 namespace RoosterBot.Schedule {
 	public partial class ScheduleModule {
-		// TODO pretext
-		private CommandResult RespondSingle(IdentifierInfo info, ScheduleRecord record) {
-			if (record == null) {
-				m_ResponseCaption = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
-				if (DateTimeUtil.IsWeekend(DateTime.Today)) {
-					m_ResponseCaption += GetString("ScheduleModule_ItIsWeekend");
-				}
-				return new TextResult(null, m_ResponseCaption);
-			} else {
-				return GetResult(record, info, info.DisplayText);
-			}
-		}
-
 		private CommandResult RespondDay(IdentifierInfo? info, DateTime date) {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
 			if (resolve.Success) {
@@ -34,7 +19,7 @@ namespace RoosterBot.Schedule {
 			}
 		}
 		
-		protected CommandResult RespondWeek(IdentifierInfo? info, int weeksFromNow) {
+		private CommandResult RespondWeek(IdentifierInfo? info, int weeksFromNow) {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
 			return resolve.Success
 				? new PaginatedResult(new WeekScheduleEnumerator(Context, resolve.Value, weeksFromNow))
