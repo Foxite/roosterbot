@@ -59,13 +59,18 @@ namespace RoosterBot {
 		private Program() {
 			Instance = this;
 
-			Logger.Info("Main", "Starting program");
-
 			if (!Directory.Exists(DataPath)) {
 				Directory.CreateDirectory(DataPath);
 			}
 
-			string configFile = Path.Combine(DataPath, "Config", "Config.json");
+			string configFolder = Path.Combine(DataPath, "Config");
+			if (!Directory.Exists(configFolder)) {
+				Directory.CreateDirectory(configFolder);
+			}
+
+			Logger.Info("Main", "Starting program");
+
+			string configFile = Path.Combine(configFolder, "Config.json");
 			var configService = new GlobalConfigService(configFile);
 
 			IServiceCollection serviceCollection = CreateRBServices(configService);
