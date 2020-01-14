@@ -23,10 +23,6 @@ namespace RoosterBot.Schedule {
 			return GetSchedule(identifier, context).GetSchedulesForDateAsync(identifier, date);
 		}
 
-		public Task<AvailabilityInfo[]> GetWeekAvailability(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
-			return GetSchedule(identifier, context).GetWeekAvailabilityAsync(identifier, weeksFromNow);
-		}
-		
 		public Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow, RoosterCommandContext context) {
 			return GetSchedule(identifier, context).GetWeekRecordsAsync(identifier, weeksFromNow);
 		}

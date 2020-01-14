@@ -9,20 +9,29 @@ namespace RoosterBot.Schedule {
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
 	public class MemoryScheduleProvider : ScheduleProvider {
-		// TODO This is slow. Potential optimization: Dictionary<Date, List<ScheduleRecord>>?
-		private readonly List<ScheduleRecord> m_Schedule;
+		private readonly Dictionary<DateTime, IEnumerable<ScheduleRecord>> m_Schedule;
+		private readonly DateTime m_ScheduleBegin;
+		private readonly DateTime m_ScheduleEnd;
 		private readonly string m_Name;
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
 		public MemoryScheduleProvider(string name, ScheduleReader reader, IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) {
 			m_Name = name;
-			m_Schedule = reader.GetSchedule();
+			List<ScheduleRecord> list = reader.GetSchedule();
+			m_ScheduleBegin = list[0].Start.Date;
+			m_ScheduleEnd = list[list.Count - 1].End.Date;
+			m_Schedule = list
+				.GroupBy(record => record.Start.Date)
+				.ToDictionary(
+					grp => grp.Key,
+					grp => (IEnumerable<ScheduleRecord>) grp
+				);
 		}
 
 		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			bool sawRecordForClass = false;
 
-			foreach (ScheduleRecord record in m_Schedule) {
+			foreach (ScheduleRecord record in RecordsFrom(target)) {
 				if (identifier.Matches(record)) {
 					sawRecordForClass = true;
 					if (record.Start < target && record.End > target) {
@@ -42,7 +51,7 @@ namespace RoosterBot.Schedule {
 		public override Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			bool sawRecordForClass = false;
 
-			foreach (ScheduleRecord record in m_Schedule) {
+			foreach (ScheduleRecord record in RecordsFrom(target)) {
 				if (identifier.Matches(record)) {
 					if (record.End > target) {
 						return record;
@@ -59,47 +68,34 @@ namespace RoosterBot.Schedule {
 		});
 
 		public override Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
-			var records = new List<ScheduleRecord>();
 			bool sawRecordForClass = false;
 			bool sawRecordAfterTarget = false;
 
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
-					if (record.Start.Date == date) {
-						records.Add(record);
-					} else if (record.Start.Date > date) {
-						sawRecordAfterTarget = true;
-						break;
+			if (m_Schedule.TryGetValue(date.Date, out var records)) {
+				var ret = new List<ScheduleRecord>();
+				foreach (ScheduleRecord record in records) {
+					if (identifier.Matches(record)) {
+						sawRecordForClass = true;
+						if (record.Start.Date == date) {
+							ret.Add(record);
+						} else if (record.Start.Date > date) {
+							sawRecordAfterTarget = true;
+							break;
+						}
 					}
 				}
-			}
-
-			if (records.Count == 0) {
-				if (!sawRecordForClass) {
-					throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-				} else if (!sawRecordAfterTarget) {
-					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
+				if (ret.Count == 0) {
+					if (!sawRecordForClass) {
+						throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
+					} else if (!sawRecordAfterTarget) {
+						throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
+					}
 				}
+				return ret.ToArray();
+			} else {
+				return Array.Empty<ScheduleRecord>();
 			}
-			return records.ToArray();
 		});
-
-		/// <summary>
-		/// Gets all the days in a week that have at least 1 record on those days.
-		/// </summary>
-		public async override Task<AvailabilityInfo[]> GetWeekAvailabilityAsync(IdentifierInfo identifier, int weeksFromNow = 0) {
-			ScheduleRecord[] weekRecords = await GetWeekRecordsAsync(identifier, weeksFromNow);
-			IEnumerable<IGrouping<DayOfWeek, ScheduleRecord>> recordsByDay = weekRecords.GroupBy(record => record.Start.DayOfWeek);
-			var ret = new AvailabilityInfo[recordsByDay.Count()];
-			int i = 0;
-			foreach (IGrouping<DayOfWeek, ScheduleRecord> day in recordsByDay) {
-				ret[i] = new AvailabilityInfo(day.First().Start, day.Last().End);
-				i++;
-			}
-
-			return ret;
-		}
 
 		public override Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
 			DateTime targetFirstDate =
@@ -110,7 +106,7 @@ namespace RoosterBot.Schedule {
 
 			var weekRecords = new List<ScheduleRecord>();
 
-			foreach (ScheduleRecord record in m_Schedule) {
+			foreach (ScheduleRecord record in RecordsFrom(targetFirstDate)) {
 				if (identifier.Matches(record)) {
 					if (record.Start.Date >= targetFirstDate) {
 						if (record.Start.Date > targetLastDate) {
@@ -123,20 +119,46 @@ namespace RoosterBot.Schedule {
 			return weekRecords.ToArray();
 		});
 
-		public override Task<ScheduleRecord> GetRecordBeforeDateTimeAsync(IdentifierInfo identifier, DateTime datetime) => Task.Run(() => {
+		public override Task<ScheduleRecord> GetRecordBeforeDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			ScheduleRecord? lastMatch = null;
 
-			foreach (ScheduleRecord record in m_Schedule) {
-				if (identifier.Matches(record)) {
-					if (record.End < datetime) {
-						lastMatch = record;
-					} else {
-						return lastMatch ?? throw new RecordsOutdatedException("Cannot look as far back as " + datetime.ToString());
+			IEnumerable<ScheduleRecord> sequence() {
+				for (DateTime date = target.Date; date > m_ScheduleBegin; date = date.AddDays(-1)) {
+					if (m_Schedule.TryGetValue(date, out var scheduleDate)) {
+						foreach (ScheduleRecord yieldRecord in scheduleDate.Reverse()) {
+							yield return yieldRecord;
+						}
 					}
 				}
 			}
-			return lastMatch ?? throw new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}");
+
+			bool sawMatch = false;
+			bool sawAny = false;
+			foreach (ScheduleRecord record in sequence()) {
+				sawAny = true;
+				if (identifier.Matches(record)) {
+					sawMatch = true;
+
+					if (record.End < target) {
+						lastMatch = record;
+					}
+				}
+			}
+			return lastMatch ?? throw (sawMatch || !sawAny
+				? (Exception) new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}")
+				: new RecordsOutdatedException("Cannot look as far back as " + target.ToString())
+			);
 		});
+
+		private IEnumerable<ScheduleRecord> RecordsFrom(DateTime target) {
+			for (DateTime date = target.Date; date < m_ScheduleEnd; date = date.AddDays(1)) {
+				if (m_Schedule.TryGetValue(target, out var scheduleDate)) {
+					foreach (ScheduleRecord yieldRecord in scheduleDate) {
+						yield return yieldRecord;
+					}
+				}
+			}
+		}
 	}
 
 	[Serializable]
