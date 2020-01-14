@@ -117,106 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CommandHandling_FatalError" xml:space="preserve">
-    <value>Something has gone horribly wrong.</value>
+  <data name="ChannelParser_InvalidMention" xml:space="preserve">
+    <value>Ik kan daar geen kanaal uit halen.</value>
   </data>
-  <data name="RangeAttribute_CheckFailed" xml:space="preserve">
-    <value>That's too high or too low.</value>
+  <data name="ChannelParser_Name" xml:space="preserve">
+    <value>Discord-kanaal</value>
   </data>
-  <data name="RequireBotManagerAttribute_Summary" xml:space="preserve">
-    <value>Requires bot control</value>
+  <data name="ChannelParser_UnknownChannel" xml:space="preserve">
+    <value>Ik ken geen servers met dat kanaal.</value>
   </data>
-  <data name="RequireBotManagerAttribute_CheckFailed" xml:space="preserve">
-    <value>You are not authorized to do that.</value>
+  <data name="DiscordOnly" xml:space="preserve">
+    <value>Deze command werkt alleen op Discord.</value>
   </data>
-  <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
-    <value>You need moderator privileges to do this.</value>
+  <data name="DiscordParser_InvalidType" xml:space="preserve">
+    <value>Dat is niet het juiste type.</value>
   </data>
-  <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
-    <value>This command only works in a server.</value>
+  <data name="MessageParser_InvalidMention" xml:space="preserve">
+    <value>Daar kan ik geen bericht uit halen.</value>
   </data>
-  <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
-    <value>You need to be a moderator to do this.</value>
+  <data name="MessageParser_InvalidUri" xml:space="preserve">
+    <value>Dat is geen URL naar een Discord-bericht.</value>
   </data>
-  <data name="RequireCultureAttribute_CheckFailed" xml:space="preserve">
-    <value>This command only works in {0}-speaking servers.</value>
-    <comment>{0}: localized language name</comment>
+  <data name="MessageParser_Name" xml:space="preserve">
+    <value>Discord-bericht</value>
   </data>
-  <data name="RequireCultureAttribute_Summary" xml:space="preserve">
-    <value>Requires a {0}-speaking server.</value>
-    <comment>{0}: localized language name</comment>
+  <data name="MessageParser_UnknownMessage" xml:space="preserve">
+    <value>Ik ken dat bericht niet. Uit een entity-ID kan ik alleen berichten halen uit dit kanaal.</value>
   </data>
-  <data name="CommandHandling_Cooldown" xml:space="preserve">
-    <value>You're currently on cooldown for {0}.</value>
-    <comment>0: cooldown time remaining (formatted and localized)</comment>
+  <data name="RoleParser_GuildsOnly" xml:space="preserve">
+    <value>Ik kan alleen rollen gebruiken binnen een server.</value>
   </data>
-  <data name="CommandHandling_Disabled" xml:space="preserve">
-    <value>That command is disabled.</value>
+  <data name="RoleParser_InvalidMention" xml:space="preserve">
+    <value>Ik kan daar geen rol uit halen.</value>
   </data>
-  <data name="CommandHandling_NotFound" xml:space="preserve">
-    <value>I don't know that command. Use `{0}help` for information.</value>
-    <comment>0: Command prefix</comment>
+  <data name="RoleParser_Name" xml:space="preserve">
+    <value>Discord-server rol</value>
   </data>
-  <data name="CommandHandling_OverloadsFailed" xml:space="preserve">
-    <value>I don't know which of these you mean:</value>
-    <comment>Followed by list of signatures</comment>
+  <data name="RoleParser_UnknownRole" xml:space="preserve">
+    <value>Ik ken die rol niet.</value>
   </data>
-  <data name="CommandHandling_ParseFailed" xml:space="preserve">
-    <value>I don't understand the parameter(s).</value>
+  <data name="UserParser_InvalidMention" xml:space="preserve">
+    <value>Ik kan daar geen gebruiker uit halen.</value>
   </data>
-  <data name="CommandHandling_UsageHint" xml:space="preserve">
-    <value>Usage: {0}</value>
-    <comment>0: command signature</comment>
+  <data name="UserParser_Name" xml:space="preserve">
+    <value>Discord-gebruiker</value>
   </data>
-  <data name="RequireContextAttribute_PrivateOnly" xml:space="preserve">
-    <value>This command only works in a private channel.</value>
-  </data>
-  <data name="RequireContextAttribute_PublicOnly" xml:space="preserve">
-    <value>This command only works in a public channel.</value>
-  </data>
-  <data name="CommandHandling_ParamCheckFailed" xml:space="preserve">
-    <value>Parameter {0}: {1}</value>
-    <comment>0: Parameter name
-1: failure reason</comment>
-  </data>
-  <data name="CommandHandling_Empty" xml:space="preserve">
-    <value>The command returned no response.</value>
-  </data>
-  <data name="CommandHandling_ResponseTooLong" xml:space="preserve">
-    <value>Something has gone horribly wrong, and the error message was longer than 2000 characters.</value>
-  </data>
-  <data name="CommandHandling_Arguments_NoWhitespaceBetweenArguments" xml:space="preserve">
-    <value>No space between parameters.</value>
-  </data>
-  <data name="CommandHandling_Arguments_TooFewArguments" xml:space="preserve">
-    <value>Not enough parameters.</value>
-  </data>
-  <data name="CommandHandling_Arguments_TooManyArguments" xml:space="preserve">
-    <value>Too many parameters.</value>
-  </data>
-  <data name="CommandHandling_Arguments_UnclosedQuote" xml:space="preserve">
-    <value>Unclosed quote.</value>
-  </data>
-  <data name="CommandHandling_Arguments_UnexpectedQuote" xml:space="preserve">
-    <value>Unexpected quote.</value>
-  </data>
-  <data name="ChannelParser_TypeDisplayName" xml:space="preserve">
-    <value>Channel</value>
-  </data>
-  <data name="MessageParser_TypeDisplayName" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="UserParser_TypeDisplayName" xml:space="preserve">
-    <value>User</value>
-  </data>
-  <data name="PlatformSpecificParser_MissingParser" xml:space="preserve">
-    <value>The developer of {0} has neglected to integrate all TypeParsers! If you see this you may slap them.</value>
-    <comment>0: platform component name</comment>
-  </data>
-  <data name="RequirePrivateAttribute_RequirePrivate" xml:space="preserve">
-    <value>Must be in a private channel.</value>
-  </data>
-  <data name="RequirePrivateAttribute_RequirePublic" xml:space="preserve">
-    <value>Must be in a public channel.</value>
+  <data name="UserParser_UnknownUser" xml:space="preserve">
+    <value>Ik deel geen server met die gebruiker, dus ik kan ze niet gebruiken.</value>
   </data>
 </root>

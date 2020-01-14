@@ -72,9 +72,9 @@ namespace RoosterBot {
 			m_ResourceService = resourceService;
 			m_DefaultService = GetNewCommandService();
 
-			AddTypeParser(new PlatformSpecificParser<IUser>("User")); // TODO localize TDN
-			AddTypeParser(new PlatformSpecificParser<IChannel>("Channel"));
-			AddTypeParser(new PlatformSpecificParser<IMessage>("Message"));
+			AddTypeParser(new PlatformSpecificParser<IUser>("#UserParser_TypeDisplayName"));
+			AddTypeParser(new PlatformSpecificParser<IChannel>("#ChannelParser_TypeDisplayName"));
+			AddTypeParser(new PlatformSpecificParser<IMessage>("#MessageParser_TypeDisplayName"));
 		}
 
 		internal async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {

@@ -303,49 +303,4 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   <data name="BoolParser_Invalid" xml:space="preserve">
     <value>Indicate `yes` or `no`.</value>
   </data>
-  <data name="ChannelParser_InvalidMention" xml:space="preserve">
-    <value>Ik kan daar geen kanaal uit halen.</value>
-  </data>
-  <data name="ChannelParser_Name" xml:space="preserve">
-    <value>Discord-kanaal</value>
-  </data>
-  <data name="ChannelParser_UnknownChannel" xml:space="preserve">
-    <value>Ik ken geen servers met dat kanaal.</value>
-  </data>
-  <data name="RoleParser_GuildsOnly" xml:space="preserve">
-    <value>Ik kan alleen rollen gebruiken binnen een server.</value>
-  </data>
-  <data name="RoleParser_InvalidMention" xml:space="preserve">
-    <value>Ik kan daar geen rol uit halen.</value>
-  </data>
-  <data name="RoleParser_Name" xml:space="preserve">
-    <value>Discord-server rol</value>
-  </data>
-  <data name="RoleParser_UnknownRole" xml:space="preserve">
-    <value>Ik ken die rol niet.</value>
-  </data>
-  <data name="UserParser_InvalidMention" xml:space="preserve">
-    <value>Ik kan daar geen gebruiker uit halen.</value>
-  </data>
-  <data name="UserParser_Name" xml:space="preserve">
-    <value>Discord-gebruiker</value>
-  </data>
-  <data name="UserParser_UnknownUser" xml:space="preserve">
-    <value>Ik deel geen server met die gebruiker, dus ik kan ze niet gebruiken.</value>
-  </data>
-  <data name="DiscordParser_InvalidType" xml:space="preserve">
-    <value>Dat is niet het juiste type.</value>
-  </data>
-  <data name="MessageParser_InvalidUri" xml:space="preserve">
-    <value>Dat is geen URL naar een Discord-bericht.</value>
-  </data>
-  <data name="MessageParser_InvalidMention" xml:space="preserve">
-    <value>Daar kan ik geen bericht uit halen.</value>
-  </data>
-  <data name="MessageParser_Name" xml:space="preserve">
-    <value>Discord-bericht</value>
-  </data>
-  <data name="MessageParser_UnknownMessage" xml:space="preserve">
-    <value>Ik ken dat bericht niet. Uit een entity-ID kan ik alleen berichten halen uit dit kanaal.</value>
-  </data>
 </root>

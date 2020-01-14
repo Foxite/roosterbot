@@ -30,11 +30,15 @@ namespace RoosterBot.Schedule {
 		public bool MoveNext() {
 			if (m_CurrentRecord == null) {
 				m_CurrentRecord = m_Initial;
+				return true;
 			} else {
-				// TODO error handling
-				m_CurrentRecord = m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End, m_Context).Result;
+				try {
+					m_CurrentRecord = m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End, m_Context).Result;
+					return true;
+				} catch {
+					return false;
+				}
 			}
-			return true;
 		}
 
 		public bool MovePrevious() {
@@ -44,9 +48,12 @@ namespace RoosterBot.Schedule {
 			} else {
 				record = m_CurrentRecord;
 			}
-			m_CurrentRecord = m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, record.Start, m_Context).Result;
-
-			return true;
+			try {
+				m_CurrentRecord = m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, record.Start, m_Context).Result;
+				return true;
+			} catch {
+				return false;
+			}
 		}
 
 		public void Reset() => m_CurrentRecord = m_Initial;

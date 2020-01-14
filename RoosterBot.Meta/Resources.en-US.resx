@@ -301,49 +301,4 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
   <data name="BoolParser_Invalid" xml:space="preserve">
     <value>Geef `ja` of `nee` aan.</value>
   </data>
-  <data name="ChannelParser_InvalidMention" xml:space="preserve">
-    <value>I can't get a channel from that.</value>
-  </data>
-  <data name="ChannelParser_Name" xml:space="preserve">
-    <value>Discord channel</value>
-  </data>
-  <data name="ChannelParser_UnknownChannel" xml:space="preserve">
-    <value>I don't know any servers that channel.</value>
-  </data>
-  <data name="RoleParser_GuildsOnly" xml:space="preserve">
-    <value>I can only use roles within a server.</value>
-  </data>
-  <data name="RoleParser_InvalidMention" xml:space="preserve">
-    <value>I can't get a role from that.</value>
-  </data>
-  <data name="RoleParser_Name" xml:space="preserve">
-    <value>Discord server role</value>
-  </data>
-  <data name="RoleParser_UnknownRole" xml:space="preserve">
-    <value>I don't know that role.</value>
-  </data>
-  <data name="UserParser_InvalidMention" xml:space="preserve">
-    <value>I can't get a user from that.</value>
-  </data>
-  <data name="UserParser_Name" xml:space="preserve">
-    <value>Discord user</value>
-  </data>
-  <data name="UserParser_UnknownUser" xml:space="preserve">
-    <value>I don't share a server with that user, so I can't use them.</value>
-  </data>
-  <data name="DiscordParser_InvalidType" xml:space="preserve">
-    <value>That is not the correct type.</value>
-  </data>
-  <data name="MessageParser_InvalidUri" xml:space="preserve">
-    <value>That is not a URL to a Discord-message.</value>
-  </data>
-  <data name="MessageParser_InvalidMention" xml:space="preserve">
-    <value>I can't get a message from that.</value>
-  </data>
-  <data name="MessageParser_Name" xml:space="preserve">
-    <value>Discord message</value>
-  </data>
-  <data name="MessageParser_UnknownMessage" xml:space="preserve">
-    <value>I don't know that message. I can only get a message from the current channel from an entity ID.</value>
-  </data>
 </root>

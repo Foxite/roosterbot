@@ -200,4 +200,26 @@
   <data name="CommandHandling_Arguments_UnexpectedQuote" xml:space="preserve">
     <value>Onverwachte quote.</value>
   </data>
+  <data name="ChannelParser_TypeDisplayName" xml:space="preserve">
+    <value>Kanaal</value>
+  </data>
+  <data name="MessageParser_TypeDisplayName" xml:space="preserve">
+    <value>Bericht</value>
+  </data>
+  <data name="UserParser_TypeDisplayName" xml:space="preserve">
+    <value>Gebruiker</value>
+  </data>
+  <data name="PlatformSpecificParser_MissingParser" xml:space="preserve">
+    <value>De developer van {0} heeft verzuimd om alle TypeParsers te integreren! Als je dit ziet mag je hem slaan.</value>
+    <comment>0: platform component name</comment>
+  </data>
+  <data name="RequirePrivateAttribute_RequirePrivate" xml:space="preserve">
+    <value>Moet in een privé-kanaal.</value>
+  </data>
+  <data name="RequirePrivateAttribute_RequirePublic" xml:space="preserve">
+    <value>Moet in een openbaar kanaal.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>
