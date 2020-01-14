@@ -64,7 +64,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Console.App", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.DiscordNet", "RoosterBot.DiscordNet\RoosterBot.DiscordNet.csproj", "{3BC3C417-6014-4F6D-A161-B0D7A25C7360}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.Telegram", "RoosterBot.Telegram\RoosterBot.Telegram.csproj", "{A31239FE-F840-4D85-B214-47D6AC9649CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Telegram", "RoosterBot.Telegram\RoosterBot.Telegram.csproj", "{A31239FE-F840-4D85-B214-47D6AC9649CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoosterBot.GLU.Discord", "RoosterBot.GLU.Discord\RoosterBot.GLU.Discord.csproj", "{06772B09-11A3-4593-ABE1-F58216168A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,6 +142,10 @@ Global
 		{A31239FE-F840-4D85-B214-47D6AC9649CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A31239FE-F840-4D85-B214-47D6AC9649CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A31239FE-F840-4D85-B214-47D6AC9649CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06772B09-11A3-4593-ABE1-F58216168A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06772B09-11A3-4593-ABE1-F58216168A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06772B09-11A3-4593-ABE1-F58216168A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06772B09-11A3-4593-ABE1-F58216168A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

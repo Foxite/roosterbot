@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AssemblyName>GLU.Discord</AssemblyName>
+		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CsvHelper" Version="12.2.1">
+			<IncludeAssets>compile</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RoosterBot.DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot.DiscordNet\RoosterBot.DiscordNet.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot.GLU\RoosterBot.GLU.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
+			<Private>false</Private>
+			<IncludeAssets>compile</IncludeAssets>
+		</ProjectReference>
+	</ItemGroup>
+
+</Project>

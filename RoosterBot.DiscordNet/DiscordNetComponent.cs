@@ -15,6 +15,7 @@ namespace RoosterBot.DiscordNet {
 
 		public BaseSocketClient Client { get; private set; } = null!;
 		public ulong BotOwnerId { get; private set; }
+		public Discord.IUser BotOwner => Client.GetUser(BotOwnerId);
 		public string DiscordLink { get; private set; } = null!;
 
 		public override string PlatformName => "Discord";

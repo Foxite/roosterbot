@@ -8,11 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
-	// This component has a lot of hardcoded snowflake IDs. Normally I'd get all that from a config file, but this component is specifically made for a particular guild,
-	//  so generalizing the code does not make a lot of sense.
 	public class GLUComponent : Component {
-		public const long GLUGuildId = 278586698877894657;
-
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
 		private readonly Regex m_StudentSetRegex;
 		private readonly Regex m_RoomRegex;
@@ -62,8 +58,6 @@ namespace RoosterBot.GLU {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
-			commands.AddModule<GLUModule>();
-
 			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
 			if (services.GetService<GlobalConfigService>().IgnoreUnknownPlatforms) {
@@ -74,22 +68,14 @@ namespace RoosterBot.GLU {
 			TeacherNameService teachers = services.GetService<TeacherNameService>();
 			teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
 
-			#region Read schedules
 			ScheduleService provider = services.GetService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds));
 			}
-			#endregion
 
 			// Student sets and Rooms validator
 			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
-			/* TODO discord
-			DiscordSocketClient client = services.GetService<DiscordSocketClient>();
-
-			new RoleAssignmentHandler(client, services.GetService<ConfigService>());
-			new ManualRanksHintHandler(client);
-			new NewUserHandler(client);*/
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {

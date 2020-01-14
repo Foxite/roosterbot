@@ -1,22 +1,18 @@
-﻿/* TODO Move into GLU.Discord
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using RoosterBot.DiscordNet;
 using RoosterBot.Schedule;
 
-namespace RoosterBot.GLU {
-	public class RoleAssignmentHandler {
-		private const long NewUserRank = 278937741478330389;
+namespace RoosterBot.GLU.Discord {
+	internal sealed class RoleAssignmentHandler {
+		private const ulong NewUserRank = 278937741478330389;
 		private readonly IReadOnlyDictionary<string, ulong[]> m_Roles;
-		private readonly ConfigService m_Config;
-		private readonly IDiscordClient m_Client;
 
-		public RoleAssignmentHandler(IDiscordClient client, ConfigService config) {
-			m_Client = client;
-			m_Config = config;
+		public RoleAssignmentHandler() {
 			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
 
 			var roles = new Dictionary<string, ulong[]>();
@@ -39,27 +35,27 @@ namespace RoosterBot.GLU {
 			ScheduleUtil.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async Task OnUserChangedClass(ulong userId, StudentSetInfo? oldSSI, StudentSetInfo newSSI) {
-			if ((await m_Client.GetUserAsync(userId)) is SocketUser socketUser) {
-				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUComponent.GLUGuildId)?.GetUser(userId);
+		private async Task OnUserChangedClass(UserChangedStudentSetEventArgs args) {
+			if (DiscordNetComponent.Instance.Client.GetUser((ulong) args.UserReference.Id) is SocketUser socketUser) {
+				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
 				// Assign roles
 				if (user != null) {
 					// Assign roles
 					try {
-						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, newSSI);
-						if (oldSSI != null) {
-							IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, oldSSI);
+						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, args.NewSet);
+						if (args.OldSet != null) {
+							IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, args.OldSet);
 							IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
 
 							oldRoles = oldRoles.Except(keptRoles);
 							newRoles = newRoles.Except(keptRoles);
 
 							foreach (IRole role in oldRoles) {
-								if (user.HasRole(role.Id)) {
+								if (user.RoleIds.Contains(role.Id)) {
 									await user.RemoveRolesAsync(oldRoles);
 								}
 							}
-							if (user.HasRole(NewUserRank)) {
+							if (user.RoleIds.Contains(NewUserRank)) {
 								await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 							}
 						}
@@ -69,7 +65,7 @@ namespace RoosterBot.GLU {
 						}
 					} catch (Exception e) {
 						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
-						await m_Config.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
+						await DiscordNetComponent.Instance.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
 					}
 				}
 			}
@@ -80,4 +76,3 @@ namespace RoosterBot.GLU {
 		}
 	}
 }
-*/

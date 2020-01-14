@@ -1,16 +1,16 @@
-﻿/* TODO Move into GLU.Discord
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using RoosterBot.DiscordNet;
 
-namespace RoosterBot.GLU {
+namespace RoosterBot.GLU.Discord {
 	internal sealed class ManualRanksHintHandler {
-		public ManualRanksHintHandler(DiscordSocketClient client) {
-			client.MessageReceived += HintManualRanks;
+		public ManualRanksHintHandler() {
+			DiscordNetComponent.Instance.Client.MessageReceived += HintManualRanks;
 		}
 
 		private async Task HintManualRanks(SocketMessage msg) {
-			if (msg is SocketUserMessage sum && msg.Channel is IGuildChannel igu && igu.GuildId == GLUComponent.GLUGuildId) {
+			if (msg is SocketUserMessage sum && msg.Channel is IGuildChannel igu && igu.GuildId == GLUDiscordComponent.GLUGuildId) {
 				int argPos = 0;
 				if (sum.Content.StartsWith("?rank ")) {
 					string normalContent = sum.Content.ToLower();
@@ -34,4 +34,3 @@ namespace RoosterBot.GLU {
 		}
 	}
 }
-*/

@@ -1,16 +1,16 @@
-﻿/*
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
+using RoosterBot.DiscordNet;
 
-namespace RoosterBot.GLU {
-	public class NewUserHandler {
-		public NewUserHandler(DiscordSocketClient client) {
-			client.UserJoined += WelcomeUser;
+namespace RoosterBot.GLU.Discord {
+	internal sealed class NewUserHandler {
+		public NewUserHandler() {
+			DiscordNetComponent.Instance.Client.UserJoined += WelcomeUser;
 		}
 
 		private async Task WelcomeUser(SocketGuildUser user) {
-			if (user.Guild.Id == GLUComponent.GLUGuildId &&
+			if (user.Guild.Id == GLUDiscordComponent.GLUGuildId &&
 				user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
 				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel)!.Mention;
 
@@ -26,4 +26,3 @@ namespace RoosterBot.GLU {
 		}
 	}
 }
-*/

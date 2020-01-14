@@ -30,13 +30,7 @@ namespace RoosterBot.GLU {
 							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", getString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
 						} else {
 							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
-							IEmote teacherEmote;
-							/* TODO Move into GLU.Discord or delete
-							if (StaffMember.Count == 1 && StaffMember[0].ScheduleCode == "JWO") {
-								teacherEmote = Emote.Parse("<:VRjoram:392762653367336960>");
-							} else {*/
-								teacherEmote = new Emoji("👤");
-							//}
+							IEmote teacherEmote = new Emoji("👤");
 							yield return getAspect(teacherEmote, "GLUScheduleRecord_Aspect_StaffMember", teachers);
 						}
 					}
