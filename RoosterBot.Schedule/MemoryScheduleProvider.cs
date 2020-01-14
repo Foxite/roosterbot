@@ -9,6 +9,7 @@ namespace RoosterBot.Schedule {
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
 	public class MemoryScheduleProvider : ScheduleProvider {
+		// TODO This is slow. Potential optimization: Dictionary<Date, List<ScheduleRecord>>?
 		private readonly List<ScheduleRecord> m_Schedule;
 		private readonly string m_Name;
 
