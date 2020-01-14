@@ -53,7 +53,7 @@ namespace RoosterBot.Schedule {
 
 			foreach (ScheduleRecord record in RecordsFrom(target)) {
 				if (identifier.Matches(record)) {
-					if (record.End > target) {
+					if (record.Start > target) {
 						return record;
 					} else {
 						sawRecordForClass = true;
@@ -120,8 +120,6 @@ namespace RoosterBot.Schedule {
 		});
 
 		public override Task<ScheduleRecord> GetRecordBeforeDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
-			ScheduleRecord? lastMatch = null;
-
 			IEnumerable<ScheduleRecord> sequence() {
 				for (DateTime date = target.Date; date > m_ScheduleBegin; date = date.AddDays(-1)) {
 					if (m_Schedule.TryGetValue(date, out var scheduleDate)) {
@@ -133,21 +131,20 @@ namespace RoosterBot.Schedule {
 			}
 
 			bool sawMatch = false;
-			bool sawAny = false;
+			bool sawNone = true;
 			foreach (ScheduleRecord record in sequence()) {
-				sawAny = true;
+				sawNone = false;
 				if (identifier.Matches(record)) {
 					sawMatch = true;
-
 					if (record.End < target) {
-						lastMatch = record;
+						return record;
 					}
 				}
 			}
-			return lastMatch ?? throw (sawMatch || !sawAny
-				? (Exception) new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}")
-				: new RecordsOutdatedException("Cannot look as far back as " + target.ToString())
-			);
+			throw sawNone || sawMatch
+				? new RecordsOutdatedException("Cannot look as far back as " + target.ToString())
+				: (Exception) new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}")
+			;
 		});
 
 		private IEnumerable<ScheduleRecord> RecordsFrom(DateTime target) {
