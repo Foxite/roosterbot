@@ -16,6 +16,7 @@ namespace RoosterBot.Telegram {
 			if (e.Message.Type == MessageType.Text) {
 				ChannelConfig channelConfig = await CCS.GetConfigAsync(new TelegramChannel(e.Message.Chat).GetReference());
 				if (e.Message.Text.StartsWith(channelConfig.CommandPrefix)) {
+					await TelegramComponent.Instance.Client.SendChatActionAsync(e.Message.Chat, ChatAction.Typing);
 					await Program.Instance.CommandHandler.ExecuteCommandAsync(
 						e.Message.Text.Substring(channelConfig.CommandPrefix.Length),
 						new TelegramCommandContext(
