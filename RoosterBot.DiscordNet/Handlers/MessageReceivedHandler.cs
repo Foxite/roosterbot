@@ -22,8 +22,6 @@ namespace RoosterBot.DiscordNet {
 					ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, (dum.Channel is Discord.IGuildChannel igc) ? igc.GuildId : dum.Channel.Id));
 					if (DiscordUtil.IsMessageCommand(dum, guildConfig.CommandPrefix, out int argPos)) {
 						UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
-						// TODO it's better UX to use EnterTypingState instead, and dispose it when execution finishes.
-						// not sure about the best way to so.
 						await dum.Channel.TriggerTypingAsync();
 						await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(dum), userConfig, guildConfig));
 					}

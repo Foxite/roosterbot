@@ -21,7 +21,7 @@ namespace RoosterBot.Statistics {
 				return Task.CompletedTask;
 			};
 
-			// TODO discord statistics
+			// TODO (hold) (feature) discord statistics
 			//DiscordSocketClient client = services.GetService<DiscordSocketClient>();
 			//stats.AddStatistic(new ExternalStatistic(() => client.Guilds.Count, this, "Guilds served"));
 			stats.AddStatistic(commandsExecuted);

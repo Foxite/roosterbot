@@ -12,7 +12,7 @@ namespace RoosterBot.DiscordNet {
 
 		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
 
-		// TODO this currently breaks contract as there is no way to attach a file after it was sent.
+		// TODO (block) (fix) this currently breaks contract as there is no way to attach a file after it was sent.
 		// We could create a new message and delete the old one but that would break contract as well.
 		// I'm not sure what to do about this but something needs to be done.
 		public Task ModifyAsync(string newContent, string? filePath) => DiscordEntity.ModifyAsync(props => {

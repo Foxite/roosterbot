@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
-	// TODO this should be split into a full WeatherBit C# api, which could actually become an entirely new library that this component uses
+	// TODO (hold) (refactor) this should be split into a full WeatherBit C# api, which could actually become an entirely new library that this component uses
 	public class WeatherService : IDisposable {
 		private const string BaseUrl = "https://api.weatherbit.io/v2.0/";
 

@@ -69,9 +69,9 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private async Task<IMessage> SendPaginatedResult(PaginatedResult pr) {
-			// TODO some of this could be done in RoosterBot, only problem is that it can't add the buttons. Platform would have to take care of that.
+			// Some of this could be done in RoosterBot, only problem is that it can't add the buttons. Platform would have to take care of that.
 			if (!pr.MoveNext()) {
-				return new DiscordMessage(await Channel.SendMessageAsync("Empty result!")); // TODO
+				throw new InvalidOperationException("Tried sending a PaginatedResult that didn't have any pages!");
 			}
 
 			IUserMessage message;

@@ -95,7 +95,7 @@ namespace RoosterBot {
 			resources.RegisterResources("RoosterBot.Resources");
 
 			var cns = new CultureNameService();
-			// TODO This should be obtained from resource files
+			// TODO (feature) This should be obtained from resource files
 			// Allow any locale to define as many translations as it wants, and just use the first one that is found.
 			cns.AddLocalizedName("nl-NL", "nl-NL", "nederlands");
 			cns.AddLocalizedName("nl-NL", "en-US", "Dutch");
