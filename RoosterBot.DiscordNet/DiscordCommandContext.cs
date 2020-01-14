@@ -67,7 +67,7 @@ namespace RoosterBot.DiscordNet {
 				Fields = (
 					from aspect in alr
 					select new EmbedFieldBuilder() {
-						Name = aspect.PrefixEmote.ToString() + aspect.Name,
+						Name = aspect.PrefixEmote.ToString() + " " + aspect.Name,
 						Value = aspect.Value,
 						IsInline = true
 					}
