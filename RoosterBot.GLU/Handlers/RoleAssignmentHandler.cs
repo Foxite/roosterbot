@@ -58,9 +58,10 @@ namespace RoosterBot.GLU {
 									await user.RemoveRolesAsync(oldRoles);
 								}
 							}
-							if (user.HasRole(NewUserRank)) {
-								await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
-							}
+						}
+
+						if (user.HasRole(NewUserRank)) {
+							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 						}
 
 						if (newRoles.Any()) {
