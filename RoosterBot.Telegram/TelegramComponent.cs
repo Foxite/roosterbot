@@ -34,7 +34,6 @@ namespace RoosterBot.Telegram {
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
 			new MessageReceivedHandler(services);
-			new MessageDeletedHandler (services);
 			new MessageEditedHandler  (services);
 		}
 
