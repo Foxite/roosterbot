@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
-	internal sealed class CommandExecutedHandler : RoosterHandler {
-		public CommandExecutedHandler(IServiceProvider isp) : base(isp) {
+	internal sealed class CommandExecutedHandler {
+		public CommandExecutedHandler(IServiceProvider isp) {
 			isp.GetRequiredService<RoosterCommandService>().CommandExecuted += HandleResultAsync;
 		}
 

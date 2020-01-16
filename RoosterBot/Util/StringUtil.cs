@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 
 namespace RoosterBot {
+	/// <summary>
+	/// A static class containing several functions to manipulate strings or string arrays.
+	/// </summary>
 	public static class StringUtil {
 		/// <summary>
 		/// Capitalize the first character in a string.
@@ -78,6 +81,11 @@ namespace RoosterBot {
 			return ret;
 		}
 
+		/// <summary>
+		/// Break a string up into lines, with a maximum length of each line.
+		/// The string will be split up into words by space, and each line will contain the maximum amount of words without exceeding the maximum line length.
+		/// If a single word exceeds the maximum line length, it will be broken up and hyphenated.
+		/// </summary>
 		public static List<string> BreakStringIntoLines(string input, int maxLineLength) {
 			string[] words = input.Split(' ', (char) 0x200B); // 200B == zero width space
 			var lines = new List<string>();
@@ -113,24 +121,6 @@ namespace RoosterBot {
 			return lines;
 		}
 
-		public static string EscapeString(string input) {
-			var replacements = new List<(string replace, string with)>() {
-				("\\", "\\\\"), // Needs to be done first
-				("_", @"\_"),
-				("*", @"\*"), // Also covers **, which need only their *first* side escaped, or all of the asterisks in *both* sides
-				(">", @"\>"),
-				(">>>", @"\>>>"),
-				("<", @"\<"),
-				("`", @"\`")
-			};
-
-			foreach ((string replace, string with) in replacements) {
-				input = input.Replace(replace, with);
-			}
-
-			return input;
-		}
-
 		/// <summary>
 		/// Removes diacritics from characters: characters like â become a, etc.
 		/// </summary>
@@ -153,7 +143,14 @@ namespace RoosterBot {
 
 			return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 		}
-		
+
+		/// <summary>
+		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the beginning of <paramref name="target"/>. It will not touch any instances of
+		/// <paramref name="trimString"/> that do not occur at the start of <paramref name="target"/>.
+		/// </summary>
+		/// <seealso cref="TrimStart(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
+		/// <seealso cref="TrimEnd(string, string)"/>
+		/// <seealso cref="TrimEnd(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
 		// Stolen from https://stackoverflow.com/a/4335913
 		public static string TrimStart(this string target, string trimString) {
 			if (string.IsNullOrEmpty(trimString)) return target;
@@ -165,7 +162,14 @@ namespace RoosterBot {
 
 			return result;
 		}
-		
+
+		/// <summary>
+		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the end of <paramref name="target"/>. It will not touch any instances of
+		/// <paramref name="trimString"/> that do not occur at the end of <paramref name="target"/>.
+		/// </summary>
+		/// <seealso cref="TrimStart(string, string)"/>
+		/// <seealso cref="TrimStart(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
+		/// <seealso cref="TrimEnd(string, string)"/>
 		// Also https://stackoverflow.com/a/4335913
 		public static string TrimEnd(this string target, string trimString) {
 			if (string.IsNullOrEmpty(trimString)) return target;
@@ -177,7 +181,14 @@ namespace RoosterBot {
 
 			return result;
 		}
-		
+
+		/// <summary>
+		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the end of <paramref name="target"/>. It will not touch any instances of
+		/// <paramref name="trimString"/> that do not occur at the end of <paramref name="target"/>.
+		/// </summary>
+		/// <seealso cref="TrimStart(string, string)"/>
+		/// <seealso cref="TrimEnd(string, string)"/>
+		/// <seealso cref="TrimEnd(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
 		// Adapted from the previous 2 functions
 		public static ReadOnlySpan<char> TrimStart(this ReadOnlySpan<char> target, ReadOnlySpan<char> trimString) {
 			if (trimString.IsEmpty) return target;
@@ -189,7 +200,14 @@ namespace RoosterBot {
 
 			return result;
 		}
-		
+
+		/// <summary>
+		/// This trim all instances of <paramref name="trimString"/> from <paramref name="target"/> from the end of <paramref name="target"/>. It will not touch any instances of
+		/// <paramref name="trimString"/> that do not occur at the end of <paramref name="target"/>.
+		/// </summary>
+		/// <seealso cref="TrimStart(ReadOnlySpan{char}, ReadOnlySpan{char})"/>
+		/// <seealso cref="TrimStart(string, string)"/>
+		/// <seealso cref="TrimEnd(string, string)"/>
 		// Same
 		public static ReadOnlySpan<char> TrimEnd(this ReadOnlySpan<char> target, ReadOnlySpan<char> trimString) {
 			if (trimString.IsEmpty) return target;

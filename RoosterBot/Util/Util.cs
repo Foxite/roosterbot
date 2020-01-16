@@ -6,9 +6,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace RoosterBot {
+	/// <summary>
+	/// A static class containing several helper functions.
+	/// </summary>
 	public static class Util {
 		private static bool s_FileCreationWarningNotSent = true;
 
+		/// <summary>
+		/// The program-wide instance of <see cref="Random"/> for use in easter eggs or games.
+		/// </summary>
 		public static readonly Random RNG = new Random();
 
 		/// <summary>
@@ -34,6 +40,12 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// This returns true if <paramref name="input"/> is either:
+		/// - Type of <typeparamref name="T"/>, in which case <paramref name="result"/> will be set to <paramref name="input"/>, or
+		/// - A <see cref="CompoundResult"/> with only a single result which is type of <typeparamref name="T"/>, in which case <paramref name="result"/> will be set to that item.
+		/// Otherwise this will return false and <paramref name="result"/> will be set to null.
+		/// </summary>
 		public static bool Is<T>(this RoosterCommandResult input, [MaybeNullWhen(false), NotNullWhen(true)] out T? result) where T : RoosterCommandResult {
 			result =                                    // Hard-to-read expression - I've laid it out here:
 				input as T ??                           // Simple, if result is T then return result as T.

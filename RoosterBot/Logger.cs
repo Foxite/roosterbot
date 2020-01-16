@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The static class that takes care of logging in the entire program.
+	/// </summary>
 	public static class Logger {
 		private static readonly object Lock = new object();
 		private static readonly int LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
-
-		public static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
+		private static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 
 		static Logger() {
 			// Keep the log from the previous launch as ".old.log"
@@ -25,26 +27,44 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Log a message at verbose level.
+		/// </summary>
 		public static void Verbose(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Verbose, tag, msg, e);
 		}
 
+		/// <summary>
+		/// Log a message at debug level.
+		/// </summary>
 		public static void Debug(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Debug, tag, msg, e);
 		}
 
+		/// <summary>
+		/// Log a message at informational level.
+		/// </summary>
 		public static void Info(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Info, tag, msg, e);
 		}
 
+		/// <summary>
+		/// Log a message at warning level.
+		/// </summary>
 		public static void Warning(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Warning, tag, msg, e);
 		}
 
+		/// <summary>
+		/// Log a message at error level.
+		/// </summary>
 		public static void Error(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Error, tag, msg, e);
 		}
 
+		/// <summary>
+		/// Log a message at critical level.
+		/// </summary>
 		public static void Critical(string tag, string msg, Exception? e = null) {
 			Log(LogSeverity.Critical, tag, msg, e);
 		}

@@ -29,7 +29,7 @@ namespace RoosterBot.DiscordNet {
 			if (m_VersionNotReported && m_ReportVersion) {
 				m_VersionNotReported = false;
 				IDMChannel ownerDM = await Client.GetUser(m_BotOwnerId).GetOrCreateDMChannelAsync();
-				string startReport = $"RoosterBot version: {Constants.VersionString}\n";
+				string startReport = $"RoosterBot version: {Program.Version.ToString()}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {
 					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";

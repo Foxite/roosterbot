@@ -14,6 +14,7 @@ namespace RoosterBot {
 			Hide = hide;
 		}
 
+		/// 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (Culture == context.Culture) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);

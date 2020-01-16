@@ -14,15 +14,36 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The singleton Program class.
+	/// </summary>
 	public sealed class Program {
+		/// <summary>
+		/// The version of RoosterBot.
+		/// </summary>
+		public static readonly Version Version = new Version(3, 0, 0);
+
+		/// <summary>
+		/// The directory where program data is stored.
+		/// </summary>
 		public const string DataPath = @"C:\ProgramData\RoosterBot";
 
 #nullable disable
+		/// <summary>
+		/// The instance of the Program class.
+		/// </summary>
 		public static Program Instance { get; private set; }
 #nullable restore
 
+		/// <summary>
+		/// The instance of the <see cref="ComponentManager"/> class.
+		/// </summary>
 		public ComponentManager Components { get; private set; }
-		public CommandExecutionHandler CommandHandler { get; private set; }
+
+		/// <summary>
+		/// The instance of the <see cref="CommandHandler"/> class.
+		/// </summary>
+		public CommandHandler CommandHandler { get; private set; }
 
 		private bool m_ShutDown;
 		
@@ -78,7 +99,7 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			Components.SetupComponents(serviceCollection);
 
-			CommandHandler = new CommandExecutionHandler(Components.Services);
+			CommandHandler = new CommandHandler(Components.Services);
 			new CommandExecutedHandler(Components.Services);
 			new CommandExceptionHandler(Components.Services);
 			NotifyAppStart();
@@ -181,10 +202,16 @@ namespace RoosterBot {
 			cts.Dispose();
 		}
 
+		/// <summary>
+		/// Signal the program to stop and exit.
+		/// </summary>
 		public void Shutdown() {
 			m_ShutDown = true;
 		}
 
+		/// <summary>
+		/// Signal the program to stop and exit, and then start again.
+		/// </summary>
 		public void Restart() {
 			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 			Shutdown();

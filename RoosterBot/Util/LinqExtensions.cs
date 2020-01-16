@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
 namespace System.Linq {
+	/// <summary>
+	/// Adds several extensions methods to <see cref="IEnumerable{T}"/>.
+	/// </summary>
 	public static class LinqExtensions {
 		/// <summary>
 		/// This will enumerate <paramref name="source"/> and determine if the count is equal to <paramref name="count"/>.
@@ -205,7 +208,7 @@ namespace System.Linq {
 		/// </summary>
 		/// <remarks>
 		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
-		/// and then yielding that in reverse. This function utilizes a reverse for loop over the IList<T>.
+		/// and then yielding that in reverse. This function utilizes a reverse for loop over the <see cref="IList{T}"/>.
 		/// 
 		/// This function is not called Reverse to avoid naming conflicts with the aforementioned function.
 		/// </remarks>
@@ -216,7 +219,7 @@ namespace System.Linq {
 		}
 
 		/// <summary>
-		/// Adds all items that match a predicate into a separate IEnumerable<T>, and returns all items that did not pass the predicate.
+		/// Adds all items that match a predicate into a separate <see cref="IEnumerable{T}"/>, and returns all items that did not pass the predicate.
 		/// </summary>
 		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
 			var outA = new List<T>();
@@ -231,7 +234,7 @@ namespace System.Linq {
 		}
 
 		/// <summary>
-		/// Does effectively the same as enumerable.ToArray().CopyTo(...), but does not convert the enumerable to an array.
+		/// Does effectively the same as <code>enumerable.ToArray().CopyTo(...)</code>, but does not convert the enumerable to an array.
 		/// </summary>
 		public static void CopyTo<T>(this IEnumerable<T> enumerable, T[] array, int index) {
 			int i = index;
@@ -247,6 +250,7 @@ namespace System.Linq {
 		/// For example, a duplicate occuring 4 times will be yielded 3 times.
 		/// You can combine this with .Distinct() to avoid this.
 		/// </summary>
+		/// <param name="enumerable">The source enumerable.</param>
 		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
 		public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> enumerable, IEqualityComparer<T>? equalityComparer = null) {
 			var d = new HashSet<T>(equalityComparer ?? EqualityComparer<T>.Default);
@@ -263,6 +267,7 @@ namespace System.Linq {
 		/// For example, a duplicate occuring 4 times will be yielded 3 times.
 		/// You can combine this with .Distinct() to avoid this.
 		/// </summary>
+		/// <param name="enumerable">The source enumerable.</param>
 		/// <param name="equalityComparer">Uses <see cref="EqualityComparer{T}.Default"/> if null.</param>
 		/// <param name="selector">Determine equality based on this selector.</param>
 		public static IEnumerable<TSource> Duplicates<TSource, TValue>(this IEnumerable<TSource> enumerable, Func<TSource, TValue> selector, IEqualityComparer<TValue>? equalityComparer = null) {

@@ -2,8 +2,10 @@
 
 namespace RoosterBot {
 	public sealed class UserIsModeratorAttribute : RoosterPreconditionAttribute {
+		/// 
 		public override string Summary => "#UserIsModeratorAttribute_Summary";
 
+		/// 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (context.IsPrivate) {
 				return ValueTaskUtil.FromResult(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_PublicOnly"));

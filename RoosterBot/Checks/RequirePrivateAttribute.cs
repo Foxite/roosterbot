@@ -6,12 +6,15 @@ namespace RoosterBot {
 	public sealed class RequirePrivateAttribute : RoosterPreconditionAttribute {
 		public bool RequirePrivate { get; }
 
+		/// 
 		public override string Summary => RequirePrivate ? "#RequirePrivateAttribute_RequirePrivate" : "#RequirePrivateAttribute_RequirePublic";
 
+		/// 
 		public RequirePrivateAttribute(bool requirePrivate) {
 			RequirePrivate = requirePrivate;
 		}
 
+		/// 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			return ValueTaskUtil.FromResult(
 				RequirePrivate == context.IsPrivate
