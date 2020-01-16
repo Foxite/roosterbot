@@ -58,24 +58,24 @@ namespace RoosterBot.GLU {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
-			if (services.GetService<GlobalConfigService>().IgnoreUnknownPlatforms) {
+			if (services.GetRequiredService<GlobalConfigService>().IgnoreUnknownPlatforms) {
 				m_AllowedChannels = m_AllowedChannels.Where(sr => sr.Platform != null).ToArray();
 			}
 
 			// Teachers
-			StaffMemberService members = services.GetService<StaffMemberService>();
+			StaffMemberService members = services.GetRequiredService<StaffMemberService>();
 			members.AddTeachers(m_TeacherPath, m_AllowedChannels);
 
-			ScheduleService provider = services.GetService<ScheduleService>();
+			ScheduleService provider = services.GetRequiredService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
-			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
+			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {

@@ -8,7 +8,7 @@ namespace RoosterBot.PublicTransit {
 		public override string TypeDisplayName => "treinstation";
 
 		public override ValueTask<RoosterTypeParserResult<StationInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			StationInfoService sis = context.ServiceProvider.GetService<StationInfoService>();
+			StationInfoService sis = context.ServiceProvider.GetRequiredService<StationInfoService>();
 			RoosterTypeParserResult<StationInfo> result;
 			if (input.StartsWith("$")) {
 				StationInfo? lookupResult = sis.GetByCode(input.Substring(1));

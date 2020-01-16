@@ -14,11 +14,11 @@ namespace RoosterBot.Tools {
 			});
 
 			services.AddSingleton<YoutubeClient>();
-			services.AddSingleton((isp) => new YoutubeConverter(isp.GetService<YoutubeClient>(), config.PathToFFMPEG));
+			services.AddSingleton((isp) => new YoutubeConverter(isp.GetRequiredService<YoutubeClient>(), config.PathToFFMPEG));
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
 
 			commandService.AddModule<YoutubeModule>();
 		}

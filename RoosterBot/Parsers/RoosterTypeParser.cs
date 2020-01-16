@@ -33,7 +33,7 @@ namespace RoosterBot {
 
 		protected RoosterTypeParserResult<T> Successful(T value) => RoosterTypeParserResult<T>.Successful(value);
 		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, RoosterCommandContext context, string reason, params string[] objects) {
-			ResourceService Resources = context.ServiceProvider.GetService<ResourceService>();
+			ResourceService Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			Component component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
 			return RoosterTypeParserResult<T>.Unsuccessful(inputValid, string.Format(Resources.ResolveString(context.Culture, component, reason), objects));
 		}

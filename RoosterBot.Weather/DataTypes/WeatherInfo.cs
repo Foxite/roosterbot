@@ -122,8 +122,8 @@ namespace RoosterBot.Weather {
 					802 => new Emoji("🌤️"),
 					803 => new Emoji("⛅"),
 					804 => new Emoji("☁️"),
-					900 => context.ServiceProvider.GetService<EmoteService>().Unknown(context.Platform),
-					_   => context.ServiceProvider.GetService<EmoteService>().Error(context.Platform)
+					900 => context.ServiceProvider.GetRequiredService<EmoteService>().Unknown(context.Platform),
+					_   => context.ServiceProvider.GetRequiredService<EmoteService>().Error(context.Platform)
 				}, m_Resources.GetString(context.Culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(context.Culture, WeatherCode));
 
 				if (WindSpeed == 0) {

@@ -43,7 +43,7 @@ namespace RoosterBot.AWS {
 			production = false;
 #endif
 			if (production) {
-				m_SNS = new SNSNotificationHandler(services.GetService<NotificationService>(), services.GetService<AWSConfigService>(), m_NotificationARN);
+				m_SNS = new SNSNotificationHandler(services.GetRequiredService<NotificationService>(), services.GetRequiredService<AWSConfigService>(), m_NotificationARN);
 			}
 		}
 

@@ -34,7 +34,7 @@ namespace RoosterBot.Meta {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
 

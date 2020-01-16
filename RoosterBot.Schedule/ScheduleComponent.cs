@@ -21,7 +21,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			var ssir = new StudentSetInfoParser();
 			commandService.AddTypeParser(ssir);

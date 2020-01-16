@@ -7,11 +7,11 @@ namespace RoosterBot.Statistics {
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
-			services.AddSingleton((isp) => new StatisticsService(isp.GetService<ResourceService>()));
+			services.AddSingleton((isp) => new StatisticsService(isp.GetRequiredService<ResourceService>()));
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			StatisticsService stats = services.GetService<StatisticsService>();
+			StatisticsService stats = services.GetRequiredService<StatisticsService>();
 
 
 			var commandsExecuted = new TimeStatistic(this, "Commands executed");
@@ -22,7 +22,7 @@ namespace RoosterBot.Statistics {
 			};
 
 			// TODO (hold) (feature) discord statistics
-			//DiscordSocketClient client = services.GetService<DiscordSocketClient>();
+			//DiscordSocketClient client = services.GetRequiredService<DiscordSocketClient>();
 			//stats.AddStatistic(new ExternalStatistic(() => client.Guilds.Count, this, "Guilds served"));
 			stats.AddStatistic(commandsExecuted);
 

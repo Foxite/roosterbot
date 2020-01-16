@@ -73,8 +73,8 @@ namespace RoosterBot.Schedule {
 			m_InitialOffset = initialWeekOffset - 1;
 			m_Offset = m_InitialOffset;
 
-			m_Resources = m_Context.ServiceProvider.GetService<ResourceService>();
-			m_Schedule = m_Context.ServiceProvider.GetService<ScheduleService>();
+			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
+			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
 		}
 
 		object? IEnumerator.Current => Current;

@@ -17,8 +17,8 @@ namespace RoosterBot.Schedule {
 		object? IEnumerator.Current => throw new NotImplementedException();
 		
 		public SingleScheduleEnumerator(RoosterCommandContext context, ScheduleRecord initial, IdentifierInfo identifier) {
-			m_Resources = context.ServiceProvider.GetService<ResourceService>();
-			m_ScheduleService = context.ServiceProvider.GetService<ScheduleService>();
+			m_Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
+			m_ScheduleService = context.ServiceProvider.GetRequiredService<ScheduleService>();
 			m_Context = context;
 			m_Initial = initial;
 			m_Identifier = identifier;

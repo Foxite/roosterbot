@@ -14,13 +14,13 @@ namespace RoosterBot.Schedule {
 				bool byMention;
 				StudentSetInfo? result;
 
-				if (input.ToLower() == context.ServiceProvider.GetService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
+				if (input.ToLower() == context.ServiceProvider.GetRequiredService<ResourceService>().GetString(context.Culture, "IdentifierInfoReader_Self")) {
 					result = context.UserConfig.GetStudentSet();
 					byMention = false;
 				} else {
-					RoosterTypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+					RoosterTypeParserResult<IUser> userResult = await context.ServiceProvider.GetRequiredService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
 					if (userResult.IsSuccessful) {
-						result = (await context.ServiceProvider.GetService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetStudentSet();
+						result = (await context.ServiceProvider.GetRequiredService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetStudentSet();
 						byMention = true;
 					} else {
 						return Unsuccessful(false, context, "#StudentSetInfoReader_CheckFailed_Direct");

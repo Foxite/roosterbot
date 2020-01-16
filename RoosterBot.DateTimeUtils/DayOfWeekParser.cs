@@ -10,7 +10,7 @@ namespace RoosterBot.DateTimeUtils {
 
 		public override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();
-			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
+			ResourceService resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			CultureInfo culture = context.Culture;
 			if (input == resources.GetString(culture, "DayOfWeekReader_Today")) {
 				return ValueTaskUtil.FromResult(Successful(DateTime.Today.DayOfWeek));

@@ -11,7 +11,7 @@ namespace RoosterBot {
 		public EmoteService Emotes { get; set; } = null!;
 
 		public CommandExceptionHandler(IServiceProvider isp) : base(isp) {
-			isp.GetService<RoosterCommandService>().CommandExecutionFailed += HandleError;
+			isp.GetRequiredService<RoosterCommandService>().CommandExecutionFailed += HandleError;
 		}
 
 		private async Task HandleError(CommandExecutionFailedEventArgs args) {

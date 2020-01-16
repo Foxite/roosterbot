@@ -13,11 +13,11 @@ namespace RoosterBot.Schedule {
 			if (baseResult.IsSuccessful) {
 				return baseResult;
 			} else {
-				StaffMemberService tns = context.ServiceProvider.GetService<StaffMemberService>();
+				StaffMemberService tns = context.ServiceProvider.GetRequiredService<StaffMemberService>();
 				StaffMemberInfo? result = null;
 
 				IUser? user = null;
-				TypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+				TypeParserResult<IUser> userResult = await context.ServiceProvider.GetRequiredService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
 				if (userResult.IsSuccessful) {
 					user = userResult.Value;
 				}
