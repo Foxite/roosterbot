@@ -9,7 +9,7 @@ namespace RoosterBot.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 
-		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room)
+		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<StaffMemberInfo> staffMember, IReadOnlyList<RoomInfo> room)
 			: base(activity, start, end, studentSets, staffMember, room) { }
 
 		public override IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture) {
@@ -29,9 +29,9 @@ namespace RoosterBot.GLU {
 						if (StaffMember[0].IsUnknown && StaffMember.Count == 1) {
 							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", getString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
 						} else {
-							string teachers = string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText));
-							IEmote teacherEmote = new Emoji("👤");
-							yield return getAspect(teacherEmote, "GLUScheduleRecord_Aspect_StaffMember", teachers);
+							string staffMembers = string.Join(", ", StaffMember.Select(staffMember => staffMember.DisplayText));
+							IEmote staffMemberEmote = new Emoji("👤");
+							yield return getAspect(staffMemberEmote, "GLUScheduleRecord_Aspect_StaffMember", staffMembers);
 						}
 					}
 

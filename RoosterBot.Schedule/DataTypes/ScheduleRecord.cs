@@ -11,12 +11,12 @@ namespace RoosterBot.Schedule {
 		public DateTime Start { get; }
 		public DateTime End { get; set; }
 		public IReadOnlyList<StudentSetInfo> StudentSets { get; }
-		public IReadOnlyList<TeacherInfo> StaffMember { get; }
+		public IReadOnlyList<StaffMemberInfo> StaffMember { get; }
 		public IReadOnlyList<RoomInfo> Room { get; }
 		public abstract bool ShouldCallNextCommand { get; }
 		public BreakTime? Break { get; set; }
 
-		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<TeacherInfo> staffMember, IReadOnlyList<RoomInfo> room) {
+		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<StaffMemberInfo> staffMember, IReadOnlyList<RoomInfo> room) {
 			Activity = activity;
 			Start = start;
 			End = end;

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class TeacherInfo : IdentifierInfo {
+	public class StaffMemberInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
 		public override string DisplayText { get; }
 		public bool			   IsUnknown { get; }
@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 		public string?		   DiscordUser { get; }
 		public IReadOnlyList<string> AltSpellings { get; }
 
-		public TeacherInfo(string scheduleCode, string displayText, bool isUnknown, bool noLookup, string? discordUser, IReadOnlyList<string> altSpellings) {
+		public StaffMemberInfo(string scheduleCode, string displayText, bool isUnknown, bool noLookup, string? discordUser, IReadOnlyList<string> altSpellings) {
 			IsUnknown = isUnknown;
 			ScheduleCode = scheduleCode;
 			DisplayText = displayText;
@@ -46,7 +46,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override bool Equals(object? obj) {
-			return obj is TeacherInfo info &&
+			return obj is StaffMemberInfo info &&
 				base.Equals(obj) &&
 				IsUnknown == info.IsUnknown &&
 				NoLookup == info.NoLookup &&

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
-    <value>You can query the schedule for a class, teacher or room.
+    <value>You can query the schedule for a class, staff member or room.
 You don't have to indicate which you mean; I will pick up on this automatically.
 
 You can use these commands to see this:
@@ -145,8 +145,8 @@ After that you won't have to put your class in commands. So you can just type `{
 You can always check what class I think you're in by just typing `{0}i am in`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)</value>
     <comment>0: command prefix</comment>
   </data>
-  <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
-    <value>Is that a teacher? :thinking: If they are new, they need to be added by the bot owner.</value>
+  <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
+    <value>Is that a staff member? :thinking: If they are new, they need to be added by the bot owner.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
     <value>Thats not a class.</value>
@@ -158,7 +158,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
   </data>
   <data name="ScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
-    <value>I don't understand if you're talking about a class, teacher, or room.</value>
+    <value>I don't understand if you're talking about a class, staff member, or room.</value>
   </data>
   <data name="ScheduleModule_ItIsWeekend" xml:space="preserve">
     <value> It is weekend after all.</value>
@@ -198,21 +198,21 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserClassModule_InvalidClass" xml:space="preserve">
     <value>That's not a class.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
-    <value>No teachers found.</value>
+  <data name="StaffMemberListModule_StaffMemberListCommand_NoStaffMembersFound" xml:space="preserve">
+    <value>No staff members found.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnFullName" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnFullName" xml:space="preserve">
     <value>Full name</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnAbbreviation" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnAbbreviation" xml:space="preserve">
     <value>Abbr</value>
     <comment>Needs to be very short, recommend 4 characters max, because it will stretch up the column</comment>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_DiscordName" xml:space="preserve">
     <value>Discord name</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
-    <value>Automatically understands if you're talking about a class, teacher, or room.</value>
+    <value>Automatically understands if you're talking about a class, staff member, or room.</value>
   </data>
   <data name="ScheduleModule_Name" xml:space="preserve">
     <value>Schedule</value>
@@ -232,11 +232,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_TodayCommand_Summary" xml:space="preserve">
     <value>See the schedule for today.</value>
   </data>
-  <data name="TeacherListModule_Name" xml:space="preserve">
+  <data name="StaffMemberListModule_Name" xml:space="preserve">
     <value>Schedule</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
-    <value>A list of all teachers, their abbreviations, and their Discord names (if known). You can filter by name.</value>
+  <data name="StaffMemberListModule_StaffMemberListCommand_Summary" xml:space="preserve">
+    <value>A list of all staff members, their abbreviations, and their Discord names (if known). You can filter by name.</value>
   </data>
   <data name="UserClassModule_ModuleSummary" xml:space="preserve">
     <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
@@ -271,11 +271,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>week|weeks</value>
     <comment>Separate possible values with |</comment>
   </data>
-  <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
+  <data name="StaffMemberListModule_ListCommand_NameParameterName" xml:space="preserve">
     <value>name</value>
-  </data>
-  <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
-    <value>Too many results. Please refine your search.</value>
   </data>
   <data name="ScheduleModule_DayCommand" xml:space="preserve">
     <value>on|day</value>
@@ -313,8 +310,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
     <value>Time</value>
   </data>
-  <data name="ScheduleModule_RespondDay_ColumnTeacher" xml:space="preserve">
-    <value>Teacher</value>
+  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
+    <value>Staff member</value>
   </data>
   <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Room</value>
@@ -353,8 +350,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
     <value>class</value>
   </data>
-  <data name="TeacherInfoReader_TypeDisplayName" xml:space="preserve">
-    <value>teacher</value>
+  <data name="StaffMemberInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>staff member</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
@@ -365,8 +362,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
     <value>amount</value>
   </data>
-  <data name="TeacherListModule_CommandName" xml:space="preserve">
-    <value>teachers|teacher|staff</value>
+  <data name="StaffMemberListModule_CommandName" xml:space="preserve">
+    <value>staff members|staff member|teachers|teacher|staff</value>
   </data>
   <data name="ScheduleModule_DayCommand_Day" xml:space="preserve">
     <value>day</value>
@@ -374,14 +371,14 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_IdentiferInfo_Name" xml:space="preserve">
     <value>identifier</value>
   </data>
-  <data name="TeacherInfoReader_MultipleMatches" xml:space="preserve">
+  <data name="StaffMemberInfoReader_MultipleMatches" xml:space="preserve">
     <value>I don't know who you mean: {0}</value>
     <comment>0: list of match display texts</comment>
   </data>
   <data name="ScheduleModule_CurrentCommand_Next" xml:space="preserve">
     <value> This is what comes next:</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ResultsFor" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_ResultsFor" xml:space="preserve">
     <value>Results for `{0}`</value>
     <comment>0: input</comment>
   </data>

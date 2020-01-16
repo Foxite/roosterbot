@@ -9,14 +9,14 @@ using RoosterBot.Schedule;
 namespace RoosterBot.GLU {
 	public class GLUScheduleReader : ScheduleReader {
 		private readonly string m_Path;
-		private readonly TeacherNameService m_Teachers;
-		private readonly SnowflakeReference m_TeacherChannel;
+		private readonly StaffMemberService m_StaffMembers;
+		private readonly SnowflakeReference m_StaffMemberChannel;
 		private readonly bool m_SkipPastRecords;
 
-		public GLUScheduleReader(string path, TeacherNameService teachers, SnowflakeReference teacherChannel, bool skipPastRecords) {
+		public GLUScheduleReader(string path, StaffMemberService staffMembers, SnowflakeReference staffMembersChannel, bool skipPastRecords) {
 			m_Path = path;
-			m_Teachers = teachers;
-			m_TeacherChannel = teacherChannel;
+			m_StaffMembers = staffMembers;
+			m_StaffMemberChannel = staffMembersChannel;
 			m_SkipPastRecords = skipPastRecords;
 		}
 
@@ -68,7 +68,7 @@ namespace RoosterBot.GLU {
 							start: start,
 							end: end,
 							studentSets: studentsets != null ? studentsets.Select(code => new StudentSetInfo(code)).ToList() : new List<StudentSetInfo>(),
-							staffMember: staffmember != null ? staffmember.Select(abbr => m_Teachers.GetRecordFromAbbr(m_TeacherChannel, abbr)).ToList() : new List<TeacherInfo>(),
+							staffMember: staffmember != null ? staffmember.Select(abbr => m_StaffMembers.GetRecordFromAbbr(m_StaffMemberChannel, abbr)).ToList() : new List<StaffMemberInfo>(),
 							room: room != null ? room.Select(code => new RoomInfo(code)).ToList() : new List<RoomInfo>()
 						);
 

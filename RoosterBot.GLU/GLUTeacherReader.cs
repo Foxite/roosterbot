@@ -12,8 +12,8 @@ namespace RoosterBot.GLU {
 			m_Path = path;
 		}
 
-		public IEnumerable<TeacherInfo> ReadCSV() {
-			Logger.Info("GLUTeacherReader", $"Loading teacher CSV file {Path.GetFileName(m_Path)}");
+		public IEnumerable<StaffMemberInfo> ReadCSV() {
+			Logger.Info("GLUTeacherReader", $"Loading staff CSV file {Path.GetFileName(m_Path)}");
 
 			using StreamReader reader = File.OpenText(m_Path);
 			using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
@@ -28,7 +28,7 @@ namespace RoosterBot.GLU {
 					altSpellings = altSpellingsString.Split(',');
 				};
 
-				var record = new TeacherInfo(
+				var record = new StaffMemberInfo(
 					scheduleCode: csv["Abbreviation"],
 					displayText: csv["FullName"],
 					isUnknown: false,
@@ -39,7 +39,7 @@ namespace RoosterBot.GLU {
 
 				yield return record;
 			}
-			Logger.Info("GLUTeacherReader", $"Successfully loaded teacher CSV file {Path.GetFileName(m_Path)}");
+			Logger.Info("GLUTeacherReader", $"Successfully loaded staff CSV file {Path.GetFileName(m_Path)}");
 		}
 	}
 }

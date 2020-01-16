@@ -148,6 +148,6 @@
     <value>{0} - {1}</value>
   </data>
   <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
-    <value>Unknown teacher with abbreviation {0}</value>
+    <value>Unknown staff member with abbreviation {0}</value>
   </data>
 </root>

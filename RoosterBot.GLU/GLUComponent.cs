@@ -51,7 +51,7 @@ namespace RoosterBot.GLU {
 			}
 
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
-			addSchedule<TeacherInfo>("GLU-Teachers");
+			addSchedule<StaffMemberInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
@@ -65,13 +65,13 @@ namespace RoosterBot.GLU {
 			}
 
 			// Teachers
-			TeacherNameService teachers = services.GetService<TeacherNameService>();
-			teachers.AddTeachers(m_TeacherPath, m_AllowedChannels);
+			StaffMemberService members = services.GetService<StaffMemberService>();
+			members.AddTeachers(m_TeacherPath, m_AllowedChannels);
 
 			ScheduleService provider = services.GetService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
+				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
