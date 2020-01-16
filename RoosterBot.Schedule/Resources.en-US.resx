@@ -157,30 +157,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
   </data>
-  <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
-    <value>After what?</value>
-  </data>
-  <data name="ScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
-    <value>I don't have access to the latest schedule tables, so I can't see anything.</value>
-  </data>
-  <data name="ScheduleModule_PretextNext" xml:space="preserve">
-    <value>{0}: Next</value>
-    <comment>0: Identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_PretextAfterPrevious" xml:space="preserve">
-    <value>{0}: After previous class</value>
-    <comment>0: Identifier display text</comment>
-  </data>
   <data name="ScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>I don't understand if you're talking about a class, teacher, or room.</value>
   </data>
   <data name="ScheduleModule_ItIsWeekend" xml:space="preserve">
-    <value>It is weekend after all.</value>
-  </data>
-  <data name="ScheduleModule_Pretext_FirstOn" xml:space="preserve">
-    <value>{0}: First on {1}</value>
-    <comment>0: Identifier display text
-		  1: Relative date reference</comment>
+    <value> It is weekend after all.</value>
   </data>
   <data name="ScheduleModule_HandleError_NotFound" xml:space="preserve">
     <value>That item is not on my schedules.</value>
@@ -191,30 +172,9 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
     <value>There are no schedules available for this server.</value>
   </data>
-  <data name="ScheduleModule_PretextNow" xml:space="preserve">
-    <value>{0}: Now</value>
-  </data>
-  <data name="ScheduleModule_InXHours" xml:space="preserve">
-    <value>{0}: In {1} hours</value>
-    <comment>0: Identifier display text
-		  1: Amount of hours</comment>
-  </data>
-  <data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
-    <value>{1}: Not on schedule {0}.</value>
-    <comment>0: relative date reference
-	1: identifier info display text</comment>
-  </data>
-  <data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
-    <value>{0}: Schedule for {1}</value>
-    <comment>0: Identifier display text
-		  1: relative date reference</comment>
-  </data>
   <data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>{0}: Not on schedule right now.</value>
     <comment>0: identifier info display text</comment>
-  </data>
-  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
-    <value> That is in the weekend after all.</value>
   </data>
   <data name="UserClassModule_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
@@ -257,19 +217,19 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_Name" xml:space="preserve">
     <value>Schedule</value>
   </data>
-  <data name="ScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_CurrentCommand_Summary" xml:space="preserve">
     <value>See the current schedule item.</value>
   </data>
-  <data name="ScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_NextCommand_Summary" xml:space="preserve">
     <value>See the next schedule item.</value>
   </data>
-  <data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_WeekdayCommand_Summary" xml:space="preserve">
     <value>The schedule for a certain day. If you use today, then I will show you next week. `{0}today` does not do this.</value>
   </data>
-  <data name="ScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_TomorrowCommand_Summary" xml:space="preserve">
     <value>See the schedule for tomorrow.</value>
   </data>
-  <data name="ScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_TodayCommand_Summary" xml:space="preserve">
     <value>See the schedule for today.</value>
   </data>
   <data name="TeacherListModule_Name" xml:space="preserve">
@@ -287,32 +247,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>class</value>
   </data>
-  <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
-    <value>See what happens after the last thing you looked up.</value>
-  </data>
   <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>That does not match anything.</value>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Not on schedule this week</value>
-    <comment>0: Identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Not on schedule next week</value>
-    <comment>0: Identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Not on schedule in {1} weeks</value>
-    <comment>0: identifier display text
-	1: amount of weeks</comment>
-  </data>
-  <data name="ScheduleModule_RespondDay_OnlyRecordForDay" xml:space="preserve">
-    <value>{0}: Only item for {1}</value>
-    <comment>0: identifier display text
-1: relative date reference</comment>
   </data>
   <data name="IdentifierInfoReader_Self" xml:space="preserve">
     <value>me</value>
@@ -338,14 +277,8 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
     <value>Too many results. Please refine your search.</value>
   </data>
-  <data name="ScheduleModule_AfterCommand" xml:space="preserve">
-    <value>after</value>
-  </data>
   <data name="ScheduleModule_DayCommand" xml:space="preserve">
-    <value>day</value>
-  </data>
-  <data name="ScheduleModule_FutureCommand" xml:space="preserve">
-    <value>in</value>
+    <value>on|day</value>
   </data>
   <data name="ScheduleModule_NextCommand" xml:space="preserve">
     <value>next|later</value>
@@ -386,15 +319,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Room</value>
   </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Rooster deze week</value>
-  </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Schedule for next week</value>
-  </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Schedule in {1} weeks</value>
-  </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
     <value>See what is on a schedule next week.</value>
   </data>
@@ -423,13 +347,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserClassModule_CommandName" xml:space="preserve">
     <value>am in</value>
   </data>
-  <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
+  <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>room</value>
   </data>
-  <data name="StudentSetInfo_TypeDisplayName" xml:space="preserve">
+  <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
     <value>class</value>
   </data>
-  <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
+  <data name="TeacherInfoReader_TypeDisplayName" xml:space="preserve">
     <value>teacher</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
@@ -460,5 +384,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="TeacherListModule_TeacherListCommand_ResultsFor" xml:space="preserve">
     <value>Results for `{0}`</value>
     <comment>0: input</comment>
+  </data>
+  <data name="ScheduleModule_FutureCommand" xml:space="preserve">
+    <value>in</value>
+  </data>
+  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
+    <value> That is weekend after all.</value>
   </data>
 </root>

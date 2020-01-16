@@ -10,18 +10,19 @@ namespace RoosterBot.Schedule {
 	public class ScheduleModule : RoosterModule {
 		public ScheduleService Schedules { get; set; } = null!;
 
-		[Command("#ScheduleModule_NowCommand"), Description("#ScheduleModule_DefaultCurrentCommand_Summary")]
+		#region Commands
+		[Command("#ScheduleModule_NowCommand"), Description("#ScheduleModule_CurrentCommand_Summary")]
 		public Task<CommandResult> CurrentCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null)
-			=> RespondRecordAtTime(info, DateTime.Now);
+			=> RespondRecordAtTime(info, TimeSpan.Zero);
 		
-		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_DefaultNextCommand_Summary")]
+		[Command("#ScheduleModule_NextCommand"), Description("#ScheduleModule_NextCommand_Summary")]
 		public async Task<CommandResult> NextCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
 			if (resolve.Success) {
 				info = resolve.Value;
 				ReturnValue<ScheduleRecord> recordResult = await GetRecordAfterDateTime(info, DateTime.Now);
 				if (recordResult.Success) {
-					return GetSingleResult(recordResult.Value, info, null);
+					return new PaginatedResult(new SingleScheduleEnumerator(Context, recordResult.Value, info), null);
 				} else {
 					return recordResult.ErrorResult;
 				}
@@ -30,17 +31,17 @@ namespace RoosterBot.Schedule {
 			}
 		}
 		
-		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_DefaultWeekdayCommand_Summary")]
+		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_WeekdayCommand_Summary")]
 		public CommandResult WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			return RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
 		}
 
-		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_DefaultTodayCommand_Summary")]
+		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_TodayCommand_Summary")]
 		public CommandResult TodayCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			return RespondDay(info, DateTime.Today);
 		}
 
-		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_DefaultTomorrowCommand_Summary")]
+		[Command("#ScheduleModule_TomorrowCommand"), Description("#ScheduleModule_TomorrowCommand_Summary")]
 		public CommandResult TomorrowCommand([Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			return RespondDay(info, DateTime.Today.AddDays(1));
 		}
@@ -62,7 +63,7 @@ namespace RoosterBot.Schedule {
 			[Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
 			unit = unit.ToLower();
 			if (GetString("ScheduleModule_ShowFutureCommand_UnitHours").Split('|').Contains(unit)) {
-				return RespondRecordAtTime(info, DateTime.Now + TimeSpan.FromHours(amount));
+				return RespondRecordAtTime(info, TimeSpan.FromHours(amount));
 			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitDays").Split('|').Contains(unit)) {
 				return Task.FromResult(RespondDay(info, DateTime.Today.AddDays(amount)));
 			} else if (GetString("ScheduleModule_ShowFutureCommand_UnitWeeks").Split('|').Contains(unit)) {
@@ -71,19 +72,29 @@ namespace RoosterBot.Schedule {
 				return Task.FromResult<CommandResult>(TextResult.Error(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits")));
 			}
 		}
+		#endregion
 
-		private async Task<CommandResult> RespondRecordAtTime(IdentifierInfo? info, DateTime datetime) {
+		#region Responses
+		private async Task<CommandResult> RespondRecordAtTime(IdentifierInfo? info, TimeSpan fromNow) {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
 			if (resolve.Success) {
 				info = resolve.Value;
+				DateTime datetime = DateTime.Now + fromNow;
 				ReturnValue<ScheduleRecord?> recordResult = await GetRecordAtDateTime(info, datetime);
 				if (recordResult.Success) {
 					ScheduleRecord? record = recordResult.Value;
 					string caption;
 					if (record == null) {
-						caption = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
-						if (DateTimeUtil.IsWeekend(DateTime.Today)) {
-							caption += GetString("ScheduleModule_ItIsWeekend");
+						if (fromNow.TotalSeconds < 1) {
+							caption = GetString("ScheduleModule_CurrentCommand_NoCurrentRecord", info.DisplayText);
+							if (DateTimeUtil.IsWeekend(datetime.Date)) {
+								caption += GetString("ScheduleModule_ItIsWeekend");
+							}
+						} else {
+							caption = GetString("ScheduleModule_ShowFutureCommand_NoRecordAtThatTime", info.DisplayText);
+							if (DateTimeUtil.IsWeekend(datetime.Date)) {
+								caption += GetString("ScheduleModule_ThatIsWeekend");
+							}
 						}
 						caption += GetString("ScheduleModule_CurrentCommand_Next");
 						ReturnValue<ScheduleRecord> nextRecordResult = await GetRecordAfterDateTime(info, datetime);
@@ -95,7 +106,7 @@ namespace RoosterBot.Schedule {
 					} else {
 						caption = "";
 					}
-					return GetSingleResult(record, info, caption);
+					return new PaginatedResult(new SingleScheduleEnumerator(Context, record, info), caption);
 				} else {
 					return recordResult.ErrorResult;
 				}
@@ -126,10 +137,9 @@ namespace RoosterBot.Schedule {
 				? new PaginatedResult(new WeekScheduleEnumerator(Context, resolve.Value, weeksFromNow), null)
 				: resolve.ErrorResult;
 		}
+		#endregion
 
-		private PaginatedResult GetSingleResult(ScheduleRecord record, IdentifierInfo identifier, string? caption) =>
-			new PaginatedResult(new SingleScheduleEnumerator(Context, record, identifier), caption);
-
+		#region Util
 		private ReturnValue<IdentifierInfo> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
 				StudentSetInfo? ssi = Context.UserConfig.GetStudentSet();
@@ -163,5 +173,6 @@ namespace RoosterBot.Schedule {
 				})));
 			}
 		}
+		#endregion
 	}
 }

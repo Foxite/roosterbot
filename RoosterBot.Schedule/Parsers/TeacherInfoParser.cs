@@ -6,7 +6,7 @@ using Qmmands;
 
 namespace RoosterBot.Schedule {
 	public class TeacherInfoParser : IdentifierInfoParserBase<TeacherInfo> {
-		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
+		public override string TypeDisplayName => "#TeacherInfoReader_TypeDisplayName";
 
 		public async override ValueTask<RoosterTypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			RoosterTypeParserResult<TeacherInfo> baseResult = await base.ParseAsync(parameter, input, context);
