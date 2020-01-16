@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		public CommandResult Commands([Remainder, Name("#Commands_ModuleName")] string? query = null) {
 			if (query == null) {
 				return new TextResult(null,
-					GetString("Commands_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
+					GetString("Commands_CategoriesPretext", ChannelConfig.CommandPrefix) + "\n"
 					+ string.Join(", ", GetCategories()));
 			} else {
 				query = query.ToLower();
@@ -27,9 +27,9 @@ namespace RoosterBot.Meta {
 						if (!containsOptionalParameters) {
 							containsOptionalParameters = command.Parameters.Any(param => param.IsOptional);
 						}
-						response += "`" + GuildConfig.CommandPrefix + command.GetSignature() + "`";
+						response += "`" + ChannelConfig.CommandPrefix + command.GetSignature() + "`";
 						if (command.Description != null) {
-							response += ": " + string.Format(command.Description, GuildConfig.CommandPrefix);
+							response += ": " + string.Format(command.Description, ChannelConfig.CommandPrefix);
 						}
 						response += "\n";
 					}
@@ -41,7 +41,7 @@ namespace RoosterBot.Meta {
 				} else {
 					return new TextResult(null,
 						GetString("Commands_CategoryDoesNotExist") + "\n\n"
-						+ GetString("Commands_CategoriesPretext", GuildConfig.CommandPrefix) + "\n"
+						+ GetString("Commands_CategoriesPretext", ChannelConfig.CommandPrefix) + "\n"
 						+ string.Join(", ", GetCategories()));
 				}
 			}

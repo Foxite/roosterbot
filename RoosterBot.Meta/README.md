@@ -3,8 +3,8 @@ RoosterBot.Meta provides essential features for RoosterBot. The reason these are
 - Certain provisions should be optional, as explained below.
 
 This component provides:
-- A file-based implementation of UserConfigService and GuildConfigService. These can be disabled in the config file for this component, if you want to use another implementation.
-- A module for bot managers and guild staff members to change the GuildConfig for a guild, and a module for users to change their preferred language.
+- A file-based implementation of UserConfigService and ChannelConfigService. These can be disabled in the config file for this component, if you want to use another implementation.
+- A module for bot managers and channel staff members to change the ChannelConfig for a channel, and a module for users to change their preferred language.
 - A help command, which uses the built-in HelpService.
 - A command that shows a list of all commands by module.
 - An info command which shows the installed components and a link to the source code repository.

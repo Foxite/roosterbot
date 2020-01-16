@@ -6,7 +6,7 @@ namespace RoosterBot {
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (context.IsPrivate) {
-				return ValueTaskUtil.FromResult(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_GuildsOnly"));
+				return ValueTaskUtil.FromResult(RoosterCheckResult.UnsuccessfulBuiltIn("#UserIsModeratorAttribute_PublicOnly"));
 			} else if (context.User.IsChannelAdmin(context.Channel)) {
 				return ValueTaskUtil.FromResult(RoosterCheckResult.Successful);
 			} else {

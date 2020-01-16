@@ -21,7 +21,7 @@ namespace RoosterBot.AWS {
 				SecretKey = "",
 				NotificationArn = "",
 				UserTable = "",
-				GuildTable = "",
+				ChannelTable = "",
 				Endpoint  = "",
 			});
 
@@ -33,7 +33,7 @@ namespace RoosterBot.AWS {
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
 
 			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, jsonConfig.UserTable));
-			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBGuildConfigService(isp.GetRequiredService<GlobalConfigService>(), m_DynamoDBClient, jsonConfig.GuildTable));
+			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), m_DynamoDBClient, jsonConfig.ChannelTable));
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {

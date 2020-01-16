@@ -14,8 +14,8 @@ namespace RoosterBot {
 		protected ModuleLogger Log { get; private set; } = null!;
 
 		protected UserConfig  UserConfig  => Context.UserConfig;
-		protected ChannelConfig GuildConfig => Context.ChannelConfig;
-		protected CultureInfo Culture     => UserConfig.Culture ?? GuildConfig.Culture;
+		protected ChannelConfig ChannelConfig => Context.ChannelConfig;
+		protected CultureInfo Culture     => UserConfig.Culture ?? ChannelConfig.Culture;
 
 		protected override ValueTask BeforeExecutedAsync() {
 			Log = new ModuleLogger(GetType().Name);

@@ -4,9 +4,9 @@
 		/// Cooldown is specific to this user and shared by all commands.
 		/// </summary>
 		User,
-		
+
 		/// <summary>
-		/// Cooldown is specific to this guild and shared by all commands.
+		/// Cooldown is specific to this channel and shared by all commands.
 		/// </summary>
 		Channel,
 
@@ -16,7 +16,7 @@
 		ModuleUser,
 
 		/// <summary>
-		/// Cooldown is specific to this guild and shared by all commands in your module.
+		/// Cooldown is specific to this channel and shared by all commands in your module.
 		/// </summary>
 		ModuleChannel,
 
@@ -26,7 +26,7 @@
 		ComponentUser,
 
 		/// <summary>
-		/// Cooldown is specific to this guild shared by all command in your component.
+		/// Cooldown is specific to this channel shared by all command in your component.
 		/// </summary>
 		ComponentChannel
 	}

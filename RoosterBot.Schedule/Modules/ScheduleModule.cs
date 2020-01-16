@@ -146,7 +146,7 @@ namespace RoosterBot.Schedule {
 				if (ssi != null) {
 					return ReturnValue<IdentifierInfo>.Successful(ssi);
 				} else {
-					return ReturnValue<IdentifierInfo>.Unsuccessful(TextResult.Error(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", GuildConfig.CommandPrefix)));
+					return ReturnValue<IdentifierInfo>.Unsuccessful(TextResult.Error(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", ChannelConfig.CommandPrefix)));
 				}
 			} else {
 				return ReturnValue<IdentifierInfo>.Successful(info);

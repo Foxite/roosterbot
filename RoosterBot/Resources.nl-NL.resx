@@ -132,8 +132,8 @@
   <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
     <value>Je moet moderatorprivileges hebben om dat te doen.</value>
   </data>
-  <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
-    <value>Dit werkt alleen in een server.</value>
+  <data name="UserIsModeratorAttribute_PublicOnly" xml:space="preserve">
+    <value>Dit werkt alleen in een openbaar kanaal.</value>
   </data>
   <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
     <value>Je moet moderator zijn om dit te doen.</value>

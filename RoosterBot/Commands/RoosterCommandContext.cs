@@ -14,14 +14,14 @@ namespace RoosterBot {
 		public ChannelConfig ChannelConfig { get; }
 		public CultureInfo Culture => UserConfig.Culture ?? ChannelConfig.Culture;
 
-		public RoosterCommandContext(PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig guildConfig) : base(Program.Instance.Components.Services) {
+		public RoosterCommandContext(PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig channelConfig) : base(Program.Instance.Components.Services) {
 			Platform = platform;
 			Message = message;
 			User = message.User;
 			Channel = message.Channel;
 
 			UserConfig = userConfig;
-			ChannelConfig = guildConfig;
+			ChannelConfig = channelConfig;
 		}
 
 		public override string ToString() {

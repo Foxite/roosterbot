@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot {
 	/// <summary>
-	/// Provides user-specific overrides for the GuildConfigService.
+	/// Provides user-specific overrides for the <see cref="ChannelConfigService"/>.
 	/// </summary>
 	public abstract class UserConfigService {
 		public abstract Task<UserConfig> GetConfigAsync(SnowflakeReference user);

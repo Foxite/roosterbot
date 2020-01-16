@@ -14,7 +14,7 @@ namespace RoosterBot.Schedule {
 				} else {
 					response = GetString("UserClassModule_UserIsInClass", ssi.DisplayText);
 				}
-				response += GetString("UserClassModule_ChangeHint", GuildConfig.CommandPrefix);
+				response += GetString("UserClassModule_ChangeHint", ChannelConfig.CommandPrefix);
 				return TextResult.Info(response);
 			} else {
 				StudentSetInfo? oldStudentSet = await UserConfig.SetStudentSetAsync(newStudentSet);

@@ -13,7 +13,7 @@ namespace RoosterBot.Meta {
 		private readonly ConcurrentDictionary<SnowflakeReference, ChannelConfig> m_ConfigMap;
 
 		public FileChannelConfigService(GlobalConfigService config, string configPath) : base(config) {
-			Logger.Info("FileGuildConfigService", "Loading guild config json");
+			Logger.Info("FileChannelConfigService", "Loading channel config json");
 
 			m_ConfigFilePath = configPath;
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, ChannelConfig>();
@@ -44,14 +44,14 @@ namespace RoosterBot.Meta {
 				sw.Write("{}");
 			}
 
-			Logger.Info("FileGuildConfigService", "Finished loading guild config json");
+			Logger.Info("FileChannelConfigService", "Finished loading channel config json");
 		}
 
 		public override Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel) {
 			return Task.FromResult(m_ConfigMap.GetOrAdd(channel, GetDefaultConfig));
 		}
 
-		public override Task UpdateGuildAsync(ChannelConfig config) {
+		public override Task UpdateChannelAsync(ChannelConfig config) {
 			m_ConfigMap.AddOrUpdate(config.ChannelReference, config, (channel, old) => config);
 
 			return File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(

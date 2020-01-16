@@ -9,16 +9,16 @@ namespace RoosterBot.Meta {
 		public CommandResult HelpCommand([Remainder, Name("#HelpCommand_Section")] string? section = null) {
 			if (section == null) {
 				return new TextResult(null,
-					GetString("HelpCommand_HelpPretext", GuildConfig.CommandPrefix) + "\n\n"
-					+ GetString("HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n"
+					GetString("HelpCommand_HelpPretext", ChannelConfig.CommandPrefix) + "\n\n"
+					+ GetString("HelpCommand_HelpSectionsPretext", ChannelConfig.CommandPrefix) + "\n"
 					+ string.Join(", ", Help.GetSectionNames(Culture)) + "\n\n"
-					+ GetString("HelpCommand_PostText", GuildConfig.CommandPrefix));
+					+ GetString("HelpCommand_PostText", ChannelConfig.CommandPrefix));
 			} else if (Help.HelpSectionExists(Culture, section)) {
-				return new TextResult(null, string.Format(Help.GetHelpSection(Culture, section), GuildConfig.CommandPrefix));
+				return new TextResult(null, string.Format(Help.GetHelpSection(Culture, section), ChannelConfig.CommandPrefix));
 			} else {
 				return new TextResult(null,
 					GetString("HelpCommand_ChapterDoesNotExist") + "\n\n"
-					+ GetString("HelpCommand_HelpSectionsPretext", GuildConfig.CommandPrefix) + "\n"
+					+ GetString("HelpCommand_HelpSectionsPretext", ChannelConfig.CommandPrefix) + "\n"
 					+ string.Join(", ", Help.GetSectionNames(Culture)));
 			}
 		}

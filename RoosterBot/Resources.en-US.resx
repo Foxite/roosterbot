@@ -132,8 +132,8 @@
   <data name="UserIsModeratorAttribute_CheckFailed" xml:space="preserve">
     <value>You need moderator privileges to do this.</value>
   </data>
-  <data name="UserIsModeratorAttribute_GuildsOnly" xml:space="preserve">
-    <value>This command only works in a server.</value>
+  <data name="UserIsModeratorAttribute_PublicOnly" xml:space="preserve">
+    <value>This command only works in a public channel.</value>
   </data>
   <data name="UserIsModeratorAttribute_Summary" xml:space="preserve">
     <value>You need to be a moderator to do this.</value>
