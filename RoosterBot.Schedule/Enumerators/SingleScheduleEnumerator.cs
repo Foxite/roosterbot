@@ -9,21 +9,19 @@ namespace RoosterBot.Schedule {
 		private readonly RoosterCommandContext m_Context;
 		private readonly ScheduleRecord m_Initial;
 		private readonly IdentifierInfo m_Identifier;
-		private readonly string m_Caption;
 
 		private ScheduleRecord m_CurrentRecord;
 
-		public RoosterCommandResult Current => new AspectListResult(m_Caption, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+		public RoosterCommandResult Current => new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
 
 		object? IEnumerator.Current => throw new NotImplementedException();
 		
-		public SingleScheduleEnumerator(RoosterCommandContext context, ScheduleRecord initial, IdentifierInfo identifier, string caption) {
+		public SingleScheduleEnumerator(RoosterCommandContext context, ScheduleRecord initial, IdentifierInfo identifier) {
 			m_Resources = context.ServiceProvider.GetService<ResourceService>();
 			m_ScheduleService = context.ServiceProvider.GetService<ScheduleService>();
 			m_Context = context;
 			m_Initial = initial;
 			m_Identifier = identifier;
-			m_Caption = caption;
 			m_CurrentRecord = null!;
 		}
 

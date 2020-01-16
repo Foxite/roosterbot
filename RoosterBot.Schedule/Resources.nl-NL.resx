@@ -455,4 +455,11 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>Ik weet niet wie je bedoelt: {0}</value>
     <comment>0: list of match display texts</comment>
   </data>
+  <data name="ScheduleModule_CurrentCommand_Next" xml:space="preserve">
+    <value> Dit is wat er hierna komt:</value>
+  </data>
+  <data name="TeacherListModule_TeacherListCommand_ResultsFor" xml:space="preserve">
+    <value>Resultaten voor `{0}`</value>
+    <comment>0: input</comment>
+  </data>
 </root>

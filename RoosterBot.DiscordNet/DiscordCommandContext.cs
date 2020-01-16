@@ -77,9 +77,13 @@ namespace RoosterBot.DiscordNet {
 			IUserMessage message;
 			RoosterCommandResult initial = pr.Current;
 			if (initial is AspectListResult alr) {
-				message = await Channel.SendMessageAsync(embed: AspectListToEmbedBuilder(alr).Build());
+				message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
 			} else {
-				message = await Channel.SendMessageAsync(pr.Current.ToString(this));
+				string text = pr.Current.ToString(this);
+				if (pr.Caption != null) {
+					text = pr.Caption + "\n" + text;
+				}
+				message = await Channel.SendMessageAsync(text);
 			}
 
 			Task goTo(Func<bool> moveAction) {
@@ -87,10 +91,14 @@ namespace RoosterBot.DiscordNet {
 				if (moveAction()) {
 					return message.ModifyAsync(props => {
 						if (pr.Current is AspectListResult alr) {
-							props.Content = null;
+							props.Content = pr.Caption;
 							props.Embed = AspectListToEmbedBuilder(alr).Build();
 						} else {
-							props.Content = current.ToString(this);
+							string text = current.ToString(this);
+							if (pr.Caption != null) {
+								text = pr.Caption + "\n" + text;
+							}
+							props.Content = text;
 							props.Embed = null;
 						}
 					});

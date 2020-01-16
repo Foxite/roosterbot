@@ -18,8 +18,6 @@ namespace RoosterBot.Schedule {
 
 			if (!records.Any()) {
 				return TextResult.Info(GetString("TeacherListModule_TeacherListCommand_NoTeachersFound"));
-			//} else if (records.Count() > 25) {
-			//	return TextResult.Warning(GetString("TeacherListModule_TeacherListCommand_TooManyResults"));
 			} else {
 				string[][] cells = new string[records.Count()][];
 				string[] header = new string[] {
@@ -37,7 +35,7 @@ namespace RoosterBot.Schedule {
 					recordIndex++;
 				}
 
-				return new PaginatedResult(new PaginatedTableEnumerator("Table", header, cells));
+				return new PaginatedResult(new PaginatedTableEnumerator("Table", header, cells), GetString("TeacherListModule_TeacherListCommand_ResultsFor", name));
 			}
 		}
 	}

@@ -5,7 +5,7 @@ namespace RoosterBot.Meta {
 	public class TestModule : RoosterModule {
 		[Command("test")]
 		public CommandResult Test(int head) {
-			return new PaginatedResult(new TestBDE(head));
+			return new PaginatedResult(new TestBDE(head), "Caption");
 		}
 
 		private class TestBDE : IBidirectionalEnumerator<RoosterCommandResult> {

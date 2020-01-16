@@ -454,4 +454,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>I don't know who you mean: {0}</value>
     <comment>0: list of match display texts</comment>
   </data>
+  <data name="ScheduleModule_CurrentCommand_Next" xml:space="preserve">
+    <value> This is what comes next:</value>
+  </data>
+  <data name="TeacherListModule_TeacherListCommand_ResultsFor" xml:space="preserve">
+    <value>Results for `{0}`</value>
+    <comment>0: input</comment>
+  </data>
 </root>
