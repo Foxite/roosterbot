@@ -266,12 +266,10 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
     <comment>0: new language name, localized</comment>
   </data>
   <data name="Meta_PrimitiveFail_Decimal" xml:space="preserve">
-    <value>{0} is geen heel of fractioneel getal.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>Dat is geen heel of fractioneel getal.</value>
   </data>
   <data name="Meta_PrimitiveFail_Integer" xml:space="preserve">
-    <value>{0} is geen heel getal.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>Dat is geen heel getal.</value>
   </data>
   <data name="CharParser_Name" xml:space="preserve">
     <value>teken</value>

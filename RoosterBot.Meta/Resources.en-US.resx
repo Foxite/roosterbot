@@ -264,12 +264,10 @@ To quickly edit your last message, klik on the textbox and press the :arrow_up: 
     <comment>0: new language name, localized</comment>
   </data>
   <data name="Meta_PrimitiveFail_Decimal" xml:space="preserve">
-    <value>{0} is not an integer or fractional number.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>That is not an integer or fractional number.</value>
   </data>
   <data name="Meta_PrimitiveFail_Integer" xml:space="preserve">
-    <value>{0} is not an integer.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>That is not an integer.</value>
   </data>
   <data name="CharParser_Name" xml:space="preserve">
     <value>character</value>

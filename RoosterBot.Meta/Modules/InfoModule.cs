@@ -7,7 +7,7 @@ namespace RoosterBot.Meta {
 	public class InfoModule : RoosterModule {
 		[Command("#InfoModule_InfoCommand"), Description("#InfoModule_InfoCommand_Summary")]
 		public CommandResult InfoCommand() {
-			string response = GetString("InfoModule_InfoCommand_Pretext", Constants.VersionString);
+			string response = GetString("InfoModule_InfoCommand_Pretext", Program.Version.ToString());
 			foreach (Component component in Program.Instance.Components.GetComponents()) {
 				response += "\n" + GetString("InfoModule_InfoCommand_ListItem", component.Name, component.ComponentVersion.ToString());
 			}
