@@ -30,7 +30,7 @@ namespace RoosterBot.Schedule {
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
 			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
 			identifierReaders.AddReader(ssir);
-			identifierReaders.AddReader(new TeacherInfoParser());
+			identifierReaders.AddReader(new StaffMemberInfoParser());
 			identifierReaders.AddReader(new RoomInfoParser());
 			commandService.AddTypeParser(identifierReaders);
 

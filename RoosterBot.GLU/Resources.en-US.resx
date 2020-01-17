@@ -130,7 +130,7 @@
     <value>Room</value>
   </data>
   <data name="GLUScheduleRecord_Aspect_StaffMember" xml:space="preserve">
-    <value>Teacher</value>
+    <value>Staff member</value>
   </data>
   <data name="GLUScheduleRecord_Aspect_StudentSets" xml:space="preserve">
     <value>Class</value>

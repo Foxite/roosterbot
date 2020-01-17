@@ -123,7 +123,7 @@ namespace RoosterBot.Schedule {
 					GetString("ScheduleModule_RespondDay_ColumnActivity"),
 					GetString("ScheduleModule_RespondDay_ColumnTime"),
 					GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
-					GetString("ScheduleModule_RespondDay_ColumnTeacher"),
+					GetString("ScheduleModule_RespondDay_ColumnStaffMember"),
 					GetString("ScheduleModule_RespondDay_ColumnRoom")
 				}), null);
 			} else {

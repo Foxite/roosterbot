@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public class TeacherInfoParser : IdentifierInfoParserBase<StaffMemberInfo> {
-		public override string TypeDisplayName => "#TeacherInfoReader_TypeDisplayName";
+	public class StaffMemberInfoParser : IdentifierInfoParserBase<StaffMemberInfo> {
+		public override string TypeDisplayName => "#StaffMemberInfoReader_TypeDisplayName";
 
 		public async override ValueTask<RoosterTypeParserResult<StaffMemberInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			RoosterTypeParserResult<StaffMemberInfo> baseResult = await base.ParseAsync(parameter, input, context);
@@ -28,7 +28,7 @@ namespace RoosterBot.Schedule {
 						if (lookupResults.Count == 1) {
 							result = lookupResults.First().StaffMember;
 						} else if (lookupResults.Count > 1) {
-							return Unsuccessful(true, context, "#TeacherInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.StaffMember.DisplayText)));
+							return Unsuccessful(true, context, "#StaffMemberInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.StaffMember.DisplayText)));
 						}
 					}
 				} else if (context.IsPrivate) {
@@ -36,7 +36,7 @@ namespace RoosterBot.Schedule {
 				}
 
 				if (result == null) {
-					return Unsuccessful(false, context, "#TeacherInfoReader_CheckFailed");
+					return Unsuccessful(false, context, "#StaffMemberInfoReader_CheckFailed");
 				} else {
 					return Successful(result);
 				}

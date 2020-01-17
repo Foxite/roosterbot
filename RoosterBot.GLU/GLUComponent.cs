@@ -13,7 +13,7 @@ namespace RoosterBot.GLU {
 		private readonly Regex m_StudentSetRegex;
 		private readonly Regex m_RoomRegex;
 		private SnowflakeReference[] m_AllowedChannels;
-		private string m_TeacherPath;
+		private string m_StaffMemberPath;
 		private bool m_SkipPastRecords;
 
 		public override Version ComponentVersion => new Version(1, 1, 1);
@@ -22,7 +22,7 @@ namespace RoosterBot.GLU {
 		public GLUComponent() {
 			m_Schedules = new List<ScheduleRegistryInfo>();
 			m_AllowedChannels = Array.Empty<SnowflakeReference>();
-			m_TeacherPath = "";
+			m_StaffMemberPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
@@ -51,10 +51,10 @@ namespace RoosterBot.GLU {
 			}
 
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
-			addSchedule<StaffMemberInfo>("GLU-Teachers");
+			addSchedule<StaffMemberInfo>("GLU-StaffMembers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
-			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
+			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
@@ -64,9 +64,9 @@ namespace RoosterBot.GLU {
 				m_AllowedChannels = m_AllowedChannels.Where(sr => sr.Platform != null).ToArray();
 			}
 
-			// Teachers
+			// Staff members
 			StaffMemberService members = services.GetRequiredService<StaffMemberService>();
-			members.AddTeachers(m_TeacherPath, m_AllowedChannels);
+			members.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);
 
 			ScheduleService provider = services.GetRequiredService<ScheduleService>();
 

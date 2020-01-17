@@ -5,15 +5,15 @@ using CsvHelper;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
-	internal class GLUTeacherReader {
+	internal class GLUStaffMemberReader {
 		private readonly string m_Path;
 
-		public GLUTeacherReader(string path) {
+		public GLUStaffMemberReader(string path) {
 			m_Path = path;
 		}
 
 		public IEnumerable<StaffMemberInfo> ReadCSV() {
-			Logger.Info("GLUTeacherReader", $"Loading staff CSV file {Path.GetFileName(m_Path)}");
+			Logger.Info("GLUStaffMemberReader", $"Loading staff CSV file {Path.GetFileName(m_Path)}");
 
 			using StreamReader reader = File.OpenText(m_Path);
 			using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
@@ -39,7 +39,7 @@ namespace RoosterBot.GLU {
 
 				yield return record;
 			}
-			Logger.Info("GLUTeacherReader", $"Successfully loaded staff CSV file {Path.GetFileName(m_Path)}");
+			Logger.Info("GLUStaffMemberReader", $"Successfully loaded staff CSV file {Path.GetFileName(m_Path)}");
 		}
 	}
 }
