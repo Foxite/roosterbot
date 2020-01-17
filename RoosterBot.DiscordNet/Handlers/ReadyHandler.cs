@@ -4,8 +4,8 @@ using Discord;
 using Discord.WebSocket;
 
 namespace RoosterBot.DiscordNet {
-	internal sealed class ReadyHandler : RoosterHandler {
-		public DiscordSocketClient Client { get; set; } = null!;
+	internal sealed class ReadyHandler {
+		private DiscordSocketClient Client => (DiscordSocketClient) DiscordNetComponent.Instance.Client;
 
 		private bool m_VersionNotReported = true;
 		private readonly string m_GameString;
@@ -13,7 +13,7 @@ namespace RoosterBot.DiscordNet {
 		private readonly bool m_ReportVersion;
 		private readonly ulong m_BotOwnerId;
 
-		public ReadyHandler(IServiceProvider isp, string gameString, ActivityType activityType, bool reportVersion, ulong botOwnerId) : base(isp) {
+		public ReadyHandler(string gameString, ActivityType activityType, bool reportVersion, ulong botOwnerId) {
 			Client.Ready += OnClientReady;
 
 			m_GameString = gameString;

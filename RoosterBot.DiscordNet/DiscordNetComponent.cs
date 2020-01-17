@@ -125,7 +125,7 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
 			new MessageDeletedHandler (services);
-			new ReadyHandler          (services, m_GameString, m_Activity, m_ReportVersion, BotOwnerId);
+			new ReadyHandler          (m_GameString, m_Activity, m_ReportVersion, BotOwnerId);
 			new LogHandler            (Client);
 		}
 

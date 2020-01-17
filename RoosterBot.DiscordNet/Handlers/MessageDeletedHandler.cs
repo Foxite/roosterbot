@@ -4,10 +4,11 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
-	internal sealed class MessageDeletedHandler : RoosterHandler {
+	internal sealed class MessageDeletedHandler {
 		public UserConfigService UCS { get; set; } = null!;
 
-		public MessageDeletedHandler(IServiceProvider isp) : base(isp) {
+		public MessageDeletedHandler(IServiceProvider isp) {
+			UCS = isp.GetRequiredService<UserConfigService>();
 			isp.GetRequiredService<BaseSocketClient>().MessageDeleted += OnMessageDeleted;
 		}
 

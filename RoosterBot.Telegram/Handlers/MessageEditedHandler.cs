@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 
 namespace RoosterBot.Telegram {
-	internal sealed class MessageEditedHandler : RoosterHandler {
+	internal sealed class MessageEditedHandler {
 		public UserConfigService UCS { get; set; } = null!;
 		public ChannelConfigService CCS { get; set; } = null!;
 
-		public MessageEditedHandler(IServiceProvider isp) : base(isp) {
+		public MessageEditedHandler(IServiceProvider isp) {
+			CCS = isp.GetRequiredService<ChannelConfigService>();
+			UCS = isp.GetRequiredService<UserConfigService>();
 			TelegramComponent.Instance.Client.OnMessageEdited += OnMessageEdited;
 		}
 

@@ -2,15 +2,17 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
-	internal sealed class MessageUpdatedHandler : RoosterHandler {
-		public BaseSocketClient Client { get; set; } = null!;
+	internal sealed class MessageUpdatedHandler {
 		public ChannelConfigService CCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
 
-		internal MessageUpdatedHandler(IServiceProvider isp) : base(isp) {
-			Client.MessageUpdated += OnMessageUpdated;
+		internal MessageUpdatedHandler(IServiceProvider isp) {
+			CCS = isp.GetRequiredService<ChannelConfigService>();
+			UCS = isp.GetRequiredService<UserConfigService>();
+			DiscordNetComponent.Instance.Client.MessageUpdated += OnMessageUpdated;
 		}
 
 		private Task OnMessageUpdated(Discord.Cacheable<Discord.IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {

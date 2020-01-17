@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
-	internal sealed class MessageReceivedHandler : RoosterHandler {
+	internal sealed class MessageReceivedHandler {
 		public ChannelConfigService CCS { get; set; } = null!;
 		public UserConfigService UCS { get; set; } = null!;
-		public BaseSocketClient Client { get; set; } = null!;
 
-		internal MessageReceivedHandler(IServiceProvider isp) : base(isp) {
-			Client.MessageReceived += HandleNewCommand;
+		internal MessageReceivedHandler(IServiceProvider isp) {
+			CCS = isp.GetRequiredService<ChannelConfigService>();
+			UCS = isp.GetRequiredService<UserConfigService>();
+
+			DiscordNetComponent.Instance.Client.MessageReceived += HandleNewCommand;
 		}
 
 		private Task HandleNewCommand(SocketMessage dsm) {
