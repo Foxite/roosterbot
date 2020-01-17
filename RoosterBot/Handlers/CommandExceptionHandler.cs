@@ -5,13 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
-	internal sealed class CommandExceptionHandler : RoosterHandler {
-		public ResourceService Resources { get; set; } = null!;
-		public NotificationService Notification { get; set; } = null!;
-		public EmoteService Emotes { get; set; } = null!;
+	internal sealed class CommandExceptionHandler {
+		private ResourceService Resources { get; }
+		private NotificationService Notification { get; }
 
-		public CommandExceptionHandler(IServiceProvider isp) : base(isp) {
-			isp.GetService<RoosterCommandService>().CommandExecutionFailed += HandleError;
+		public CommandExceptionHandler(IServiceProvider isp) {
+			Resources = isp.GetRequiredService<ResourceService>();
+			Notification = isp.GetRequiredService<NotificationService>();
+
+			isp.GetRequiredService<RoosterCommandService>().CommandExecutionFailed += HandleError;
 		}
 
 		private async Task HandleError(CommandExecutionFailedEventArgs args) {

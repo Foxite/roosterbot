@@ -11,6 +11,7 @@ namespace RoosterBot {
 
 		public abstract string Summary { get; }
 
+		/// 
 		public async sealed override ValueTask<CheckResult> CheckAsync(CommandContext context) {
 			if (context is RoosterCommandContext rcc) {
 				return await CheckAsync(rcc);
@@ -21,6 +22,7 @@ namespace RoosterBot {
 			}
 		}
 
+		/// 
 		protected abstract ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context);
 	}
 }

@@ -25,12 +25,12 @@ namespace RoosterBot.Weather {
 				Attribution = false
 			});
 
-			services.AddSingleton(isp => new WeatherService(isp.GetService<ResourceService>(), jsonConfig.WeatherBitKey, jsonConfig.Attribution));
+			services.AddSingleton(isp => new WeatherService(isp.GetRequiredService<ResourceService>(), jsonConfig.WeatherBitKey, jsonConfig.Attribution));
 			services.AddSingleton(cityService);
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
 			commandService.AddTypeParser(new CityInfoParser());
 

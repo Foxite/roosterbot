@@ -13,7 +13,7 @@ namespace RoosterBot.DateTimeUtils {
 #nullable restore
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			ResourceService = services.GetService<ResourceService>();
+			ResourceService = services.GetRequiredService<ResourceService>();
 			ResourceService.RegisterResources("RoosterBot.DateTimeUtils.Resources");
 
 			commandService.AddTypeParser(new DayOfWeekParser());

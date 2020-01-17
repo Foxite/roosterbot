@@ -36,8 +36,8 @@ namespace RoosterBot.Schedule {
 			m_InitialDate = initialDate.AddDays(-1);
 			m_CurrentDate = m_InitialDate;
 			
-			m_Resources = m_Context.ServiceProvider.GetService<ResourceService>();
-			m_Schedule = m_Context.ServiceProvider.GetService<ScheduleService>();
+			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
+			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
 		}
 
 		object? IEnumerator.Current => Current;

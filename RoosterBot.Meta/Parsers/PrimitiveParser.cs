@@ -17,7 +17,7 @@ namespace RoosterBot.Meta {
 				var result = (T) Convert.ChangeType(input, typeof(T));
 				return ValueTaskUtil.FromResult(Successful((T) result));
 			} catch {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#Meta_PrimitiveFail_" + m_TypeKey, StringUtil.EscapeString(input)));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#Meta_PrimitiveFail_" + m_TypeKey));
 			}
 		}
 	}

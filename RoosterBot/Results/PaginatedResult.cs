@@ -3,14 +3,17 @@ using System.Collections;
 
 namespace RoosterBot {
 	public sealed class PaginatedResult : RoosterCommandResult, IBidirectionalEnumerator<RoosterCommandResult> {
+		public string? Caption { get; }
+
 		private readonly IBidirectionalEnumerator<RoosterCommandResult> m_Enumerator;
 
 		public RoosterCommandResult Current => m_Enumerator.Current;
 
 		object? IEnumerator.Current => m_Enumerator.Current;
 
-		public PaginatedResult(IBidirectionalEnumerator<RoosterCommandResult> pageEnumerator) {
+		public PaginatedResult(IBidirectionalEnumerator<RoosterCommandResult> pageEnumerator, string? caption) {
 			m_Enumerator = pageEnumerator;
+			Caption = caption;
 		}
 
 		public void Dispose() => m_Enumerator.Dispose();

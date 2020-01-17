@@ -13,7 +13,7 @@ namespace RoosterBot.Meta {
 				return ValueTaskUtil.FromResult(Successful(info));
 			}
 
-			CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
+			CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
 			string? resultCode = cns.Search(context.Culture, input);
 			if (resultCode != null) {
 				return ValueTaskUtil.FromResult(Successful(CultureInfo.GetCultureInfo(resultCode)));

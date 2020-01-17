@@ -75,7 +75,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.DiscordNet.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.DiscordNet.Resources");
 
 			#region Discord parsers
 			var userParser = new UserParser<Discord.IUser>();
@@ -115,7 +115,7 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddModule<UserListModule>();
 			commandService.AddModule<InfoModule>();
 
-			var emotes = services.GetService<EmoteService>();
+			var emotes = services.GetRequiredService<EmoteService>();
 			emotes.RegisterEmote(this, "Error",   new DiscordEmote("<:error:636213609919283238>"));
 			emotes.RegisterEmote(this, "Success", new DiscordEmote("<:ok:636213617825546242>"));
 			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));

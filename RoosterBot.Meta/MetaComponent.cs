@@ -25,7 +25,7 @@ namespace RoosterBot.Meta {
 			});
 
 			if (config.UseFileConfig) {
-				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Guilds.json")));
+				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Channels.json")));
 				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService   (isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Users.json")));
 			}
 
@@ -34,7 +34,7 @@ namespace RoosterBot.Meta {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
 
@@ -62,7 +62,7 @@ namespace RoosterBot.Meta {
 			}
 
 			commandService.AddModule<ControlModule>();
-			commandService.AddModule<GuildConfigModule>();
+			commandService.AddModule<ChannelConfigModule>();
 			commandService.AddModule<UserConfigModule>();
 			commandService.AddModule<InfoModule>();
 			commandService.AddModule<TestModule>();

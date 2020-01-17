@@ -12,7 +12,7 @@ namespace RoosterBot.GLU {
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
 		private readonly Regex m_StudentSetRegex;
 		private readonly Regex m_RoomRegex;
-		private SnowflakeReference[] m_AllowedGuilds;
+		private SnowflakeReference[] m_AllowedChannels;
 		private string m_TeacherPath;
 		private bool m_SkipPastRecords;
 
@@ -21,7 +21,7 @@ namespace RoosterBot.GLU {
 
 		public GLUComponent() {
 			m_Schedules = new List<ScheduleRegistryInfo>();
-			m_AllowedGuilds = Array.Empty<SnowflakeReference>();
+			m_AllowedChannels = Array.Empty<SnowflakeReference>();
 			m_TeacherPath = "";
 			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
@@ -38,48 +38,48 @@ namespace RoosterBot.GLU {
 				SkipPastRecords = false,
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),
-				AllowedGuilds = new[] {
+				AllowedChannels = new[] {
 					new SnowflakeReference(null!, null!)
 				}
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
-			m_AllowedGuilds = config.AllowedGuilds;
+			m_AllowedChannels = config.AllowedChannels;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
 			}
 
 			addSchedule<StudentSetInfo>("GLU-StudentSets");
-			addSchedule<TeacherInfo>("GLU-Teachers");
+			addSchedule<StaffMemberInfo>("GLU-Teachers");
 			addSchedule<RoomInfo>("GLU-Rooms");
 
 			m_TeacherPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
-			if (services.GetService<GlobalConfigService>().IgnoreUnknownPlatforms) {
-				m_AllowedGuilds = m_AllowedGuilds.Where(sr => sr.Platform != null).ToArray();
+			if (services.GetRequiredService<GlobalConfigService>().IgnoreUnknownPlatforms) {
+				m_AllowedChannels = m_AllowedChannels.Where(sr => sr.Platform != null).ToArray();
 			}
 
 			// Teachers
-			TeacherNameService teachers = services.GetService<TeacherNameService>();
-			teachers.ReadAbbrCSV(m_TeacherPath, m_AllowedGuilds);
+			StaffMemberService members = services.GetRequiredService<StaffMemberService>();
+			members.AddTeachers(m_TeacherPath, m_AllowedChannels);
 
-			ScheduleService provider = services.GetService<ScheduleService>();
+			ScheduleService provider = services.GetRequiredService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, teachers, m_AllowedGuilds[0], m_SkipPastRecords), m_AllowedGuilds));
+				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
-			services.GetService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
+			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
 		}
 
 		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
-			if (m_AllowedGuilds.Contains(context.ChannelConfig.ChannelReference)) {
+			if (m_AllowedChannels.Contains(context.ChannelConfig.ChannelReference)) {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (m_StudentSetRegex.IsMatch(input)) {

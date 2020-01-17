@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
-	public sealed class CommandExecutionHandler : RoosterHandler {
-		public RoosterCommandService Commands { get; set; } = null!;
-		public ResourceService Resources { get; set; } = null!;
-		public NotificationService Notifications { get; set; } = null!;
-		public EmoteService Emotes { get; set; } = null!;
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class CommandHandler {
+		private RoosterCommandService Commands { get; }
+		private ResourceService Resources { get; }
+		private NotificationService Notifications { get; }
 
-		internal CommandExecutionHandler(IServiceProvider isp) : base(isp) { }
+		internal CommandHandler(IServiceProvider isp) {
+			Commands = isp.GetService<RoosterCommandService>();
+			Resources = isp.GetService<ResourceService>();
+			Notifications = isp.GetService<NotificationService>();
+		}
 
+		/// <summary>
+		/// Execute a command asynchronously.
+		/// </summary>
+		/// <param name="input">Input to parse.</param>
+		/// <param name="context">The <see cref="RoosterCommandContext"/> for this execution.</param>
 		public async Task ExecuteCommandAsync(string input, RoosterCommandContext context) {
 			IResult result = await Commands.ExecuteAsync(input, context);
 

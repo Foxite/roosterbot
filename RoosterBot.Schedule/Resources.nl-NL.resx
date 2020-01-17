@@ -145,7 +145,7 @@ Daarna hoef je niet meer je klas in commands te zetten. Je kan dus alleen maar `
 Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in` te typen, om te checken of het nog klopt (of als je aan geheugenverlies lijdt, maar dat denk ik niet.)</value>
     <comment>0: command prefix</comment>
   </data>
-  <data name="TeacherInfoReader_CheckFailed" xml:space="preserve">
+  <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
     <value>Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.</value>
   </data>
   <data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
@@ -157,31 +157,11 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
   </data>
-  <data name="ScheduleModule_GetAfterCommand_NoContext" xml:space="preserve">
-    <value>Na wat?</value>
-  </data>
-  <data name="ScheduleModule_GetAfterCommand_RecordsOutdated" xml:space="preserve">
-    <value>Daarna heb ik nog geen toegang tot de laatste roostertabellen, dus ik kan niets zien.</value>
-  </data>
-  <data name="ScheduleModule_PretextNext" xml:space="preserve">
-    <value>{0}: Hierna</value>
-    <comment>0: Identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_PretextAfterPrevious" xml:space="preserve">
-    <value>{0}: Na de vorige les</value>
-    <comment>0: Identifier display text
-		</comment>
-  </data>
   <data name="ScheduleModule_ReplyErrorMessage_UnknownIdentifier" xml:space="preserve">
     <value>Ik weet niet of je het over een leraar, klas of lokaal hebt.</value>
   </data>
   <data name="ScheduleModule_ItIsWeekend" xml:space="preserve">
     <value> Het is dan ook weekend.</value>
-  </data>
-  <data name="ScheduleModule_Pretext_FirstOn" xml:space="preserve">
-    <value>{0}: Als eerste op {1}</value>
-    <comment>0: Identifier display text
-		  1: Relative date reference</comment>
   </data>
   <data name="ScheduleModule_HandleError_NotFound" xml:space="preserve">
     <value>Dat item staat niet op mijn rooster.</value>
@@ -191,24 +171,6 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   </data>
   <data name="ScheduleModule_HandleError_NoSchedulesAvailableForServer" xml:space="preserve">
     <value>Er zijn geen roosters beschikbaar voor deze server.</value>
-  </data>
-  <data name="ScheduleModule_PretextNow" xml:space="preserve">
-    <value>{0}: Nu</value>
-  </data>
-  <data name="ScheduleModule_InXHours" xml:space="preserve">
-    <value>{0}: Over {1} uur</value>
-    <comment>0: Identifier display text
-		  1: Amount of hours</comment>
-  </data>
-  <data name="ScheduleModule_RespondDay_NoRecordAtRelative" xml:space="preserve">
-    <value>{0}: Niet op het rooster {1}.</value>
-    <comment>0: identifier display text
-		1: relative date reference</comment>
-  </data>
-  <data name="ScheduleModule_ResondDay_ScheduleForRelative" xml:space="preserve">
-    <value>{0}: Rooster voor {1}</value>
-    <comment>0: Identifier display text
-		  1: relative date reference</comment>
   </data>
   <data name="ScheduleModule_CurrentCommand_NoCurrentRecord" xml:space="preserve">
     <value>{0}: Niet op het rooster op dit moment.</value>
@@ -236,17 +198,17 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserClassModule_InvalidClass" xml:space="preserve">
     <value>Dat is geen klas.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_NoTeachersFound" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_NoStaffMembersFound" xml:space="preserve">
     <value>Geen leraren gevonden.</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnFullName" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnFullName" xml:space="preserve">
     <value>Volledige naam</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_ColumnAbbreviation" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnAbbreviation" xml:space="preserve">
     <value>Afk.</value>
     <comment>Needs to be very short, recommend 4 characters max, because it will stretch up the column</comment>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_DiscordName" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_DiscordName" xml:space="preserve">
     <value>Discord naam</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
@@ -255,25 +217,25 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_Name" xml:space="preserve">
     <value>Rooster</value>
   </data>
-  <data name="ScheduleModule_DefaultCurrentCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_CurrentCommand_Summary" xml:space="preserve">
     <value>Kijk wat er nu op het rooster staat.</value>
   </data>
-  <data name="ScheduleModule_DefaultNextCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_NextCommand_Summary" xml:space="preserve">
     <value>Kijk wat er hierna op het rooster staat.</value>
   </data>
-  <data name="ScheduleModule_DefaultWeekdayCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_WeekdayCommand_Summary" xml:space="preserve">
     <value>Het rooster voor een bepaalde dag. Als je de huidige dag gebruikt, pak ik volgende week. `{0}vandaag` doet dit niet.</value>
   </data>
-  <data name="ScheduleModule_DefaultTomorrowCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_TomorrowCommand_Summary" xml:space="preserve">
     <value>Wat er morgen op het rooster staat.</value>
   </data>
-  <data name="ScheduleModule_DefaultTodayCommand_Summary" xml:space="preserve">
+  <data name="ScheduleModule_TodayCommand_Summary" xml:space="preserve">
     <value>Wat er vandaag op het rooster staat.</value>
   </data>
-  <data name="TeacherListModule_Name" xml:space="preserve">
+  <data name="StaffMemberListModule_Name" xml:space="preserve">
     <value>Rooster</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_Summary" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_Summary" xml:space="preserve">
     <value>Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.</value>
   </data>
   <data name="UserClassModule_ModuleSummary" xml:space="preserve">
@@ -285,32 +247,11 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserClassModule_class_Name" xml:space="preserve">
     <value>klas</value>
   </data>
-  <data name="ScheduleModule_AfterCommand_Summary" xml:space="preserve">
-    <value>Kijk wat er gebeurt na het laatste wat je hebt bekeken.</value>
-  </data>
   <data name="UserClassModule_ModuleName" xml:space="preserve">
     <value>Instellingen</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Niet op het rooster deze week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Niet op het rooster volgende week</value>
-    <comment>0: identifier display text</comment>
-  </data>
-  <data name="ScheduleModule_RespondWorkingDays_NotOnScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Niet op het rooster over {1} weken</value>
-    <comment>0: identifier display text
-	1: amount of weeks</comment>
-  </data>
-  <data name="ScheduleModule_RespondDay_OnlyRecordForDay" xml:space="preserve">
-    <value>{0}: Enige item voor {1}</value>
-    <comment>0: identifier display text
-1: relative date reference</comment>
   </data>
   <data name="IdentifierInfoReader_Self" xml:space="preserve">
     <value>ik</value>
@@ -330,17 +271,14 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>week|weken</value>
     <comment>Separate possible values with |</comment>
   </data>
-  <data name="TeacherListModule_ListCommand_NameParameterName" xml:space="preserve">
+  <data name="StaffMemberListModule_ListCommand_NameParameterName" xml:space="preserve">
     <value>naam</value>
   </data>
-  <data name="TeacherListModule_TeacherListCommand_TooManyResults" xml:space="preserve">
+  <data name="StaffMemberListModule_StaffMemberListCommand_TooManyResults" xml:space="preserve">
     <value>Te veel resultaten. Voeg een specifieker filter toe.</value>
   </data>
-  <data name="ScheduleModule_AfterCommand" xml:space="preserve">
-    <value>daarna</value>
-  </data>
   <data name="ScheduleModule_DayCommand" xml:space="preserve">
-    <value>dag</value>
+    <value>op|dag</value>
   </data>
   <data name="ScheduleModule_FutureCommand" xml:space="preserve">
     <value>over</value>
@@ -378,20 +316,11 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
     <value>Tijd</value>
   </data>
-  <data name="ScheduleModule_RespondDay_ColumnTeacher" xml:space="preserve">
+  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
     <value>Leraar</value>
   </data>
   <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
     <value>Lokaal</value>
-  </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
-    <value>{0}: Rooster deze week</value>
-  </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
-    <value>{0}: Rooster volgende week</value>
-  </data>
-  <data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
-    <value>{0}: Rooster over {1} weken</value>
   </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
     <value>Kijk wat er volgende week op een rooster staat.</value>
@@ -418,13 +347,13 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
   </data>
-  <data name="RoomInfo_TypeDisplayName" xml:space="preserve">
+  <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>lokaal</value>
   </data>
-  <data name="StudentSetInfo_TypeDisplayName" xml:space="preserve">
+  <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
     <value>klas</value>
   </data>
-  <data name="TeacherInfo_TypeDisplayName" xml:space="preserve">
+  <data name="StaffMemberInfoReader_TypeDisplayName" xml:space="preserve">
     <value>leraar</value>
   </data>
   <data name="UserClassModule_Group" xml:space="preserve">
@@ -436,13 +365,10 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
   </data>
-  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
-    <value> Dat is dan ook in het weekend.</value>
-  </data>
   <data name="ScheduleModule_ShowFutureCommand_AmountParameterName" xml:space="preserve">
     <value>aantal</value>
   </data>
-  <data name="TeacherListModule_CommandName" xml:space="preserve">
+  <data name="StaffMemberListModule_CommandName" xml:space="preserve">
     <value>leraren|docenten|docent</value>
   </data>
   <data name="ScheduleModule_DayCommand_Day" xml:space="preserve">
@@ -451,8 +377,18 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_IdentiferInfo_Name" xml:space="preserve">
     <value>identifier</value>
   </data>
-  <data name="TeacherInfoReader_MultipleMatches" xml:space="preserve">
+  <data name="StaffMemberInfoReader_MultipleMatches" xml:space="preserve">
     <value>Ik weet niet wie je bedoelt: {0}</value>
     <comment>0: list of match display texts</comment>
+  </data>
+  <data name="ScheduleModule_CurrentCommand_Next" xml:space="preserve">
+    <value> Dit is wat er hierna komt:</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ResultsFor" xml:space="preserve">
+    <value>Resultaten voor `{0}`</value>
+    <comment>0: input</comment>
+  </data>
+  <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
+    <value> Dat is dan ook in het weekend.</value>
   </data>
 </root>

@@ -126,27 +126,27 @@
   <data name="CultureInfoReader_TypeDisplayName" xml:space="preserve">
     <value>taal</value>
   </data>
-  <data name="GuildConfigModule_GetLanguage" xml:space="preserve">
+  <data name="ChannelConfigModule_GetLanguage" xml:space="preserve">
     <value>De servertaal is {0}.</value>
     <comment>0: current language name, localized</comment>
   </data>
-  <data name="GuildConfigModule_GetPrefix" xml:space="preserve">
+  <data name="ChannelConfigModule_GetPrefix" xml:space="preserve">
     <value>De servercommandprefix is `{0}`.</value>
   </data>
-  <data name="GuildConfigModule_Group" xml:space="preserve">
+  <data name="ChannelConfigModule_Group" xml:space="preserve">
     <value>config</value>
   </data>
-  <data name="GuildConfigModule_Language" xml:space="preserve">
+  <data name="ChannelConfigModule_Language" xml:space="preserve">
     <value>taal</value>
   </data>
-  <data name="GuildConfigModule_Prefix" xml:space="preserve">
+  <data name="ChannelConfigModule_Prefix" xml:space="preserve">
     <value>prefix</value>
   </data>
-  <data name="GuildConfigModule_SetLanguage" xml:space="preserve">
+  <data name="ChannelConfigModule_SetLanguage" xml:space="preserve">
     <value>De servertaal is nu {0}.</value>
     <comment>0: new language name, localized</comment>
   </data>
-  <data name="GuildConfigModule_SetPrefix" xml:space="preserve">
+  <data name="ChannelConfigModule_SetPrefix" xml:space="preserve">
     <value>Deze servercommandprefix is nu `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
@@ -244,7 +244,7 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   </data>
   <data name="UserConfigModule_GetLanguage_NoneSet" xml:space="preserve">
     <value>Je hebt geen taal ingesteld, de servertaal {0} wordt gebruikt.</value>
-    <comment>0: guild language name, localized</comment>
+    <comment>0: channel language name, localized</comment>
   </data>
   <data name="UserConfigModule_Group" xml:space="preserve">
     <value>ik</value>
@@ -266,12 +266,10 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
     <comment>0: new language name, localized</comment>
   </data>
   <data name="Meta_PrimitiveFail_Decimal" xml:space="preserve">
-    <value>{0} is geen heel of fractioneel getal.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>Dat is geen heel of fractioneel getal.</value>
   </data>
   <data name="Meta_PrimitiveFail_Integer" xml:space="preserve">
-    <value>{0} is geen heel getal.</value>
-    <comment>0: erroneous input, sanitized</comment>
+    <value>Dat is geen heel getal.</value>
   </data>
   <data name="CharParser_Name" xml:space="preserve">
     <value>teken</value>

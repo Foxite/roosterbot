@@ -11,13 +11,13 @@ namespace RoosterBot.AWS {
 	// TODO (refactor) Improve database structure
 	// This currently indexes SnowflakeReferences by sr.Platform.PlatformName + "/" + sr.Id.ToString().
 	// That's not great and to change it requires changing the database structure.
-	public class DynamoDBGuildConfigService : ChannelConfigService {
+	public class DynamoDBChannelConfigService : ChannelConfigService {
 		private readonly Table m_Table;
 
-		public DynamoDBGuildConfigService(GlobalConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
-			Logger.Info("DynamoDBGuild", "Loading guild table");
+		public DynamoDBChannelConfigService(GlobalConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
+			Logger.Info("DynamoDBChannel", "Loading channel table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("DynamoDBGuild", "Finished loading guild table");
+			Logger.Info("DynamoDBChannel", "Finished loading channel table");
 		}
 
 		public async override Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel) {
@@ -47,8 +47,8 @@ namespace RoosterBot.AWS {
 			}
 		}
 
-		// In the future, guild staff will modify their settings on a website, and there will be no way to update this through commands.
-		public async override Task UpdateGuildAsync(ChannelConfig config) {
+		// In the future, channel staff will modify their settings on a website, and there will be no way to update this through commands.
+		public async override Task UpdateChannelAsync(ChannelConfig config) {
 			string id = config.ChannelReference.Platform.PlatformName + "/" + config.ChannelReference.Id.ToString();
 			Document document = await m_Table.GetItemAsync(id);
 			if (document is null) {
@@ -59,7 +59,7 @@ namespace RoosterBot.AWS {
 					{ "customData", config.GetRawData().ToString(Formatting.None) }
 				}));
 			} else {
-				// We can assume the guild ID won't change
+				// We can assume the channel ID won't change
 				document["culture"] = config.Culture.Name;
 				document["commandPrefix"] = config.CommandPrefix;
 				document["customData"] = config.GetRawData().ToString(Formatting.None);

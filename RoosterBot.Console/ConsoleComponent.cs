@@ -30,7 +30,7 @@ namespace RoosterBot.Console {
 			commandService.AddTypeParser(userParser);
 			commandService.GetPlatformSpecificParser<IUser>().RegisterParser(this, new ConversionParser<ConsoleUser, IUser>("Console user", userParser, user => user));
 
-			var emotes = services.GetService<EmoteService>();
+			var emotes = services.GetRequiredService<EmoteService>();
 			emotes.RegisterEmote(this, "Info",    new Emoji("i "));
 			emotes.RegisterEmote(this, "Error",   new Emoji("x "));
 			emotes.RegisterEmote(this, "Success", new Emoji("v "));
@@ -39,7 +39,7 @@ namespace RoosterBot.Console {
 		}
 
 		protected override void Connect(IServiceProvider services) {
-			UserConfigService ucs = services.GetService<UserConfigService>();
+			UserConfigService ucs = services.GetRequiredService<UserConfigService>();
 
 			Process.Start(new ProcessStartInfo() {
 				FileName = @"..\..\RoosterBot.Console.App\bin\Debug\netcoreapp3.0\RoosterBot.Console.App.exe",
@@ -47,8 +47,8 @@ namespace RoosterBot.Console {
 				UseShellExecute = true
 			});
 
-			ChannelConfigService ccs = services.GetService<ChannelConfigService>();
-			RoosterCommandService commandService = services.GetService<RoosterCommandService>();
+			ChannelConfigService ccs = services.GetRequiredService<ChannelConfigService>();
+			RoosterCommandService commandService = services.GetRequiredService<RoosterCommandService>();
 
 			_ = Task.Run(async () => {
 				NamedPipeServerStream? pipeServer = null;

@@ -129,8 +129,8 @@ namespace RoosterBot {
 		}
 
 		private void AddComponentModules(IServiceProvider services) {
-			RoosterCommandService commands = services.GetService<RoosterCommandService>();
-			HelpService help = services.GetService<HelpService>();
+			RoosterCommandService commands = services.GetRequiredService<RoosterCommandService>();
+			HelpService help = services.GetRequiredService<HelpService>();
 
 			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);

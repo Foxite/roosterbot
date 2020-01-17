@@ -5,34 +5,34 @@ using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	public class TeacherInfoParser : IdentifierInfoParserBase<TeacherInfo> {
-		public override string TypeDisplayName => "#TeacherInfo_TypeDisplayName";
+	public class TeacherInfoParser : IdentifierInfoParserBase<StaffMemberInfo> {
+		public override string TypeDisplayName => "#TeacherInfoReader_TypeDisplayName";
 
-		public async override ValueTask<RoosterTypeParserResult<TeacherInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			RoosterTypeParserResult<TeacherInfo> baseResult = await base.ParseAsync(parameter, input, context);
+		public async override ValueTask<RoosterTypeParserResult<StaffMemberInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
+			RoosterTypeParserResult<StaffMemberInfo> baseResult = await base.ParseAsync(parameter, input, context);
 			if (baseResult.IsSuccessful) {
 				return baseResult;
 			} else {
-				TeacherNameService tns = context.ServiceProvider.GetService<TeacherNameService>();
-				TeacherInfo? result = null;
+				StaffMemberService tns = context.ServiceProvider.GetRequiredService<StaffMemberService>();
+				StaffMemberInfo? result = null;
 
 				IUser? user = null;
-				TypeParserResult<IUser> userResult = await context.ServiceProvider.GetService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
+				TypeParserResult<IUser> userResult = await context.ServiceProvider.GetRequiredService<RoosterCommandService>().GetPlatformSpecificParser<IUser>().ParseAsync(parameter, input, context);
 				if (userResult.IsSuccessful) {
 					user = userResult.Value;
 				}
 
 				if (user == null) {
 					if (input.Length >= 3) {
-						IReadOnlyCollection<TeacherMatch> lookupResults = tns.Lookup(context.ChannelConfig.ChannelReference, input);
+						IReadOnlyCollection<StaffMemberMatch> lookupResults = tns.Lookup(context.ChannelConfig.ChannelReference, input);
 						if (lookupResults.Count == 1) {
-							result = lookupResults.First().Teacher;
+							result = lookupResults.First().StaffMember;
 						} else if (lookupResults.Count > 1) {
-							return Unsuccessful(true, context, "#TeacherInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.Teacher.DisplayText)));
+							return Unsuccessful(true, context, "#TeacherInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.StaffMember.DisplayText)));
 						}
 					}
 				} else if (context.IsPrivate) {
-					result = tns.GetTeacherByDiscordUser(context.Channel.GetReference(), user);
+					result = tns.GetStaffMemberByDiscordUser(context.Channel.GetReference(), user);
 				}
 
 				if (result == null) {

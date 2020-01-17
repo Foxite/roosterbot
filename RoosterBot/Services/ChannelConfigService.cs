@@ -16,7 +16,7 @@ namespace RoosterBot {
 			return new ChannelConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, channel, new Dictionary<string, JToken>());
 		}
 
-		public abstract Task UpdateGuildAsync(ChannelConfig config);
+		public abstract Task UpdateChannelAsync(ChannelConfig config);
 		public abstract Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel);
 	}
 
@@ -34,8 +34,8 @@ namespace RoosterBot {
 		public string CommandPrefix { get; set; }
 		public CultureInfo Culture { get; set; }
 
-		public ChannelConfig(ChannelConfigService guildConfigService, string commandPrefix, CultureInfo culture, SnowflakeReference channel, IDictionary<string, JToken> customData) {
-			m_Service = guildConfigService;
+		public ChannelConfig(ChannelConfigService service, string commandPrefix, CultureInfo culture, SnowflakeReference channel, IDictionary<string, JToken> customData) {
+			m_Service = service;
 			CommandPrefix = commandPrefix;
 			Culture = culture;
 			m_CustomData = customData;
@@ -61,7 +61,7 @@ namespace RoosterBot {
 		}
 
 		public Task UpdateAsync() {
-			return m_Service.UpdateGuildAsync(this);
+			return m_Service.UpdateChannelAsync(this);
 		}
 
 		public JObject GetRawData() => JObject.FromObject(m_CustomData);

@@ -14,13 +14,14 @@ namespace RoosterBot {
 			Hide = hide;
 		}
 
+		/// 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
 			if (Culture == context.Culture) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else if (Hide) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_UnknownCommand", context.ChannelConfig.CommandPrefix));
 			} else {
-				CultureNameService cns = context.ServiceProvider.GetService<CultureNameService>();
+				CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
 				string localizedName = cns.GetLocalizedName(Culture, context.ChannelConfig.Culture);
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#RequireCultureAttribute_CheckFailed", localizedName));
 			}

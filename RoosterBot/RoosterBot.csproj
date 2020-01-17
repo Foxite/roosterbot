@@ -4,6 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<OutDir>$(SolutionDir)\Output\RoosterBot</OutDir>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

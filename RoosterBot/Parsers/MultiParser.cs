@@ -28,7 +28,7 @@ namespace RoosterBot {
 		}
 
 		public async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
-			ResourceService resources = context.ServiceProvider.GetService<ResourceService>();
+			ResourceService resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			foreach (IRoosterTypeParser reader in m_Readers) {
 				IRoosterTypeParserResult result = await reader.ParseAsync(parameter, value, context);
 				if (result.IsSuccessful) {

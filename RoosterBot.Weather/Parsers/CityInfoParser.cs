@@ -7,7 +7,7 @@ namespace RoosterBot.Weather {
 		public override string TypeDisplayName => "#CityInfo_TypeDisplayName";
 
 		public async override ValueTask<RoosterTypeParserResult<CityInfo>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
-			CityService cities = context.ServiceProvider.GetService<CityService>();
+			CityService cities = context.ServiceProvider.GetRequiredService<CityService>();
 			CityInfo? cityResult = await cities.Lookup(input);
 
 			if (cityResult == null) {

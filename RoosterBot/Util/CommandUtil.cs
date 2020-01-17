@@ -2,6 +2,9 @@
 using Qmmands;
 
 namespace RoosterBot {
+	/// <summary>
+	/// A static class containing some helper functions for dealing with commands.
+	/// </summary>
 	public static class CommandUtil {
 		/// <summary>
 		/// Returns a localized signature of a CommandInfo.

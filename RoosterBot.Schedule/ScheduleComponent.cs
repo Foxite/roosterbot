@@ -15,13 +15,13 @@ namespace RoosterBot.Schedule {
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			services
-				.AddSingleton<TeacherNameService>()
+				.AddSingleton<StaffMemberService>()
 				.AddSingleton<ScheduleService>()
 				.AddSingleton<IdentifierValidationService>();
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
-			services.GetService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
+			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			var ssir = new StudentSetInfoParser();
 			commandService.AddTypeParser(ssir);
@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 			identifierReaders.AddReader(new RoomInfoParser());
 			commandService.AddTypeParser(identifierReaders);
 
-			commandService.AddModule<TeacherListModule>();
+			commandService.AddModule<StaffMemberModule>();
 			commandService.AddModule<ScheduleModule>();
 			commandService.AddModule<UserClassModule>();
 

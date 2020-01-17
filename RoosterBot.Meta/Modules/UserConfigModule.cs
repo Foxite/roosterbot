@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 				if (UserConfig.Culture != null) {
 					return TextResult.Info(GetString("UserConfigModule_GetLanguage", CultureNameService.GetLocalizedName(UserConfig.Culture, UserConfig.Culture)));
 				} else {
-					return TextResult.Info(GetString("UserConfigModule_GetLanguage_NoneSet", CultureNameService.GetLocalizedName(GuildConfig.Culture, GuildConfig.Culture)));
+					return TextResult.Info(GetString("UserConfigModule_GetLanguage_NoneSet", CultureNameService.GetLocalizedName(ChannelConfig.Culture, ChannelConfig.Culture)));
 				}
 			} else {
 				UserConfig.Culture = culture;

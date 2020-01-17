@@ -30,7 +30,7 @@ namespace RoosterBot.Schedule {
 		private ScheduleProvider GetSchedule(IdentifierInfo info, RoosterCommandContext context) {
 			if (m_Schedules.TryGetValue(info.GetType(), out List<ScheduleProvider>? list)) {
 				return list.FirstOrDefault(schedule => schedule.IsChannelAllowed(context.ChannelConfig.ChannelReference)) ??
-					throw new NoAllowedChannelsException($"No schedules are allowed for guild {(context.IsPrivate ? ("from " + context.User.UserName) : context.Channel.Name)}");
+					throw new NoAllowedChannelsException($"No schedules are allowed for channel {(context.IsPrivate ? ("from " + context.User.UserName) : context.Channel.Name)}");
 			} else {
 				throw new ArgumentException("Identifier type " + info.GetType().Name + " is not known to ScheduleProvider");
 			}
