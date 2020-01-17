@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 				.AddSingleton<IdentifierValidationService>();
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
 			var ssir = new StudentSetInfoParser();
@@ -38,6 +38,7 @@ namespace RoosterBot.Schedule {
 			commandService.AddModule<ScheduleModule>();
 			commandService.AddModule<UserClassModule>();
 
+			var help = services.GetRequiredService<HelpService>();
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
 		}

@@ -2,8 +2,14 @@
 using System.Threading.Tasks;
 
 namespace RoosterBot {
+	/// <summary>
+	/// Require that <see cref="RoosterCommandContext.IsPrivate"/> is equal a certain value.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
 	public sealed class RequirePrivateAttribute : RoosterPreconditionAttribute {
+		/// <summary>
+		/// <see cref="RoosterCommandContext.IsPrivate"/> must equal this value for this check to pass.
+		/// </summary>
 		public bool RequirePrivate { get; }
 
 		/// 

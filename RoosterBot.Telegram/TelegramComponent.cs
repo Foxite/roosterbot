@@ -32,7 +32,7 @@ namespace RoosterBot.Telegram {
 			Logger.Info("Telegram", "Username is " + Client.GetMeAsync().Result.Username);
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			new MessageReceivedHandler(services);
 			new MessageEditedHandler  (services);
 		}

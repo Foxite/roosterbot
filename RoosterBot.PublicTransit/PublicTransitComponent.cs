@@ -24,7 +24,7 @@ namespace RoosterBot.PublicTransit {
 			services.AddSingleton(new StationInfoService(Path.Combine(configPath, "stations.xml"), config.DefaultDepartureCode));
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			var stationInfoReader = new StationInfoParser();
 			commandService.AddTypeParser(stationInfoReader);
 			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
@@ -38,7 +38,7 @@ namespace RoosterBot.PublicTransit {
 			helpText += "Je kunt het vertrekstation overslaan. In dit geval wordt Utrecht Vaartsche Rijn gebruikt, want dit is om de hoek bij de school.\n\n";
 
 			helpText += "Je kunt stations opzoeken met `{0}stations <naam van station>`";
-			help.AddHelpSection(this, "trein", helpText);
+			services.GetRequiredService<HelpService>().AddHelpSection(this, "trein", helpText);
 		}
 
 		protected override void Dispose(bool disposing) {
