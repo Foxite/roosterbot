@@ -14,7 +14,7 @@ namespace RoosterBot.Tools {
 		[Command("steal"), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand() {
 			// Get last message before command
-			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToList()).SelectMany(c => c).OfType<IUserMessage>();
+			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToListAsync()).SelectMany(c => c).OfType<IUserMessage>();
 			if (messages.Any()) {
 				bool sawCommand = false;
 				foreach (IUserMessage message in messages) {
