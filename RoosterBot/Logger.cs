@@ -80,8 +80,19 @@ namespace RoosterBot {
 					loggedMessage += "\n" + exception.ToStringDemystified();
 				}
 			}
-			Console.WriteLine(loggedMessage);
 			lock (Lock) {
+				Console.ForegroundColor = severity switch
+				{
+					LogSeverity.Verbose => ConsoleColor.Gray,
+					LogSeverity.Debug => ConsoleColor.Gray,
+					LogSeverity.Info => ConsoleColor.White,
+					LogSeverity.Warning => ConsoleColor.Yellow,
+					LogSeverity.Error => ConsoleColor.Red,
+					LogSeverity.Critical => ConsoleColor.Red,
+					_ => ConsoleColor.White
+				};
+				Console.WriteLine(loggedMessage);
+				Console.ForegroundColor = ConsoleColor.White;
 				File.AppendAllText(LogPath, loggedMessage + Environment.NewLine);
 			}
 		}
