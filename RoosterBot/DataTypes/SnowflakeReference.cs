@@ -11,17 +11,35 @@ namespace RoosterBot {
 	[JsonConverter(typeof(SnowflakeReferenceConverter))]
 	[DebuggerDisplay("{Platform.PlatformName}:{Id.ToString()}")]
 	public class SnowflakeReference : IEquatable<SnowflakeReference> {
+		/// <summary>
+		/// The <see cref="PlatformComponent"/> that originated the ISnowflake represented by this object.
+		/// </summary>
 		public PlatformComponent Platform { get; }
 
+		/// <summary>
+		/// The unique ID of the snowflake.
+		/// </summary>
 		public object Id { get; }
 
+		/// <summary>
+		/// Construct a new SnowflakeReference.
+		/// </summary>
 		public SnowflakeReference(PlatformComponent platform, object id) {
 			Platform = platform;
 			Id = id;
 		}
 
+		/// <summary>
+		/// Tests for equality with another object.
+		/// </summary>
 		public override bool Equals(object? obj) => Equals(obj as SnowflakeReference);
 
+		/// <summary>
+		/// Tests for equality with another SnowflakeReference.
+		/// Equality is when the <see cref="PlatformComponent.PlatformName"/> of this and the other SnowflakeReference match, and the <see cref="Id"/> equals the other.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(SnowflakeReference? other) {
 			if (!(other is null)) {
 				return Platform.PlatformName == other.Platform.PlatformName &&
@@ -31,8 +49,10 @@ namespace RoosterBot {
 			}
 		}
 
-		public override int GetHashCode() => HashCode.Combine(Platform, Id);
+		/// <inheritdoc/>
+		public override int GetHashCode() => HashCode.Combine(Platform.PlatformName, Id);
 
+		/// <inheritdoc/>
 		public static bool operator ==(SnowflakeReference? left, SnowflakeReference? right) {
 			if (left is null && right is null) {
 				return true;
@@ -45,6 +65,7 @@ namespace RoosterBot {
 			return left!.Equals(right);
 		}
 
+		/// <inheritdoc/>
 		public static bool operator !=(SnowflakeReference? left, SnowflakeReference? right) {
 			return !(left == right);
 		}

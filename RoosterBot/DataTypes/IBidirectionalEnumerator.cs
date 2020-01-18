@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 
 namespace RoosterBot {
+	/// <summary>
+	/// An <see cref="IEnumerator{T}"/> that can move backwards as well as forwards.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public interface IBidirectionalEnumerator<T> : IEnumerator<T> {
 		/// <summary>
 		/// Moves the enumerator to the previous element of the collection.

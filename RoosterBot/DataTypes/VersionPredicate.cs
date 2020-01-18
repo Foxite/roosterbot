@@ -1,9 +1,23 @@
 ﻿using System;
 
 namespace RoosterBot {
+	/// <summary>
+	/// A filter for a <see cref="Version"/>.
+	/// </summary>
 	public class VersionPredicate {
+		/// <summary>
+		/// The required <see cref="Version.Major"/>.
+		/// </summary>
 		public uint  Major { get; }
+
+		/// <summary>
+		/// The required <see cref="Version.Feature"/>.
+		/// </summary>
 		public uint? Feature { get; }
+
+		/// <summary>
+		/// The required <see cref="Version.Minor"/>.
+		/// </summary>
 		public uint? Minor { get; }
 
 		/// <summary>
@@ -20,12 +34,16 @@ namespace RoosterBot {
 			Minor = minor;
 		}
 
+		/// <summary>
+		/// Test if a <see cref="Version"/> matches this predicate.
+		/// </summary>
 		public bool Matches(Version version) {
 			return						 version.Major   == Major
 				&& (!Feature.HasValue || version.Feature == Feature)
 				&& (!Minor  .HasValue || version.Minor   == Minor);
 		}
-
+		
+		/// <inheritdoc/>
 		public override bool Equals(object? obj) {
 			return obj is VersionPredicate predicate
 				&& Major   == predicate.Major
@@ -33,6 +51,7 @@ namespace RoosterBot {
 				&& Minor   == predicate.Minor;
 		}
 
+		/// <inheritdoc/>
 		public override int GetHashCode() {
 			var hashCode = 145219157;
 			hashCode = hashCode * -1521134295 + Major.GetHashCode();
@@ -41,6 +60,7 @@ namespace RoosterBot {
 			return hashCode;
 		}
 
+		/// <inheritdoc/>
 		public override string ToString() => $"{Major}.{Feature.ToString() ?? "x"}.{Minor.ToString() ?? "x"}";
 	}
 }

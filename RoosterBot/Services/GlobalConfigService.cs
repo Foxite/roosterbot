@@ -3,6 +3,9 @@ using System.Globalization;
 using Newtonsoft.Json;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The global configuration for RoosterBot.
+	/// </summary>
 	public sealed class GlobalConfigService {
 		/// <summary>
 		/// The default command prefix for all channels.

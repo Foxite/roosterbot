@@ -27,7 +27,7 @@ namespace RoosterBot {
 				string longName = GetType().Name;
 				const string ComponentString = "Component";
 				if (longName.EndsWith(ComponentString)) {
-					return longName.Substring(0, ComponentString.Length);
+					return longName.Substring(0, longName.Length - ComponentString.Length);
 				} else {
 					return longName;
 				}

@@ -6,6 +6,9 @@ namespace RoosterBot {
 	/// Represents multiple <see cref="RoosterCommandResult"/>s that are displayed together.
 	/// </summary>
 	public class CompoundResult : RoosterCommandResult {
+		/// <summary>
+		/// The individual results of this CompoundResult.
+		/// </summary>
 		public IEnumerable<RoosterCommandResult> IndividualResults => m_IndividualResults;
 
 		/// <summary>
@@ -15,15 +18,21 @@ namespace RoosterBot {
 
 		private readonly List<RoosterCommandResult> m_IndividualResults;
 
+		///
 		public CompoundResult(string separator, params RoosterCommandResult[] results) {
 			m_IndividualResults = new List<RoosterCommandResult>(results);
 			Separator = separator;
 		}
 
+		/// <summary>
+		/// Add a result to the CompoundResult.
+		/// </summary>
+		/// <param name="result"></param>
 		public void AddResult(RoosterCommandResult result) {
 			m_IndividualResults.Add(result);
 		}
 
+		/// <inheritdoc/>
 		public override string ToString(RoosterCommandContext rcc) {
 			return string.Join(Separator, IndividualResults.Select(result => result.ToString(rcc)));
 		}

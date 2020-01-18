@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using Qmmands;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The base class for all <see cref="CheckResult"/> used within RoosterBot.
+	/// </summary>
 	public class RoosterCheckResult : CheckResult {
+		/// <summary>
+		/// The list of objects used to format the <see cref="CheckResult.Reason"/>.
+		/// </summary>
 		public IReadOnlyList<object> ErrorReasonObjects { get; }
+
+		/// <summary>
+		/// The Component used when resolving the <see cref="CheckResult.Reason"/>.
+		/// </summary>
 		public Component? ErrorReasonComponent { get; }
 
 		public static new RoosterCheckResult Successful => new RoosterCheckResult();

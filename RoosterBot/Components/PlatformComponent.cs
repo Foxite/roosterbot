@@ -20,7 +20,6 @@ namespace RoosterBot {
 
 		/// <summary>
 		/// Start the connection to the platform.
-		/// 
 		/// </summary>
 		protected abstract void Connect(IServiceProvider services);
 
@@ -32,6 +31,9 @@ namespace RoosterBot {
 		internal void ConnectInternal(IServiceProvider services) => Connect(services);
 		internal void DisconnectInternal() => Disconnect();
 
+		/// <summary>
+		/// Get a platform-specific object that can be used as an <see cref="ISnowflake.Id"/>.
+		/// </summary>
 		public abstract object GetSnowflakeIdFromString(string input);
 	}
 }

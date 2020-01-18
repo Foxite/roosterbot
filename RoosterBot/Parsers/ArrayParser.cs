@@ -2,10 +2,18 @@
 using Qmmands;
 
 namespace RoosterBot {
+	/// <summary>
+	/// Parse an array of objects according to another <see cref="RoosterTypeParser{T}"/>.
+	/// </summary>
 	public class ArrayParser<T> : RoosterTypeParser<T[]>, IExternalResultStringParser {
 		private readonly RoosterTypeParser<T> m_IndivReader;
 
+		/// <inheritdoc/>
 		public override string TypeDisplayName { get; }
+
+		/// <summary>
+		/// The Component to be used when resolving the <see cref="TypeParserResult{T}.Reason"/>.
+		/// </summary>
 		public Component ErrorReasonComponent {
 			get {
 				if (m_IndivReader is IExternalResultStringParser ersp) {
@@ -16,12 +24,17 @@ namespace RoosterBot {
 			}
 		}
 
-
-		public ArrayParser(RoosterTypeParser<T> indivReader, string? typeDisplayName = null) {
-			m_IndivReader = indivReader;
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="indivParser">The <see cref="RoosterTypeParser{T}"/> used when parsing individual items.</param>
+		/// <param name="typeDisplayName">The <see cref="TypeDisplayName"/>.</param>
+		public ArrayParser(RoosterTypeParser<T> indivParser, string? typeDisplayName = null) {
+			m_IndivReader = indivParser;
 			TypeDisplayName = typeDisplayName ?? (m_IndivReader.TypeDisplayName + "[]");
 		}
 
+		/// <inheritdoc/>
 		public async override ValueTask<RoosterTypeParserResult<T[]>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			string[] inputs = input.Split(',');
 			var results = new T[inputs.Length];

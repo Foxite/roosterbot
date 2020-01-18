@@ -11,14 +11,17 @@ namespace RoosterBot {
 		private readonly RoosterTypeParser<TIn> m_Inner;
 		private readonly Func<TIn, TOut> m_Converter;
 
+		/// <inheritdoc/>
 		public override string TypeDisplayName { get; }
 
+		/// 
 		public ConversionParser(string typeDisplayName, RoosterTypeParser<TIn> inner, Func<TIn, TOut> converter) {
 			TypeDisplayName = typeDisplayName;
 			m_Inner = inner;
 			m_Converter = converter;
 		}
 
+		/// <inheritdoc/>
 		public async override ValueTask<RoosterTypeParserResult<TOut>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
 			var result = await m_Inner.ParseAsync(parameter, value, context);
 

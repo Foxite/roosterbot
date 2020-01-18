@@ -1,4 +1,7 @@
 ﻿namespace RoosterBot {
+	/// <summary>
+	/// The type of cooldown used in <see cref="Qmmands.CooldownAttribute"/> within RoosterBot.
+	/// </summary>
 	public enum CooldownType {
 		/// <summary>
 		/// Cooldown is specific to this user and shared by all commands.
