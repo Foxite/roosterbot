@@ -25,7 +25,7 @@ namespace RoosterBot.Console {
 			m_CTS = new CancellationTokenSource();
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			var userParser = new UserParser();
 			commandService.AddTypeParser(userParser);
 			commandService.GetPlatformSpecificParser<IUser>().RegisterParser(this, new ConversionParser<ConsoleUser, IUser>("Console user", userParser, user => user));

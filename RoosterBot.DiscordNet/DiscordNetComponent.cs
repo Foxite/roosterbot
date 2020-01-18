@@ -74,7 +74,7 @@ namespace RoosterBot.DiscordNet {
 			services.AddSingleton(Client);
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.DiscordNet.Resources");
 
 			#region Discord parsers

@@ -8,7 +8,7 @@ namespace RoosterBot.Telegram {
 		private string m_Token = "";
 
 		public override string PlatformName => "Telegram";
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(0, 2, 0);
 
 		public TelegramBotClient Client { get; private set; } = null!;
 		public int BotOwnerId { get; private set; }
@@ -32,7 +32,7 @@ namespace RoosterBot.Telegram {
 			Logger.Info("Telegram", "Username is " + Client.GetMeAsync().Result.Username);
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			new MessageReceivedHandler(services);
 			new MessageEditedHandler  (services);
 		}

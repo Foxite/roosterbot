@@ -36,7 +36,7 @@ namespace RoosterBot.AWS {
 			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), m_DynamoDBClient, jsonConfig.ChannelTable));
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			bool production = true;
 			// This way, there will be no warnings about unused fields.
 #if DEBUG

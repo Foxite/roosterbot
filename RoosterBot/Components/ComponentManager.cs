@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using Module = Qmmands.Module;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The singleton class that takes care of setting up and shutting down components.
+	/// </summary>
 	public sealed class ComponentManager {
 		private readonly List<Component> m_Components;
 		private readonly ConcurrentDictionary<Assembly, Component> m_ComponentsByAssembly;
@@ -158,10 +161,19 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Get a read-only list of all installed Components.
+		/// </summary>
+		/// <returns></returns>
 		public IReadOnlyList<Component> GetComponents() {
 			return m_Components.AsReadOnly();
 		}
 
+		/// <summary>
+		/// Get the <see cref="Component"/> that owns a module. For this to work, a module <b>must</b> be defined in an assembly that also defines a component.
+		/// </summary>
+		/// <param name="module"></param>
+		/// <returns></returns>
 		public Component GetComponentForModule(Module module) {
 			if (module.Type == null) {
 				throw new ArgumentException($"Module named {module.Name} was built manually. This is not supported since RoosterBot 2.2.");
@@ -180,6 +192,10 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Gets the installed <see cref="PlatformComponent"/> that has a <see cref="PlatformComponent.PlatformName"/> equal to <paramref name="name"/>.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">When no appropriate <see cref="PlatformComponent"/> is installed.</exception>
 		public PlatformComponent? GetPlatform(string name) {
 			return m_Components.OfType<PlatformComponent>().SingleOrDefault(platform => platform.PlatformName == name);
 		}

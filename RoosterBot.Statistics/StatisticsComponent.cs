@@ -10,7 +10,7 @@ namespace RoosterBot.Statistics {
 			services.AddSingleton((isp) => new StatisticsService(isp.GetRequiredService<ResourceService>()));
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			StatisticsService stats = services.GetRequiredService<StatisticsService>();
 
 

@@ -8,7 +8,7 @@ namespace RoosterBot.GLU.Discord {
 
 		public override Version ComponentVersion => new Version(0, 1, 0);
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			commandService.AddModule<GLUModule>();
 
 			new RoleAssignmentHandler();

@@ -17,7 +17,7 @@ namespace RoosterBot.Tools {
 			services.AddSingleton((isp) => new YoutubeConverter(isp.GetRequiredService<YoutubeClient>(), config.PathToFFMPEG));
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
 
 			commandService.AddModule<YoutubeModule>();

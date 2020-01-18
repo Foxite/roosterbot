@@ -57,7 +57,7 @@ namespace RoosterBot.GLU {
 			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commands, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commands) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
 			if (services.GetRequiredService<GlobalConfigService>().IgnoreUnknownPlatforms) {

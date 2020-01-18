@@ -29,14 +29,14 @@ namespace RoosterBot.Weather {
 			services.AddSingleton(cityService);
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Weather.Resources");
 
 			commandService.AddTypeParser(new CityInfoParser());
 
 			commandService.AddModule<WeatherModule>();
 
-			help.AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
+			services.GetRequiredService<HelpService>().AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 		}
 	}
 }

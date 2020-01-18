@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 
 namespace RoosterBot {
+	/// <summary>
+	/// Require that the user has <see cref="IUser.IsBotAdmin"/> <see langword="true"/>.
+	/// </summary>
 	public sealed class RequireBotManagerAttribute : RoosterPreconditionAttribute {
 		/// 
 		public override string Summary => "#RequireBotManagerAttribute_Summary";

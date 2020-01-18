@@ -33,7 +33,7 @@ namespace RoosterBot.Meta {
 			m_EnableCommandsList = config.EnableCommandsList;
 		}
 
-		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService, HelpService help) {
+		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
@@ -67,7 +67,7 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<InfoModule>();
 			commandService.AddModule<TestModule>();
 
-			help.AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
+			services.GetRequiredService<HelpService>().AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 		}
 	}
 }

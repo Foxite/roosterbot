@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 
 namespace RoosterBot {
+	/// <summary>
+	/// Require that the user has <see cref="IUser.IsChannelAdmin(IChannel)"/> for the context's channel.
+	/// </summary>
 	public sealed class UserIsModeratorAttribute : RoosterPreconditionAttribute {
 		/// 
 		public override string Summary => "#UserIsModeratorAttribute_Summary";

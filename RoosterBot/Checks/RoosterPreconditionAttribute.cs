@@ -3,12 +3,18 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
+	/// <summary>
+	/// The base class for all command checks used within RoosterBot. This class enforces the use of <see cref="RoosterCommandContext"/> and <see cref="RoosterCheckResult"/>.
+	/// </summary>
 	public abstract class RoosterPreconditionAttribute : CheckAttribute {
 		/// <summary>
 		/// If the given command context is not a RoosterCommandContext, then this indicates if an exception should be thrown, or a ParseFailed result should be returned.
 		/// </summary>
 		public bool ThrowOnInvalidContext { get; set; }
 
+		/// <summary>
+		/// A user-friendly explanation for this check. It may start with a #, in which case it will be resolved as a string resource.
+		/// </summary>
 		public abstract string Summary { get; }
 
 		/// 
