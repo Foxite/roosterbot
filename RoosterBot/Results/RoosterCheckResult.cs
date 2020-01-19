@@ -17,6 +17,9 @@ namespace RoosterBot {
 		/// </summary>
 		public Component? ErrorReasonComponent { get; }
 
+		/// <summary>
+		/// Get a successful result.
+		/// </summary>
 		public static new RoosterCheckResult Successful => new RoosterCheckResult();
 
 		private RoosterCheckResult(string errorReason, Component? errorReasonComponent, params object[] errorReasonObjects) : base(errorReason) {
@@ -28,6 +31,9 @@ namespace RoosterBot {
 			ErrorReasonObjects = Array.Empty<object>();
 		}
 
+		/// <summary>
+		/// Get an unsuccessful result with an error reason, the <see cref="Component"/> used when resolving the error reason, and the objects used to format the resolved string.
+		/// </summary>
 		public static RoosterCheckResult Unsuccessful(string errorReason, Component errorReasonComponent, params object[] errorReasonObjects) {
 			return new RoosterCheckResult(errorReason, errorReasonComponent, errorReasonObjects);
 		}

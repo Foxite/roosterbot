@@ -87,6 +87,10 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Get the <see cref="PlatformSpecificParser{T}"/> for <typeparamref name="T"/>.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">If no <see cref="PlatformSpecificParser{T}"/> has been registered for <typeparamref name="T"/>.</exception>
 		public PlatformSpecificParser<T> GetPlatformSpecificParser<T>() where T : ISnowflake {
 			PlatformSpecificParser<T>? psp = GetSpecificTypeParser<T, PlatformSpecificParser<T>>();
 			if (psp == null) {
@@ -96,9 +100,20 @@ namespace RoosterBot {
 		}
 
 		#region AddModule and LocalizeModule
+		/// <summary>
+		/// Add a module.
+		/// </summary>
+		/// <param name="postBuild">Delegate that modifies the module before it gets added to the RoosterCommandService.</param>
+		/// <typeparam name="T">Must be <see cref="RoosterModule{T}"/>.</typeparam>
 		// Can't really have proper type checking here because RoosterModule is generic. We can still do it but we would have to add a second parameter
 		//  just for the context type which I think is undesirable.
 		public IReadOnlyList<Module> AddModule<T>(Action<ModuleBuilder>? postBuild = null) => AddModule(typeof(T), postBuild);
+
+		/// <summary>
+		/// Add a module.
+		/// </summary>
+		/// <param name="moduleType">The <see cref="Type"/> of module to add.</param>
+		/// <param name="postBuild">Delegate that modifies the module before it gets added to the RoosterCommandService.</param>
 		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
 			if (!IsRoosterModule(moduleType)) {
 				throw new ArgumentException("Modules must derive from RoosterModule<T>.");
@@ -194,22 +209,39 @@ namespace RoosterBot {
 		#endregion
 
 		#region CommandService wrappers
+		/// <summary>
+		/// Add an <see cref="IArgumentParser"/>.
+		/// </summary>
 		public void AddArgumentParser(IArgumentParser ap) {
 			AllServices((service) => service.AddArgumentParser(ap));
 		}
 
+		/// <summary>
+		/// Add a <see cref="RoosterTypeParser{T}"/>.
+		/// </summary>
+		/// <param name="parser">The parser to add.</param>
+		/// <param name="replacePrimitive">Should this parser replace the built-in parser for <typeparamref name="T"/>.</param>
 		public void AddTypeParser<T>(RoosterTypeParser<T> parser, bool replacePrimitive = false) {
 			AllServices((service) => service.AddTypeParser(parser, replacePrimitive));
 		}
 
+		/// <summary>
+		/// Find all commands matching a <paramref name="path"/>.
+		/// </summary>
 		public IReadOnlyList<CommandMatch> FindCommands(CultureInfo? culture, string path) {
 			return GetService(culture).FindCommands(path);
 		}
 
+		/// <summary>
+		/// Get all commands for a culture.
+		/// </summary>
 		public IReadOnlyList<Command> GetAllCommands(CultureInfo? culture) {
 			return GetService(culture).GetAllCommands();
 		}
 
+		/// <summary>
+		/// Get all modules for a culture.
+		/// </summary>
 		public IReadOnlyList<Module> GetAllModules(CultureInfo? culture) {
 			IEnumerable<Module> modules = GetService(culture).GetAllModules();
 			if (culture != null) {
@@ -218,37 +250,59 @@ namespace RoosterBot {
 			return modules.ToList().AsReadOnly();
 		}
 
+		/// <summary>
+		/// Get an <see cref="IArgumentParser"/>.
+		/// </summary>
 		public IArgumentParser? GetArgumentParser<T>() where T : IArgumentParser => GetArgumentParser(typeof(T));
+
+		/// <summary>
+		/// Get an <see cref="IArgumentParser"/>.
+		/// </summary>
 		public IArgumentParser? GetArgumentParser(Type type) {
 			return GetService(null).GetArgumentParser(type);
 		}
 
+		/// <summary>
+		/// Get a specific <see cref="RoosterTypeParser{T}"/>.
+		/// </summary>
 		public TParser? GetSpecificTypeParser<T, TParser>() where TParser : RoosterTypeParser<T> {
 			return GetService(null).GetSpecificTypeParser<T, TParser>();
 		}
 
+		/// <summary>
+		/// Get a <see cref="RoosterTypeParser{T}"/> for a specific <typeparamref name="T"/>.
+		/// </summary>
 		public RoosterTypeParser<T>? GetTypeParser<T>(bool replacingPrimitive = false) {
 			return GetService(null).GetTypeParser<T>(replacingPrimitive) as RoosterTypeParser<T>;
 		}
 
-		public void RemoveAllModules() {
-			AllServices((service) => service.RemoveAllModules());
-		}
-
-		public void RemoveAllTypeParsers() {
-			AllServices((service) => service.RemoveAllTypeParsers());
-		}
-
+		/// <summary>
+		/// Remove an <see cref="IArgumentParser"/>.
+		/// </summary>
 		public void RemoveArgumentParser<T>() where T : IArgumentParser => RemoveArgumentParser(typeof(T));
+
+		/// <summary>
+		/// Remove an <see cref="IArgumentParser"/>.
+		/// </summary>
 		public void RemoveArgumentParser(Type type) {
 			AllServices((service) => service.RemoveArgumentParser(type));
 		}
 
+		/// <summary>
+		/// Remove a <see cref="RoosterTypeParser{T}"/>.
+		/// </summary>
 		public void RemoveTypeParser<T>(RoosterTypeParser<T> typeParser) {
 			AllServices((service) => service.RemoveTypeParser(typeParser));
 		}
 
+		/// <summary>
+		/// Set a <see cref="IArgumentParser"/> as the default.
+		/// </summary>
 		public void SetDefaultArgumentParser<T>() where T : IArgumentParser => SetDefaultArgumentParser(typeof(T));
+
+		/// <summary>
+		/// Set a <see cref="IArgumentParser"/> as the default.
+		/// </summary>
 		public void SetDefaultArgumentParser(Type type) {
 			if (typeof(IArgumentParser).IsAssignableFrom(type)) {
 				AllServices((service) => service.SetDefaultArgumentParser(type));
@@ -257,6 +311,9 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Set a <see cref="IArgumentParser"/> as the default.
+		/// </summary>
 		public void SetDefaultArgumentParser(IArgumentParser parser) {
 			AllServices((service) => service.SetDefaultArgumentParser(parser));
 

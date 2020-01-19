@@ -4,6 +4,9 @@ using System.Globalization;
 using System.Linq;
 
 namespace RoosterBot {
+	/// <summary>
+	/// Provide informational texts to users.
+	/// </summary>
 	public sealed class HelpService {
 		private readonly List<HelpSection> m_Sections;
 		private readonly ResourceService m_Resources;
@@ -13,10 +16,16 @@ namespace RoosterBot {
 			m_Resources = resources;
 		}
 
+		/// <summary>
+		/// Add a text section to the help service.
+		/// </summary>
 		public void AddHelpSection(Component component, string name, string text) {
 			m_Sections.Add(new HelpSection(component, name, text));
 		}
 
+		/// <summary>
+		/// Get a help section.
+		/// </summary>
 		public string GetHelpSection(CultureInfo culture, string name) {
 			HelpSection helpSection = GetSection(culture, name);
 			if (helpSection != null) {
@@ -26,6 +35,9 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Check if a help section exists.
+		/// </summary>
 		public bool HelpSectionExists(CultureInfo culture, string name) {
 			HelpSection section = GetSection(culture, name);
 			if (section != null) {
@@ -35,6 +47,11 @@ namespace RoosterBot {
 			}
 		}
 
+		/// <summary>
+		/// Get the names of all help sections for a given language.
+		/// </summary>
+		/// <param name="culture"></param>
+		/// <returns></returns>
 		public string[] GetSectionNames(CultureInfo culture) {
 			return m_Sections
 				.Where(section => section.Cultures.Count == 0 ||  section.Cultures.Contains(culture))
