@@ -264,7 +264,7 @@ __pycache__/
 MigrationBackup/
 
 # Release folder and script
-Release.ps1
+Release*.ps1
 Release/
 
 # Generated code
@@ -273,4 +273,5 @@ Release/
 # RoosterBot.Meta folder exception
 !RoosterBot.Meta
 Output/
+
 Docs/log.txt
