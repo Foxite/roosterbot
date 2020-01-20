@@ -1,4 +1,12 @@
 - name: Introduction
   href: intro.md
-- name: Test
-  href: test.md
+- name: Components
+  items:
+  - name: Introduction
+    href: components/intro.md
+  - name: Guide
+    href: components/guide.md
+  - name: Platforms
+    href: components/platform.md
+- name: Hosting
+  href: hosting.md

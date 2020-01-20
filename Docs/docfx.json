@@ -5,14 +5,22 @@
         {
 		  "src": "../",
           "files": [
-            "**.csproj"
+            "**/RoosterBot.csproj",
+            "**/RoosterBot.DiscordNet.csproj",
+            "**/RoosterBot.Telegram.csproj",
+            "**/RoosterBot.Console.csproj",
+            "**/RoosterBot.Console.App.csproj",
+            "**/RoosterBot.DateTimeUtils.csproj",
+            "**/RoosterBot.AWS.csproj",
+            "**/RoosterBot.Meta.csproj",
+            "**/RoosterBot.Schedule.csproj",
+            "**/RoosterBot.Statistics.csproj"
           ],
 		  "exclude": [
             "**/bin/**",
             "**/obj/**",
             "_site/**"
-          ],
-          /*"src": "E:\\Development\\RoosterBot\\Docs"*/
+          ]
         }
       ],
       "dest": "api",
