@@ -273,3 +273,4 @@ Release/
 # RoosterBot.Meta folder exception
 !RoosterBot.Meta
 Output/
+Docs/log.txt
