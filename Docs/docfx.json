@@ -67,8 +67,7 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default",
-      "templates/light-dark-theme",
+      "default"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
