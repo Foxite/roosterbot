@@ -3,10 +3,16 @@
     {
       "src": [
         {
+		  "src": "../",
           "files": [
             "**.csproj"
           ],
-          "src": "E:\\Development\\RoosterBot\\Docs"
+		  "exclude": [
+            "**/bin/**",
+            "**/obj/**",
+            "_site/**"
+          ],
+          /*"src": "E:\\Development\\RoosterBot\\Docs"*/
         }
       ],
       "dest": "api",
