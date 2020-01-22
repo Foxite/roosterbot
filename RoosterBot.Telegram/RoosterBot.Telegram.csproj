@@ -4,7 +4,7 @@
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>Telegram</AssemblyName>
-		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 		<RootNamespace>RoosterBot.Telegram</RootNamespace>
 	</PropertyGroup>

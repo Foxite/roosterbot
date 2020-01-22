@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
-		<OutDir>$(SolutionDir)\Output\AppStop</OutDir>
+		<OutDir>..\Output\AppStop</OutDir>
 	</PropertyGroup>
 
 </Project>

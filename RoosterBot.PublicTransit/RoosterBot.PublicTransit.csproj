@@ -4,7 +4,7 @@
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>PublicTransit</AssemblyName>
-		<OutDir>$(SolutionDir)\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
+		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

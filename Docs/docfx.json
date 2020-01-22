@@ -3,13 +3,11 @@
 		{
 			"src": [
 				{
-					"src": ".",
+					"src": "../",
 					"files": [
 						"**/RoosterBot.csproj",
 						"**/RoosterBot.DiscordNet.csproj",
 						"**/RoosterBot.Telegram.csproj",
-						"**/RoosterBot.Console.csproj",
-						"**/RoosterBot.Console.App.csproj",
 						"**/RoosterBot.DateTimeUtils.csproj",
 						"**/RoosterBot.AWS.csproj",
 						"**/RoosterBot.Meta.csproj",
