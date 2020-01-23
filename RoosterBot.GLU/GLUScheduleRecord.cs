@@ -29,7 +29,12 @@ namespace RoosterBot.GLU {
 						if (StaffMember[0].IsUnknown && StaffMember.Count == 1) {
 							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", getString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
 						} else {
-							string staffMembers = string.Join(", ", StaffMember.Select(staffMember => staffMember.DisplayText));
+							string staffMembers;
+							if (StaffMember.Count > 5) {
+								staffMembers = string.Join(", ", StaffMember.Take(5).Select(staffMember => staffMember.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)";
+							} else {
+								staffMembers = string.Join(", ", StaffMember.Select(staffMember => staffMember.DisplayText));
+							}
 							IEmote staffMemberEmote = new Emoji("👤");
 							yield return getAspect(staffMemberEmote, "GLUScheduleRecord_Aspect_StaffMember", staffMembers);
 						}
@@ -74,7 +79,9 @@ namespace RoosterBot.GLU {
 				Activity.DisplayText.ToString(),
 				string.Format(resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToString("t", culture), End.ToString("t", culture)),
 				StudentSetsString,
-				StaffMemberString,
+				StaffMember.Count > 5
+					? string.Join(", ", StaffMember.Take(5).Select(teacher => teacher.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)"
+					: string.Join(", ", StaffMember.Select(teacher => teacher.DisplayText)),
 				RoomString
 			};
 		}

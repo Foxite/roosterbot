@@ -32,7 +32,7 @@ namespace RoosterBot.DiscordNet {
 		
 		[Command("steal"), Priority(1), RequireBotManager]
 		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
-			MatchCollection matches = Regex.Matches(message.Content, @"((?<!\\)\<:[A-z0-9\-_]+?:[0-9]+?\>)");
+			MatchCollection matches = Regex.Matches(message.Content, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)");
 
 			static bool canStoreStaticEmote  (IGuild guild) => guild.Emotes.Count(emote => !emote.Animated) < 50;
 			static bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  emote.Animated) < 50;

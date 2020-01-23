@@ -55,9 +55,9 @@ namespace RoosterBot.GLU.Discord {
 									await user.RemoveRolesAsync(oldRoles);
 								}
 							}
-							if (user.RoleIds.Contains(NewUserRank)) {
-								await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
-							}
+						}
+						if (user.RoleIds.Contains(NewUserRank)) {
+							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 						}
 
 						if (newRoles.Any()) {
