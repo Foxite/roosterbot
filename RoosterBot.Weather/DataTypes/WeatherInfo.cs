@@ -45,7 +45,7 @@ namespace RoosterBot.Weather {
 		}
 
 		/// <summary>
-		/// Creates an AspectListResult that contains all information from <see cref="Present(CultureInfo, bool)"/>, as well as a pretext with the City and Region name and the DateTime.
+		/// Creates an AspectListResult that contains all information from <see cref="Present(RoosterCommandContext, string, bool)"/>, as well as a pretext with the City and Region name and the DateTime.
 		/// </summary>
 		public AspectListResult Present(RoosterCommandContext context, DateTime datetime, bool useMetric) {
 			string pretext;

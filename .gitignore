@@ -15,8 +15,6 @@
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
-x86/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -264,7 +262,7 @@ __pycache__/
 MigrationBackup/
 
 # Release folder and script
-Release.ps1
+Release*.ps1
 Release/
 
 # Generated code
@@ -273,3 +271,5 @@ Release/
 # RoosterBot.Meta folder exception
 !RoosterBot.Meta
 Output/
+
+Docs/log.txt
