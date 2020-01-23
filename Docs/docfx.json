@@ -64,10 +64,8 @@
 		"dest": "_site",
 		"globalMetadataFiles": [],
 		"fileMetadataFiles": [],
-		"template": [
-			"default"
-		],
-		"postProcessors": [],
+		"template": [ "default", "templates/last-modified" ],
+		"postProcessors": [ "LastModifiedPostProcessor" ],
 		"markdownEngineName": "markdig",
 		"noLangKeyword": false,
 		"keepFileLink": false,
