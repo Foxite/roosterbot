@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -61,15 +60,5 @@ namespace RoosterBot {
 		/// Get a <see cref="SnowflakeReference"/> for this <see cref="ISnowflake"/>.
 		/// </summary>
 		public static SnowflakeReference GetReference(this ISnowflake snowflake) => new SnowflakeReference(snowflake.Platform, snowflake.Id);
-
-		/// <summary>
-		/// Shortcut for:
-		/// <code>
-		/// new <see cref="ValueTask"/>&lt;<typeparamref name="T"/>&gt;(<paramref name="result"/>)
-		/// </code>
-		/// </summary>
-		/// <typeparam name="T">The type of result. This can be inferred, making it shorter than the standard approach.</typeparam>
-		/// <param name="result">The result of the completed task.</param>
-		public static ValueTask<T> FromResult<T>(T result) => new ValueTask<T>(result);
 	}
 }
