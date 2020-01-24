@@ -10,8 +10,6 @@ using RoosterBot.Schedule;
 namespace RoosterBot.GLU {
 	public class GLUComponent : Component {
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
-		private readonly Regex m_StudentSetRegex;
-		private readonly Regex m_RoomRegex;
 		private SnowflakeReference[] m_AllowedChannels;
 		private string m_StaffMemberPath;
 		private bool m_SkipPastRecords;
@@ -23,8 +21,6 @@ namespace RoosterBot.GLU {
 			m_Schedules = new List<ScheduleRegistryInfo>();
 			m_AllowedChannels = Array.Empty<SnowflakeReference>();
 			m_StaffMemberPath = "";
-			m_StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
-			m_RoomRegex = new Regex("[aAbBwW][012][0-9]{2}");
 		}
 
 		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
@@ -79,21 +75,25 @@ namespace RoosterBot.GLU {
 			}
 
 			// Student sets and Rooms validator
-			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(ValidateIdentifier);
+			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(new GLUIdentifierValidator(m_AllowedChannels));
 		}
 
-		private Task<IdentifierInfo?> ValidateIdentifier(RoosterCommandContext context, string input) {
-			if (m_AllowedChannels.Contains(context.ChannelConfig.ChannelReference)) {
+		private class GLUIdentifierValidator : IdentifierValidator {
+			private static readonly Regex StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
+			private static readonly Regex RoomRegex = new Regex("[aAbBwW][0-4][0-9]{2}");
+
+			public GLUIdentifierValidator(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
+
+			public override Task<IdentifierInfo?> ValidateAsync(RoosterCommandContext context, string input) {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
-				if (m_StudentSetRegex.IsMatch(input)) {
+				if (StudentSetRegex.IsMatch(input)) {
 					result = new StudentSetInfo(input);
-				} else if (m_RoomRegex.IsMatch(input)) {
+				} else if (RoomRegex.IsMatch(input)) {
 					result = new RoomInfo(input);
 				}
 				return Task.FromResult(result);
 			}
-			return Task.FromResult((IdentifierInfo?) null);
 		}
 
 		private class ScheduleRegistryInfo {

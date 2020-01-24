@@ -4,6 +4,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 namespace RoosterBot.Schedule {
+	// TODO should be moved to RoosterBot
+	// I think I did this once but backed out of it, forgot why.
+	// Go and find out.
 	public abstract class ChannelSpecificInfo {
 		private readonly IEnumerable<SnowflakeReference> m_AllowedChannels;
 
@@ -11,8 +14,11 @@ namespace RoosterBot.Schedule {
 			m_AllowedChannels = allowedChannels;
 		}
 
+		/// <summary>
+		/// When working with a <see cref="RoosterCommandContext"/>, you should always use <see cref="RoosterCommandContext.ChannelConfig"/>.ChannelReference
+		/// and never <see cref="RoosterCommandContext.Channel"/>.
+		/// </summary>
 		public bool IsChannelAllowed(SnowflakeReference reference) => m_AllowedChannels.Contains(reference);
-		public bool IsChannelAllowed(IChannel channel) => IsChannelAllowed(new SnowflakeReference(channel.Platform, channel.Id));
 	}
 
 	[Serializable]
