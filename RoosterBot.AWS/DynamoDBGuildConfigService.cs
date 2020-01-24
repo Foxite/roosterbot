@@ -14,7 +14,8 @@ namespace RoosterBot.AWS {
 	public class DynamoDBChannelConfigService : ChannelConfigService {
 		private readonly Table m_Table;
 
-		public DynamoDBChannelConfigService(GlobalConfigService configService, AmazonDynamoDBClient client, string tableName) : base(configService) {
+		public DynamoDBChannelConfigService(AmazonDynamoDBClient client, string tableName, string defaultCommandPrefix, CultureInfo defaultCulture)
+			: base(defaultCommandPrefix, defaultCulture) {
 			Logger.Info("DynamoDBChannel", "Loading channel table");
 			m_Table = Table.LoadTable(client, tableName);
 			Logger.Info("DynamoDBChannel", "Finished loading channel table");

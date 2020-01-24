@@ -12,7 +12,7 @@ namespace RoosterBot.Meta {
 		private readonly string m_ConfigFilePath;
 		private readonly ConcurrentDictionary<SnowflakeReference, ChannelConfig> m_ConfigMap;
 
-		public FileChannelConfigService(GlobalConfigService config, string configPath) : base(config) {
+		public FileChannelConfigService(string configPath, string defaultCommandPrefix, CultureInfo defaultCulture) : base(defaultCommandPrefix, defaultCulture) {
 			Logger.Info("FileChannelConfigService", "Loading channel config json");
 
 			m_ConfigFilePath = configPath;
@@ -24,11 +24,7 @@ namespace RoosterBot.Meta {
 				foreach (KeyValuePair<string, IDictionary<string, FileChannelConfig>> platformKvp in jsonConfig) {
 					PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
 					if (platform is null) {
-						if (config.IgnoreUnknownPlatforms) {
-							continue;
-						} else {
-							throw new KeyNotFoundException("No PlatformComponent for `" + platformKvp.Key + "` is installed.");
-						}
+						continue;
 					}
 
 					foreach (KeyValuePair<string, FileChannelConfig> configItem in platformKvp.Value) {

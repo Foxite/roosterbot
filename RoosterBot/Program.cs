@@ -89,10 +89,7 @@ namespace RoosterBot {
 
 			Logger.Info("Main", "Starting program");
 
-			string configFile = Path.Combine(configFolder, "Config.json");
-			var configService = new GlobalConfigService(configFile);
-
-			IServiceCollection serviceCollection = CreateRBServices(configService);
+			IServiceCollection serviceCollection = CreateRBServices();
 
 			Components = new ComponentManager();
 			Components.SetupComponents(serviceCollection);
@@ -109,7 +106,7 @@ namespace RoosterBot {
 			Components.ShutdownComponents();
 		}
 
-		private IServiceCollection CreateRBServices(GlobalConfigService configService) {
+		private IServiceCollection CreateRBServices() {
 			var resources = new ResourceService();
 			resources.RegisterResources("RoosterBot.Resources");
 
@@ -126,7 +123,6 @@ namespace RoosterBot {
 				.AddSingleton(new HelpService(resources))
 				.AddSingleton(new NotificationService())
 				.AddSingleton(new EmoteService())
-				.AddSingleton(configService)
 				.AddSingleton(resources)
 				.AddSingleton(cns);
 		}

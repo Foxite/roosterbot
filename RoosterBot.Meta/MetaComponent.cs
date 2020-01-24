@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,12 +22,15 @@ namespace RoosterBot.Meta {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				UseFileConfig = false,
 				EnableHelp = true,
-				EnableCommandsList = true
+				EnableCommandsList = true,
+				DefaultCommandPrefix = "!",
+				DefaultCulture = "en-US"
 			});
 
 			if (config.UseFileConfig) {
-				services.AddSingleton<ChannelConfigService, FileChannelConfigService>(isp => new FileChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Channels.json")));
-				services.AddSingleton<UserConfigService,    FileUserConfigService   >(isp => new FileUserConfigService   (isp.GetRequiredService<GlobalConfigService>(), Path.Combine(configPath, "Users.json")));
+				services.AddSingleton<UserConfigService   >(new FileUserConfigService   (Path.Combine(configPath, "Users.json")));
+				services.AddSingleton<ChannelConfigService>(new FileChannelConfigService(Path.Combine(configPath, "Channels.json"),
+					config.DefaultCommandPrefix, CultureInfo.GetCultureInfo(config.DefaultCulture)));
 			}
 
 			m_EnableHelp = config.EnableHelp;

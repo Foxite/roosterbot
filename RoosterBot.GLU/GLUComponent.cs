@@ -39,12 +39,20 @@ namespace RoosterBot.GLU {
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),
 				AllowedChannels = new[] {
-					new SnowflakeReference(null!, null!)
+					new {
+						Platform = "",
+						Id = ""
+					}
 				}
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
-			m_AllowedChannels = config.AllowedChannels;
+			m_AllowedChannels = (
+				from uncheckedSR in config.AllowedChannels
+				let platform = Program.Instance.Components.GetPlatform(uncheckedSR.Platform)
+				where !(platform is null)
+				select new SnowflakeReference(platform, uncheckedSR.Id)
+			).ToArray();
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
@@ -59,10 +67,6 @@ namespace RoosterBot.GLU {
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
-
-			if (services.GetRequiredService<GlobalConfigService>().IgnoreUnknownPlatforms) {
-				m_AllowedChannels = m_AllowedChannels.Where(sr => sr.Platform != null).ToArray();
-			}
 
 			// Staff members
 			StaffMemberService members = services.GetRequiredService<StaffMemberService>();

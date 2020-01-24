@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Amazon;
 using Amazon.DynamoDBv2;
@@ -17,12 +18,14 @@ namespace RoosterBot.AWS {
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
+				Endpoint  = "",
 				AccessKey = "",
 				SecretKey = "",
-				NotificationArn = "",
 				UserTable = "",
 				ChannelTable = "",
-				Endpoint  = "",
+				NotificationArn = "",
+				DefaultComandPrefix = "!",
+				DefaultCulture = "en-US"
 			});
 
 			m_NotificationARN = jsonConfig.NotificationArn;
@@ -33,7 +36,12 @@ namespace RoosterBot.AWS {
 			m_DynamoDBClient = new AmazonDynamoDBClient(awsConfig.Credentials, awsConfig.Region);
 
 			services.AddSingleton<UserConfigService>(new DynamoDBUserConfigService(m_DynamoDBClient, jsonConfig.UserTable));
-			services.AddSingleton<ChannelConfigService>((isp) => new DynamoDBChannelConfigService(isp.GetRequiredService<GlobalConfigService>(), m_DynamoDBClient, jsonConfig.ChannelTable));
+			services.AddSingleton<ChannelConfigService>(new DynamoDBChannelConfigService(
+				m_DynamoDBClient,
+				jsonConfig.ChannelTable,
+				jsonConfig.DefaultComandPrefix,
+				CultureInfo.GetCultureInfo(jsonConfig.DefaultCulture)
+			));
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {

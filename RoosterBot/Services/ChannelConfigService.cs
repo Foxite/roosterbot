@@ -9,20 +9,22 @@ namespace RoosterBot {
 	/// The base class for a service providing configuration for <see cref="IChannel"/>s.
 	/// </summary>
 	public abstract class ChannelConfigService {
-		private readonly GlobalConfigService m_Config;
+		private readonly string m_DefaultCommandPrefix;
+		private readonly CultureInfo m_DefaultCulture;
 
 		/// <summary>
 		/// Construct an instance of <see cref="ChannelConfigService"/>.
 		/// </summary>
-		protected ChannelConfigService(GlobalConfigService config) {
-			m_Config = config;
+		protected ChannelConfigService(string defaultCommandPrefix, CultureInfo defaultCulture) {
+			m_DefaultCommandPrefix = defaultCommandPrefix;
+			m_DefaultCulture = defaultCulture;
 		}
 
 		/// <summary>
 		/// Get the default config for a channel represented by a <see cref="SnowflakeReference"/>.
 		/// </summary>
 		protected ChannelConfig GetDefaultConfig(SnowflakeReference channel) {
-			return new ChannelConfig(this, m_Config.DefaultCommandPrefix, m_Config.DefaultCulture, channel, new Dictionary<string, JToken>());
+			return new ChannelConfig(this, m_DefaultCommandPrefix, m_DefaultCulture, channel, new Dictionary<string, JToken>());
 		}
 
 		/// <summary>
