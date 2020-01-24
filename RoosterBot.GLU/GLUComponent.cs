@@ -51,7 +51,7 @@ namespace RoosterBot.GLU {
 				from uncheckedSR in config.AllowedChannels
 				let platform = Program.Instance.Components.GetPlatform(uncheckedSR.Platform)
 				where !(platform is null)
-				select new SnowflakeReference(platform, uncheckedSR.Id)
+				select new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(uncheckedSR.Id))
 			).ToArray();
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
