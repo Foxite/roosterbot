@@ -33,7 +33,7 @@ namespace RoosterBot.Schedule {
 		
 		[Command("#ScheduleModule_DayCommand"), Description("#ScheduleModule_WeekdayCommand_Summary")]
 		public CommandResult WeekdayCommand([Name("#ScheduleModule_DayCommand_Day")] DayOfWeek day, [Name("#ScheduleModule_IdentiferInfo_Name"), Remainder] IdentifierInfo? info = null) {
-			return RespondDay(info, DateTimeUtil.NextDayOfWeek(day, false));
+			return RespondDay(info, DateTimeUtil.NextDayOfWeek(day, true));
 		}
 
 		[Command("#ScheduleModule_TodayCommand"), Description("#ScheduleModule_TodayCommand_Summary")]
