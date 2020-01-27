@@ -22,7 +22,7 @@ namespace RoosterBot.Schedule {
 					/* Key select */ group => group.Key,
 					/* Val select */ group => group.ToArray()
 				);
-				int longestColumn = dayRecords.Max(kvp => kvp.Value.Length);
+				int longestColumn = dayRecords.Any() ? dayRecords.Max(kvp => kvp.Value.Length) : 1;
 
 				// Header
 				string[][] cells = new string[longestColumn + 2][];
