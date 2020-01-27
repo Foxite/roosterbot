@@ -124,7 +124,7 @@
     <value>vandaag</value>
   </data>
   <data name="DayOfWeekReader_Tomorrow" xml:space="preserve">
-    <value>tomorrow</value>
+    <value>morgen</value>
   </data>
   <data name="DayOfWeek_DisplayName" xml:space="preserve">
     <value>weekdag</value>
