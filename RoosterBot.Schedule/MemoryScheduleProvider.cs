@@ -10,6 +10,7 @@ namespace RoosterBot.Schedule {
 	/// </summary>
 	public class MemoryScheduleProvider : ScheduleProvider {
 		private readonly Dictionary<DateTime, IEnumerable<ScheduleRecord>> m_Schedule;
+		private readonly HashSet<IdentifierInfo> m_PresentIdentifiers;
 		private readonly DateTime m_ScheduleBegin;
 		private readonly DateTime m_ScheduleEnd;
 		private readonly string m_Name;
@@ -26,14 +27,24 @@ namespace RoosterBot.Schedule {
 					grp => grp.Key,
 					grp => (IEnumerable<ScheduleRecord>) grp
 				);
+			m_PresentIdentifiers = new HashSet<IdentifierInfo>(
+				m_Schedule.Values.SelectMany(item => item).SelectMany(item => (IEnumerable<IdentifierInfo>) item.StudentSets).Distinct()
+				.Concat(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.StaffMember).Distinct())
+				.Concat(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.Room).Distinct())
+			);
+		}
+
+		private void EnsureIdentifierPresent(IdentifierInfo identifier) {
+			if (!m_PresentIdentifiers.Contains(identifier)) {
+				throw new IdentifierNotFoundException($"The identifier {identifier} does not exist in schedule {m_Name}.");
+			}
 		}
 
 		public override Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
-			bool sawRecordForClass = false;
+			EnsureIdentifierPresent(identifier);
 
 			foreach (ScheduleRecord record in RecordsFrom(target)) {
 				if (identifier.Matches(record)) {
-					sawRecordForClass = true;
 					if (record.Start < target && record.End > target) {
 						return record;
 					} else if (record.Start > target) {
@@ -41,55 +52,32 @@ namespace RoosterBot.Schedule {
 					}
 				}
 			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
-			} else {
-				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-			}
+			throw new RecordsOutdatedException($"Records outdated for identifier {identifier} in schedule {m_Name}");
 		});
 
 		public override Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
-			bool sawRecordForClass = false;
+			EnsureIdentifierPresent(identifier);
 
 			foreach (ScheduleRecord record in RecordsFrom(target)) {
 				if (identifier.Matches(record)) {
-					if (record.Start > target) {
-						return record;
-					} else {
-						sawRecordForClass = true;
-					}
+					return record;
 				}
 			}
-			if (sawRecordForClass) {
-				throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
-			} else {
-				throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-			}
+			throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 		});
 
 		public override Task<ScheduleRecord[]> GetSchedulesForDateAsync(IdentifierInfo identifier, DateTime date) => Task.Run(() => {
-			bool sawRecordForClass = false;
-			bool sawRecordAfterTarget = false;
+			EnsureIdentifierPresent(identifier);
 
 			if (m_Schedule.TryGetValue(date.Date, out var records)) {
 				var ret = new List<ScheduleRecord>();
 				foreach (ScheduleRecord record in records) {
 					if (identifier.Matches(record)) {
-						sawRecordForClass = true;
-						if (record.Start.Date == date) {
-							ret.Add(record);
-						} else if (record.Start.Date > date) {
-							sawRecordAfterTarget = true;
-							break;
-						}
+						ret.Add(record);
 					}
 				}
-				if (ret.Count == 0) {
-					if (!sawRecordForClass) {
-						throw new IdentifierNotFoundException($"The class {identifier} does not exist in schedule {m_Name}.");
-					} else if (!sawRecordAfterTarget) {
-						throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
-					}
+				if (ret.Count == 0 && !RecordsFrom(date.Date.AddDays(1)).Where(record => identifier.Matches(record)).Any()) { // If nothing comes after this date
+					throw new RecordsOutdatedException($"Records outdated for class {identifier} in schedule {m_Name}");
 				}
 				return ret.ToArray();
 			} else {
@@ -98,8 +86,9 @@ namespace RoosterBot.Schedule {
 		});
 
 		public override Task<ScheduleRecord[]> GetWeekRecordsAsync(IdentifierInfo identifier, int weeksFromNow = 0) => Task.Run(() => {
-			DateTime targetFirstDate =
-				DateTime.Today
+			EnsureIdentifierPresent(identifier);
+
+			DateTime targetFirstDate = DateTime.Today
 				.AddDays(-(int) DateTime.Today.DayOfWeek + 1) // First date in this week; + 1 because DayOfWeek.Sunday == 0, and Monday == 1
 				.AddDays(7 * weeksFromNow); // First date in the week n weeks from now
 			DateTime targetLastDate = targetFirstDate.AddDays(4); // Friday
@@ -108,12 +97,10 @@ namespace RoosterBot.Schedule {
 
 			foreach (ScheduleRecord record in RecordsFrom(targetFirstDate)) {
 				if (identifier.Matches(record)) {
-					if (record.Start.Date >= targetFirstDate) {
-						if (record.Start.Date > targetLastDate) {
-							break;
-						}
-						weekRecords.Add(record);
+					if (record.Start.Date > targetLastDate) {
+						break;
 					}
+					weekRecords.Add(record);
 				}
 			}
 			return weekRecords.ToArray();
@@ -130,21 +117,16 @@ namespace RoosterBot.Schedule {
 				}
 			}
 
-			bool sawMatch = false;
-			bool sawNone = true;
+			EnsureIdentifierPresent(identifier);
+
 			foreach (ScheduleRecord record in sequence()) {
-				sawNone = false;
 				if (identifier.Matches(record)) {
-					sawMatch = true;
 					if (record.End < target) {
 						return record;
 					}
 				}
 			}
-			throw sawNone || sawMatch
-				? new RecordsOutdatedException("Cannot look as far back as " + target.ToString())
-				: (Exception) new IdentifierNotFoundException($"Identifier {identifier} not found in schedule {m_Name}")
-			;
+			throw new RecordsOutdatedException("Cannot look as far back as " + target.ToString());
 		});
 
 		private IEnumerable<ScheduleRecord> RecordsFrom(DateTime target) {
