@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
@@ -54,8 +55,11 @@ namespace RoosterBot {
 		/// <returns></returns>
 		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, RoosterCommandContext context, string reason, params string[] objects) {
 			ResourceService Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
-			Component component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
-			return RoosterTypeParserResult<T>.Unsuccessful(inputValid, string.Format(Resources.ResolveString(context.Culture, component, reason), objects));
+			if (!GetType().Assembly.Equals(Assembly.GetExecutingAssembly())) {
+				Component component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
+				reason = Resources.ResolveString(context.Culture, component, reason);
+			}
+			return RoosterTypeParserResult<T>.Unsuccessful(inputValid, string.Format(reason, objects));
 		}
 	}
 }
