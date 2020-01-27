@@ -91,7 +91,7 @@ namespace RoosterBot {
 				UserConfig.SetResponse(Message, response);
 			} else {
 				// The command was edited.
-				await response.ModifyAsync(result.ToString(this), result.UploadFilePath);
+				await SendResultAsync(result, response);
 			}
 
 			return response;
