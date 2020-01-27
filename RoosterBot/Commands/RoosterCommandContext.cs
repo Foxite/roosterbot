@@ -1,5 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot {
@@ -80,7 +82,12 @@ namespace RoosterBot {
 			IMessage? response = crp == null ? null : await Channel.GetMessageAsync(crp.Response.Id);
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
-				response = await SendResultAsync(result);
+				try {
+					response = await SendResultAsync(result);
+				} catch (Exception e) {
+					Logger.Error("Result", "Error was caught in SendResultAsync. Sending a generic error result", e);
+					response = await SendResultAsync(TextResult.Error(ServiceProvider.GetService<ResourceService>().GetString(Culture, "CommandHandling_FatalError")));
+				}
 				UserConfig.SetResponse(Message, response);
 			} else {
 				// The command was edited.
