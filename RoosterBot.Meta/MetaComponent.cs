@@ -69,7 +69,6 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<ChannelConfigModule>();
 			commandService.AddModule<UserConfigModule>();
 			commandService.AddModule<InfoModule>();
-			commandService.AddModule<TestModule>();
 
 			services.GetRequiredService<HelpService>().AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 		}
