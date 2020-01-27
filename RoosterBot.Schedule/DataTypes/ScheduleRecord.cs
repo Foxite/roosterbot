@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
+	[DebuggerDisplay("{Activity.ScheduleCode} on {Start.ToString(\"yyyy-MM-dd\")} from {Start.ToString(\"hh:mm\")} to {End.ToString(\"hh:mm\")}")]
 	public abstract class ScheduleRecord {
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
@@ -29,11 +31,6 @@ namespace RoosterBot.Schedule {
 		[JsonIgnore] public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ScheduleCode));
 		[JsonIgnore] public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.DisplayText));
 		[JsonIgnore] public string RoomString => string.Join(", ", Room.Select(info => info.ScheduleCode));
-
-		public override string ToString() {
-			return $"{StudentSetsString}: {Activity.ScheduleCode} in {RoomString} from {Start.ToString()} (for {(int) Duration.TotalHours}:{Duration.Minutes}) (with " +
-				$"{(Break == null ? "no break" : ("a break from " + Break.Start.ToString() + " to " + Break.End.ToString()))}) to {End.ToString()} by {StaffMember}";
-		}
 
 		public abstract IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture);
 		public abstract IReadOnlyList<string> PresentRow(ResourceService resources, CultureInfo culture);
