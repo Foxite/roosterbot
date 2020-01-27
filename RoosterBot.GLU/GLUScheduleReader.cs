@@ -68,7 +68,7 @@ namespace RoosterBot.GLU {
 							start: start,
 							end: end,
 							studentSets: studentsets != null ? studentsets.Select(code => new StudentSetInfo(code)).ToList() : new List<StudentSetInfo>(),
-							staffMember: staffmember != null ? staffmember.Select(abbr => m_StaffMembers.GetRecordFromAbbr(m_StaffMemberChannel, abbr)).ToList() : new List<StaffMemberInfo>(),
+							staffMember: staffmember != null ? staffmember.Select(abbr => m_StaffMembers.GetRecordFromAbbr(m_StaffMemberChannel, abbr)).WhereNotNull().ToList() : new List<StaffMemberInfo>(),
 							room: room != null ? room.Select(code => new RoomInfo(code)).ToList() : new List<RoomInfo>()
 						);
 

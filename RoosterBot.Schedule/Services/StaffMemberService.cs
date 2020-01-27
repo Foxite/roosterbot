@@ -10,7 +10,7 @@ namespace RoosterBot.Schedule {
 			m_Records.Add(new ChannelStaffList(allowedChannels, members.ToList()));
 		}
 
-		public StaffMemberInfo GetRecordFromAbbr(SnowflakeReference channel, string abbr) {
+		public StaffMemberInfo? GetRecordFromAbbr(SnowflakeReference channel, string abbr) {
 			return GetAllowedRecordsForChannel(channel).FirstOrDefault(record => record.ScheduleCode == abbr);
 		}
 		
