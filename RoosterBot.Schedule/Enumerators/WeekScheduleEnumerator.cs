@@ -58,12 +58,12 @@ namespace RoosterBot.Schedule {
 					}
 				}
 
-				return new TableResult(string.Format(m_Resources.GetString(m_Context.Culture, m_Offset switch
+				return new TableResult(m_Identifier.DisplayText + ": " + string.Format(m_Resources.GetString(m_Context.Culture, m_Offset switch
 				{
 					0 => "ScheduleModule_RespondWeek_ScheduleThisWeek",
 					1 => "ScheduleModule_RespondWeek_ScheduleNextWeek",
 					_ => "ScheduleModule_RespondWeek_ScheduleInXWeeks"
-				}), m_Identifier.DisplayText, m_Offset), cells);
+				}), m_Offset), cells);
 			}
 		}
 

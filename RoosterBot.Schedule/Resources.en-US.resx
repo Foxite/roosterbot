@@ -388,4 +388,14 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
     <value> That is weekend after all.</value>
   </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
+    <value>in {0} weeks</value>
+    <comment>0: offset</comment>
+  </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
+    <value>next week</value>
+  </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
+    <value>this week</value>
+  </data>
 </root>

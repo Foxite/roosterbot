@@ -391,4 +391,14 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_ThatIsWeekend" xml:space="preserve">
     <value> Dat is dan ook in het weekend.</value>
   </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleInXWeeks" xml:space="preserve">
+    <value>over {0} weken</value>
+    <comment>0: offset</comment>
+  </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleNextWeek" xml:space="preserve">
+    <value>volgende week</value>
+  </data>
+  <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
+    <value>deze week</value>
+  </data>
 </root>
