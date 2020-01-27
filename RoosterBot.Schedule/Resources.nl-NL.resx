@@ -401,4 +401,10 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>deze week</value>
   </data>
+  <data name="ScheduleModule_AfterCommand" xml:space="preserve">
+    <value>daarna</value>
+  </data>
+  <data name="ScheduleModule_AfterCommand_Output" xml:space="preserve">
+    <value>Druk op de pijlknoppen onder mijn reacties om te terug of vooruit te kijken in het rooster.</value>
+  </data>
 </root>

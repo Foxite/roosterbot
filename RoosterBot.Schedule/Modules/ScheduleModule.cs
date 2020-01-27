@@ -72,6 +72,11 @@ namespace RoosterBot.Schedule {
 				return Task.FromResult<CommandResult>(TextResult.Error(GetString("ScheduleModule_ShowFutureCommand_OnlySupportUnits")));
 			}
 		}
+
+		[Command("#ScheduleModule_AfterCommand"), HiddenFromList]
+		public CommandResult DeprecatedCommand([Remainder] string ignored = "") {
+			return TextResult.Info(GetString("ScheduleModule_AfterCommand_Output"));
+		}
 		#endregion
 
 		#region Responses

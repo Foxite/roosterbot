@@ -398,4 +398,10 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_RespondWeek_ScheduleThisWeek" xml:space="preserve">
     <value>this week</value>
   </data>
+  <data name="ScheduleModule_AfterCommand" xml:space="preserve">
+    <value>after</value>
+  </data>
+  <data name="ScheduleModule_AfterCommand_Output" xml:space="preserve">
+    <value>Press the arrow buttons below my responses to browse the schedule.</value>
+  </data>
 </root>
