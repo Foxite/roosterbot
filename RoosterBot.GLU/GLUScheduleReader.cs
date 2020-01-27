@@ -57,7 +57,7 @@ namespace RoosterBot.GLU {
 							studentsets = null;
 						}
 						if (staffmember.Length == 1 && staffmember[0].Length == 0) {
-							studentsets = null;
+							staffmember = null;
 						}
 						if (room.Length == 1 && room[0].Length == 0) {
 							room = null;
