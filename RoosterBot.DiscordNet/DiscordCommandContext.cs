@@ -21,22 +21,32 @@ namespace RoosterBot.DiscordNet {
 			Guild = Channel is SocketGuildChannel sgc ? sgc.Guild : null;
 		}
 
-		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result) {
+		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
 			if (result.Is<AspectListResult>(out var alr)) {
-				return SendAspectList(alr);
+				return SendAspectList(alr, existingResponse);
 			} else if (result.Is<PaginatedResult>(out var pr)) {
-				return SendPaginatedResult(pr);
+				return SendPaginatedResult(pr, existingResponse);
 			} else {
-				return base.SendResultAsync(result);
+				return base.SendResultAsync(result, existingResponse);
 			}
 		}
 
-		private async Task<IMessage> SendAspectList(AspectListResult alr) {
+		private async Task<IMessage> SendAspectList(AspectListResult alr, IMessage? existingResponse) {
 			Embed embed = AspectListToEmbedBuilder(alr).Build();
-			if (alr.UploadFilePath == null) {
-				return new DiscordMessage(await Channel.SendMessageAsync(embed: embed));
+			if (existingResponse == null) {
+				if (alr.UploadFilePath == null) {
+					return new DiscordMessage(await Channel.SendMessageAsync(embed: embed));
+				} else {
+					return new DiscordMessage(await Channel.SendFileAsync(alr.UploadFilePath, embed: embed));
+				}
 			} else {
-				return new DiscordMessage(await Channel.SendFileAsync(alr.UploadFilePath, embed: embed));
+				var discordResponse = (DiscordMessage) existingResponse;
+				await discordResponse.DiscordEntity.ModifyAsync(props => {
+					props.Content = "";
+					props.Embed = embed;
+				});
+				// TODO (block) Can't change file attachment
+				return discordResponse;
 			}
 		}
 
@@ -68,7 +78,7 @@ namespace RoosterBot.DiscordNet {
 			};
 		}
 
-		private async Task<IMessage> SendPaginatedResult(PaginatedResult pr) {
+		private async Task<IMessage> SendPaginatedResult(PaginatedResult pr, IMessage? existingResponse) {
 			// Some of this could be done in RoosterBot, only problem is that it can't add the buttons. Platform would have to take care of that.
 			if (!pr.MoveNext()) {
 				throw new InvalidOperationException("Tried sending a PaginatedResult that didn't have any pages!");
@@ -77,13 +87,28 @@ namespace RoosterBot.DiscordNet {
 			IUserMessage message;
 			RoosterCommandResult initial = pr.Current;
 			if (initial is AspectListResult alr) {
-				message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
+				if (existingResponse == null) {
+					message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
+				} else {
+					message = ((DiscordMessage) existingResponse).DiscordEntity;
+					await message.ModifyAsync(props => {
+						props.Content = pr.Caption;
+						props.Embed = AspectListToEmbedBuilder(alr).Build();
+					});
+				}
 			} else {
 				string text = pr.Current.ToString(this);
 				if (pr.Caption != null) {
 					text = pr.Caption + "\n" + text;
 				}
-				message = await Channel.SendMessageAsync(text);
+				if (existingResponse == null) {
+					message = await Channel.SendMessageAsync(text);
+				} else {
+					message = ((DiscordMessage) existingResponse).DiscordEntity;
+					await message.ModifyAsync(props => {
+						props.Content = pr.Caption + "\n" + text;
+					});
+				}
 			}
 
 			Task goTo(Func<bool> moveAction) {

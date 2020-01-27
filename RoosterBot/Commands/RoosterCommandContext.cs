@@ -83,10 +83,10 @@ namespace RoosterBot {
 			if (response == null) {
 				// The response was already deleted, or there was no response to begin with.
 				try {
-					response = await SendResultAsync(result);
+					response = await SendResultAsync(result, response);
 				} catch (Exception e) {
 					Logger.Error("Result", "Error was caught in SendResultAsync. Sending a generic error result", e);
-					response = await SendResultAsync(TextResult.Error(ServiceProvider.GetService<ResourceService>().GetString(Culture, "CommandHandling_FatalError")));
+					response = await SendResultAsync(TextResult.Error(ServiceProvider.GetService<ResourceService>().GetString(Culture, "CommandHandling_FatalError")), response);
 				}
 				UserConfig.SetResponse(Message, response);
 			} else {
@@ -100,8 +100,13 @@ namespace RoosterBot {
 		/// <summary>
 		/// Send the result to the channel. You may override this for your platform to provide custom presentations of built-in or external <see cref="RoosterCommandResult"/> types.
 		/// </summary>
-		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result) {
-			return Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
+		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
+			if (existingResponse == null) {
+				return Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
+			} else {
+				existingResponse.ModifyAsync(result.ToString(this), result.UploadFilePath);
+				return Task.FromResult(existingResponse);
+			}
 		}
 	}
 }
