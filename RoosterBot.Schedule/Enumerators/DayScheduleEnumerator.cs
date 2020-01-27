@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.DateTimeUtils;
 
@@ -17,13 +18,19 @@ namespace RoosterBot.Schedule {
 		public RoosterCommandResult Current {
 			get {
 				ScheduleRecord[] result = m_Schedule.GetSchedulesForDate(m_Identifier, m_CurrentDate, m_Context).Result;
-				var cells = new IReadOnlyList<string>[result.Length + 1];
+				var cells = new IReadOnlyList<string>[Math.Max(result.Length, 1) + 1];
 				cells[0] = m_Header;
 
-				int recordIndex = 1;
-				foreach (ScheduleRecord record in result) {
-					cells[recordIndex] = record.PresentRow(m_Resources, m_Context.Culture);
-					recordIndex++;
+				if (result.Length == 0) {
+					string[] onlyRow = Enumerable.Repeat("", m_Header.Length).ToArray();
+					onlyRow[0] = "---";
+					cells[1] = onlyRow;
+				} else {
+					int recordIndex = 1;
+					foreach (ScheduleRecord record in result) {
+						cells[recordIndex] = record.PresentRow(m_Resources, m_Context.Culture);
+						recordIndex++;
+					}
 				}
 				return new TableResult(m_Identifier.DisplayText + ": " + DateTimeUtil.GetRelativeDateReference(m_CurrentDate, m_Context.Culture), cells);
 			}
