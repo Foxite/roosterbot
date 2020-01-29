@@ -59,7 +59,7 @@ namespace RoosterBot.Schedule {
 			EnsureIdentifierPresent(identifier);
 
 			foreach (ScheduleRecord record in RecordsFrom(target)) {
-				if (identifier.Matches(record)) {
+				if (identifier.Matches(record) && record.Start > target) {
 					return record;
 				}
 			}
