@@ -17,6 +17,7 @@ namespace RoosterBot.DiscordNet {
 		// I'm not sure what to do about this but something needs to be done.
 		public Task ModifyAsync(string newContent, string? filePath) => DiscordEntity.ModifyAsync(props => {
 			props.Content = newContent;
+			props.Embed = null;
 		});
 
 		internal DiscordMessage(Discord.IUserMessage discordMessage) {

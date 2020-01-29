@@ -107,6 +107,7 @@ namespace RoosterBot.DiscordNet {
 					message = ((DiscordMessage) existingResponse).DiscordEntity;
 					await message.ModifyAsync(props => {
 						props.Content = pr.Caption + "\n" + text;
+						props.Embed = null;
 					});
 				}
 			}
