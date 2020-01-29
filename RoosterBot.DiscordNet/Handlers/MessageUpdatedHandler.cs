@@ -17,24 +17,28 @@ namespace RoosterBot.DiscordNet {
 
 		private Task OnMessageUpdated(Discord.Cacheable<Discord.IMessage, ulong> messageBefore, SocketMessage messageAfter, ISocketMessageChannel channel) {
 			if (messageBefore.HasValue &&
-				messageAfter.Content != null && 
+				messageAfter.Content != null &&
 				messageAfter.Content != messageBefore.Value.Content &&
 				messageAfter is SocketUserMessage userMessageAfter &&
 				messageAfter.Source == Discord.MessageSource.User) {
 				_ = Task.Run(async () => {
-					ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance,
-						((channel as Discord.IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First()).Id));
+					try {
+						ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance,
+							((channel as Discord.IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First()).Id));
 
-					UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
-					CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessageAfter));
+						UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
+						CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessageAfter));
 
-					if (DiscordUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-						await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(userMessageAfter), userConfig, guildConfig));
-					} else if (crp != null) {
-						// No longer a command
-						await channel.DeleteMessageAsync((ulong) crp.Response.Id);
-						userConfig.RemoveCommand(crp.Command);
-					} // else: was not a command, is not a command
+						if (DiscordUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(userMessageAfter), userConfig, guildConfig));
+						} else if (crp != null) {
+							// No longer a command
+							await channel.DeleteMessageAsync((ulong) crp.Response.Id);
+							userConfig.RemoveCommand(crp.Command);
+						} // else: was not a command, is not a command
+					} catch (Exception e) {
+						Logger.Error("Discord", "Exception caught when handling edited message", e);
+					}
 				});
 			}
 			return Task.CompletedTask;

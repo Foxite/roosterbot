@@ -112,41 +112,48 @@ namespace RoosterBot.DiscordNet {
 				}
 			}
 
-			Task goTo(Func<bool> moveAction) {
-				RoosterCommandResult current = pr.Current;
-				if (moveAction()) {
-					return message.ModifyAsync(props => {
-						if (pr.Current is AspectListResult alr) {
-							props.Content = pr.Caption;
-							props.Embed = AspectListToEmbedBuilder(alr).Build();
-						} else {
-							string text = current.ToString(this);
-							if (pr.Caption != null) {
-								text = pr.Caption + "\n" + text;
+			SocketGuildUser? currentGuildUser = ((SocketGuild?) Guild)?.GetUser(Client.CurrentUser.Id);
+			if (currentGuildUser != null &&
+				currentGuildUser.GuildPermissions.AddReactions &&
+				currentGuildUser.GuildPermissions.ManageMessages) {
+				Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
+			} else {
+				Task goTo(Func<bool> moveAction) {
+					RoosterCommandResult current = pr.Current;
+					if (moveAction()) {
+						return message.ModifyAsync(props => {
+							if (pr.Current is AspectListResult alr) {
+								props.Content = pr.Caption;
+								props.Embed = AspectListToEmbedBuilder(alr).Build();
+							} else {
+								string text = current.ToString(this);
+								if (pr.Caption != null) {
+									text = pr.Caption + "\n" + text;
+								}
+								props.Content = text;
+								props.Embed = null;
 							}
-							props.Content = text;
-							props.Embed = null;
-						}
-					});
-				} else {
-					return message.ModifyAsync(props => {
-						if (current is AspectListResult alr) {
-							props.Embed = props.Embed.Value.ToEmbedBuilder()
-								.WithFooter(props.Embed.Value.Footer + "\nNo more results")
-								.Build();
-						} else {
-							props.Content += "\nNo more results.";
-						}
-					});
+						});
+					} else {
+						return message.ModifyAsync(props => {
+							if (current is AspectListResult alr) {
+								props.Embed = props.Embed.Value.ToEmbedBuilder()
+									.WithFooter(props.Embed.Value.Footer + "\nNo more results")
+									.Build();
+							} else {
+								props.Content += "\nNo more results.";
+							}
+						});
+					}
 				}
-			}
 
-			new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
+				new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 				{ new Discord.Emoji("◀️"), () => goTo(pr.MovePrevious) },
 				{ new Discord.Emoji("▶️"), () => goTo(pr.MoveNext) },
 				//{ new Discord.Emoji("⏪"), reset }
 			});
-			return new DiscordMessage(message);
+				return new DiscordMessage(message);
+			}
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace RoosterBot.DiscordNet {
 				LogSeverity.Critical => Logger.Critical,
 				_                    => Logger.Info,
 			};
-			logFunc(msg.Source, msg.Message, msg.Exception);
+			logFunc("Discord-" + msg.Source, msg.Message, msg.Exception);
 
 			return Task.CompletedTask;
 		}

@@ -14,13 +14,17 @@ namespace RoosterBot.DiscordNet {
 
 		// Delete responses when commands are deleted
 		private async Task OnMessageDeleted(Discord.Cacheable<Discord.IMessage, ulong> message, Discord.IMessageChannel channel) {
-			if (message.HasValue && message.Value is Discord.IUserMessage userMessage) {
-				UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(message.Value.Author).GetReference());
-				CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessage.Id));
-				if (crp != null) {
-					await channel.DeleteMessageAsync((ulong) crp.Response.Id);
-					userConfig.RemoveCommand(crp.Command);
+			try {
+				if (message.HasValue && message.Value is Discord.IUserMessage userMessage) {
+					UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(message.Value.Author).GetReference());
+					CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessage.Id));
+					if (crp != null) {
+						await channel.DeleteMessageAsync((ulong) crp.Response.Id);
+						userConfig.RemoveCommand(crp.Command);
+					}
 				}
+			} catch (Exception e) {
+				Logger.Error("Discord", "Exception caught when deleting message", e);
 			}
 		}
 	}
