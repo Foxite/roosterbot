@@ -114,8 +114,8 @@ namespace RoosterBot.DiscordNet {
 
 			SocketGuildUser? currentGuildUser = ((SocketGuild?) Guild)?.GetUser(Client.CurrentUser.Id);
 			if (currentGuildUser != null &&
-				currentGuildUser.GuildPermissions.AddReactions &&
-				currentGuildUser.GuildPermissions.ManageMessages) {
+				!currentGuildUser.GuildPermissions.AddReactions &&
+				!currentGuildUser.GuildPermissions.ManageMessages) {
 				Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
 			} else {
 				Task goTo(Func<bool> moveAction) {
