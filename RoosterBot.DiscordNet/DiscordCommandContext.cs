@@ -148,12 +148,12 @@ namespace RoosterBot.DiscordNet {
 				}
 
 				new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
-				{ new Discord.Emoji("◀️"), () => goTo(pr.MovePrevious) },
-				{ new Discord.Emoji("▶️"), () => goTo(pr.MoveNext) },
-				//{ new Discord.Emoji("⏪"), reset }
-			});
-				return new DiscordMessage(message);
+					{ new Discord.Emoji("◀️"), () => goTo(pr.MovePrevious) },
+					{ new Discord.Emoji("▶️"), () => goTo(pr.MoveNext) },
+					//{ new Discord.Emoji("⏪"), reset }
+				});
 			}
+			return new DiscordMessage(message);
 		}
 	}
 }
