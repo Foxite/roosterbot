@@ -26,7 +26,6 @@ namespace RoosterBot {
 				}
 				await Notification.AddNotificationAsync(report);
 				await rcc.RespondAsync(TextResult.Error(Resources.GetString(rcc.Culture, "CommandHandling_FatalError")));
-				await rcc.UserConfig.UpdateAsync();
 			}
 		}
 	}

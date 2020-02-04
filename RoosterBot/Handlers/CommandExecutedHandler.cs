@@ -21,7 +21,6 @@ namespace RoosterBot {
 					string response = rcc.ServiceProvider.GetRequiredService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
 					await rcc.RespondAsync(TextResult.Info(response));
 				}
-				await rcc.UserConfig.UpdateAsync();
 			}
 		}
 	}

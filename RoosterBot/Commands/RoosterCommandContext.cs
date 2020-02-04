@@ -93,6 +93,7 @@ namespace RoosterBot {
 				// The command was edited.
 				await SendResultAsync(result, response);
 			}
+			await UserConfig.UpdateAsync();
 
 			return response;
 		}
