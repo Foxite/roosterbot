@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -10,8 +11,8 @@ namespace RoosterBot {
 	/// </summary>
 	public static class Logger {
 		private static readonly object Lock = new object();
-		private static readonly int LongestSeverity = ((LogSeverity[]) typeof(LogSeverity).GetEnumValues()).Max(sev => sev.ToString().Length);
 		private static readonly string LogPath = Path.Combine(Program.DataPath, "RoosterBot");
+		private static readonly Dictionary<LogSeverity, string> SeverityStrings;
 
 		static Logger() {
 			// Keep the log from the previous launch as ".old.log"
@@ -25,6 +26,14 @@ namespace RoosterBot {
 			} else {
 				LogPath += ".log";
 			}
+
+
+			var severities = (LogSeverity[]) typeof(LogSeverity).GetEnumValues();
+			int longestSeverity = severities.Max(sev => sev.ToString().Length);
+			SeverityStrings = severities.ToDictionary(
+				sev => sev,
+				sev => " [" + sev.ToString().PadLeft(longestSeverity) + "] "
+			);
 		}
 
 		/// <summary>
@@ -70,9 +79,7 @@ namespace RoosterBot {
 		}
 
 		private static void Log(LogSeverity severity, string tag, string msg, Exception? exception = null) {
-			string severityStr = severity.ToString().PadLeft(LongestSeverity);
-			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern)
-								+ " [" + severityStr + "] " + tag + " : " + msg;
+			string loggedMessage = DateTime.Now.ToString(DateTimeFormatInfo.CurrentInfo.UniversalSortableDateTimePattern) + SeverityStrings[severity] + tag + " : " + msg;
 			if (exception != null) {
 				if (exception is FileLoadException) {
 					loggedMessage += "\n" + exception.ToString();
@@ -83,11 +90,11 @@ namespace RoosterBot {
 			lock (Lock) {
 				Console.ForegroundColor = severity switch
 				{
-					LogSeverity.Verbose => ConsoleColor.Gray,
-					LogSeverity.Debug => ConsoleColor.Gray,
-					LogSeverity.Info => ConsoleColor.White,
-					LogSeverity.Warning => ConsoleColor.Yellow,
-					LogSeverity.Error => ConsoleColor.Red,
+					LogSeverity.Verbose  => ConsoleColor.Gray,
+					LogSeverity.Debug    => ConsoleColor.Gray,
+					LogSeverity.Info     => ConsoleColor.White,
+					LogSeverity.Warning  => ConsoleColor.Yellow,
+					LogSeverity.Error    => ConsoleColor.Red,
 					LogSeverity.Critical => ConsoleColor.Red,
 					_ => ConsoleColor.White
 				};
