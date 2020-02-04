@@ -18,13 +18,9 @@ namespace RoosterBot {
 
 		private async Task HandleError(CommandExecutionFailedEventArgs args) {
 			if (args.Context is RoosterCommandContext rcc) {
-				string report = $"{rcc.ToString()}\nException during {args.Result.CommandExecutionStep.ToString()}\n{args.Result.Exception.ToStringDemystified()}";
-				Logger.Error("CommandException", report);
-				if (report.Length > 2000) {
-					const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
-					report = TooLong + report.Substring(0, 1999 - TooLong.Length);
-				}
-				await Notification.AddNotificationAsync(report);
+				string report = $"{rcc.ToString()}\nException during {args.Result.CommandExecutionStep.ToString()}";
+				Logger.Error("CommandException", report, args.Result.Exception);
+				await Notification.AddNotificationAsync(report + "\n" + args.Result.Exception.ToStringDemystified());
 				await rcc.RespondAsync(TextResult.Error(Resources.GetString(rcc.Culture, "CommandHandling_FatalError")));
 			}
 		}
