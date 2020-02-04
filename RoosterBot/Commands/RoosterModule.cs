@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 using Qmmands;
@@ -17,11 +16,6 @@ namespace RoosterBot {
 		public ResourceService Resources { get; set; } = null!;
 
 		/// <summary>
-		/// The <see cref="ModuleLogger"/> instance for this module.
-		/// </summary>
-		protected ModuleLogger Log { get; private set; } = null!;
-
-		/// <summary>
 		/// Shorthand for <code>Context.UserConfig</code>
 		/// </summary>
 		protected UserConfig UserConfig => Context.UserConfig;
@@ -36,11 +30,9 @@ namespace RoosterBot {
 		/// </summary>
 		protected CultureInfo Culture => UserConfig.Culture ?? ChannelConfig.Culture;
 
-		///
+		/// <inheritdoc/>
 		protected override ValueTask BeforeExecutedAsync() {
-			Log = new ModuleLogger(GetType().Name);
-
-			Log.Debug("Executing: " + Context.ToString());
+			Logger.Debug(GetType().Name, "Executing: " + Context.ToString());
 			// This is like Task.CompletedTask but with ValueTask
 			// https://github.com/dotnet/corefx/issues/33609#issuecomment-440123253
 			return default;
@@ -58,30 +50,6 @@ namespace RoosterBot {
 		/// </summary>
 		protected string GetString(string name, params object[] args) {
 			return string.Format(Resources.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
-		}
-
-		/// <summary>
-		/// A helper class that stops you from having to specify a log tag with your <see cref="Logger"/> calls.
-		/// </summary>
-		protected sealed class ModuleLogger {
-			private readonly string m_Tag;
-
-			internal ModuleLogger(string tag) {
-				m_Tag = tag;
-			}
-
-			/// <summary>Log a message at verbose level.</summary>
-			public void Verbose (string message, Exception? e = null) => Logger.Verbose (m_Tag, message, e);
-			/// <summary>Log a message at debug level.</summary>
-			public void Debug   (string message, Exception? e = null) => Logger.Debug   (m_Tag, message, e);
-			/// <summary>Log a message at informational level.</summary>
-			public void Info    (string message, Exception? e = null) => Logger.Info    (m_Tag, message, e);
-			/// <summary>Log a message at verbose level.</summary>
-			public void Warning (string message, Exception? e = null) => Logger.Warning (m_Tag, message, e);
-			/// <summary>Log a message at error level.</summary>
-			public void Error   (string message, Exception? e = null) => Logger.Error   (m_Tag, message, e);
-			/// <summary>Log a message at critical level.</summary>
-			public void Critical(string message, Exception? e = null) => Logger.Critical(m_Tag, message, e);
 		}
 	}
 
