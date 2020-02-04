@@ -87,6 +87,9 @@ namespace RoosterBot {
 				Directory.CreateDirectory(configFolder);
 			}
 
+			Logger.AddEndpoint(new FileLogEndpoint());
+			Logger.AddEndpoint(new ConsoleLogEndpoint());
+
 			Logger.Info("Main", "Starting program");
 
 			IServiceCollection serviceCollection = CreateRBServices();
