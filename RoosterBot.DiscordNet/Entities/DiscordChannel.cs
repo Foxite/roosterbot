@@ -7,7 +7,7 @@ namespace RoosterBot.DiscordNet {
 		public PlatformComponent Platform => DiscordNetComponent.Instance;
 
 		public object Id => DiscordEntity.Name;
-		public string Name => DiscordEntity.Name;
+		public string Name => (DiscordEntity is Discord.IGuildChannel igc ? (igc.Guild + "/") : "DM with ") + DiscordEntity.Name;
 
 		public async Task<IMessage> GetMessageAsync(object id) {
 			if (id is ulong ulongId) {
