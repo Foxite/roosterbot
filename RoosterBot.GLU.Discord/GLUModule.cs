@@ -9,7 +9,7 @@ namespace RoosterBot.GLU {
 				 "thanks", "thnx", "thx", "ty", "thank")]
 		public CommandResult ThankYouCommand([Remainder] string post = "") {
 			string response;
-			if (post.ToLower() == "joram" || UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram) {
+			if (post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
 				response = "<:wsjoram:570601561072467969>";
 			} else {
 				string[] responses = new[] {
