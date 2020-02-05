@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace RoosterBot {
-	internal class ConsoleLogEndpoint : TextLogEndpoint {
+	internal class ConsoleLogEndpoint : LogEndpoint {
 		public override void Log(LogMessage message) {
 			string msg = FormatMessage(message);
 

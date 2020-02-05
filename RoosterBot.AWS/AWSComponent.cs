@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using Amazon;
+using Amazon.CloudWatchLogs;
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,8 @@ namespace RoosterBot.AWS {
 
 #nullable disable
 		private AmazonDynamoDBClient m_DynamoDBClient;
+		private AmazonCloudWatchLogsClient m_LogClient;
+		private CloudwatchLogEndpoint m_LogEndpoint;
 #nullable restore
 		// This field may actually be null after startup, because it does not get created in debug builds. So don't exclude it from nullability.
 		private SNSNotificationHandler? m_SNS;
@@ -42,6 +45,12 @@ namespace RoosterBot.AWS {
 				jsonConfig.DefaultComandPrefix,
 				CultureInfo.GetCultureInfo(jsonConfig.DefaultCulture)
 			));
+
+			m_LogClient = new AmazonCloudWatchLogsClient(awsConfig.Credentials, awsConfig.Region);
+
+			m_LogEndpoint = CloudwatchLogEndpoint.CreateAsync(m_LogClient, TimeSpan.FromSeconds(5)).Result;
+			
+			Logger.AddEndpoint(m_LogEndpoint);
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
@@ -56,7 +65,9 @@ namespace RoosterBot.AWS {
 		}
 
 		protected override void Dispose(bool disposing) {
-			m_DynamoDBClient.Dispose();
+			m_DynamoDBClient?.Dispose();
+			m_LogClient?.Dispose();
+			m_LogEndpoint?.Dispose();
 			m_SNS?.Dispose();
 		}
 	}

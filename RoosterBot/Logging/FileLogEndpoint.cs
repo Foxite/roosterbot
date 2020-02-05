@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace RoosterBot {
-	internal class FileLogEndpoint : TextLogEndpoint {
+	internal class FileLogEndpoint : LogEndpoint {
 		private readonly string m_LogPath = Path.Combine(Program.DataPath, "RoosterBot");
 
 		public FileLogEndpoint() {

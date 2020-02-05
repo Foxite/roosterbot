@@ -273,3 +273,6 @@ dotnet_diagnostic.CS8600.severity = error
 
 # CS8620: Argument cannot be used for parameter due to differences in the nullability of reference types.
 dotnet_diagnostic.CS8620.severity = error
+
+# CA1810: Initialize reference type static fields inline
+dotnet_diagnostic.CA1810.severity = none
