@@ -71,8 +71,8 @@ namespace RoosterBot {
 					case ChecksFailedResult check:
 						foreach ((CheckAttribute Check, CheckResult Result) in check.FailedChecks) {
 							if (Result is RoosterCheckResult rcr) {
-								Component? component = Program.Instance.Components.GetComponentFromAssembly(check.FailedChecks.First().Check.GetType().Assembly);
-								response += Resources.ResolveString(context.Culture, component, check.Reason);
+								Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
+								response += Resources.ResolveString(context.Culture, component, Result.Reason);
 							} else {
 								response += Result.Reason;
 							}

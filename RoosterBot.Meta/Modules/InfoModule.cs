@@ -19,5 +19,10 @@ namespace RoosterBot.Meta {
 			TimeSpan uptime = DateTime.Now - Process.GetCurrentProcess().StartTime;
 			return TextResult.Info(GetString("InfoModule_Uptime_Response", (int) uptime.TotalDays, uptime.Hours, uptime.Minutes, uptime.Seconds));
 		}
+
+		[Command("test"), RequirePrivate(true)]
+		public CommandResult Test() {
+			return TextResult.Info("Success");
+		}
 	}
 }
