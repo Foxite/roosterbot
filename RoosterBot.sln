@@ -44,8 +44,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Weather", "Roost
 		{7BD87AB2-4DE7-48FE-89BF-2419E46FA027} = {7BD87AB2-4DE7-48FE-89BF-2419E46FA027}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Tests", "RoosterBot.Tests\RoosterBot.Tests.csproj", "{561157ED-DEED-407E-AA09-B80968598292}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D1489DF-30E1-4470-B5BB-06B366B123C7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -68,7 +66,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Telegram", "Roos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.GLU.Discord", "RoosterBot.GLU.Discord\RoosterBot.GLU.Discord.csproj", "{06772B09-11A3-4593-ABE1-F58216168A90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docs", "Docs\Docs.csproj", "{509D7C99-2767-4A3F-A190-478DDDCB04A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "Docs\Docs.csproj", "{509D7C99-2767-4A3F-A190-478DDDCB04A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,10 +114,6 @@ Global
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D93F1D7C-D77F-4015-8FF0-5B29442712E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{561157ED-DEED-407E-AA09-B80968598292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{561157ED-DEED-407E-AA09-B80968598292}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{561157ED-DEED-407E-AA09-B80968598292}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{561157ED-DEED-407E-AA09-B80968598292}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8240830B-E7AD-4931-9B92-ECDF27D90F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8240830B-E7AD-4931-9B92-ECDF27D90F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8240830B-E7AD-4931-9B92-ECDF27D90F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
