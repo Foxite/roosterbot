@@ -14,7 +14,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The Component to be used when resolving the <see cref="TypeParserResult{T}.Reason"/>.
 		/// </summary>
-		public Component ErrorReasonComponent {
+		public Component? ErrorReasonComponent {
 			get {
 				if (m_IndivReader is IExternalResultStringParser ersp) {
 					return ersp.ErrorReasonComponent;

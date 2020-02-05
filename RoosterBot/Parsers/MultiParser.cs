@@ -15,7 +15,7 @@ namespace RoosterBot {
 		public override string TypeDisplayName { get; }
 
 		/// <inheritdoc/>
-		public Component ErrorReasonComponent { get; }
+		public Component? ErrorReasonComponent { get; }
 
 		/// <summary>
 		/// Allows multiple type parsers to be used for a single type.
@@ -45,7 +45,7 @@ namespace RoosterBot {
 				if (result.IsSuccessful) {
 					return Successful((T) result.Value!); // should never throw -- see AddReader, there's no way to add an invalid parser
 				} else if (result.InputValid) {
-					Component resourceComponent;
+					Component? resourceComponent;
 					if (reader is IExternalResultStringParser ersp) {
 						resourceComponent = ersp.ErrorReasonComponent;
 					} else {
