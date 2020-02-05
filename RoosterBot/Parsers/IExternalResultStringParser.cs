@@ -6,6 +6,6 @@
 		/// <summary>
 		/// The Component used when resolving a <see cref="Qmmands.TypeParserResult{T}.Reason"/>.
 		/// </summary>
-		Component ErrorReasonComponent { get; }
+		Component? ErrorReasonComponent { get; }
 	}
 }

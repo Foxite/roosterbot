@@ -56,7 +56,7 @@ namespace RoosterBot {
 		protected RoosterTypeParserResult<T> Unsuccessful(bool inputValid, RoosterCommandContext context, string reason, params string[] objects) {
 			ResourceService Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			if (!GetType().Assembly.Equals(Assembly.GetExecutingAssembly())) {
-				Component component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
+				Component? component = Program.Instance.Components.GetComponentFromAssembly(GetType().Assembly);
 				reason = Resources.ResolveString(context.Culture, component, reason);
 			}
 			return RoosterTypeParserResult<T>.Unsuccessful(inputValid, string.Format(reason, objects));

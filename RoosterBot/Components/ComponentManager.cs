@@ -184,9 +184,11 @@ namespace RoosterBot {
 			}
 		}
 
-		internal Component GetComponentFromAssembly(Assembly assembly) {
+		internal Component? GetComponentFromAssembly(Assembly assembly) {
 			if (m_ComponentsByAssembly.TryGetValue(assembly, out Component? result)) {
 				return result;
+			} else if (assembly.Equals(Assembly.GetExecutingAssembly())) {
+				return null;
 			} else {
 				throw new ArgumentException($"Assembly {assembly.FullName} does not have a ComponentBase");
 			}
