@@ -9,6 +9,8 @@ namespace RoosterBot.DiscordNet {
 		public object Id => DiscordEntity.Name;
 		public string Name => (DiscordEntity is Discord.IGuildChannel igc ? (igc.Guild + "/") : "DM with ") + DiscordEntity.Name;
 
+		public bool IsPrivate => DiscordEntity is Discord.IPrivateChannel;
+
 		public async Task<IMessage> GetMessageAsync(object id) {
 			if (id is ulong ulongId) {
 				if (await DiscordEntity.GetMessageAsync(ulongId) is Discord.IUserMessage message) {

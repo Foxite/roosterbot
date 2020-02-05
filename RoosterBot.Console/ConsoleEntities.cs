@@ -32,6 +32,8 @@ namespace RoosterBot.Console {
 
 		public string Name => "Window";
 
+		public bool IsPrivate => true;
+
 		public ConsoleChannel() : base(3) { }
 
 		public Task<IMessage> GetMessageAsync(object id) => Task.FromResult((IMessage) m_Messages.First(message => message.Id == Id));
