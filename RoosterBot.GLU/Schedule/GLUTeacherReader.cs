@@ -29,7 +29,7 @@ namespace RoosterBot.GLU {
 				};
 
 				var record = new StaffMemberInfo(
-					scheduleCode: csv["Abbreviation"],
+					code: csv["Abbreviation"],
 					displayText: csv["FullName"],
 					isUnknown: false,
 					noLookup: bool.Parse(csv["NoLookup"]),

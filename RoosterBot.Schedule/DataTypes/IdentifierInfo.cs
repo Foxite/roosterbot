@@ -4,9 +4,13 @@ using Newtonsoft.Json;
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptIn)]
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
-		[JsonProperty] public abstract string ScheduleCode { get; }
-		public abstract string DisplayText { get; }
+		[JsonProperty] public string ScheduleCode { get; }
+		public virtual string DisplayText => ScheduleCode;
 		public abstract bool AssignableToUser { get; }
+
+		protected IdentifierInfo(string scheduleCode) {
+			ScheduleCode = scheduleCode;
+		}
 
 		public abstract bool Matches(ScheduleRecord info);
 

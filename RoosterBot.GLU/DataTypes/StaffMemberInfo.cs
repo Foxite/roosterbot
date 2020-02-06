@@ -7,7 +7,6 @@ using RoosterBot.Schedule;
 namespace RoosterBot.GLU {
 	[JsonObject(MemberSerialization.OptIn)]
 	public class StaffMemberInfo : IdentifierInfo {
-		public override string ScheduleCode { get; }
 		public override string DisplayText { get; }
 		public bool			   IsUnknown { get; }
 		public bool			   NoLookup { get; }
@@ -15,9 +14,8 @@ namespace RoosterBot.GLU {
 		public IReadOnlyList<string> AltSpellings { get; }
 		public override bool AssignableToUser => false;
 
-		public StaffMemberInfo(string scheduleCode, string displayText, bool isUnknown, bool noLookup, string? discordUser, IReadOnlyList<string> altSpellings) {
+		public StaffMemberInfo(string code, string displayText, bool isUnknown, bool noLookup, string? discordUser, IReadOnlyList<string> altSpellings) : base(code) {
 			IsUnknown = isUnknown;
-			ScheduleCode = scheduleCode;
 			DisplayText = displayText;
 			NoLookup = noLookup;
 			DiscordUser = discordUser;
