@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	public class BreakTime {
 		public DateTime Start { get; }
 		public DateTime End { get; }

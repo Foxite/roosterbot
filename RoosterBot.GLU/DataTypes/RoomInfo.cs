@@ -1,6 +1,7 @@
 ﻿using System.Linq;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	public class RoomInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
 		public override string DisplayText => ScheduleCode;

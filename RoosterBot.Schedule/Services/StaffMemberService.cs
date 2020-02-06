@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace RoosterBot.Schedule {
+	/* TODO replace with something more generic
 	public class StaffMemberService {
 		private readonly List<ChannelStaffList> m_Records = new List<ChannelStaffList>();
 		
@@ -76,5 +77,5 @@ namespace RoosterBot.Schedule {
 			StaffMember = member;
 			Score = score;
 		}
-	}
+	}*/
 }

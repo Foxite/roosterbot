@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace RoosterBot.Schedule {
@@ -12,25 +11,14 @@ namespace RoosterBot.Schedule {
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
 		public DateTime End { get; set; }
-		public IReadOnlyList<StudentSetInfo> StudentSets { get; }
-		public IReadOnlyList<StaffMemberInfo> StaffMember { get; }
-		public IReadOnlyList<RoomInfo> Room { get; }
-		public abstract bool ShouldCallNextCommand { get; }
-		public BreakTime? Break { get; set; }
+		public abstract bool ShouldCallNextCommand { get; }	
+		public abstract IEnumerable<IdentifierInfo> InvolvedIdentifiers { get; }
 
-		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<StaffMemberInfo> staffMember, IReadOnlyList<RoomInfo> room) {
+		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end) {
 			Activity = activity;
 			Start = start;
 			End = end;
-			StudentSets = studentSets;
-			StaffMember = staffMember;
-			Room = room;
 		}
-
-		[JsonIgnore] public TimeSpan Duration => End - Start;
-		[JsonIgnore] public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ScheduleCode));
-		[JsonIgnore] public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.DisplayText));
-		[JsonIgnore] public string RoomString => string.Join(", ", Room.Select(info => info.ScheduleCode));
 
 		public abstract IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture);
 		public abstract IReadOnlyList<string> PresentRow(ResourceService resources, CultureInfo culture);

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	public class StudentSetInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
 		public override string DisplayText => ScheduleCode;
@@ -10,7 +11,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override bool Matches(ScheduleRecord record) {
-			return record.StudentSets.Contains(this);
+			return record is GLUScheduleRecord gluRecord && gluRecord.StudentSets.Contains(this);
 		}
 	}
 }

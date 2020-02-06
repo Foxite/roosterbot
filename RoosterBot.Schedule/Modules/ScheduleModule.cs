@@ -147,7 +147,7 @@ namespace RoosterBot.Schedule {
 		#region Util
 		private ReturnValue<IdentifierInfo> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
-				StudentSetInfo? ssi = Context.UserConfig.GetStudentSet();
+				IdentifierInfo? ssi = Context.UserConfig.GetIdentifier();
 				if (ssi != null) {
 					return ReturnValue<IdentifierInfo>.Successful(ssi);
 				} else {

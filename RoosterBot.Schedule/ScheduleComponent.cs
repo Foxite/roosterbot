@@ -15,7 +15,7 @@ namespace RoosterBot.Schedule {
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			services
-				.AddSingleton<StaffMemberService>()
+				//.AddSingleton<StaffMemberService>()
 				.AddSingleton<ScheduleService>()
 				.AddSingleton<IdentifierValidationService>();
 		}
@@ -23,15 +23,9 @@ namespace RoosterBot.Schedule {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Schedule.Resources");
 
-			var ssir = new StudentSetInfoParser();
-			commandService.AddTypeParser(ssir);
-
 			// Long-term todo: allow other components to use their own IdentifierInfo.
 			// Currently the codebase *probably* allows this, but I haven't really looked into it.
 			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
-			identifierReaders.AddParser(ssir);
-			identifierReaders.AddParser(new StaffMemberInfoParser());
-			identifierReaders.AddParser(new RoomInfoParser());
 			commandService.AddTypeParser(identifierReaders);
 
 			commandService.AddModule<StaffMemberModule>();

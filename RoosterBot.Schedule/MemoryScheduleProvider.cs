@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
 		public MemoryScheduleProvider(string name, ScheduleReader reader, IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) {
 			m_Name = name;
-			List<ScheduleRecord> list = reader.GetSchedule();
+			IReadOnlyList<ScheduleRecord> list = reader.GetSchedule();
 			m_ScheduleBegin = list[0].Start.Date;
 			m_ScheduleEnd = list[list.Count - 1].End.Date;
 			m_Schedule = list
@@ -27,11 +27,7 @@ namespace RoosterBot.Schedule {
 					grp => grp.Key,
 					grp => (IEnumerable<ScheduleRecord>) grp
 				);
-			m_PresentIdentifiers = new HashSet<IdentifierInfo>(
-				m_Schedule.Values.SelectMany(item => item).SelectMany(item => (IEnumerable<IdentifierInfo>) item.StudentSets).Distinct()
-				.Concat(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.StaffMember).Distinct())
-				.Concat(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.Room).Distinct())
-			);
+			m_PresentIdentifiers = new HashSet<IdentifierInfo>(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.InvolvedIdentifiers).Distinct());
 		}
 
 		private void EnsureIdentifierPresent(IdentifierInfo identifier) {

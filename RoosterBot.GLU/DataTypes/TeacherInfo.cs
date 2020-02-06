@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	[JsonObject(MemberSerialization.OptIn)]
 	public class StaffMemberInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
@@ -42,7 +43,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public override bool Matches(ScheduleRecord record) {
-			return record.StaffMember.Contains(this);
+			return record is GLUScheduleRecord gluRecord && gluRecord.StaffMember.Contains(this);
 		}
 
 		public override bool Equals(object? obj) {

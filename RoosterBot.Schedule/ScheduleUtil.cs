@@ -27,17 +27,17 @@ namespace RoosterBot.Schedule {
 			remove => ClassChangedEvent.Unhook(value);
 		}
 
-		public static StudentSetInfo? GetStudentSet(this UserConfig config) {
-			config.TryGetData("schedule.userClass", out StudentSetInfo? ssi);
+		public static IdentifierInfo? GetIdentifier(this UserConfig config) {
+			config.TryGetData("schedule.userClass", out IdentifierInfo? ssi);
 			return ssi;
 		}
 
 		/// <returns>The old StudentSetInfo, or null if none was assigned</returns>
-		public static async Task<StudentSetInfo?> SetStudentSetAsync(this UserConfig config, StudentSetInfo ssi) {
-			StudentSetInfo? old = GetStudentSet(config);
-			config.SetData("schedule.userClass", ssi);
-			if (old != ssi) {
-				await ClassChangedEvent.InvokeAsync(new UserChangedStudentSetEventArgs(config.UserReference, old, ssi));
+		public static async Task<IdentifierInfo?> SetStudentSetAsync(this UserConfig config, IdentifierInfo info) {
+			IdentifierInfo? old = GetIdentifier(config);
+			config.SetData("schedule.userClass", info);
+			if (old != info) {
+				await ClassChangedEvent.InvokeAsync(new UserChangedStudentSetEventArgs(config.UserReference, old, info));
 			}
 			return old;
 		}
@@ -46,10 +46,10 @@ namespace RoosterBot.Schedule {
 
 	public class UserChangedStudentSetEventArgs : EventArgs {
 		public SnowflakeReference UserReference { get; }
-		public StudentSetInfo? OldSet { get; }
-		public StudentSetInfo NewSet { get; }
+		public IdentifierInfo? OldSet { get; }
+		public IdentifierInfo NewSet { get; }
 
-		public UserChangedStudentSetEventArgs(SnowflakeReference userReference, StudentSetInfo? oldSet, StudentSetInfo newSet) {
+		public UserChangedStudentSetEventArgs(SnowflakeReference userReference, IdentifierInfo? oldSet, IdentifierInfo newSet) {
 			UserReference = userReference;
 			OldSet = oldSet;
 			NewSet = newSet;

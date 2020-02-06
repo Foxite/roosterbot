@@ -2,15 +2,31 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-//using Discord;
+using Newtonsoft.Json;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	public class GLUScheduleRecord : ScheduleRecord {
+		public IReadOnlyList<StudentSetInfo> StudentSets { get; }
+		public IReadOnlyList<StaffMemberInfo> StaffMember { get; }
+		public IReadOnlyList<RoomInfo> Room { get; }
+		public BreakTime? Break { get; set; }
+
 		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
+		public override IEnumerable<IdentifierInfo> InvolvedIdentifiers => ((IEnumerable<IdentifierInfo>) StudentSets).Concat(StaffMember).Concat(Room);
 
 		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<StaffMemberInfo> staffMember, IReadOnlyList<RoomInfo> room)
-			: base(activity, start, end, studentSets, staffMember, room) { }
+			: base(activity, start, end) {
+			StudentSets = studentSets;
+			StaffMember = staffMember;
+			Room = room;
+		}
+
+		[JsonIgnore] public TimeSpan Duration => End - Start;
+		[JsonIgnore] public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ScheduleCode));
+		[JsonIgnore] public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.DisplayText));
+		[JsonIgnore] public string RoomString => string.Join(", ", Room.Select(info => info.ScheduleCode));
+
 
 		public override IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture) {
 			string getString(string key, params object[] objects) {

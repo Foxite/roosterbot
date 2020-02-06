@@ -3,8 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
+using RoosterBot.Schedule;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	public class StaffMemberInfoParser : IdentifierInfoParserBase<StaffMemberInfo> {
 		public override string TypeDisplayName => "#StaffMemberInfoReader_TypeDisplayName";
 

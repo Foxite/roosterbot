@@ -4,6 +4,7 @@ using Qmmands;
 namespace RoosterBot.Schedule {
 	[Name("#UserClassModule_ModuleName"), Description("#UserClassModule_ModuleSummary"), Group("#UserClassModule_Group")]
 	public class UserClassModule : RoosterModule {
+		/* TODO replace with UserIdentifierService
 		[Command("#UserClassModule_CommandName"), Description("#UserClassModule_CommandSummary"), RequirePrivate(false)]
 		public async Task<CommandResult> UserClass([Name("#UserClassModule_class_Name")] StudentSetInfo? newStudentSet = null) {
 			if (newStudentSet == null) {
@@ -26,6 +27,6 @@ namespace RoosterBot.Schedule {
 					return TextResult.Success(GetString("UserClassModule_ConfirmUserIsInClassWithOld", newStudentSet.DisplayText, oldStudentSet.DisplayText));
 				}
 			}
-		}
+		}*/
 	}
 }

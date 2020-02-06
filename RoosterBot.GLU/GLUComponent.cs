@@ -64,18 +64,24 @@ namespace RoosterBot.GLU {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
-			// Staff members
-			StaffMemberService members = services.GetRequiredService<StaffMemberService>();
-			members.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);
+			// TODO Staff members
+			/*StaffMemberService members = services.GetRequiredService<StaffMemberService>();
+			members.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);*/
 
 			ScheduleService provider = services.GetRequiredService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
+				// TODO
+				//provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
 			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(new GLUIdentifierValidator(m_AllowedChannels));
+
+			var identifierReaders = commands.GetSpecificTypeParser<IdentifierInfo, MultiParser<IdentifierInfo>>()!; // TODO proper null checking
+			identifierReaders.AddParser(new StudentSetInfoParser());
+			identifierReaders.AddParser(new StaffMemberInfoParser());
+			identifierReaders.AddParser(new RoomInfoParser());
 		}
 
 		private class GLUIdentifierValidator : IdentifierValidator {

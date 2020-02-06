@@ -20,12 +20,12 @@ namespace RoosterBot.GLU {
 			m_SkipPastRecords = skipPastRecords;
 		}
 
-		public override List<ScheduleRecord> GetSchedule() {
+		public override IReadOnlyList<ScheduleRecord> GetSchedule() {
 			Logger.Info("GLUScheduleReader", $"Loading CSV file from {m_Path}");
 
 			int line = 1;
 			try {
-				List<ScheduleRecord> schedule;
+				List<GLUScheduleRecord> schedule;
 				using (StreamReader reader = File.OpenText(m_Path))
 				using (var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," })) {
 					csv.Read();
@@ -33,7 +33,7 @@ namespace RoosterBot.GLU {
 
 					DateTime lastMonday = DateTime.Today.AddDays(-(int) DateTime.Today.DayOfWeek + 1); // + 1 because C# weeks start on Sunday (which is 0, and Monday is 1, etc. Saturday is 6)
 
-					schedule = new List<ScheduleRecord>();
+					schedule = new List<GLUScheduleRecord>();
 					var culture = CultureInfo.GetCultureInfo("en-US");
 
 					while (csv.Read()) {
@@ -63,7 +63,7 @@ namespace RoosterBot.GLU {
 							room = null;
 						}
 
-						ScheduleRecord record = new GLUScheduleRecord(
+						var record = new GLUScheduleRecord(
 							activity: new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
 							start: start,
 							end: end,
@@ -72,10 +72,10 @@ namespace RoosterBot.GLU {
 							room: room != null ? room.Select(code => new RoomInfo(code)).ToList() : new List<RoomInfo>()
 						);
 
-						bool shouldMerge(ScheduleRecord merge, out ScheduleRecord? into) {
+						bool shouldMerge(GLUScheduleRecord merge, out GLUScheduleRecord? into) {
 							into = null;
 							for (int i = schedule.Count - 1; i >= 0; i--) {
-								ScheduleRecord item = schedule[i];
+								GLUScheduleRecord item = schedule[i];
 								if (item.StaffMember.Intersect(merge.StaffMember).Any() ||
 									item.StudentSets.Intersect(merge.StudentSets).Any() ||
 									item.Room.Intersect(merge.Room).Any()) {
@@ -95,7 +95,7 @@ namespace RoosterBot.GLU {
 							return false;
 						}
 
-						if (shouldMerge(record, out ScheduleRecord? mergeInto)) {
+						if (shouldMerge(record, out GLUScheduleRecord? mergeInto)) {
 							mergeInto!.Break = new BreakTime(mergeInto.End, record.Start);
 							mergeInto.End = record.End;
 						} else {

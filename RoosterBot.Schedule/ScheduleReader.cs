@@ -2,6 +2,6 @@
 
 namespace RoosterBot.Schedule {
 	public abstract class ScheduleReader {
-		public abstract List<ScheduleRecord> GetSchedule();
+		public abstract IReadOnlyList<ScheduleRecord> GetSchedule();
 	}
 }
