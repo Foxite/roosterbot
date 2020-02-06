@@ -150,4 +150,61 @@
   <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
     <value>Unknown staff member with abbreviation {0}</value>
   </data>
+  <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>room</value>
+  </data>
+  <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
+    <value>Is that a staff member? :thinking: If they are new, they need to be added by the bot owner.</value>
+  </data>
+  <data name="StaffMemberInfoReader_MultipleMatches" xml:space="preserve">
+    <value>I don't know who you mean: {0}</value>
+    <comment>0: list of match display texts</comment>
+  </data>
+  <data name="StaffMemberInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>staff member</value>
+  </data>
+  <data name="StaffMemberListModule_CommandName" xml:space="preserve">
+    <value>staff members|staff member|teachers|teacher|staff</value>
+  </data>
+  <data name="StaffMemberListModule_ListCommand_NameParameterName" xml:space="preserve">
+    <value>name</value>
+  </data>
+  <data name="StaffMemberListModule_Name" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnAbbreviation" xml:space="preserve">
+    <value>Abbr</value>
+    <comment>Needs to be very short, recommend 4 characters max, because it will stretch up the column</comment>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnFullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_DiscordName" xml:space="preserve">
+    <value>Discord name</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_NoStaffMembersFound" xml:space="preserve">
+    <value>No staff members found.</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ResultsFor" xml:space="preserve">
+    <value>Results for `{0}`</value>
+    <comment>0: input</comment>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_Summary" xml:space="preserve">
+    <value>A list of all staff members, their abbreviations, and their Discord names (if known). You can filter by name.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
+    <value>Thats not a class.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
+    <value>I don't know that user.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
+    <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
+    <value>I don't know in what class that person is. He/she needs to use `{0}i am in &lt;class&gt;` to change this.</value>
+  </data>
+  <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>class</value>
+  </data>
 </root>

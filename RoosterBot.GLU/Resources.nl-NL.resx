@@ -150,4 +150,64 @@
   <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
     <value>Onbekende leraar met afkorting {0}</value>
   </data>
+  <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>lokaal</value>
+  </data>
+  <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
+    <value>Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.</value>
+  </data>
+  <data name="StaffMemberInfoReader_MultipleMatches" xml:space="preserve">
+    <value>Ik weet niet wie je bedoelt: {0}</value>
+    <comment>0: list of match display texts</comment>
+  </data>
+  <data name="StaffMemberInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>leraar</value>
+  </data>
+  <data name="StaffMemberListModule_CommandName" xml:space="preserve">
+    <value>leraren|docenten|docent</value>
+  </data>
+  <data name="StaffMemberListModule_ListCommand_NameParameterName" xml:space="preserve">
+    <value>naam</value>
+  </data>
+  <data name="StaffMemberListModule_Name" xml:space="preserve">
+    <value>Rooster</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnAbbreviation" xml:space="preserve">
+    <value>Afk.</value>
+    <comment>Needs to be very short, recommend 4 characters max, because it will stretch up the column</comment>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ColumnFullName" xml:space="preserve">
+    <value>Volledige naam</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_DiscordName" xml:space="preserve">
+    <value>Discord naam</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_NoStaffMembersFound" xml:space="preserve">
+    <value>Geen leraren gevonden.</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_ResultsFor" xml:space="preserve">
+    <value>Resultaten voor `{0}`</value>
+    <comment>0: input</comment>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_Summary" xml:space="preserve">
+    <value>Een lijst van alle leraren, hun afkortingen, en hun Discord namen (als die bekend is). Je kan filteren op naam.</value>
+  </data>
+  <data name="StaffMemberListModule_StaffMemberListCommand_TooManyResults" xml:space="preserve">
+    <value>Te veel resultaten. Voeg een specifieker filter toe.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_Direct" xml:space="preserve">
+    <value>Dat is geen klas.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
+    <value>Ik ken die gebruiker niet.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
+    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
+  </data>
+  <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
+    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik zit in &lt;klas&gt;` gebruiken om dit in te stellen.</value>
+  </data>
+  <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
+    <value>klas</value>
+  </data>
 </root>
