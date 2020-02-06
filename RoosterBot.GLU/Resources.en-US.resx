@@ -150,6 +150,9 @@
   <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
     <value>Unknown staff member with abbreviation {0}</value>
   </data>
+  <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
+    <value>That does not match anything.</value>
+  </data>
   <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>room</value>
   </data>

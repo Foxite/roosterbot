@@ -150,6 +150,9 @@
   <data name="GLUScheduleRecord_UnknownStaffMember" xml:space="preserve">
     <value>Onbekende leraar met afkorting {0}</value>
   </data>
+  <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
+    <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
+  </data>
   <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>lokaal</value>
   </data>
