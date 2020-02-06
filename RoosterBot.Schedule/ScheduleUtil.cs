@@ -13,13 +13,13 @@ namespace RoosterBot.Schedule {
 		}
 
 		public static IdentifierInfo? GetIdentifier(this UserConfig config) {
-			config.TryGetData("schedule.userClass", out IdentifierInfo? ssi);
-			return ssi;
+			config.TryGetData("schedule.userClass", out IdentifierInfoWrapper? ssi);
+			return ssi?.WrappedIdentifier;
 		}
 
 		public static async Task<IdentifierInfo?> SetIdentifierAsync(this UserConfig config, IdentifierInfo info) {
 			IdentifierInfo? old = GetIdentifier(config);
-			config.SetData("schedule.userClass", info);
+			config.SetData("schedule.userClass", (IdentifierInfoWrapper) info);
 			if (old != info) {
 				await ClassChangedEvent.InvokeAsync(new UserChangedIdentifierEventArgs(config.UserReference, old, info));
 			}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -69,11 +70,24 @@ namespace RoosterBot {
 
 		/// <summary>
 		/// Set the value of a configuration key.
+		/// Warning: You cannot deserialize <see langword="abstract"/> types. See the remarks for more information.
 		/// </summary>
+		/// <remarks>
+		/// If <typeparamref name="T"/> is <see langword="abstract"/>, then this method will throw an <see cref="InvalidOperationException"/> to prevent errors when deserializing.
+		/// To work around this problem, you must either specify a concrete type for your object, or create a non-abstract wrapper class for your abstract type, and add this attribute to it:
+		/// <code>[JsonObject(ItemTypeNameHandling = TypeNameHandling.Auto)]</code>
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">If <typeparamref name="T"/> is <see langword="abstract"/>.</exception>
 		public void SetData<T>(string key, T data) {
 			if (data is null) {
 				m_CustomData.Remove(key);
 			} else {
+				if (typeof(T).IsAbstract) {
+					throw new InvalidOperationException($"You are serializing an object typed {data.GetType().Name} as an abstract type {typeof(T).Name}. " +
+						"Abstract types cannot be deserialized. To prevent errors when deserializing, this object cannot be serialized." +
+						"To work around this issue, you must either specify a concrete type for your object, or create a non-abstract wrapper class for your abstract type, " +
+						"and add this attribute to it:\nJsonObject(ItemTypeNameHandling = TypeNameHandling.Auto)");
+				}
 				m_CustomData[key] = JToken.FromObject(data);
 			}
 		}
