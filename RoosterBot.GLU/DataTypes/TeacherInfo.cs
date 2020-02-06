@@ -13,6 +13,7 @@ namespace RoosterBot.GLU {
 		public bool			   NoLookup { get; }
 		public string?		   DiscordUser { get; }
 		public IReadOnlyList<string> AltSpellings { get; }
+		public override bool AssignableToUser => false;
 
 		public StaffMemberInfo(string scheduleCode, string displayText, bool isUnknown, bool noLookup, string? discordUser, IReadOnlyList<string> altSpellings) {
 			IsUnknown = isUnknown;

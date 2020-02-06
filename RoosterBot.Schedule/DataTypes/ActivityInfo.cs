@@ -1,9 +1,8 @@
-﻿using RoosterBot.Schedule;
-
-namespace RoosterBot.Schedule {
+﻿namespace RoosterBot.Schedule {
 	public class ActivityInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
 		public override string DisplayText { get; }
+		public override bool AssignableToUser => false;
 
 		public ActivityInfo(string scheduleCode, string displayText) {
 			ScheduleCode = scheduleCode;

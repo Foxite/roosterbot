@@ -6,7 +6,6 @@ namespace RoosterBot.Schedule {
 	public abstract class IdentifierInfo : IEquatable<IdentifierInfo> {
 		[JsonProperty] public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
-
 		public abstract bool AssignableToUser { get; }
 
 		public abstract bool Matches(ScheduleRecord info);
