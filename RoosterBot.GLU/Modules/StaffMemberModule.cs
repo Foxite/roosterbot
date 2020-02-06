@@ -2,10 +2,9 @@
 using System.Linq;
 using Qmmands;
 
-namespace RoosterBot.Schedule {
+namespace RoosterBot.GLU {
 	[Name("#StaffMemberListModule_Name")]
 	public class StaffMemberModule : RoosterModule {
-		/* TODO see item in StaffMemberService
 		public StaffMemberService Staff { get; set; } = null!;
 
 		[Command("#StaffMemberListModule_CommandName"), Description("#StaffMemberListModule_StaffMemberListCommand_Summary")]
@@ -38,6 +37,6 @@ namespace RoosterBot.Schedule {
 
 				return new PaginatedResult(new PaginatedTableEnumerator("Table", header, cells), GetString("StaffMemberListModule_StaffMemberListCommand_ResultsFor", name));
 			}
-		}*/
+		}
 	}
 }
