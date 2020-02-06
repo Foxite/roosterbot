@@ -7,6 +7,8 @@ namespace RoosterBot.Schedule {
 		[JsonProperty] public abstract string ScheduleCode { get; }
 		public abstract string DisplayText { get; }
 
+		public abstract bool AssignableToUser { get; }
+
 		public abstract bool Matches(ScheduleRecord info);
 
 		public override bool Equals(object? other) {

@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		/// <returns>The old StudentSetInfo, or null if none was assigned</returns>
-		public static async Task<IdentifierInfo?> SetStudentSetAsync(this UserConfig config, IdentifierInfo info) {
+		public static async Task<IdentifierInfo?> SetIdentifierAsync(this UserConfig config, IdentifierInfo info) {
 			IdentifierInfo? old = GetIdentifier(config);
 			config.SetData("schedule.userClass", info);
 			if (old != info) {
