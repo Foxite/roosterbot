@@ -59,26 +59,29 @@ namespace RoosterBot.GLU {
 			addSchedule<RoomInfo>("GLU-Rooms");
 
 			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
+			var staffMemberService = new StaffMemberService();
+			staffMemberService.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);
+			services.AddSingleton(staffMemberService);
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
-			// TODO Staff members
-			/*StaffMemberService members = services.GetRequiredService<StaffMemberService>();
-			members.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);*/
-
 			ScheduleService provider = services.GetRequiredService<ScheduleService>();
+			StaffMemberService staffMembers = services.GetService<StaffMemberService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				// TODO
-				//provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
+				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, staffMembers, m_AllowedChannels[0], m_SkipPastRecords),  m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
 			services.GetRequiredService<IdentifierValidationService>().RegisterValidator(new GLUIdentifierValidator(m_AllowedChannels));
 
-			var identifierReaders = commands.GetSpecificTypeParser<IdentifierInfo, MultiParser<IdentifierInfo>>()!; // TODO proper null checking
+			var identifierReaders = commands.GetSpecificTypeParser<IdentifierInfo, MultiParser<IdentifierInfo>>();
+			if (identifierReaders == null) {
+				throw new InvalidOperationException("GLU must be installed after Schedule");
+			}
+
 			identifierReaders.AddParser(new StudentSetInfoParser());
 			identifierReaders.AddParser(new StaffMemberInfoParser());
 			identifierReaders.AddParser(new RoomInfoParser());

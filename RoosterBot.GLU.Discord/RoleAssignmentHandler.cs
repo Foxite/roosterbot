@@ -35,16 +35,16 @@ namespace RoosterBot.GLU.Discord {
 			ScheduleUtil.UserChangedClass += OnUserChangedClass;
 		}
 
-		private async Task OnUserChangedClass(UserChangedStudentSetEventArgs args) {
+		private async Task OnUserChangedClass(UserChangedIdentifierEventArgs args) {
 			if (DiscordNetComponent.Instance.Client.GetUser((ulong) args.UserReference.Id) is SocketUser socketUser) {
 				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUDiscordComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
 				// Assign roles
 				if (user != null) {
 					// Assign roles
 					try {
-						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, args.NewSet);
-						if (args.OldSet != null) {
-							IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, args.OldSet);
+						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, args.NewIdentifier);
+						if (args.OldIdentifier != null) {
+							IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, args.OldIdentifier);
 							IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
 
 							oldRoles = oldRoles.Except(keptRoles);
@@ -71,7 +71,7 @@ namespace RoosterBot.GLU.Discord {
 			}
 		}
 
-		private IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
+		private IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, IdentifierInfo info) {
 			return m_Roles[info.ScheduleCode.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
 		}
 	}

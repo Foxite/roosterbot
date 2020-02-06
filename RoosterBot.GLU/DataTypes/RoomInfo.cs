@@ -5,7 +5,7 @@ namespace RoosterBot.GLU {
 	public class RoomInfo : IdentifierInfo {
 		public override string ScheduleCode { get; }
 		public override string DisplayText => ScheduleCode;
-		public override bool AssignableToUser => true;
+		public override bool AssignableToUser => false;
 
 		public RoomInfo(string scheduleCode) {
 			ScheduleCode = scheduleCode;

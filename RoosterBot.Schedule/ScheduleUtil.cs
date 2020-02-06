@@ -5,9 +5,9 @@ using Qommon.Events;
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
 		#region User classes
-		private static readonly AsynchronousEvent<UserChangedStudentSetEventArgs> ClassChangedEvent = new AsynchronousEvent<UserChangedStudentSetEventArgs>();
+		private static readonly AsynchronousEvent<UserChangedIdentifierEventArgs> ClassChangedEvent = new AsynchronousEvent<UserChangedIdentifierEventArgs>();
 
-		public static event AsynchronousEventHandler<UserChangedStudentSetEventArgs> UserChangedClass {
+		public static event AsynchronousEventHandler<UserChangedIdentifierEventArgs> UserChangedClass {
 			add => ClassChangedEvent.Hook(value);
 			remove => ClassChangedEvent.Unhook(value);
 		}
@@ -17,27 +17,26 @@ namespace RoosterBot.Schedule {
 			return ssi;
 		}
 
-		/// <returns>The old StudentSetInfo, or null if none was assigned</returns>
 		public static async Task<IdentifierInfo?> SetIdentifierAsync(this UserConfig config, IdentifierInfo info) {
 			IdentifierInfo? old = GetIdentifier(config);
 			config.SetData("schedule.userClass", info);
 			if (old != info) {
-				await ClassChangedEvent.InvokeAsync(new UserChangedStudentSetEventArgs(config.UserReference, old, info));
+				await ClassChangedEvent.InvokeAsync(new UserChangedIdentifierEventArgs(config.UserReference, old, info));
 			}
 			return old;
 		}
 		#endregion
 	}
 
-	public class UserChangedStudentSetEventArgs : EventArgs {
+	public class UserChangedIdentifierEventArgs : EventArgs {
 		public SnowflakeReference UserReference { get; }
-		public IdentifierInfo? OldSet { get; }
-		public IdentifierInfo NewSet { get; }
+		public IdentifierInfo? OldIdentifier { get; }
+		public IdentifierInfo NewIdentifier { get; }
 
-		public UserChangedStudentSetEventArgs(SnowflakeReference userReference, IdentifierInfo? oldSet, IdentifierInfo newSet) {
+		public UserChangedIdentifierEventArgs(SnowflakeReference userReference, IdentifierInfo? oldInfo, IdentifierInfo newInfo) {
 			UserReference = userReference;
-			OldSet = oldSet;
-			NewSet = newSet;
+			OldIdentifier = oldInfo;
+			NewIdentifier = newInfo;
 		}
 	}
 }

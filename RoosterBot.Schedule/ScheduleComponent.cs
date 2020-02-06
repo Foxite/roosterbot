@@ -15,7 +15,6 @@ namespace RoosterBot.Schedule {
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			services
-				//.AddSingleton<StaffMemberService>()
 				.AddSingleton<ScheduleService>()
 				.AddSingleton<IdentifierValidationService>();
 		}
