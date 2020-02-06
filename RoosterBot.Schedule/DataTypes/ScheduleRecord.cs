@@ -11,7 +11,10 @@ namespace RoosterBot.Schedule {
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
 		public DateTime End { get; set; }
-		public abstract bool ShouldCallNextCommand { get; }	
+
+		/// <summary>
+		/// Used in optimizing <see cref="MemoryScheduleProvider"/>. If you don't use that provider, this will be unused.
+		/// </summary>
 		public abstract IEnumerable<IdentifierInfo> InvolvedIdentifiers { get; }
 
 		protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end) {

@@ -1,1 +1,1 @@
-﻿Specific features for 
+﻿Specific features for the Discord server targeted by RoosterBot.GLU.

@@ -1,5 +1,5 @@
 RoosterBot.Meta provides essential features for RoosterBot. The reason these are not built into RoosterBot is twofold:
-- RoosterBot is *intended* not to have any public functionality, only to facilitate components using its services.
+- RoosterBot is *intended* not to have any features exposed to the user, only to facilitate components using its services.
 - Certain provisions should be optional, as explained below.
 
 This component provides:
