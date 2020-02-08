@@ -20,7 +20,7 @@ namespace RoosterBot.Weather {
 			cityService.ReadCityCSV();
 			Logger.Debug("Weather", "Finished loading cities file");
 
-			var jsonConfig = WeatherUtil.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
+			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				WeatherBitKey = "",
 				Attribution = false
 			});

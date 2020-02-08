@@ -17,7 +17,7 @@ namespace RoosterBot.Weather {
 			Aliases = aliases;
 			Region = region;
 
-			m_NormalName = StringUtil.RemoveDiacritics(name).ToLower();
+			m_NormalName = name.RemoveDiacritics().ToLower();
 		}
 
 		public bool Match(string input) {

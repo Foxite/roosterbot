@@ -12,7 +12,7 @@ namespace RoosterBot.Weather {
 		/// This is apparently wrong, due to certain characters being replaced phonetically.
 		/// </remarks>
 		/// <returns></returns>
-		public static string RemoveDiacritics(string text) {
+		public static string RemoveDiacritics(this string text) {
 			var normalizedString = text.Normalize(NormalizationForm.FormD);
 			var stringBuilder = new StringBuilder();
 

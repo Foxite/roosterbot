@@ -12,7 +12,6 @@ namespace RoosterBot.GLU {
 		public IReadOnlyList<RoomInfo> Room { get; }
 		public BreakTime? Break { get; set; }
 
-		public override bool ShouldCallNextCommand => Activity.ScheduleCode == "pauze";
 		public override IEnumerable<IdentifierInfo> InvolvedIdentifiers => ((IEnumerable<IdentifierInfo>) StudentSets).Concat(StaffMember).Concat(Room);
 
 		public GLUScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList<StudentSetInfo> studentSets, IReadOnlyList<StaffMemberInfo> staffMember, IReadOnlyList<RoomInfo> room)
