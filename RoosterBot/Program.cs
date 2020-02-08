@@ -42,7 +42,6 @@ namespace RoosterBot {
 		public CommandHandler CommandHandler { get; private set; }
 
 		internal IServiceProvider Services { get; private set; }
-		//internal ConfigurationManager Configuration { get; private set; }
 
 		private bool m_ShutDown;
 		
