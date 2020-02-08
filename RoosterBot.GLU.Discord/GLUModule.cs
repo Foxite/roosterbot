@@ -30,10 +30,5 @@ namespace RoosterBot.GLU {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
 		}
-
-		[Command("kut"), IgnoresExtraArguments]
-		public CommandResult BoazBas() {
-			return new TextResult(null, "Kut " + Context.User.Mention);
-		}
 	}
 }
