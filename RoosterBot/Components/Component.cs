@@ -53,7 +53,7 @@ namespace RoosterBot {
 
 		internal DependencyResult CheckDependenciesInternal(IEnumerable<Component> components) => CheckDependencies(components);
 		internal void AddServicesInternal(IServiceCollection services, string configPath) => AddServices(services, configPath);
-		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService, HelpService help) => AddModules(services, commandService);
+		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService) => AddModules(services, commandService);
 		
 		#region IDisposable Support
 		/// <summary>
