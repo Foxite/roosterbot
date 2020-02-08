@@ -5,11 +5,12 @@ using Qommon.Events;
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
 		#region User classes
-		private static readonly AsynchronousEvent<UserChangedIdentifierEventArgs> ClassChangedEvent = new AsynchronousEvent<UserChangedIdentifierEventArgs>();
+		// TODO should be async?
+		private static readonly AsynchronousEvent<UserChangedIdentifierEventArgs> IdentifierChangedEvent = new AsynchronousEvent<UserChangedIdentifierEventArgs>();
 
-		public static event AsynchronousEventHandler<UserChangedIdentifierEventArgs> UserChangedClass {
-			add => ClassChangedEvent.Hook(value);
-			remove => ClassChangedEvent.Unhook(value);
+		public static event AsynchronousEventHandler<UserChangedIdentifierEventArgs> UserChangedIdentifier {
+			add => IdentifierChangedEvent.Hook(value);
+			remove => IdentifierChangedEvent.Unhook(value);
 		}
 
 		public static IdentifierInfo? GetIdentifier(this UserConfig config) {
@@ -21,7 +22,7 @@ namespace RoosterBot.Schedule {
 			IdentifierInfo? old = GetIdentifier(config);
 			config.SetData("schedule.userClass", (IdentifierInfoWrapper) info);
 			if (old != info) {
-				await ClassChangedEvent.InvokeAsync(new UserChangedIdentifierEventArgs(config.UserReference, old, info));
+				await IdentifierChangedEvent.InvokeAsync(new UserChangedIdentifierEventArgs(config.UserReference, old, info));
 			}
 			return old;
 		}

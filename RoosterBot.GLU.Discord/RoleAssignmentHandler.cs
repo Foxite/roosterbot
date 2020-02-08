@@ -32,7 +32,7 @@ namespace RoosterBot.GLU.Discord {
 
 			m_Roles = roles;
 
-			ScheduleUtil.UserChangedClass += OnUserChangedClass;
+			ScheduleUtil.UserChangedIdentifier += OnUserChangedClass;
 		}
 
 		private async Task OnUserChangedClass(UserChangedIdentifierEventArgs args) {

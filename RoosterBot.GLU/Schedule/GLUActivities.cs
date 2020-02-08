@@ -69,7 +69,7 @@
 				case "rozosho":
 				case "rozosho-i":
 				case "twinstick":
-					return abbr.FirstCharToUpper();
+					return abbr[0].ToString().ToUpper() + abbr.Substring(1);
 
 				// Special
 				case "Sinterklaas":

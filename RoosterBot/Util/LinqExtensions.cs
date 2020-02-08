@@ -150,40 +150,6 @@ namespace System.Linq {
 		}
 
 		/// <summary>
-		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, as opposed to all <typeparamref name="T"/>.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <returns></returns>
-		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
-			if (list.Count > 0) {
-				LinkedListNode<T>? node = list.First;
-				while (node != null) {
-					yield return node;
-					node = node.Next;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, in reversed order, as opposed to all <typeparamref name="T"/>.
-		/// </summary>
-		/// <remarks>
-		/// This is much faster than <see cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/> as that function will enumerate the entire source and store the results,
-		/// and then yielding that in reverse. This function yields <see cref="LinkedList{T}.Last"/> and then yields that node's <see cref="LinkedListNode{T}.Previous"/>
-		/// until there are no more items.
-		/// </remarks>
-		public static IEnumerable<LinkedListNode<T>> GetNodesBackwards<T>(this LinkedList<T> list) {
-			if (list.Count > 0) {
-				LinkedListNode<T>? node = list.Last;
-				while (node != null) {
-					yield return node;
-					node = node.Previous;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Returns all <see cref="LinkedListNode{T}"/>s in a <see cref="LinkedList{T}"/>, in reversed order, as opposed to all <typeparamref name="T"/>.
 		/// </summary>
 		/// <remarks>
@@ -216,21 +182,6 @@ namespace System.Linq {
 			for (int i = list.Count - 1; i >= 0; i--) {
 				yield return list[i];
 			}
-		}
-
-		/// <summary>
-		/// Adds all items that match a predicate into a separate <see cref="IEnumerable{T}"/>, and returns all items that did not pass the predicate.
-		/// </summary>
-		public static IEnumerable<T> Divide<T>(this IEnumerable<T> source, out IEnumerable<T> moveInto, Func<T, bool> predicate) {
-			var outA = new List<T>();
-			var outB = new List<T>();
-
-			foreach (T item in source) {
-				List<T> outInto = predicate(item) ? outB : outA;
-				outInto.Add(item);
-			}
-			moveInto = outB;
-			return outA;
 		}
 
 		/// <summary>

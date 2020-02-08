@@ -3,10 +3,6 @@ using System.Globalization;
 
 namespace RoosterBot.DateTimeUtils {
 	public static class DateTimeUtil {
-		public static string GetStringFromDayOfWeek(CultureInfo culture, DayOfWeek day) {
-			return culture.DateTimeFormat.DayNames[(int) day];
-		}
-
 		public static string GetName(this DayOfWeek day, CultureInfo culture) {
 			return culture.DateTimeFormat.DayNames[(int) day];
 		}
@@ -33,10 +29,6 @@ namespace RoosterBot.DateTimeUtils {
 			return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
 		}
 
-		public static bool IsWithinSameWeekend(DateTime left, DateTime right) {
-			return IsWeekend(left) && IsWeekend(right) && Math.Abs((left.Date - right.Date).TotalDays) <= 2;
-		}
-
 		public static string GetRelativeDateReference(DateTime date, CultureInfo culture) {
 			string GetString(string key, params string[] objects) {
 				return string.Format(DateTimeUtilsComponent.ResourceService.GetString(culture, key), objects);
@@ -46,7 +38,7 @@ namespace RoosterBot.DateTimeUtils {
 				return GetString("RelativeDateReference_Today");
 			} else if (date == DateTime.Today.AddDays(1)) {
 				return GetString("RelativeDateReference_Tomorrow");
-			} else if ((date - DateTime.Today).TotalDays < 7) {
+			} else if (Math.Abs((date - DateTime.Today).TotalDays) < 7) {
 				return GetString("RelativeDateReference_DayName", date.DayOfWeek.GetName(culture));
 			} else {
 				return GetString("RelativeDateReference_Date", date.ToString("D", culture));

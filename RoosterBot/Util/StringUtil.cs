@@ -1,26 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace RoosterBot {
 	/// <summary>
 	/// A static class containing several functions to manipulate strings or string arrays.
 	/// </summary>
 	public static class StringUtil {
-		/// <summary>
-		/// Capitalize the first character in a string.
-		/// </summary>
-		/// From https://stackoverflow.com/a/4405876/3141917
-		public static string FirstCharToUpper(this string input) {
-			if (input.Length == 0) {
-				throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-			} else {
-				return input[0].ToString().ToUpper() + input.Substring(1);
-			}
-		}
-
 		/// <summary>
 		/// Generate a table for use in a Discord message. Output will be formatted into a code block.
 		/// Warning: This will glitch out when the table array is jagged.
@@ -119,29 +105,6 @@ namespace RoosterBot {
 				}
 			}
 			return lines;
-		}
-
-		/// <summary>
-		/// Removes diacritics from characters: characters like â become a, etc.
-		/// </summary>
-		/// <remarks>
-		/// https://stackoverflow.com/a/249126/3141917
-		/// 
-		/// This is apparently wrong, due to certain characters being replaced phonetically.
-		/// </remarks>
-		/// <returns></returns>
-		public static string RemoveDiacritics(string text) {
-			var normalizedString = text.Normalize(NormalizationForm.FormD);
-			var stringBuilder = new StringBuilder();
-
-			foreach (var c in normalizedString) {
-				var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-				if (unicodeCategory != UnicodeCategory.NonSpacingMark) {
-					stringBuilder.Append(c);
-				}
-			}
-
-			return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 		}
 
 		/// <summary>
