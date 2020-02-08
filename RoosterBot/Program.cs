@@ -46,13 +46,7 @@ namespace RoosterBot {
 
 		private bool m_ShutDown;
 		
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Log crash and exit")]
 		private static int Main(string[] args) {
-			Console.CancelKeyPress += (o, e) => {
-				e.Cancel = true;
-				Console.WriteLine("Use Ctrl-Q to stop the program, or force-quit this window if it is not responding.");
-			};
-
 			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
 				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
 #if DEBUG
@@ -153,12 +147,19 @@ namespace RoosterBot {
 		}
 
 		private void WaitForQuitCondition() {
+			Console.CancelKeyPress += (o, e) => {
+				e.Cancel = true;
+				m_ShutDown = true;
+				Logger.Info("Main", "Ctrl-C pressed");
+			};
+
 			var cts = new CancellationTokenSource();
 			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
 			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
 				_ = pipeServer.WaitForConnectionAsync(cts.Token);
 
 				var quitConditions = new Func<bool>[] {
+					() => m_ShutDown,
 					() => {
 						// Ctrl-Q pressed by user
 						if (Console.KeyAvailable) {
@@ -169,14 +170,6 @@ namespace RoosterBot {
 							}
 						}
 						return false;
-					}, () => {
-						// Shutdown() called
-						if (m_ShutDown) {
-							Logger.Info("Main", "Shutdown() or Restart() has been called");
-							return true;
-						} else {
-							return false;
-						}
 					}, () => {
 						// Pipe connection by stop executable
 						if (pipeServer.IsConnected) {
@@ -195,7 +188,6 @@ namespace RoosterBot {
 				};
 
 				while (!quitConditions.Any(condition => condition())) {
-					// This could make the console window seem unresponsive. Is there a better way?
 					Thread.Sleep(500);
 				}
 			}
@@ -207,6 +199,7 @@ namespace RoosterBot {
 		/// Signal the program to stop and exit.
 		/// </summary>
 		public void Shutdown() {
+			Logger.Info("Main", "Shutdown() has been called");
 			m_ShutDown = true;
 		}
 
@@ -214,8 +207,9 @@ namespace RoosterBot {
 		/// Signal the program to stop and exit, and then start again.
 		/// </summary>
 		public void Restart() {
+			Logger.Info("Main", "Restart() has been called");
+			m_ShutDown = true;
 			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
-			Shutdown();
 		}
 	}
 }
