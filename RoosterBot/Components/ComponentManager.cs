@@ -16,8 +16,6 @@ namespace RoosterBot {
 		private readonly List<Component> m_Components;
 		private readonly ConcurrentDictionary<Assembly, Component> m_ComponentsByAssembly;
 
-		internal IServiceProvider Services { get; private set; } = null!;
-
 		internal ComponentManager() {
 			m_Components = new List<Component>();
 			m_ComponentsByAssembly = new ConcurrentDictionary<Assembly, Component>();
@@ -26,7 +24,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Runs the full initialization process for components.
 		/// </summary>
-		internal void SetupComponents(IServiceCollection serviceCollection) {
+		internal IServiceProvider SetupComponents(IServiceCollection serviceCollection) {
 			Logger.Info("ComponentManager", "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
@@ -39,10 +37,11 @@ namespace RoosterBot {
 			// Start components
 			ConstructComponents(types);
 			CheckDependencies(m_Components);
-			Services = AddComponentServices(serviceCollection);
-			AddComponentModules(Services);
+			IServiceProvider services = AddComponentServices(serviceCollection);
+			AddComponentModules(services);
 			Logger.Info("ComponentManager", "Components ready");
-			ConnectPlatforms();
+			ConnectPlatforms(services);
+			return services;
 		}
 
 		private IEnumerable<string> ReadComponentsFile() {
@@ -145,9 +144,9 @@ namespace RoosterBot {
 			}
 		}
 
-		private void ConnectPlatforms() {
+		private void ConnectPlatforms(IServiceProvider services) {
 			foreach (var component in m_Components.OfType<PlatformComponent>()) {
-				component.ConnectInternal(Services);
+				component.ConnectInternal(services);
 			}
 		}
 

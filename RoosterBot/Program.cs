@@ -17,21 +17,19 @@ namespace RoosterBot {
 	/// </summary>
 	public sealed class Program {
 		/// <summary>
+		/// The directory where program data is stored.
+		/// </summary>
+		public const string DataPath = @"C:\ProgramData\RoosterBot";
+
+		/// <summary>
 		/// The version of RoosterBot.
 		/// </summary>
 		public static readonly Version Version = new Version(3, 0, 0);
 
 		/// <summary>
-		/// The directory where program data is stored.
-		/// </summary>
-		public const string DataPath = @"C:\ProgramData\RoosterBot";
-
-#nullable disable
-		/// <summary>
 		/// The instance of the Program class.
 		/// </summary>
-		public static Program Instance { get; private set; }
-#nullable restore
+		public static Program Instance { get; private set; } = null!;
 
 		/// <summary>
 		/// The instance of the <see cref="ComponentManager"/> class.
@@ -42,6 +40,9 @@ namespace RoosterBot {
 		/// The instance of the <see cref="CommandHandler"/> class.
 		/// </summary>
 		public CommandHandler CommandHandler { get; private set; }
+
+		internal IServiceProvider Services { get; private set; }
+		//internal ConfigurationManager Configuration { get; private set; }
 
 		private bool m_ShutDown;
 		
@@ -92,14 +93,11 @@ namespace RoosterBot {
 
 			Logger.Info("Main", "Starting program");
 
-			IServiceCollection serviceCollection = CreateRBServices();
-
 			Components = new ComponentManager();
-			Components.SetupComponents(serviceCollection);
-
-			CommandHandler = new CommandHandler(Components.Services);
-			new CommandExecutedHandler(Components.Services);
-			new CommandExceptionHandler(Components.Services);
+			IServiceCollection serviceCollection = CreateRBServices();
+			var serviceProvider = Components.SetupComponents(serviceCollection);
+			Services = serviceProvider;
+			CommandHandler = CreateHandlers(serviceProvider);
 			NotifyAppStart();
 
 			WaitForQuitCondition();
@@ -130,7 +128,13 @@ namespace RoosterBot {
 				.AddSingleton(cns);
 		}
 
-		private static void NotifyAppStart() {
+		private CommandHandler CreateHandlers(IServiceProvider services) {
+			new CommandExecutedHandler(services);
+			new CommandExceptionHandler(services);
+			return new CommandHandler(services);
+		}
+
+		private void NotifyAppStart() {
 			// Find an open Ready pipe and report
 			NamedPipeClientStream? pipeClient = null;
 			try {
