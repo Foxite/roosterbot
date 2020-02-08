@@ -56,7 +56,7 @@ namespace RoosterBot {
 								CooldownType.ModuleChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + rcc.Command.Module.FullAliases.First(),
 								CooldownType.ComponentUser => rcc.User.GetReference().ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
 								CooldownType.ComponentChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
-								_ => throw new ShouldNeverHappenException("Unknown CooldownType. This should never happen.")
+								_ => type.ToString()
 							};
 						} else {
 							// This stuff shouldn't happen anymore with the added type safety of our wrapper functions, but we still have to return something or throw.
