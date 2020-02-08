@@ -347,4 +347,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_AfterCommand_Output" xml:space="preserve">
     <value>Press the arrow buttons below my responses to browse the schedule.</value>
   </data>
+  <data name="UserIdentifierParser_TypeDisplayName" xml:space="preserve">
+    <value>user</value>
+  </data>
+  <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
+    <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
+  </data>
+  <data name="UserIdentifierParser_CheckFailed_MentionUser" xml:space="preserve">
+    <value>I don't know in what class that person is. He/she needs to use `{0}i am in &lt;class&gt;` to change this.</value>
+  </data>
 </root>

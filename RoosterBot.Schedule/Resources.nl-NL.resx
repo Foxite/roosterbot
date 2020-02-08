@@ -222,7 +222,7 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
     <value>Ik weet niet of dat een klas, leraar of lokaal is.</value>
   </data>
-  <data name="IdentifierInfoReader_Self" xml:space="preserve">
+  <data name="UserIdentifierParser_Self" xml:space="preserve">
     <value>ik</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitDays" xml:space="preserve">
@@ -346,5 +346,14 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   </data>
   <data name="ScheduleModule_AfterCommand_Output" xml:space="preserve">
     <value>Druk op de pijlknoppen onder mijn reacties om te terug of vooruit te kijken in het rooster.</value>
+  </data>
+  <data name="UserIdentifierParser_TypeDisplayName" xml:space="preserve">
+    <value>gebruiker</value>
+  </data>
+  <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
+    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
+  </data>
+  <data name="UserIdentifierParser_CheckFailed_MentionUser" xml:space="preserve">
+    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik zit in &lt;klas&gt;` gebruiken om dit in te stellen.</value>
   </data>
 </root>

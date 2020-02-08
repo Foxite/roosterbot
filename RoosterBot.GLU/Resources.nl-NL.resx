@@ -204,12 +204,6 @@
   <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
     <value>Ik ken die gebruiker niet.</value>
   </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
-  </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
-    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik zit in &lt;klas&gt;` gebruiken om dit in te stellen.</value>
-  </data>
   <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
     <value>klas</value>
   </data>

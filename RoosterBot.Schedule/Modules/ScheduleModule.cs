@@ -73,8 +73,8 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_AfterCommand"), HiddenFromList]
-		public CommandResult DeprecatedCommand([Remainder] string ignored = "") {
+		[Command("#ScheduleModule_AfterCommand"), HiddenFromList, IgnoresExtraArguments, Obsolete]
+		public CommandResult DeprecatedCommand() {
 			return TextResult.Info(GetString("ScheduleModule_AfterCommand_Output"));
 		}
 		#endregion
@@ -148,10 +148,11 @@ namespace RoosterBot.Schedule {
 		private ReturnValue<IdentifierInfo> ResolveNullInfo(IdentifierInfo? info) {
 			if (info == null) {
 				IdentifierInfo? ssi = Context.UserConfig.GetIdentifier();
+
 				if (ssi != null) {
 					return ReturnValue<IdentifierInfo>.Successful(ssi);
 				} else {
-					return ReturnValue<IdentifierInfo>.Unsuccessful(TextResult.Error(GetString("StudentSetInfoReader_CheckFailed_MentionSelf", ChannelConfig.CommandPrefix)));
+					return ReturnValue<IdentifierInfo>.Unsuccessful(TextResult.Error(GetString("UserIdentifierParser_CheckFailed_MentionSelf", ChannelConfig.CommandPrefix)));
 				}
 			} else {
 				return ReturnValue<IdentifierInfo>.Successful(info);

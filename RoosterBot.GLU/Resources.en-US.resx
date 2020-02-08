@@ -201,12 +201,6 @@
   <data name="StudentSetInfoReader_CheckFailed_InaccessibleUser" xml:space="preserve">
     <value>I don't know that user.</value>
   </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
-  </data>
-  <data name="StudentSetInfoReader_CheckFailed_MentionUser" xml:space="preserve">
-    <value>I don't know in what class that person is. He/she needs to use `{0}i am in &lt;class&gt;` to change this.</value>
-  </data>
   <data name="StudentSetInfoReader_TypeDisplayName" xml:space="preserve">
     <value>class</value>
   </data>
