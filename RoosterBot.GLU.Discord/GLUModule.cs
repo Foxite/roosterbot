@@ -2,6 +2,7 @@
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
+	// TODO only accept discord context, provide proper mechanism for this (currently you get an exception if the platform is not compatible)
 	public class GLUModule : RoosterModule {
 		[Priority(-1), Command(
 			"danku", "dankje", "dankjewel", "bedankt", "dank",
@@ -9,7 +10,8 @@ namespace RoosterBot.GLU {
 			"thanks", "thnx", "thx", "ty", "thank")]
 		public CommandResult ThankYouCommand([Remainder] string post = "") {
 			string response;
-			if (post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
+			double joramChance = Context.User.Id.Equals(244147515375484928ul) ? 0.1d : 0.2d;
+			if (Util.RNG.NextDouble() < joramChance || post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
 				response = "<:wsjoram:570601561072467969>";
 			} else {
 				string[] responses = new[] {
@@ -21,8 +23,7 @@ namespace RoosterBot.GLU {
 					":hugging:",
 					":smiley_cat:",
 					":thumbsup:",
-					":love_you_gesture:",
-					"<:wsjoram:570601561072467969>"
+					":love_you_gesture:"
 				};
 				int selection = Util.RNG.Next(0, responses.Length + 1);
 				if (selection == 0) {
