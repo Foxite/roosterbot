@@ -14,7 +14,7 @@ namespace RoosterBot.GLU {
 			} else {
 				string[] responses = new[] {
 					":smile:",
-					":smiley",
+					":smiley:",
 					":grin:",
 					":blush:",
 					":smiling_face_with_3_hearts:",
