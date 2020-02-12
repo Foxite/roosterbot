@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,10 @@ namespace RoosterBot.DiscordNet {
 			m_Activity = config.Activity;
 			m_NotifyReady = config.NotifyReady;
 			m_BotOwnerIds = config.BotOwnerIds;
+
+			foreach (PropertyInfo prop in config.Discord.GetType().GetProperties()) {
+				discordConfig.GetType().GetProperty(prop.Name)!.SetValue(discordConfig, prop.GetValue(config.Discord));
+			}
 
 			discordConfig.GatewayHost         = config.Discord.GatewayHost;
 			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
