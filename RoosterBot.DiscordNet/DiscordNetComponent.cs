@@ -61,21 +61,12 @@ namespace RoosterBot.DiscordNet {
 			m_NotifyReady = config.NotifyReady;
 			m_BotOwnerIds = config.BotOwnerIds;
 
+			// Reflection, but it beats doing this:
+			//  discordConfig.GatewayHost = config.Discord.GatewayHost;
+			// For every property of the anonymous type
 			foreach (PropertyInfo prop in config.Discord.GetType().GetProperties()) {
 				discordConfig.GetType().GetProperty(prop.Name)!.SetValue(discordConfig, prop.GetValue(config.Discord));
 			}
-
-			discordConfig.GatewayHost         = config.Discord.GatewayHost;
-			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
-			discordConfig.ShardId             = config.Discord.ShardId;
-			discordConfig.TotalShards         = config.Discord.TotalShards;
-			discordConfig.MessageCacheSize    = config.Discord.MessageCacheSize;
-			discordConfig.LargeThreshold      = config.Discord.LargeThreshold;
-			discordConfig.AlwaysDownloadUsers = config.Discord.AlwaysDownloadUsers;
-			discordConfig.HandlerTimeout      = config.Discord.HandlerTimeout;
-			discordConfig.ExclusiveBulkDelete = config.Discord.ExclusiveBulkDelete;
-			discordConfig.DefaultRetryMode    = config.Discord.DefaultRetryMode;
-			discordConfig.LogLevel            = config.Discord.LogLevel;
 			#endregion
 
 			Client = new DiscordSocketClient(discordConfig);
