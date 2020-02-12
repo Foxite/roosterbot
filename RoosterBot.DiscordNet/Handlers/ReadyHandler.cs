@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
@@ -9,30 +10,31 @@ namespace RoosterBot.DiscordNet {
 		private bool m_VersionNotReported = true;
 		private readonly string m_GameString;
 		private readonly ActivityType m_ActivityType;
-		private readonly bool m_ReportVersion;
+		private readonly ulong[] m_NotifyReady;
 
-		public ReadyHandler(string gameString, ActivityType activityType, bool reportVersion) {
+		public ReadyHandler(string gameString, ActivityType activityType, ulong[] notifyReady) {
 			Client.Ready += OnClientReady;
 
 			m_GameString = gameString;
 			m_ActivityType = activityType;
-			m_ReportVersion = reportVersion;
+			m_NotifyReady = notifyReady;
 		}
 
 		private async Task OnClientReady() {
 			await Client.SetGameAsync(m_GameString, type: m_ActivityType);
-			Logger.Info("Main", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
+			Logger.Info("Discord", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
-			if (m_VersionNotReported && m_ReportVersion) {
+			if (m_VersionNotReported && m_NotifyReady.Length != 0) {
 				m_VersionNotReported = false;
-				IDMChannel ownerDM = await DiscordNetComponent.Instance.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Program.Version.ToString()}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {
 					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
 				}
 
-				await ownerDM.SendMessageAsync(startReport);
+				foreach (Task<IDMChannel> ownerDMTask in m_NotifyReady.Select(notificant => DiscordNetComponent.Instance.Client.GetUser(notificant).GetOrCreateDMChannelAsync())) {
+					await (await ownerDMTask).SendMessageAsync(startReport);
+				}
 			}
 		}
 	}

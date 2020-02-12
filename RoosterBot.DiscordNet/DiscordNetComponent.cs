@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Qommon.Collections;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
@@ -11,18 +13,20 @@ namespace RoosterBot.DiscordNet {
 		private string m_Token = null!;
 		private string m_GameString = "";
 		private ActivityType m_Activity;
-		private bool m_ReportVersion;
-		private ulong m_BotOwnerId;
+		private ulong[] m_NotifyReady;
+		private ulong[] m_BotOwnerIds;
 
 		public BaseSocketClient Client { get; private set; } = null!;
-		public SocketUser BotOwner => Client.GetUser(m_BotOwnerId);
 		public string DiscordLink { get; private set; } = null!;
+		public IReadOnlyList<ulong> BotAdminIds => new ReadOnlyList<ulong>(m_BotOwnerIds);
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(0, 2, 0);
 
 		public DiscordNetComponent() {
 			Instance = this;
+			m_BotOwnerIds = Array.Empty<ulong>();
+			m_NotifyReady = Array.Empty<ulong>();
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
@@ -33,8 +37,8 @@ namespace RoosterBot.DiscordNet {
 				Token = "",
 				GameString = "",
 				Activity = ActivityType.Playing,
-				ReportStartupVersionToOwner = true,
-				BotOwnerId = 0UL,
+				NotifyReady = new[] { 0UL },
+				BotOwnerIds = new[] { 0UL },
 				Discord = new {
 					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
 					discordConfig.GatewayHost,
@@ -53,8 +57,8 @@ namespace RoosterBot.DiscordNet {
 			m_Token = config.Token;
 			m_GameString = config.GameString;
 			m_Activity = config.Activity;
-			m_ReportVersion = config.ReportStartupVersionToOwner;
-			m_BotOwnerId = config.BotOwnerId;
+			m_NotifyReady = config.NotifyReady;
+			m_BotOwnerIds = config.BotOwnerIds;
 
 			discordConfig.GatewayHost         = config.Discord.GatewayHost;
 			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
@@ -125,7 +129,7 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
 			new MessageDeletedHandler (services);
-			new ReadyHandler          (m_GameString, m_Activity, m_ReportVersion);
+			new ReadyHandler          (m_GameString, m_Activity, m_NotifyReady);
 			new LogHandler            (Client);
 		}
 
