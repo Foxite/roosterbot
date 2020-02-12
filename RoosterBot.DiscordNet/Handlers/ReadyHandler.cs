@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 
@@ -11,15 +10,13 @@ namespace RoosterBot.DiscordNet {
 		private readonly string m_GameString;
 		private readonly ActivityType m_ActivityType;
 		private readonly bool m_ReportVersion;
-		private readonly ulong m_BotOwnerId;
 
-		public ReadyHandler(string gameString, ActivityType activityType, bool reportVersion, ulong botOwnerId) {
+		public ReadyHandler(string gameString, ActivityType activityType, bool reportVersion) {
 			Client.Ready += OnClientReady;
 
 			m_GameString = gameString;
 			m_ActivityType = activityType;
 			m_ReportVersion = reportVersion;
-			m_BotOwnerId = botOwnerId;
 		}
 
 		private async Task OnClientReady() {
@@ -28,7 +25,7 @@ namespace RoosterBot.DiscordNet {
 
 			if (m_VersionNotReported && m_ReportVersion) {
 				m_VersionNotReported = false;
-				IDMChannel ownerDM = await Client.GetUser(m_BotOwnerId).GetOrCreateDMChannelAsync();
+				IDMChannel ownerDM = await DiscordNetComponent.Instance.BotOwner.GetOrCreateDMChannelAsync();
 				string startReport = $"RoosterBot version: {Program.Version.ToString()}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {

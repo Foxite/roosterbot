@@ -8,7 +8,7 @@
 		public string UserName => DiscordEntity.Username + "#" + DiscordEntity.Discriminator;
 		public string DisplayName => (DiscordEntity is Discord.IGuildUser igu) ? igu.Nickname : DiscordEntity.Username;
 		public string Mention => DiscordEntity.Mention;
-		public bool IsBotAdmin => Id == DiscordNetComponent.Instance.BotOwnerId;
+		public bool IsBotAdmin => Id == DiscordNetComponent.Instance.BotOwner.Id;
 		public bool IsRoosterBot => DiscordNetComponent.Instance.Client.CurrentUser.Id == Id;
 
 		internal DiscordUser(Discord.IUser discordUser) {

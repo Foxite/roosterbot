@@ -12,10 +12,10 @@ namespace RoosterBot.DiscordNet {
 		private string m_GameString = "";
 		private ActivityType m_Activity;
 		private bool m_ReportVersion;
+		private ulong m_BotOwnerId;
 
 		public BaseSocketClient Client { get; private set; } = null!;
-		public ulong BotOwnerId { get; private set; }
-		public Discord.IUser BotOwner => Client.GetUser(BotOwnerId);
+		public SocketUser BotOwner => Client.GetUser(m_BotOwnerId);
 		public string DiscordLink { get; private set; } = null!;
 
 		public override string PlatformName => "Discord";
@@ -54,7 +54,7 @@ namespace RoosterBot.DiscordNet {
 			m_GameString = config.GameString;
 			m_Activity = config.Activity;
 			m_ReportVersion = config.ReportStartupVersionToOwner;
-			BotOwnerId = config.BotOwnerId;
+			m_BotOwnerId = config.BotOwnerId;
 
 			discordConfig.GatewayHost         = config.Discord.GatewayHost;
 			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
@@ -125,7 +125,7 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
 			new MessageDeletedHandler (services);
-			new ReadyHandler          (m_GameString, m_Activity, m_ReportVersion, BotOwnerId);
+			new ReadyHandler          (m_GameString, m_Activity, m_ReportVersion);
 			new LogHandler            (Client);
 		}
 
