@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public abstract class ScheduleProvider : ChannelSpecificInfo {
-		protected ScheduleProvider(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
+		protected ScheduleProvider(IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
 
 		public abstract Task<ScheduleRecord?> GetRecordAtDateTimeAsync(IdentifierInfo identifier, DateTime datetime);
 		public abstract Task<ScheduleRecord> GetRecordAfterDateTimeAsync(IdentifierInfo identifier, DateTime datetime);

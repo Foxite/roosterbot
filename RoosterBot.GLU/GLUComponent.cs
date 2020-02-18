@@ -60,7 +60,7 @@ namespace RoosterBot.GLU {
 
 			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 			var staffMemberService = new StaffMemberService();
-			staffMemberService.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV(), m_AllowedChannels);
+			staffMemberService.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV().ToArray(), m_AllowedChannels);
 			services.AddSingleton(staffMemberService);
 		}
 
@@ -71,7 +71,7 @@ namespace RoosterBot.GLU {
 			StaffMemberService staffMembers = services.GetService<StaffMemberService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, staffMembers, m_AllowedChannels[0], m_SkipPastRecords),  m_AllowedChannels));
+				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, staffMembers, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
@@ -93,7 +93,7 @@ namespace RoosterBot.GLU {
 			private static readonly Regex StudentSetRegex = new Regex("^[1-4]G[AD][12]$");
 			private static readonly Regex RoomRegex = new Regex("[aAbBwW][0-4][0-9]{2}");
 
-			public GLUIdentifierValidator(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
+			public GLUIdentifierValidator(IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
 
 			public override Task<IdentifierInfo?> ValidateAsync(RoosterCommandContext context, string input) {
 				input = input.ToUpper();

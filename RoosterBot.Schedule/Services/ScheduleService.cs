@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Qommon.Collections;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleService {
 		private readonly Dictionary<Type, List<ScheduleProvider>> m_Schedules;
+
+		internal IReadOnlyDictionary<Type, IReadOnlyList<ScheduleProvider>> Providers =>
+			new ReadOnlyDictionary<Type, IReadOnlyList<ScheduleProvider>>(m_Schedules.ToDictionary(kvp => kvp.Key,
+				kvp => (IReadOnlyList<ScheduleProvider>) new ReadOnlyList<ScheduleProvider>(kvp.Value))); // slow and ugly
 
 		public ScheduleService() {
 			m_Schedules = new Dictionary<Type, List<ScheduleProvider>>();

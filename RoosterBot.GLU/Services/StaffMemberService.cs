@@ -62,7 +62,7 @@ namespace RoosterBot.GLU {
 
 			public IReadOnlyList<StaffMemberInfo> Members => m_Members.AsReadOnly();
 
-			public ChannelStaffList(IEnumerable<SnowflakeReference> allowedChannels, List<StaffMemberInfo> members) : base(allowedChannels) {
+			public ChannelStaffList(IReadOnlyCollection<SnowflakeReference> allowedChannels, List<StaffMemberInfo> members) : base(allowedChannels) {
 				m_Members = members;
 			}
 		}

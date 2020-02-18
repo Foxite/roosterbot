@@ -9,18 +9,27 @@ namespace RoosterBot.Schedule {
 	/// A schedule provider that loads all records into memory from a schedule reader.
 	/// </summary>
 	public class MemoryScheduleProvider : ScheduleProvider {
-		private readonly Dictionary<DateTime, IEnumerable<ScheduleRecord>> m_Schedule;
-		private readonly HashSet<IdentifierInfo> m_PresentIdentifiers;
-		private readonly DateTime m_ScheduleBegin;
-		private readonly DateTime m_ScheduleEnd;
+		private Dictionary<DateTime, IEnumerable<ScheduleRecord>> m_Schedule;
+		private HashSet<IdentifierInfo> m_PresentIdentifiers;
+		private DateTime m_Begin;
 		private readonly string m_Name;
+		private readonly ScheduleReader m_Reader;
+
+		public DateTime End { get; private set; }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		public MemoryScheduleProvider(string name, ScheduleReader reader, IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) {
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CS8618:Non-nullable field is uninitialized", Justification = "Calls reload function")]
+		public MemoryScheduleProvider(string name, ScheduleReader reader, IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) {
 			m_Name = name;
-			IReadOnlyList<ScheduleRecord> list = reader.GetSchedule();
-			m_ScheduleBegin = list[0].Start.Date;
-			m_ScheduleEnd = list[list.Count - 1].End.Date;
+			m_Reader = reader;
+
+			Reload();
+		}
+
+		private void Reload() {
+			IReadOnlyList<ScheduleRecord> list = m_Reader.GetSchedule();
+			m_Begin = list[0].Start.Date;
+			End = list[list.Count - 1].End.Date;
 			m_Schedule = list
 				.GroupBy(record => record.Start.Date)
 				.ToDictionary(
@@ -104,7 +113,7 @@ namespace RoosterBot.Schedule {
 
 		public override Task<ScheduleRecord> GetRecordBeforeDateTimeAsync(IdentifierInfo identifier, DateTime target) => Task.Run(() => {
 			IEnumerable<ScheduleRecord> sequence() {
-				for (DateTime date = target.Date; date > m_ScheduleBegin; date = date.AddDays(-1)) {
+				for (DateTime date = target.Date; date > m_Begin; date = date.AddDays(-1)) {
 					if (m_Schedule.TryGetValue(date, out var scheduleDate)) {
 						foreach (ScheduleRecord yieldRecord in scheduleDate.Reverse()) {
 							yield return yieldRecord;
@@ -126,7 +135,7 @@ namespace RoosterBot.Schedule {
 		});
 
 		private IEnumerable<ScheduleRecord> RecordsFrom(DateTime target) {
-			for (DateTime date = target.Date; date < m_ScheduleEnd; date = date.AddDays(1).Date) {
+			for (DateTime date = target.Date; date < End; date = date.AddDays(1).Date) {
 				if (m_Schedule.TryGetValue(date, out var dateSchedules)) {
 					foreach (ScheduleRecord yieldRecord in dateSchedules) {
 						yield return yieldRecord;

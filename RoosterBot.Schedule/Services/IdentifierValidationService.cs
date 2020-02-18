@@ -27,7 +27,7 @@ namespace RoosterBot.Schedule {
 	}
 
 	public abstract class IdentifierValidator : ChannelSpecificInfo {
-		protected IdentifierValidator(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
+		protected IdentifierValidator(IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
 
 		/// <summary>
 		/// Given an ICommandContext and an input string, this will return a valid IdentifierInfo instance. If the input is invalid, it will return null.

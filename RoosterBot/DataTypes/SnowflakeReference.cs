@@ -53,6 +53,11 @@ namespace RoosterBot {
 		public override int GetHashCode() => HashCode.Combine(Platform.PlatformName, Id);
 
 		/// <inheritdoc/>
+		public override string ToString() {
+			return Platform.PlatformName + ":" + Id.ToString();
+		}
+
+		/// <inheritdoc/>
 		public static bool operator ==(SnowflakeReference? left, SnowflakeReference? right) {
 			if (left is null && right is null) {
 				return true;
