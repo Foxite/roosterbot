@@ -12,7 +12,8 @@ namespace RoosterBot.DiscordNet {
 				// First char after prefix
 				char firstChar = message.Content[prefix.Length];
 				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
-					// Probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
+					// Otherwise probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
+					argPos = prefix.Length;
 					return true;
 				}
 			}
