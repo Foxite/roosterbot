@@ -126,12 +126,8 @@
   <data name="CultureInfoReader_TypeDisplayName" xml:space="preserve">
     <value>taal</value>
   </data>
-  <data name="ChannelConfigModule_GetLanguage" xml:space="preserve">
-    <value>De servertaal is {0}.</value>
-    <comment>0: current language name, localized</comment>
-  </data>
   <data name="ChannelConfigModule_GetPrefix" xml:space="preserve">
-    <value>De servercommandprefix is `{0}`.</value>
+    <value>De commandprefix van deze server is `{0}`.</value>
   </data>
   <data name="ChannelConfigModule_Group" xml:space="preserve">
     <value>config</value>
@@ -143,11 +139,11 @@
     <value>prefix</value>
   </data>
   <data name="ChannelConfigModule_SetLanguage" xml:space="preserve">
-    <value>De servertaal is nu {0}.</value>
+    <value>De taal van deze server is nu {0}.</value>
     <comment>0: new language name, localized</comment>
   </data>
   <data name="ChannelConfigModule_SetPrefix" xml:space="preserve">
-    <value>Deze servercommandprefix is nu `{0}`.</value>
+    <value>De commandprefix van deze server is nu `{0}`.</value>
     <comment>0: new prefix</comment>
   </data>
   <data name="Commands" xml:space="preserve">
@@ -288,5 +284,9 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
   </data>
   <data name="BoolParser_Invalid" xml:space="preserve">
     <value>Indicate `yes` or `no`.</value>
+  </data>
+  <data name="ChannelConfigModule_GetLanguage" xml:space="preserve">
+    <value>De taal van deze server is {0}.</value>
+    <comment>0: current language name, localized</comment>
   </data>
 </root>
