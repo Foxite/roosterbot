@@ -84,14 +84,14 @@ namespace RoosterBot.DiscordNet {
 				throw new InvalidOperationException("Tried sending a PaginatedResult that didn't have any pages!");
 			}
 
-			IUserMessage message;
+			IUserMessage botMessage;
 			RoosterCommandResult initial = pr.Current;
 			if (initial is AspectListResult alr) {
 				if (existingResponse == null) {
-					message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
+					botMessage = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
 				} else {
-					message = ((DiscordMessage) existingResponse).DiscordEntity;
-					await message.ModifyAsync(props => {
+					botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
+					await botMessage.ModifyAsync(props => {
 						props.Content = pr.Caption;
 						props.Embed = AspectListToEmbedBuilder(alr).Build();
 					});
@@ -102,10 +102,10 @@ namespace RoosterBot.DiscordNet {
 					text = pr.Caption + "\n" + text;
 				}
 				if (existingResponse == null) {
-					message = await Channel.SendMessageAsync(text);
+					botMessage = await Channel.SendMessageAsync(text);
 				} else {
-					message = ((DiscordMessage) existingResponse).DiscordEntity;
-					await message.ModifyAsync(props => {
+					botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
+					await botMessage.ModifyAsync(props => {
 						props.Content = text;
 						props.Embed = null;
 					});
@@ -121,7 +121,7 @@ namespace RoosterBot.DiscordNet {
 				Task goTo(Func<bool> moveAction) {
 					RoosterCommandResult current = pr.Current;
 					if (moveAction()) {
-						return message.ModifyAsync(props => {
+						return botMessage.ModifyAsync(props => {
 							if (pr.Current is AspectListResult alr) {
 								props.Content = pr.Caption;
 								props.Embed = AspectListToEmbedBuilder(alr).Build();
@@ -135,7 +135,7 @@ namespace RoosterBot.DiscordNet {
 							}
 						});
 					} else {
-						return message.ModifyAsync(props => {
+						return botMessage.ModifyAsync(props => {
 							if (current is AspectListResult alr) {
 								props.Embed = props.Embed.Value.ToEmbedBuilder()
 									.WithFooter(props.Embed.Value.Footer + "\nNo more results")
@@ -147,13 +147,13 @@ namespace RoosterBot.DiscordNet {
 					}
 				}
 
-				new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
+				new InteractiveMessageHandler(botMessage, Message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 					{ new Discord.Emoji("◀️"), () => goTo(pr.MovePrevious) },
 					{ new Discord.Emoji("▶️"), () => goTo(pr.MoveNext) },
 					//{ new Discord.Emoji("⏪"), reset }
 				});
 			}
-			return new DiscordMessage(message);
+			return new DiscordMessage(botMessage);
 		}
 	}
 }
