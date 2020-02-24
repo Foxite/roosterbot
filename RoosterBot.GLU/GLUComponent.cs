@@ -60,6 +60,8 @@ namespace RoosterBot.GLU {
 
 			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 			var staffMemberService = new StaffMemberService();
+			// The ToArray() call here is important because the ReadCSV function is an iterator, and if you keep it as an IEnumerable it will read the csv every single time
+			//  you query the enumerable.
 			staffMemberService.AddStaff(new GLUStaffMemberReader(m_StaffMemberPath).ReadCSV().ToArray(), m_AllowedChannels);
 			services.AddSingleton(staffMemberService);
 		}

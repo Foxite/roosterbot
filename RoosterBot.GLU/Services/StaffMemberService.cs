@@ -6,7 +6,7 @@ namespace RoosterBot.GLU {
 	public class StaffMemberService {
 		private readonly List<ChannelStaffList> m_Records = new List<ChannelStaffList>();
 		
-		public void AddStaff(IEnumerable<StaffMemberInfo> members, IEnumerable<SnowflakeReference> allowedChannels) {
+		public void AddStaff(IEnumerable<StaffMemberInfo> members, IReadOnlyCollection<SnowflakeReference> allowedChannels) {
 			m_Records.Add(new ChannelStaffList(allowedChannels, members.ToList()));
 		}
 
