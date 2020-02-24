@@ -30,8 +30,16 @@ namespace RoosterBot.DiscordNet {
 			DiscordNetComponent.Instance.Client.MessageDeleted += OnMessageDeleted;
 
 			_ = Task.Run(async () => {
+				// Remove our reactions left over from previous InteractiveMessageHandlers
+				foreach (Discord.IEmote emote in message.Reactions.Keys.Except(callbacks.Keys)) {
+					await message.RemoveReactionAsync(emote, DiscordNetComponent.Instance.Client.CurrentUser);
+				}
+
 				foreach (KeyValuePair<Discord.IEmote, Func<Task>> kvp in callbacks) {
-					await message.AddReactionAsync(kvp.Key);
+					// Don't bother adding the reaction if it's already there
+					if (!(message.Reactions.TryGetValue(kvp.Key, out var reactionData) && reactionData.IsMe)) {
+						await message.AddReactionAsync(kvp.Key);
+					}
 				}
 			});
 		}
