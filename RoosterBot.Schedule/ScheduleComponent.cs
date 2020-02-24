@@ -29,6 +29,7 @@ namespace RoosterBot.Schedule {
 
 			commandService.AddModule<ScheduleModule>();
 			commandService.AddModule<UserIdentifierModule>();
+			commandService.AddModule<AdminModule>();
 
 			var help = services.GetRequiredService<HelpService>();
 			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");

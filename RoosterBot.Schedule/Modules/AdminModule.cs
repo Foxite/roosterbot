@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 				string.Join(", ", kvp.Value.Select(provider => provider is MemoryScheduleProvider msp ? msp.End.ToLongDateString() : "N/A")) // Column 3: expiration date, if it's an MSP
 			})).ToArray();
 
-			return new PaginatedResult(new PaginatedTableEnumerator("All providers", new string[] { "Type", "Allowed channels", "Last record date" }, cells), "All providers");
+			return new PaginatedResult(new PaginatedTableEnumerator("All providers", new string[] { "Type", "Allowed channels", "Last record date" }, cells), null);
 		}
 		// TODO: commands for adding/reloading providers using attached files
 	}
