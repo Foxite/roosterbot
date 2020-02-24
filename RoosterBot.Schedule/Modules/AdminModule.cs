@@ -12,7 +12,8 @@ namespace RoosterBot.Schedule {
 			IEnumerable<KeyValuePair<System.Type, IReadOnlyList<ScheduleProvider>>> providers = Schedules.Providers;
 			if (identifierType != null) {
 				string lowercaseFilter = identifierType.ToLower();
-				providers = providers.Where(kvp => kvp.Key.Name.ToLower() == lowercaseFilter);
+				providers = providers.Where(kvp => kvp.Key.Name.ToLower() == lowercaseFilter ||
+					(kvp.Key.IsGenericTypeDefinition ? kvp.Key.GetGenericTypeDefinition().FullName : kvp.Key.FullName)!.ToLower() == lowercaseFilter);
 			}
 			var cells = providers.Select(kvp => (new[] {
 				(kvp.Key.IsGenericTypeDefinition ? kvp.Key.GetGenericTypeDefinition().FullName : kvp.Key.FullName)!, // Column 1: type name of identifier
