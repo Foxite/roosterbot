@@ -18,10 +18,13 @@ namespace RoosterBot.Schedule {
 		public DateTime End { get; private set; }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CS8618:Non-nullable field is uninitialized", Justification = "Calls reload function")]
 		public MemoryScheduleProvider(string name, ScheduleReader reader, IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) {
 			m_Name = name;
 			m_Reader = reader;
+
+			// The Reload function is called immediately after this, which sets these fields to something other than null
+			m_Schedule = null!;
+			m_PresentIdentifiers = null!;
 
 			Reload();
 		}
