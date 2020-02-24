@@ -5,12 +5,6 @@ using System.Threading.Tasks;
 using Qmmands;
 
 namespace RoosterBot {
-	// If you get an error that you can't find ICommandMap, add this to your nuget sources:
-	// https://www.myget.org/F/foxite/api/v3/index.json 
-	// Then delete Qmmands from your nuget cache (usually located at ~/.nuget/packages/qmmands, or you can clear your entire cache) and do a package restore.
-	// 
-	// That feed contains a fork of Qmmands which lets you provide your own command map. The builtin command map does not support spaces in command/module aliases, and the library owner
-	//  does not want to support custom command maps nor spaces in aliases.
 	internal class MultiWordCommandMap : ICommandMap {
 		private readonly string m_Separator;
 		private readonly List<Command> m_Commands;

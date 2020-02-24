@@ -16,6 +16,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
 			<Private>false</Private>
+			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 	</ItemGroup>
