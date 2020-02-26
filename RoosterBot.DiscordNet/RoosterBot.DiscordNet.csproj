@@ -9,7 +9,7 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<RestoreSources>https://www.myget.org/F/discord-net/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
+		<RestoreSources>https://www.myget.org/F/foxite/api/v3/index.json;https://www.myget.org/F/discord-net/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
 	</PropertyGroup>
 	
 	<ItemGroup>
