@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Qmmands;
 using StrawpollNET;
@@ -11,7 +8,7 @@ namespace RoosterBot.Tools {
 		[Command("strawpoll")]
 		public async Task<CommandResult> CreateStrawpoll(string title, params string[] answers) {
 			var api = new StrawPoll();
-			var poll = await api.CreatePollAsync(title, answers.ToList(), false, StrawpollNET.Data.DupCheck.DISABLED, true);
+			var poll = await api.CreatePollAsync(title, answers.ToList(), false, StrawpollNET.Data.DupCheck.DISABLED, false);
 			return TextResult.Success(poll.PollUrl);
 		}
 	}
