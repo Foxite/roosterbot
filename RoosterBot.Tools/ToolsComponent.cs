@@ -20,6 +20,7 @@ namespace RoosterBot.Tools {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
 
+			commandService.AddModule<StrawpollModule>();
 			commandService.AddModule<YoutubeModule>();
 		}
 	}
