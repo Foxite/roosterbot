@@ -1,8 +1,11 @@
-﻿using Qmmands;
+﻿using System;
+using Qmmands;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	public class GLUModule : RoosterModule {
+		public Random RNG { get; set; } = null!;
+
 		[Priority(-1),
 		 Command("danku", "dankje", "dankjewel", "bedankt", "dank",
 				 "goed", "goedzo", "goodbot", "good",
@@ -19,7 +22,7 @@ namespace RoosterBot.GLU {
 					":blush:",
 					":heart:"
 				};
-				response = responses[Util.RNG.Next(0, responses.Length)];
+				response = responses[RNG.Next(0, responses.Length)];
 			}
 
 			return new TextResult(null, response);

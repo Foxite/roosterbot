@@ -106,6 +106,7 @@ namespace RoosterBot {
 				.AddSingleton(new NotificationService())
 				.AddSingleton(new EmoteService())
 				.AddSingleton(new CultureNameService(resources))
+				.AddSingleton(new Random())
 				.AddSingleton(resources);
 		}
 
