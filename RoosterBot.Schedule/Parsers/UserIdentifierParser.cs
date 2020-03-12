@@ -19,7 +19,6 @@ namespace RoosterBot.Schedule {
 					result = (await context.ServiceProvider.GetRequiredService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetIdentifier();
 					byMention = true;
 				} else {
-					// TODO update resource names
 					return Unsuccessful(false, context, userResult.Reason);
 				}
 			}
