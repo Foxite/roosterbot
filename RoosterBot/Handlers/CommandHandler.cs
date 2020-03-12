@@ -6,7 +6,7 @@ using Qmmands;
 
 namespace RoosterBot {
 	/// <summary>
-	/// 
+	/// The singleton class that provides entry to the command handling pipeline.
 	/// </summary>
 	public sealed class CommandHandler {
 		private RoosterCommandService Commands { get; }
