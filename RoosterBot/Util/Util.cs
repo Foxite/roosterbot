@@ -83,5 +83,12 @@ namespace RoosterBot {
 				return ret;
 			}
 		}
+
+		/// <summary>
+		/// Converts a non-generic <see cref="DictionaryEntry"/> to a generic <see cref="KeyValuePair{TKey, TValue}"/>.
+		/// </summary>
+		public static KeyValuePair<TKey, TValue> ToGeneric<TKey, TValue>(this DictionaryEntry de) {
+			return new KeyValuePair<TKey, TValue>((TKey) de.Key, (TValue) de.Value!);
+		}
 	}
 }

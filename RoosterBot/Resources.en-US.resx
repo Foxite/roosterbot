@@ -219,4 +219,10 @@
   <data name="RequirePrivateAttribute_RequirePublic" xml:space="preserve">
     <value>Must be in a public channel.</value>
   </data>
+  <data name="CultureName_en-US" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="CultureName_nl-NL" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
 </root>

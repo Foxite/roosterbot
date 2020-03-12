@@ -1,77 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace RoosterBot {
 	/// <summary>
 	/// Allows you to look up the name of one language in another language.
 	/// </summary>
 	public sealed class CultureNameService {
+		private const string KeyPrefix = "CultureName_";
+		private readonly ResourceService m_Resources;
+
+		internal CultureNameService(ResourceService resources) {
+			m_Resources = resources;
+		}
+
 		/// <summary>
-		/// Effectively a table, this stores the name of one language (the first, identified by code) in another (the second, also code).
+		/// Returns a CultureInfo, which is named similar to <paramref name="input"/> in <paramref name="culture"/>.
 		/// </summary>
 		/// <example>
-		/// m_Table[("en-US", "es-ES")] == "inglés" // The name of the English language in Spanish
-		/// m_Table[("nl-NL", "en-US")] == "Dutch" // The name of Dutch in English
+		/// Search(CultureInfo.GetCultureInfo("es-ES", "inglés").Name == "en-US"
 		/// </example>
-		private readonly Dictionary<(string, string), string> m_Table;
-
-		internal CultureNameService() {
-			m_Table = new Dictionary<(string, string), string>();
-		}
-
-		/// <summary>
-		/// Get the name of one language in another language.
-		/// </summary>
-		/// <example>
-		/// <code>GetLocalizedName("en-US", "en-ES") == "inglés"; // The name of the English language in Spanish</code>
-		/// <code>GetLocalizedName("nl-NL", "en-US") == "Dutch"; // The name of Dutch in English</code>
-		/// </example>
-		public string GetLocalizedName(string nameOf, string inLanguage) {
-			m_Table.TryGetValue((nameOf, inLanguage), out string? ret);
-			return ret ?? throw new ArgumentException($"The name of {nameOf} in {inLanguage} is not known.");
-		}
-
-		/// <summary>
-		/// Register the name of one language in another.
-		/// </summary>
-		public bool AddLocalizedName(string nameOf, string inLanguage, string name) {
-			(string, string) key = (nameOf, inLanguage);
-			if (m_Table.ContainsKey(key)) {
-				return false;
-			} else {
-				m_Table[key] = name;
-				return true;
-			}
-		}
-
-		/// <summary>
-		/// Returns the code of a CultureInfo, which is named similar <paramref name="input"/> in <paramref name="inputLanguage"/>.
-		/// </summary>
-		/// <param name="inputLanguage"></param>
-		/// <param name="input"></param>
-		/// <returns></returns>
-		public string? Search(CultureInfo inputLanguage, string input) {
+		public CultureInfo? Search(CultureInfo culture, string input) {
 			input = input.ToLower();
-			var results = m_Table.Where(kvp => kvp.Key.Item2 == inputLanguage.Name && kvp.Value.ToLower() == input);
-			if (results.Any()) {
-				return results.First().Key.Item1;
-			} else {
-				return null;
-			}
+			System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>> enumerable = m_Resources.GetAvailableKeys(Assembly.GetExecutingAssembly(), culture);
+			string? resultCode = enumerable
+				.Where(kvp => kvp.Key.StartsWith(KeyPrefix))
+				.FirstOrDefault(kvp => kvp.Value.ToLower() == input)
+				.Key.Substring(KeyPrefix.Length);
+			return resultCode != null ? CultureInfo.GetCultureInfo(resultCode) : null;
 		}
 
 		/// <summary>
 		/// Get the name of one language in another language.
 		/// </summary>
-		/// <seealso cref="GetLocalizedName(string, string)"/>
-		public string GetLocalizedName(CultureInfo nameOf, CultureInfo inLanguage) => GetLocalizedName(nameOf.Name, inLanguage.Name);
-
-		/// <summary>
-		/// Register the name of one language in another.
-		/// </summary>
-		/// <seealso cref="AddLocalizedName(string, string, string)"/>.
-		public bool AddLocalizedName(CultureInfo nameOf, CultureInfo inLanguage, string name) => AddLocalizedName(nameOf.Name, inLanguage.Name, name);
+		public string GetLocalizedName(CultureInfo nameOf, CultureInfo inLanguage) {
+			try {
+				return m_Resources.GetString(inLanguage, KeyPrefix + nameOf.Name);
+			} catch (MissingResourceException e) {
+				throw new ArgumentException($"The name of {nameOf.Name} in {inLanguage.Name} is not known.", e);
+			}
+		}
 	}
 }

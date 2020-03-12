@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -66,6 +67,13 @@ namespace RoosterBot {
 			} catch (MissingManifestResourceException e) {
 				throw new MissingResourceException($"Resource named {name} in culture {culture.Name} was not found in assembly {assembly.FullName}", e);
 			}
+		}
+
+		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys(Assembly assembly, CultureInfo culture) {
+			ResourceSet? resourceSet = m_ResourceManagers[assembly].GetResourceSet(culture, true, true);
+			return resourceSet != null
+				? resourceSet.Cast<DictionaryEntry>().Select(Util.ToGeneric<string, string>)
+				: Enumerable.Empty<KeyValuePair<string, string>>();
 		}
 
 		internal static IReadOnlyCollection<CultureInfo> GetAvailableCultures(Component component) => GetAvailableCultures(component.GetType().Assembly);

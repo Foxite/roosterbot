@@ -14,9 +14,9 @@ namespace RoosterBot.Meta {
 			}
 
 			CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
-			string? resultCode = cns.Search(context.Culture, input);
-			if (resultCode != null) {
-				return ValueTaskUtil.FromResult(Successful(CultureInfo.GetCultureInfo(resultCode)));
+			CultureInfo? result = cns.Search(context.Culture, input);
+			if (result != null) {
+				return ValueTaskUtil.FromResult(Successful(result));
 			}
 
 			return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#CultureInfoReader_ParseFailed"));
