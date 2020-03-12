@@ -55,8 +55,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Construct a new <see cref="RoosterCommandContext"/> with the necessary information.
 		/// </summary>
-		// TODO eliminate last usage of Program.Instance.Services and remove it
-		public RoosterCommandContext(PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig channelConfig) : base(Program.Instance.Services) {
+		public RoosterCommandContext(IServiceProvider isp, PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig channelConfig) : base(isp) {
 			Platform = platform;
 			Message = message;
 			User = message.User;

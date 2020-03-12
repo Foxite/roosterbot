@@ -37,8 +37,6 @@ namespace RoosterBot {
 		/// </summary>
 		public CommandHandler CommandHandler { get; private set; }
 
-		internal IServiceProvider Services { get; private set; }
-
 		private bool m_ShutDown;
 		
 		private static int Main(string[] args) {
@@ -84,8 +82,7 @@ namespace RoosterBot {
 
 			Components = new ComponentManager();
 			IServiceCollection serviceCollection = CreateRBServices();
-			var serviceProvider = Components.SetupComponents(serviceCollection);
-			Services = serviceProvider;
+			IServiceProvider serviceProvider = Components.SetupComponents(serviceCollection);
 			CommandHandler = CreateHandlers(serviceProvider);
 			NotifyAppStart();
 

@@ -13,7 +13,8 @@ namespace RoosterBot.DiscordNet {
 		public new IMessageChannel Channel { get; }
 		public IGuild? Guild { get; }
 
-		public DiscordCommandContext(DiscordMessage message, UserConfig userConfig, ChannelConfig guildConfig) : base(DiscordNetComponent.Instance, message, userConfig, guildConfig) {
+		public DiscordCommandContext(IServiceProvider isp, DiscordMessage message, UserConfig userConfig, ChannelConfig guildConfig)
+			: base(isp, DiscordNetComponent.Instance, message, userConfig, guildConfig) {
 			Client = DiscordNetComponent.Instance.Client;
 			Message = message.DiscordEntity;
 			User = Message.Author;

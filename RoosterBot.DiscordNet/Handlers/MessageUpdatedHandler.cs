@@ -6,12 +6,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
 	internal sealed class MessageUpdatedHandler {
-		public ChannelConfigService CCS { get; set; } = null!;
-		public UserConfigService UCS { get; set; } = null!;
+		private readonly ChannelConfigService m_CCS;
+		private readonly UserConfigService m_UCS;
+		private readonly IServiceProvider m_ISP;
 
 		internal MessageUpdatedHandler(IServiceProvider isp) {
-			CCS = isp.GetRequiredService<ChannelConfigService>();
-			UCS = isp.GetRequiredService<UserConfigService>();
+			m_CCS = isp.GetRequiredService<ChannelConfigService>();
+			m_UCS = isp.GetRequiredService<UserConfigService>();
+			m_ISP = isp;
+
 			DiscordNetComponent.Instance.Client.MessageUpdated += OnMessageUpdated;
 		}
 
@@ -23,14 +26,14 @@ namespace RoosterBot.DiscordNet {
 				messageAfter.Source == Discord.MessageSource.User) {
 				_ = Task.Run(async () => {
 					try {
-						ChannelConfig guildConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance,
+						ChannelConfig guildConfig = await m_CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance,
 							((channel as Discord.IGuildChannel)?.Guild ?? messageAfter.Author.MutualGuilds.First()).Id));
 
-						UserConfig userConfig = await UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
+						UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
 						CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessageAfter));
 
 						if (DiscordUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), new DiscordCommandContext(new DiscordMessage(userMessageAfter), userConfig, guildConfig));
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos + 1), new DiscordCommandContext(m_ISP, new DiscordMessage(userMessageAfter), userConfig, guildConfig));
 						} else if (crp != null) {
 							// No longer a command
 							await channel.DeleteMessageAsync((ulong) crp.Response.Id);
