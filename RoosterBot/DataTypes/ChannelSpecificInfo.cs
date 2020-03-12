@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace RoosterBot.Schedule {
-	// TODO should be moved to RoosterBot
-	// I think I did this once but backed out of it, forgot why.
-	// Go and find out.
+namespace RoosterBot {
+	/// <summary>
+	/// An abstract type representing information that is restricted to a collection of <see cref="IChannel"/>s.
+	/// </summary>
 	public abstract class ChannelSpecificInfo {
+		/// <summary>
+		/// The collection of <see cref="IChannel"/> references that this object is restricted to.
+		/// </summary>
 		public IReadOnlyCollection<SnowflakeReference> AllowedChannels { get; }
 
+		///
 		protected ChannelSpecificInfo(IReadOnlyCollection<SnowflakeReference> allowedChannels) {
 			AllowedChannels = allowedChannels;
 		}
@@ -21,11 +25,21 @@ namespace RoosterBot.Schedule {
 		public bool IsChannelAllowed(SnowflakeReference reference) => AllowedChannels.Contains(reference);
 	}
 
+	/// <summary>
+	/// Thrown in situations where there is no <see cref="ChannelSpecificInfo"/> that is allowed to be used.
+	/// </summary>
 	[Serializable]
 	public class NoAllowedChannelsException : Exception {
+		/// <inheritdoc />
 		public NoAllowedChannelsException() { }
+
+		/// <inheritdoc />
 		public NoAllowedChannelsException(string message) : base(message) { }
+
+		/// <inheritdoc />
 		public NoAllowedChannelsException(string message, Exception inner) : base(message, inner) { }
+
+		/// <inheritdoc />
 		protected NoAllowedChannelsException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
