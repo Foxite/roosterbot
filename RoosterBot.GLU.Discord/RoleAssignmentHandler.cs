@@ -37,7 +37,7 @@ namespace RoosterBot.GLU.Discord {
 
 		private async Task OnUserChangedClass(UserChangedIdentifierEventArgs args) {
 			if (DiscordNetComponent.Instance.Client.GetUser((ulong) args.UserReference.Id) is SocketUser socketUser) {
-				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUDiscordComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
+				SocketGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUDiscordComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
 				// Assign roles
 				if (user != null) {
 					// Assign roles
@@ -50,19 +50,13 @@ namespace RoosterBot.GLU.Discord {
 							oldRoles = oldRoles.Except(keptRoles);
 							newRoles = newRoles.Except(keptRoles);
 
-							foreach (IRole role in oldRoles) {
-								if (user.RoleIds.Contains(role.Id)) {
-									await user.RemoveRolesAsync(oldRoles);
-								}
-							}
+							await user.RemoveRolesAsync(oldRoles);
 						}
-						if (user.RoleIds.Contains(NewUserRank)) {
+						if (user.Roles.Any(role => role.Id == NewUserRank)) {
 							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 						}
 
-						if (newRoles.Any()) {
-							await user.AddRolesAsync(newRoles);
-						}
+						await user.AddRolesAsync(newRoles);
 					} catch (Exception e) {
 						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
 						foreach (ulong ownerID in DiscordNetComponent.Instance.BotAdminIds) {
