@@ -67,7 +67,7 @@ namespace RoosterBot.DiscordNet {
 					select new EmbedFieldBuilder() {
 						Name = aspect.PrefixEmote.ToString() + " " + aspect.Name,
 						Value = aspect.Value,
-						IsInline = true
+						IsInline = aspect.Value.Length < 80
 					}
 				).ToList(),
 				Author = new EmbedAuthorBuilder() {
