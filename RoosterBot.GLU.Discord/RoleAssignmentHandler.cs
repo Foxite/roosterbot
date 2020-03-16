@@ -9,29 +9,9 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU.Discord {
 	internal sealed class RoleAssignmentHandler {
-		private const ulong NewUserRank = 278937741478330389;
-		private readonly IReadOnlyDictionary<string, ulong[]> m_Roles;
+		private const ulong NewUserRank = 278937741478330389; //669257158969524244;
 
 		public RoleAssignmentHandler() {
-			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
-
-			var roles = new Dictionary<string, ulong[]>();
-
-			ulong dev = 278587815271464970;
-			ulong art = 278587791141765121;
-
-			void setupYearRoles(ulong courseRole) {
-				for (int i = 0; i < yearRoles.Length; i++) {
-					string key = (i + 1).ToString() + "G" + (courseRole == dev ? "D" : "A");
-					roles[key] = new[] { yearRoles[i], courseRole };
-				}
-			}
-
-			setupYearRoles(dev);
-			setupYearRoles(art);
-
-			m_Roles = roles;
-
 			ScheduleUtil.UserChangedClass += OnUserChangedClass;
 		}
 
@@ -42,9 +22,9 @@ namespace RoosterBot.GLU.Discord {
 				if (user != null) {
 					// Assign roles
 					try {
-						IEnumerable<IRole> newRoles = GetRolesForStudentSet(user.Guild, args.NewSet);
+						IEnumerable<IRole> newRoles = GluDiscordUtil.GetRolesForStudentSet(user.Guild, args.NewSet);
 						if (args.OldSet != null) {
-							IEnumerable<IRole> oldRoles = GetRolesForStudentSet(user.Guild, args.OldSet);
+							IEnumerable<IRole> oldRoles = GluDiscordUtil.GetRolesForStudentSet(user.Guild, args.OldSet);
 							IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
 
 							oldRoles = oldRoles.Except(keptRoles);
@@ -69,10 +49,6 @@ namespace RoosterBot.GLU.Discord {
 					}
 				}
 			}
-		}
-
-		private IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
-			return m_Roles[info.ScheduleCode.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
 		}
 	}
 }
