@@ -1,9 +1,15 @@
-﻿using Qmmands;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Discord;
+using Qmmands;
+using RoosterBot.DiscordNet;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	// TODO only accept discord context, provide proper mechanism for this (currently you get an exception if the platform is not compatible)
 	public class GLUModule : RoosterModule {
+		public UserConfigService UCS { get; set; } = null!;
+
 		[Priority(-1), Command(
 			"danku", "dankje", "dankjewel", "bedankt", "dank",
 			"goed", "goedzo", "goodbot", "good",
@@ -52,6 +58,25 @@ namespace RoosterBot.GLU {
 		public CommandResult AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
+		}
+
+		[RequireBotManager]
+		public async void IndexUserNicknames() {
+			IReadOnlyCollection<IGuildUser> users = await (Context as DiscordCommandContext)!.Guild!.GetUsersAsync();
+			int i = 0;
+			foreach (IGuildUser user in users) {
+				if (user.Nickname != null) {
+					UserConfig userConfig = await UCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, user.Id));
+					userConfig.SetData("glu.discord.nickname", user.Nickname);
+					await userConfig.UpdateAsync();
+				}
+				i++;
+				await Task.Delay(500);
+				if (i % 25 == 0) {
+					await Context.Channel.SendMessageAsync(Context.User.Mention + " " + i + " / " + users.Count);
+				}
+			}
+			await Context.Channel.SendMessageAsync(Context.User.Mention + " done");
 		}
 	}
 }
