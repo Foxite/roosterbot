@@ -12,12 +12,12 @@ namespace RoosterBot.DiscordNet {
 		public UserListService Service { get; set; } = null!;
 
 		private async Task<IEnumerable<IGuildUser>> GetList() {
-			return Service.GetLastListForUser((IGuildUser) Context.User) ?? await Context.Guild!.GetUsersAsync();
+			return Service.GetLastListForUser(((RoosterCommandContext) Context).User) ?? await Context.Guild!.GetUsersAsync();
 		}
 
 		[Command("clear")]
 		public CommandResult ClearContext() {
-			Service.RemoveListForUser((IGuildUser) Context.User);
+			Service.RemoveListForUser(((RoosterCommandContext) Context).User);
 			return TextResult.Success("Context has been cleared.");
 		}
 
@@ -70,9 +70,11 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 
-		private TableResult ReplyList(IEnumerable<IGuildUser> unnamedUsers) {
+		private RoosterCommandResult ReplyList(IEnumerable<IGuildUser> users) {
+			Service.SetListUserUser(((RoosterCommandContext) Context).User, users);
+
 			IEnumerable<string[]> userRows =
-				from user in unnamedUsers
+				from user in users
 				orderby user.JoinedAt?.Date
 				select new[] {
 					$"@{user.Username}#{user.Discriminator}",
@@ -80,11 +82,15 @@ namespace RoosterBot.DiscordNet {
 					string.Join(", ", user.RoleIds.Select(roleId => Context.Guild!.GetRole(roleId).Name).Where(roleName => roleName != "@everyone"))
 				};
 
-			string[][] table = new string[userRows.Count() + 1][];
-			table[0] = new[] { "Username", "Joined", "Roles" };
-			userRows.CopyTo(table, 1);
+			if (userRows.Any()) {
+				string[][] table = new string[userRows.Count() + 1][];
+				table[0] = new[] { "Username", "Joined", "Roles" };
+				userRows.CopyTo(table, 1);
 
-			return new TableResult("", table);
+				return new TableResult("", table);
+			} else {
+				return TextResult.Info("No results.");
+			}
 		}
 	}
 }

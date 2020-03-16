@@ -1,5 +1,9 @@
-﻿namespace RoosterBot.DiscordNet {
-	public class DiscordUser : IUser {
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+namespace RoosterBot.DiscordNet {
+	public class DiscordUser : IUser, IEquatable<DiscordUser> {
 		public Discord.IUser DiscordEntity { get; }
 		public PlatformComponent Platform => DiscordNetComponent.Instance;
 
@@ -24,6 +28,18 @@
 			} else {
 				return false;
 			}
+		}
+
+		public override bool Equals(object? obj) => Equals(obj as DiscordUser);
+		public bool Equals(DiscordUser? other) => !(other is null) && other.DiscordEntity.Id == DiscordEntity.Id;
+		public override int GetHashCode() => DiscordEntity.Id.GetHashCode();
+
+		public static bool operator ==(DiscordUser left, DiscordUser right) {
+			return left.DiscordEntity.Id == right.DiscordEntity.Id;
+		}
+
+		public static bool operator !=(DiscordUser left, DiscordUser right) {
+			return !(left == right);
 		}
 	}
 }
