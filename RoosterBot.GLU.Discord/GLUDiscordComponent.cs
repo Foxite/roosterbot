@@ -6,7 +6,7 @@ namespace RoosterBot.GLU.Discord {
 	public class GLUDiscordComponent : Component {
 		public const long GLUGuildId = 278586698877894657;
 
-		public override Version ComponentVersion => new Version(0, 1, 0);
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			commandService.AddModule<GLUModule>();

@@ -35,7 +35,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Indicates if the context is private or not. Communication in a private context is only visible to the <see cref="User"/> and RoosterBot.
 		/// </summary>
-		public bool IsPrivate { get; }
+		public bool IsPrivate => Channel.IsPrivate;
 
 		/// <summary>
 		/// The <see cref="RoosterBot.UserConfig"/> for the <see cref="User"/>.

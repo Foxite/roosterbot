@@ -1,12 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace RoosterBot.DiscordNet {
-	public class DiscordUser : IUser {
+	public class DiscordUser : IUser, IEquatable<DiscordUser> {
 		public Discord.IUser DiscordEntity { get; }
 		public PlatformComponent Platform => DiscordNetComponent.Instance;
 
 		object ISnowflake.Id => DiscordEntity.Id;
-		public ulong  Id     => DiscordEntity.Id;
+		public ulong Id => DiscordEntity.Id;
 		public string UserName => DiscordEntity.Username + "#" + DiscordEntity.Discriminator;
 		public string DisplayName => (DiscordEntity is Discord.IGuildUser igu) ? igu.Nickname : DiscordEntity.Username;
 		public string Mention => DiscordEntity.Mention;
@@ -26,6 +27,18 @@ namespace RoosterBot.DiscordNet {
 			} else {
 				return false;
 			}
+		}
+
+		public override bool Equals(object? obj) => Equals(obj as DiscordUser);
+		public bool Equals(DiscordUser? other) => !(other is null) && other.DiscordEntity.Id == DiscordEntity.Id;
+		public override int GetHashCode() => DiscordEntity.Id.GetHashCode();
+
+		public static bool operator ==(DiscordUser left, DiscordUser right) {
+			return left.DiscordEntity.Id == right.DiscordEntity.Id;
+		}
+
+		public static bool operator !=(DiscordUser left, DiscordUser right) {
+			return !(left == right);
 		}
 	}
 }

@@ -29,7 +29,7 @@ namespace RoosterBot.DiscordNet {
 						if (DiscordUtil.IsMessageCommand(dum, guildConfig.CommandPrefix, out int argPos)) {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
 							await dum.Channel.TriggerTypingAsync();
-							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos + 1), new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig));
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig));
 						}
 					} catch (Exception e) {
 						Logger.Error("Discord", "Exception caught when handling new message", e);

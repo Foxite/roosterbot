@@ -11,6 +11,11 @@ namespace RoosterBot {
 		string Name { get; }
 
 		/// <summary>
+		/// Indicates if the channel is private.
+		/// </summary>
+		bool IsPrivate { get; }
+
+		/// <summary>
 		/// Sends a message into the IChannel. Optionally includes a file attachment.
 		/// </summary>
 		/// <param name="content">The content of the message.</param>

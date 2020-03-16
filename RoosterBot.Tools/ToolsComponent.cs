@@ -6,7 +6,7 @@ using YoutubeExplode.Converter;
 
 namespace RoosterBot.Tools {
 	public class ToolsComponent : Component {
-		public override Version ComponentVersion => new Version(0, 3, 0);
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
@@ -20,6 +20,7 @@ namespace RoosterBot.Tools {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
 
+			commandService.AddModule<StrawpollModule>();
 			commandService.AddModule<YoutubeModule>();
 		}
 	}

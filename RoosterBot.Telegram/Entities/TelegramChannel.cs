@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using File = System.IO.File;
 
@@ -13,6 +14,8 @@ namespace RoosterBot.Telegram {
 		public string Name => TelegramEntity.Title;
 
 		object ISnowflake.Id => Id;
+
+		public bool IsPrivate => TelegramEntity.Type == ChatType.Private;
 
 		public TelegramChannel(Chat telegramEntity) {
 			TelegramEntity = telegramEntity;

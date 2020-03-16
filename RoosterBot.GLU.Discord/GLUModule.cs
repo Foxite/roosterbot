@@ -3,20 +3,28 @@ using Qmmands;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
+	// TODO only accept discord context, provide proper mechanism for this (currently you get an exception if the platform is not compatible)
 	public class GLUModule : RoosterModule {
 		public Random RNG { get; set; } = null!;
 
-		[Priority(-1),
-		 Command("danku", "dankje", "dankjewel", "bedankt", "dank",
-				 "goed", "goedzo", "goodbot", "good",
-				 "thanks", "thnx", "thx", "ty", "thank")]
+		[Priority(-1), Command(
+			"danku", "dankje", "dankjewel", "bedankt", "dank",
+			"goed", "goedzo", "goodbot", "good",
+			"thanks", "thnx", "thx", "ty", "thank")]
 		public CommandResult ThankYouCommand([Remainder] string post = "") {
 			string response;
-			if (post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
+			double joramChance = Context.User.Id.Equals(244147515375484928ul) ? 0.1d : 0.2d;
+			if (Util.RNG.NextDouble() < joramChance || post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
 				response = "<:wsjoram:570601561072467969>";
 			} else {
 				string[] responses = new[] {
 					":smile:",
+					":smiley:",
+					":grin:",
+					":blush:",
+					":smiling_face_with_3_hearts:",
+					":hugging:",
+					":smiley_cat:",
 					":thumbsup:",
 					"<:wsjoram:570601561072467969>",
 					":blush:",
@@ -32,11 +40,6 @@ namespace RoosterBot.GLU {
 		public CommandResult AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
-		}
-
-		[Command("kut"), IgnoresExtraArguments]
-		public CommandResult BoazBas() {
-			return new TextResult(null, "Kut " + Context.User.Mention);
 		}
 	}
 }

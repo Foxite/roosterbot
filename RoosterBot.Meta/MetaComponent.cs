@@ -65,6 +65,7 @@ namespace RoosterBot.Meta {
 				commandService.AddModule<HelpModule>();
 			}
 
+			commandService.AddModule<DebuggingModule>();
 			commandService.AddModule<ControlModule>();
 			commandService.AddModule<ChannelConfigModule>();
 			commandService.AddModule<UserConfigModule>();
