@@ -72,6 +72,7 @@ namespace RoosterBot.DiscordNet {
 			Client = new DiscordSocketClient(discordConfig);
 
 			services.AddSingleton(Client);
+			services.AddSingleton<UserListService>();
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {

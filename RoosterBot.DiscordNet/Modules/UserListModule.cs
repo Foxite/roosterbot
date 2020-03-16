@@ -9,10 +9,22 @@ using Qmmands;
 namespace RoosterBot.DiscordNet {
 	[HiddenFromList, Group("users"), RequirePrivate(false), UserIsModerator]
 	public class UserListModule : RoosterModule<DiscordCommandContext> {
+		public UserListService Service { get; set; } = null!;
+
+		private async Task<IEnumerable<IGuildUser>> GetList() {
+			return Service.GetLastListForUser((IGuildUser) Context.User) ?? await Context.Guild!.GetUsersAsync();
+		}
+
+		[Command("clear")]
+		public CommandResult ClearContext() {
+			Service.RemoveListForUser((IGuildUser) Context.User);
+			return TextResult.Success("Context has been cleared.");
+		}
+
 		[Command("with no nickname")]
 		public async Task<CommandResult> GetUnnamedUsers() {
 			return ReplyList(
-				from user in await Context.Guild!.GetUsersAsync()
+				from user in await GetList()
 				where !user.IsBot && user.Nickname == null
 				select user
 			);
@@ -25,7 +37,7 @@ namespace RoosterBot.DiscordNet {
 			}
 
 			return ReplyList(
-				from user in await Context.Guild!.GetUsersAsync()
+				from user in await GetList()
 				where !user.IsBot
 				let roleCount =
 					roles.Length == 0
@@ -39,7 +51,7 @@ namespace RoosterBot.DiscordNet {
 		[Command("with status")]
 		public async Task<CommandResult> UsersWithStatus(UserStatus status) {
 			return ReplyList(
-				from user in await Context.Guild!.GetUsersAsync()
+				from user in await GetList()
 				where !user.IsBot
 				where user.Status == status
 				select user
