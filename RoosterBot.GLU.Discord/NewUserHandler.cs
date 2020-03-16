@@ -16,8 +16,8 @@ namespace RoosterBot.GLU.Discord {
 		private async Task WelcomeUser(SocketGuildUser user) {
 			if (user.Guild.Id == GLUDiscordComponent.GLUGuildId &&
 				user.Guild.Channels.SingleOrDefault(channel => channel.Name == "welcome") is SocketTextChannel welcomeChannel) {
-				//string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel)!.Mention;
-				string botCommandsMention = (user.Guild.GetChannel(346682476149866498) as SocketTextChannel)!.Mention;
+				string botCommandsMention = (user.Guild.Channels.Single(channel => channel.Name == "bot-commands") as SocketTextChannel)!.Mention;
+				//string botCommandsMention = (user.Guild.GetChannel(346682476149866498) as SocketTextChannel)!.Mention;
 
 				string text = $"Welkom {user.Mention},\n";
 
