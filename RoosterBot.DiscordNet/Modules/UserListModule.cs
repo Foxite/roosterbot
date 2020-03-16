@@ -36,6 +36,16 @@ namespace RoosterBot.DiscordNet {
 			);
 		}
 
+		[Command("with status")]
+		public async Task<CommandResult> UsersWithStatus(UserStatus status) {
+			return ReplyList(
+				from user in await Context.Guild!.GetUsersAsync()
+				where !user.IsBot
+				where user.Status == status
+				select user
+			);
+		}
+
 		private bool TryGetCompareFunc(string name, [NotNullWhen(true)] out Func<int, int, bool>? func) {
 			switch (name) {
 				case "==": func = (a, b) => a == b; return true;
