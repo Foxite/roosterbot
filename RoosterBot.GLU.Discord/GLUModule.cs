@@ -14,7 +14,7 @@ namespace RoosterBot.GLU {
 		public CommandResult ThankYouCommand([Remainder] string post = "") {
 			string response;
 			double joramChance = Context.User.Id.Equals(244147515375484928ul) ? 0.1d : 0.2d;
-			if (Util.RNG.NextDouble() < joramChance || post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
+			if (RNG.NextDouble() < joramChance || post.ToLower() == "joram" || (UserConfig.TryGetData("misc.alwaysjoram", out bool alwaysJoram, false) && alwaysJoram)) {
 				response = "<:wsjoram:570601561072467969>";
 			} else {
 				string[] responses = new[] {
