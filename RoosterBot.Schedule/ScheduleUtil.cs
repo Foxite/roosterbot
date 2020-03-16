@@ -15,7 +15,7 @@ namespace RoosterBot.Schedule {
 		}
 
 		public static void RemoveLastScheduleCommand(this UserConfig userConfig, IChannel channel) {
-			userConfig.SetData<LastScheduleCommandInfo?>("schedule.lastCommand." + channel.Id, null);
+			userConfig.RemoveData("schedule.lastCommand." + channel.Id);
 		}
 		#endregion
 

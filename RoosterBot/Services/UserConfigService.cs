@@ -68,6 +68,13 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
+		/// Remove a key (and its value) from the configuration.
+		/// </summary>
+		public void RemoveData(string key) {
+			m_CustomData.Remove(key);
+		}
+
+		/// <summary>
 		/// Set the value of a configuration key.
 		/// </summary>
 		public void SetData<T>(string key, T data) {
