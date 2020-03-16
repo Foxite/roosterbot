@@ -9,25 +9,21 @@ using Qmmands;
 namespace RoosterBot.DiscordNet {
 	[HiddenFromList, Group("users"), RequirePrivate(false), UserIsModerator]
 	public class UserListModule : RoosterModule<DiscordCommandContext> {
-		public UserListService Service { get; set; } = null!;
+		private const string UserConfigListKey = "discord.tools.userList";
 
 		private async Task<IEnumerable<IGuildUser>> GetList() {
-			return Service.GetLastListForUser(((RoosterCommandContext) Context).User) ?? await Context.Guild!.GetUsersAsync();
+			return UserConfig.TryGetData(UserConfigListKey, out IEnumerable<IGuildUser>? ret) ? ret : (await Context.Guild!.GetUsersAsync()).Where(user => !user.IsBot);
 		}
 
 		[Command("clear")]
 		public CommandResult ClearContext() {
-			Service.RemoveListForUser(((RoosterCommandContext) Context).User);
+			UserConfig.RemoveData(UserConfigListKey);
 			return TextResult.Success("Context has been cleared.");
 		}
 
 		[Command("with no nickname")]
 		public async Task<CommandResult> GetUnnamedUsers() {
-			return ReplyList(
-				from user in await GetList()
-				where !user.IsBot && user.Nickname == null
-				select user
-			);
+			return ReplyList((await GetList()).Where(user => user.Nickname == null));
 		}
 
 		[Command("with role count")]
@@ -38,7 +34,6 @@ namespace RoosterBot.DiscordNet {
 
 			return ReplyList(
 				from user in await GetList()
-				where !user.IsBot
 				let roleCount =
 					roles.Length == 0
 						? (user.RoleIds.Count - 1) // Everyone has a role called "@everyone" so ignore that one
@@ -50,12 +45,7 @@ namespace RoosterBot.DiscordNet {
 
 		[Command("with status")]
 		public async Task<CommandResult> UsersWithStatus(UserStatus status) {
-			return ReplyList(
-				from user in await GetList()
-				where !user.IsBot
-				where user.Status == status
-				select user
-			);
+			return ReplyList((await GetList()).Where(user => user.Status == status));
 		}
 
 		private bool TryGetCompareFunc(string name, [NotNullWhen(true)] out Func<int, int, bool>? func) {
@@ -71,24 +61,26 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private RoosterCommandResult ReplyList(IEnumerable<IGuildUser> users) {
-			Service.SetListUserUser(((RoosterCommandContext) Context).User, users);
+			if (users.Any()) {
+				IEnumerable<string[]> userRows =
+					from user in users
+					orderby user.JoinedAt?.Date
+					select new[] {
+						$"@{user.Username}#{user.Discriminator}",
+						user.JoinedAt?.ToString("yyyy-MM-dd") ?? "Unknown",
+						string.Join(", ", user.RoleIds.Select(roleId => Context.Guild!.GetRole(roleId).Name).Where(roleName => roleName != "@everyone"))
+					};
 
-			IEnumerable<string[]> userRows =
-				from user in users
-				orderby user.JoinedAt?.Date
-				select new[] {
-					$"@{user.Username}#{user.Discriminator}",
-					user.JoinedAt?.ToString("yyyy-MM-dd") ?? "Unknown",
-					string.Join(", ", user.RoleIds.Select(roleId => Context.Guild!.GetRole(roleId).Name).Where(roleName => roleName != "@everyone"))
-				};
-
-			if (userRows.Any()) {
 				string[][] table = new string[userRows.Count() + 1][];
 				table[0] = new[] { "Username", "Joined", "Roles" };
 				userRows.CopyTo(table, 1);
 
+				UserConfig.SetData(UserConfigListKey, users);
+
 				return new TableResult("", table);
 			} else {
+				UserConfig.RemoveData(UserConfigListKey);
+
 				return TextResult.Info("No results.");
 			}
 		}
