@@ -19,7 +19,7 @@ namespace RoosterBot.DiscordNet {
 		public string DiscordLink { get; private set; } = null!;
 
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(0, 2, 0);
+		public override Version ComponentVersion => new Version(1, 0, 0);
 
 		public DiscordNetComponent() {
 			Instance = this;
