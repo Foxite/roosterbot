@@ -12,7 +12,11 @@ namespace RoosterBot.DiscordNet {
 		private const string UserConfigListKey = "discord.tools.userList";
 
 		private async Task<IEnumerable<IGuildUser>> GetList() {
-			return UserConfig.TryGetData(UserConfigListKey, out IEnumerable<IGuildUser>? ret) ? ret : (await Context.Guild!.GetUsersAsync()).Where(user => !user.IsBot);
+			IEnumerable<IGuildUser> userList = await Context.Guild!.GetUsersAsync();
+
+			return UserConfig.TryGetData<IEnumerable<ulong>>(UserConfigListKey, out IEnumerable<ulong>? ret)
+				? userList.Join(ret, user => user.Id, id => id, (igu, id) => igu)
+				: userList.Where(user => !user.IsBot);
 		}
 
 		[Command("clear")]
@@ -75,7 +79,7 @@ namespace RoosterBot.DiscordNet {
 				table[0] = new[] { "Username", "Joined", "Roles" };
 				userRows.CopyTo(table, 1);
 
-				UserConfig.SetData(UserConfigListKey, users);
+				UserConfig.SetData(UserConfigListKey, users.Select(user => user.Id));
 
 				return new TableResult("", table);
 			} else {
