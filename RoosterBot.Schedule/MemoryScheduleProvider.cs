@@ -130,7 +130,7 @@ namespace RoosterBot.Schedule {
 		});
 
 		private IEnumerable<ScheduleRecord> RecordsFrom(DateTime target) {
-			for (DateTime date = target.Date; date < m_ScheduleEnd; date = date.AddDays(1).Date) {
+			for (DateTime date = target.Date; date <= m_ScheduleEnd; date = date.AddDays(1).Date) {
 				if (m_Schedule.TryGetValue(date, out var dateSchedules)) {
 					foreach (ScheduleRecord yieldRecord in dateSchedules) {
 						yield return yieldRecord;
