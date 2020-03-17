@@ -8,8 +8,8 @@ namespace RoosterBot.GLU.Discord {
 		private static readonly IReadOnlyDictionary<string, ulong[]> Roles;
 
 		static GluDiscordUtil() {
-			//ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
-			ulong[] yearRoles = new ulong[] { 689201556234829861, 689201576228945998, 689201580825903211, 689201581765296132 };
+			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
+			//ulong[] yearRoles = new ulong[] { 689201556234829861, 689201576228945998, 689201580825903211, 689201581765296132 };
 
 			var roles = new Dictionary<string, ulong[]>();
 

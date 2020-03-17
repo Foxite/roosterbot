@@ -44,8 +44,9 @@ namespace RoosterBot.GLU.Discord {
 							await user.AddRolesAsync(newRoles);
 						}
 					} catch (Exception e) {
-						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.", e);
+						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.");
 						await DiscordNetComponent.Instance.BotOwner.SendMessageAsync("Failed to assign role: " + e.ToString());
+						throw;
 					}
 				}
 			}
