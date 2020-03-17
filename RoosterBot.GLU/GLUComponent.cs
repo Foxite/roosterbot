@@ -13,6 +13,7 @@ namespace RoosterBot.GLU {
 		private SnowflakeReference[] m_AllowedChannels;
 		private string m_StaffMemberPath;
 		private bool m_SkipPastRecords;
+		private int m_RepeatRecords;
 
 		public override Version ComponentVersion => new Version(1, 1, 1);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
@@ -32,6 +33,7 @@ namespace RoosterBot.GLU {
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				SkipPastRecords = false,
+				RepeatRecords = 0,
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),
 				AllowedChannels = new[] {
@@ -43,6 +45,7 @@ namespace RoosterBot.GLU {
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
+			m_RepeatRecords = config.RepeatRecords;
 			m_AllowedChannels = (
 				from uncheckedSR in config.AllowedChannels
 				let platform = Program.Instance.Components.GetPlatform(uncheckedSR.Platform)
@@ -54,9 +57,17 @@ namespace RoosterBot.GLU {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
 			}
 
-			addSchedule<StudentSetInfo>("GLU-StudentSets");
-			addSchedule<StaffMemberInfo>("GLU-StaffMembers");
-			addSchedule<RoomInfo>("GLU-Rooms");
+			if (config.Schedules.ContainsKey("GLU-StudentSets")) {
+				addSchedule<StudentSetInfo>("GLU-StudentSets");
+			}
+
+			if (config.Schedules.ContainsKey("GLU-StaffMembers")) {
+				addSchedule<StaffMemberInfo>("GLU-StaffMembers");
+			}
+
+			if (config.Schedules.ContainsKey("GLU-Rooms")) {
+				addSchedule<RoomInfo>("GLU-Rooms");
+			}
 
 			m_StaffMemberPath = Path.Combine(configPath, "leraren-afkortingen.csv");
 		}
@@ -71,7 +82,10 @@ namespace RoosterBot.GLU {
 			ScheduleService provider = services.GetRequiredService<ScheduleService>();
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(sri.IdentifierType, new MemoryScheduleProvider(sri.Name, new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords), m_AllowedChannels));
+				provider.RegisterProvider(sri.IdentifierType,
+					new MemoryScheduleProvider(sri.Name,
+						new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords, m_RepeatRecords),
+						m_AllowedChannels));
 			}
 
 			// Student sets and Rooms validator
