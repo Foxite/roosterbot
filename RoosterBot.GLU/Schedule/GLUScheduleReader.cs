@@ -12,12 +12,14 @@ namespace RoosterBot.GLU {
 		private readonly StaffMemberService m_StaffMembers;
 		private readonly SnowflakeReference m_StaffMemberChannel;
 		private readonly bool m_SkipPastRecords;
+		private readonly int m_RepeatRecords;
 
-		public GLUScheduleReader(string path, StaffMemberService staffMembers, SnowflakeReference staffMembersChannel, bool skipPastRecords) {
+		public GLUScheduleReader(string path, StaffMemberService staffMembers, SnowflakeReference staffMembersChannel, bool skipPastRecords, int repeatRecords) {
 			m_Path = path;
 			m_StaffMembers = staffMembers;
 			m_StaffMemberChannel = staffMembersChannel;
 			m_SkipPastRecords = skipPastRecords;
+			m_RepeatRecords = repeatRecords;
 		}
 
 		public override IReadOnlyList<ScheduleRecord> GetSchedule() {
@@ -103,6 +105,17 @@ namespace RoosterBot.GLU {
 						}
 					}
 				}
+
+				if (m_RepeatRecords > 0) {
+					int repeatLength = (int) Math.Abs((schedule[0].Start.Date - schedule[schedule.Count - 1].Start.Date).TotalDays);
+					repeatLength += (repeatLength + 6) / 7 * 7; // To next multiple of 7 days (repeat weeks)
+					var originalSchedule = schedule.ToList(); // Clone list
+					for (int i = 1; i <= m_RepeatRecords; i++) {
+						schedule.AddRange(originalSchedule.Select(record =>
+							new GLUScheduleRecord(record.Activity, record.Start.AddDays(repeatLength * i), record.End.AddDays(repeatLength * i), record.StudentSets, record.StaffMember, record.Room)));
+					}
+				}
+
 				return schedule;
 			} catch (Exception e) {
 				Logger.Critical("GLUScheduleReader", $"The following exception was thrown while loading the CSV at \"{m_Path}\" on line {line}", e);
