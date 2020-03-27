@@ -14,6 +14,7 @@ namespace RoosterBot.GLU {
 		private string m_StaffMemberPath;
 		private bool m_SkipPastRecords;
 		private int m_RepeatRecords;
+		private bool m_ExpandActivites;
 
 		public override Version ComponentVersion => new Version(1, 1, 1);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
@@ -41,11 +42,13 @@ namespace RoosterBot.GLU {
 						Platform = "",
 						Id = ""
 					}
-				}
+				},
+				ExpandActivites = true
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
 			m_RepeatRecords = config.RepeatRecords;
+			m_ExpandActivites = config.ExpandActivites;
 			m_AllowedChannels = (
 				from uncheckedSR in config.AllowedChannels
 				let platform = Program.Instance.Components.GetPlatform(uncheckedSR.Platform)
@@ -84,7 +87,7 @@ namespace RoosterBot.GLU {
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				provider.RegisterProvider(sri.IdentifierType,
 					new MemoryScheduleProvider(sri.Name,
-						new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords, m_RepeatRecords),
+						new GLUScheduleReader(sri.Path, members, m_AllowedChannels[0], m_SkipPastRecords, m_RepeatRecords, m_ExpandActivites),
 						m_AllowedChannels));
 			}
 
