@@ -73,7 +73,7 @@ namespace RoosterBot.GLU {
 				}
 
 				if (Activity.ScheduleCode != "pauze") {
-					yield return new AspectListItem(new Emoji("☣️"), "Quarantaine", "In ieder geval tot en met 3 juni worden alle lessen via Discord gegeven. Lees je mail voor meer informatie.");
+					yield return getAspect(new Emoji("☣️"), "GLUScheduleRecord_QuarantineLabel", getString("GLUScheduleRecord_Quarantine"));
 				}
 			}
 		}
