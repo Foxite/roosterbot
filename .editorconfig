@@ -259,3 +259,4 @@ dotnet_diagnostic.CS8620.severity = error # Argument cannot be used for paramete
 dotnet_diagnostic.CS8625.severity = error # Cannot convert null literal to non-nullable reference type.
 dotnet_diagnostic.CS8629.severity = error # Nullable value type may be null.
 dotnet_diagnostic.CS8714.severity = error # The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+dotnet_diagnostic.CS8762.severity = error # CS8762: Parameter may not have a null value when exiting in some condition.

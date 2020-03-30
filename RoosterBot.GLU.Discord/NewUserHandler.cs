@@ -22,11 +22,11 @@ namespace RoosterBot.GLU.Discord {
 				string text = $"Welkom {user.Mention},\n";
 
 				UserConfig userConfig = await m_UCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, user.Id));
-				StudentSetInfo? ssi = userConfig.GetStudentSet();
+				var info = userConfig.GetIdentifier() as StudentSetInfo;
 
 				userConfig.TryGetData("glu.discord.nickname", out string? nickname);
 
-				if (ssi == null || nickname == null) {
+				if (info == null || nickname == null) {
 					text += "Je bent bijna klaar je hoeft alleen het volgende nog te doen.\n";
 				}
 
@@ -34,7 +34,7 @@ namespace RoosterBot.GLU.Discord {
 					text += "- Geef je naam en achternaam door in dit kanaal zodat een admin of mod je naam kan veranderen.\n";
 				}
 
-				if (ssi == null) {
+				if (info == null) {
 					text += $"- Stel in {botCommandsMention} jouw klas in door `!ik zit in <klas>` te sturen: bijvoorbeeld `!ik zit in 2gd1` of `!ik zit in 1ga2`. Je krijgt dan automatisch een rang die jouw klas aangeeft.\n";
 				}
 
@@ -43,9 +43,9 @@ namespace RoosterBot.GLU.Discord {
 					await user.ModifyAsync(props => props.Nickname = nickname);
 				}
 
-				if (ssi != null) {
+				if (info != null) {
 					text += $"- Jouw klas is al bij mij bekend, dus ik heb jou de juiste rangen gegeven. Als dit niet klopt, ga dan naar {botCommandsMention} en gebruik `!ik zit in <klas>` om het te veranderen: bijvoorbeeld `!ik zit in 2gd1` of `!ik zit in 1ga2`.\n";
-					await user.AddRolesAsync(GluDiscordUtil.GetRolesForStudentSet(user.Guild, ssi));
+					await user.AddRolesAsync(GluDiscordUtil.GetRolesForStudentSet(user.Guild, info));
 				}
 
 				text += "\n";

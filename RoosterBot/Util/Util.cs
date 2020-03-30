@@ -17,7 +17,7 @@ namespace RoosterBot {
 		/// </summary>
 		public static T LoadJsonConfigFromTemplate<T>(string filePath, T template, JsonSerializerSettings? jss = null) {
 			if (File.Exists(filePath)) {
-				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss);
+				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss) ?? throw new InvalidOperationException("Configuration being deserialized is null.");
 			} else {
 				Logger.Warning("Main", "A config file was not found and a blank template has been created: " + filePath);
 				Logger.Warning("Main", "You should read the file and change it where necessary. The template config will likely not function properly.");

@@ -4,8 +4,9 @@ using Qmmands;
 using StrawPollNET;
 
 namespace RoosterBot.Tools {
+	[Name("#StrawpollModule_Name")]
 	public class StrawpollModule : RoosterModule {
-		[Command("strawpoll")]
+		[Command("#StrawpollModule_Command_Name"), Description("#StrawpollModule_Command_Description")]
 		public async Task<CommandResult> CreateStrawpoll(string title, params string[] answers) {
 			var poll = await API.Create.CreatePollAsync(title, answers.ToList(), false, StrawPollNET.Enums.DupCheck.Normal, false);
 			return TextResult.Success(poll.PollUrl);

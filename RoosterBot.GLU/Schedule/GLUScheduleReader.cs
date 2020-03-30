@@ -13,13 +13,15 @@ namespace RoosterBot.GLU {
 		private readonly SnowflakeReference m_StaffMemberChannel;
 		private readonly bool m_SkipPastRecords;
 		private readonly int m_RepeatRecords;
+		private readonly bool m_ExpandActivities;
 
-		public GLUScheduleReader(string path, StaffMemberService staffMembers, SnowflakeReference staffMembersChannel, bool skipPastRecords, int repeatRecords) {
+		public GLUScheduleReader(string path, StaffMemberService staffMembers, SnowflakeReference staffMembersChannel, bool skipPastRecords, int repeatRecords, bool expandActivities) {
 			m_Path = path;
 			m_StaffMembers = staffMembers;
 			m_StaffMemberChannel = staffMembersChannel;
 			m_SkipPastRecords = skipPastRecords;
 			m_RepeatRecords = repeatRecords;
+			m_ExpandActivities = expandActivities;
 		}
 
 		public override IReadOnlyList<ScheduleRecord> GetSchedule() {
@@ -66,7 +68,7 @@ namespace RoosterBot.GLU {
 						}
 
 						var record = new GLUScheduleRecord(
-							activity: new ActivityInfo(csv["Activity"], GLUActivities.GetActivityFromAbbr(csv["Activity"])),
+							activity: new ActivityInfo(csv["Activity"], m_ExpandActivities ? GLUActivities.GetActivityFromAbbr(csv["Activity"]) : csv["Activity"]),
 							start: start,
 							end: end,
 							studentSets: studentsets != null ? studentsets.Select(code => new StudentSetInfo(code)).ToList() : new List<StudentSetInfo>(),

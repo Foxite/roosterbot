@@ -80,7 +80,7 @@ namespace RoosterBot {
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Anonymous type cannot be used as generic type, must be inferred")]
 		public override SnowflakeReference ReadJson(JsonReader reader, Type objectType, SnowflakeReference? existingValue, bool hasExistingValue, JsonSerializer serializer) {
 			T deserializeAnonymous<T>(T template) {
-				return serializer.Deserialize<T>(reader);
+				return serializer.Deserialize<T>(reader) ?? throw new InvalidOperationException("JSON being deserialized is null.");
 			}
 
 			var rawResult = deserializeAnonymous(new {

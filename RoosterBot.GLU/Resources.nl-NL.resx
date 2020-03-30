@@ -141,6 +141,12 @@
   <data name="GLUScheduleRecord_Aspect_TimeStartEnd" xml:space="preserve">
     <value>Tijd</value>
   </data>
+  <data name="GLUScheduleRecord_Quarantine" xml:space="preserve">
+    <value>In ieder geval tot en met 3 juni worden alle lessen via Discord gegeven. Lees je mail voor meer informatie.</value>
+  </data>
+  <data name="GLUScheduleRecord_QuarantineLabel" xml:space="preserve">
+    <value>Quarantaine</value>
+  </data>
   <data name="GLUScheduleRecord_TimeLeft" xml:space="preserve">
     <value> - nog {0}</value>
   </data>

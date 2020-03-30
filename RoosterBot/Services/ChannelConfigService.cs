@@ -84,10 +84,10 @@ namespace RoosterBot {
 		/// <summary>
 		/// Try to get the value of a configuration key and convert it to <typeparamref name="T"/>.
 		/// </summary>
-		public bool TryGetData<T>(string key, [MaybeNullWhen(false)] out T data, T defaultValue = default) {
+		public bool TryGetData<T>(string key, [MaybeNullWhen(false), NotNullWhen(true)] out T data, T defaultValue = default) {
 			if (m_CustomData.TryGetValue(key, out JToken? value)) {
 				data = value.ToObject<T>();
-				return true;
+				return data != null;
 			} else {
 				data = defaultValue;
 				return false;
