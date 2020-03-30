@@ -22,7 +22,7 @@ namespace RoosterBot {
 		/// </summary>
 		public static T LoadJsonConfigFromTemplate<T>(string filePath, T template, JsonSerializerSettings? jss = null) {
 			if (File.Exists(filePath)) {
-				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss);
+				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss) ?? throw new InvalidOperationException("Configuration being deserialized is null.");
 			} else {
 				if (s_FileCreationWarningNotSent) {
 					s_FileCreationWarningNotSent = false;
