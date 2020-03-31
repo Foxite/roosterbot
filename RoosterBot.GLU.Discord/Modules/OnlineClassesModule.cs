@@ -16,7 +16,7 @@ namespace RoosterBot.GLU.Discord {
 			IVoiceChannel? userChannel = ((Context.User as DiscordUser)!.DiscordEntity as IGuildUser)!.VoiceChannel;
 
 			if (userChannel != null) {
-				return TextResult.Info("Presente leerlingen:\n- " + string.Join("\n- ",
+				return TextResult.Info("Presente leerlingen:\n\n" + string.Join("\n",
 					// Null-forgiveness, but the preconditions will prevent null from showing up here.
 					from user in await userChannel.GetUsersAsync().FlattenAsync()
 					// Skip teachers
