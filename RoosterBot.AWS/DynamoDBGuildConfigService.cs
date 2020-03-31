@@ -41,7 +41,7 @@ namespace RoosterBot.AWS {
 					string commandPrefix = prefixEntry.AsString();
 					var customData = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(customDataEntry.AsString());
 
-					return new ChannelConfig(this, commandPrefix, culture, channel, customData);
+					return new ChannelConfig(this, commandPrefix, culture, channel, customData, customData["dynamodb.disabledChannels"]?.ToObject<IEnumerable<string>>() ?? Array.Empty<string>());
 				}
 			} else {
 				return GetDefaultConfig(channel);

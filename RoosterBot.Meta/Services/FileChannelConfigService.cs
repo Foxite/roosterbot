@@ -31,7 +31,13 @@ namespace RoosterBot.Meta {
 						var channelRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
 						m_ConfigMap.TryAdd(
 							channelRef,
-							new ChannelConfig(this, configItem.Value.CommandPrefix, CultureInfo.GetCultureInfo(configItem.Value.Culture), channelRef, configItem.Value.CustomData)
+							new ChannelConfig(
+								this,
+								configItem.Value.CommandPrefix,
+								CultureInfo.GetCultureInfo(configItem.Value.Culture),
+								channelRef,
+								configItem.Value.CustomData,
+								configItem.Value.DisabledModules)
 						);
 					}
 				}
@@ -72,6 +78,7 @@ namespace RoosterBot.Meta {
 			public string Culture { get; set; } = null!;
 			public string CommandPrefix { get; set; } = null!;
 			public IDictionary<string, JToken> CustomData { get; set; } = null!;
+			public string[] DisabledModules { get; set; } = null!;
 		}
 	}
 }
