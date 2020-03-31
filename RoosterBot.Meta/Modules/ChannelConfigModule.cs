@@ -33,14 +33,18 @@ namespace RoosterBot.Meta {
 
 		[Group("module")]
 		public class ModuleDisableModule : RoosterModule {
-			// TODO fix this hack - see ChannelConfigService
 			[Command("disable")]
 			public async Task<CommandResult> DisableModule(string typeName) {
-				ChannelConfig.DisabledModules.Add(typeName);
-				await ChannelConfig.UpdateAsync();
-				return TextResult.Success("Module has been disabled in this channel.");
+				if (typeName == nameof(ChannelConfigModule) || typeName == nameof(ModuleDisableModule)) {
+					return TextResult.Warning("I would not recommend that.");
+				} else {
+					ChannelConfig.DisabledModules.Add(typeName);
+					await ChannelConfig.UpdateAsync();
+					return TextResult.Success("Module has been disabled in this channel.");
+				}
 			}
 
+			// TODO fix this hack - see ChannelConfigService
 			[Command("enable")]
 			public async Task<CommandResult> EnableModule(string typeName) {
 				ChannelConfig.DisabledModules.Remove(typeName);
