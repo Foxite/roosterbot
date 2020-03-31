@@ -33,7 +33,7 @@ namespace RoosterBot.Meta {
 	}
 
 	// Should be a nested class, temporary workaround for submodules not working
-	[Group("config module")]
+	[Group("config module"), HiddenFromList, RequireBotManager]
 	public class ModuleDisableModule : RoosterModule {
 		[Command("disable")]
 		public async Task<CommandResult> DisableModule(string typeName) {
