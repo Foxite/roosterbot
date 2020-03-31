@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using Qmmands;
 
 namespace RoosterBot {
 	/// <summary>
@@ -24,7 +28,7 @@ namespace RoosterBot {
 		/// Get the default config for a channel represented by a <see cref="SnowflakeReference"/>.
 		/// </summary>
 		protected ChannelConfig GetDefaultConfig(SnowflakeReference channel) {
-			return new ChannelConfig(this, m_DefaultCommandPrefix, m_DefaultCulture, channel, new Dictionary<string, JToken>());
+			return new ChannelConfig(this, m_DefaultCommandPrefix, m_DefaultCulture, channel, new Dictionary<string, JToken>(), Array.Empty<string>());
 		}
 
 		/// <summary>
@@ -66,19 +70,24 @@ namespace RoosterBot {
 		public CultureInfo Culture { get; set; }
 
 		/// <summary>
+		/// The set of disabled modules for this channel.
+		/// </summary>
+		public HashSet<string> DisabledModules { get; }
+
+		/// <summary>
 		/// Construct a new instance of the ChannelConfig class.
 		/// </summary>
-		/// <param name="service"></param>
-		/// <param name="commandPrefix"></param>
-		/// <param name="culture"></param>
-		/// <param name="channel"></param>
-		/// <param name="customData"></param>
-		public ChannelConfig(ChannelConfigService service, string commandPrefix, CultureInfo culture, SnowflakeReference channel, IDictionary<string, JToken> customData) {
+		public ChannelConfig(ChannelConfigService service, string commandPrefix, CultureInfo culture, SnowflakeReference channel, IDictionary<string, JToken> customData, IEnumerable<string> disabledModules) {
 			m_Service = service;
 			CommandPrefix = commandPrefix;
 			Culture = culture;
 			m_CustomData = customData;
 			ChannelReference = channel;
+			
+			// TODO fix this hack!
+			// This was built quickly to make sure there are no irrelevant commands available in the secondary server for our main client.
+			// It's a good feature but needs to be rebuilt properly.
+			DisabledModules = disabledModules.ToHashSet();
 		}
 
 		/// <summary>

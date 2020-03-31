@@ -128,6 +128,9 @@ namespace RoosterBot {
 							Logger.Info("RoosterCommandService", $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
 								"This is no longer necessary as commands are always executed off-thread.");
 						}
+
+						builder.AddCheck(new ModuleEnabledInChannelAttribute());
+
 						postBuild?.Invoke(builder);
 					})
 				};
@@ -136,10 +139,12 @@ namespace RoosterBot {
 				foreach (CultureInfo culture in cultures) {
 					CommandService service = GetService(culture);
 
-					localizedModules.Add(service.AddModule(moduleType, (module) => {
-						LocalizeModule(module, culture, component);
+					localizedModules.Add(service.AddModule(moduleType, (builder) => {
+						LocalizeModule(builder, culture, component);
 
-						postBuild?.Invoke(module);
+						builder.AddCheck(new ModuleEnabledInChannelAttribute());
+
+						postBuild?.Invoke(builder);
 					}));
 				}
 				return localizedModules;
