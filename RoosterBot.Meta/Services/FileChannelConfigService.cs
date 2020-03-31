@@ -38,7 +38,8 @@ namespace RoosterBot.Meta {
 								CultureInfo.GetCultureInfo(configItem.Value.Culture),
 								channelRef,
 								configItem.Value.CustomData,
-								configItem.Value.DisabledModules)
+								configItem.Value.DisabledModules
+							)
 						);
 					}
 				}

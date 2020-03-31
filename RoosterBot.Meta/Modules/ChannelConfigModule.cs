@@ -30,42 +30,43 @@ namespace RoosterBot.Meta {
 				return TextResult.Success(GetString("ChannelConfigModule_SetLanguage", CultureNameService.GetLocalizedName(ChannelConfig.Culture, ChannelConfig.Culture)));
 			}
 		}
+	}
 
-		[Group("module")]
-		public class ModuleDisableModule : RoosterModule {
-			[Command("disable")]
-			public async Task<CommandResult> DisableModule(string typeName) {
-				if (typeName == nameof(ChannelConfigModule) || typeName == nameof(ModuleDisableModule)) {
-					return TextResult.Warning("I would not recommend that.");
-				} else {
-					ChannelConfig.DisabledModules.Add(typeName);
-					await ChannelConfig.UpdateAsync();
-					return TextResult.Success("Module has been disabled in this channel.");
-				}
-			}
-
-			// TODO fix this hack - see ChannelConfigService
-			[Command("enable")]
-			public async Task<CommandResult> EnableModule(string typeName) {
-				ChannelConfig.DisabledModules.Remove(typeName);
+	// Should be a nested class, temporary workaround for submodules not working
+	[Group("config module")]
+	public class ModuleDisableModule : RoosterModule {
+		[Command("disable")]
+		public async Task<CommandResult> DisableModule(string typeName) {
+			if (typeName == nameof(ChannelConfigModule) || typeName == nameof(ModuleDisableModule)) {
+				return TextResult.Warning("I would not recommend that.");
+			} else {
+				ChannelConfig.DisabledModules.Add(typeName);
 				await ChannelConfig.UpdateAsync();
-				return TextResult.Success("Module has been enabled in this channel.");
+				return TextResult.Success("Module has been disabled in this channel.");
 			}
+		}
 
-			[Command("reset")]
-			public async Task<CommandResult> EnableAllModules() {
-				ChannelConfig.DisabledModules.Clear();
-				await ChannelConfig.UpdateAsync();
-				return TextResult.Success("All disabled modules have been re-enabled for this channel.");
-			}
+		// TODO fix this hack - see ChannelConfigService
+		[Command("enable")]
+		public async Task<CommandResult> EnableModule(string typeName) {
+			ChannelConfig.DisabledModules.Remove(typeName);
+			await ChannelConfig.UpdateAsync();
+			return TextResult.Success("Module has been enabled in this channel.");
+		}
 
-			[Command("list")]
-			public CommandResult ListDisabledModules() {
-				if (ChannelConfig.DisabledModules.Count == 0) {
-					return TextResult.Info("No modules are disabled for this channel.");
-				} else {
-					return TextResult.Info("Disabled modules for this channel:\n- " + string.Join("\n-", ChannelConfig.DisabledModules));
-				}
+		[Command("reset")]
+		public async Task<CommandResult> EnableAllModules() {
+			ChannelConfig.DisabledModules.Clear();
+			await ChannelConfig.UpdateAsync();
+			return TextResult.Success("All disabled modules have been re-enabled for this channel.");
+		}
+
+		[Command("list")]
+		public CommandResult ListDisabledModules() {
+			if (ChannelConfig.DisabledModules.Count == 0) {
+				return TextResult.Info("No modules are disabled for this channel.");
+			} else {
+				return TextResult.Info("Disabled modules for this channel:\n- " + string.Join("\n-", ChannelConfig.DisabledModules));
 			}
 		}
 	}
