@@ -17,6 +17,7 @@
 			Download this package from this source:
 			https://www.myget.org/F/foxite/api/v3/index.json 
 			It has some small modifications to allow custom command maps.
+			Source code is located here: https://github.com/Foxite/Qmmands/tree/feature/custom-maps
 		-->
 		<PackageReference Include="Qmmands" Version="3.0.0" />
 	</ItemGroup>	
