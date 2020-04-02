@@ -11,6 +11,7 @@ namespace RoosterBot {
 	// 
 	// That feed contains a fork of Qmmands which lets you provide your own command map. The builtin command map does not support spaces in command/module aliases, and the library owner
 	//  does not want to support custom command maps nor spaces in aliases.
+	// The source code for the fork is located here: https://github.com/Foxite/Qmmands/tree/feature/custom-maps
 	internal class MultiWordCommandMap : ICommandMap {
 		private readonly string m_Separator;
 		private readonly List<Command> m_Commands;
