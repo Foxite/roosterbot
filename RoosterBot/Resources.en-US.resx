@@ -219,4 +219,7 @@
   <data name="RequirePrivateAttribute_RequirePublic" xml:space="preserve">
     <value>Must be in a public channel.</value>
   </data>
+  <data name="ModuleEnabledInChannelAttribute_Unsuccessful" xml:space="preserve">
+    <value>This command is disabled.</value>
+  </data>
 </root>
