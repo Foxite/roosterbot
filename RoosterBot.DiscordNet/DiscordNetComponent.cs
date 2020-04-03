@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Discord;
 using Discord.WebSocket;
@@ -8,6 +9,7 @@ namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
 		public static DiscordNetComponent Instance { get; private set; } = null!;
 
+		private Dictionary<string, DiscordEmote> m_Emotes = new Dictionary<string, DiscordEmote>();
 		private string m_Token = null!;
 		private string m_GameString = "";
 		private ActivityType m_Activity;
@@ -15,8 +17,9 @@ namespace RoosterBot.DiscordNet {
 
 		public BaseSocketClient Client { get; private set; } = null!;
 		public ulong BotOwnerId { get; private set; }
-		public Discord.IUser BotOwner => Client.GetUser(BotOwnerId);
 		public string DiscordLink { get; private set; } = null!;
+
+		public Discord.IUser BotOwner => Client.GetUser(BotOwnerId);
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(1, 0, 0);
@@ -35,6 +38,13 @@ namespace RoosterBot.DiscordNet {
 				Activity = ActivityType.Playing,
 				ReportStartupVersionToOwner = true,
 				BotOwnerId = 0UL,
+				Emotes = new {
+					Info = ":information_source:",
+					Unknown = ":question:",
+					Warning = ":exclamation:",
+					Success = ":white_check_mark:",
+					Error = ":x:"
+				},
 				Discord = new {
 					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
 					discordConfig.GatewayHost,
@@ -55,6 +65,14 @@ namespace RoosterBot.DiscordNet {
 			m_Activity = config.Activity;
 			m_ReportVersion = config.ReportStartupVersionToOwner;
 			BotOwnerId = config.BotOwnerId;
+
+			m_Emotes = new Dictionary<string, DiscordEmote>() {
+				{ "Error",    new DiscordEmote(config.Emotes.Error) },
+				{ "Info",     new DiscordEmote(config.Emotes.Info) },
+				{ "Success",  new DiscordEmote(config.Emotes.Success) },
+				{ "Warning",  new DiscordEmote(config.Emotes.Warning) },
+				{ "Unknown",  new DiscordEmote(config.Emotes.Unknown) }
+			};
 
 			discordConfig.GatewayHost         = config.Discord.GatewayHost;
 			discordConfig.ConnectionTimeout   = config.Discord.ConnectionTimeout;
@@ -115,12 +133,10 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddModule<UserListModule>();
 			commandService.AddModule<InfoModule>();
 
-			var emotes = services.GetRequiredService<EmoteService>();
-			emotes.RegisterEmote(this, "Error",   new DiscordEmote("<:error:636213609919283238>"));
-			emotes.RegisterEmote(this, "Success", new DiscordEmote("<:ok:636213617825546242>"));
-			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));
-			emotes.RegisterEmote(this, "Unknown", new DiscordEmote("<:unknown:636213624460935188>"));
-			emotes.RegisterEmote(this, "Info",    new DiscordEmote("<:info:644251874010202113>"));
+			var emoteService = services.GetRequiredService<EmoteService>();
+			foreach (var item in m_Emotes) {
+				emoteService.RegisterEmote(this, item.Key, item.Value);
+			}
 			
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);
