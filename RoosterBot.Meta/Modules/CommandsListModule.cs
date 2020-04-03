@@ -61,7 +61,7 @@ namespace RoosterBot.Meta {
 
 		private IEnumerable<string> GetCategories() => (
 			from module in CmdService.GetAllModules(Context.Culture)
-			where ShouldNotHide(module)
+			where ShouldNotHide(module) && module.Commands.Any(command => ShouldNotHide(command))
 			select module.Name
 		).Distinct();
 	}

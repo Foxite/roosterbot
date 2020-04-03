@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -31,7 +32,14 @@ namespace RoosterBot.Meta {
 						var channelRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
 						m_ConfigMap.TryAdd(
 							channelRef,
-							new ChannelConfig(this, configItem.Value.CommandPrefix, CultureInfo.GetCultureInfo(configItem.Value.Culture), channelRef, configItem.Value.CustomData)
+							new ChannelConfig(
+								this,
+								configItem.Value.CommandPrefix,
+								CultureInfo.GetCultureInfo(configItem.Value.Culture),
+								channelRef,
+								configItem.Value.CustomData,
+								configItem.Value.DisabledModules
+							)
 						);
 					}
 				}
@@ -61,7 +69,8 @@ namespace RoosterBot.Meta {
 							CustomData = (kvp.Value.GetRawData() as IDictionary<string, JToken?>).ToDictionary(
 								innerKvp => innerKvp.Key,
 								innerKvp => innerKvp.Value ?? (JToken) JValue.CreateNull()
-							)
+							),
+							DisabledModules = kvp.Value.DisabledModules
 						}
 					))
 				)
@@ -72,6 +81,7 @@ namespace RoosterBot.Meta {
 			public string Culture { get; set; } = null!;
 			public string CommandPrefix { get; set; } = null!;
 			public IDictionary<string, JToken> CustomData { get; set; } = null!;
+			public IEnumerable<string> DisabledModules { get; set; } = null!;
 		}
 	}
 }

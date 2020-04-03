@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
@@ -27,21 +28,15 @@ namespace RoosterBot.AWS {
 			if (document != null) {
 				if (!document.TryGetValue("culture", out DynamoDBEntry cultureEntry) ||
 					!document.TryGetValue("commandPrefix", out DynamoDBEntry prefixEntry) ||
-					!document.TryGetValue("timeZoneId", out DynamoDBEntry timeZoneEntry) ||
 					!document.TryGetValue("customData", out DynamoDBEntry customDataEntry)) {
 					return GetDefaultConfig(channel);
 				} else {
-					TimeZoneInfo timezone;
-					try {
-						timezone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneEntry.AsString());
-					} catch (TimeZoneNotFoundException) {
-						return GetDefaultConfig(channel);
-					}
 					var culture = CultureInfo.GetCultureInfo(cultureEntry.AsString());
 					string commandPrefix = prefixEntry.AsString();
 					var customData = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(customDataEntry.AsString());
+					IEnumerable<string> disabledModules = customData["dynamodb.disabledModules"].ToObject<JArray>().Select(token => token.ToObject<string>()).WhereNotNull() ?? Array.Empty<string>();
 
-					return new ChannelConfig(this, commandPrefix, culture, channel, customData);
+					return new ChannelConfig(this, commandPrefix, culture, channel, customData, disabledModules);
 				}
 			} else {
 				return GetDefaultConfig(channel);
@@ -50,6 +45,8 @@ namespace RoosterBot.AWS {
 
 		// In the future, channel staff will modify their settings on a website, and there will be no way to update this through commands.
 		public async override Task UpdateChannelAsync(ChannelConfig config) {
+			config.SetData("dynamodb.disabledModules", config.DisabledModules);
+
 			string id = config.ChannelReference.Platform.PlatformName + "/" + config.ChannelReference.Id.ToString();
 			Document document = await m_Table.GetItemAsync(id);
 			if (document is null) {

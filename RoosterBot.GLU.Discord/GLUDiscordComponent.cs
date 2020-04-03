@@ -9,8 +9,15 @@ namespace RoosterBot.GLU.Discord {
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
 
+		internal static GLUDiscordComponent Instance { get; private set; } = null!;
+
+		public GLUDiscordComponent() {
+			Instance = this;
+		}
+
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			commandService.AddModule<GLUModule>();
+			commandService.AddModule<OnlineClassesModule>();
 
 			new RoleAssignmentHandler();
 			new ManualRanksHintHandler();

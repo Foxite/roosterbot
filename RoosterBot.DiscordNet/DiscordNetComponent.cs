@@ -11,6 +11,7 @@ namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
 		public static DiscordNetComponent Instance { get; private set; } = null!;
 
+		private Dictionary<string, DiscordEmote> m_Emotes = new Dictionary<string, DiscordEmote>();
 		private string m_Token = null!;
 		private string m_GameString = "";
 		private ActivityType m_Activity;
@@ -40,6 +41,13 @@ namespace RoosterBot.DiscordNet {
 				Activity = ActivityType.Playing,
 				NotifyReady = new[] { 0UL },
 				BotOwnerIds = new[] { 0UL },
+				Emotes = new {
+					Info = ":information_source:",
+					Unknown = ":question:",
+					Warning = ":exclamation:",
+					Success = ":white_check_mark:",
+					Error = ":x:"
+				},
 				Discord = new {
 					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
 					discordConfig.GatewayHost,
@@ -67,6 +75,14 @@ namespace RoosterBot.DiscordNet {
 			foreach (PropertyInfo prop in config.Discord.GetType().GetProperties()) {
 				discordConfig.GetType().GetProperty(prop.Name)!.SetValue(discordConfig, prop.GetValue(config.Discord));
 			}
+
+			m_Emotes = new Dictionary<string, DiscordEmote>() {
+				{ "Error",    new DiscordEmote(config.Emotes.Error) },
+				{ "Info",     new DiscordEmote(config.Emotes.Info) },
+				{ "Success",  new DiscordEmote(config.Emotes.Success) },
+				{ "Warning",  new DiscordEmote(config.Emotes.Warning) },
+				{ "Unknown",  new DiscordEmote(config.Emotes.Unknown) }
+			};
 			#endregion
 
 			Client = new DiscordSocketClient(discordConfig);
@@ -115,12 +131,10 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddModule<UserListModule>();
 			commandService.AddModule<InfoModule>();
 
-			var emotes = services.GetRequiredService<EmoteService>();
-			emotes.RegisterEmote(this, "Error",   new DiscordEmote("<:error:636213609919283238>"));
-			emotes.RegisterEmote(this, "Success", new DiscordEmote("<:ok:636213617825546242>"));
-			emotes.RegisterEmote(this, "Warning", new DiscordEmote("<:warning:636213630114856962>"));
-			emotes.RegisterEmote(this, "Unknown", new DiscordEmote("<:unknown:636213624460935188>"));
-			emotes.RegisterEmote(this, "Info",    new DiscordEmote("<:info:644251874010202113>"));
+			var emoteService = services.GetRequiredService<EmoteService>();
+			foreach (var item in m_Emotes) {
+				emoteService.RegisterEmote(this, item.Key, item.Value);
+			}
 			
 			new MessageReceivedHandler(services);
 			new MessageUpdatedHandler (services);

@@ -228,4 +228,7 @@
   <data name="CultureName_nl-NL" xml:space="preserve">
     <value>nederlands</value>
   </data>
+  <data name="ModuleEnabledInChannelAttribute_Unsuccessful" xml:space="preserve">
+    <value>Deze command is uitgeschakeld.</value>
+  </data>
 </root>
