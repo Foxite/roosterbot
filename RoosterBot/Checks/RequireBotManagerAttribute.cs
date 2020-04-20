@@ -4,7 +4,7 @@ namespace RoosterBot {
 	/// <summary>
 	/// Require that the user has <see cref="IUser.IsBotAdmin"/> <see langword="true"/>.
 	/// </summary>
-	public sealed class RequireBotManagerAttribute : RoosterPreconditionAttribute {
+	public sealed class RequireBotManagerAttribute : RoosterCheckAttribute {
 		/// 
 		public override string Summary => "#RequireBotManagerAttribute_Summary";
 

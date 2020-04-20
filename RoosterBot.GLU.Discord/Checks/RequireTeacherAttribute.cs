@@ -4,7 +4,7 @@ using Discord;
 using RoosterBot.DiscordNet;
 
 namespace RoosterBot.GLU.Discord {
-	public class RequireTeacherAttribute : RoosterPreconditionAttribute {
+	public class RequireTeacherAttribute : RoosterCheckAttribute {
 		public override string Summary => "Alleen leraren mogen deze command gebruiken.";
 		
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext ctx) {

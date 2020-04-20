@@ -6,7 +6,7 @@ namespace RoosterBot {
 	/// <summary>
 	/// Require that <see cref="RoosterCommandContext.Culture"/> equals a certain value.
 	/// </summary>
-	public sealed class RequireCultureAttribute : RoosterPreconditionAttribute {
+	public sealed class RequireCultureAttribute : RoosterCheckAttribute {
 		/// 
 		public override string Summary => "#RequireCultureAttribute_Summary";
 

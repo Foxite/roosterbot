@@ -6,7 +6,7 @@ namespace RoosterBot {
 	/// Require that <see cref="RoosterCommandContext.IsPrivate"/> is equal a certain value.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
-	public sealed class RequirePrivateAttribute : RoosterPreconditionAttribute {
+	public sealed class RequirePrivateAttribute : RoosterCheckAttribute {
 		/// <summary>
 		/// <see cref="RoosterCommandContext.IsPrivate"/> must equal this value for this check to pass.
 		/// </summary>

@@ -4,7 +4,7 @@ namespace RoosterBot {
 	/// <summary>
 	/// Implicit on all modules added through <see cref="RoosterCommandService"/>.
 	/// </summary>
-	internal class ModuleEnabledInChannelAttribute : RoosterPreconditionAttribute {
+	internal class ModuleEnabledInChannelAttribute : RoosterCheckAttribute {
 		public override string Summary => "";
 
 		protected override ValueTask<RoosterCheckResult> CheckAsync(RoosterCommandContext context) {
