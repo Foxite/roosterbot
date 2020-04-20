@@ -10,90 +10,123 @@ using Qmmands;
 
 namespace RoosterBot.DiscordNet {
 	[Group("emote"), HiddenFromList]
-	public class EmoteTheftModule : RoosterModule<DiscordCommandContext> {
-		[Command("steal"), RequireBotManager]
-		public async Task<CommandResult> StealEmoteCommand() {
+	public class EmoteModule : RoosterModule<DiscordCommandContext> {
+		private IEnumerable<IGuild>? m_StorageGuilds;
+
+		#region Helper stuff
+		private IGuild GetStorageGuild(bool isAnimated) {
+			if (m_StorageGuilds == null) {
+				m_StorageGuilds = new ulong[] {
+					// Currently hardcoded IDs for my private emote storage servers
+					346682476149866497, 649728161281736704
+				}.Select(id => Context.Client.GetGuild(id));
+			}
+
+			bool canStoreStaticEmote  (IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;
+			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  isAnimated) < 50;
+
+			return m_StorageGuilds.FirstOrDefault(isAnimated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
+		}
+
+		private async Task<IUserMessage?> GetMessageBeforeCommand() {
 			// Get last message before command
 			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToListAsync()).SelectMany(c => c).OfType<IUserMessage>();
 			if (messages.Any()) {
 				bool sawCommand = false;
 				foreach (IUserMessage message in messages) {
 					if (sawCommand) {
-						return await StealEmoteCommand(message);
+						return message;
 					} else if (message.Id == Context.Message.Id) {
 						sawCommand = true;
 					}
 				}
-				return TextResult.Error("Ninja'd");
-			} else {
-				return TextResult.Error("Cache is disabled");
 			}
+			return null;
 		}
-		
-		[Command("steal"), Priority(1), RequireBotManager]
-		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
-			MatchCollection matches = Regex.Matches(message.Content, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)");
 
-			static bool canStoreStaticEmote  (IGuild guild) => guild.Emotes.Count(emote => !emote.Animated) < 50;
-			static bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  emote.Animated) < 50;
+		private static List<Emote> GetEmotesFromText(string text) {
+			return Regex.Matches(text, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)")
+				.Select(match => Emote.TryParse(match.Captures[0].Value, out Emote ret) ? ret : null)
+				.WhereNotNull()
+				.ToList();
+		}
 
-			if (matches.Count > 0) {
-				IEnumerable<IGuild> storageGuilds = new ulong[] {
-					// Currently hardcoded IDs for my private emote storage servers
-					346682476149866497, 649728161281736704
-				}.Select(id => Context.Client.GetGuild(id));
-				
-				string stolenEmotes = "";
-				int animatedStealFails = 0;
-				int staticStealFails = 0;
-				bool anySuccessfulSteals = false;
-				using (var webClient = new WebClient()) {
-					IGuild getStorageGuild(Emote emote) => storageGuilds.FirstOrDefault(emote.Animated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
-
-					// Download an emote image while we're uploading the previous one.
-					Task<GuildEmote>? createEmote = null;
-					GuildEmote stolenEmote;
-					IGuild? guild = null;
-					for (int i = 0; i < matches.Count; i++) {
-						Match match = matches[i];
-
-						// Download an emote image while we're uploading the previous one.
-						var emote = Emote.Parse(match.Captures[0].Value);
-						guild = getStorageGuild(emote);
-						if (guild == null) {
-							(emote.Animated ? ref animatedStealFails : ref staticStealFails)++;
-							continue;
-						} else {
-							anySuccessfulSteals = true;
-						}
-
-						byte[] emoteBytes = await webClient.DownloadDataTaskAsync(emote.Url);
-						if (createEmote != null) {
-							stolenEmote = await createEmote;
-							stolenEmotes += stolenEmote.ToString();
-						}
-						createEmote = guild.CreateEmoteAsync(emote.Name, new Image(new MemoryStream(emoteBytes)));
+		private async Task<CommandResult> CreateEmotes(IEnumerable<EmoteCreationData> emotes) {
+			var successfulEmotes = new List<Emote>();
+			int animatedFails = 0;
+			int staticFails = 0;
+			using (var webClient = new WebClient()) {
+				// Download an emote image while we're uploading the previous one.
+				Task<GuildEmote>? createEmote = null;
+				GuildEmote stolenEmote;
+				IGuild? guild = null;
+				foreach (EmoteCreationData emote in emotes) {
+					guild = GetStorageGuild(emote.IsAnimated);
+					if (guild == null) {
+						(emote.IsAnimated ? ref animatedFails : ref staticFails)++;
+						continue;
 					}
+
+					byte[] emoteBytes = await webClient.DownloadDataTaskAsync(emote.Url);
 					if (createEmote != null) {
 						stolenEmote = await createEmote;
-						stolenEmotes += stolenEmote.ToString();
+						successfulEmotes.Add(stolenEmote);
 					}
+					createEmote = guild.CreateEmoteAsync(emote.Name, new Image(new MemoryStream(emoteBytes)));
 				}
-				var result = new CompoundResult("\n");
-				
-				if (anySuccessfulSteals) {
-					result.AddResult(TextResult.Success(stolenEmotes));
+				if (createEmote != null) {
+					stolenEmote = await createEmote;
+					successfulEmotes.Add(stolenEmote);
 				}
+			}
+			var result = new CompoundResult("\n");
 
-				if (staticStealFails > 0 || animatedStealFails > 0) {
-					string response = $"Unable to steal {animatedStealFails} animated and {staticStealFails} static emotes because we're out of space.";
-					result.AddResult(anySuccessfulSteals ? TextResult.Warning(response) : TextResult.Error(response));
-				}
+			if (successfulEmotes.Count > 0) {
+				result.AddResult(TextResult.Success(string.Join(' ', successfulEmotes.Select(emote => emote.ToString()))));
+			}
 
-				return result;
+			if (staticFails > 0 || animatedFails > 0) {
+				string response = $"Unable to create {animatedFails} animated and {staticFails} static emotes because we're out of space.";
+				result.AddResult(successfulEmotes.Count > 0 ? TextResult.Warning(response) : TextResult.Error(response));
+			}
+
+			return result;
+		}
+
+		private struct EmoteCreationData {
+			public string Name { get; }
+			public string Url { get; }
+			public bool IsAnimated { get; }
+
+			public EmoteCreationData(string name, string url, bool isAnimated) {
+				Name = name;
+				Url = url;
+				IsAnimated = isAnimated;
+			}
+		}
+		#endregion
+
+		#region Commands
+		[Command("steal"), RequireBotManager]
+		public async Task<CommandResult> StealEmoteCommand() {
+			IUserMessage? message = await GetMessageBeforeCommand();
+			if (message != null) {
+				return await StealEmoteCommand();
+			} else {
+				return TextResult.Error("Could not get message before your command.");
+			}
+		}
+
+		[Command("steal"), Priority(1), RequireBotManager]
+		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
+			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url, emote.Animated));
+
+			if (emotes.Any()) {
+				return await CreateEmotes(emotes);
 			} else {
 				return TextResult.Error("Did not find any emotes");
 			}
 		}
+		#endregion
 	}
 }
