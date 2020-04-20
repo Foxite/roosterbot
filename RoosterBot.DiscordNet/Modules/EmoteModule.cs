@@ -16,10 +16,7 @@ namespace RoosterBot.DiscordNet {
 		#region Helper stuff
 		private IGuild GetStorageGuild(bool isAnimated) {
 			if (m_StorageGuilds == null) {
-				m_StorageGuilds = new ulong[] {
-					// Currently hardcoded IDs for my private emote storage servers
-					346682476149866497, 649728161281736704
-				}.Select(id => Context.Client.GetGuild(id));
+				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 			}
 
 			bool canStoreStaticEmote  (IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;

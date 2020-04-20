@@ -18,6 +18,7 @@ namespace RoosterBot.DiscordNet {
 		private ulong[] m_NotifyReady;
 		private ulong[] m_BotOwnerIds;
 
+		public IReadOnlyList<ulong> EmoteStorageGuilds { get; private set; }
 		public BaseSocketClient Client { get; private set; } = null!;
 		public string DiscordLink { get; private set; } = null!;
 		public IReadOnlyList<ulong> BotAdminIds => new ReadOnlyList<ulong>(m_BotOwnerIds);
@@ -29,6 +30,7 @@ namespace RoosterBot.DiscordNet {
 			Instance = this;
 			m_BotOwnerIds = Array.Empty<ulong>();
 			m_NotifyReady = Array.Empty<ulong>();
+			EmoteStorageGuilds = Array.Empty<ulong>();
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
@@ -39,8 +41,8 @@ namespace RoosterBot.DiscordNet {
 				Token = "",
 				GameString = "",
 				Activity = ActivityType.Playing,
-				NotifyReady = new[] { 0UL },
-				BotOwnerIds = new[] { 0UL },
+				NotifyReady = Array.Empty<ulong>(),
+				BotOwnerIds = Array.Empty<ulong>(),
 				Emotes = new {
 					Info = ":information_source:",
 					Unknown = ":question:",
@@ -48,6 +50,7 @@ namespace RoosterBot.DiscordNet {
 					Success = ":white_check_mark:",
 					Error = ":x:"
 				},
+				EmoteStorageGuilds = Array.Empty<ulong>(),
 				Discord = new {
 					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
 					discordConfig.GatewayHost,
@@ -68,6 +71,8 @@ namespace RoosterBot.DiscordNet {
 			m_Activity = config.Activity;
 			m_NotifyReady = config.NotifyReady;
 			m_BotOwnerIds = config.BotOwnerIds;
+
+			EmoteStorageGuilds = config.EmoteStorageGuilds;
 
 			// Reflection, but it beats doing this:
 			//  discordConfig.GatewayHost = config.Discord.GatewayHost;
