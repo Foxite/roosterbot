@@ -127,7 +127,7 @@ namespace RoosterBot.DiscordNet {
 			commandService.GetPlatformSpecificParser<IChannel>().RegisterParser(this, new ConversionParser<IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
 			#endregion
 			
-			commandService.AddModule<EmoteTheftModule>();
+			commandService.AddModule<EmoteModule>();
 			commandService.AddModule<UserListModule>();
 			commandService.AddModule<InfoModule>();
 
