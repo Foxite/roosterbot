@@ -9,18 +9,18 @@ using Discord;
 using Qmmands;
 
 namespace RoosterBot.DiscordNet {
-	[Group("emote"), HiddenFromList]
+	[Group("emote"), HiddenFromList, RequireBotManager]
 	public class EmoteModule : RoosterModule<DiscordCommandContext> {
+		#region Helper stuff
 		private IEnumerable<IGuild>? m_StorageGuilds;
 
-		#region Helper stuff
 		private IGuild GetStorageGuild(bool isAnimated) {
 			if (m_StorageGuilds == null) {
 				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 			}
 
-			bool canStoreStaticEmote  (IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;
-			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  isAnimated) < 50;
+			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;
+			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => isAnimated) < 50;
 
 			return m_StorageGuilds.FirstOrDefault(isAnimated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
 		}
@@ -48,19 +48,30 @@ namespace RoosterBot.DiscordNet {
 				.ToList();
 		}
 
+		private enum FailureReason {
+			OutOfSpace, InvalidFormat
+		}
+
 		private async Task<CommandResult> CreateEmotes(IEnumerable<EmoteCreationData> emotes) {
 			var successfulEmotes = new List<Emote>();
-			int animatedFails = 0;
-			int staticFails = 0;
+
+			var fails = new Dictionary<(FailureReason reason, bool Animated), int>();
+
 			using (var webClient = new WebClient()) {
 				// Download an emote image while we're uploading the previous one.
 				Task<GuildEmote>? createEmote = null;
 				GuildEmote stolenEmote;
 				IGuild? guild = null;
 				foreach (EmoteCreationData emote in emotes) {
-					guild = GetStorageGuild(emote.IsAnimated);
+					string extension = Path.GetExtension(emote.Url);
+					guild = GetStorageGuild(extension == "gif");
 					if (guild == null) {
-						(emote.IsAnimated ? ref animatedFails : ref staticFails)++;
+						(FailureReason OutOfSpace, bool) key = (FailureReason.OutOfSpace, extension == "gif");
+						if (fails.ContainsKey(key)) {
+							fails[key]++;
+						} else {
+							fails[key] = 1;
+						}
 						continue;
 					}
 
@@ -82,8 +93,16 @@ namespace RoosterBot.DiscordNet {
 				result.AddResult(TextResult.Success(string.Join(' ', successfulEmotes.Select(emote => emote.ToString()))));
 			}
 
-			if (staticFails > 0 || animatedFails > 0) {
-				string response = $"Unable to create {animatedFails} animated and {staticFails} static emotes because we're out of space.";
+			if (fails.Count > 0) {
+				string response = "Unable to create";
+				foreach (var info in fails) {
+					response += $"\n- {info.Value} {(info.Key.Animated ? "animated" : "static")} emote(s) because " +
+						info.Key.reason switch {
+							FailureReason.InvalidFormat => "of an unsupported format",
+							FailureReason.OutOfSpace => "because we're out of space",
+							_ => info.Key.reason.ToString()
+						};
+				}
 				result.AddResult(successfulEmotes.Count > 0 ? TextResult.Warning(response) : TextResult.Error(response));
 			}
 
@@ -93,36 +112,56 @@ namespace RoosterBot.DiscordNet {
 		private struct EmoteCreationData {
 			public string Name { get; }
 			public string Url { get; }
-			public bool IsAnimated { get; }
 
-			public EmoteCreationData(string name, string url, bool isAnimated) {
+			public EmoteCreationData(string name, string url) {
 				Name = name;
 				Url = url;
-				IsAnimated = isAnimated;
 			}
 		}
 		#endregion
 
-		#region Commands
-		[Command("steal"), RequireBotManager]
-		public async Task<CommandResult> StealEmoteCommand() {
+		#region Steal (create from other message)
+		[Command("steal")]
+		public async Task<CommandResult> StealEmote() {
 			IUserMessage? message = await GetMessageBeforeCommand();
 			if (message != null) {
-				return await StealEmoteCommand();
+				return await StealEmote();
 			} else {
 				return TextResult.Error("Could not get message before your command.");
 			}
 		}
 
-		[Command("steal"), Priority(1), RequireBotManager]
-		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
-			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url, emote.Animated));
+		[Command("steal"), Priority(0), RequireBotManager]
+		public Task<CommandResult> StealEmote(IUserMessage message) {
+			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url));
 
 			if (emotes.Any()) {
-				return await CreateEmotes(emotes);
+				return CreateEmotes(emotes);
 			} else {
-				return TextResult.Error("Did not find any emotes");
+				return Task.FromResult((CommandResult) TextResult.Error("Did not find any emotes"));
 			}
+		}
+
+		[Command("steal from attachment"), Priority(1)]
+		public async Task<CommandResult> StealEmoteFromAttachment(params string[] names) {
+			IUserMessage? message = await GetMessageBeforeCommand();
+			if (message != null) {
+				return await CreateEmotes(message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
+			} else {
+				return TextResult.Error("Could not get message before your command.");
+			}
+		}
+		#endregion
+
+		#region Create (create from user message)
+		[Command("create from attachment"), MessageHasAttachment]
+		public Task<CommandResult> CreateEmoteFromAttachment(params string[] names) {
+			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
+		}
+
+		[Command("create from url")]
+		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) { // TODO uri parser
+			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString()) });
 		}
 		#endregion
 	}
