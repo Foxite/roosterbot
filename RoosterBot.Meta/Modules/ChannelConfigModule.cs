@@ -46,7 +46,6 @@ namespace RoosterBot.Meta {
 			}
 		}
 
-		// TODO fix this hack - see ChannelConfigService
 		[Command("enable")]
 		public async Task<CommandResult> EnableModule(string typeName) {
 			ChannelConfig.DisabledModules.Remove(typeName);
