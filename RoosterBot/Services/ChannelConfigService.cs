@@ -83,10 +83,6 @@ namespace RoosterBot {
 			Culture = culture;
 			m_CustomData = customData;
 			ChannelReference = channel;
-			
-			// TODO fix this hack!
-			// This was built quickly to make sure there are no irrelevant commands available in the secondary server for our main client.
-			// It's a good feature but needs to be rebuilt properly.
 			DisabledModules = disabledModules.ToHashSet();
 		}
 
