@@ -41,6 +41,7 @@ namespace RoosterBot.Meta {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Meta.Resources");
 
 			commandService.AddTypeParser(new CultureInfoParser());
+			commandService.AddTypeParser(new UriParser());
 
 			#region Primitive types
 			void addPrimitive<T>(string typeKey) {

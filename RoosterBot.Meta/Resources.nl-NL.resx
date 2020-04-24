@@ -289,4 +289,7 @@ Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arro
     <value>De taal van deze server is {0}.</value>
     <comment>0: current language name, localized</comment>
   </data>
+  <data name="UriParser_Invalid" xml:space="preserve">
+    <value>Dat is geen geldige URL.</value>
+  </data>
 </root>

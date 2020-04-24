@@ -160,7 +160,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		[Command("create from url")]
-		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) { // TODO uri parser
+		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) {
 			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString()) });
 		}
 		#endregion
