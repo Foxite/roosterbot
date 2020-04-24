@@ -164,26 +164,26 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>{0}: Not on schedule right now.</value>
     <comment>0: identifier info display text</comment>
   </data>
-  <data name="UserClassModule_UserNotKnown" xml:space="preserve">
+  <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
   </data>
-  <data name="UserClassModule_UserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_UserIsInClass" xml:space="preserve">
     <value>You are in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
-  <data name="UserClassModule_ChangeHint" xml:space="preserve">
+  <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
     <value>Use `{0}i am in &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="UserClassModule_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsInClass" xml:space="preserve">
     <value>Noted: you are in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserClassModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
     <value>Noted: you are in {0}, and not in {1} anymore.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>
   </data>
-  <data name="UserClassModule_InvalidClass" xml:space="preserve">
+  <data name="UserIdentifierModule_InvalidClass" xml:space="preserve">
     <value>That's not a class.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
@@ -207,16 +207,16 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_TodayCommand_Summary" xml:space="preserve">
     <value>See the schedule for today.</value>
   </data>
-  <data name="UserClassModule_ModuleSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
     <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
   </data>
-  <data name="UserClassModule_CommandSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
     <value>Change what class you are in.</value>
   </data>
-  <data name="UserClassModule_class_Name" xml:space="preserve">
+  <data name="UserIdentifierModule_class_Name" xml:space="preserve">
     <value>class</value>
   </data>
-  <data name="UserClassModule_ModuleName" xml:space="preserve">
+  <data name="UserIdentifierModule_ModuleName" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
@@ -297,14 +297,14 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
     <value>schedule</value>
   </data>
-  <data name="UserClassModule_ConfirmNoChange" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmNoChange" xml:space="preserve">
     <value>You're already in {0}!</value>
     <comment>0: student set</comment>
   </data>
-  <data name="UserClassModule_Group" xml:space="preserve">
+  <data name="UserIdentifierModule_Group" xml:space="preserve">
     <value>i</value>
   </data>
-  <data name="UserClassModule_CommandName" xml:space="preserve">
+  <data name="UserIdentifierModule_CommandName" xml:space="preserve">
     <value>am in</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">

@@ -164,26 +164,26 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>{0}: Niet op het rooster op dit moment.</value>
     <comment>0: identifier info display text</comment>
   </data>
-  <data name="UserClassModule_UserNotKnown" xml:space="preserve">
+  <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit.</value>
   </data>
-  <data name="UserClassModule_UserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_UserIsInClass" xml:space="preserve">
     <value>Jij zit in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
-  <data name="UserClassModule_ChangeHint" xml:space="preserve">
+  <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
     <value> Gebruik `{0}ik zit in &lt;klas&gt;` om dit te veranderen.</value>
   </data>
-  <data name="UserClassModule_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsInClass" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserClassModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}, en niet meer in {1}.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>
   </data>
-  <data name="UserClassModule_InvalidClass" xml:space="preserve">
+  <data name="UserIdentifierModule_InvalidClass" xml:space="preserve">
     <value>Dat is geen klas.</value>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
@@ -207,16 +207,16 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_TodayCommand_Summary" xml:space="preserve">
     <value>Wat er vandaag op het rooster staat.</value>
   </data>
-  <data name="UserClassModule_ModuleSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
     <value>Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.</value>
   </data>
-  <data name="UserClassModule_CommandSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
     <value>Stel in in welke klas jij zit.</value>
   </data>
-  <data name="UserClassModule_class_Name" xml:space="preserve">
+  <data name="UserIdentifierModule_class_Name" xml:space="preserve">
     <value>klas</value>
   </data>
-  <data name="UserClassModule_ModuleName" xml:space="preserve">
+  <data name="UserIdentifierModule_ModuleName" xml:space="preserve">
     <value>Instellingen</value>
   </data>
   <data name="IdentifierInfoReaderBase_ErrorMessage" xml:space="preserve">
@@ -300,17 +300,17 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
     <value>rooster</value>
   </data>
-  <data name="UserClassModule_ConfirmNoChange" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmNoChange" xml:space="preserve">
     <value>Je zit al in {0}!</value>
     <comment>0: student set</comment>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
   </data>
-  <data name="UserClassModule_Group" xml:space="preserve">
+  <data name="UserIdentifierModule_Group" xml:space="preserve">
     <value>ik</value>
   </data>
-  <data name="UserClassModule_CommandName" xml:space="preserve">
+  <data name="UserIdentifierModule_CommandName" xml:space="preserve">
     <value>zit in</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
