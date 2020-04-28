@@ -34,15 +34,23 @@ namespace RoosterBot.Schedule {
 
 		private void Reload() {
 			IReadOnlyList<ScheduleRecord> list = m_Reader.GetSchedule();
-			m_Begin = list[0].Start.Date;
-			End = list[list.Count - 1].End.Date;
-			m_Schedule = list
-				.GroupBy(record => record.Start.Date)
-				.ToDictionary(
-					grp => grp.Key,
-					grp => (IEnumerable<ScheduleRecord>) grp
-				);
-			m_PresentIdentifiers = new HashSet<IdentifierInfo>(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.InvolvedIdentifiers).Distinct());
+			if (list.Count > 0) {
+				m_Begin = list[0].Start.Date;
+				End = list[list.Count - 1].End.Date;
+				m_Schedule = list
+					.GroupBy(record => record.Start.Date)
+					.ToDictionary(
+						grp => grp.Key,
+						grp => (IEnumerable<ScheduleRecord>) grp
+					);
+				m_PresentIdentifiers = new HashSet<IdentifierInfo>(m_Schedule.Values.SelectMany(item => item).SelectMany(item => item.InvolvedIdentifiers).Distinct());
+			} else {
+				Logger.Warning("Schedule", $"ScheduleReader returned an empty list to {m_Name}");
+				m_Begin = DateTime.MinValue;
+				End = DateTime.MinValue;
+				m_Schedule = new Dictionary<DateTime, IEnumerable<ScheduleRecord>>();
+				m_PresentIdentifiers = new HashSet<IdentifierInfo>();
+			}
 		}
 
 		private void EnsureIdentifierPresent(IdentifierInfo identifier) {
