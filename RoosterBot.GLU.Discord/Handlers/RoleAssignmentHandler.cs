@@ -15,12 +15,12 @@ namespace RoosterBot.GLU.Discord {
 			ScheduleUtil.UserChangedIdentifier += OnUserChangedClass;
 		}
 
-		private async Task OnUserChangedClass(UserChangedIdentifierEventArgs args) {
+		private void OnUserChangedClass(object? sender, UserChangedIdentifierEventArgs args) => Task.Run(async () => {
 			if (DiscordNetComponent.Instance.Client.GetUser((ulong) args.UserReference.Id) is SocketUser socketUser) {
 				IGuildUser? user = socketUser.MutualGuilds.FirstOrDefault(guild => guild.Id == GLUDiscordComponent.GLUGuildId)?.GetUser((ulong) args.UserReference.Id);
 				// Assign roles
 				if (user != null && args.NewIdentifier is StudentSetInfo newSet) {
-					StudentSetInfo? oldSet = args.OldIdentifier as StudentSetInfo;
+					var oldSet = args.OldIdentifier as StudentSetInfo;
 					// Assign roles
 					try {
 						IEnumerable<IRole> newRoles = GluDiscordUtil.GetRolesForStudentSet(user.Guild, newSet);
@@ -31,12 +31,9 @@ namespace RoosterBot.GLU.Discord {
 							oldRoles = oldRoles.Except(keptRoles);
 							newRoles = newRoles.Except(keptRoles);
 
-							foreach (IRole role in oldRoles) {
-								if (user.RoleIds.Contains(role.Id)) {
-									await user.RemoveRolesAsync(oldRoles);
-								}
-							}
+							await user.RemoveRolesAsync(oldRoles);
 						}
+
 						if (user.RoleIds.Contains(NewUserRank)) {
 							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 						}
@@ -49,10 +46,9 @@ namespace RoosterBot.GLU.Discord {
 						foreach (SocketUser admin in DiscordNetComponent.Instance.BotAdminIds.Select(id => DiscordNetComponent.Instance.Client.GetUser(id))) {
 							await admin.SendMessageAsync("Failed to assign role: " + e.ToString());
 						}
-						throw;
 					}
 				}
 			}
-		}
+		});
 	}
 }

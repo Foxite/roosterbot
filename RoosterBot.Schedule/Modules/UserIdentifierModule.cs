@@ -18,7 +18,7 @@ namespace RoosterBot.Schedule {
 				return TextResult.Info(response);
 			} else {
 				if (newIdentifier.AssignableToUser) {
-					IdentifierInfo? oldIdentifier = await UserConfig.SetIdentifierAsync(newIdentifier);
+				IdentifierInfo? oldIdentifier = UserConfig.SetIdentifier(newIdentifier);
 					if (oldIdentifier == null) {
 						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsIdentifier", newIdentifier.DisplayText));
 					} else if (oldIdentifier == newIdentifier) {
