@@ -1,10 +1,10 @@
 ﻿using System;
 using Qmmands;
+using RoosterBot.DiscordNet;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
-	// TODO only accept discord context, provide proper mechanism for this (currently you get an exception if the platform is not compatible)
-	public class GLUModule : RoosterModule {
+	public class GLUModule : RoosterModule<DiscordCommandContext> {
 		public Random RNG { get; set; } = null!;
 
 		[Priority(-1), Command(

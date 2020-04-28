@@ -207,7 +207,7 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
     <value>Met deze commands kun je jouw rooster-ID instellen, zodat je bij Rooster commands niets hoeft in te vullen.</value>
   </data>
-  <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_SetCommandSummary" xml:space="preserve">
     <value>Stel jouw rooster-ID in.</value>
   </data>
   <data name="UserIdentifierModule_class_Name" xml:space="preserve">
@@ -292,7 +292,7 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierModule_Group" xml:space="preserve">
     <value>ik</value>
   </data>
-  <data name="UserIdentifierModule_CommandName" xml:space="preserve">
+  <data name="UserIdentifierModule_SetCommandName" xml:space="preserve">
     <value>ben|zit in</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
