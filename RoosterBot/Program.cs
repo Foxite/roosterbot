@@ -33,34 +33,29 @@ namespace RoosterBot {
 		public ComponentManager Components { get; private set; }
 
 		/// <summary>
-		/// The instance of the <see cref="CommandHandler"/> class.
+		/// The instance of the <see cref="RoosterBot.CommandHandler"/> class.
 		/// </summary>
 		public CommandHandler CommandHandler { get; private set; }
 
 		private bool m_ShutDown;
 		
 		private static int Main(string[] args) {
-			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
-#if DEBUG
-				Console.ReadKey();
-#endif
-				return 1;
-			}
-
 			try {
+				if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
+					Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
+					return 1;
+				}
+
 				new Program();
+				return 0;
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
-				// At this point it can not be assumed that literally any part of the program is functional, so there's no reporting this crash to Discord or Notification endpoints.
-				// At one point someone will notice that the bot is offline and restart it manually.
-				// Or if the crash occurred during startup it's likely that the deploy system saw the crash and is doing something about it.
+				return 2;
+			} finally {
 #if DEBUG
 				Console.ReadKey();
 #endif
-				return 2;
 			}
-			return 0;
 		}
 
 		private Program() {
