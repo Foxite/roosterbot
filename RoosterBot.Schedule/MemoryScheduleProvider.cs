@@ -15,6 +15,9 @@ namespace RoosterBot.Schedule {
 		private readonly string m_Name;
 		private readonly ScheduleReader m_Reader;
 
+		/// <summary>
+		/// The date of the last item accessible by this MemoryScheduleProvider. Trying to get any item after this point will result in a <see cref="RecordsOutdatedException"/>.
+		/// </summary>
 		public DateTime End { get; private set; }
 
 		/// <param name="name">Used in logging. Does not affect anything else.</param>
