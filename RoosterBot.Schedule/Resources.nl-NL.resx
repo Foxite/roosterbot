@@ -356,4 +356,10 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierModule_NotAssignableToUser" xml:space="preserve">
     <value>Je kunt dat niet aan jezelf toewijzen.</value>
   </data>
+  <data name="UserIdentifierModule_GetCommandName" xml:space="preserve">
+    <value>ben|zit in</value>
+  </data>
+  <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
+    <value>Bekijk je rooster-ID.</value>
+  </data>
 </root>

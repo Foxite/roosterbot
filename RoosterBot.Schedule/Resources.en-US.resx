@@ -203,7 +203,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
     <value>With these commands, you can set your schedule identifier, so you won't have to enter it in Schedule commands.</value>
   </data>
-  <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
+  <data name="UserIdentifierModule_SetCommandSummary" xml:space="preserve">
     <value>Change your schedule identifier.</value>
   </data>
   <data name="UserIdentifierModule_class_Name" xml:space="preserve">
@@ -297,7 +297,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserIdentifierModule_Group" xml:space="preserve">
     <value>i</value>
   </data>
-  <data name="UserIdentifierModule_CommandName" xml:space="preserve">
+  <data name="UserIdentifierModule_SetCommandName" xml:space="preserve">
     <value>am|am in</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
@@ -358,5 +358,11 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="UserIdentifierModule_NotAssignableToUser" xml:space="preserve">
     <value>You can't assign that to yourself.</value>
+  </data>
+  <data name="UserIdentifierModule_GetCommandName" xml:space="preserve">
+    <value>am|am in</value>
+  </data>
+  <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
+    <value>See your schedule identifier.</value>
   </data>
 </root>
