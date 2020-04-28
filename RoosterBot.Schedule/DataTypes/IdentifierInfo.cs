@@ -22,7 +22,7 @@ namespace RoosterBot.Schedule {
 			return Equals(otherInfo);
 		}
 
-		public bool Equals(IdentifierInfo? other) {
+		public virtual bool Equals(IdentifierInfo? other) {
 			return other != null && other.GetType() == GetType() && other.ScheduleCode == ScheduleCode;
 		}
 
