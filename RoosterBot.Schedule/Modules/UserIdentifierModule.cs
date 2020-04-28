@@ -27,7 +27,7 @@ namespace RoosterBot.Schedule {
 						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsIdentifierWithOld", newIdentifier.DisplayText, oldIdentifier.DisplayText));
 					}
 				} else {
-					return TextResult.Error("You can't assign that to yourself."); // TODO localize
+					return TextResult.Error("#UserIdentifierModule_NotAssignableToUser");
 				}
 			}
 		}

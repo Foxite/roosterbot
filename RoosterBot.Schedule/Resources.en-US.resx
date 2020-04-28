@@ -356,4 +356,7 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserIdentifierParser_Self" xml:space="preserve">
     <value>i|me</value>
   </data>
+  <data name="UserIdentifierModule_NotAssignableToUser" xml:space="preserve">
+    <value>You can't assign that to yourself.</value>
+  </data>
 </root>

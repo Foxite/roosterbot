@@ -353,4 +353,7 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
     <value>Ik weet niet wat jouw rooster-ID is. Gebruik `{0}ik ben &lt;rooster-ID&gt;` of `{0}ik zit in &lt;rooster-ID&gt;` om dit in te stellen.</value>
   </data>
+  <data name="UserIdentifierModule_NotAssignableToUser" xml:space="preserve">
+    <value>Je kunt dat niet aan jezelf toewijzen.</value>
+  </data>
 </root>
