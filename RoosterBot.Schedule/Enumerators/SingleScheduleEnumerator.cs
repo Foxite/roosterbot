@@ -12,10 +12,18 @@ namespace RoosterBot.Schedule {
 
 		private ScheduleRecord m_CurrentRecord;
 
-		public RoosterCommandResult Current => new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+		public RoosterCommandResult Current {
+			get {
+				if (m_CurrentRecord != null) {
+					return new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+				} else {
+					throw new InvalidOperationException($"Enumerator was not initialized with {nameof(MoveNext)} or {nameof(MovePrevious)} before getting {nameof(Current)}.");
+				}
+			}
+		}
 
-		object? IEnumerator.Current => throw new NotImplementedException();
-		
+		object? IEnumerator.Current => Current;
+
 		public SingleScheduleEnumerator(RoosterCommandContext context, ScheduleRecord initial, IdentifierInfo identifier) {
 			m_Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			m_ScheduleService = context.ServiceProvider.GetRequiredService<ScheduleService>();
