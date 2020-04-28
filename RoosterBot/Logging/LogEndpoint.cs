@@ -35,7 +35,7 @@ namespace RoosterBot {
 		/// </code>
 		/// 
 		/// <code>
-		/// FormatMessage(new LogMessage(LogLevel.Error, "Source", "I done goofed up"))
+		/// FormatMessage(new LogMessage(LogLevel.Critical, "Source", "I done goofed up"))
 		/// </code>
 		/// Returns:
 		/// <code>
