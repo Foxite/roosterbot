@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Qmmands;
+﻿using Qmmands;
 
 namespace RoosterBot.Schedule {
 	[Name("#UserIdentifierModule_ModuleName"), Description("#UserIdentifierModule_ModuleSummary"), Group("#UserIdentifierModule_Group")]
