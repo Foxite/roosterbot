@@ -12,7 +12,7 @@ namespace RoosterBot.DiscordNet {
 			} else if (ThrowOnInvalidContext) {
 				throw new InvalidOperationException($"{nameof(RoosterCheckAttribute)} requires a ICommandContext instance that derives from {nameof(RoosterCommandContext)}.");
 			} else {
-				return RoosterCheckResult.Unsuccessful("If you see this, then you may slap the programmer.", DiscordNetComponent.Instance);
+				return ValueTaskUtil.FromResult(RoosterCheckResult.Unsuccessful("If you see this, then you may slap the programmer.", DiscordNetComponent.Instance));
 			}
 		}
 
