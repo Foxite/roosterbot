@@ -13,7 +13,7 @@ namespace RoosterBot.Schedule {
 				if (identifier == null) {
 					response = GetString("UserIdentifierModule_UserNotKnown");
 				} else {
-					response = GetString("UserIdentifierModule_UserIsInClass", identifier.DisplayText);
+					response = GetString("UserIdentifierModule_UserIsIdentifier", identifier.DisplayText);
 				}
 				response += GetString("UserIdentifierModule_ChangeHint", ChannelConfig.CommandPrefix);
 				return TextResult.Info(response);
@@ -21,11 +21,11 @@ namespace RoosterBot.Schedule {
 				if (newIdentifier.AssignableToUser) {
 					IdentifierInfo? oldIdentifier = await UserConfig.SetIdentifierAsync(newIdentifier);
 					if (oldIdentifier == null) {
-						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsInClass", newIdentifier.DisplayText));
+						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsIdentifier", newIdentifier.DisplayText));
 					} else if (oldIdentifier == newIdentifier) {
 						return TextResult.Info(GetString("UserIdentifierModule_ConfirmNoChange", newIdentifier.DisplayText));
 					} else {
-						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsInClassWithOld", newIdentifier.DisplayText, oldIdentifier.DisplayText));
+						return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsIdentifierWithOld", newIdentifier.DisplayText, oldIdentifier.DisplayText));
 					}
 				} else {
 					return TextResult.Error("You can't assign that to yourself."); // TODO localize

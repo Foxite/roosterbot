@@ -167,18 +167,18 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
     <value>Ik weet niet in welke klas jij zit.</value>
   </data>
-  <data name="UserIdentifierModule_UserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_UserIsIdentifier" xml:space="preserve">
     <value>Jij zit in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
   <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
     <value> Gebruik `{0}ik zit in &lt;klas&gt;` om dit te veranderen.</value>
   </data>
-  <data name="UserIdentifierModule_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsIdentifier" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserIdentifierModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsIdentifierWithOld" xml:space="preserve">
     <value>Genoteerd: jij zit in {0}, en niet meer in {1}.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>

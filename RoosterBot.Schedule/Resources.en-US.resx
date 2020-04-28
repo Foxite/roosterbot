@@ -167,18 +167,18 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
     <value>I don't know in what class you are.</value>
   </data>
-  <data name="UserIdentifierModule_UserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_UserIsIdentifier" xml:space="preserve">
     <value>You are in {0}.</value>
     <comment>0: user's student set</comment>
   </data>
   <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
     <value>Use `{0}i am in &lt;your class&gt;` to change this.</value>
   </data>
-  <data name="UserIdentifierModule_ConfirmUserIsInClass" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsIdentifier" xml:space="preserve">
     <value>Noted: you are in {0}.</value>
     <comment>0: user's new student set</comment>
   </data>
-  <data name="UserIdentifierModule_ConfirmUserIsInClassWithOld" xml:space="preserve">
+  <data name="UserIdentifierModule_ConfirmUserIsIdentifierWithOld" xml:space="preserve">
     <value>Noted: you are in {0}, and not in {1} anymore.</value>
     <comment>0: user's new student set
 	1: user's previous student set</comment>
