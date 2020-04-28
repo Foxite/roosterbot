@@ -267,18 +267,6 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="ScheduleModule_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
     <value>Ik ondersteun alleen uren, dagen, en weken.</value>
   </data>
-  <data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
-    <value>Activiteit</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
-    <value>Tijd</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
-    <value>Leraar</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
-    <value>Lokaal</value>
-  </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
     <value>Kijk wat er volgende week op een rooster staat.</value>
   </data>
@@ -287,9 +275,6 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   </data>
   <data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>Kijk wat er deze week op een rooster staat.</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
-    <value>Klas</value>
   </data>
   <data name="ScheduleComponent_HelpName_Class" xml:space="preserve">
     <value>klas</value>

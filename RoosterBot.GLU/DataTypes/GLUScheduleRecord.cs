@@ -104,5 +104,19 @@ namespace RoosterBot.GLU {
 				RoomString
 			};
 		}
+
+		public override IReadOnlyList<string> PresentRowHeadings(ResourceService resources, CultureInfo culture) {
+			string getString(string key) {
+				return resources.GetString(culture, key);
+			}
+
+			return new string[] {
+				getString("ScheduleModule_RespondDay_ColumnActivity"),
+				getString("ScheduleModule_RespondDay_ColumnTime"),
+				getString("ScheduleModule_RespondDay_ColumnStudentSets"),
+				getString("ScheduleModule_RespondDay_ColumnStaffMember"),
+				getString("ScheduleModule_RespondDay_ColumnRoom")
+			};
+		}
 	}
 }

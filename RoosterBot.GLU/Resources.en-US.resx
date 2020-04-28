@@ -162,6 +162,21 @@
   <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>room</value>
   </data>
+  <data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
+    <value>Staff member</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
   <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
     <value>Is that a staff member? :thinking: If they are new, they need to be added by the bot owner.</value>
   </data>

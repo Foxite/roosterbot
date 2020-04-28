@@ -162,6 +162,21 @@
   <data name="RoomInfoReader_TypeDisplayName" xml:space="preserve">
     <value>lokaal</value>
   </data>
+  <data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
+    <value>Activiteit</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
+    <value>Lokaal</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
+    <value>Leraar</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
+    <value>Klas</value>
+  </data>
+  <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
+    <value>Tijd</value>
+  </data>
   <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
     <value>Is dat wel een leraar? :thinking: Als hij of zij nieuw is, moet hij worden toegevoegd door de bot eigenaar.</value>
   </data>

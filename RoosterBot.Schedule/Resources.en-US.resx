@@ -260,18 +260,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   <data name="ScheduleModule_ShowFutureCommand_OnlySupportUnits" xml:space="preserve">
     <value>I only support hours, days, and weeks.</value>
   </data>
-  <data name="ScheduleModule_RespondDay_ColumnActivity" xml:space="preserve">
-    <value>Activity</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnTime" xml:space="preserve">
-    <value>Time</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnStaffMember" xml:space="preserve">
-    <value>Staff member</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnRoom" xml:space="preserve">
-    <value>Room</value>
-  </data>
   <data name="ScheduleModule_ShowNextWeekWorkingDays_Summary" xml:space="preserve">
     <value>See what is on a schedule next week.</value>
   </data>
@@ -280,9 +268,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="ScheduleModule_ShowThisWeekWorkingDays_Summary" xml:space="preserve">
     <value>See what is on a schedule for this week.</value>
-  </data>
-  <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
-    <value>Class</value>
   </data>
   <data name="ScheduleComponent_HelpName_Class" xml:space="preserve">
     <value>your class</value>

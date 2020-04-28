@@ -124,13 +124,7 @@ namespace RoosterBot.Schedule {
 			ReturnValue<IdentifierInfo> resolve = ResolveNullInfo(info);
 			if (resolve.Success) {
 				info = resolve.Value;
-				return new PaginatedResult(new DayScheduleEnumerator(Context, info, date, new string[] {
-					GetString("ScheduleModule_RespondDay_ColumnActivity"),
-					GetString("ScheduleModule_RespondDay_ColumnTime"),
-					GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
-					GetString("ScheduleModule_RespondDay_ColumnStaffMember"),
-					GetString("ScheduleModule_RespondDay_ColumnRoom")
-				}), null);
+				return new PaginatedResult(new DayScheduleEnumerator(Context, info, date), null);
 			} else {
 				return resolve.ErrorResult;
 			}
