@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
@@ -10,7 +11,7 @@ namespace RoosterBot.Schedule {
 			bool byMention;
 			IdentifierInfo? result;
 
-			if (input.ToLower() == context.ServiceProvider.GetRequiredService<ResourceService>().GetString(context.Culture, "UserIdentifierParser_Self")) {
+			if (context.ServiceProvider.GetRequiredService<ResourceService>().GetString(context.Culture, "UserIdentifierParser_Self").Split("|").Contains(input.ToLower())) {
 				result = context.UserConfig.GetIdentifier();
 				byMention = false;
 			} else {

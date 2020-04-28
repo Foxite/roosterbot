@@ -165,29 +165,22 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <comment>0: identifier info display text</comment>
   </data>
   <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
-    <value>I don't know in what class you are.</value>
+    <value>I don't know your schedule identifier.</value>
   </data>
   <data name="UserIdentifierModule_UserIsIdentifier" xml:space="preserve">
     <value>You are in {0}.</value>
-    <comment>0: user's student set</comment>
+    <comment>0: user's identifier</comment>
   </data>
   <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
-    <value>Use `{0}i am in &lt;your class&gt;` to change this.</value>
-  </data>
-  <data name="UserIdentifierModule_ConfirmUserIsIdentifier" xml:space="preserve">
-    <value>Noted: you are in {0}.</value>
-    <comment>0: user's new student set</comment>
+    <value>Use `{0}i am &lt;identifier&gt;` to change this.</value>
   </data>
   <data name="UserIdentifierModule_ConfirmUserIsIdentifierWithOld" xml:space="preserve">
-    <value>Noted: you are in {0}, and not in {1} anymore.</value>
-    <comment>0: user's new student set
-	1: user's previous student set</comment>
-  </data>
-  <data name="UserIdentifierModule_InvalidClass" xml:space="preserve">
-    <value>That's not a class.</value>
+    <value>Your new schedule identifier is {0} (was {1}).</value>
+    <comment>0: user's new identifier
+1: user's previous identifier</comment>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
-    <value>Automatically understands if you're talking about a class, staff member, or room.</value>
+    <value>Look up schedule information.</value>
   </data>
   <data name="ScheduleModule_Name" xml:space="preserve">
     <value>Schedule</value>
@@ -208,13 +201,13 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>See the schedule for today.</value>
   </data>
   <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
-    <value>With these commands, you can set what class you are in, so you won't have to enter it in Schedule commands.</value>
+    <value>With these commands, you can set your schedule identifier, so you won't have to enter it in Schedule commands.</value>
   </data>
   <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
-    <value>Change what class you are in.</value>
+    <value>Change your schedule identifier.</value>
   </data>
   <data name="UserIdentifierModule_class_Name" xml:space="preserve">
-    <value>class</value>
+    <value>identifier</value>
   </data>
   <data name="UserIdentifierModule_ModuleName" xml:space="preserve">
     <value>Settings</value>
@@ -298,14 +291,14 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>schedule</value>
   </data>
   <data name="UserIdentifierModule_ConfirmNoChange" xml:space="preserve">
-    <value>You're already in {0}!</value>
-    <comment>0: student set</comment>
+    <value>Your schedule identifier is already {0}.</value>
+    <comment>0: identifier</comment>
   </data>
   <data name="UserIdentifierModule_Group" xml:space="preserve">
     <value>i</value>
   </data>
   <data name="UserIdentifierModule_CommandName" xml:space="preserve">
-    <value>am in</value>
+    <value>am|am in</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
@@ -351,9 +344,16 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
     <value>user</value>
   </data>
   <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>I don't know in what class you are. Use `{0}i am in &lt;class&gt;` to change this.</value>
+    <value>I don't know your schedule identifier. Use `{0}i am &lt;identifier&gt;` to change this.</value>
+  </data>
+  <data name="UserIdentifierModule_ConfirmUserIsIdentifier" xml:space="preserve">
+    <value>Your new identifier is {0}.</value>
+    <comment>0: identifier</comment>
   </data>
   <data name="UserIdentifierParser_CheckFailed_MentionUser" xml:space="preserve">
-    <value>I don't know in what class that person is. He/she needs to use `{0}i am in &lt;class&gt;` to change this.</value>
+    <value>I don't know the schedule identifier of that person. They need to use `{0}i am &lt;identifier&gt;` to change this.</value>
+  </data>
+  <data name="UserIdentifierParser_Self" xml:space="preserve">
+    <value>i|me</value>
   </data>
 </root>

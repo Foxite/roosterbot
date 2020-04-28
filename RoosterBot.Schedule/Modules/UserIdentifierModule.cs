@@ -2,7 +2,6 @@
 using Qmmands;
 
 namespace RoosterBot.Schedule {
-	// TODO update ui strings, still sounds like it's restricted to student sets
 	[Name("#UserIdentifierModule_ModuleName"), Description("#UserIdentifierModule_ModuleSummary"), Group("#UserIdentifierModule_Group")]
 	public class UserIdentifierModule : RoosterModule {
 		[Command("#UserIdentifierModule_CommandName"), Description("#UserIdentifierModule_CommandSummary"), RequirePrivate(false)]

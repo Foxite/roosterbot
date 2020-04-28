@@ -165,29 +165,26 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <comment>0: identifier info display text</comment>
   </data>
   <data name="UserIdentifierModule_UserNotKnown" xml:space="preserve">
-    <value>Ik weet niet in welke klas jij zit.</value>
+    <value>Ik weet niet wat jouw rooster-ID is.</value>
   </data>
   <data name="UserIdentifierModule_UserIsIdentifier" xml:space="preserve">
-    <value>Jij zit in {0}.</value>
-    <comment>0: user's student set</comment>
+    <value>Jouw rooster-ID is {0}.</value>
+    <comment>0: identifier</comment>
   </data>
   <data name="UserIdentifierModule_ChangeHint" xml:space="preserve">
-    <value> Gebruik `{0}ik zit in &lt;klas&gt;` om dit te veranderen.</value>
+    <value> Gebruik `{0}ik zit in &lt;rooster-ID&gt;` of `{0}ik ben &lt;rooster-ID&gt;` om dit te veranderen.</value>
   </data>
   <data name="UserIdentifierModule_ConfirmUserIsIdentifier" xml:space="preserve">
-    <value>Genoteerd: jij zit in {0}.</value>
-    <comment>0: user's new student set</comment>
+    <value>Jouw rooster-ID is nu {0}.</value>
+    <comment>0: new identifier</comment>
   </data>
   <data name="UserIdentifierModule_ConfirmUserIsIdentifierWithOld" xml:space="preserve">
-    <value>Genoteerd: jij zit in {0}, en niet meer in {1}.</value>
-    <comment>0: user's new student set
-	1: user's previous student set</comment>
-  </data>
-  <data name="UserIdentifierModule_InvalidClass" xml:space="preserve">
-    <value>Dat is geen klas.</value>
+    <value>Jouw rooster-ID is nu {0}, en niet meer {1}.</value>
+    <comment>0: new identifier
+1: old identifier</comment>
   </data>
   <data name="ScheduleModule_Summary" xml:space="preserve">
-    <value>Begrijpt automatisch of je een klas, leraar, of lokaal bedoelt.</value>
+    <value>Bekijk rooster-informatie.</value>
   </data>
   <data name="ScheduleModule_Name" xml:space="preserve">
     <value>Rooster</value>
@@ -208,13 +205,13 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>Wat er vandaag op het rooster staat.</value>
   </data>
   <data name="UserIdentifierModule_ModuleSummary" xml:space="preserve">
-    <value>Met deze commands kun je instellen in welke klas je zit, zodat je bij Rooster commands niets hoeft in te vullen.</value>
+    <value>Met deze commands kun je jouw rooster-ID instellen, zodat je bij Rooster commands niets hoeft in te vullen.</value>
   </data>
   <data name="UserIdentifierModule_CommandSummary" xml:space="preserve">
-    <value>Stel in in welke klas jij zit.</value>
+    <value>Stel jouw rooster-ID in.</value>
   </data>
   <data name="UserIdentifierModule_class_Name" xml:space="preserve">
-    <value>klas</value>
+    <value>rooster-ID</value>
   </data>
   <data name="UserIdentifierModule_ModuleName" xml:space="preserve">
     <value>Instellingen</value>
@@ -301,8 +298,8 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>rooster</value>
   </data>
   <data name="UserIdentifierModule_ConfirmNoChange" xml:space="preserve">
-    <value>Je zit al in {0}!</value>
-    <comment>0: student set</comment>
+    <value>Jouw rooster-ID is al {0}.</value>
+    <comment>0: identifier</comment>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
@@ -311,7 +308,7 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
     <value>ik</value>
   </data>
   <data name="UserIdentifierModule_CommandName" xml:space="preserve">
-    <value>zit in</value>
+    <value>ben|zit in</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
@@ -350,10 +347,10 @@ Je kan altijd kijken in welke klas ik denk dat je zit door alleen `{0}ik zit in`
   <data name="UserIdentifierParser_TypeDisplayName" xml:space="preserve">
     <value>gebruiker</value>
   </data>
-  <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
-    <value>Ik weet niet in welke klas jij zit. Gebruik `{0}ik zit in &lt;klas&gt;` om dit in te stellen.</value>
-  </data>
   <data name="UserIdentifierParser_CheckFailed_MentionUser" xml:space="preserve">
-    <value>Ik weet niet in welke klas die persoon zit. Hij/zij moet `{0}ik zit in &lt;klas&gt;` gebruiken om dit in te stellen.</value>
+    <value>Ik weet niet wat de rooster-ID van die persoon is. Gebruik `{0}ik ben &lt;rooster-ID&gt;` of `{0}ik zit in &lt;rooster-ID&gt;` om dit in te stellen.</value>
+  </data>
+  <data name="UserIdentifierParser_CheckFailed_MentionSelf" xml:space="preserve">
+    <value>Ik weet niet wat jouw rooster-ID is. Gebruik `{0}ik ben &lt;rooster-ID&gt;` of `{0}ik zit in &lt;rooster-ID&gt;` om dit in te stellen.</value>
   </data>
 </root>
