@@ -40,21 +40,21 @@ namespace RoosterBot {
 		private bool m_ShutDown;
 		
 		private static int Main(string[] args) {
-			try {
-				if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-					Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
-					return 1;
-				}
+			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
+				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
+				Console.ReadKey();
+				return 1;
+			}
 
+			try {
 				new Program();
 				return 0;
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
-				return 2;
-			} finally {
 #if DEBUG
 				Console.ReadKey();
 #endif
+				return 2;
 			}
 		}
 
