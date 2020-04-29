@@ -16,6 +16,7 @@ namespace RoosterBot {
 		/// This will deserialize a Json file based on a template class. If the file does not exist, it will be created and the template will be serialized and written to the file.
 		/// </summary>
 		public static T LoadJsonConfigFromTemplate<T>(string filePath, T template, JsonSerializerSettings? jss = null) {
+			// TODO (feature) Fill in missing values from template, not null
 			if (File.Exists(filePath)) {
 				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss) ?? throw new InvalidOperationException("Configuration being deserialized is null.");
 			} else {
