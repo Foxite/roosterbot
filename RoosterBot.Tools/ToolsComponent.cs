@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using YoutubeExplode;
@@ -13,7 +14,7 @@ namespace RoosterBot.Tools {
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				PathToFFMPEG = "",
-				MotivationProviders = Array.Empty<string>()
+				MotivationProviders = new List<string>()
 			});
 
 			services.AddSingleton<YoutubeClient>();

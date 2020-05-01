@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -10,9 +11,9 @@ namespace RoosterBot.DiscordNet {
 		private bool m_VersionNotReported = true;
 		private readonly string m_GameString;
 		private readonly ActivityType m_ActivityType;
-		private readonly ulong[] m_NotifyReady;
+		private readonly IReadOnlyList<ulong> m_NotifyReady;
 
-		public ReadyHandler(string gameString, ActivityType activityType, ulong[] notifyReady) {
+		public ReadyHandler(string gameString, ActivityType activityType, IReadOnlyList<ulong> notifyReady) {
 			Client.Ready += OnClientReady;
 
 			m_GameString = gameString;
@@ -24,7 +25,7 @@ namespace RoosterBot.DiscordNet {
 			await Client.SetGameAsync(m_GameString, type: m_ActivityType);
 			Logger.Info("Discord", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
-			if (m_VersionNotReported && m_NotifyReady.Length != 0) {
+			if (m_VersionNotReported && m_NotifyReady.Count != 0) {
 				m_VersionNotReported = false;
 				string startReport = $"RoosterBot version: {Program.Version.ToString()}\n";
 				startReport += "Components:\n";

@@ -46,7 +46,7 @@ namespace RoosterBot {
 
 		private IEnumerable<string> ReadComponentsFile() {
 			try {
-				return Util.LoadJsonConfigFromTemplate(Path.Combine(Program.DataPath, "Config", "Components.json"), new { Components = Array.Empty<string>() }).Components;
+				return Util.LoadJsonConfigFromTemplate(Path.Combine(Program.DataPath, "Config", "Components.json"), new { Components = new List<string>() }).Components;
 			} catch (JsonReaderException e) {
 				throw new FormatException("Components.json contains invalid data.", e);
 			}
