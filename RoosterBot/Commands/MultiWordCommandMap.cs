@@ -20,8 +20,7 @@ namespace RoosterBot {
 			var matches = new ConcurrentBag<CommandMatch>();
 			var checkedModules = new ConcurrentDictionary<Module, bool>();
 
-			// This might be faster if we only keep a list of top level modules, and iterate over that, recursively checking the submodules.
-			Parallel.ForEach(m_Commands, command => { // This will run for quite a lot of iterations and is pretty heavy, so making it fast is important.
+			Parallel.ForEach(m_Commands, command => {
 				var checkModules = new Stack<Module>(4);
 				checkModules.Push(command.Module);
 				bool proceed = true;
