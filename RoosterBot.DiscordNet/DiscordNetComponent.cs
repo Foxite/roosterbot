@@ -15,8 +15,8 @@ namespace RoosterBot.DiscordNet {
 		private string m_Token = null!;
 		private string m_GameString = "";
 		private ActivityType m_Activity;
-		private IReadOnlyList<ulong> m_NotifyReady;
-		private IReadOnlyList<ulong> m_BotOwnerIds;
+		private ulong[] m_NotifyReady;
+		private ulong[] m_BotOwnerIds;
 
 		public IReadOnlyList<ulong> EmoteStorageGuilds { get; private set; }
 		public BaseSocketClient Client { get; private set; } = null!;
@@ -41,8 +41,8 @@ namespace RoosterBot.DiscordNet {
 				Token = "",
 				GameString = "",
 				Activity = ActivityType.Playing,
-				NotifyReady = new List<ulong>(),
-				BotOwnerIds = new List<ulong>(),
+				NotifyReady = Array.Empty<ulong>(),
+				BotOwnerIds = Array.Empty<ulong>(),
 				Emotes = new {
 					Info = ":information_source:",
 					Unknown = ":question:",
@@ -50,7 +50,7 @@ namespace RoosterBot.DiscordNet {
 					Success = ":white_check_mark:",
 					Error = ":x:"
 				},
-				EmoteStorageGuilds = new List<ulong>(),
+				EmoteStorageGuilds = Array.Empty<ulong>(),
 				Discord = new {
 					// Does not include RestClientProvider, WebSocketProvider, UdpSocketProvider
 					discordConfig.GatewayHost,

@@ -37,15 +37,12 @@ namespace RoosterBot.GLU {
 				RepeatRecords = 0,
 				TimezoneId = "",
 				Schedules = new Dictionary<string, string>(),
-				// This isn't a List<SnowflakeReference> because we want to ignore platforms that aren't installed, instead of an giving error.
-				// The serializer for SnowflakeReference throws an exception if a platform is not installed.
-				// I have not found a way to configure serializer behaviour on a per-class-member basis.
 				AllowedChannels = new[] {
 					new {
 						Platform = "",
 						Id = ""
 					}
-				}.ToList(), // This allows you to create a list of anonymous types.
+				},
 				ExpandActivites = true
 			});
 
@@ -92,8 +89,7 @@ namespace RoosterBot.GLU {
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				provider.RegisterProvider(
 					sri.IdentifierType,
-					new MemoryScheduleProvider(
-						sri.Name,
+					new MemoryScheduleProvider(sri.Name,
 						new GLUScheduleReader(sri.Path, staffMembers, m_AllowedChannels[0], m_SkipPastRecords, m_RepeatRecords, m_ExpandActivites),
 						m_AllowedChannels
 					)
