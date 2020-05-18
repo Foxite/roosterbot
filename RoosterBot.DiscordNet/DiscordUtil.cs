@@ -5,7 +5,6 @@ namespace RoosterBot.DiscordNet {
 		public static bool IsMessageCommand(Discord.IMessage message, string prefix, out int argPos) {
 			argPos = 0;
 			if (message.Content != null && // Message objects created for MessageUpdated events only contain what was modified. Content may be null in certain cases. https://github.com/discord-net/Discord.Net/issues/1409
-				message.Source == MessageSource.User &&
 				message is IUserMessage userMessage) {
 				string mention = DiscordNetComponent.Instance.Client.CurrentUser.Mention;
 				if (userMessage.Content.StartsWith(mention)) {
