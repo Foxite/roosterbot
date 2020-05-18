@@ -34,7 +34,13 @@ namespace RoosterBot.AWS {
 					var culture = CultureInfo.GetCultureInfo(cultureEntry.AsString());
 					string commandPrefix = prefixEntry.AsString();
 					var customData = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(customDataEntry.AsString());
-					IEnumerable<string> disabledModules = customData["dynamodb.disabledModules"].ToObject<JArray>().Select(token => token.ToObject<string>()).WhereNotNull() ?? Array.Empty<string>();
+
+					IEnumerable<string> disabledModules;
+					if (customData.TryGetValue("dynamodb.disabledModules", out JToken? value)) {
+						disabledModules = value.ToObject<JArray>().Select(token => token.ToObject<string>()).WhereNotNull();
+					} else {
+						disabledModules = Array.Empty<string>();
+					}
 
 					return new ChannelConfig(this, commandPrefix, culture, channel, customData, disabledModules);
 				}
@@ -43,7 +49,6 @@ namespace RoosterBot.AWS {
 			}
 		}
 
-		// In the future, channel staff will modify their settings on a website, and there will be no way to update this through commands.
 		public async override Task UpdateChannelAsync(ChannelConfig config) {
 			config.SetData("dynamodb.disabledModules", config.DisabledModules);
 
