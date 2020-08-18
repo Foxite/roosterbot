@@ -15,7 +15,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The directory where program data is stored.
 		/// </summary>
-		public const string DataPath = @"C:\ProgramData\RoosterBot";
+		public static string DataPath { get; private set; } = "";
 
 		/// <summary>
 		/// The version of RoosterBot.
@@ -47,6 +47,8 @@ namespace RoosterBot {
 			}
 
 			try {
+				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
+
 				new Program();
 				return 0;
 			} catch (Exception e) {
