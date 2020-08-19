@@ -41,7 +41,8 @@ namespace RoosterBot {
 		public CommandHandler CommandHandler { get; private set; }
 
 		private bool m_ShutDown;
-		
+		private static IHost s_ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
+
 		private static int Main(string[] args) {
 			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
 				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
@@ -51,6 +52,8 @@ namespace RoosterBot {
 
 			try {
 				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
+
+				s_ConsoleHost.Start();
 
 				new Program();
 				return 0;
@@ -62,6 +65,8 @@ namespace RoosterBot {
 				}
 #endif
 				return 2;
+			} finally {
+				s_ConsoleHost.Dispose();
 			}
 		}
 
@@ -134,24 +139,19 @@ namespace RoosterBot {
 		}
 
 		private void WaitForQuitCondition() {
-			Console.CancelKeyPress += (o, e) => {
-				e.Cancel = true;
-				m_ShutDown = true;
-				Logger.Info("Main", "Ctrl-C pressed");
-			};
-
 			var cts = new CancellationTokenSource();
 			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
 			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
 				CancellationToken token = cts.Token;
 				_ = pipeServer.WaitForConnectionAsync(token);
 
-				IHost consoleHost = new HostBuilder()
-						.UseConsoleLifetime()
-						.Build();
-
-				consoleHost.StartAsync(token);
-				Task consoleShutdown = consoleHost.WaitForShutdownAsync(token).ContinueWith(t => consoleHost.StopAsync(), TaskContinuationOptions.OnlyOnRanToCompletion);
+				Task consoleShutdown = s_ConsoleHost.WaitForShutdownAsync(token)
+					.ContinueWith(t => {
+						if (!token.IsCancellationRequested) {
+							Logger.Info("Main", "SIGTERM received");
+						}
+						s_ConsoleHost.StopAsync();
+					});
 
 				var quitConditions = new List<Func<bool>>() {
 					() => m_ShutDown,
