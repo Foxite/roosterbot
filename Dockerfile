@@ -1,7 +1,8 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
-COPY Config/ Config/
+COPY Output/Config/ Config/
 
-COPY bin/netcoreapp3.1/ App/
+COPY Output/RoosterBot/ App/
 
-CMD ["App/dotnet", "NetCore.Docker.dll -- \"../Config\""]
+WORKDIR App/
+ENTRYPOINT dotnet RoosterBot.dll /Config
