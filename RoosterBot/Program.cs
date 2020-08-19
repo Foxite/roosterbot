@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace RoosterBot {
 	/// <summary>
@@ -54,7 +57,9 @@ namespace RoosterBot {
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
 #if DEBUG
-				Console.ReadKey();
+				if (!Console.IsInputRedirected) {
+					Console.ReadKey();
+				}
 #endif
 				return 2;
 			}
@@ -138,21 +143,19 @@ namespace RoosterBot {
 			var cts = new CancellationTokenSource();
 			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
 			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
-				_ = pipeServer.WaitForConnectionAsync(cts.Token);
+				CancellationToken token = cts.Token;
+				_ = pipeServer.WaitForConnectionAsync(token);
 
-				var quitConditions = new Func<bool>[] {
+				IHost consoleHost = new HostBuilder()
+						.UseConsoleLifetime()
+						.Build();
+
+				consoleHost.StartAsync(token);
+				Task consoleShutdown = consoleHost.WaitForShutdownAsync(token).ContinueWith(t => consoleHost.StopAsync(), TaskContinuationOptions.OnlyOnRanToCompletion);
+
+				var quitConditions = new List<Func<bool>>() {
 					() => m_ShutDown,
 					() => {
-						// Ctrl-Q pressed by user
-						if (Console.KeyAvailable) {
-							ConsoleKeyInfo keyPress = Console.ReadKey(true);
-							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-								Logger.Info("Main", "Ctrl-Q pressed");
-								return true;
-							}
-						}
-						return false;
-					}, () => {
 						// Pipe connection by stop executable
 						if (pipeServer.IsConnected) {
 							string? input = sr.ReadLine();
@@ -166,8 +169,23 @@ namespace RoosterBot {
 							}
 						}
 						return false;
-					}
+					},
+					() => consoleShutdown.IsCompleted
 				};
+
+				if (!Console.IsInputRedirected) {
+					quitConditions.Add(() => {
+						// Ctrl-Q pressed by user
+						if (Console.KeyAvailable) {
+							ConsoleKeyInfo keyPress = Console.ReadKey(true);
+							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+								Logger.Info("Main", "Ctrl-Q pressed");
+								return true;
+							}
+						}
+						return false;
+					});
+				}
 
 				while (!quitConditions.Any(condition => condition())) {
 					Thread.Sleep(500);
