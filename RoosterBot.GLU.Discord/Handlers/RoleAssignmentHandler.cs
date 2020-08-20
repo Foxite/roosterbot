@@ -22,24 +22,16 @@ namespace RoosterBot.GLU.Discord {
 				if (user != null) {
 					// Assign roles
 					try {
-						IEnumerable<IRole> newRoles = GluDiscordUtil.GetRolesForStudentSet(user.Guild, args.NewSet);
-						IEnumerable<IRole> oldRoles = GluDiscordUtil.GetRolesForStudentSet(user.Guild, args.OldSet);
-						IEnumerable<IRole> keptRoles = oldRoles.Intersect(newRoles);
-
-						oldRoles = oldRoles.Except(keptRoles);
-						newRoles = newRoles.Except(keptRoles);
-
-						foreach (IRole role in oldRoles) {
-							if (user.RoleIds.Contains(role.Id)) {
-								await user.RemoveRolesAsync(oldRoles);
+						foreach ((IRole Role, GluDiscordUtil.RemoveOrAdd action) in user.StudentSetRoles(args.NewSet)) {
+							if (action == GluDiscordUtil.RemoveOrAdd.Add) {
+								await user.AddRoleAsync(Role);
+							} else if (action == GluDiscordUtil.RemoveOrAdd.Remove) {
+								await user.RemoveRoleAsync(Role);
 							}
 						}
+
 						if (user.RoleIds.Contains(NewUserRank)) {
 							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
-						}
-
-						if (newRoles.Any()) {
-							await user.AddRolesAsync(newRoles);
 						}
 					} catch (Exception e) {
 						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.");

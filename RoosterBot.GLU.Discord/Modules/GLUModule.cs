@@ -1,9 +1,15 @@
-﻿using Qmmands;
+﻿using System.Text;
+using System.Threading.Tasks;
+using Discord;
+using Qmmands;
+using RoosterBot.DiscordNet;
+using RoosterBot.GLU.Discord;
+using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	// TODO only accept discord context, provide proper mechanism for this (currently you get an exception if the platform is not compatible)
-	public class GLUModule : RoosterModule {
+	public class GLUModule : RoosterModule<DiscordCommandContext> {
 		public UserConfigService UCS { get; set; } = null!;
 
 		[Priority(-1), Command(
