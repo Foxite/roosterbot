@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Qmmands;
@@ -60,6 +62,22 @@ namespace RoosterBot.GLU {
 		public CommandResult AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
+		}
+
+		[Command("users with mismatched student set roles"), UserIsModerator]
+		public async Task<CommandResult> CheckMismatchedRoles() {
+			var ucs = (UserConfigService) Context.ServiceProvider.GetService(typeof(UserConfigService));
+			return UserListModule.ReplyList(Context, (await UserListModule.GetList(Context))
+				.Where(user => Task.Run(async () => {
+					var config = await ucs.GetConfigAsync(user.GetReference());
+					StudentSetInfo? ssi = config.GetStudentSet();
+					if (ssi != null) {
+						return ((IGuildUser) user.DiscordEntity).StudentSetRoles(ssi).Any();
+					} else {
+						return false;
+					}
+				}).Result)
+			);
 		}
 	}
 }
