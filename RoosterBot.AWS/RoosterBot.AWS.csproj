@@ -9,10 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWS.Logger.Core" Version="1.5.1" />
-		<PackageReference Include="AWSSDK.Core" Version="3.3.104.22" />
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.104.24" />
-		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.118" />
+		<PackageReference Include="AWS.Logger.Core" Version="1.6.0" />
+		<PackageReference Include="AWSSDK.Core" Version="3.5.0.1" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.5.0.1" />
+		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.5.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
