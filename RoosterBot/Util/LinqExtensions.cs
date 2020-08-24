@@ -229,5 +229,43 @@ namespace System.Linq {
 				}
 			}
 		}
+
+		/// <summary>
+		/// Returns the <typeparamref name="T"/> that results in the highest value returned from <paramref name="selector"/>.
+		/// </summary>
+		public static T MaxBy<T, TCompare>(this IEnumerable<T> source, Func<T, TCompare> selector) where TCompare : IComparable<TCompare> {
+			if (source.Any()) {
+				T ret = source.First();
+				TCompare max = selector(ret);
+
+				foreach (T item in source) {
+					if (selector(item).CompareTo(max) > 0) {
+						ret = item;
+					}
+				}
+				return ret;
+			} else {
+				throw new InvalidOperationException("Source is empty.");
+			}
+		}
+
+		/// <summary>
+		/// Returns the <typeparamref name="T"/> that results in the lowest value returned from <paramref name="selector"/>.
+		/// </summary>
+		public static T MinBy<T, TCompare>(this IEnumerable<T> source, Func<T, TCompare> selector) where TCompare : IComparable<TCompare> {
+			if (source.Any()) {
+				T ret = source.First();
+				TCompare max = selector(ret);
+
+				foreach (T item in source) {
+					if (selector(item).CompareTo(max) > 0) {
+						ret = item;
+					}
+				}
+				return ret;
+			} else {
+				throw new InvalidOperationException("Source is empty.");
+			}
+		}
 	}
 }

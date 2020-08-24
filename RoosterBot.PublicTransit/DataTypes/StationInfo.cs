@@ -70,8 +70,8 @@ namespace RoosterBot.PublicTransit {
 			Score = score;
 		}
 
-		public int CompareTo(StationMatchInfo other) {
-			return Math.Sign(Score - other.Score);
+		public int CompareTo(StationMatchInfo? other) {
+			return other is null ? -1 : Math.Sign(Score - other.Score);
 		}
 
 		public override string ToString() => Station.ToString() + "@" + Score;

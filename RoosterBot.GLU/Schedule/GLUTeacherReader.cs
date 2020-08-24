@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using CsvHelper;
 using RoosterBot.Schedule;
@@ -16,7 +17,7 @@ namespace RoosterBot.GLU {
 			Logger.Info("GLUStaffMemberReader", $"Loading staff CSV file {Path.GetFileName(m_Path)}");
 
 			using StreamReader reader = File.OpenText(m_Path);
-			using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
+			using var csv = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "," });
 			csv.Read();
 			csv.ReadHeader();
 

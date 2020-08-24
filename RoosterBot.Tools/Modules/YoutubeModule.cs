@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using Qmmands;
 using YoutubeExplode;
 using YoutubeExplode.Converter;
-using YoutubeExplode.Models;
-using YoutubeExplode.Models.MediaStreams;
+using YoutubeExplode.Videos;
 
 namespace RoosterBot.Tools {
 	[Name("#YoutubeModule_Name")]
@@ -19,14 +18,15 @@ namespace RoosterBot.Tools {
 			string[] formats = new[] { "mp3", "ogg" };
 			if (formats.Contains(format)) {
 
-				string id = YoutubeClient.ParseVideoId(url);
-				Video video = await Client.GetVideoAsync(id);
+				var id = new VideoId(url);
+				Video video = await Client.Videos.GetAsync(id);
 
-				MediaStreamInfoSet streams = await Client.GetVideoMediaStreamInfosAsync(id);
-				if (streams.Audio.Any()) {
+				//MediaStreamInfoSet streams = await Client.GetVideoMediaStreamInfosAsync(id);
+				var streams = await Client.Videos.Streams.GetManifestAsync(id);
+				if (streams.GetAudioOnly().Any()) {
 					DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 					string filePath = Path.Combine(Path.GetTempPath(), directory.FullName, video.Title + "." + format);
-					await Converter.DownloadAndProcessMediaStreamsAsync(streams.Audio, filePath, format);
+					await Converter.DownloadAndProcessMediaStreamsAsync(streams.GetAudioOnly().ToList(), filePath, format, ConversionPreset.Medium);
 
 					if (new FileInfo(filePath).Length > 8e6) {
 						return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Filesize"));

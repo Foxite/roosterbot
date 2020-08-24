@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace RoosterBot.Weather {
 
 			string csvPath = Path.Combine(m_ConfigPath, "cities.csv");
 			using StreamReader reader = File.OpenText(csvPath);
-			using var csv = new CsvReader(reader, new CsvHelper.Configuration.Configuration() { Delimiter = "," });
+			using var csv = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "," });
 
 			var regions = new Dictionary<int, RegionInfo>();
 
