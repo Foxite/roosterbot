@@ -103,17 +103,18 @@ namespace RoosterBot {
 					m_Components.Add(component);
 					m_ComponentsByAssembly[type.Assembly] = component;
 				} catch (Exception ex) {
-					throw new ComponentConstructionException("Component " + type.Name + " threw an exception during construction.", type, ex);
+					throw new InvalidOperationException("Component " + type.Name + " threw an exception during construction.", ex);
 				}
 			}
 		}
 
 		private void CheckDependencies(IEnumerable<Component> components) {
-			foreach (Component component in components) {
-				DependencyResult dependencyResult = component.CheckDependenciesInternal(components);
-				if (!dependencyResult.OK) {
-					throw new ComponentDependencyException($"{component.Name} cannot satisfy dependencies:\n{dependencyResult.ErrorMessage}", component.GetType());
-				}
+			IEnumerable<string> presentTags = components.SelectMany(component => component.Tags);
+			IEnumerable<string> requiredTags = components.SelectMany(component => component.RequiredTags);
+
+			string errorMessage = string.Join('\n', requiredTags.Except(presentTags).Select(tag => tag + " required by " + string.Join(", ", components.Where(component => component.RequiredTags.Contains(tag)))));
+			if (string.IsNullOrWhiteSpace(errorMessage)) {
+				throw new InvalidOperationException("Missing tags:\n" + errorMessage);
 			}
 		}
 
@@ -124,7 +125,7 @@ namespace RoosterBot {
 				try {
 					component.AddServicesInternal(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
 				} catch (Exception ex) {
-					throw new ComponentServiceException("Component " + component.Name + " threw an exception during AddServices.", component.GetType(), ex);
+					throw new InvalidOperationException("Component " + component.Name + " threw an exception during AddServices.", ex);
 				}
 			}
 			return serviceCollection.BuildServiceProvider();
@@ -138,7 +139,7 @@ namespace RoosterBot {
 				try {
 					component.AddModulesInternal(services, commands);
 				} catch (Exception ex) {
-					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
+					throw new InvalidOperationException("Component " + component.Name + " threw an exception during AddModules.", ex);
 				}
 			}
 		}

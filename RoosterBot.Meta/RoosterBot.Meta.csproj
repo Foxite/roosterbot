@@ -7,6 +7,10 @@
 		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="FluentEmail.Smtp" Version="2.8.0" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">

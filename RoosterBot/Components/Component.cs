@@ -20,6 +20,11 @@ namespace RoosterBot {
 		public virtual IEnumerable<string> Tags { get; } = Enumerable.Empty<string>();
 
 		/// <summary>
+		/// The list of tags required in other components by this component.
+		/// </summary>
+		public virtual IEnumerable<string> RequiredTags { get; } = Enumerable.Empty<string>();
+
+		/// <summary>
 		/// The name for this component. It is equal to the class name 
 		/// </summary>
 		public string Name {
@@ -35,11 +40,6 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
-		/// Check your dependencies. Use <see cref="DependencyResult.Build(IEnumerable{Component})"/> for this.
-		/// </summary>
-		protected virtual DependencyResult CheckDependencies(IEnumerable<Component> components) => new DependencyResult();
-
-		/// <summary>
 		/// Add your services to the global <see cref="IServiceProvider"/>.
 		/// </summary>
 		/// <param name="services">The <see cref="IServiceCollection"/> that will be used to create the global <see cref="IServiceProvider"/>.</param>
@@ -51,7 +51,6 @@ namespace RoosterBot {
 		/// </summary>
 		protected virtual void AddModules(IServiceProvider services, RoosterCommandService commandService) { }
 
-		internal DependencyResult CheckDependenciesInternal(IEnumerable<Component> components) => CheckDependencies(components);
 		internal void AddServicesInternal(IServiceCollection services, string configPath) => AddServices(services, configPath);
 		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService) => AddModules(services, commandService);
 		

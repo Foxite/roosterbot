@@ -8,11 +8,7 @@ namespace RoosterBot.Weather {
 		public override Version ComponentVersion => new Version(0, 3, 1);
 		public bool AttributionLicense { get; private set; }
 
-		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
-			return DependencyResult.Build(components)
-				.RequireTag("DayOfWeekReader")
-				.Check();
-		}
+		public override IEnumerable<string> RequiredTags { get; } = new[] { "DayOfWeekReader" };
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			Logger.Debug("Weather", "Loading cities file");

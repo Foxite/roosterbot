@@ -25,12 +25,6 @@ namespace RoosterBot.GLU {
 			m_StaffMemberPath = "";
 		}
 
-		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
-			return DependencyResult.Build(components)
-				.RequireMinimumVersion<ScheduleComponent>(new Version(2, 0, 0))
-				.Check();
-		}
-
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				SkipPastRecords = false,

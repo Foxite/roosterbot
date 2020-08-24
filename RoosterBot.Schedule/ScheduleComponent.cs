@@ -6,12 +6,7 @@ namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
 		public override Version ComponentVersion => new Version(2, 1, 1);
 
-		protected override DependencyResult CheckDependencies(IEnumerable<Component> components) {
-			return DependencyResult.Build(components)
-				.RequireTag("ScheduleProvider")
-				.RequireTag("DayOfWeekReader")
-				.Check();
-		}
+		public override IEnumerable<string> RequiredTags { get; } = new[] { "ScheduleProvider", "DayOfWeekReader" };
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			services
