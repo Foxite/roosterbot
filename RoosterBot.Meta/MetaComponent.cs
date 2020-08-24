@@ -7,6 +7,7 @@ namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		private bool m_EnableHelp;
 		private bool m_EnableCommandsList;
+		private EmailSettings m_EmailSettings = new EmailSettings();
 
 		public override Version ComponentVersion => new Version(1, 2, 1);
 
@@ -24,7 +25,8 @@ namespace RoosterBot.Meta {
 				EnableHelp = true,
 				EnableCommandsList = true,
 				DefaultCommandPrefix = "!",
-				DefaultCulture = "en-US"
+				DefaultCulture = "en-US",
+				EmailSettings = new EmailSettings()
 			});
 
 			if (config.UseFileConfig) {
@@ -35,6 +37,7 @@ namespace RoosterBot.Meta {
 
 			m_EnableHelp = config.EnableHelp;
 			m_EnableCommandsList = config.EnableCommandsList;
+			m_EmailSettings = config.EmailSettings;
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
@@ -74,6 +77,8 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<InfoModule>();
 
 			services.GetRequiredService<HelpService>().AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
+
+			new EmailNotificationHandler(services.GetRequiredService<NotificationService>(), m_EmailSettings);
 		}
 	}
 }
