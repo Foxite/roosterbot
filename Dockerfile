@@ -5,4 +5,4 @@ COPY Output/Config/ Config/
 COPY Output/RoosterBot/ App/
 
 WORKDIR App/
-ENTRYPOINT dotnet RoosterBot.dll /Config
+CMD [ "dotnet", "RoosterBot.dll", "/Config" ]
