@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace RoosterBot {
 	/// <summary>
@@ -15,7 +18,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The directory where program data is stored.
 		/// </summary>
-		public const string DataPath = @"C:\ProgramData\RoosterBot";
+		public static string DataPath { get; private set; } = "";
 
 		/// <summary>
 		/// The version of RoosterBot.
@@ -38,7 +41,8 @@ namespace RoosterBot {
 		public CommandHandler CommandHandler { get; private set; }
 
 		private bool m_ShutDown;
-		
+		private static IHost s_ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
+
 		private static int Main(string[] args) {
 			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
 				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
@@ -47,14 +51,22 @@ namespace RoosterBot {
 			}
 
 			try {
+				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
+
+				s_ConsoleHost.Start();
+
 				new Program();
 				return 0;
 			} catch (Exception e) {
 				Logger.Critical("Program", "Application has crashed.", e);
 #if DEBUG
-				Console.ReadKey();
+				if (!Console.IsInputRedirected) {
+					Console.ReadKey();
+				}
 #endif
 				return 2;
+			} finally {
+				s_ConsoleHost.Dispose();
 			}
 		}
 
@@ -127,30 +139,23 @@ namespace RoosterBot {
 		}
 
 		private void WaitForQuitCondition() {
-			Console.CancelKeyPress += (o, e) => {
-				e.Cancel = true;
-				m_ShutDown = true;
-				Logger.Info("Main", "Ctrl-C pressed");
-			};
-
 			var cts = new CancellationTokenSource();
 			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
 			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
-				_ = pipeServer.WaitForConnectionAsync(cts.Token);
+				CancellationToken token = cts.Token;
+				_ = pipeServer.WaitForConnectionAsync(token);
 
-				var quitConditions = new Func<bool>[] {
+				Task consoleShutdown = s_ConsoleHost.WaitForShutdownAsync(token)
+					.ContinueWith(t => {
+						if (!token.IsCancellationRequested) {
+							Logger.Info("Main", "SIGTERM received");
+						}
+						s_ConsoleHost.StopAsync();
+					});
+
+				var quitConditions = new List<Func<bool>>() {
 					() => m_ShutDown,
 					() => {
-						// Ctrl-Q pressed by user
-						if (Console.KeyAvailable) {
-							ConsoleKeyInfo keyPress = Console.ReadKey(true);
-							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-								Logger.Info("Main", "Ctrl-Q pressed");
-								return true;
-							}
-						}
-						return false;
-					}, () => {
 						// Pipe connection by stop executable
 						if (pipeServer.IsConnected) {
 							string? input = sr.ReadLine();
@@ -164,8 +169,23 @@ namespace RoosterBot {
 							}
 						}
 						return false;
-					}
+					},
+					() => consoleShutdown.IsCompleted
 				};
+
+				if (!Console.IsInputRedirected) {
+					quitConditions.Add(() => {
+						// Ctrl-Q pressed by user
+						if (Console.KeyAvailable) {
+							ConsoleKeyInfo keyPress = Console.ReadKey(true);
+							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
+								Logger.Info("Main", "Ctrl-Q pressed");
+								return true;
+							}
+						}
+						return false;
+					});
+				}
 
 				while (!quitConditions.Any(condition => condition())) {
 					Thread.Sleep(500);

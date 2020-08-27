@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -148,16 +149,14 @@ namespace RoosterBot.DiscordNet {
 			new LogHandler            (Client);
 		}
 
-		// Async void, but does it matter? StartAsync spawns a thread that manages the connection and returns immediately.
-		// If this was actually awaited it would hardly matter.
-		protected async override void Connect(IServiceProvider services) {
-			await Client.LoginAsync(TokenType.Bot, m_Token);
-			await Client.StartAsync();
+		protected override void Connect(IServiceProvider services) {
+			Client.LoginAsync(TokenType.Bot, m_Token).GetAwaiter().GetResult();
+			Client.StartAsync().GetAwaiter().GetResult();
 		}
 
-		protected async override void Disconnect() {
-			await Client.StopAsync();
-			await Client.LogoutAsync();
+		protected override void Disconnect() {
+			Client.StopAsync().GetAwaiter().GetResult();
+			Client.LogoutAsync().GetAwaiter().GetResult();
 		}
 
 		public override object GetSnowflakeIdFromString(string input) => ulong.Parse(input);
