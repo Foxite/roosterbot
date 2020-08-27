@@ -1,1 +1,1 @@
-This project contains the source for the documentation site hosted on [docs.rooster.bot](https://docs.rooster.bot).
+This project contains the source for the documentation site hosted on [rooster.bot](https://rooster.bot).
