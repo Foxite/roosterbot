@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace RoosterBot
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace RoosterBot
+   ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterBot">
+  
+  <h1 id="RoosterBot" data-uid="RoosterBot" class="text-break">Namespace RoosterBot
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="RoosterBot.ArrayParser-1.html">ArrayParser&lt;T&gt;</a></h4>
+      <section><p>Parse an array of objects according to another <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.AspectListItem.html">AspectListItem</a></h4>
+      <section><p>An presented AspectListItem must start with its <a class="xref" href="RoosterBot.AspectListItem.html#RoosterBot_AspectListItem_PrefixEmote">PrefixEmote</a> and end with its <a class="xref" href="RoosterBot.AspectListItem.html#RoosterBot_AspectListItem_Value">Value</a>. It name is optional, but if shown it must come between PrefixEmote and Value.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.AspectListResult.html">AspectListResult</a></h4>
+      <section><p>An AspectListResult has multiple discrete pieces of information that should be displayed together. This class is <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ChannelConfig.html">ChannelConfig</a></h4>
+      <section><p>This class stores data about a channel's preferences with this bot. Built-in are the language and command prefix, and it can store arbitrary custom data.</p>
+<p>This arbitrary data is serialized using Newtonsoft.Json. This means most built-in .NET types will work, and any custom data structure that you store must
+be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ChannelConfigService.html">ChannelConfigService</a></h4>
+      <section><p>The base class for a service providing configuration for <a class="xref" href="RoosterBot.IChannel.html">IChannel</a>s.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ChannelSpecificInfo.html">ChannelSpecificInfo</a></h4>
+      <section><p>An abstract type representing information that is restricted to a collection of <a class="xref" href="RoosterBot.IChannel.html">IChannel</a>s.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CommandHandler.html">CommandHandler</a></h4>
+      <section><p>The singleton class that provides entry to the command handling pipeline.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a></h4>
+      <section><p>A serialized reference to a user command and RoosterBot's response.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CommandUtil.html">CommandUtil</a></h4>
+      <section><p>A static class containing some helper functions for dealing with <span class="xref">Qmmands.Command</span>s and and <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a>s.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.Component.html">Component</a></h4>
+      <section><p>The base class for all feature packages for RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ComponentManager.html">ComponentManager</a></h4>
+      <section><p>The singleton class that takes care of setting up and shutting down components.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CompoundResult.html">CompoundResult</a></h4>
+      <section><p>Represents multiple <a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>s that are displayed together.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ConversionParser-2.html">ConversionParser&lt;TIn, TOut&gt;</a></h4>
+      <section><p>This lets you apply a function to the result of an existing <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a> without creating a new class.
+This is particularly useful for creating instances of your <a class="xref" href="RoosterBot.ISnowflake.html">ISnowflake</a> implementations based on your existing, platform-specific snowflake parsers.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CountAttribute.html">CountAttribute</a></h4>
+      <section><p>This precondition requires that the amount of item in an array is &gt;= and &lt;= a value. Both Min and Max are inclusive.
+Of course, it can only be used on parammeters that have an Array type; an exception will be thrown if the parameter is not an array.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.CultureNameService.html">CultureNameService</a></h4>
+      <section><p>Allows you to look up the name of one language in another language.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.Emoji.html">Emoji</a></h4>
+      <section><p>A string, usually an emoji, that can be used as an <a class="xref" href="RoosterBot.IEmote.html">IEmote</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.EmoteService.html">EmoteService</a></h4>
+      <section><p>Allows you to get an <a class="xref" href="RoosterBot.IEmote.html">IEmote</a> for a specific purpose on a specific platform.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.GrammarParameterAttribute.html">GrammarParameterAttribute</a></h4>
+      <section><p>Indicates that a parameter is only allowed to have one value, and that it is there to make a command grammatically structured.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.HelpService.html">HelpService</a></h4>
+      <section><p>Provide informational texts to users.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.HiddenFromListAttribute.html">HiddenFromListAttribute</a></h4>
+      <section><p>Indicates that a module, command, or parameter should be hidden from listings.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.LogEndpoint.html">LogEndpoint</a></h4>
+      <section><p>An endpoint for the <a class="xref" href="RoosterBot.Logger.html">Logger</a> class. All messages logged using <a class="xref" href="RoosterBot.Logger.html">Logger</a> will be passed to every registered instance of this class.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.Logger.html">Logger</a></h4>
+      <section><p>The static class that takes care of logging in the entire program.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.MissingResourceException.html">MissingResourceException</a></h4>
+      <section><p>Thrown when a resource cannot be found.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.MultiParser-1.html">MultiParser&lt;T&gt;</a></h4>
+      <section><p>A <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a> that consults multiple other <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a>s to get the result.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.NoAllowedChannelsException.html">NoAllowedChannelsException</a></h4>
+      <section><p>Thrown in situations where there is no <a class="xref" href="RoosterBot.ChannelSpecificInfo.html">ChannelSpecificInfo</a> that is allowed to be used.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.NotificationEventArgs.html">NotificationEventArgs</a></h4>
+      <section><p>Event arguments for <a class="xref" href="RoosterBot.NotificationService.html#RoosterBot_NotificationService_NotificationAdded">NotificationAdded</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.NotificationService.html">NotificationService</a></h4>
+      <section><p>Allows you to notify the bot administrators of an event.
+You cannot send notifications yourself, but you can provide delivery target for the notification.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.PaginatedResult.html">PaginatedResult</a></h4>
+      <section><p>A result that consists of multiple pages that can be viewed independently.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.PaginatedTableEnumerator.html">PaginatedTableEnumerator</a></h4>
+      <section><p>An enumerator for <a class="xref" href="RoosterBot.PaginatedResult.html">PaginatedResult</a> that enumerates pages from a <a class="xref" href="RoosterBot.TableResult.html">TableResult</a></p>
+</section>
+      <h4><a class="xref" href="RoosterBot.PlatformComponent.html">PlatformComponent</a></h4>
+      <section><p>A <a class="xref" href="RoosterBot.Component.html">Component</a> that integrates RoosterBot with a user interface, usually an instant messaging platform.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.PlatformSpecificParser-1.html">PlatformSpecificParser&lt;T&gt;</a></h4>
+      <section><p>Similar to <a class="xref" href="RoosterBot.MultiParser-1.html">MultiParser&lt;T&gt;</a>, however this class only uses one parser, and selects it based on the platform of the current context.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.Program.html">Program</a></h4>
+      <section><p>The singleton Program class.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RequireBotManagerAttribute.html">RequireBotManagerAttribute</a></h4>
+      <section><p>Require that the user has <a class="xref" href="RoosterBot.IUser.html#RoosterBot_IUser_IsBotAdmin">IsBotAdmin</a> <span class="xref">true</span>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RequireCultureAttribute.html">RequireCultureAttribute</a></h4>
+      <section><p>Require that <a class="xref" href="RoosterBot.RoosterCommandContext.html#RoosterBot_RoosterCommandContext_Culture">Culture</a> equals a certain value.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RequirePrivateAttribute.html">RequirePrivateAttribute</a></h4>
+      <section><p>Require that <a class="xref" href="RoosterBot.RoosterCommandContext.html#RoosterBot_RoosterCommandContext_IsPrivate">IsPrivate</a> is equal a certain value.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ResourceService.html">ResourceService</a></h4>
+      <section><p>Allows you to localize your UI strings.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterCheckAttribute.html">RoosterCheckAttribute</a></h4>
+      <section><p>The base class for all command checks used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterCheckResult.html">RoosterCheckResult</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterCheckResult.html">RoosterCheckResult</a></h4>
+      <section><p>The base class for all <span class="xref">Qmmands.CheckResult</span> used within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a></h4>
+      <section><p>The object that represents the context in which a command is being exeucted. It persists from message reception to post-command handling, and it holds the message being responded to,
+as well as the <a class="xref" href="RoosterBot.PlatformComponent.html">PlatformComponent</a> which received the message that originated this context.
+It also holds the <a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a> for the <a class="xref" href="RoosterBot.RoosterCommandContext.html#RoosterBot_RoosterCommandContext_User">User</a> and the <a class="xref" href="RoosterBot.ChannelConfig.html">ChannelConfig</a> for the <a class="xref" href="RoosterBot.RoosterCommandContext.html#RoosterBot_RoosterCommandContext_Channel">Channel</a>, which is
+often accessed by multiple unrelated classes in the execution process, so that these classes do not have to retrieve the config data independently.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a></h4>
+      <section><p>The base class for all <span class="xref">Qmmands.CommandResult</span>s used within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterCommandService.html">RoosterCommandService</a></h4>
+      <section><p>This class wraps multiple Qmmands.CommandService objects, one for each supported culture.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterModule.html">RoosterModule</a></h4>
+      <section><p>Shorthand for <pre><code>RoosterModule&lt;RoosterCommandContext&gt;</code></pre>. This module type accepts all contexts.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule&lt;T&gt;</a></h4>
+      <section><p>The base class for all command modules used within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterParameterCheckAttribute.html">RoosterParameterCheckAttribute</a></h4>
+      <section><p>The base class for all <span class="xref">Qmmands.ParameterCheckAttribute</span> within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterTextAttribute.html">RoosterTextAttribute</a></h4>
+      <section><p>The abstract base class for all attributes within RoosterBot that consist of only a single string.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a></h4>
+      <section><p>The base class for all <span class="xref">Qmmands.TypeParser&lt;T&gt;</span>s used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a></h4>
+      <section><p>The base class for all <span class="xref">Qmmands.TypeParserResult&lt;T&gt;</span>s used within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.SnowflakeNotFoundException.html">SnowflakeNotFoundException</a></h4>
+      <section><p>Thrown when a method attempts to retrieve a snowflake entity from a platform, but it does not exist.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.SnowflakeReference.html">SnowflakeReference</a></h4>
+      <section><p>Contains data needed to obtain an <a class="xref" href="RoosterBot.ISnowflake.html">ISnowflake</a> object.
+This class can be instantiated before a platform connection is available, allowing it to be deserialized from config data at startup.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.StringUtil.html">StringUtil</a></h4>
+      <section><p>A static class containing several functions to manipulate strings or string arrays.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.TableResult.html">TableResult</a></h4>
+      <section><p>A TableResult consists of a two-dimensional grid of strings that are formatted for easy reading, optionally preceded by some text.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.TextResult.html">TextResult</a></h4>
+      <section><p>A TextResult consists of an optional emote followed by a string.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.TypeDisplayAttribute.html">TypeDisplayAttribute</a></h4>
+      <section><p>Specify a display name for your command's parameter type.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></h4>
+      <section><p>The configuration for an <a class="xref" href="RoosterBot.IUser.html">IUser</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.UserConfigService.html">UserConfigService</a></h4>
+      <section><p>Provides user-specific overrides for the <a class="xref" href="RoosterBot.ChannelConfigService.html">ChannelConfigService</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.UserIsModeratorAttribute.html">UserIsModeratorAttribute</a></h4>
+      <section><p>Require that the user has <a class="xref" href="RoosterBot.IUser.html#RoosterBot_IUser_IsChannelAdmin_RoosterBot_IChannel_">IsChannelAdmin(IChannel)</a> for the context's channel.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.Util.html">Util</a></h4>
+      <section><p>A static class containing several helper functions.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ValueTaskUtil.html">ValueTaskUtil</a></h4>
+      <section><p>A static class containing some helper functions for dealing with <span class="xref">System.Threading.Tasks.ValueTask</span>s.</p>
+</section>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="RoosterBot.LogMessage.html">LogMessage</a></h4>
+      <section><p>A message for <a class="xref" href="RoosterBot.Logger.html">Logger</a>.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator&lt;T&gt;</a></h4>
+      <section><p>An <span class="xref">System.Collections.Generic.IEnumerator&lt;T&gt;</span> that can move backwards as well as forwards.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IChannel.html">IChannel</a></h4>
+      <section><p>Represents a channel that RoosterBot can receive commands from, and send replies into.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IEmote.html">IEmote</a></h4>
+      <section><p>Represents a graphic that can be added to an <a class="xref" href="RoosterBot.IMessage.html">IMessage</a> object.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IExternalResultStringParser.html">IExternalResultStringParser</a></h4>
+      <section><p>Represents a RoosterTypeParser that gets its ErrorReason string from an external Component.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IMessage.html">IMessage</a></h4>
+      <section><p>Represents a message that was either sent by a user or by RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IRoosterTypeParser.html">IRoosterTypeParser</a></h4>
+      <section><p>A non-generic interface for <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IRoosterTypeParserResult.html">IRoosterTypeParserResult</a></h4>
+      <section><p>A non-generic interface for <a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ISnowflake.html">ISnowflake</a></h4>
+      <section><p>Represents a unique entity on a given platform, identified by an ID.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.IUser.html">IUser</a></h4>
+      <section><p>Represents a user that can interact with RoosterBot, and vice versa.</p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="RoosterBot.CooldownType.html">CooldownType</a></h4>
+      <section><p>The type of cooldown used in <span class="xref">Qmmands.CooldownAttribute</span> within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.LogLevel.html">LogLevel</a></h4>
+      <section><p>Indicates the severity of a <a class="xref" href="RoosterBot.LogMessage.html">LogMessage</a>.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

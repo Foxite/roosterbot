@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CommandUtil
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CommandUtil
+   ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterBot.CommandUtil">
+  
+  
+  <h1 id="RoosterBot_CommandUtil" data-uid="RoosterBot.CommandUtil" class="text-break">Class CommandUtil
+  </h1>
+  <div class="markdown level0 summary"><p>A static class containing some helper functions for dealing with <span class="xref">Qmmands.Command</span>s and and <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a>s.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">CommandUtil</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
+  <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
+  <h5 id="RoosterBot_CommandUtil_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class CommandUtil</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_GetResponse_RoosterBot_UserConfig_RoosterBot_IMessage_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.GetResponse(RoosterBot.UserConfig%2CRoosterBot.IMessage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L104">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_GetResponse_" data-uid="RoosterBot.CommandUtil.GetResponse*"></a>
+  <h4 id="RoosterBot_CommandUtil_GetResponse_RoosterBot_UserConfig_RoosterBot_IMessage_" data-uid="RoosterBot.CommandUtil.GetResponse(RoosterBot.UserConfig,RoosterBot.IMessage)">GetResponse(UserConfig, IMessage)</h4>
+  <div class="markdown level1 summary"><p>Get RoosterBot's response to an <a class="xref" href="RoosterBot.IMessage.html">IMessage</a> sent by a user.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CommandResponsePair GetResponse(this UserConfig userConfig, IMessage message)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></td>
+        <td><span class="parametername">userConfig</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.IMessage.html">IMessage</a></td>
+        <td><span class="parametername">message</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_GetResponse_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.GetResponse(RoosterBot.UserConfig%2CRoosterBot.SnowflakeReference)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L69">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_GetResponse_" data-uid="RoosterBot.CommandUtil.GetResponse*"></a>
+  <h4 id="RoosterBot_CommandUtil_GetResponse_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_" data-uid="RoosterBot.CommandUtil.GetResponse(RoosterBot.UserConfig,RoosterBot.SnowflakeReference)">GetResponse(UserConfig, SnowflakeReference)</h4>
+  <div class="markdown level1 summary"><p>Retrieve the bot's response to the message indicated by <code data-dev-comment-type="paramref" class="paramref">message</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CommandResponsePair GetResponse(this UserConfig userConfig, SnowflakeReference message)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></td>
+        <td><span class="parametername">userConfig</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.SnowflakeReference.html">SnowflakeReference</a></td>
+        <td><span class="parametername">message</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_GetSignature_Qmmands_Command_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.GetSignature(Qmmands.Command)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L13">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_GetSignature_" data-uid="RoosterBot.CommandUtil.GetSignature*"></a>
+  <h4 id="RoosterBot_CommandUtil_GetSignature_Qmmands_Command_" data-uid="RoosterBot.CommandUtil.GetSignature(Qmmands.Command)">GetSignature(Command)</h4>
+  <div class="markdown level1 summary"><p>Returns a localized signature of a CommandInfo.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetSignature(this Command command)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Qmmands.Command</span></td>
+        <td><span class="parametername">command</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_RemoveCommand_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.RemoveCommand(RoosterBot.UserConfig%2CRoosterBot.SnowflakeReference)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L81">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_RemoveCommand_" data-uid="RoosterBot.CommandUtil.RemoveCommand*"></a>
+  <h4 id="RoosterBot_CommandUtil_RemoveCommand_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_" data-uid="RoosterBot.CommandUtil.RemoveCommand(RoosterBot.UserConfig,RoosterBot.SnowflakeReference)">RemoveCommand(UserConfig, SnowflakeReference)</h4>
+  <div class="markdown level1 summary"><p>Delete a <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a> for a command indicated by <code data-dev-comment-type="paramref" class="paramref">command</code> from a <a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CommandResponsePair RemoveCommand(this UserConfig userConfig, SnowflakeReference command)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></td>
+        <td><span class="parametername">userConfig</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.SnowflakeReference.html">SnowflakeReference</a></td>
+        <td><span class="parametername">command</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a></td>
+        <td><p>The deleted <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_SetResponse_RoosterBot_UserConfig_RoosterBot_IMessage_RoosterBot_IMessage_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.SetResponse(RoosterBot.UserConfig%2CRoosterBot.IMessage%2CRoosterBot.IMessage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L99">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_SetResponse_" data-uid="RoosterBot.CommandUtil.SetResponse*"></a>
+  <h4 id="RoosterBot_CommandUtil_SetResponse_RoosterBot_UserConfig_RoosterBot_IMessage_RoosterBot_IMessage_" data-uid="RoosterBot.CommandUtil.SetResponse(RoosterBot.UserConfig,RoosterBot.IMessage,RoosterBot.IMessage)">SetResponse(UserConfig, IMessage, IMessage)</h4>
+  <div class="markdown level1 summary"><p>Set the response to a command to an <a class="xref" href="RoosterBot.IMessage.html">IMessage</a> sent by RoosterBot.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetResponse(this UserConfig userConfig, IMessage userMessage, IMessage botResponse)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></td>
+        <td><span class="parametername">userConfig</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.IMessage.html">IMessage</a></td>
+        <td><span class="parametername">userMessage</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.IMessage.html">IMessage</a></td>
+        <td><span class="parametername">botResponse</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil_SetResponse_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_RoosterBot_SnowflakeReference_.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil.SetResponse(RoosterBot.UserConfig%2CRoosterBot.SnowflakeReference%2CRoosterBot.SnowflakeReference)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L47">View Source</a>
+  </span>
+  <a id="RoosterBot_CommandUtil_SetResponse_" data-uid="RoosterBot.CommandUtil.SetResponse*"></a>
+  <h4 id="RoosterBot_CommandUtil_SetResponse_RoosterBot_UserConfig_RoosterBot_SnowflakeReference_RoosterBot_SnowflakeReference_" data-uid="RoosterBot.CommandUtil.SetResponse(RoosterBot.UserConfig,RoosterBot.SnowflakeReference,RoosterBot.SnowflakeReference)">SetResponse(UserConfig, SnowflakeReference, SnowflakeReference)</h4>
+  <div class="markdown level1 summary"><p>Set the response to the message indicated by <code data-dev-comment-type="paramref" class="paramref">userCommand</code> to the message indicated by <code data-dev-comment-type="paramref" class="paramref">botResponse</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetResponse(this UserConfig userConfig, SnowflakeReference userCommand, SnowflakeReference botResponse)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.UserConfig.html">UserConfig</a></td>
+        <td><span class="parametername">userConfig</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.SnowflakeReference.html">SnowflakeReference</a></td>
+        <td><span class="parametername">userCommand</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="RoosterBot.SnowflakeReference.html">SnowflakeReference</a></td>
+        <td><span class="parametername">botResponse</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_CommandUtil.md&amp;value=---%0Auid%3A%20RoosterBot.CommandUtil%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/CommandUtil.cs/#L9" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

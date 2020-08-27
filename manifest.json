@@ -1,0 +1,2084 @@
+{
+  "homepages": [],
+  "source_base_path": "E:/Development/RoosterBot/Docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html",
+          "hash": "jsCiSYxic3JnI3Q+X3pYVw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.AWSComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.AWSComponent.html",
+          "hash": "D+PCgwV/h7SR3DCnc1CQyA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.AWSConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.AWSConfigService.html",
+          "hash": "7zUMPBIwAVpd0Yt3YgiIGA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.DynamoDBChannelConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.DynamoDBChannelConfigService.html",
+          "hash": "33eiQE7Z8KaU/3YllWoRjw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.DynamoDBUserConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.DynamoDBUserConfigService.html",
+          "hash": "J6yVnVbyDJ22fdXmM5fn7g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.SNSNotificationHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.SNSNotificationHandler.html",
+          "hash": "PvFQpvYIPJM3j/nMnHjYGw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AWS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AWS.html",
+          "hash": "+TwqQtIt6naW7fepnOxALQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ArrayParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ArrayParser-1.html",
+          "hash": "fqL9Z3TgL3BBXXaTonAHHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AspectListItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AspectListItem.html",
+          "hash": "14RquZpdWprtYgewGPyDFQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.AspectListResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.AspectListResult.html",
+          "hash": "YyLdrvuTxLsRBQGikx1WkA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ChannelConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ChannelConfig.html",
+          "hash": "K82LOmCFnHzWjw9cWXlHWw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ChannelConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ChannelConfigService.html",
+          "hash": "24OOno5q7dlE5+gKDv4oxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ChannelSpecificInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ChannelSpecificInfo.html",
+          "hash": "7O74eDOWoC85Zxi5HTs0qA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CommandHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CommandHandler.html",
+          "hash": "IMpbx2NkDXYfWUrPrGr/SA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CommandResponsePair.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CommandResponsePair.html",
+          "hash": "tXExPjRS6Xquo0J1vuCQpA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CommandUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CommandUtil.html",
+          "hash": "iSoCNbW/TCQHPa8psyWa9A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Component.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Component.html",
+          "hash": "1AgQPhZeT0kVahKUXeg0YQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentManager.html",
+          "hash": "e8VsBtDWxkCGk9Mh2L6eQw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CompoundResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CompoundResult.html",
+          "hash": "jUuU6OFOT/0D+D5EZoDD2Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ConversionParser-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ConversionParser-2.html",
+          "hash": "kKM7A5IMW+u523+WTUqUng=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CooldownType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CooldownType.html",
+          "hash": "wHXyCyRrhQ5wISACz5n56A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CountAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CountAttribute.html",
+          "hash": "3IRPybNNIwHB8QD+ym1idg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.CultureNameService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.CultureNameService.html",
+          "hash": "NMr8I+n7wwg6bpXzQUAkFA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtil.html",
+          "hash": "yt1mZ3dlSjzWuRHsLAok9g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtilsComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtilsComponent.html",
+          "hash": "BnmV1l7OWb3QiGYL1ezzjg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DateTimeUtils.DayOfWeekParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DateTimeUtils.DayOfWeekParser.html",
+          "hash": "YSuqEEINMvTFX5YFDZ5j7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DateTimeUtils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DateTimeUtils.html",
+          "hash": "b7zVCzd7SS5m6vlIZdpOKw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.ChannelParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.ChannelParser-1.html",
+          "hash": "JIx+1W/gpjtRTD9lEeUqAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordChannel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordChannel.html",
+          "hash": "Bu/bc/JfC5XvzeVra6IH9Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordCommandContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordCommandContext.html",
+          "hash": "eMQtymOBIa8k53jjLTsWww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordEmote.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordEmote.html",
+          "hash": "/xoiy3iOJE6W6ajo7uh/rw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordMessage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordMessage.html",
+          "hash": "arsKLjLDcwGZ2X5lrW50/A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordNetCheckAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordNetCheckAttribute.html",
+          "hash": "XOE5GJFa83SJjF6b6YgoIA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordNetComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordNetComponent.html",
+          "hash": "XaRwySaBBXT6e99bXC7KCw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordUser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.DiscordUser.html",
+          "hash": "A02AoC5FqFCyTFkKMOa+DQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.EmoteModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.EmoteModule.html",
+          "hash": "ynVUzK1v6Dilcb8SDh6JkQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.InfoModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.InfoModule.html",
+          "hash": "GWdv0lrCVytTGJxWZWc13Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.InteractiveMessageHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.InteractiveMessageHandler.html",
+          "hash": "Et2soSnuoKSwEqFtPLyLAA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.MessageHasAttachmentAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.MessageHasAttachmentAttribute.html",
+          "hash": "FYgfDrGLdj82pM5PiEPHIg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.MessageParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.MessageParser-1.html",
+          "hash": "siIHdRdjVOR+yiJqX34OTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.RoleParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.RoleParser-1.html",
+          "hash": "XfJqlcq9n88zdlZniMQuMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.UserListModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.UserListModule.html",
+          "hash": "F3WnWDfA7JG1BOpzPb7vGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.UserParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.UserParser-1.html",
+          "hash": "BgaqRF3O/45yKiUWOCrCgQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DiscordNet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DiscordNet.html",
+          "hash": "rgjK7syoEEvLKONwXkptyA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Emoji.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Emoji.html",
+          "hash": "sbj7tgLbw2BH7P4sXk6J5g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.EmoteService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.EmoteService.html",
+          "hash": "TZ3NnQKLFCh76TYvXkjeyQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.GrammarParameterAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.GrammarParameterAttribute.html",
+          "hash": "5TCjAXzh/0sTwuNKrUVwvw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.HelpService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.HelpService.html",
+          "hash": "ObkoDAIS4b/LKjf/zlvXeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.HiddenFromListAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.HiddenFromListAttribute.html",
+          "hash": "+U0wTuZrPVrxMtLH5Bv5yw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IBidirectionalEnumerator-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IBidirectionalEnumerator-1.html",
+          "hash": "3OOoQZdAgE36plUGEbLULg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IChannel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IChannel.html",
+          "hash": "Wu7ZMkVBWpSjgUs/Mkq4sA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IEmote.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IEmote.html",
+          "hash": "2XB+W4xIYfu+VQDHZmzZMw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IExternalResultStringParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IExternalResultStringParser.html",
+          "hash": "5SeUuht/3//jn6om7vnTKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IMessage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IMessage.html",
+          "hash": "iLGXBaCEfx/+3oR0hlbvGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IRoosterTypeParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IRoosterTypeParser.html",
+          "hash": "anji+Xn7L+yqYjRoAFKlsg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IRoosterTypeParserResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IRoosterTypeParserResult.html",
+          "hash": "eayzw19bghcg0TtLLK9S+g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ISnowflake.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ISnowflake.html",
+          "hash": "ZhiVy6idnAZbKtr9PLr3Iw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.IUser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.IUser.html",
+          "hash": "deQ75niPSnH8Eep8RekOIg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.LogEndpoint.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.LogEndpoint.html",
+          "hash": "3OopGkC1RxVDJTyFu9qC2A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.LogLevel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.LogLevel.html",
+          "hash": "MdYs69F94aqdppbNGrpiXA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.LogMessage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.LogMessage.html",
+          "hash": "r06CTyvtQNkG9hHSK9WK4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Logger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Logger.html",
+          "hash": "cpY6gHoPR+FAE+JSFkMfRg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.BoolParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.BoolParser.html",
+          "hash": "glinYOkTOmoQ8CiuTfuWYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.ChannelConfigModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.ChannelConfigModule.html",
+          "hash": "3n0mHsp8uQwctGP2WTqTUg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.CharParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.CharParser.html",
+          "hash": "gZu05mSfq1614kHS8FX/xA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.CommandsListModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.CommandsListModule.html",
+          "hash": "rj+BgEXrnyjjuDuYAnIBZg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.ControlModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.ControlModule.html",
+          "hash": "lG15aTp/4t+ZpYe61VjKZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.CultureInfoParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.CultureInfoParser.html",
+          "hash": "GsRKWQeMWAU3o0oTgzOZng=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.DebuggingModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.DebuggingModule.html",
+          "hash": "/Bk/+xxtErUzd7I74bCvjg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.FileChannelConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.FileChannelConfigService.html",
+          "hash": "+bC+Fx+9sX2INKDPjDpO+g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.FileUserConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.FileUserConfigService.html",
+          "hash": "o/2mHSnucLOaMbqHymtpjw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.HelpModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.HelpModule.html",
+          "hash": "wYOCWmhCz29rLAXiSNBNuw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.InfoModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.InfoModule.html",
+          "hash": "CwqxgYx+7yQF/WHJnLTVUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.MetaComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.MetaComponent.html",
+          "hash": "0gFgsUTopFTq6EaV6Quy3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.ModuleDisableModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.ModuleDisableModule.html",
+          "hash": "SlHpBA3BGEQlLHddJfUgUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.PrimitiveParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.PrimitiveParser-1.html",
+          "hash": "dRSqaP7qTllBlOwtGBumjg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.TryParsePrimitive-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.TryParsePrimitive-1.html",
+          "hash": "hUcsHRk8R18VdgxZgIsaCA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.UriParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.UriParser.html",
+          "hash": "IgYJVukIvdUHfrWXKtMjbA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.UserConfigModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.UserConfigModule.html",
+          "hash": "F+c2IF03nTxq/OupO1UBTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Meta.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Meta.html",
+          "hash": "K6a1NKjZ9mlb3wNg7Xw4LQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.MissingResourceException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.MissingResourceException.html",
+          "hash": "2bjo4HHfDKwpZGlspDLRUw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.MultiParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.MultiParser-1.html",
+          "hash": "/vM4hw5v2LGTsH9vEEmedg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.NoAllowedChannelsException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.NoAllowedChannelsException.html",
+          "hash": "LOZ5eUopSDCaHTIC3Bp7YA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.NotificationEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.NotificationEventArgs.html",
+          "hash": "uQhhTinFj+lFgj9hctdwKA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.NotificationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.NotificationService.html",
+          "hash": "FjPRa2+W4fguZy+PZLko4A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.PaginatedResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.PaginatedResult.html",
+          "hash": "0Il9ellZC0chYWgvUb+Y9g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.PaginatedTableEnumerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.PaginatedTableEnumerator.html",
+          "hash": "m7njY8ZMMSbD9OQ4XiAxzw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.PlatformComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.PlatformComponent.html",
+          "hash": "2Q0gSZL8mHuG1eONQi1bJQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.PlatformSpecificParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.PlatformSpecificParser-1.html",
+          "hash": "DsYdn2w+iJWLQlk4IZxvUg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Program.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Program.html",
+          "hash": "Qt3GL+G8Ot2/nFFOBXGhvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RequireBotManagerAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RequireBotManagerAttribute.html",
+          "hash": "FMoS2d2z+S/KO0FNdp7nKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RequireCultureAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RequireCultureAttribute.html",
+          "hash": "dIg73oK9wDqTlg8X6GcLhA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RequirePrivateAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RequirePrivateAttribute.html",
+          "hash": "m/SrxVJF4vC6TeRSIAe11w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ResourceService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ResourceService.html",
+          "hash": "c5pNqZHedlZMraJHhj5LvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterCheckAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterCheckAttribute.html",
+          "hash": "K82ntoAS9dO1y602qWsuSA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterCheckResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterCheckResult.html",
+          "hash": "KEzrJ7dQJmiBNR8cquojfA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterCommandContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterCommandContext.html",
+          "hash": "m+b1xFfqj1nyB2n3vkasKQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterCommandResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterCommandResult.html",
+          "hash": "8i9M31VBjZT6F6slK3yuow=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterCommandService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterCommandService.html",
+          "hash": "aeqiMCjnVBfJ1lPNHa6V7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterModule-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterModule-1.html",
+          "hash": "JkwY2F8KAk3KCit0vDAxGA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterModule.html",
+          "hash": "djWV9Y2B01CuEpVj/4fpmw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterParameterCheckAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterParameterCheckAttribute.html",
+          "hash": "nexlMPIGqhwx38a+yM95LA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterTextAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterTextAttribute.html",
+          "hash": "eL/GipbrlAl8qyjqsCJ/CQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterTypeParser-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterTypeParser-1.html",
+          "hash": "RGkqRoIxbpGaFBjSFBLO7w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterTypeParserResult-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterTypeParserResult-1.html",
+          "hash": "FqmMlbMgTTI7NyJfYjjnuA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ActivityInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ActivityInfo.html",
+          "hash": "r2DD9fPulBaKCNehrrUm1A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.AvailabilityInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.AvailabilityInfo.html",
+          "hash": "BdYhFQq/lvx8DG07CEFtJQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.DayScheduleEnumerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.DayScheduleEnumerator.html",
+          "hash": "hIX3R5MnHDnsVOUirI2T+w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierInfo.html",
+          "hash": "O3AH1+ZQKbf+m3LbVmOfcA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierInfoParserBase-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierInfoParserBase-1.html",
+          "hash": "dh+q6IqYcT6qGBMiuCmPSQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierInfoWrapper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierInfoWrapper.html",
+          "hash": "ywDFvdlv/77tWSwqbvbguQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierNotFoundException.html",
+          "hash": "BfOeWgA6RvJwbUaH0ZqYkA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierValidationService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierValidationService.html",
+          "hash": "O/pNEYM3nGUSCpX8jw42gw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.IdentifierValidator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.IdentifierValidator.html",
+          "hash": "PXjO3TgLJuv3Lnr3Avoa0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.MemoryScheduleProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.MemoryScheduleProvider.html",
+          "hash": "OuILtgFbz+N1QbgYnQOACw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.RecordsOutdatedException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.RecordsOutdatedException.html",
+          "hash": "sfIcJLHx1mkLsKiGP2FhBg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ReturnValue-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ReturnValue-1.html",
+          "hash": "kp+F7hZCEaw56Ai/+rpSxA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleComponent.html",
+          "hash": "Yi7cblrqXEunlgejNlaxCg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleModule.html",
+          "hash": "i4lF9Z7UtnI1J2BQxgNLvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleProvider.html",
+          "hash": "IGgBpxo8vBszpom41k9Unw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleReader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleReader.html",
+          "hash": "Pcc6TvtHaLx66z6sJj0k0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleRecord.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleRecord.html",
+          "hash": "UFy7mrl5XsU6v4UBJ8rocg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleService.html",
+          "hash": "MJ71YF+l2X+7XmYZLw9RDg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleUtil.html",
+          "hash": "PSdx2ZV9GGwEOJfZ/L3IHg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.SingleScheduleEnumerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.SingleScheduleEnumerator.html",
+          "hash": "DD0pfXGTOC2n9f1Z1Y0ZLQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.UserChangedIdentifierEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.UserChangedIdentifierEventArgs.html",
+          "hash": "xEaZn/UVd6/0j4XSmQbf3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.UserIdentifierModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.UserIdentifierModule.html",
+          "hash": "EM/sjE/RvO9ktGyro83Fpw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.UserIdentifierParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.UserIdentifierParser.html",
+          "hash": "BCJ5/Q+nsgMX0h+30Y2iGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.WeekScheduleEnumerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.WeekScheduleEnumerator.html",
+          "hash": "PeWiMa8Zrz3qW9vKYjRFLQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.html",
+          "hash": "9i8XvvT+li9X2oyQHP5TNw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.SnowflakeNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.SnowflakeNotFoundException.html",
+          "hash": "c6vYb5+6DOYOX9r3eYxdXw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.SnowflakeReference.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.SnowflakeReference.html",
+          "hash": "YVWnSGyXwCSjj3Un/ZLtaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.ExternalStatistic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.ExternalStatistic.html",
+          "hash": "oIYceQNMkn+VX5pNW7lJuA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.Statistic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.Statistic.html",
+          "hash": "+d3DMQr/1nFvzxdUFkJ8rQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.StatisticsComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.StatisticsComponent.html",
+          "hash": "G13A9Ck2u/wzxcPRS2kh1Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.StatisticsModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.StatisticsModule.html",
+          "hash": "hAWTmCJZyd8uLaLhnbqF1g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.StatisticsService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.StatisticsService.html",
+          "hash": "W1leTeCetRf2OWRqXvSMrA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.TimeStatistic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.TimeStatistic.html",
+          "hash": "PEQ2jabyhhObRTd+/+VK9Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Statistics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Statistics.html",
+          "hash": "phYGhH5eoIYsbaEuKBTRqg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.StringUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.StringUtil.html",
+          "hash": "RE7qTjRE8awTonWC9VEvGA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.TableResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.TableResult.html",
+          "hash": "aJAwszRGNf4T0sGrFhsedw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramChannel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramChannel.html",
+          "hash": "u64/Y0SL6LvCTCXz3/2Jeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramCommandContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramCommandContext.html",
+          "hash": "an+f5Aq7lGF6/DmbkeP9eA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramComponent.html",
+          "hash": "Ozxm9TbcyjICt04mrLcu/g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramMessage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramMessage.html",
+          "hash": "82lF4qviZxxBokEDJBhOkQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramMessageFacade.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramMessageFacade.html",
+          "hash": "HRpyDJ5AILUTKeSwVzGDKw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramSnowflake.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramSnowflake.html",
+          "hash": "Sd8CSyVDCZ//bEj+cRRzNQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.TelegramUser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.TelegramUser.html",
+          "hash": "Dw2b9jkj7nNg2ndt2DOXJA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Telegram.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Telegram.html",
+          "hash": "PNSZ/GkiU9GMsORcFBfgTw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.TextResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.TextResult.html",
+          "hash": "Lj7r6NuMt51WPzxU4SXmGQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.TypeDisplayAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.TypeDisplayAttribute.html",
+          "hash": "LPm++GFnSCdcuAzGjRQCbA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.UserConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.UserConfig.html",
+          "hash": "aHzdOAYLA1DHj2KDzijq/Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.UserConfigService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.UserConfigService.html",
+          "hash": "A2rhrj9XFDEg9Q1eS7MUKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.UserIsModeratorAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.UserIsModeratorAttribute.html",
+          "hash": "lvLU3mo+HDmWAlbfPTFmvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Util.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Util.html",
+          "hash": "2c7iLPwP+t6RUnYi23kPMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ValueTaskUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ValueTaskUtil.html",
+          "hash": "zRK3hanzqp40PUtBaf8C8w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.html",
+          "hash": "nksCEAB+ennKcbAwr+Ui8g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/System.Linq.LinqExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/System.Linq.LinqExtensions.html",
+          "hash": "Zrin7dWtQruhgbZaWSb0ZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/System.Linq.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/System.Linq.html",
+          "hash": "cCPPVrJgMpCKQkESt2ygeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "n0+UdLUyQu+0c5XUHoD8iA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "/0S/P/7FpuGNE0pshEzzwA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/components/guide.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/components/guide.html",
+          "hash": "nXFlERDij8i4Yo1fOlNRYw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/components/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/components/intro.html",
+          "hash": "SL3zArd7INCB2/74RDJj0A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/components/platform.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/components/platform.html",
+          "hash": "22Hp21stb8LVeB8U4aECqg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/hosting.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/hosting.html",
+          "hash": "5O4ciWdmHolt70waxAGFmA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "KMeKkW6t5huGFL9V3BMaqA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "ZBmyPWxznAGvj+UQyNNPUA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "MeiYE3m5jPzl4Y6rV2uTIw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "+rHUkRZHZRi5gd1aTU6lJA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 8,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 158,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

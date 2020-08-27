@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TelegramMessageFacade
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TelegramMessageFacade
+   ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterBot.Telegram.TelegramMessageFacade">
+  
+  
+  <h1 id="RoosterBot_Telegram_TelegramMessageFacade" data-uid="RoosterBot.Telegram.TelegramMessageFacade" class="text-break">Class TelegramMessageFacade
+  </h1>
+  <div class="markdown level0 summary"><p>A &quot;Fake&quot; Telegram message that contains a ChatId and message ID, and does not represent a &quot;real&quot; <span class="xref">Telegram.Bot.Types.Message</span> object.
+Unfortunately it does not seem to be possible to obtain an actual Message object from an ID with Telegram.Bot without doing something to it, or when it is sent or received.</p>
+<p>It supports deletion and modification, and retrieving the IChannel it belongs to.
+This is enough for what RoosterBot needs <a class="xref" href="RoosterBot.IChannel.html#RoosterBot_IChannel_GetMessageAsync_System_Object_">GetMessageAsync(Object)</a> for, but keep that in mind when dealing with TelegramMessages.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="RoosterBot.Telegram.TelegramSnowflake.html">TelegramSnowflake</a></div>
+    <div class="level2"><span class="xref">TelegramMessageFacade</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="RoosterBot.IMessage.html">IMessage</a></div>
+    <div><a class="xref" href="RoosterBot.ISnowflake.html">ISnowflake</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="RoosterBot.Telegram.TelegramSnowflake.html#RoosterBot_Telegram_TelegramSnowflake_Platform">TelegramSnowflake.Platform</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.Telegram.TelegramSnowflake.html#RoosterBot_Telegram_TelegramSnowflake_RoosterBot_ISnowflake_Id">TelegramSnowflake.ISnowflake.Id</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.Telegram.html">RoosterBot.Telegram</a></h6>
+  <h6><strong>Assembly</strong>: Telegram.dll</h6>
+  <h5 id="RoosterBot_Telegram_TelegramMessageFacade_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TelegramMessageFacade : TelegramSnowflake, IMessage, ISnowflake</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade__ctor_RoosterBot_Telegram_TelegramChannel_System_Int64_.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.%23ctor(RoosterBot.Telegram.TelegramChannel%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L29">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade__ctor_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.#ctor*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade__ctor_RoosterBot_Telegram_TelegramChannel_System_Int64_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.#ctor(RoosterBot.Telegram.TelegramChannel,System.Int64)">TelegramMessageFacade(TelegramChannel, Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TelegramMessageFacade(TelegramChannel channel, long id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.Telegram.TelegramChannel.html">TelegramChannel</a></td>
+        <td><span class="parametername">channel</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_Channel.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.Channel%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L23">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_Channel_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Channel*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_Channel" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Channel">Channel</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IChannel Channel { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.IChannel.html">IChannel</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_ChatId.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.ChatId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L24">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_ChatId_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.ChatId*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_ChatId" data-uid="RoosterBot.Telegram.TelegramMessageFacade.ChatId">ChatId</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ChatId ChatId { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Telegram.Bot.Types.ChatId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_Content.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.Content%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L27">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_Content_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Content*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_Content" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Content">Content</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Content { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_Id.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L21">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_Id_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Id*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_Id" data-uid="RoosterBot.Telegram.TelegramMessageFacade.Id">Id</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override long Id { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="RoosterBot.Telegram.TelegramSnowflake.html#RoosterBot_Telegram_TelegramSnowflake_Id">TelegramSnowflake.Id</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_User.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.User%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L26">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_User_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.User*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_User" data-uid="RoosterBot.Telegram.TelegramMessageFacade.User">User</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IUser User { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.IUser.html">IUser</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_DeleteAsync.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.DeleteAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L35">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_DeleteAsync_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.DeleteAsync*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_DeleteAsync" data-uid="RoosterBot.Telegram.TelegramMessageFacade.DeleteAsync">DeleteAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade_ModifyAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade.ModifyAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L36">View Source</a>
+  </span>
+  <a id="RoosterBot_Telegram_TelegramMessageFacade_ModifyAsync_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.ModifyAsync*"></a>
+  <h4 id="RoosterBot_Telegram_TelegramMessageFacade_ModifyAsync_System_String_System_String_" data-uid="RoosterBot.Telegram.TelegramMessageFacade.ModifyAsync(System.String,System.String)">ModifyAsync(String, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task ModifyAsync(string newContent, string filePath = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newContent</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">filePath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="RoosterBot.IMessage.html">IMessage</a>
+  </div>
+  <div>
+      <a class="xref" href="RoosterBot.ISnowflake.html">ISnowflake</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Telegram_TelegramMessageFacade.md&amp;value=---%0Auid%3A%20RoosterBot.Telegram.TelegramMessageFacade%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Telegram/Entities/TelegramMessageFacade.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

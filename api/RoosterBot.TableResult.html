@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TableResult
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TableResult
+   ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="RoosterBot.TableResult">
+  
+  
+  <h1 id="RoosterBot_TableResult" data-uid="RoosterBot.TableResult" class="text-break">Class TableResult
+  </h1>
+  <div class="markdown level0 summary"><p>A TableResult consists of a two-dimensional grid of strings that are formatted for easy reading, optionally preceded by some text.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Qmmands.CommandResult</span></div>
+    <div class="level2"><a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a></div>
+    <div class="level3"><span class="xref">TableResult</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">Qmmands.IResult</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_UploadFilePath">RoosterCommandResult.UploadFilePath</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_IsSuccessful">RoosterCommandResult.IsSuccessful</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_ToString">RoosterCommandResult.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">Qmmands.CommandResult.Command</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
+  <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
+  <h5 id="RoosterBot_TableResult_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TableResult : RoosterCommandResult, IResult</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult__ctor_System_String_System_Collections_Generic_IReadOnlyList_System_Collections_Generic_IReadOnlyList_System_String___System_Nullable_System_Int32__.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.%23ctor(System.String%2CSystem.Collections.Generic.IReadOnlyList%7BSystem.Collections.Generic.IReadOnlyList%7BSystem.String%7D%7D%2CSystem.Nullable%7BSystem.Int32%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L48">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult__ctor_" data-uid="RoosterBot.TableResult.#ctor*"></a>
+  <h4 id="RoosterBot_TableResult__ctor_System_String_System_Collections_Generic_IReadOnlyList_System_Collections_Generic_IReadOnlyList_System_String___System_Nullable_System_Int32__" data-uid="RoosterBot.TableResult.#ctor(System.String,System.Collections.Generic.IReadOnlyList{System.Collections.Generic.IReadOnlyList{System.String}},System.Nullable{System.Int32})">TableResult(String, IReadOnlyList&lt;IReadOnlyList&lt;String&gt;&gt;, Nullable&lt;Int32&gt;)</h4>
+  <div class="markdown level1 summary"><p>Construct a new read-only TableResult with pre-filled cells.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TableResult(string caption, IReadOnlyList&lt;IReadOnlyList&lt;string&gt;&gt; cells, int? maxColumnWidth = default(int? ))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td><span class="parametername">cells</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">maxColumnWidth</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult__ctor_System_String_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.%23ctor(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L30">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult__ctor_" data-uid="RoosterBot.TableResult.#ctor*"></a>
+  <h4 id="RoosterBot_TableResult__ctor_System_String_System_Int32_System_Int32_System_Int32_" data-uid="RoosterBot.TableResult.#ctor(System.String,System.Int32,System.Int32,System.Int32)">TableResult(String, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Construct a new writable, empty TableResult.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TableResult(string caption, int maxColumnWidth, int rows, int columns)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxColumnWidth</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">rows</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">columns</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_Caption.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.Caption%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L12">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_Caption_" data-uid="RoosterBot.TableResult.Caption*"></a>
+  <h4 id="RoosterBot_TableResult_Caption" data-uid="RoosterBot.TableResult.Caption">Caption</h4>
+  <div class="markdown level1 summary"><p>The text to prefix to this TableResult.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Caption { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_Cells.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.Cells%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L17">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_Cells_" data-uid="RoosterBot.TableResult.Cells*"></a>
+  <h4 id="RoosterBot_TableResult_Cells" data-uid="RoosterBot.TableResult.Cells">Cells</h4>
+  <div class="markdown level1 summary"><p>The cells of the table.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;IReadOnlyList&lt;string&gt;&gt; Cells { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_MaxColumnWidth.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.MaxColumnWidth%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L22">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_MaxColumnWidth_" data-uid="RoosterBot.TableResult.MaxColumnWidth*"></a>
+  <h4 id="RoosterBot_TableResult_MaxColumnWidth" data-uid="RoosterBot.TableResult.MaxColumnWidth">MaxColumnWidth</h4>
+  <div class="markdown level1 summary"><p>The optional maximum width for each column of the table. If null, there is no maximum.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int? MaxColumnWidth { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_GetCell_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.GetCell(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L73">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_GetCell_" data-uid="RoosterBot.TableResult.GetCell*"></a>
+  <h4 id="RoosterBot_TableResult_GetCell_System_Int32_System_Int32_" data-uid="RoosterBot.TableResult.GetCell(System.Int32,System.Int32)">GetCell(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Get the vaue of a cell in the table.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetCell(int row, int column)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_MakeReadOnly.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.MakeReadOnly%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L82">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_MakeReadOnly_" data-uid="RoosterBot.TableResult.MakeReadOnly*"></a>
+  <h4 id="RoosterBot_TableResult_MakeReadOnly" data-uid="RoosterBot.TableResult.MakeReadOnly">MakeReadOnly()</h4>
+  <div class="markdown level1 summary"><p>Disable writing to this table. <strong>Can only be used if you used the empty constructor.</strong></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void MakeReadOnly()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>If writing has already been disabled.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="RoosterBot_TableResult_MakeReadOnly_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="RoosterBot.TableResult.html#RoosterBot_TableResult__ctor_System_String_System_Int32_System_Int32_System_Int32_">TableResult(String, Int32, Int32, Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_SetCell_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.SetCell(System.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L59">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_SetCell_" data-uid="RoosterBot.TableResult.SetCell*"></a>
+  <h4 id="RoosterBot_TableResult_SetCell_System_Int32_System_Int32_System_String_" data-uid="RoosterBot.TableResult.SetCell(System.Int32,System.Int32,System.String)">SetCell(Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Set the value of a cell in the table. <strong>Can only be used if you used the empty constructor.</strong></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetCell(int row, int column, string cell)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">cell</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>If writing has been disabled.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="RoosterBot_TableResult_SetCell_System_Int32_System_Int32_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="RoosterBot.TableResult.html#RoosterBot_TableResult__ctor_System_String_System_Int32_System_Int32_System_Int32_">TableResult(String, Int32, Int32, Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult_ToString_RoosterBot_RoosterCommandContext_.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult.ToString(RoosterBot.RoosterCommandContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L92">View Source</a>
+  </span>
+  <a id="RoosterBot_TableResult_ToString_" data-uid="RoosterBot.TableResult.ToString*"></a>
+  <h4 id="RoosterBot_TableResult_ToString_RoosterBot_RoosterCommandContext_" data-uid="RoosterBot.TableResult.ToString(RoosterBot.RoosterCommandContext)">ToString(RoosterCommandContext)</h4>
+  <div class="markdown level1 summary"><p>Convert the result to a string that can be displayed to the user.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(RoosterCommandContext r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_ToString_RoosterBot_RoosterCommandContext_">RoosterCommandResult.ToString(RoosterCommandContext)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">Qmmands.IResult</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="RoosterBot.Util.html#RoosterBot_Util_Is__1_RoosterBot_RoosterCommandResult___0__">Util.Is&lt;T&gt;(RoosterCommandResult, out T)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TableResult.md&amp;value=---%0Auid%3A%20RoosterBot.TableResult%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TableResult.cs/#L8" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
