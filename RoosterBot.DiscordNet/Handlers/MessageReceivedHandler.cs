@@ -20,7 +20,7 @@ namespace RoosterBot.DiscordNet {
 		private Task HandleNewCommand(SocketMessage dsm) {
 			// Only process commands from users
 			// Other cases include bots, webhooks, and system messages (such as "X started a call" or welcome messages)
-			if (dsm is Discord.IUserMessage dum) {
+			if (dsm.Source == Discord.MessageSource.User && dsm is Discord.IUserMessage dum) {
 				_ = Task.Run(async () => {
 					try {
 						// RoosterBot doesn't have a concept of guilds, and in Discord it's not convention to have different config per channel.

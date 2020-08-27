@@ -45,7 +45,7 @@ namespace RoosterBot.GLU.Discord {
 
 				if (info != null) {
 					text += $"- Jouw klas is al bij mij bekend, dus ik heb jou de juiste rangen gegeven. Als dit niet klopt, ga dan naar {botCommandsMention} en gebruik `!ik zit in <klas>` om het te veranderen: bijvoorbeeld `!ik zit in 2gd1` of `!ik zit in 1ga2`.\n";
-					await user.AddRolesAsync(GluDiscordUtil.GetRolesForStudentSet(user.Guild, info));
+					await user.AddRolesAsync(user.StudentSetRoles(info).Where(item => item.Item2 == GluDiscordUtil.RemoveOrAdd.Add).Select(item => item.Role));
 				}
 
 				text += "\n";

@@ -1,38 +1,60 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Discord;
-using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU.Discord {
 	internal static class GluDiscordUtil {
 		private static readonly IReadOnlyDictionary<string, ulong[]> Roles;
 
-		static GluDiscordUtil() {
-			ulong[] yearRoles = new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
-			//ulong[] yearRoles = new ulong[] { 689201556234829861, 689201576228945998, 689201580825903211, 689201581765296132 };
+		const ulong DevRole =
+			278587815271464970;
+			//689201635331014743;
 
+		const ulong ArtRole =
+			278587791141765121;
+			//689201622911287401;
+
+		private static readonly IReadOnlyList<ulong> YearRoles =
+			new ulong[] { 494531025473503252, 494531131606040586, 494531205966987285, 494531269796036618 };
+			//new ulong[] { 689201556234829861, 689201576228945998, 689201580825903211, 689201581765296132 };
+
+		static GluDiscordUtil() {
 			var roles = new Dictionary<string, ulong[]>();
 
-			ulong dev = 278587815271464970;
-			ulong art = 278587791141765121;
-			//ulong dev = 689201635331014743;
-			//ulong art = 689201622911287401;
-
 			void setupYearRoles(ulong courseRole) {
-				for (int i = 0; i < yearRoles.Length; i++) {
-					string key = (i + 1).ToString() + "G" + (courseRole == dev ? "D" : "A");
-					roles[key] = new[] { yearRoles[i], courseRole };
+				for (int i = 0; i < YearRoles.Count; i++) {
+					string key = (i + 1).ToString() + "G" + (courseRole == DevRole ? "D" : "A");
+					roles[key] = new[] { YearRoles[i], courseRole };
 				}
 			}
 
-			setupYearRoles(dev);
-			setupYearRoles(art);
+			setupYearRoles(DevRole);
+			setupYearRoles(ArtRole);
 
 			Roles = roles;
 		}
 
-		public static IEnumerable<IRole> GetRolesForStudentSet(IGuild guild, StudentSetInfo info) {
-			return Roles[info.ScheduleCode.Substring(0, 3)].Select(roleId => guild.GetRole(roleId));
+		public static IEnumerable<(IRole Role, RemoveOrAdd)> StudentSetRoles(this IGuildUser user, StudentSetInfo ssi) {
+			var neededRoles = Roles[ssi.ScheduleCode.Substring(0, 3)].ToHashSet();
+
+			foreach (ulong role in user.RoleIds) {
+				if (neededRoles.Contains(role)) {
+					// Keep
+					neededRoles.Remove(role);
+				} else {
+					if (role == DevRole || role == ArtRole || YearRoles.Contains(role)) {
+						yield return (user.Guild.GetRole(role), RemoveOrAdd.Remove);
+					}
+				}
+			}
+
+			foreach (ulong role in neededRoles) {
+				yield return (user.Guild.GetRole(role), RemoveOrAdd.Add);
+			}
+		}
+
+		public enum RemoveOrAdd {
+			Remove, Add
 		}
 	}
 }

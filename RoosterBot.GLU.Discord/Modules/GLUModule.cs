@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Discord;
 using Qmmands;
 using RoosterBot.DiscordNet;
+using RoosterBot.GLU.Discord;
+using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	[HiddenFromList]
 	public class GLUModule : RoosterModule<DiscordCommandContext> {
 		public Random RNG { get; set; } = null!;
+		public UserConfigService UCS { get; set; } = null!;
 
 		[Priority(-1), Command(
 			"danku", "dankje", "dankjewel", "bedankt", "dank",
@@ -40,6 +46,20 @@ namespace RoosterBot.GLU {
 		public CommandResult AlwaysJoramCommand(bool value) {
 			UserConfig.SetData("misc.alwaysjoram", value);
 			return TextResult.Success($"Je krijgt nu {(value ? "altijd" : "niet altijd")} <:wsjoram:570601561072467969> als je `!bedankt` gebruikt.");
+		}
+
+		[Command("users with mismatched student set roles"), UserIsModerator]
+		public async Task<CommandResult> CheckMismatchedRoles() {
+			return UserListModule.ReplyList(Context, (await UserListModule.GetList(Context))
+				.Where(user => Task.Run(async () => {
+					var config = await UCS.GetConfigAsync(user.GetReference());
+					if (config.GetIdentifier() is StudentSetInfo ssi) {
+						return ((IGuildUser) user.DiscordEntity).StudentSetRoles(ssi).Any();
+					} else {
+						return false;
+					}
+				}).Result)
+			);
 		}
 	}
 }
