@@ -83,56 +83,30 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
-    <div><span class="xref">System.Collections.IEnumerator</span></div>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
+    <div><span class="xref">IEnumerator</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.Schedule.html">RoosterBot.Schedule</a></h6>
   <h6><strong>Assembly</strong>: Schedule.dll</h6>
   <h5 id="RoosterBot_Schedule_DayScheduleEnumerator_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class DayScheduleEnumerator : IBidirectionalEnumerator&lt;RoosterCommandResult&gt;, IEnumerator&lt;RoosterCommandResult&gt;, IEnumerator, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class DayScheduleEnumerator : object, IBidirectionalEnumerator&lt;RoosterCommandResult&gt;, IEnumerator&lt;RoosterCommandResult&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator__ctor_RoosterBot_RoosterCommandContext_RoosterBot_Schedule_IdentifierInfo_System_DateTime_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.%23ctor(RoosterBot.RoosterCommandContext%2CRoosterBot.Schedule.IdentifierInfo%2CSystem.DateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator__ctor_RoosterBot_RoosterCommandContext_RoosterBot_Schedule_IdentifierInfo_DateTime_System_String___.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.%23ctor(RoosterBot.RoosterCommandContext%2CRoosterBot.Schedule.IdentifierInfo%2CDateTime%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L43">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L39">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator__ctor_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.#ctor*"></a>
-  <h4 id="RoosterBot_Schedule_DayScheduleEnumerator__ctor_RoosterBot_RoosterCommandContext_RoosterBot_Schedule_IdentifierInfo_System_DateTime_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.#ctor(RoosterBot.RoosterCommandContext,RoosterBot.Schedule.IdentifierInfo,System.DateTime)">DayScheduleEnumerator(RoosterCommandContext, IdentifierInfo, DateTime)</h4>
+  <h4 id="RoosterBot_Schedule_DayScheduleEnumerator__ctor_RoosterBot_RoosterCommandContext_RoosterBot_Schedule_IdentifierInfo_DateTime_System_String___" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.#ctor(RoosterBot.RoosterCommandContext,RoosterBot.Schedule.IdentifierInfo,DateTime,System.String[])">DayScheduleEnumerator(RoosterCommandContext, IdentifierInfo, DateTime, String[])</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DayScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, DateTime initialDate)</code></pre>
+    <pre><code class="lang-csharp hljs">public DayScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, DateTime initialDate, string[] header)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -155,8 +129,13 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="xref">DateTime</span></td>
         <td><span class="parametername">initialDate</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">header</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -165,10 +144,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L18">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L18">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator_Current_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Current*"></a>
   <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_Current" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Current">Current</h4>
@@ -197,10 +176,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Dispose.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Dispose.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L53">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L52">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator_Dispose_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Dispose*"></a>
   <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_Dispose" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Dispose">Dispose()</h4>
@@ -212,10 +191,10 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_MoveNext.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.MoveNext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_MoveNext.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.MoveNext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L54">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L53">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator_MoveNext_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.MoveNext*"></a>
   <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_MoveNext" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.MoveNext">MoveNext()</h4>
@@ -242,10 +221,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_MovePrevious.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.MovePrevious%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_MovePrevious.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.MovePrevious%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L62">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L58">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator_MovePrevious_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.MovePrevious*"></a>
   <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_MovePrevious" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.MovePrevious">MovePrevious()</h4>
@@ -272,10 +251,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Reset.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_Reset.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L70">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L63">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_DayScheduleEnumerator_Reset_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Reset*"></a>
   <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_Reset" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.Reset">Reset()</h4>
@@ -285,50 +264,12 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
   </div>
-  <h3 id="eii">Explicit Interface Implementations
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator_System_Collections_IEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator.System%23Collections%23IEnumerator%23Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L41">View Source</a>
-  </span>
-  <a id="RoosterBot_Schedule_DayScheduleEnumerator_System_Collections_IEnumerator_Current_" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.System#Collections#IEnumerator#Current*"></a>
-  <h4 id="RoosterBot_Schedule_DayScheduleEnumerator_System_Collections_IEnumerator_Current" data-uid="RoosterBot.Schedule.DayScheduleEnumerator.System#Collections#IEnumerator#Current">IEnumerator.Current</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">object IEnumerator.Current { get; }</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator&lt;T&gt;</a>
   </div>
   <div>
-      <span class="xref">System.Collections.Generic.IEnumerator&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.IEnumerator</span>
-  </div>
-  <div>
-      <span class="xref">System.IDisposable</span>
+      <span class="xref">IEnumerator&lt;&gt;</span>
   </div>
 </article>
           </div>
@@ -338,10 +279,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_DayScheduleEnumerator.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.DayScheduleEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L9" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/Enumerators/DayScheduleEnumerator.cs/#L9" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

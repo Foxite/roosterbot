@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "README.html",
-          "hash": "jsCiSYxic3JnI3Q+X3pYVw=="
+          "hash": "J1GxM5kIgP7cM4fhUsKo7Q=="
         }
       },
       "is_incremental": false,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AWS.AWSComponent.html",
-          "hash": "D+PCgwV/h7SR3DCnc1CQyA=="
+          "hash": "2IB8xcu+J00B7phNUWashA=="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AWS.AWSConfigService.html",
-          "hash": "7zUMPBIwAVpd0Yt3YgiIGA=="
+          "hash": "LXC7UhgUvxVLDBAlnPm7XA=="
         }
       },
       "is_incremental": false,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AWS.DynamoDBChannelConfigService.html",
-          "hash": "33eiQE7Z8KaU/3YllWoRjw=="
+          "hash": "YULk2tsJisBIfKdDIIDzrA=="
         }
       },
       "is_incremental": false,
@@ -57,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AWS.DynamoDBUserConfigService.html",
-          "hash": "J6yVnVbyDJ22fdXmM5fn7g=="
+          "hash": "NbOcT3wucFNnDspCl8nM3w=="
         }
       },
       "is_incremental": false,
@@ -69,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AWS.SNSNotificationHandler.html",
-          "hash": "PvFQpvYIPJM3j/nMnHjYGw=="
+          "hash": "rNcqsa1m5LgfxhMEqyVM5g=="
         }
       },
       "is_incremental": false,
@@ -93,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ArrayParser-1.html",
-          "hash": "fqL9Z3TgL3BBXXaTonAHHQ=="
+          "hash": "ZtjqA92FIlBV46l7pWHBjg=="
         }
       },
       "is_incremental": false,
@@ -105,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AspectListItem.html",
-          "hash": "14RquZpdWprtYgewGPyDFQ=="
+          "hash": "ObNdGGA0cyyTQCYxktNFCw=="
         }
       },
       "is_incremental": false,
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.AspectListResult.html",
-          "hash": "YyLdrvuTxLsRBQGikx1WkA=="
+          "hash": "/uIsxSJt/XJOi3eX/SVlpw=="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ChannelConfig.html",
-          "hash": "K82LOmCFnHzWjw9cWXlHWw=="
+          "hash": "lEnxA+D0CGgrYGRJ2rLT0w=="
         }
       },
       "is_incremental": false,
@@ -141,19 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ChannelConfigService.html",
-          "hash": "24OOno5q7dlE5+gKDv4oxg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.ChannelSpecificInfo.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.ChannelSpecificInfo.html",
-          "hash": "7O74eDOWoC85Zxi5HTs0qA=="
+          "hash": "F4z42llmC/G+eOuIGaT96Q=="
         }
       },
       "is_incremental": false,
@@ -165,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CommandHandler.html",
-          "hash": "IMpbx2NkDXYfWUrPrGr/SA=="
+          "hash": "UIm0nFUBuepQjMnQNj1tVw=="
         }
       },
       "is_incremental": false,
@@ -177,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CommandResponsePair.html",
-          "hash": "tXExPjRS6Xquo0J1vuCQpA=="
+          "hash": "xgNDk6yR0TGIWfM/bPTxhQ=="
         }
       },
       "is_incremental": false,
@@ -189,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CommandUtil.html",
-          "hash": "iSoCNbW/TCQHPa8psyWa9A=="
+          "hash": "5WlpoOe3LVNAkSsdbjYYVQ=="
         }
       },
       "is_incremental": false,
@@ -201,7 +189,43 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Component.html",
-          "hash": "1AgQPhZeT0kVahKUXeg0YQ=="
+          "hash": "xri8F3o3xmY+2lC69MFQSw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentConstructionException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentConstructionException.html",
+          "hash": "dqi9TAn20igh8oQQpjdGDA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentDependencyException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentDependencyException.html",
+          "hash": "Dofd5yjncks+qQTeFu0EQA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentException.html",
+          "hash": "t9SGBGGan+c5nDaqCdN+NA=="
         }
       },
       "is_incremental": false,
@@ -213,7 +237,31 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ComponentManager.html",
-          "hash": "e8VsBtDWxkCGk9Mh2L6eQw=="
+          "hash": "rgkqmQThYatnKvYJvi2G5g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentModuleException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentModuleException.html",
+          "hash": "HZ/gNOf64r2VEDWHXLvPUA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.ComponentServiceException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.ComponentServiceException.html",
+          "hash": "K8JtZJ5KHp8RoBAtsHeKCA=="
         }
       },
       "is_incremental": false,
@@ -225,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CompoundResult.html",
-          "hash": "jUuU6OFOT/0D+D5EZoDD2Q=="
+          "hash": "zLEujxpXnfUVbiHOfXU2yA=="
         }
       },
       "is_incremental": false,
@@ -237,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ConversionParser-2.html",
-          "hash": "kKM7A5IMW+u523+WTUqUng=="
+          "hash": "IEB2r23ea4GuTWZv9AgBEQ=="
         }
       },
       "is_incremental": false,
@@ -249,7 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CooldownType.html",
-          "hash": "wHXyCyRrhQ5wISACz5n56A=="
+          "hash": "7lmbGCrm6Oy/2LLc6J5Wew=="
         }
       },
       "is_incremental": false,
@@ -261,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CountAttribute.html",
-          "hash": "3IRPybNNIwHB8QD+ym1idg=="
+          "hash": "s9I0+XHAnHzpNF1TQicdvg=="
         }
       },
       "is_incremental": false,
@@ -273,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.CultureNameService.html",
-          "hash": "NMr8I+n7wwg6bpXzQUAkFA=="
+          "hash": "uniysMEg9enlZ7Xl5irUdw=="
         }
       },
       "is_incremental": false,
@@ -285,7 +333,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtil.html",
-          "hash": "yt1mZ3dlSjzWuRHsLAok9g=="
+          "hash": "wwpNxb2pzsTF1HPwgcetIg=="
         }
       },
       "is_incremental": false,
@@ -297,7 +345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DateTimeUtils.DateTimeUtilsComponent.html",
-          "hash": "BnmV1l7OWb3QiGYL1ezzjg=="
+          "hash": "wqJpFDmnxP50PFSomtu/Fg=="
         }
       },
       "is_incremental": false,
@@ -309,7 +357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DateTimeUtils.DayOfWeekParser.html",
-          "hash": "YSuqEEINMvTFX5YFDZ5j7A=="
+          "hash": "LEjKHntTK53G2BRQ2UvlHQ=="
         }
       },
       "is_incremental": false,
@@ -329,11 +377,35 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DependencyResult.Builder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DependencyResult.Builder.html",
+          "hash": "2shKolC3022h9Ok3vDDteQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.DependencyResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.DependencyResult.html",
+          "hash": "wwFef1aYhPqE+rXyeU4B4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/RoosterBot.DiscordNet.ChannelParser-1.yml",
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.ChannelParser-1.html",
-          "hash": "JIx+1W/gpjtRTD9lEeUqAg=="
+          "hash": "xSrqJjL9+I8+66B2YL4wuA=="
         }
       },
       "is_incremental": false,
@@ -345,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordChannel.html",
-          "hash": "Bu/bc/JfC5XvzeVra6IH9Q=="
+          "hash": "BBopwnoO68LO6EiTEhiuaQ=="
         }
       },
       "is_incremental": false,
@@ -357,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordCommandContext.html",
-          "hash": "eMQtymOBIa8k53jjLTsWww=="
+          "hash": "fbJFyFzWuF+t5CuXOye4Rw=="
         }
       },
       "is_incremental": false,
@@ -369,7 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordEmote.html",
-          "hash": "/xoiy3iOJE6W6ajo7uh/rw=="
+          "hash": "l3O5p9L2Xx93bCuRurxfxg=="
         }
       },
       "is_incremental": false,
@@ -381,19 +453,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordMessage.html",
-          "hash": "arsKLjLDcwGZ2X5lrW50/A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.DiscordNet.DiscordNetCheckAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.DiscordNet.DiscordNetCheckAttribute.html",
-          "hash": "XOE5GJFa83SJjF6b6YgoIA=="
+          "hash": "oZ4FEdUk2z1tPkYVxw7a8w=="
         }
       },
       "is_incremental": false,
@@ -405,7 +465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordNetComponent.html",
-          "hash": "XaRwySaBBXT6e99bXC7KCw=="
+          "hash": "mF3zqQeYMZH1/D0/yGj3vw=="
         }
       },
       "is_incremental": false,
@@ -417,7 +477,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.DiscordUser.html",
-          "hash": "A02AoC5FqFCyTFkKMOa+DQ=="
+          "hash": "v8CoyBEsQ5RuNXU08eeeWA=="
         }
       },
       "is_incremental": false,
@@ -425,11 +485,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.DiscordNet.EmoteModule.yml",
+      "source_relative_path": "api/RoosterBot.DiscordNet.EmoteTheftModule.yml",
       "output": {
         ".html": {
-          "relative_path": "api/RoosterBot.DiscordNet.EmoteModule.html",
-          "hash": "ynVUzK1v6Dilcb8SDh6JkQ=="
+          "relative_path": "api/RoosterBot.DiscordNet.EmoteTheftModule.html",
+          "hash": "R2ZB/Zqo/1nD75aPkv7drw=="
         }
       },
       "is_incremental": false,
@@ -441,7 +501,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.InfoModule.html",
-          "hash": "GWdv0lrCVytTGJxWZWc13Q=="
+          "hash": "Ceab+GylHchLAAF2puHvJA=="
         }
       },
       "is_incremental": false,
@@ -453,19 +513,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.InteractiveMessageHandler.html",
-          "hash": "Et2soSnuoKSwEqFtPLyLAA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.DiscordNet.MessageHasAttachmentAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.DiscordNet.MessageHasAttachmentAttribute.html",
-          "hash": "FYgfDrGLdj82pM5PiEPHIg=="
+          "hash": "K7j9TPK/6jAriNExo36oQw=="
         }
       },
       "is_incremental": false,
@@ -477,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.MessageParser-1.html",
-          "hash": "siIHdRdjVOR+yiJqX34OTQ=="
+          "hash": "NOTwstVO15GofLm849zgtw=="
         }
       },
       "is_incremental": false,
@@ -489,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.RoleParser-1.html",
-          "hash": "XfJqlcq9n88zdlZniMQuMg=="
+          "hash": "YOTidIT1asG/jOiyxPIsZQ=="
         }
       },
       "is_incremental": false,
@@ -501,7 +549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.UserListModule.html",
-          "hash": "F3WnWDfA7JG1BOpzPb7vGQ=="
+          "hash": "8+aSw5UOERb/Ipo7A7+YJg=="
         }
       },
       "is_incremental": false,
@@ -513,7 +561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.UserParser-1.html",
-          "hash": "BgaqRF3O/45yKiUWOCrCgQ=="
+          "hash": "fCmD4G5qG9Qu4kp9mRT+pA=="
         }
       },
       "is_incremental": false,
@@ -525,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.DiscordNet.html",
-          "hash": "rgjK7syoEEvLKONwXkptyA=="
+          "hash": "KIdIuD66YoUFU1AQSVIdHQ=="
         }
       },
       "is_incremental": false,
@@ -537,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Emoji.html",
-          "hash": "sbj7tgLbw2BH7P4sXk6J5g=="
+          "hash": "AP/G16SdzS9O+U2h0uVOcA=="
         }
       },
       "is_incremental": false,
@@ -549,7 +597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.EmoteService.html",
-          "hash": "TZ3NnQKLFCh76TYvXkjeyQ=="
+          "hash": "D/rBruOXqkDSR9yqEnU7+Q=="
         }
       },
       "is_incremental": false,
@@ -561,7 +609,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.GrammarParameterAttribute.html",
-          "hash": "5TCjAXzh/0sTwuNKrUVwvw=="
+          "hash": "TD0fSqToD/32O/pOTHwTfA=="
         }
       },
       "is_incremental": false,
@@ -573,7 +621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.HelpService.html",
-          "hash": "ObkoDAIS4b/LKjf/zlvXeg=="
+          "hash": "2T52J1nyaADc8zANKSSzVw=="
         }
       },
       "is_incremental": false,
@@ -585,7 +633,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.HiddenFromListAttribute.html",
-          "hash": "+U0wTuZrPVrxMtLH5Bv5yw=="
+          "hash": "PU811r76OJAOc2XywIbsvg=="
         }
       },
       "is_incremental": false,
@@ -597,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IBidirectionalEnumerator-1.html",
-          "hash": "3OOoQZdAgE36plUGEbLULg=="
+          "hash": "P8hCWpTHuFzeP6dbp17tQA=="
         }
       },
       "is_incremental": false,
@@ -609,7 +657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IChannel.html",
-          "hash": "Wu7ZMkVBWpSjgUs/Mkq4sA=="
+          "hash": "7NU2zvX0RFyimWehcbXqYw=="
         }
       },
       "is_incremental": false,
@@ -621,7 +669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IEmote.html",
-          "hash": "2XB+W4xIYfu+VQDHZmzZMw=="
+          "hash": "GCZ5jsLgqYLH7/GetVlBDg=="
         }
       },
       "is_incremental": false,
@@ -633,7 +681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IExternalResultStringParser.html",
-          "hash": "5SeUuht/3//jn6om7vnTKg=="
+          "hash": "I7rvTs+Zpdugo0qBBIlUqg=="
         }
       },
       "is_incremental": false,
@@ -645,7 +693,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IMessage.html",
-          "hash": "iLGXBaCEfx/+3oR0hlbvGQ=="
+          "hash": "DUDN6i5BMiaWyR7eRc5xEQ=="
         }
       },
       "is_incremental": false,
@@ -657,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IRoosterTypeParser.html",
-          "hash": "anji+Xn7L+yqYjRoAFKlsg=="
+          "hash": "tcbOHJgx9gP4Ee/GeSHr9g=="
         }
       },
       "is_incremental": false,
@@ -669,7 +717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IRoosterTypeParserResult.html",
-          "hash": "eayzw19bghcg0TtLLK9S+g=="
+          "hash": "WVya1BbeGd/cWE0553koMA=="
         }
       },
       "is_incremental": false,
@@ -681,7 +729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ISnowflake.html",
-          "hash": "ZhiVy6idnAZbKtr9PLr3Iw=="
+          "hash": "K6WDVqHH6q4fT/3HCHSerg=="
         }
       },
       "is_incremental": false,
@@ -693,43 +741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.IUser.html",
-          "hash": "deQ75niPSnH8Eep8RekOIg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.LogEndpoint.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.LogEndpoint.html",
-          "hash": "3OopGkC1RxVDJTyFu9qC2A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.LogLevel.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.LogLevel.html",
-          "hash": "MdYs69F94aqdppbNGrpiXA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.LogMessage.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.LogMessage.html",
-          "hash": "r06CTyvtQNkG9hHSK9WK4w=="
+          "hash": "gMOQTAmt8Gs/M3mBpxjFvw=="
         }
       },
       "is_incremental": false,
@@ -741,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Logger.html",
-          "hash": "cpY6gHoPR+FAE+JSFkMfRg=="
+          "hash": "S11WyAYtJhY9aixoY/4gfQ=="
         }
       },
       "is_incremental": false,
@@ -753,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.BoolParser.html",
-          "hash": "glinYOkTOmoQ8CiuTfuWYg=="
+          "hash": "uhrnJAoTBI+gN3NczgRHIw=="
         }
       },
       "is_incremental": false,
@@ -765,7 +777,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.ChannelConfigModule.html",
-          "hash": "3n0mHsp8uQwctGP2WTqTUg=="
+          "hash": "m8q7+hKvw7uOxs3k57srBw=="
         }
       },
       "is_incremental": false,
@@ -777,7 +789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.CharParser.html",
-          "hash": "gZu05mSfq1614kHS8FX/xA=="
+          "hash": "LGhK23KcAD6NsXzp8SHL2g=="
         }
       },
       "is_incremental": false,
@@ -789,7 +801,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.CommandsListModule.html",
-          "hash": "rj+BgEXrnyjjuDuYAnIBZg=="
+          "hash": "3oIjo1MLaCTMUDAXothM1w=="
         }
       },
       "is_incremental": false,
@@ -801,7 +813,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.ControlModule.html",
-          "hash": "lG15aTp/4t+ZpYe61VjKZQ=="
+          "hash": "djxJi+bMk73fowrQRFQyCg=="
         }
       },
       "is_incremental": false,
@@ -813,7 +825,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.CultureInfoParser.html",
-          "hash": "GsRKWQeMWAU3o0oTgzOZng=="
+          "hash": "ehVotXTVxFCT3w9tX40A1A=="
         }
       },
       "is_incremental": false,
@@ -825,7 +837,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.DebuggingModule.html",
-          "hash": "/Bk/+xxtErUzd7I74bCvjg=="
+          "hash": "/QG+AefETZMhbwBvCeL0ag=="
         }
       },
       "is_incremental": false,
@@ -837,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.FileChannelConfigService.html",
-          "hash": "+bC+Fx+9sX2INKDPjDpO+g=="
+          "hash": "rLGA26NXb/8Cd1YjGuiubA=="
         }
       },
       "is_incremental": false,
@@ -849,7 +861,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.FileUserConfigService.html",
-          "hash": "o/2mHSnucLOaMbqHymtpjw=="
+          "hash": "6Z8CByvxTiSSG/HY9jgx5A=="
         }
       },
       "is_incremental": false,
@@ -861,7 +873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.HelpModule.html",
-          "hash": "wYOCWmhCz29rLAXiSNBNuw=="
+          "hash": "WaQ0Wi0F+9t2iZ0D5zJURw=="
         }
       },
       "is_incremental": false,
@@ -873,7 +885,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.InfoModule.html",
-          "hash": "CwqxgYx+7yQF/WHJnLTVUw=="
+          "hash": "dNTvOibAVVuoa7p0sthM1A=="
         }
       },
       "is_incremental": false,
@@ -885,7 +897,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.MetaComponent.html",
-          "hash": "0gFgsUTopFTq6EaV6Quy3w=="
+          "hash": "Rphz7HdQiftwQMHF1fZL4Q=="
         }
       },
       "is_incremental": false,
@@ -897,7 +909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.ModuleDisableModule.html",
-          "hash": "SlHpBA3BGEQlLHddJfUgUw=="
+          "hash": "GbqUxv5NbUrHJ3uVtWWEiA=="
         }
       },
       "is_incremental": false,
@@ -909,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.PrimitiveParser-1.html",
-          "hash": "dRSqaP7qTllBlOwtGBumjg=="
+          "hash": "TsxbE/E02WozUJvFtq++Ww=="
         }
       },
       "is_incremental": false,
@@ -921,19 +933,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.TryParsePrimitive-1.html",
-          "hash": "hUcsHRk8R18VdgxZgIsaCA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.Meta.UriParser.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.Meta.UriParser.html",
-          "hash": "IgYJVukIvdUHfrWXKtMjbA=="
+          "hash": "tn9qHBd7oaOqnFJe8TENHg=="
         }
       },
       "is_incremental": false,
@@ -945,7 +945,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.UserConfigModule.html",
-          "hash": "F+c2IF03nTxq/OupO1UBTQ=="
+          "hash": "qWiozj6P+xkSyvoisaNNIQ=="
         }
       },
       "is_incremental": false,
@@ -957,7 +957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Meta.html",
-          "hash": "K6a1NKjZ9mlb3wNg7Xw4LQ=="
+          "hash": "r61UKxEdYYaBzQ8MjxMCNQ=="
         }
       },
       "is_incremental": false,
@@ -969,7 +969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.MissingResourceException.html",
-          "hash": "2bjo4HHfDKwpZGlspDLRUw=="
+          "hash": "c53dlQDmbypJj64/P8q3Pw=="
         }
       },
       "is_incremental": false,
@@ -981,19 +981,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.MultiParser-1.html",
-          "hash": "/vM4hw5v2LGTsH9vEEmedg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.NoAllowedChannelsException.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.NoAllowedChannelsException.html",
-          "hash": "LOZ5eUopSDCaHTIC3Bp7YA=="
+          "hash": "3HKCYqgJvEj/9jTKkEJpLA=="
         }
       },
       "is_incremental": false,
@@ -1005,7 +993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.NotificationEventArgs.html",
-          "hash": "uQhhTinFj+lFgj9hctdwKA=="
+          "hash": "Fbr65kdaSXY+IgVzDRuU3Q=="
         }
       },
       "is_incremental": false,
@@ -1017,7 +1005,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.NotificationService.html",
-          "hash": "FjPRa2+W4fguZy+PZLko4A=="
+          "hash": "LsH1NvC7KtTXn+2btx6Jeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.OuterComponentException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.OuterComponentException.html",
+          "hash": "nTgu8c9KBSf3C2dIghZFqQ=="
         }
       },
       "is_incremental": false,
@@ -1029,7 +1029,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.PaginatedResult.html",
-          "hash": "0Il9ellZC0chYWgvUb+Y9g=="
+          "hash": "sTIHbURxuU9u8pW6SEAoPg=="
         }
       },
       "is_incremental": false,
@@ -1041,7 +1041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.PaginatedTableEnumerator.html",
-          "hash": "m7njY8ZMMSbD9OQ4XiAxzw=="
+          "hash": "feBUiAG9Tf9kriTjCemOTg=="
         }
       },
       "is_incremental": false,
@@ -1053,7 +1053,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.PlatformComponent.html",
-          "hash": "2Q0gSZL8mHuG1eONQi1bJQ=="
+          "hash": "gXQOK3panhB/PcJUEriKcA=="
         }
       },
       "is_incremental": false,
@@ -1065,7 +1065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.PlatformSpecificParser-1.html",
-          "hash": "DsYdn2w+iJWLQlk4IZxvUg=="
+          "hash": "AUPGFB1Aq1B3Lx/FFnQdAQ=="
         }
       },
       "is_incremental": false,
@@ -1077,7 +1077,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Program.html",
-          "hash": "Qt3GL+G8Ot2/nFFOBXGhvA=="
+          "hash": "nxrwcf3UQYFqfHrUy5+LKQ=="
         }
       },
       "is_incremental": false,
@@ -1089,7 +1089,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RequireBotManagerAttribute.html",
-          "hash": "FMoS2d2z+S/KO0FNdp7nKg=="
+          "hash": "HFHKMqulaQjARFlbGbCENQ=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RequireCultureAttribute.html",
-          "hash": "dIg73oK9wDqTlg8X6GcLhA=="
+          "hash": "JkXWIJ22LuQTYL3mljMjfQ=="
         }
       },
       "is_incremental": false,
@@ -1113,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RequirePrivateAttribute.html",
-          "hash": "m/SrxVJF4vC6TeRSIAe11w=="
+          "hash": "No7mVbcqXfKhcRxmEOlIpA=="
         }
       },
       "is_incremental": false,
@@ -1125,19 +1125,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ResourceService.html",
-          "hash": "c5pNqZHedlZMraJHhj5LvQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.RoosterCheckAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.RoosterCheckAttribute.html",
-          "hash": "K82ntoAS9dO1y602qWsuSA=="
+          "hash": "phrZR9amr9tncaj89n9Mng=="
         }
       },
       "is_incremental": false,
@@ -1149,7 +1137,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterCheckResult.html",
-          "hash": "KEzrJ7dQJmiBNR8cquojfA=="
+          "hash": "5spa0JhuFovb1oin/rgJMw=="
         }
       },
       "is_incremental": false,
@@ -1161,7 +1149,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterCommandContext.html",
-          "hash": "m+b1xFfqj1nyB2n3vkasKQ=="
+          "hash": "nD4x2piRhbzZAmDreYu5Ig=="
         }
       },
       "is_incremental": false,
@@ -1173,7 +1161,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterCommandResult.html",
-          "hash": "8i9M31VBjZT6F6slK3yuow=="
+          "hash": "w1MTTdzW5RbIAJjGFuFApw=="
         }
       },
       "is_incremental": false,
@@ -1185,7 +1173,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterCommandService.html",
-          "hash": "aeqiMCjnVBfJ1lPNHa6V7A=="
+          "hash": "fo8CqgTmO281kLIbSwEg3A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterModule-1.ModuleLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterModule-1.ModuleLogger.html",
+          "hash": "Yvk+fgrWD9F8J66HWMXU/Q=="
         }
       },
       "is_incremental": false,
@@ -1197,7 +1197,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterModule-1.html",
-          "hash": "JkwY2F8KAk3KCit0vDAxGA=="
+          "hash": "7NePlWeb5Ul2QYnOr2I4TQ=="
         }
       },
       "is_incremental": false,
@@ -1209,7 +1209,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterModule.html",
-          "hash": "djWV9Y2B01CuEpVj/4fpmw=="
+          "hash": "Jtx4RUdFRfGAEbrjcS/tbw=="
         }
       },
       "is_incremental": false,
@@ -1221,7 +1221,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterParameterCheckAttribute.html",
-          "hash": "nexlMPIGqhwx38a+yM95LA=="
+          "hash": "/CY5sh+U9OBskFP2RDvsjw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.RoosterPreconditionAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.RoosterPreconditionAttribute.html",
+          "hash": "wCVRlAn9IgIW1r63SjeyCA=="
         }
       },
       "is_incremental": false,
@@ -1233,7 +1245,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterTextAttribute.html",
-          "hash": "eL/GipbrlAl8qyjqsCJ/CQ=="
+          "hash": "wHqGgJzsG6l1dTv4T4A5Gg=="
         }
       },
       "is_incremental": false,
@@ -1245,7 +1257,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterTypeParser-1.html",
-          "hash": "RGkqRoIxbpGaFBjSFBLO7w=="
+          "hash": "IJsaR94Vomdztf1Cc7+2BA=="
         }
       },
       "is_incremental": false,
@@ -1257,7 +1269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.RoosterTypeParserResult-1.html",
-          "hash": "FqmMlbMgTTI7NyJfYjjnuA=="
+          "hash": "TJkMOy3o6MrgCdgfbpQp4w=="
         }
       },
       "is_incremental": false,
@@ -1269,7 +1281,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ActivityInfo.html",
-          "hash": "r2DD9fPulBaKCNehrrUm1A=="
+          "hash": "zgJpPm0wO2B6T8x9JO6OeA=="
         }
       },
       "is_incremental": false,
@@ -1281,7 +1293,31 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.AvailabilityInfo.html",
-          "hash": "BdYhFQq/lvx8DG07CEFtJQ=="
+          "hash": "iUpHqsY7DZ6R4TbwDJQCuw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.BreakTime.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.BreakTime.html",
+          "hash": "xiYI6t0VqJ3XaviUHEF3wA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ChannelSpecificInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ChannelSpecificInfo.html",
+          "hash": "+pSf9P39kiSiuHRAILjd+w=="
         }
       },
       "is_incremental": false,
@@ -1293,7 +1329,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.DayScheduleEnumerator.html",
-          "hash": "hIX3R5MnHDnsVOUirI2T+w=="
+          "hash": "aB5Fgs/+N3I4LB5W+qOwEw=="
         }
       },
       "is_incremental": false,
@@ -1305,7 +1341,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.IdentifierInfo.html",
-          "hash": "O3AH1+ZQKbf+m3LbVmOfcA=="
+          "hash": "7MisIMKa1kzgG7kbNxa7vQ=="
         }
       },
       "is_incremental": false,
@@ -1317,19 +1353,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.IdentifierInfoParserBase-1.html",
-          "hash": "dh+q6IqYcT6qGBMiuCmPSQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.Schedule.IdentifierInfoWrapper.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/RoosterBot.Schedule.IdentifierInfoWrapper.html",
-          "hash": "ywDFvdlv/77tWSwqbvbguQ=="
+          "hash": "Qd4LV00IhYkGavDq5AKaPw=="
         }
       },
       "is_incremental": false,
@@ -1341,7 +1365,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.IdentifierNotFoundException.html",
-          "hash": "BfOeWgA6RvJwbUaH0ZqYkA=="
+          "hash": "eJRQHpxqGyQ+WOEB6clfbw=="
         }
       },
       "is_incremental": false,
@@ -1353,7 +1377,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.IdentifierValidationService.html",
-          "hash": "O/pNEYM3nGUSCpX8jw42gw=="
+          "hash": "dHThzhsjviK7DskkuUtI5A=="
         }
       },
       "is_incremental": false,
@@ -1365,7 +1389,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.IdentifierValidator.html",
-          "hash": "PXjO3TgLJuv3Lnr3Avoa0Q=="
+          "hash": "4N4vDTVZrEZLJ0zQ8tb4Sg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.LastScheduleCommandInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.LastScheduleCommandInfo.html",
+          "hash": "FOT/khczaHFjXPZOBw012w=="
         }
       },
       "is_incremental": false,
@@ -1377,7 +1413,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.MemoryScheduleProvider.html",
-          "hash": "OuILtgFbz+N1QbgYnQOACw=="
+          "hash": "m78z8U2QepoJWoA8osTJ+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.NoAllowedChannelsException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.NoAllowedChannelsException.html",
+          "hash": "72ogpT6yyyb9X5NldIdyrw=="
         }
       },
       "is_incremental": false,
@@ -1389,7 +1437,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.RecordsOutdatedException.html",
-          "hash": "sfIcJLHx1mkLsKiGP2FhBg=="
+          "hash": "Ye4aABWIQJNuy1AGZIvRQA=="
         }
       },
       "is_incremental": false,
@@ -1401,7 +1449,31 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ReturnValue-1.html",
-          "hash": "kp+F7hZCEaw56Ai/+rpSxA=="
+          "hash": "dDRRmjKQZmSLCMxxbPVTZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.RoomInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.RoomInfo.html",
+          "hash": "amnTDG3fXVjHLFulWXs+ew=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.RoomInfoParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.RoomInfoParser.html",
+          "hash": "+jFH0L95tqWzNUlVKw2qDg=="
         }
       },
       "is_incremental": false,
@@ -1413,7 +1485,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleComponent.html",
-          "hash": "Yi7cblrqXEunlgejNlaxCg=="
+          "hash": "em0Qw5AvRMonrwrqf806iw=="
         }
       },
       "is_incremental": false,
@@ -1425,7 +1497,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleModule.html",
-          "hash": "i4lF9Z7UtnI1J2BQxgNLvQ=="
+          "hash": "XF6JekxWwtkp7dygchMg9Q=="
         }
       },
       "is_incremental": false,
@@ -1437,7 +1509,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleProvider.html",
-          "hash": "IGgBpxo8vBszpom41k9Unw=="
+          "hash": "tofe1j2IaAfo9r1+RR6VtA=="
         }
       },
       "is_incremental": false,
@@ -1449,7 +1521,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleReader.html",
-          "hash": "Pcc6TvtHaLx66z6sJj0k0g=="
+          "hash": "doPGDZ9TsZy82dwm8Grmkw=="
         }
       },
       "is_incremental": false,
@@ -1461,7 +1533,19 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleRecord.html",
-          "hash": "UFy7mrl5XsU6v4UBJ8rocg=="
+          "hash": "fi5FNWrTlEh2hWpm9Vn85Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.ScheduleResultKind.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.ScheduleResultKind.html",
+          "hash": "ukhw2r6ypIWBaLd5MdNkDQ=="
         }
       },
       "is_incremental": false,
@@ -1473,7 +1557,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleService.html",
-          "hash": "MJ71YF+l2X+7XmYZLw9RDg=="
+          "hash": "wtVtCKqQCpiQ6TBmQ/pLlA=="
         }
       },
       "is_incremental": false,
@@ -1485,7 +1569,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.ScheduleUtil.html",
-          "hash": "PSdx2ZV9GGwEOJfZ/L3IHg=="
+          "hash": "8rnc027KqYQzZS0fPMAD8A=="
         }
       },
       "is_incremental": false,
@@ -1497,7 +1581,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.SingleScheduleEnumerator.html",
-          "hash": "DD0pfXGTOC2n9f1Z1Y0ZLQ=="
+          "hash": "bIgLvbbadk3+j/Unp/P8SQ=="
         }
       },
       "is_incremental": false,
@@ -1505,11 +1589,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.Schedule.UserChangedIdentifierEventArgs.yml",
+      "source_relative_path": "api/RoosterBot.Schedule.StaffMemberInfo.yml",
       "output": {
         ".html": {
-          "relative_path": "api/RoosterBot.Schedule.UserChangedIdentifierEventArgs.html",
-          "hash": "xEaZn/UVd6/0j4XSmQbf3w=="
+          "relative_path": "api/RoosterBot.Schedule.StaffMemberInfo.html",
+          "hash": "ohdmv51aKvNi7GLPnl98pA=="
         }
       },
       "is_incremental": false,
@@ -1517,11 +1601,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.Schedule.UserIdentifierModule.yml",
+      "source_relative_path": "api/RoosterBot.Schedule.StaffMemberInfoParser.yml",
       "output": {
         ".html": {
-          "relative_path": "api/RoosterBot.Schedule.UserIdentifierModule.html",
-          "hash": "EM/sjE/RvO9ktGyro83Fpw=="
+          "relative_path": "api/RoosterBot.Schedule.StaffMemberInfoParser.html",
+          "hash": "gO+EpH5SQhpairC6H2Qayg=="
         }
       },
       "is_incremental": false,
@@ -1529,11 +1613,83 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/RoosterBot.Schedule.UserIdentifierParser.yml",
+      "source_relative_path": "api/RoosterBot.Schedule.StaffMemberMatch.yml",
       "output": {
         ".html": {
-          "relative_path": "api/RoosterBot.Schedule.UserIdentifierParser.html",
-          "hash": "BCJ5/Q+nsgMX0h+30Y2iGQ=="
+          "relative_path": "api/RoosterBot.Schedule.StaffMemberMatch.html",
+          "hash": "uEh/ZJtzz6+7lfQZ3PNzhQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.StaffMemberModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.StaffMemberModule.html",
+          "hash": "vFohO9JKFo523KTLymJcnQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.StaffMemberService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.StaffMemberService.html",
+          "hash": "14lLf4NHpul4MTPDR0JVJg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.StudentSetInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.StudentSetInfo.html",
+          "hash": "sxhiJgT7RzYnmt9nePXqOQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.StudentSetInfoParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.StudentSetInfoParser.html",
+          "hash": "dNCsLTQlGIMIImf2Gr54ww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.UserChangedStudentSetEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.UserChangedStudentSetEventArgs.html",
+          "hash": "V/sH7UkqulPAkqpzVaXM0w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Schedule.UserClassModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Schedule.UserClassModule.html",
+          "hash": "ZJNHvOkExAlLCk7kj1WOyg=="
         }
       },
       "is_incremental": false,
@@ -1545,7 +1701,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.WeekScheduleEnumerator.html",
-          "hash": "PeWiMa8Zrz3qW9vKYjRFLQ=="
+          "hash": "fskXmtkUHR0hMrhJ7hBsPg=="
         }
       },
       "is_incremental": false,
@@ -1557,7 +1713,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Schedule.html",
-          "hash": "9i8XvvT+li9X2oyQHP5TNw=="
+          "hash": "UQsTZ7hzKEFKFyKJMfgSkg=="
         }
       },
       "is_incremental": false,
@@ -1569,7 +1725,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.SnowflakeNotFoundException.html",
-          "hash": "c6vYb5+6DOYOX9r3eYxdXw=="
+          "hash": "u03ku+OOfmG7APbrfzLYeA=="
         }
       },
       "is_incremental": false,
@@ -1581,7 +1737,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.SnowflakeReference.html",
-          "hash": "YVWnSGyXwCSjj3Un/ZLtaQ=="
+          "hash": "27sBgFMa08b1Ehdk9UP1rQ=="
         }
       },
       "is_incremental": false,
@@ -1593,7 +1749,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.ExternalStatistic.html",
-          "hash": "oIYceQNMkn+VX5pNW7lJuA=="
+          "hash": "ZytSsgA2+a8NR2wM6sFiog=="
         }
       },
       "is_incremental": false,
@@ -1605,7 +1761,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.Statistic.html",
-          "hash": "+d3DMQr/1nFvzxdUFkJ8rQ=="
+          "hash": "2nw5FYLemXAWMMcoZFliBQ=="
         }
       },
       "is_incremental": false,
@@ -1617,7 +1773,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.StatisticsComponent.html",
-          "hash": "G13A9Ck2u/wzxcPRS2kh1Q=="
+          "hash": "EdAZV97YkVKODHLHJxK60w=="
         }
       },
       "is_incremental": false,
@@ -1629,7 +1785,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.StatisticsModule.html",
-          "hash": "hAWTmCJZyd8uLaLhnbqF1g=="
+          "hash": "sZ7kl4VEMsntQTQcU81Apw=="
         }
       },
       "is_incremental": false,
@@ -1641,7 +1797,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.StatisticsService.html",
-          "hash": "W1leTeCetRf2OWRqXvSMrA=="
+          "hash": "ER0vsqkhG1B7a7QOmmjEwg=="
         }
       },
       "is_incremental": false,
@@ -1653,7 +1809,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Statistics.TimeStatistic.html",
-          "hash": "PEQ2jabyhhObRTd+/+VK9Q=="
+          "hash": "5YyZlt8zwIhDAi7fwcbYOA=="
         }
       },
       "is_incremental": false,
@@ -1677,7 +1833,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.StringUtil.html",
-          "hash": "RE7qTjRE8awTonWC9VEvGA=="
+          "hash": "sN7Zg1MeaQHq5eoyJiH+UQ=="
         }
       },
       "is_incremental": false,
@@ -1689,7 +1845,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.TableResult.html",
-          "hash": "aJAwszRGNf4T0sGrFhsedw=="
+          "hash": "D8xUl537FF+bwe+ssieaKQ=="
         }
       },
       "is_incremental": false,
@@ -1701,7 +1857,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramChannel.html",
-          "hash": "u64/Y0SL6LvCTCXz3/2Jeg=="
+          "hash": "D6/aSUNfMOqUbYIY03QC/w=="
         }
       },
       "is_incremental": false,
@@ -1713,7 +1869,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramCommandContext.html",
-          "hash": "an+f5Aq7lGF6/DmbkeP9eA=="
+          "hash": "u4BM8QYlSICREccv0RnEQg=="
         }
       },
       "is_incremental": false,
@@ -1725,7 +1881,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramComponent.html",
-          "hash": "Ozxm9TbcyjICt04mrLcu/g=="
+          "hash": "oRM2qVO9iv/sgsWGoBFlQw=="
         }
       },
       "is_incremental": false,
@@ -1737,7 +1893,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramMessage.html",
-          "hash": "82lF4qviZxxBokEDJBhOkQ=="
+          "hash": "gRcleCeTl2SdHE/5M21+Ww=="
         }
       },
       "is_incremental": false,
@@ -1749,7 +1905,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramMessageFacade.html",
-          "hash": "HRpyDJ5AILUTKeSwVzGDKw=="
+          "hash": "i2tL3COnS1Ueef5BNDU0HA=="
         }
       },
       "is_incremental": false,
@@ -1761,7 +1917,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramSnowflake.html",
-          "hash": "Sd8CSyVDCZ//bEj+cRRzNQ=="
+          "hash": "v4MyjlrkEG+eIH6ClEkJkA=="
         }
       },
       "is_incremental": false,
@@ -1773,7 +1929,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.TelegramUser.html",
-          "hash": "Dw2b9jkj7nNg2ndt2DOXJA=="
+          "hash": "y+EQhZsVoSqooIw2A9VY9A=="
         }
       },
       "is_incremental": false,
@@ -1785,7 +1941,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Telegram.html",
-          "hash": "PNSZ/GkiU9GMsORcFBfgTw=="
+          "hash": "KJiOSnhbDt2gymM8Ba5eFA=="
         }
       },
       "is_incremental": false,
@@ -1797,7 +1953,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.TextResult.html",
-          "hash": "Lj7r6NuMt51WPzxU4SXmGQ=="
+          "hash": "Z2Z330u+I+I3hQXVc2cTHA=="
         }
       },
       "is_incremental": false,
@@ -1809,7 +1965,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.TypeDisplayAttribute.html",
-          "hash": "LPm++GFnSCdcuAzGjRQCbA=="
+          "hash": "TvW3ZdqM+FjD4eatHG/MCw=="
         }
       },
       "is_incremental": false,
@@ -1821,7 +1977,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.UserConfig.html",
-          "hash": "aHzdOAYLA1DHj2KDzijq/Q=="
+          "hash": "xvFDckd268MssNhMuOf1XQ=="
         }
       },
       "is_incremental": false,
@@ -1833,7 +1989,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.UserConfigService.html",
-          "hash": "A2rhrj9XFDEg9Q1eS7MUKg=="
+          "hash": "+kx6d1OYbDird8rtYAspMg=="
         }
       },
       "is_incremental": false,
@@ -1845,7 +2001,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.UserIsModeratorAttribute.html",
-          "hash": "lvLU3mo+HDmWAlbfPTFmvQ=="
+          "hash": "gIzKBiAnJWRqKRfw+2MSEg=="
         }
       },
       "is_incremental": false,
@@ -1857,7 +2013,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.Util.html",
-          "hash": "2c7iLPwP+t6RUnYi23kPMg=="
+          "hash": "BnT7iJ+vDd7Mcs3adnfeEg=="
         }
       },
       "is_incremental": false,
@@ -1869,7 +2025,31 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.ValueTaskUtil.html",
-          "hash": "zRK3hanzqp40PUtBaf8C8w=="
+          "hash": "3ao9wM/ElHhYchs3rXy9HQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.Version.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.Version.html",
+          "hash": "puz3DXvzvtn6f7gG3CSctA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/RoosterBot.VersionPredicate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/RoosterBot.VersionPredicate.html",
+          "hash": "CXKiIkUP90Q2gaWhwANT5A=="
         }
       },
       "is_incremental": false,
@@ -1881,7 +2061,7 @@
       "output": {
         ".html": {
           "relative_path": "api/RoosterBot.html",
-          "hash": "nksCEAB+ennKcbAwr+Ui8g=="
+          "hash": "B8t0uxwqiuQ5uAfIPxKeUw=="
         }
       },
       "is_incremental": false,
@@ -1893,7 +2073,7 @@
       "output": {
         ".html": {
           "relative_path": "api/System.Linq.LinqExtensions.html",
-          "hash": "Zrin7dWtQruhgbZaWSb0ZQ=="
+          "hash": "8UQfiGR7KPncc3ID2bdnHA=="
         }
       },
       "is_incremental": false,
@@ -1905,7 +2085,7 @@
       "output": {
         ".html": {
           "relative_path": "api/System.Linq.html",
-          "hash": "cCPPVrJgMpCKQkESt2ygeg=="
+          "hash": "4QyEMFlHpNiu0mSbvGjkjA=="
         }
       },
       "is_incremental": false,
@@ -1917,7 +2097,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "n0+UdLUyQu+0c5XUHoD8iA=="
+          "hash": "4JqoHIWYGog6y+BWCyofNg=="
         }
       },
       "is_incremental": false,
@@ -1929,7 +2109,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "/0S/P/7FpuGNE0pshEzzwA=="
+          "hash": "Rl4GHlvXQ+uoRBfB7ivJWw=="
         }
       },
       "is_incremental": false,
@@ -1941,7 +2121,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/components/guide.html",
-          "hash": "nXFlERDij8i4Yo1fOlNRYw=="
+          "hash": "dWM2t+Cp06Hvh9M2fs19og=="
         }
       },
       "is_incremental": false,
@@ -1953,7 +2133,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/components/intro.html",
-          "hash": "SL3zArd7INCB2/74RDJj0A=="
+          "hash": "X2byxN9DUkMXaza7G3KKlQ=="
         }
       },
       "is_incremental": false,
@@ -1965,7 +2145,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/components/platform.html",
-          "hash": "22Hp21stb8LVeB8U4aECqg=="
+          "hash": "75PbKeF6IfKNu/Clfw8KXg=="
         }
       },
       "is_incremental": false,
@@ -1977,7 +2157,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/hosting.html",
-          "hash": "5O4ciWdmHolt70waxAGFmA=="
+          "hash": "spIr/e4/n4bbyA2LQXkkSA=="
         }
       },
       "is_incremental": false,
@@ -1989,7 +2169,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "KMeKkW6t5huGFL9V3BMaqA=="
+          "hash": "z/yL7wQWi8uTVq2BWIdixg=="
         }
       },
       "is_incremental": false,
@@ -2013,7 +2193,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "MeiYE3m5jPzl4Y6rV2uTIw=="
+          "hash": "tys1Gejlh8JeB/BOhCVK+w=="
         }
       },
       "is_incremental": false,
@@ -2052,7 +2232,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 158,
+          "total_file_count": 173,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {

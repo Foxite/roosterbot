@@ -84,10 +84,6 @@
       <div class="level3"><a class="xref" href="RoosterBot.DiscordNet.DiscordNetComponent.html">DiscordNetComponent</a></div>
       <div class="level3"><a class="xref" href="RoosterBot.Telegram.TelegramComponent.html">TelegramComponent</a></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -97,16 +93,16 @@
       <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_Tags">Component.Tags</a>
     </div>
     <div>
-      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_RequiredTags">Component.RequiredTags</a>
-    </div>
-    <div>
       <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_Name">Component.Name</a>
     </div>
     <div>
-      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_AddServices_Microsoft_Extensions_DependencyInjection_IServiceCollection_System_String_">Component.AddServices(IServiceCollection, String)</a>
+      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_CheckDependencies_IEnumerable_RoosterBot_Component__">Component.CheckDependencies(IEnumerable&lt;Component&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_AddModules_System_IServiceProvider_RoosterBot_RoosterCommandService_">Component.AddModules(IServiceProvider, RoosterCommandService)</a>
+      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_AddServices_IServiceCollection_System_String_">Component.AddServices(IServiceCollection, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_AddModules_IServiceProvider_RoosterBot_RoosterCommandService_">Component.AddModules(IServiceProvider, RoosterCommandService)</a>
     </div>
     <div>
       <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_Dispose_System_Boolean_">Component.Dispose(Boolean)</a>
@@ -114,42 +110,21 @@
     <div>
       <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_Dispose">Component.Dispose()</a>
     </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="RoosterBot_PlatformComponent_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class PlatformComponent : Component, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class PlatformComponent : Component</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PlatformComponent_PlatformName.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.PlatformName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PlatformComponent_PlatformName.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.PlatformName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Components/PlatformComponent.cs/#L19">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Components/PlatformComponent.cs/#L19">View Source</a>
   </span>
   <a id="RoosterBot_PlatformComponent_PlatformName_" data-uid="RoosterBot.PlatformComponent.PlatformName*"></a>
   <h4 id="RoosterBot_PlatformComponent_PlatformName" data-uid="RoosterBot.PlatformComponent.PlatformName">PlatformName</h4>
@@ -186,13 +161,13 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PlatformComponent_Connect_System_IServiceProvider_.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.Connect(System.IServiceProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PlatformComponent_Connect_IServiceProvider_.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.Connect(IServiceProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Components/PlatformComponent.cs/#L24">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Components/PlatformComponent.cs/#L24">View Source</a>
   </span>
   <a id="RoosterBot_PlatformComponent_Connect_" data-uid="RoosterBot.PlatformComponent.Connect*"></a>
-  <h4 id="RoosterBot_PlatformComponent_Connect_System_IServiceProvider_" data-uid="RoosterBot.PlatformComponent.Connect(System.IServiceProvider)">Connect(IServiceProvider)</h4>
+  <h4 id="RoosterBot_PlatformComponent_Connect_IServiceProvider_" data-uid="RoosterBot.PlatformComponent.Connect(IServiceProvider)">Connect(IServiceProvider)</h4>
   <div class="markdown level1 summary"><p>Start the connection to the platform.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -211,7 +186,7 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.IServiceProvider</span></td>
+        <td><span class="xref">IServiceProvider</span></td>
         <td><span class="parametername">services</span></td>
         <td></td>
       </tr>
@@ -219,10 +194,10 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PlatformComponent_Disconnect.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PlatformComponent_Disconnect.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Components/PlatformComponent.cs/#L29">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Components/PlatformComponent.cs/#L29">View Source</a>
   </span>
   <a id="RoosterBot_PlatformComponent_Disconnect_" data-uid="RoosterBot.PlatformComponent.Disconnect*"></a>
   <h4 id="RoosterBot_PlatformComponent_Disconnect" data-uid="RoosterBot.PlatformComponent.Disconnect">Disconnect()</h4>
@@ -235,10 +210,10 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PlatformComponent_GetSnowflakeIdFromString_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.GetSnowflakeIdFromString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PlatformComponent_GetSnowflakeIdFromString_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent.GetSnowflakeIdFromString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Components/PlatformComponent.cs/#L37">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Components/PlatformComponent.cs/#L37">View Source</a>
   </span>
   <a id="RoosterBot_PlatformComponent_GetSnowflakeIdFromString_" data-uid="RoosterBot.PlatformComponent.GetSnowflakeIdFromString*"></a>
   <h4 id="RoosterBot_PlatformComponent_GetSnowflakeIdFromString_System_String_" data-uid="RoosterBot.PlatformComponent.GetSnowflakeIdFromString(System.String)">GetSnowflakeIdFromString(String)</h4>
@@ -281,10 +256,6 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
 </article>
           </div>
           
@@ -293,10 +264,10 @@ consequences. For this reason, serialized <a class="xref" href="RoosterBot.Snowf
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PlatformComponent.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PlatformComponent.md&amp;value=---%0Auid%3A%20RoosterBot.PlatformComponent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Components/PlatformComponent.cs/#L7" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Components/PlatformComponent.cs/#L7" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

@@ -84,7 +84,7 @@
       <section><p>An presented AspectListItem must start with its <a class="xref" href="RoosterBot.AspectListItem.html#RoosterBot_AspectListItem_PrefixEmote">PrefixEmote</a> and end with its <a class="xref" href="RoosterBot.AspectListItem.html#RoosterBot_AspectListItem_Value">Value</a>. It name is optional, but if shown it must come between PrefixEmote and Value.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.AspectListResult.html">AspectListResult</a></h4>
-      <section><p>An AspectListResult has multiple discrete pieces of information that should be displayed together. This class is <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>.</p>
+      <section><p>An AspectListResult has multiple discrete pieces of information that should be displayed together. This class is <see cref="!:IEnumerable&lt;AspectListItem>"></see>.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.ChannelConfig.html">ChannelConfig</a></h4>
       <section><p>This class stores data about a channel's preferences with this bot. Built-in are the language and command prefix, and it can store arbitrary custom data.</p>
@@ -94,23 +94,34 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
       <h4><a class="xref" href="RoosterBot.ChannelConfigService.html">ChannelConfigService</a></h4>
       <section><p>The base class for a service providing configuration for <a class="xref" href="RoosterBot.IChannel.html">IChannel</a>s.</p>
 </section>
-      <h4><a class="xref" href="RoosterBot.ChannelSpecificInfo.html">ChannelSpecificInfo</a></h4>
-      <section><p>An abstract type representing information that is restricted to a collection of <a class="xref" href="RoosterBot.IChannel.html">IChannel</a>s.</p>
-</section>
       <h4><a class="xref" href="RoosterBot.CommandHandler.html">CommandHandler</a></h4>
-      <section><p>The singleton class that provides entry to the command handling pipeline.</p>
-</section>
+      <section></section>
       <h4><a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a></h4>
       <section><p>A serialized reference to a user command and RoosterBot's response.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.CommandUtil.html">CommandUtil</a></h4>
-      <section><p>A static class containing some helper functions for dealing with <span class="xref">Qmmands.Command</span>s and and <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a>s.</p>
+      <section><p>A static class containing some helper functions for dealing with <see cref="!:Command"></see>s and and <a class="xref" href="RoosterBot.CommandResponsePair.html">CommandResponsePair</a>s.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.Component.html">Component</a></h4>
       <section><p>The base class for all feature packages for RoosterBot.</p>
 </section>
+      <h4><a class="xref" href="RoosterBot.ComponentConstructionException.html">ComponentConstructionException</a></h4>
+      <section><p>Thrown by ComponentManager when a component throws an exception during construction phase.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ComponentDependencyException.html">ComponentDependencyException</a></h4>
+      <section><p>Thrown when a component cannot satisfy one of its requirements.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ComponentException.html">ComponentException</a></h4>
+      <section><p>Thrown when there is a problem with a Component.</p>
+</section>
       <h4><a class="xref" href="RoosterBot.ComponentManager.html">ComponentManager</a></h4>
       <section><p>The singleton class that takes care of setting up and shutting down components.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ComponentModuleException.html">ComponentModuleException</a></h4>
+      <section><p>Thrown by ComponentManager when a component throws an exception during the modules phase.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.ComponentServiceException.html">ComponentServiceException</a></h4>
+      <section><p>Thrown by ComponentManager when a component throws an exception during the services phase.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.CompoundResult.html">CompoundResult</a></h4>
       <section><p>Represents multiple <a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>s that are displayed together.</p>
@@ -125,6 +136,13 @@ Of course, it can only be used on parammeters that have an Array type; an except
 </section>
       <h4><a class="xref" href="RoosterBot.CultureNameService.html">CultureNameService</a></h4>
       <section><p>Allows you to look up the name of one language in another language.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.DependencyResult.html">DependencyResult</a></h4>
+      <section><p>A class that helps when checking if <a class="xref" href="RoosterBot.Component.html">Component</a> dependencies are met.
+You should use this class within your <a class="xref" href="RoosterBot.Component.html#RoosterBot_Component_CheckDependencies_IEnumerable_RoosterBot_Component__">CheckDependencies(IEnumerable&lt;Component&gt;)</a> method.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.DependencyResult.Builder.html">DependencyResult.Builder</a></h4>
+      <section><p>The class that lets you specify your dependencies.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.Emoji.html">Emoji</a></h4>
       <section><p>A string, usually an emoji, that can be used as an <a class="xref" href="RoosterBot.IEmote.html">IEmote</a>.</p>
@@ -141,9 +159,6 @@ Of course, it can only be used on parammeters that have an Array type; an except
       <h4><a class="xref" href="RoosterBot.HiddenFromListAttribute.html">HiddenFromListAttribute</a></h4>
       <section><p>Indicates that a module, command, or parameter should be hidden from listings.</p>
 </section>
-      <h4><a class="xref" href="RoosterBot.LogEndpoint.html">LogEndpoint</a></h4>
-      <section><p>An endpoint for the <a class="xref" href="RoosterBot.Logger.html">Logger</a> class. All messages logged using <a class="xref" href="RoosterBot.Logger.html">Logger</a> will be passed to every registered instance of this class.</p>
-</section>
       <h4><a class="xref" href="RoosterBot.Logger.html">Logger</a></h4>
       <section><p>The static class that takes care of logging in the entire program.</p>
 </section>
@@ -153,15 +168,15 @@ Of course, it can only be used on parammeters that have an Array type; an except
       <h4><a class="xref" href="RoosterBot.MultiParser-1.html">MultiParser&lt;T&gt;</a></h4>
       <section><p>A <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a> that consults multiple other <a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a>s to get the result.</p>
 </section>
-      <h4><a class="xref" href="RoosterBot.NoAllowedChannelsException.html">NoAllowedChannelsException</a></h4>
-      <section><p>Thrown in situations where there is no <a class="xref" href="RoosterBot.ChannelSpecificInfo.html">ChannelSpecificInfo</a> that is allowed to be used.</p>
-</section>
       <h4><a class="xref" href="RoosterBot.NotificationEventArgs.html">NotificationEventArgs</a></h4>
       <section><p>Event arguments for <a class="xref" href="RoosterBot.NotificationService.html#RoosterBot_NotificationService_NotificationAdded">NotificationAdded</a>.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.NotificationService.html">NotificationService</a></h4>
       <section><p>Allows you to notify the bot administrators of an event.
 You cannot send notifications yourself, but you can provide delivery target for the notification.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.OuterComponentException.html">OuterComponentException</a></h4>
+      <section><p>Thrown by ComponentManager when a component throws an exception. Always has an inner exception.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.PaginatedResult.html">PaginatedResult</a></h4>
       <section><p>A result that consists of multiple pages that can be viewed independently.</p>
@@ -190,11 +205,8 @@ You cannot send notifications yourself, but you can provide delivery target for 
       <h4><a class="xref" href="RoosterBot.ResourceService.html">ResourceService</a></h4>
       <section><p>Allows you to localize your UI strings.</p>
 </section>
-      <h4><a class="xref" href="RoosterBot.RoosterCheckAttribute.html">RoosterCheckAttribute</a></h4>
-      <section><p>The base class for all command checks used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterCheckResult.html">RoosterCheckResult</a>.</p>
-</section>
       <h4><a class="xref" href="RoosterBot.RoosterCheckResult.html">RoosterCheckResult</a></h4>
-      <section><p>The base class for all <span class="xref">Qmmands.CheckResult</span> used within RoosterBot.</p>
+      <section><p>The base class for all <see cref="!:CheckResult"></see> used within RoosterBot.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a></h4>
       <section><p>The object that represents the context in which a command is being exeucted. It persists from message reception to post-command handling, and it holds the message being responded to,
@@ -203,7 +215,7 @@ It also holds the <a class="xref" href="RoosterBot.UserConfig.html">UserConfig</
 often accessed by multiple unrelated classes in the execution process, so that these classes do not have to retrieve the config data independently.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a></h4>
-      <section><p>The base class for all <span class="xref">Qmmands.CommandResult</span>s used within RoosterBot.</p>
+      <section><p>The base class for all <see cref="!:CommandResult"></see>s used within RoosterBot.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterCommandService.html">RoosterCommandService</a></h4>
       <section><p>This class wraps multiple Qmmands.CommandService objects, one for each supported culture.</p>
@@ -214,17 +226,23 @@ often accessed by multiple unrelated classes in the execution process, so that t
       <h4><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule&lt;T&gt;</a></h4>
       <section><p>The base class for all command modules used within RoosterBot.</p>
 </section>
+      <h4><a class="xref" href="RoosterBot.RoosterModule-1.ModuleLogger.html">RoosterModule&lt;T&gt;.ModuleLogger</a></h4>
+      <section><p>A helper class that stops you from having to specify a log tag with your <a class="xref" href="RoosterBot.Logger.html">Logger</a> calls.</p>
+</section>
       <h4><a class="xref" href="RoosterBot.RoosterParameterCheckAttribute.html">RoosterParameterCheckAttribute</a></h4>
-      <section><p>The base class for all <span class="xref">Qmmands.ParameterCheckAttribute</span> within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>.</p>
+      <section><p>The base class for all <see cref="!:ParameterCheckAttribute"></see> within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.RoosterPreconditionAttribute.html">RoosterPreconditionAttribute</a></h4>
+      <section><p>The base class for all command checks used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterCheckResult.html">RoosterCheckResult</a>.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterTextAttribute.html">RoosterTextAttribute</a></h4>
       <section><p>The abstract base class for all attributes within RoosterBot that consist of only a single string.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterTypeParser-1.html">RoosterTypeParser&lt;T&gt;</a></h4>
-      <section><p>The base class for all <span class="xref">Qmmands.TypeParser&lt;T&gt;</span>s used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a>.</p>
+      <section><p>The base class for all <see cref="!:TypeParser&lt;T>"></see>s used within RoosterBot. This class enforces the use of <a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a> and <a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a>.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.RoosterTypeParserResult-1.html">RoosterTypeParserResult&lt;T&gt;</a></h4>
-      <section><p>The base class for all <span class="xref">Qmmands.TypeParserResult&lt;T&gt;</span>s used within RoosterBot.</p>
+      <section><p>The base class for all <see cref="!:TypeParserResult&lt;T>"></see>s used within RoosterBot.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.SnowflakeNotFoundException.html">SnowflakeNotFoundException</a></h4>
       <section><p>Thrown when a method attempts to retrieve a snowflake entity from a platform, but it does not exist.</p>
@@ -258,17 +276,18 @@ This class can be instantiated before a platform connection is available, allowi
       <section><p>A static class containing several helper functions.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.ValueTaskUtil.html">ValueTaskUtil</a></h4>
-      <section><p>A static class containing some helper functions for dealing with <span class="xref">System.Threading.Tasks.ValueTask</span>s.</p>
+      <section><p>A static class containing some helper functions for dealing with <see cref="!:ValueTask"></see>s.</p>
 </section>
-    <h3 id="structs">Structs
-  </h3>
-      <h4><a class="xref" href="RoosterBot.LogMessage.html">LogMessage</a></h4>
-      <section><p>A message for <a class="xref" href="RoosterBot.Logger.html">Logger</a>.</p>
+      <h4><a class="xref" href="RoosterBot.Version.html">Version</a></h4>
+      <section><p>Represents a version of something used within RoosterBot.</p>
+</section>
+      <h4><a class="xref" href="RoosterBot.VersionPredicate.html">VersionPredicate</a></h4>
+      <section><p>A filter for a <a class="xref" href="RoosterBot.Version.html">Version</a>.</p>
 </section>
     <h3 id="interfaces">Interfaces
   </h3>
       <h4><a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator&lt;T&gt;</a></h4>
-      <section><p>An <span class="xref">System.Collections.Generic.IEnumerator&lt;T&gt;</span> that can move backwards as well as forwards.</p>
+      <section><p>An <see cref="!:IEnumerator&lt;T>"></see> that can move backwards as well as forwards.</p>
 </section>
       <h4><a class="xref" href="RoosterBot.IChannel.html">IChannel</a></h4>
       <section><p>Represents a channel that RoosterBot can receive commands from, and send replies into.</p>
@@ -297,10 +316,7 @@ This class can be instantiated before a platform connection is available, allowi
     <h3 id="enums">Enums
   </h3>
       <h4><a class="xref" href="RoosterBot.CooldownType.html">CooldownType</a></h4>
-      <section><p>The type of cooldown used in <span class="xref">Qmmands.CooldownAttribute</span> within RoosterBot.</p>
-</section>
-      <h4><a class="xref" href="RoosterBot.LogLevel.html">LogLevel</a></h4>
-      <section><p>Indicates the severity of a <a class="xref" href="RoosterBot.LogMessage.html">LogMessage</a>.</p>
+      <section><p>The type of cooldown used in <see cref="!:Qmmands.CooldownAttribute"></see> within RoosterBot.</p>
 </section>
 </article>
           </div>

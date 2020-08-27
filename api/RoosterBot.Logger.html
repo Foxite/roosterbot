@@ -81,86 +81,29 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">Logger</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="RoosterBot_Logger_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class Logger</code></pre>
+    <pre><code class="lang-csharp hljs">public static class Logger : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_AddEndpoint_RoosterBot_LogEndpoint_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.AddEndpoint(RoosterBot.LogEndpoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Critical_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Critical(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L15">View Source</a>
-  </span>
-  <a id="RoosterBot_Logger_AddEndpoint_" data-uid="RoosterBot.Logger.AddEndpoint*"></a>
-  <h4 id="RoosterBot_Logger_AddEndpoint_RoosterBot_LogEndpoint_" data-uid="RoosterBot.Logger.AddEndpoint(RoosterBot.LogEndpoint)">AddEndpoint(LogEndpoint)</h4>
-  <div class="markdown level1 summary"><p>Register a <a class="xref" href="RoosterBot.LogEndpoint.html">LogEndpoint</a> instance.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void AddEndpoint(LogEndpoint endpoint)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="RoosterBot.LogEndpoint.html">LogEndpoint</a></td>
-        <td><span class="parametername">endpoint</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Critical_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Critical(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L57">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L68">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Critical_" data-uid="RoosterBot.Logger.Critical*"></a>
-  <h4 id="RoosterBot_Logger_Critical_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Critical(System.String,System.String,System.Exception)">Critical(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Critical_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Critical(System.String,System.String,System.Nullable{Exception})">Critical(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at critical level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Critical(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Critical(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -183,7 +126,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -191,19 +134,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Debug_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Debug(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Debug_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Debug(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L29">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L40">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Debug_" data-uid="RoosterBot.Logger.Debug*"></a>
-  <h4 id="RoosterBot_Logger_Debug_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Debug(System.String,System.String,System.Exception)">Debug(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Debug_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Debug(System.String,System.String,System.Nullable{Exception})">Debug(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at debug level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Debug(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Debug(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -226,7 +169,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -234,19 +177,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Error_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Error(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Error_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Error(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L50">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L61">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Error_" data-uid="RoosterBot.Logger.Error*"></a>
-  <h4 id="RoosterBot_Logger_Error_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Error(System.String,System.String,System.Exception)">Error(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Error_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Error(System.String,System.String,System.Nullable{Exception})">Error(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at error level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Error(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Error(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -269,7 +212,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -277,19 +220,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Info_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Info(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Info_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Info(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L36">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L47">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Info_" data-uid="RoosterBot.Logger.Info*"></a>
-  <h4 id="RoosterBot_Logger_Info_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Info(System.String,System.String,System.Exception)">Info(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Info_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Info(System.String,System.String,System.Nullable{Exception})">Info(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at informational level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Info(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Info(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -312,7 +255,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -320,100 +263,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Log_RoosterBot_LogLevel_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Log(RoosterBot.LogLevel%2CSystem.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Verbose_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Verbose(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L64">View Source</a>
-  </span>
-  <a id="RoosterBot_Logger_Log_" data-uid="RoosterBot.Logger.Log*"></a>
-  <h4 id="RoosterBot_Logger_Log_RoosterBot_LogLevel_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Log(RoosterBot.LogLevel,System.String,System.String,System.Exception)">Log(LogLevel, String, String, Exception)</h4>
-  <div class="markdown level1 summary"><p>Logs a message.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Log(LogLevel level, string tag, string msg, Exception exception = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="RoosterBot.LogLevel.html">LogLevel</a></td>
-        <td><span class="parametername">level</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">tag</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">msg</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Exception</span></td>
-        <td><span class="parametername">exception</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Log_RoosterBot_LogMessage_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Log(RoosterBot.LogMessage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L71">View Source</a>
-  </span>
-  <a id="RoosterBot_Logger_Log_" data-uid="RoosterBot.Logger.Log*"></a>
-  <h4 id="RoosterBot_Logger_Log_RoosterBot_LogMessage_" data-uid="RoosterBot.Logger.Log(RoosterBot.LogMessage)">Log(LogMessage)</h4>
-  <div class="markdown level1 summary"><p>Logs a message.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Log(LogMessage message)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="RoosterBot.LogMessage.html">LogMessage</a></td>
-        <td><span class="parametername">message</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Verbose_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Verbose(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L22">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L33">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Verbose_" data-uid="RoosterBot.Logger.Verbose*"></a>
-  <h4 id="RoosterBot_Logger_Verbose_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Verbose(System.String,System.String,System.Exception)">Verbose(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Verbose_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Verbose(System.String,System.String,System.Nullable{Exception})">Verbose(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at verbose level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Verbose(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Verbose(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -436,7 +298,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -444,19 +306,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger_Warning_System_String_System_String_System_Exception_.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Warning(System.String%2CSystem.String%2CSystem.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger_Warning_System_String_System_String_System_Nullable_Exception__.md&amp;value=---%0Auid%3A%20RoosterBot.Logger.Warning(System.String%2CSystem.String%2CSystem.Nullable%7BException%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L43">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L54">View Source</a>
   </span>
   <a id="RoosterBot_Logger_Warning_" data-uid="RoosterBot.Logger.Warning*"></a>
-  <h4 id="RoosterBot_Logger_Warning_System_String_System_String_System_Exception_" data-uid="RoosterBot.Logger.Warning(System.String,System.String,System.Exception)">Warning(String, String, Exception)</h4>
+  <h4 id="RoosterBot_Logger_Warning_System_String_System_String_System_Nullable_Exception__" data-uid="RoosterBot.Logger.Warning(System.String,System.String,System.Nullable{Exception})">Warning(String, String, Nullable&lt;Exception&gt;)</h4>
   <div class="markdown level1 summary"><p>Log a message at warning level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void Warning(string tag, string msg, Exception e = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void Warning(string tag, string msg, Exception? e = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -479,7 +341,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Exception</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Exception</span>&gt;</td>
         <td><span class="parametername">e</span></td>
         <td></td>
       </tr>
@@ -493,10 +355,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Logger.md&amp;value=---%0Auid%3A%20RoosterBot.Logger%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Logger.md&amp;value=---%0Auid%3A%20RoosterBot.Logger%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Logging/Logger.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Logger.cs/#L11" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

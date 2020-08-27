@@ -80,53 +80,28 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">ScheduleRecord</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.Schedule.html">RoosterBot.Schedule</a></h6>
   <h6><strong>Assembly</strong>: Schedule.dll</h6>
   <h5 id="RoosterBot_Schedule_ScheduleRecord_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
-public abstract class ScheduleRecord</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class ScheduleRecord : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord__ctor_RoosterBot_Schedule_ActivityInfo_System_DateTime_System_DateTime_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.%23ctor(RoosterBot.Schedule.ActivityInfo%2CSystem.DateTime%2CSystem.DateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord__ctor_RoosterBot_Schedule_ActivityInfo_DateTime_DateTime_IReadOnlyList_RoosterBot_Schedule_StudentSetInfo__IReadOnlyList_RoosterBot_Schedule_StaffMemberInfo__IReadOnlyList_RoosterBot_Schedule_RoomInfo__.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.%23ctor(RoosterBot.Schedule.ActivityInfo%2CDateTime%2CDateTime%2CIReadOnlyList%7BRoosterBot.Schedule.StudentSetInfo%7D%2CIReadOnlyList%7BRoosterBot.Schedule.StaffMemberInfo%7D%2CIReadOnlyList%7BRoosterBot.Schedule.RoomInfo%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L20">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L21">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord__ctor_" data-uid="RoosterBot.Schedule.ScheduleRecord.#ctor*"></a>
-  <h4 id="RoosterBot_Schedule_ScheduleRecord__ctor_RoosterBot_Schedule_ActivityInfo_System_DateTime_System_DateTime_" data-uid="RoosterBot.Schedule.ScheduleRecord.#ctor(RoosterBot.Schedule.ActivityInfo,System.DateTime,System.DateTime)">ScheduleRecord(ActivityInfo, DateTime, DateTime)</h4>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord__ctor_RoosterBot_Schedule_ActivityInfo_DateTime_DateTime_IReadOnlyList_RoosterBot_Schedule_StudentSetInfo__IReadOnlyList_RoosterBot_Schedule_StaffMemberInfo__IReadOnlyList_RoosterBot_Schedule_RoomInfo__" data-uid="RoosterBot.Schedule.ScheduleRecord.#ctor(RoosterBot.Schedule.ActivityInfo,DateTime,DateTime,IReadOnlyList{RoosterBot.Schedule.StudentSetInfo},IReadOnlyList{RoosterBot.Schedule.StaffMemberInfo},IReadOnlyList{RoosterBot.Schedule.RoomInfo})">ScheduleRecord(ActivityInfo, DateTime, DateTime, IReadOnlyList&lt;StudentSetInfo&gt;, IReadOnlyList&lt;StaffMemberInfo&gt;, IReadOnlyList&lt;RoomInfo&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end)</code></pre>
+    <pre><code class="lang-csharp hljs">protected ScheduleRecord(ActivityInfo activity, DateTime start, DateTime end, IReadOnlyList&lt;StudentSetInfo&gt; studentSets, IReadOnlyList&lt;StaffMemberInfo&gt; staffMember, IReadOnlyList&lt;RoomInfo&gt; room)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -144,13 +119,28 @@ public abstract class ScheduleRecord</code></pre>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="xref">DateTime</span></td>
         <td><span class="parametername">start</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="xref">DateTime</span></td>
         <td><span class="parametername">end</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.StudentSetInfo.html">StudentSetInfo</a>&gt;</td>
+        <td><span class="parametername">studentSets</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.StaffMemberInfo.html">StaffMemberInfo</a>&gt;</td>
+        <td><span class="parametername">staffMember</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.RoomInfo.html">RoomInfo</a>&gt;</td>
+        <td><span class="parametername">room</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -159,10 +149,10 @@ public abstract class ScheduleRecord</code></pre>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Activity.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Activity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Activity.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Activity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L11">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L12">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord_Activity_" data-uid="RoosterBot.Schedule.ScheduleRecord.Activity*"></a>
   <h4 id="RoosterBot_Schedule_ScheduleRecord_Activity" data-uid="RoosterBot.Schedule.ScheduleRecord.Activity">Activity</h4>
@@ -189,10 +179,70 @@ public abstract class ScheduleRecord</code></pre>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_End.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.End%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Break.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Break%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L13">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L19">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_Break_" data-uid="RoosterBot.Schedule.ScheduleRecord.Break*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_Break" data-uid="RoosterBot.Schedule.ScheduleRecord.Break">Break</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BreakTime Break { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="RoosterBot.Schedule.BreakTime.html">BreakTime</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Duration.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Duration%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L30">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_Duration_" data-uid="RoosterBot.Schedule.ScheduleRecord.Duration*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_Duration" data-uid="RoosterBot.Schedule.ScheduleRecord.Duration">Duration</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TimeSpan Duration { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TimeSpan</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_End.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.End%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L14">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord_End_" data-uid="RoosterBot.Schedule.ScheduleRecord.End*"></a>
   <h4 id="RoosterBot_Schedule_ScheduleRecord_End" data-uid="RoosterBot.Schedule.ScheduleRecord.End">End</h4>
@@ -212,26 +262,25 @@ public abstract class ScheduleRecord</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="xref">DateTime</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_InvolvedIdentifiers.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.InvolvedIdentifiers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Room.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Room%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L18">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L17">View Source</a>
   </span>
-  <a id="RoosterBot_Schedule_ScheduleRecord_InvolvedIdentifiers_" data-uid="RoosterBot.Schedule.ScheduleRecord.InvolvedIdentifiers*"></a>
-  <h4 id="RoosterBot_Schedule_ScheduleRecord_InvolvedIdentifiers" data-uid="RoosterBot.Schedule.ScheduleRecord.InvolvedIdentifiers">InvolvedIdentifiers</h4>
-  <div class="markdown level1 summary"><p>Used in optimizing <a class="xref" href="RoosterBot.Schedule.MemoryScheduleProvider.html">MemoryScheduleProvider</a>. If you don't use that provider, this will be unused.</p>
-</div>
+  <a id="RoosterBot_Schedule_ScheduleRecord_Room_" data-uid="RoosterBot.Schedule.ScheduleRecord.Room*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_Room" data-uid="RoosterBot.Schedule.ScheduleRecord.Room">Room</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract IEnumerable&lt;IdentifierInfo&gt; InvolvedIdentifiers { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;RoomInfo&gt; Room { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -243,17 +292,137 @@ public abstract class ScheduleRecord</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="RoosterBot.Schedule.IdentifierInfo.html">IdentifierInfo</a>&gt;</td>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.RoomInfo.html">RoomInfo</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Start.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Start%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_RoomString.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.RoomString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L12">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L33">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_RoomString_" data-uid="RoosterBot.Schedule.ScheduleRecord.RoomString*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_RoomString" data-uid="RoosterBot.Schedule.ScheduleRecord.RoomString">RoomString</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string RoomString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_ShouldCallNextCommand.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.ShouldCallNextCommand%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L18">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_ShouldCallNextCommand_" data-uid="RoosterBot.Schedule.ScheduleRecord.ShouldCallNextCommand*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_ShouldCallNextCommand" data-uid="RoosterBot.Schedule.ScheduleRecord.ShouldCallNextCommand">ShouldCallNextCommand</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool ShouldCallNextCommand { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_StaffMember.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.StaffMember%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L16">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_StaffMember_" data-uid="RoosterBot.Schedule.ScheduleRecord.StaffMember*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_StaffMember" data-uid="RoosterBot.Schedule.ScheduleRecord.StaffMember">StaffMember</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;StaffMemberInfo&gt; StaffMember { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.StaffMemberInfo.html">StaffMemberInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_StaffMemberString.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.StaffMemberString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L32">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_StaffMemberString_" data-uid="RoosterBot.Schedule.ScheduleRecord.StaffMemberString*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_StaffMemberString" data-uid="RoosterBot.Schedule.ScheduleRecord.StaffMemberString">StaffMemberString</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string StaffMemberString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Start.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Start%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L13">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord_Start_" data-uid="RoosterBot.Schedule.ScheduleRecord.Start*"></a>
   <h4 id="RoosterBot_Schedule_ScheduleRecord_Start" data-uid="RoosterBot.Schedule.ScheduleRecord.Start">Start</h4>
@@ -273,7 +442,67 @@ public abstract class ScheduleRecord</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="xref">DateTime</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_StudentSets.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.StudentSets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L15">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_StudentSets_" data-uid="RoosterBot.Schedule.ScheduleRecord.StudentSets*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_StudentSets" data-uid="RoosterBot.Schedule.ScheduleRecord.StudentSets">StudentSets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;StudentSetInfo&gt; StudentSets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="RoosterBot.Schedule.StudentSetInfo.html">StudentSetInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_StudentSetsString.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.StudentSetsString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L31">View Source</a>
+  </span>
+  <a id="RoosterBot_Schedule_ScheduleRecord_StudentSetsString_" data-uid="RoosterBot.Schedule.ScheduleRecord.StudentSetsString*"></a>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_StudentSetsString" data-uid="RoosterBot.Schedule.ScheduleRecord.StudentSetsString">StudentSetsString</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string StudentSetsString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -282,13 +511,13 @@ public abstract class ScheduleRecord</code></pre>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Present_RoosterBot_ResourceService_System_Globalization_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Present(RoosterBot.ResourceService%2CSystem.Globalization.CultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_Present_RoosterBot_ResourceService_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.Present(RoosterBot.ResourceService%2CCultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L26">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L35">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord_Present_" data-uid="RoosterBot.Schedule.ScheduleRecord.Present*"></a>
-  <h4 id="RoosterBot_Schedule_ScheduleRecord_Present_RoosterBot_ResourceService_System_Globalization_CultureInfo_" data-uid="RoosterBot.Schedule.ScheduleRecord.Present(RoosterBot.ResourceService,System.Globalization.CultureInfo)">Present(ResourceService, CultureInfo)</h4>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_Present_RoosterBot_ResourceService_CultureInfo_" data-uid="RoosterBot.Schedule.ScheduleRecord.Present(RoosterBot.ResourceService,CultureInfo)">Present(ResourceService, CultureInfo)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -311,7 +540,7 @@ public abstract class ScheduleRecord</code></pre>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td><span class="xref">CultureInfo</span></td>
         <td><span class="parametername">culture</span></td>
         <td></td>
       </tr>
@@ -327,26 +556,21 @@ public abstract class ScheduleRecord</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="RoosterBot.AspectListItem.html">AspectListItem</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="RoosterBot.AspectListItem.html">AspectListItem</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_System_Globalization_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.PresentRow(RoosterBot.ResourceService%2CSystem.Globalization.CultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.PresentRow(RoosterBot.ResourceService%2CCultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L45">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L36">View Source</a>
   </span>
   <a id="RoosterBot_Schedule_ScheduleRecord_PresentRow_" data-uid="RoosterBot.Schedule.ScheduleRecord.PresentRow*"></a>
-  <h4 id="RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_System_Globalization_CultureInfo_" data-uid="RoosterBot.Schedule.ScheduleRecord.PresentRow(RoosterBot.ResourceService,System.Globalization.CultureInfo)">PresentRow(ResourceService, CultureInfo)</h4>
-  <div class="markdown level1 summary"><p>Return a list of strings used as cells when presenting this record as a row in a table. <a class="xref" href="RoosterBot.Schedule.ScheduleRecord.html#RoosterBot_Schedule_ScheduleRecord_PresentRowHeadings_RoosterBot_ResourceService_System_Globalization_CultureInfo_">PresentRowHeadings(ResourceService, CultureInfo)</a> provides the heading
-cells for this function.</p>
-<p>When implementing this function, keep in mind that multiple records WILL be used in a single table, which means that <a class="xref" href="RoosterBot.Schedule.ScheduleRecord.html#RoosterBot_Schedule_ScheduleRecord_PresentRowHeadings_RoosterBot_ResourceService_System_Globalization_CultureInfo_">PresentRowHeadings(ResourceService, CultureInfo)</a>
-and this function should always return the same format, regardless of context. Empty or non-applicable cells should be filled in with an empty string, as skipping them will
-result in breaks or errors when formatting the table.</p>
-</div>
+  <h4 id="RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_CultureInfo_" data-uid="RoosterBot.Schedule.ScheduleRecord.PresentRow(RoosterBot.ResourceService,CultureInfo)">PresentRow(ResourceService, CultureInfo)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -368,7 +592,7 @@ result in breaks or errors when formatting the table.</p>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td><span class="xref">CultureInfo</span></td>
         <td><span class="parametername">culture</span></td>
         <td></td>
       </tr>
@@ -384,63 +608,7 @@ result in breaks or errors when formatting the table.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord_PresentRowHeadings_RoosterBot_ResourceService_System_Globalization_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord.PresentRowHeadings(RoosterBot.ResourceService%2CSystem.Globalization.CultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L35">View Source</a>
-  </span>
-  <a id="RoosterBot_Schedule_ScheduleRecord_PresentRowHeadings_" data-uid="RoosterBot.Schedule.ScheduleRecord.PresentRowHeadings*"></a>
-  <h4 id="RoosterBot_Schedule_ScheduleRecord_PresentRowHeadings_RoosterBot_ResourceService_System_Globalization_CultureInfo_" data-uid="RoosterBot.Schedule.ScheduleRecord.PresentRowHeadings(RoosterBot.ResourceService,System.Globalization.CultureInfo)">PresentRowHeadings(ResourceService, CultureInfo)</h4>
-  <div class="markdown level1 summary"><p>Returns a list of strings used as the table heading for the rows returned by <a class="xref" href="RoosterBot.Schedule.ScheduleRecord.html#RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_System_Globalization_CultureInfo_">PresentRow(ResourceService, CultureInfo)</a>.</p>
-<p>When implementing this function, keep in mind that multiple records WILL be used in a single table, which means that <a class="xref" href="RoosterBot.Schedule.ScheduleRecord.html#RoosterBot_Schedule_ScheduleRecord_PresentRow_RoosterBot_ResourceService_System_Globalization_CultureInfo_">PresentRow(ResourceService, CultureInfo)</a>
-and this function should always return the same format, regardless of context. In particular, this function should be considered as a static function, as the output should
-not involve reading instance variables of this class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract IReadOnlyList&lt;string&gt; PresentRowHeadings(ResourceService resources, CultureInfo culture)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="RoosterBot.ResourceService.html">ResourceService</a></td>
-        <td><span class="parametername">resources</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
-        <td><span class="parametername">culture</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -453,10 +621,10 @@ not involve reading instance variables of this class.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Schedule_ScheduleRecord.md&amp;value=---%0Auid%3A%20RoosterBot.Schedule.ScheduleRecord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Schedule/DataTypes/ScheduleRecord.cs/#L9" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

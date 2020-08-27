@@ -78,15 +78,17 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Qmmands.ModuleBase</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
-    <div class="level2"><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
-    <div class="level3"><a class="xref" href="RoosterBot.RoosterModule.html">RoosterModule</a></div>
-    <div class="level4"><span class="xref">UserConfigModule</span></div>
+    <div class="level1"><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
+    <div class="level2"><a class="xref" href="RoosterBot.RoosterModule.html">RoosterModule</a></div>
+    <div class="level3"><span class="xref">UserConfigModule</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_Resources">RoosterModule&lt;RoosterCommandContext&gt;.Resources</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_Log">RoosterModule&lt;RoosterCommandContext&gt;.Log</a>
     </div>
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_UserConfig">RoosterModule&lt;RoosterCommandContext&gt;.UserConfig</a>
@@ -106,50 +108,21 @@
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_GetString_System_String_System_Object___">RoosterModule&lt;RoosterCommandContext&gt;.GetString(String, Object[])</a>
     </div>
-    <div>
-      <span class="xref">Qmmands.ModuleBase&lt;RoosterBot.RoosterCommandContext&gt;.AfterExecutedAsync()</span>
-    </div>
-    <div>
-      <span class="xref">Qmmands.ModuleBase&lt;RoosterBot.RoosterCommandContext&gt;.Context</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.Meta.html">RoosterBot.Meta</a></h6>
   <h6><strong>Assembly</strong>: Meta.dll</h6>
   <h5 id="RoosterBot_Meta_UserConfigModule_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Name(&quot;#UserConfigModule_Name&quot;)]
-[Group(new string[]{&quot;#UserConfigModule_Group&quot;})]
-public class UserConfigModule : RoosterModule, IModuleBase</code></pre>
+    <pre><code class="lang-csharp hljs">public class UserConfigModule : RoosterModule</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule_CultureNameService.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule.CultureNameService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule_CultureNameService.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule.CultureNameService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/UserConfigModule.cs/#L7">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/UserConfigModule.cs/#L7">View Source</a>
   </span>
   <a id="RoosterBot_Meta_UserConfigModule_CultureNameService_" data-uid="RoosterBot.Meta.UserConfigModule.CultureNameService*"></a>
   <h4 id="RoosterBot_Meta_UserConfigModule_CultureNameService" data-uid="RoosterBot.Meta.UserConfigModule.CultureNameService">CultureNameService</h4>
@@ -178,20 +151,18 @@ public class UserConfigModule : RoosterModule, IModuleBase</code></pre>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule_Language_System_Globalization_CultureInfo_.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule.Language(System.Globalization.CultureInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule_Language_System_Nullable_CultureInfo__.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule.Language(System.Nullable%7BCultureInfo%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/UserConfigModule.cs/#L9">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/UserConfigModule.cs/#L9">View Source</a>
   </span>
   <a id="RoosterBot_Meta_UserConfigModule_Language_" data-uid="RoosterBot.Meta.UserConfigModule.Language*"></a>
-  <h4 id="RoosterBot_Meta_UserConfigModule_Language_System_Globalization_CultureInfo_" data-uid="RoosterBot.Meta.UserConfigModule.Language(System.Globalization.CultureInfo)">Language(CultureInfo)</h4>
+  <h4 id="RoosterBot_Meta_UserConfigModule_Language_System_Nullable_CultureInfo__" data-uid="RoosterBot.Meta.UserConfigModule.Language(System.Nullable{CultureInfo})">Language(Nullable&lt;CultureInfo&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Command(new string[]{&quot;#UserConfigModule_Language&quot;})]
-[Description(&quot;#UserConfigModule_Language_Description&quot;)]
-public CommandResult Language([Name(&quot;#UserConfigModule_Language_ParamName&quot;)] CultureInfo culture = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public CommandResult Language(CultureInfo? culture = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -204,7 +175,7 @@ public CommandResult Language([Name(&quot;#UserConfigModule_Language_ParamName&q
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">CultureInfo</span>&gt;</td>
         <td><span class="parametername">culture</span></td>
         <td></td>
       </tr>
@@ -220,7 +191,7 @@ public CommandResult Language([Name(&quot;#UserConfigModule_Language_ParamName&q
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Qmmands.CommandResult</span></td>
+        <td><span class="xref">CommandResult</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -233,10 +204,10 @@ public CommandResult Language([Name(&quot;#UserConfigModule_Language_ParamName&q
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_UserConfigModule.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.UserConfigModule%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/UserConfigModule.cs/#L5" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/UserConfigModule.cs/#L5" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

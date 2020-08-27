@@ -79,13 +79,8 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Qmmands.CommandResult</span></div>
-    <div class="level2"><a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a></div>
-    <div class="level3"><span class="xref">TextResult</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">Qmmands.IResult</span></div>
+    <div class="level1"><a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a></div>
+    <div class="level2"><span class="xref">TextResult</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -98,51 +93,30 @@
     <div>
       <a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_ToString">RoosterCommandResult.ToString()</a>
     </div>
-    <div>
-      <span class="xref">Qmmands.CommandResult.Command</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="RoosterBot_TextResult_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TextResult : RoosterCommandResult, IResult</code></pre>
+    <pre><code class="lang-csharp hljs">public class TextResult : RoosterCommandResult</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult__ctor_System_String_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.%23ctor(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult__ctor_System_Nullable_System_String__System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.%23ctor(System.Nullable%7BSystem.String%7D%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L21">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L21">View Source</a>
   </span>
   <a id="RoosterBot_TextResult__ctor_" data-uid="RoosterBot.TextResult.#ctor*"></a>
-  <h4 id="RoosterBot_TextResult__ctor_System_String_System_String_" data-uid="RoosterBot.TextResult.#ctor(System.String,System.String)">TextResult(String, String)</h4>
+  <h4 id="RoosterBot_TextResult__ctor_System_Nullable_System_String__System_String_" data-uid="RoosterBot.TextResult.#ctor(System.Nullable{System.String},System.String)">TextResult(Nullable&lt;String&gt;, String)</h4>
   <div class="markdown level1 summary"><p>Construct a new TextResult.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TextResult(string prefixEmoteName, string response)</code></pre>
+    <pre><code class="lang-csharp hljs">public TextResult(string? prefixEmoteName, string response)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -155,7 +129,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td><span class="parametername">prefixEmoteName</span></td>
         <td></td>
       </tr>
@@ -170,10 +144,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_PrefixEmoteName.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.PrefixEmoteName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_PrefixEmoteName.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.PrefixEmoteName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L11">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L11">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_PrefixEmoteName_" data-uid="RoosterBot.TextResult.PrefixEmoteName*"></a>
   <h4 id="RoosterBot_TextResult_PrefixEmoteName" data-uid="RoosterBot.TextResult.PrefixEmoteName">PrefixEmoteName</h4>
@@ -182,7 +156,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string PrefixEmoteName { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public string? PrefixEmoteName { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -194,17 +168,17 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Response.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Response%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Response.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Response%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L16">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L16">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Response_" data-uid="RoosterBot.TextResult.Response*"></a>
   <h4 id="RoosterBot_TextResult_Response" data-uid="RoosterBot.TextResult.Response">Response</h4>
@@ -234,10 +208,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Error_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Error(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Error_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Error(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L62">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L62">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Error_" data-uid="RoosterBot.TextResult.Error*"></a>
   <h4 id="RoosterBot_TextResult_Error_System_String_" data-uid="RoosterBot.TextResult.Error(System.String)">Error(String)</h4>
@@ -282,10 +256,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Info_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Info(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Info_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Info(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L47">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L47">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Info_" data-uid="RoosterBot.TextResult.Info*"></a>
   <h4 id="RoosterBot_TextResult_Info_System_String_" data-uid="RoosterBot.TextResult.Info(System.String)">Info(String)</h4>
@@ -330,10 +304,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Success_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Success(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Success_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Success(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L42">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L42">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Success_" data-uid="RoosterBot.TextResult.Success*"></a>
   <h4 id="RoosterBot_TextResult_Success_System_String_" data-uid="RoosterBot.TextResult.Success(System.String)">Success(String)</h4>
@@ -378,10 +352,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_ToString_RoosterBot_RoosterCommandContext_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.ToString(RoosterBot.RoosterCommandContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_ToString_RoosterBot_RoosterCommandContext_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.ToString(RoosterBot.RoosterCommandContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L27">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L27">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_ToString_" data-uid="RoosterBot.TextResult.ToString*"></a>
   <h4 id="RoosterBot_TextResult_ToString_RoosterBot_RoosterCommandContext_" data-uid="RoosterBot.TextResult.ToString(RoosterBot.RoosterCommandContext)">ToString(RoosterCommandContext)</h4>
@@ -428,10 +402,10 @@
   <div><a class="xref" href="RoosterBot.RoosterCommandResult.html#RoosterBot_RoosterCommandResult_ToString_RoosterBot_RoosterCommandContext_">RoosterCommandResult.ToString(RoosterCommandContext)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Unknown_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Unknown(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Unknown_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Unknown(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L57">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L57">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Unknown_" data-uid="RoosterBot.TextResult.Unknown*"></a>
   <h4 id="RoosterBot_TextResult_Unknown_System_String_" data-uid="RoosterBot.TextResult.Unknown(System.String)">Unknown(String)</h4>
@@ -476,10 +450,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult_Warning_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Warning(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult_Warning_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult.Warning(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L52">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L52">View Source</a>
   </span>
   <a id="RoosterBot_TextResult_Warning_" data-uid="RoosterBot.TextResult.Warning*"></a>
   <h4 id="RoosterBot_TextResult_Warning_System_String_" data-uid="RoosterBot.TextResult.Warning(System.String)">Warning(String)</h4>
@@ -522,10 +496,6 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">Qmmands.IResult</span>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="RoosterBot.Util.html#RoosterBot_Util_Is__1_RoosterBot_RoosterCommandResult___0__">Util.Is&lt;T&gt;(RoosterCommandResult, out T)</a>
@@ -538,10 +508,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_TextResult.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_TextResult.md&amp;value=---%0Auid%3A%20RoosterBot.TextResult%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/TextResult.cs/#L7" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/TextResult.cs/#L7" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

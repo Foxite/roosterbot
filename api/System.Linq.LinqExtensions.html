@@ -73,7 +73,7 @@
   
   <h1 id="System_Linq_LinqExtensions" data-uid="System.Linq.LinqExtensions" class="text-break">Class LinqExtensions
   </h1>
-  <div class="markdown level0 summary"><p>Adds several extensions methods to <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>.</p>
+  <div class="markdown level0 summary"><p>Adds several extensions methods to <see cref="!:IEnumerable&lt;T>"></see>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -81,48 +81,24 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">LinqExtensions</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="System.Linq.html">System.Linq</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="System_Linq_LinqExtensions_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class LinqExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public static class LinqExtensions : object</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_IList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Backwards%60%601(System.Collections.Generic.IList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_Backwards__1_IList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Backwards%60%601(IList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L181">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L215">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_Backwards_" data-uid="System.Linq.LinqExtensions.Backwards*"></a>
-  <h4 id="System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_IList___0__" data-uid="System.Linq.LinqExtensions.Backwards``1(System.Collections.Generic.IList{``0})">Backwards&lt;T&gt;(IList&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Enumerates all items in an <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span> in reverse order.</p>
+  <h4 id="System_Linq_LinqExtensions_Backwards__1_IList___0__" data-uid="System.Linq.LinqExtensions.Backwards``1(IList{``0})">Backwards&lt;T&gt;(IList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Enumerates all items in an <see cref="!:IList&lt;T>"></see> in reverse order.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -140,7 +116,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IList</span>&lt;T&gt;</td>
+        <td><span class="xref">IList</span>&lt;T&gt;</td>
         <td><span class="parametername">list</span></td>
         <td></td>
       </tr>
@@ -156,7 +132,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -176,21 +152,21 @@
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_IList___0___remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This is much faster than <span class="xref">System.Linq.Enumerable.Reverse``1(System.Collections.Generic.IEnumerable{``0})</span> as that function will enumerate the entire source and store the results,
-and then yielding that in reverse. This function utilizes a reverse for loop over the <span class="xref">System.Collections.Generic.IList&lt;T&gt;</span>.</p>
+  <h5 id="System_Linq_LinqExtensions_Backwards__1_IList___0___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is much faster than <see cref="!:Enumerable.Reverse&lt;TSource>(IEnumerable&lt;TSource>)"></see> as that function will enumerate the entire source and store the results,
+and then yielding that in reverse. This function utilizes a reverse for loop over the <see cref="!:IList&lt;T>"></see>.</p>
 <p>This function is not called Reverse to avoid naming conflicts with the aforementioned function.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_LinkedList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Backwards%60%601(System.Collections.Generic.LinkedList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_Backwards__1_LinkedList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Backwards%60%601(LinkedList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L162">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L196">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_Backwards_" data-uid="System.Linq.LinqExtensions.Backwards*"></a>
-  <h4 id="System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_LinkedList___0__" data-uid="System.Linq.LinqExtensions.Backwards``1(System.Collections.Generic.LinkedList{``0})">Backwards&lt;T&gt;(LinkedList&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Returns all <span class="xref">System.Collections.Generic.LinkedListNode`1</span>s in a <span class="xref">System.Collections.Generic.LinkedList&lt;T&gt;</span>, in reversed order, as opposed to all <code data-dev-comment-type="typeparamref" class="typeparamref">T</code>.</p>
+  <h4 id="System_Linq_LinqExtensions_Backwards__1_LinkedList___0__" data-uid="System.Linq.LinqExtensions.Backwards``1(LinkedList{``0})">Backwards&lt;T&gt;(LinkedList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns all <see cref="!:LinkedListNode&lt;T>"></see>s in a <see cref="!:LinkedList&lt;T>"></see>, in reversed order, as opposed to all <code data-dev-comment-type="typeparamref" class="typeparamref">T</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -208,7 +184,7 @@ and then yielding that in reverse. This function utilizes a reverse for loop ove
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.LinkedList</span>&lt;T&gt;</td>
+        <td><span class="xref">LinkedList</span>&lt;T&gt;</td>
         <td><span class="parametername">list</span></td>
         <td></td>
       </tr>
@@ -224,7 +200,7 @@ and then yielding that in reverse. This function utilizes a reverse for loop ove
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.LinkedListNode</span>&lt;T&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">LinkedListNode</span>&lt;T&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -244,21 +220,21 @@ and then yielding that in reverse. This function utilizes a reverse for loop ove
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_Backwards__1_System_Collections_Generic_LinkedList___0___remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This is much faster than <span class="xref">System.Linq.Enumerable.Reverse``1(System.Collections.Generic.IEnumerable{``0})</span> as that function will enumerate the entire source and store the results,
-and then yielding that in reverse. This function yields <span class="xref">System.Collections.Generic.LinkedList`1.Last</span> and then yields the previous node's <span class="xref">System.Collections.Generic.LinkedListNode`1.Previous</span>
+  <h5 id="System_Linq_LinqExtensions_Backwards__1_LinkedList___0___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is much faster than <see cref="!:Enumerable.Reverse&lt;TSource>(IEnumerable&lt;TSource>)"></see> as that function will enumerate the entire source and store the results,
+and then yielding that in reverse. This function yields <see cref="!:LinkedList&lt;T>.Last"></see> and then yields the previous node's <see cref="!:LinkedListNode&lt;T>.Previous"></see>
 until there are no more items.</p>
 <p>This function is not called Reverse to avoid naming conflicts with the aforementioned function.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CopyTo__1_System_Collections_Generic_IEnumerable___0____0___System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CopyTo%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2C%60%600%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CopyTo__1_IEnumerable___0____0___System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CopyTo%60%601(IEnumerable%7B%60%600%7D%2C%60%600%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L190">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L239">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CopyTo_" data-uid="System.Linq.LinqExtensions.CopyTo*"></a>
-  <h4 id="System_Linq_LinqExtensions_CopyTo__1_System_Collections_Generic_IEnumerable___0____0___System_Int32_" data-uid="System.Linq.LinqExtensions.CopyTo``1(System.Collections.Generic.IEnumerable{``0},``0[],System.Int32)">CopyTo&lt;T&gt;(IEnumerable&lt;T&gt;, T[], Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CopyTo__1_IEnumerable___0____0___System_Int32_" data-uid="System.Linq.LinqExtensions.CopyTo``1(IEnumerable{``0},``0[],System.Int32)">CopyTo&lt;T&gt;(IEnumerable&lt;T&gt;, T[], Int32)</h4>
   <div class="markdown level1 summary"><p>Does effectively the same as <pre><code>enumerable.ToArray().CopyTo(...)</code></pre>, but does not convert the enumerable to an array.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -277,7 +253,7 @@ until there are no more items.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">enumerable</span></td>
         <td></td>
       </tr>
@@ -310,15 +286,15 @@ until there are no more items.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CountEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountEquals%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CountEquals__1_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountEquals%60%601(IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L16">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L16">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CountEquals_" data-uid="System.Linq.LinqExtensions.CountEquals*"></a>
-  <h4 id="System_Linq_LinqExtensions_CountEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountEquals``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">CountEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CountEquals__1_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountEquals``1(IEnumerable{``0},System.Int32)">CountEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This will enumerate <code data-dev-comment-type="paramref" class="paramref">source</code> and determine if the count is equal to <code data-dev-comment-type="paramref" class="paramref">count</code>.
-It will stop as soon as it finds an item beyond the target count, which makes it faster than <span class="xref">System.Linq.Enumerable.Count``1(System.Collections.Generic.IEnumerable{``0})</span></p>
+It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="!:Enumerable.Count&lt;TSource>(IEnumerable&lt;TSource>)"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -336,7 +312,7 @@ It will stop as soon as it finds an item beyond the target count, which makes it
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td></td>
       </tr>
@@ -377,21 +353,21 @@ It will stop as soon as it finds an item beyond the target count, which makes it
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_CountEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>, then <span class="xref">System.Collections.Generic.ICollection`1.Count</span> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
+  <h5 id="System_Linq_LinqExtensions_CountEquals__1_IEnumerable___0__System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <see cref="!:ICollection&lt;T>"></see>, then <see cref="!:ICollection&lt;T>.Count"></see> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
 will not be enumerated.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsGreaterThan__1_System_Collections_Generic_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsGreaterThan%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsGreaterThan__1_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsGreaterThan%60%601(IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L69">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L69">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CountIsGreaterThan_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThan*"></a>
-  <h4 id="System_Linq_LinqExtensions_CountIsGreaterThan__1_System_Collections_Generic_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThan``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">CountIsGreaterThan&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CountIsGreaterThan__1_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThan``1(IEnumerable{``0},System.Int32)">CountIsGreaterThan&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This will enumerate <code data-dev-comment-type="paramref" class="paramref">source</code> and determine if the count is greater than <code data-dev-comment-type="paramref" class="paramref">count</code>.
-It will stop as soon as it finds an item beyond the target count, which makes it faster than <span class="xref">System.Linq.Enumerable.Count``1(System.Collections.Generic.IEnumerable{``0})</span></p>
+It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="!:Enumerable.Count&lt;TSource>(IEnumerable&lt;TSource>)"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -409,7 +385,7 @@ It will stop as soon as it finds an item beyond the target count, which makes it
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td></td>
       </tr>
@@ -450,21 +426,21 @@ It will stop as soon as it finds an item beyond the target count, which makes it
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_CountIsGreaterThan__1_System_Collections_Generic_IEnumerable___0__System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>, then <span class="xref">System.Collections.Generic.ICollection`1.Count</span> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
+  <h5 id="System_Linq_LinqExtensions_CountIsGreaterThan__1_IEnumerable___0__System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <see cref="!:ICollection&lt;T>"></see>, then <see cref="!:ICollection&lt;T>.Count"></see> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
 will not be enumerated.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsGreaterThanOrEquals%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsGreaterThanOrEquals%60%601(IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L46">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L46">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CountIsGreaterThanOrEquals_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThanOrEquals*"></a>
-  <h4 id="System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThanOrEquals``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">CountIsGreaterThanOrEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsGreaterThanOrEquals``1(IEnumerable{``0},System.Int32)">CountIsGreaterThanOrEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This will enumerate <code data-dev-comment-type="paramref" class="paramref">source</code> and determine if the count is greater than or equal to <code data-dev-comment-type="paramref" class="paramref">count</code>.
-It will stop as soon as it finds an item beyond the target count, which makes it faster than <span class="xref">System.Linq.Enumerable.Count``1(System.Collections.Generic.IEnumerable{``0})</span></p>
+It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="!:Enumerable.Count&lt;TSource>(IEnumerable&lt;TSource>)"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -482,7 +458,7 @@ It will stop as soon as it finds an item beyond the target count, which makes it
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td></td>
       </tr>
@@ -523,21 +499,21 @@ It will stop as soon as it finds an item beyond the target count, which makes it
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>, then <span class="xref">System.Collections.Generic.ICollection`1.Count</span> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
+  <h5 id="System_Linq_LinqExtensions_CountIsGreaterThanOrEquals__1_IEnumerable___0__System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <see cref="!:ICollection&lt;T>"></see>, then <see cref="!:ICollection&lt;T>.Count"></see> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
 will not be enumerated.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsLessThan__1_System_Collections_Generic_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsLessThan%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsLessThan__1_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsLessThan%60%601(IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L115">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L115">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CountIsLessThan_" data-uid="System.Linq.LinqExtensions.CountIsLessThan*"></a>
-  <h4 id="System_Linq_LinqExtensions_CountIsLessThan__1_System_Collections_Generic_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsLessThan``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">CountIsLessThan&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CountIsLessThan__1_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsLessThan``1(IEnumerable{``0},System.Int32)">CountIsLessThan&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This will enumerate <code data-dev-comment-type="paramref" class="paramref">source</code> and determine if the count is less than <code data-dev-comment-type="paramref" class="paramref">count</code>.
-It will stop as soon as it finds an item beyond the target count, which makes it faster than <span class="xref">System.Linq.Enumerable.Count``1(System.Collections.Generic.IEnumerable{``0})</span></p>
+It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="!:Enumerable.Count&lt;TSource>(IEnumerable&lt;TSource>)"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -555,7 +531,7 @@ It will stop as soon as it finds an item beyond the target count, which makes it
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td></td>
       </tr>
@@ -596,21 +572,21 @@ It will stop as soon as it finds an item beyond the target count, which makes it
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_CountIsLessThan__1_System_Collections_Generic_IEnumerable___0__System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>, then <span class="xref">System.Collections.Generic.ICollection`1.Count</span> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
+  <h5 id="System_Linq_LinqExtensions_CountIsLessThan__1_IEnumerable___0__System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <see cref="!:ICollection&lt;T>"></see>, then <see cref="!:ICollection&lt;T>.Count"></see> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
 will not be enumerated.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsLessThanOrEquals%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_IEnumerable___0__System_Int32_.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.CountIsLessThanOrEquals%60%601(IEnumerable%7B%60%600%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L92">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L92">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_CountIsLessThanOrEquals_" data-uid="System.Linq.LinqExtensions.CountIsLessThanOrEquals*"></a>
-  <h4 id="System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsLessThanOrEquals``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">CountIsLessThanOrEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
+  <h4 id="System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_IEnumerable___0__System_Int32_" data-uid="System.Linq.LinqExtensions.CountIsLessThanOrEquals``1(IEnumerable{``0},System.Int32)">CountIsLessThanOrEquals&lt;T&gt;(IEnumerable&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This will enumerate <code data-dev-comment-type="paramref" class="paramref">source</code> and determine if the count is less than or equal to <code data-dev-comment-type="paramref" class="paramref">count</code>.
-It will stop as soon as it finds an item beyond the target count, which makes it faster than <span class="xref">System.Linq.Enumerable.Count``1(System.Collections.Generic.IEnumerable{``0})</span></p>
+It will stop as soon as it finds an item beyond the target count, which makes it faster than <see cref="!:Enumerable.Count&lt;TSource>(IEnumerable&lt;TSource>)"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -628,7 +604,7 @@ It will stop as soon as it finds an item beyond the target count, which makes it
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td></td>
       </tr>
@@ -669,28 +645,25 @@ It will stop as soon as it finds an item beyond the target count, which makes it
       </tr>
     </tbody>
   </table>
-  <h5 id="System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_System_Collections_Generic_IEnumerable___0__System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>, then <span class="xref">System.Collections.Generic.ICollection`1.Count</span> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
+  <h5 id="System_Linq_LinqExtensions_CountIsLessThanOrEquals__1_IEnumerable___0__System_Int32__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If <code data-dev-comment-type="paramref" class="paramref">source</code> implements <see cref="!:ICollection&lt;T>"></see>, then <see cref="!:ICollection&lt;T>.Count"></see> will be used and <code data-dev-comment-type="paramref" class="paramref">source</code>
 will not be enumerated.</p>
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_Duplicates__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEqualityComparer___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Duplicates%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Collections.Generic.IEqualityComparer%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_Divide__1_IEnumerable___0__IEnumerable___0___Func___0_System_Boolean__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Divide%60%601(IEnumerable%7B%60%600%7D%2CIEnumerable%7B%60%600%7D%40%2CFunc%7B%60%600%2CSystem.Boolean%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L206">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L224">View Source</a>
   </span>
-  <a id="System_Linq_LinqExtensions_Duplicates_" data-uid="System.Linq.LinqExtensions.Duplicates*"></a>
-  <h4 id="System_Linq_LinqExtensions_Duplicates__1_System_Collections_Generic_IEnumerable___0__System_Collections_Generic_IEqualityComparer___0__" data-uid="System.Linq.LinqExtensions.Duplicates``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">Duplicates&lt;T&gt;(IEnumerable&lt;T&gt;, IEqualityComparer&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Enumerates all duplicate items in an enumeration.
-If a duplicate occurs more than twice in an enumeration it will be yielded one time less than the amount of times it occurs in the source enumeration.
-For example, a duplicate occuring 4 times will be yielded 3 times.
-You can combine this with .Distinct() to avoid this.</p>
+  <a id="System_Linq_LinqExtensions_Divide_" data-uid="System.Linq.LinqExtensions.Divide*"></a>
+  <h4 id="System_Linq_LinqExtensions_Divide__1_IEnumerable___0__IEnumerable___0___Func___0_System_Boolean__" data-uid="System.Linq.LinqExtensions.Divide``1(IEnumerable{``0},IEnumerable{``0}@,Func{``0,System.Boolean})">Divide&lt;T&gt;(IEnumerable&lt;T&gt;, out IEnumerable&lt;T&gt;, Func&lt;T, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Adds all items that match a predicate into a separate <see cref="!:IEnumerable&lt;T>"></see>, and returns all items that did not pass the predicate.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; Duplicates&lt;T&gt;(this IEnumerable&lt;T&gt; enumerable, IEqualityComparer&lt;T&gt; equalityComparer = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; Divide&lt;T&gt;(this IEnumerable&lt;T&gt; source, out IEnumerable&lt;T&gt; moveInto, Func&lt;T, bool&gt; predicate)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -703,16 +676,19 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
-        <td><span class="parametername">enumerable</span></td>
-        <td><p>The source enumerable.</p>
-</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;T&gt;</td>
-        <td><span class="parametername">equalityComparer</span></td>
-        <td><p>Uses <span class="xref">System.Collections.Generic.EqualityComparer`1.Default</span> if null.</p>
-</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">moveInto</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Func</span>&lt;T, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">predicate</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -726,7 +702,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -748,14 +724,14 @@ You can combine this with .Distinct() to avoid this.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_Duplicates__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__System_Collections_Generic_IEqualityComparer___1__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Duplicates%60%602(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Func%7B%60%600%2C%60%601%7D%2CSystem.Collections.Generic.IEqualityComparer%7B%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_Duplicates__1_IEnumerable___0__System_Nullable_IEqualityComparer___0___.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Duplicates%60%601(IEnumerable%7B%60%600%7D%2CSystem.Nullable%7BIEqualityComparer%7B%60%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L224">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L255">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_Duplicates_" data-uid="System.Linq.LinqExtensions.Duplicates*"></a>
-  <h4 id="System_Linq_LinqExtensions_Duplicates__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__System_Collections_Generic_IEqualityComparer___1__" data-uid="System.Linq.LinqExtensions.Duplicates``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">Duplicates&lt;TSource, TValue&gt;(IEnumerable&lt;TSource&gt;, Func&lt;TSource, TValue&gt;, IEqualityComparer&lt;TValue&gt;)</h4>
-  <div class="markdown level1 summary"><p>Enumerates all duplicate items in an enumerable.
+  <h4 id="System_Linq_LinqExtensions_Duplicates__1_IEnumerable___0__System_Nullable_IEqualityComparer___0___" data-uid="System.Linq.LinqExtensions.Duplicates``1(IEnumerable{``0},System.Nullable{IEqualityComparer{``0}})">Duplicates&lt;T&gt;(IEnumerable&lt;T&gt;, Nullable&lt;IEqualityComparer&lt;T&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Enumerates all duplicate items in an enumeration.
 If a duplicate occurs more than twice in an enumeration it will be yielded one time less than the amount of times it occurs in the source enumeration.
 For example, a duplicate occuring 4 times will be yielded 3 times.
 You can combine this with .Distinct() to avoid this.</p>
@@ -763,7 +739,7 @@ You can combine this with .Distinct() to avoid this.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TSource&gt; Duplicates&lt;TSource, TValue&gt;(this IEnumerable&lt;TSource&gt; enumerable, Func&lt;TSource, TValue&gt; selector, IEqualityComparer&lt;TValue&gt; equalityComparer = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; Duplicates&lt;T&gt;(this IEnumerable&lt;T&gt; enumerable, IEqualityComparer&lt;T&gt;? equalityComparer = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -776,21 +752,15 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TSource&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">enumerable</span></td>
         <td><p>The source enumerable.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Func</span>&lt;TSource, TValue&gt;</td>
-        <td><span class="parametername">selector</span></td>
-        <td><p>Determine equality based on this selector.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;TValue&gt;</td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">IEqualityComparer</span>&lt;T&gt;&gt;</td>
         <td><span class="parametername">equalityComparer</span></td>
-        <td><p>Uses <span class="xref">System.Collections.Generic.EqualityComparer`1.Default</span> if null.</p>
+        <td><p>Uses <see cref="!:EqualityComparer&lt;T>.Default"></see> if null.</p>
 </td>
       </tr>
     </tbody>
@@ -805,7 +775,86 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TSource&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_Duplicates__2_IEnumerable___0__Func___0___1__System_Nullable_IEqualityComparer___1___.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.Duplicates%60%602(IEnumerable%7B%60%600%7D%2CFunc%7B%60%600%2C%60%601%7D%2CSystem.Nullable%7BIEqualityComparer%7B%60%601%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L273">View Source</a>
+  </span>
+  <a id="System_Linq_LinqExtensions_Duplicates_" data-uid="System.Linq.LinqExtensions.Duplicates*"></a>
+  <h4 id="System_Linq_LinqExtensions_Duplicates__2_IEnumerable___0__Func___0___1__System_Nullable_IEqualityComparer___1___" data-uid="System.Linq.LinqExtensions.Duplicates``2(IEnumerable{``0},Func{``0,``1},System.Nullable{IEqualityComparer{``1}})">Duplicates&lt;TSource, TValue&gt;(IEnumerable&lt;TSource&gt;, Func&lt;TSource, TValue&gt;, Nullable&lt;IEqualityComparer&lt;TValue&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Enumerates all duplicate items in an enumerable.
+If a duplicate occurs more than twice in an enumeration it will be yielded one time less than the amount of times it occurs in the source enumeration.
+For example, a duplicate occuring 4 times will be yielded 3 times.
+You can combine this with .Distinct() to avoid this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TSource&gt; Duplicates&lt;TSource, TValue&gt;(this IEnumerable&lt;TSource&gt; enumerable, Func&lt;TSource, TValue&gt; selector, IEqualityComparer&lt;TValue&gt;? equalityComparer = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TSource&gt;</td>
+        <td><span class="parametername">enumerable</span></td>
+        <td><p>The source enumerable.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Func</span>&lt;TSource, TValue&gt;</td>
+        <td><span class="parametername">selector</span></td>
+        <td><p>Determine equality based on this selector.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">IEqualityComparer</span>&lt;TValue&gt;&gt;</td>
+        <td><span class="parametername">equalityComparer</span></td>
+        <td><p>Uses <see cref="!:EqualityComparer&lt;T>.Default"></see> if null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;TSource&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -831,20 +880,19 @@ You can combine this with .Distinct() to avoid this.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_MaxBy__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.MaxBy%60%602(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Func%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_GetNodes__1_LinkedList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.GetNodes%60%601(LinkedList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L236">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L158">View Source</a>
   </span>
-  <a id="System_Linq_LinqExtensions_MaxBy_" data-uid="System.Linq.LinqExtensions.MaxBy*"></a>
-  <h4 id="System_Linq_LinqExtensions_MaxBy__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__" data-uid="System.Linq.LinqExtensions.MaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">MaxBy&lt;T, TCompare&gt;(IEnumerable&lt;T&gt;, Func&lt;T, TCompare&gt;)</h4>
-  <div class="markdown level1 summary"><p>Returns the <code data-dev-comment-type="typeparamref" class="typeparamref">T</code> that results in the highest value returned from <code data-dev-comment-type="paramref" class="paramref">selector</code>.</p>
+  <a id="System_Linq_LinqExtensions_GetNodes_" data-uid="System.Linq.LinqExtensions.GetNodes*"></a>
+  <h4 id="System_Linq_LinqExtensions_GetNodes__1_LinkedList___0__" data-uid="System.Linq.LinqExtensions.GetNodes``1(LinkedList{``0})">GetNodes&lt;T&gt;(LinkedList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns all <see cref="!:LinkedListNode&lt;T>"></see>s in a <see cref="!:LinkedList&lt;T>"></see>, as opposed to all <code data-dev-comment-type="typeparamref" class="typeparamref">T</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static T MaxBy&lt;T, TCompare&gt;(this IEnumerable&lt;T&gt; source, Func&lt;T, TCompare&gt; selector)
-    where TCompare : IComparable&lt;TCompare&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;LinkedListNode&lt;T&gt;&gt; GetNodes&lt;T&gt;(this LinkedList&lt;T&gt; list)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -857,13 +905,8 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
-        <td><span class="parametername">source</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;T, TCompare&gt;</td>
-        <td><span class="parametername">selector</span></td>
+        <td><span class="xref">LinkedList</span>&lt;T&gt;</td>
+        <td><span class="parametername">list</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -878,7 +921,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">LinkedListNode</span>&lt;T&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -896,28 +939,23 @@ You can combine this with .Distinct() to avoid this.</p>
         <td><span class="parametername">T</span></td>
         <td></td>
       </tr>
-      <tr>
-        <td><span class="parametername">TCompare</span></td>
-        <td></td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_MinBy__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.MinBy%60%602(System.Collections.Generic.IEnumerable%7B%60%600%7D%2CSystem.Func%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_GetNodesBackwards__1_LinkedList___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.GetNodesBackwards%60%601(LinkedList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L255">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L176">View Source</a>
   </span>
-  <a id="System_Linq_LinqExtensions_MinBy_" data-uid="System.Linq.LinqExtensions.MinBy*"></a>
-  <h4 id="System_Linq_LinqExtensions_MinBy__2_System_Collections_Generic_IEnumerable___0__System_Func___0___1__" data-uid="System.Linq.LinqExtensions.MinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">MinBy&lt;T, TCompare&gt;(IEnumerable&lt;T&gt;, Func&lt;T, TCompare&gt;)</h4>
-  <div class="markdown level1 summary"><p>Returns the <code data-dev-comment-type="typeparamref" class="typeparamref">T</code> that results in the lowest value returned from <code data-dev-comment-type="paramref" class="paramref">selector</code>.</p>
+  <a id="System_Linq_LinqExtensions_GetNodesBackwards_" data-uid="System.Linq.LinqExtensions.GetNodesBackwards*"></a>
+  <h4 id="System_Linq_LinqExtensions_GetNodesBackwards__1_LinkedList___0__" data-uid="System.Linq.LinqExtensions.GetNodesBackwards``1(LinkedList{``0})">GetNodesBackwards&lt;T&gt;(LinkedList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns all <see cref="!:LinkedListNode&lt;T>"></see>s in a <see cref="!:LinkedList&lt;T>"></see>, in reversed order, as opposed to all <code data-dev-comment-type="typeparamref" class="typeparamref">T</code>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static T MinBy&lt;T, TCompare&gt;(this IEnumerable&lt;T&gt; source, Func&lt;T, TCompare&gt; selector)
-    where TCompare : IComparable&lt;TCompare&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;LinkedListNode&lt;T&gt;&gt; GetNodesBackwards&lt;T&gt;(this LinkedList&lt;T&gt; list)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -930,13 +968,8 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
-        <td><span class="parametername">source</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;T, TCompare&gt;</td>
-        <td><span class="parametername">selector</span></td>
+        <td><span class="xref">LinkedList</span>&lt;T&gt;</td>
+        <td><span class="parametername">list</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -951,7 +984,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">LinkedListNode</span>&lt;T&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -969,21 +1002,22 @@ You can combine this with .Distinct() to avoid this.</p>
         <td><span class="parametername">T</span></td>
         <td></td>
       </tr>
-      <tr>
-        <td><span class="parametername">TCompare</span></td>
-        <td></td>
-      </tr>
     </tbody>
   </table>
+  <h5 id="System_Linq_LinqExtensions_GetNodesBackwards__1_LinkedList___0___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is much faster than <see cref="!:Enumerable.Reverse&lt;TSource>(IEnumerable&lt;TSource>)"></see> as that function will enumerate the entire source and store the results,
+and then yielding that in reverse. This function yields <see cref="!:LinkedList&lt;T>.Last"></see> and then yields that node's <see cref="!:LinkedListNode&lt;T>.Previous"></see>
+until there are no more items.</p>
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_WhereNotNull__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.WhereNotNull%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_WhereNotNull__1_IEnumerable___0__.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.WhereNotNull%60%601(IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L133">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L133">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_WhereNotNull_" data-uid="System.Linq.LinqExtensions.WhereNotNull*"></a>
-  <h4 id="System_Linq_LinqExtensions_WhereNotNull__1_System_Collections_Generic_IEnumerable___0__" data-uid="System.Linq.LinqExtensions.WhereNotNull``1(System.Collections.Generic.IEnumerable{``0})">WhereNotNull&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <h4 id="System_Linq_LinqExtensions_WhereNotNull__1_IEnumerable___0__" data-uid="System.Linq.LinqExtensions.WhereNotNull``1(IEnumerable{``0})">WhereNotNull&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Yields all items in the source enumeration that are not <span class="xref">null</span>. This function offers null safety when using C# 8.0 nullable reference types.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1003,7 +1037,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td><span class="parametername">enumerable</span></td>
         <td></td>
       </tr>
@@ -1019,7 +1053,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1041,14 +1075,14 @@ You can combine this with .Distinct() to avoid this.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions_WhereNotNull__1_System_Collections_Generic_IEnumerable_System_Nullable___0___.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.WhereNotNull%60%601(System.Collections.Generic.IEnumerable%7BSystem.Nullable%7B%60%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions_WhereNotNull__1_IEnumerable_System_Nullable___0___.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions.WhereNotNull%60%601(IEnumerable%7BSystem.Nullable%7B%60%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L144">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L144">View Source</a>
   </span>
   <a id="System_Linq_LinqExtensions_WhereNotNull_" data-uid="System.Linq.LinqExtensions.WhereNotNull*"></a>
-  <h4 id="System_Linq_LinqExtensions_WhereNotNull__1_System_Collections_Generic_IEnumerable_System_Nullable___0___" data-uid="System.Linq.LinqExtensions.WhereNotNull``1(System.Collections.Generic.IEnumerable{System.Nullable{``0}})">WhereNotNull&lt;T&gt;(IEnumerable&lt;Nullable&lt;T&gt;&gt;)</h4>
-  <div class="markdown level1 summary"><p>Yields all items in the source enumeration that have a value. This function offers safety when using <span class="xref">System.Nullable&lt;T&gt;</span></p>
+  <h4 id="System_Linq_LinqExtensions_WhereNotNull__1_IEnumerable_System_Nullable___0___" data-uid="System.Linq.LinqExtensions.WhereNotNull``1(IEnumerable{System.Nullable{``0}})">WhereNotNull&lt;T&gt;(IEnumerable&lt;Nullable&lt;T&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Yields all items in the source enumeration that have a value. This function offers safety when using <see cref="!:Nullable&lt;T>"></see></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1067,7 +1101,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Nullable</span>&lt;T&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">System.Nullable</span>&lt;T&gt;&gt;</td>
         <td><span class="parametername">enumerable</span></td>
         <td></td>
       </tr>
@@ -1083,7 +1117,7 @@ You can combine this with .Distinct() to avoid this.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -1111,10 +1145,10 @@ You can combine this with .Distinct() to avoid this.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=System_Linq_LinqExtensions.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=System_Linq_LinqExtensions.md&amp;value=---%0Auid%3A%20System.Linq.LinqExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Util/LinqExtensions.cs/#L7" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Util/LinqExtensions.cs/#L7" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

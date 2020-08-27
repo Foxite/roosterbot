@@ -83,47 +83,23 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">ChannelConfig</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="RoosterBot_ChannelConfig_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ChannelConfig</code></pre>
+    <pre><code class="lang-csharp hljs">public class ChannelConfig : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig__ctor_RoosterBot_ChannelConfigService_System_String_System_Globalization_CultureInfo_RoosterBot_SnowflakeReference_System_Collections_Generic_IDictionary_System_String_Newtonsoft_Json_Linq_JToken__System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.%23ctor(RoosterBot.ChannelConfigService%2CSystem.String%2CSystem.Globalization.CultureInfo%2CRoosterBot.SnowflakeReference%2CSystem.Collections.Generic.IDictionary%7BSystem.String%2CNewtonsoft.Json.Linq.JToken%7D%2CSystem.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig__ctor_RoosterBot_ChannelConfigService_System_String_CultureInfo_RoosterBot_SnowflakeReference_IDictionary_System_String_JToken__IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.%23ctor(RoosterBot.ChannelConfigService%2CSystem.String%2CCultureInfo%2CRoosterBot.SnowflakeReference%2CIDictionary%7BSystem.String%2CJToken%7D%2CIEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L80">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L80">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig__ctor_" data-uid="RoosterBot.ChannelConfig.#ctor*"></a>
-  <h4 id="RoosterBot_ChannelConfig__ctor_RoosterBot_ChannelConfigService_System_String_System_Globalization_CultureInfo_RoosterBot_SnowflakeReference_System_Collections_Generic_IDictionary_System_String_Newtonsoft_Json_Linq_JToken__System_Collections_Generic_IEnumerable_System_String__" data-uid="RoosterBot.ChannelConfig.#ctor(RoosterBot.ChannelConfigService,System.String,System.Globalization.CultureInfo,RoosterBot.SnowflakeReference,System.Collections.Generic.IDictionary{System.String,Newtonsoft.Json.Linq.JToken},System.Collections.Generic.IEnumerable{System.String})">ChannelConfig(ChannelConfigService, String, CultureInfo, SnowflakeReference, IDictionary&lt;String, JToken&gt;, IEnumerable&lt;String&gt;)</h4>
+  <h4 id="RoosterBot_ChannelConfig__ctor_RoosterBot_ChannelConfigService_System_String_CultureInfo_RoosterBot_SnowflakeReference_IDictionary_System_String_JToken__IEnumerable_System_String__" data-uid="RoosterBot.ChannelConfig.#ctor(RoosterBot.ChannelConfigService,System.String,CultureInfo,RoosterBot.SnowflakeReference,IDictionary{System.String,JToken},IEnumerable{System.String})">ChannelConfig(ChannelConfigService, String, CultureInfo, SnowflakeReference, IDictionary&lt;String, JToken&gt;, IEnumerable&lt;String&gt;)</h4>
   <div class="markdown level1 summary"><p>Construct a new instance of the ChannelConfig class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -152,7 +128,7 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td><span class="xref">CultureInfo</span></td>
         <td><span class="parametername">culture</span></td>
         <td></td>
       </tr>
@@ -162,12 +138,12 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">Newtonsoft.Json.Linq.JToken</span>&gt;</td>
+        <td><span class="xref">IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">JToken</span>&gt;</td>
         <td><span class="parametername">customData</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td><span class="parametername">disabledModules</span></td>
         <td></td>
       </tr>
@@ -177,10 +153,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_ChannelReference.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.ChannelReference%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_ChannelReference.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.ChannelReference%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L60">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L60">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_ChannelReference_" data-uid="RoosterBot.ChannelConfig.ChannelReference*"></a>
   <h4 id="RoosterBot_ChannelConfig_ChannelReference" data-uid="RoosterBot.ChannelConfig.ChannelReference">ChannelReference</h4>
@@ -208,10 +184,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_CommandPrefix.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.CommandPrefix%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_CommandPrefix.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.CommandPrefix%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L65">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L65">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_CommandPrefix_" data-uid="RoosterBot.ChannelConfig.CommandPrefix*"></a>
   <h4 id="RoosterBot_ChannelConfig_CommandPrefix" data-uid="RoosterBot.ChannelConfig.CommandPrefix">CommandPrefix</h4>
@@ -239,10 +215,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_Culture.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.Culture%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_Culture.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.Culture%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L70">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L70">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_Culture_" data-uid="RoosterBot.ChannelConfig.Culture*"></a>
   <h4 id="RoosterBot_ChannelConfig_Culture" data-uid="RoosterBot.ChannelConfig.Culture">Culture</h4>
@@ -263,17 +239,17 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td><span class="xref">CultureInfo</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_DisabledModules.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.DisabledModules%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_DisabledModules.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.DisabledModules%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L75">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L75">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_DisabledModules_" data-uid="RoosterBot.ChannelConfig.DisabledModules*"></a>
   <h4 id="RoosterBot_ChannelConfig_DisabledModules" data-uid="RoosterBot.ChannelConfig.DisabledModules">DisabledModules</h4>
@@ -294,7 +270,7 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.HashSet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">HashSet</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -303,10 +279,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_GetRawData.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.GetRawData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_GetRawData.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.GetRawData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L125">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L129">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_GetRawData_" data-uid="RoosterBot.ChannelConfig.GetRawData*"></a>
   <h4 id="RoosterBot_ChannelConfig_GetRawData" data-uid="RoosterBot.ChannelConfig.GetRawData">GetRawData()</h4>
@@ -327,17 +303,17 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Newtonsoft.Json.Linq.JObject</span></td>
+        <td><span class="xref">JObject</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_SetData__1_System_String___0_.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.SetData%60%601(System.String%2C%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_SetData__1_System_String___0_.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.SetData%60%601(System.String%2C%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L105">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L109">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_SetData_" data-uid="RoosterBot.ChannelConfig.SetData*"></a>
   <h4 id="RoosterBot_ChannelConfig_SetData__1_System_String___0_" data-uid="RoosterBot.ChannelConfig.SetData``1(System.String,``0)">SetData&lt;T&gt;(String, T)</h4>
@@ -387,10 +363,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_TryGetData__1_System_String___0____0_.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.TryGetData%60%601(System.String%2C%60%600%40%2C%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_TryGetData__1_System_String___0____0_.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.TryGetData%60%601(System.String%2C%60%600%40%2C%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L92">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L96">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_TryGetData_" data-uid="RoosterBot.ChannelConfig.TryGetData*"></a>
   <h4 id="RoosterBot_ChannelConfig_TryGetData__1_System_String___0____0_" data-uid="RoosterBot.ChannelConfig.TryGetData``1(System.String,``0@,``0)">TryGetData&lt;T&gt;(String, out T, T)</h4>
@@ -460,10 +436,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig_UpdateAsync.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.UpdateAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig_UpdateAsync.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig.UpdateAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L117">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L121">View Source</a>
   </span>
   <a id="RoosterBot_ChannelConfig_UpdateAsync_" data-uid="RoosterBot.ChannelConfig.UpdateAsync*"></a>
   <h4 id="RoosterBot_ChannelConfig_UpdateAsync" data-uid="RoosterBot.ChannelConfig.UpdateAsync">UpdateAsync()</h4>
@@ -484,7 +460,7 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -497,10 +473,10 @@ be serializable with Newtonsoft.Json. Read its documentation to learn more.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_ChannelConfig.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_ChannelConfig.md&amp;value=---%0Auid%3A%20RoosterBot.ChannelConfig%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Services/ChannelConfigService.cs/#L53" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Services/ChannelConfigService.cs/#L53" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

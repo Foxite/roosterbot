@@ -84,48 +84,22 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
-    <div><span class="xref">System.Collections.IEnumerator</span></div>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
+    <div><span class="xref">IEnumerator</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandResult.html">RoosterCommandResult</a>&gt;</div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.html">RoosterBot</a></h6>
   <h6><strong>Assembly</strong>: RoosterBot.dll</h6>
   <h5 id="RoosterBot_PaginatedTableEnumerator_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class PaginatedTableEnumerator : IBidirectionalEnumerator&lt;RoosterCommandResult&gt;, IEnumerator&lt;RoosterCommandResult&gt;, IEnumerator, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class PaginatedTableEnumerator : object, IBidirectionalEnumerator&lt;RoosterCommandResult&gt;, IEnumerator&lt;RoosterCommandResult&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator__ctor_System_String_System_String___System_String_____System_Int32_System_Nullable_System_Int32__.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.%23ctor(System.String%2CSystem.String%5B%5D%2CSystem.String%5B%5D%5B%5D%2CSystem.Int32%2CSystem.Nullable%7BSystem.Int32%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator__ctor_System_String_System_String___System_String_____System_Int32_System_Nullable_System_Int32__.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.%23ctor(System.String%2CSystem.String%5B%5D%2CSystem.String%5B%5D%5B%5D%2CSystem.Int32%2CSystem.Nullable%7BSystem.Int32%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L70">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L70">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator__ctor_" data-uid="RoosterBot.PaginatedTableEnumerator.#ctor*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator__ctor_System_String_System_String___System_String_____System_Int32_System_Nullable_System_Int32__" data-uid="RoosterBot.PaginatedTableEnumerator.#ctor(System.String,System.String[],System.String[][],System.Int32,System.Nullable{System.Int32})">PaginatedTableEnumerator(String, String[], String[][], Int32, Nullable&lt;Int32&gt;)</h4>
@@ -133,7 +107,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PaginatedTableEnumerator(string caption, string[] header, string[][] cells, int rowsPerPage = 10, int? maxColumnWidth = default(int? ))</code></pre>
+    <pre><code class="lang-csharp hljs">public PaginatedTableEnumerator(string caption, string[] header, string[][] cells, int rowsPerPage = 10, int? maxColumnWidth = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -176,10 +150,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L56">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L56">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator_Current_" data-uid="RoosterBot.PaginatedTableEnumerator.Current*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator_Current" data-uid="RoosterBot.PaginatedTableEnumerator.Current">Current</h4>
@@ -208,10 +182,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Dispose.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Dispose.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L108">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L108">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator_Dispose_" data-uid="RoosterBot.PaginatedTableEnumerator.Dispose*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator_Dispose" data-uid="RoosterBot.PaginatedTableEnumerator.Dispose">Dispose()</h4>
@@ -223,10 +197,10 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_MoveNext.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.MoveNext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_MoveNext.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.MoveNext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L81">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L81">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator_MoveNext_" data-uid="RoosterBot.PaginatedTableEnumerator.MoveNext*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator_MoveNext" data-uid="RoosterBot.PaginatedTableEnumerator.MoveNext">MoveNext()</h4>
@@ -253,10 +227,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_MovePrevious.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.MovePrevious%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_MovePrevious.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.MovePrevious%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L92">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L92">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator_MovePrevious_" data-uid="RoosterBot.PaginatedTableEnumerator.MovePrevious*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator_MovePrevious" data-uid="RoosterBot.PaginatedTableEnumerator.MovePrevious">MovePrevious()</h4>
@@ -284,30 +258,14 @@
     </tbody>
   </table>
   <h5 id="RoosterBot_PaginatedTableEnumerator_MovePrevious_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>It may move the enumerator past its initial value. Use <span class="xref">System.Collections.IEnumerator.Reset()</span> to set the enumerator to its initial value.</p>
+  <div class="markdown level1 remarks"><p>It may move the enumerator past its initial value. Use <see cref="!:System.Collections.IEnumerator.Reset"></see> to set the enumerator to its initial value.</p>
 </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.InvalidOperationException</span></td>
-        <td><p>The collection was modified after the enumerator was created.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Reset.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_Reset.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L103">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L103">View Source</a>
   </span>
   <a id="RoosterBot_PaginatedTableEnumerator_Reset_" data-uid="RoosterBot.PaginatedTableEnumerator.Reset*"></a>
   <h4 id="RoosterBot_PaginatedTableEnumerator_Reset" data-uid="RoosterBot.PaginatedTableEnumerator.Reset">Reset()</h4>
@@ -317,50 +275,12 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
   </div>
-  <h3 id="eii">Explicit Interface Implementations
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator_System_Collections_IEnumerator_Current.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator.System%23Collections%23IEnumerator%23Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L67">View Source</a>
-  </span>
-  <a id="RoosterBot_PaginatedTableEnumerator_System_Collections_IEnumerator_Current_" data-uid="RoosterBot.PaginatedTableEnumerator.System#Collections#IEnumerator#Current*"></a>
-  <h4 id="RoosterBot_PaginatedTableEnumerator_System_Collections_IEnumerator_Current" data-uid="RoosterBot.PaginatedTableEnumerator.System#Collections#IEnumerator#Current">IEnumerator.Current</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">object IEnumerator.Current { get; }</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="RoosterBot.IBidirectionalEnumerator-1.html">IBidirectionalEnumerator&lt;T&gt;</a>
   </div>
   <div>
-      <span class="xref">System.Collections.Generic.IEnumerator&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.IEnumerator</span>
-  </div>
-  <div>
-      <span class="xref">System.IDisposable</span>
+      <span class="xref">IEnumerator&lt;&gt;</span>
   </div>
 </article>
           </div>
@@ -370,10 +290,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_PaginatedTableEnumerator.md&amp;value=---%0Auid%3A%20RoosterBot.PaginatedTableEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot/Results/PaginatedResult.cs/#L46" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot/Results/PaginatedResult.cs/#L46" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

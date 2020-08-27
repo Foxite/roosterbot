@@ -73,7 +73,7 @@
   
   <h1 id="RoosterBot_DiscordNet_InteractiveMessageHandler" data-uid="RoosterBot.DiscordNet.InteractiveMessageHandler" class="text-break">Class InteractiveMessageHandler
   </h1>
-  <div class="markdown level0 summary"><p>A handler that watches for added reactions on an <span class="xref">Discord.IUserMessage</span> and executes callbacks when the message author adds them to the message.
+  <div class="markdown level0 summary"><p>A handler that watches for added reactions on an <see cref="!:IUserMessage"></see> and executes callbacks when the message author adds them to the message.
 When the message is deleted, or after a timer expires (which resets when a callback is triggered), the handler disposes itself and no more reactions will be handled.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -82,52 +82,28 @@ When the message is deleted, or after a timer expires (which resets when a callb
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">InteractiveMessageHandler</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.DiscordNet.html">RoosterBot.DiscordNet</a></h6>
   <h6><strong>Assembly</strong>: DiscordNet.dll</h6>
   <h5 id="RoosterBot_DiscordNet_InteractiveMessageHandler_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class InteractiveMessageHandler</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class InteractiveMessageHandler : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_DiscordNet_InteractiveMessageHandler__ctor_Discord_IUserMessage_Discord_IUserMessage_Discord_IUser_System_Collections_Generic_Dictionary_Discord_IEmote_System_Func_System_Threading_Tasks_Task___System_Nullable_System_TimeSpan__.md&amp;value=---%0Auid%3A%20RoosterBot.DiscordNet.InteractiveMessageHandler.%23ctor(Discord.IUserMessage%2CDiscord.IUserMessage%2CDiscord.IUser%2CSystem.Collections.Generic.Dictionary%7BDiscord.IEmote%2CSystem.Func%7BSystem.Threading.Tasks.Task%7D%7D%2CSystem.Nullable%7BSystem.TimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_DiscordNet_InteractiveMessageHandler__ctor_IUserMessage_Discord_IUser_Dictionary_Discord_IEmote_Func_Task___System_Nullable_TimeSpan__.md&amp;value=---%0Auid%3A%20RoosterBot.DiscordNet.InteractiveMessageHandler.%23ctor(IUserMessage%2CDiscord.IUser%2CDictionary%7BDiscord.IEmote%2CFunc%7BTask%7D%7D%2CSystem.Nullable%7BTimeSpan%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.DiscordNet/Handlers/InteractiveMessageHandler.cs/#L23">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.DiscordNet/Handlers/InteractiveMessageHandler.cs/#L21">View Source</a>
   </span>
   <a id="RoosterBot_DiscordNet_InteractiveMessageHandler__ctor_" data-uid="RoosterBot.DiscordNet.InteractiveMessageHandler.#ctor*"></a>
-  <h4 id="RoosterBot_DiscordNet_InteractiveMessageHandler__ctor_Discord_IUserMessage_Discord_IUserMessage_Discord_IUser_System_Collections_Generic_Dictionary_Discord_IEmote_System_Func_System_Threading_Tasks_Task___System_Nullable_System_TimeSpan__" data-uid="RoosterBot.DiscordNet.InteractiveMessageHandler.#ctor(Discord.IUserMessage,Discord.IUserMessage,Discord.IUser,System.Collections.Generic.Dictionary{Discord.IEmote,System.Func{System.Threading.Tasks.Task}},System.Nullable{System.TimeSpan})">InteractiveMessageHandler(IUserMessage, IUserMessage, IUser, Dictionary&lt;IEmote, Func&lt;Task&gt;&gt;, Nullable&lt;TimeSpan&gt;)</h4>
+  <h4 id="RoosterBot_DiscordNet_InteractiveMessageHandler__ctor_IUserMessage_Discord_IUser_Dictionary_Discord_IEmote_Func_Task___System_Nullable_TimeSpan__" data-uid="RoosterBot.DiscordNet.InteractiveMessageHandler.#ctor(IUserMessage,Discord.IUser,Dictionary{Discord.IEmote,Func{Task}},System.Nullable{TimeSpan})">InteractiveMessageHandler(IUserMessage, Discord.IUser, Dictionary&lt;Discord.IEmote, Func&lt;Task&gt;&gt;, Nullable&lt;TimeSpan&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InteractiveMessageHandler(IUserMessage botMessage, IUserMessage userCommand, IUser user, Dictionary&lt;IEmote, Func&lt;Task&gt;&gt; callbacks, TimeSpan? expires = default(TimeSpan? ))</code></pre>
+    <pre><code class="lang-csharp hljs">public InteractiveMessageHandler(IUserMessage message, Discord.IUser user, Dictionary&lt;Discord.IEmote, Func&lt;Task&gt;&gt; callbacks, TimeSpan? expires = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -140,13 +116,8 @@ When the message is deleted, or after a timer expires (which resets when a callb
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Discord.IUserMessage</span></td>
-        <td><span class="parametername">botMessage</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">Discord.IUserMessage</span></td>
-        <td><span class="parametername">userCommand</span></td>
+        <td><span class="xref">IUserMessage</span></td>
+        <td><span class="parametername">message</span></td>
         <td></td>
       </tr>
       <tr>
@@ -155,12 +126,12 @@ When the message is deleted, or after a timer expires (which resets when a callb
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">Discord.IEmote</span>, <span class="xref">System.Func</span>&lt;<span class="xref">System.Threading.Tasks.Task</span>&gt;&gt;</td>
+        <td><span class="xref">Dictionary</span>&lt;<span class="xref">Discord.IEmote</span>, <span class="xref">Func</span>&lt;<span class="xref">Task</span>&gt;&gt;</td>
         <td><span class="parametername">callbacks</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.TimeSpan</span>&gt;</td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">TimeSpan</span>&gt;</td>
         <td><span class="parametername">expires</span></td>
         <td><p>5 minutes, if null.</p>
 </td>
@@ -175,10 +146,10 @@ When the message is deleted, or after a timer expires (which resets when a callb
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_DiscordNet_InteractiveMessageHandler.md&amp;value=---%0Auid%3A%20RoosterBot.DiscordNet.InteractiveMessageHandler%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_DiscordNet_InteractiveMessageHandler.md&amp;value=---%0Auid%3A%20RoosterBot.DiscordNet.InteractiveMessageHandler%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.DiscordNet/Handlers/InteractiveMessageHandler.cs/#L14" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.DiscordNet/Handlers/InteractiveMessageHandler.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

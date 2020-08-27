@@ -78,15 +78,17 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Qmmands.ModuleBase</span>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
-    <div class="level2"><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
-    <div class="level3"><a class="xref" href="RoosterBot.RoosterModule.html">RoosterModule</a></div>
-    <div class="level4"><span class="xref">ControlModule</span></div>
+    <div class="level1"><a class="xref" href="RoosterBot.RoosterModule-1.html">RoosterModule</a>&lt;<a class="xref" href="RoosterBot.RoosterCommandContext.html">RoosterCommandContext</a>&gt;</div>
+    <div class="level2"><a class="xref" href="RoosterBot.RoosterModule.html">RoosterModule</a></div>
+    <div class="level3"><span class="xref">ControlModule</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_Resources">RoosterModule&lt;RoosterCommandContext&gt;.Resources</a>
+    </div>
+    <div>
+      <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_Log">RoosterModule&lt;RoosterCommandContext&gt;.Log</a>
     </div>
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_UserConfig">RoosterModule&lt;RoosterCommandContext&gt;.UserConfig</a>
@@ -106,48 +108,21 @@
     <div>
       <a class="xref" href="RoosterBot.RoosterModule-1.html#RoosterBot_RoosterModule_1_GetString_System_String_System_Object___">RoosterModule&lt;RoosterCommandContext&gt;.GetString(String, Object[])</a>
     </div>
-    <div>
-      <span class="xref">Qmmands.ModuleBase&lt;RoosterBot.RoosterCommandContext&gt;.AfterExecutedAsync()</span>
-    </div>
-    <div>
-      <span class="xref">Qmmands.ModuleBase&lt;RoosterBot.RoosterCommandContext&gt;.Context</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="RoosterBot.Meta.html">RoosterBot.Meta</a></h6>
   <h6><strong>Assembly</strong>: Meta.dll</h6>
   <h5 id="RoosterBot_Meta_ControlModule_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ControlModule : RoosterModule, IModuleBase</code></pre>
+    <pre><code class="lang-csharp hljs">public class ControlModule : RoosterModule</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_ControlModule_RestartCommand.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.RestartCommand%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_ControlModule_RestartCommand.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.RestartCommand%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/ControlModule.cs/#L15">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/ControlModule.cs/#L15">View Source</a>
   </span>
   <a id="RoosterBot_Meta_ControlModule_RestartCommand_" data-uid="RoosterBot.Meta.ControlModule.RestartCommand*"></a>
   <h4 id="RoosterBot_Meta_ControlModule_RestartCommand" data-uid="RoosterBot.Meta.ControlModule.RestartCommand">RestartCommand()</h4>
@@ -155,8 +130,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Command(new string[]{&quot;restart&quot;})]
-public Task RestartCommand()</code></pre>
+    <pre><code class="lang-csharp hljs">public Task RestartCommand()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -168,17 +142,17 @@ public Task RestartCommand()</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IChannel_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IChannel%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IChannel_System_String_.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IChannel%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/ControlModule.cs/#L22">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/ControlModule.cs/#L22">View Source</a>
   </span>
   <a id="RoosterBot_Meta_ControlModule_SendMessageCommand_" data-uid="RoosterBot.Meta.ControlModule.SendMessageCommand*"></a>
   <h4 id="RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IChannel_System_String_" data-uid="RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IChannel,System.String)">SendMessageCommand(IChannel, String)</h4>
@@ -186,8 +160,7 @@ public Task RestartCommand()</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Command(new string[]{&quot;send&quot;})]
-public Task SendMessageCommand(IChannel channel, [Remainder] string message)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task SendMessageCommand(IChannel channel, string message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -221,17 +194,17 @@ public Task SendMessageCommand(IChannel channel, [Remainder] string message)</co
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IMessage_.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IMessage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IMessage_.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IMessage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/ControlModule.cs/#L27">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/ControlModule.cs/#L27">View Source</a>
   </span>
   <a id="RoosterBot_Meta_ControlModule_SendMessageCommand_" data-uid="RoosterBot.Meta.ControlModule.SendMessageCommand*"></a>
   <h4 id="RoosterBot_Meta_ControlModule_SendMessageCommand_RoosterBot_IMessage_" data-uid="RoosterBot.Meta.ControlModule.SendMessageCommand(RoosterBot.IMessage)">SendMessageCommand(IMessage)</h4>
@@ -239,8 +212,7 @@ public Task SendMessageCommand(IChannel channel, [Remainder] string message)</co
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Command(new string[]{&quot;delete&quot;})]
-public Task SendMessageCommand(IMessage message)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task SendMessageCommand(IMessage message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -269,17 +241,17 @@ public Task SendMessageCommand(IMessage message)</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_ControlModule_ShutdownCommand.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.ShutdownCommand%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_ControlModule_ShutdownCommand.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule.ShutdownCommand%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/ControlModule.cs/#L8">View Source</a>
+    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/ControlModule.cs/#L8">View Source</a>
   </span>
   <a id="RoosterBot_Meta_ControlModule_ShutdownCommand_" data-uid="RoosterBot.Meta.ControlModule.ShutdownCommand*"></a>
   <h4 id="RoosterBot_Meta_ControlModule_ShutdownCommand" data-uid="RoosterBot.Meta.ControlModule.ShutdownCommand">ShutdownCommand()</h4>
@@ -287,8 +259,7 @@ public Task SendMessageCommand(IMessage message)</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Command(new string[]{&quot;shutdown&quot;})]
-public Task ShutdownCommand()</code></pre>
+    <pre><code class="lang-csharp hljs">public Task ShutdownCommand()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -300,7 +271,7 @@ public Task ShutdownCommand()</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -313,10 +284,10 @@ public Task ShutdownCommand()</code></pre>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/new/staging/apiSpec/new?filename=RoosterBot_Meta_ControlModule.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/Foxite/roosterbot/new/master/apiSpec/new?filename=RoosterBot_Meta_ControlModule.md&amp;value=---%0Auid%3A%20RoosterBot.Meta.ControlModule%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/Foxite/roosterbot/blob/staging/RoosterBot.Meta/Modules/ControlModule.cs/#L5" class="contribution-link">View Source</a>
+                    <a href="https://github.com/Foxite/roosterbot/blob/master/RoosterBot.Meta/Modules/ControlModule.cs/#L5" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
