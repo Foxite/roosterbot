@@ -55,28 +55,6 @@ namespace RoosterBot {
 		public static SnowflakeReference GetReference(this ISnowflake snowflake) => new SnowflakeReference(snowflake.Platform, snowflake.Id);
 
 		/// <summary>
-		/// - If <paramref name="key"/> exists in <paramref name="dict"/>, then the value stored at that key will be returned.
-		/// - Otherwise, <paramref name="addValue"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
-		/// </summary>
-		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue addValue) where TKey : notnull {
-			return dict.GetOrAdd(key, _ => addValue);
-		}
-
-		/// <summary>
-		/// - If <paramref name="key"/> exists in <paramref name="dict"/>, then the value stored at that key will be returned.
-		/// - Otherwise, the return value of <paramref name="addFactory"/> will be added to <paramref name="dict"/> using <paramref name="key"/>, and then returned from this function.
-		/// </summary>
-		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> addFactory) where TKey : notnull {
-			if (dict.TryGetValue(key, out TValue value)) {
-				return value;
-			} else {
-				TValue ret = addFactory(key);
-				dict.Add(key, ret);
-				return ret;
-			}
-		}
-
-		/// <summary>
 		/// Converts a non-generic <see cref="DictionaryEntry"/> to a generic <see cref="KeyValuePair{TKey, TValue}"/>.
 		/// </summary>
 		public static KeyValuePair<TKey, TValue> ToGeneric<TKey, TValue>(this DictionaryEntry de) {

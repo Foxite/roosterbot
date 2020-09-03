@@ -1,4 +1,6 @@
-﻿namespace RoosterBot.Weather {
+﻿using Foxite.Common;
+
+namespace RoosterBot.Weather {
 	public class RegionInfo {
 		public int Id { get; }
 		public string Name { get; }

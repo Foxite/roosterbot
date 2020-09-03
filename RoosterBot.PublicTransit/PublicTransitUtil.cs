@@ -37,15 +37,5 @@ namespace RoosterBot.PublicTransit {
 			}
 			return d[n, m];
 		}
-
-		public static IEnumerable<LinkedListNode<T>> GetNodes<T>(this LinkedList<T> list) {
-			if (list.Count > 0) {
-				LinkedListNode<T>? node = list.First;
-				while (node != null) {
-					yield return node;
-					node = node.Next;
-				}
-			}
-		}
 	}
 }

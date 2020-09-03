@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Foxite.Common;
 
 namespace RoosterBot.Weather {
 	public class CityInfo {

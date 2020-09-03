@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using Foxite.Common;
 
 namespace RoosterBot.Weather {
 	public class CityService {
@@ -53,12 +54,7 @@ namespace RoosterBot.Weather {
 
 		public Task<CityInfo?> Lookup(string input) => Task.Run(() => {
 			input = input.RemoveDiacritics().ToLower();
-			foreach (CityInfo city in m_Cities) {
-				if (city.Match(input)) {
-					return city;
-				}
-			}
-			return null;
+			return (CityInfo?) m_Cities.FirstOrDefault(city => city.Match(input));
 		});
 	}
 }
