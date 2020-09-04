@@ -96,7 +96,7 @@ namespace RoosterBot.GLU {
 		}
 
 		private class GLUIdentifierValidator : IdentifierValidator {
-			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][12]([ab]?)$", RegexOptions.IgnoreCase);
+			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][12](-?[ab])?$", RegexOptions.IgnoreCase);
 			private static readonly Regex RoomRegex = new Regex("^[abw][0-4][0-9]{2}$", RegexOptions.IgnoreCase);
 
 			public GLUIdentifierValidator(IEnumerable<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
@@ -105,6 +105,9 @@ namespace RoosterBot.GLU {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (StudentSetRegex.IsMatch(input)) {
+					if (input.Length == 5) {
+						input = input.Insert(5, "-"); // Reinsert - if it was not added by user
+					}
 					result = new StudentSetInfo(input);
 				} else if (RoomRegex.IsMatch(input)) {
 					result = new RoomInfo(input);
