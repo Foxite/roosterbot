@@ -113,7 +113,7 @@ namespace RoosterBot {
 			IEnumerable<string> requiredTags = components.SelectMany(component => component.RequiredTags);
 
 			string errorMessage = string.Join('\n', requiredTags.Except(presentTags).Select(tag => tag + " required by " + string.Join(", ", components.Where(component => component.RequiredTags.Contains(tag)))));
-			if (string.IsNullOrWhiteSpace(errorMessage)) {
+			if (!string.IsNullOrWhiteSpace(errorMessage)) {
 				throw new InvalidOperationException("Missing tags:\n" + errorMessage);
 			}
 		}
