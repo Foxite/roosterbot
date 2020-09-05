@@ -115,6 +115,8 @@ namespace RoosterBot {
 		/// <param name="moduleType">The <see cref="Type"/> of module to add.</param>
 		/// <param name="postBuild">Delegate that modifies the module before it gets added to the RoosterCommandService.</param>
 		public IReadOnlyList<Module> AddModule(Type moduleType, Action<ModuleBuilder>? postBuild = null) {
+			bool globalLocalizations = moduleType.GetCustomAttributes(true).OfType<GlobalLocalizationsAttribute>().Any();
+
 			if (!IsRoosterModule(moduleType)) {
 				throw new ArgumentException("Modules must derive from RoosterModule<T>.");
 			}
@@ -137,10 +139,10 @@ namespace RoosterBot {
 			} else {
 				var localizedModules = new List<Module>(cultures.Count);
 				foreach (CultureInfo culture in cultures) {
-					CommandService service = GetService(culture);
+					CommandService service = GetService(globalLocalizations ? null : culture);
 
 					localizedModules.Add(service.AddModule(moduleType, (builder) => {
-						LocalizeModule(builder, culture, component);
+						LocalizeModule(builder, culture, component, globalLocalizations);
 
 						builder.AddCheck(new ModuleEnabledInChannelAttribute());
 
@@ -151,12 +153,14 @@ namespace RoosterBot {
 			}
 		}
 
-		private void LocalizeModule(ModuleBuilder module, CultureInfo culture, Component component) {
+		private void LocalizeModule(ModuleBuilder module, CultureInfo culture, Component component, bool globalLocalizations) {
 			string? resolveString(string? key) {
 				return key == null ? null : m_ResourceService.ResolveString(culture, component, key);
 			}
 
-			module.AddCheck(new RequireCultureAttribute(culture.Name, true));
+			if (!globalLocalizations) {
+				module.AddCheck(new RequireCultureAttribute(culture.Name, true));
+			}
 
 			foreach (RoosterTextAttribute rta in module.Attributes.OfType<RoosterTextAttribute>()) {
 				rta.Text = resolveString(rta.Text)!;
@@ -208,7 +212,7 @@ namespace RoosterBot {
 			}
 
 			foreach (ModuleBuilder submodule in module.Submodules) {
-				LocalizeModule(submodule, culture, component);
+				LocalizeModule(submodule, culture, component, globalLocalizations);
 			}
 		}
 		#endregion

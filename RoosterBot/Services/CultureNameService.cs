@@ -48,13 +48,12 @@ namespace RoosterBot {
 
 		/// <summary>
 		/// Returns the code of a CultureInfo, which is named similar <paramref name="input"/> in <paramref name="inputLanguage"/>.
+		/// 
+		/// If <paramref name="inputLanguage"/> is null, all languages will be searched.
 		/// </summary>
-		/// <param name="inputLanguage"></param>
-		/// <param name="input"></param>
-		/// <returns></returns>
-		public string? Search(CultureInfo inputLanguage, string input) {
+		public string? Search(CultureInfo? inputLanguage, string input) {
 			input = input.ToLower();
-			var results = m_Table.Where(kvp => kvp.Key.Item2 == inputLanguage.Name && kvp.Value.ToLower() == input);
+			var results = m_Table.Where(kvp => (inputLanguage is null || kvp.Key.Item2 == inputLanguage.Name) && kvp.Value.ToLower() == input);
 			if (results.Any()) {
 				return results.First().Key.Item1;
 			} else {

@@ -2,7 +2,7 @@
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[Name("#UserConfigModule_Name"), Group("#UserConfigModule_Group")]
+	[Name("#UserConfigModule_Name"), Group("#UserConfigModule_Group"), GlobalLocalizations]
 	public class UserConfigModule : RoosterModule {
 		public CultureNameService CultureNameService { get; set; } = null!;
 
