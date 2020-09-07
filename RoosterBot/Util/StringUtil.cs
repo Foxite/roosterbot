@@ -68,11 +68,11 @@ namespace RoosterBot {
 				for (int rowLine = 0; rowLine < cellLines[row][0].Count; rowLine++) {
 					for (int column = 0; column < cellLines[0].Length; column++) {
 						List<string> lines = cellLines[row][column];
-						ret += lines[rowLine].PadRight(columnWidths[column]);
+
 						if (column == cellLines[0].Length - 1) {
-							ret += "\n";
+							ret += lines[rowLine] + "\n";
 						} else {
-							ret += " | ";
+							ret += lines[rowLine].PadRight(columnWidths[column]) + " | ";
 						}
 					}
 				}
