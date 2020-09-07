@@ -106,7 +106,7 @@ namespace RoosterBot.GLU {
 				IdentifierInfo? result = null;
 				if (StudentSetRegex.IsMatch(input)) {
 					if (input.Length == 5) {
-						input = input.Insert(5, "-"); // Reinsert - if it was not added by user
+						input = input.Insert(4, "-"); // Reinsert - if it was not added by user
 					}
 					result = new StudentSetInfo(input);
 				} else if (RoomRegex.IsMatch(input)) {

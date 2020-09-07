@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
@@ -14,7 +15,7 @@ namespace RoosterBot.Meta {
 			}
 
 			CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
-			string? resultCode = cns.Search(context.Culture, input);
+			string? resultCode = cns.Search(parameter.Command.Module.Attributes.OfType<GlobalLocalizationsAttribute>().Any() ? null : context.Culture, input);
 			if (resultCode != null) {
 				return ValueTaskUtil.FromResult(Successful(CultureInfo.GetCultureInfo(resultCode)));
 			}
