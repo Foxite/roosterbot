@@ -137,13 +137,14 @@ namespace RoosterBot.DiscordNet {
 			foreach (var item in m_Emotes) {
 				emoteService.RegisterEmote(this, item.Key, item.Value);
 			}
-			
-			new MessageReceivedHandler(services);
-			new MessageUpdatedHandler (services);
-			new MessageDeletedHandler (services);
-			new VoteToPinHandler      (services);
-			new ReadyHandler          (m_GameString, m_Activity, m_ReportVersion, BotOwnerId);
-			new LogHandler            (Client);
+
+			new DiscordNotificationHandler(services.GetRequiredService<NotificationService>());
+			new MessageReceivedHandler    (services);
+			new MessageUpdatedHandler     (services);
+			new MessageDeletedHandler     (services);
+			new VoteToPinHandler          (services);
+			new ReadyHandler              (m_GameString, m_Activity, m_ReportVersion, BotOwnerId);
+			new LogHandler                (Client);
 		}
 
 		// Async void, but does it matter? StartAsync spawns a thread that manages the connection and returns immediately.
