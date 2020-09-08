@@ -73,8 +73,8 @@ namespace RoosterBot.Schedule {
 			}
 		}
 
-		[Command("#ScheduleModule_AfterCommand"), HiddenFromList]
-		public CommandResult DeprecatedCommand([Remainder] string ignored = "") {
+		[Command("#ScheduleModule_AfterCommand"), HiddenFromList, IgnoresExtraArguments]
+		public CommandResult DeprecatedCommand() {
 			return TextResult.Info(GetString("ScheduleModule_AfterCommand_Output"));
 		}
 		#endregion
@@ -159,24 +159,11 @@ namespace RoosterBot.Schedule {
 		}
 
 		private Task<ReturnValue<ScheduleRecord?>> GetRecordAtDateTime(IdentifierInfo identifier, DateTime datetime) {
-			return HandleErrorAsync(() => Schedules.GetRecordAtDateTime(identifier, datetime, Context));
+			return ScheduleUtil.HandleScheduleProviderErrorAsync(Resources, Culture, () => Schedules.GetRecordAtDateTime(identifier, datetime, Context));
 		}
 
 		private Task<ReturnValue<ScheduleRecord>> GetRecordAfterDateTime(IdentifierInfo identifier, DateTime datetime) {
-			return HandleErrorAsync(() => Schedules.GetRecordAfterDateTime(identifier, datetime, Context));
-		}
-
-		private async Task<ReturnValue<T>> HandleErrorAsync<T>(Func<Task<T>> action) {
-			try {
-				return ReturnValue<T>.Successful(await action());
-			} catch (Exception e) {
-				return ReturnValue<T>.Unsuccessful(TextResult.Error(GetString(e switch {
-					IdentifierNotFoundException _ => "ScheduleModule_HandleError_NotFound",
-					RecordsOutdatedException    _ => "ScheduleModule_HandleError_RecordsOutdated",
-					NoAllowedChannelsException  _ => "ScheduleModule_HandleError_NoSchedulesAvailableForServer",
-					_ => throw e
-				})));
-			}
+			return ScheduleUtil.HandleScheduleProviderErrorAsync(Resources, Culture, () => Schedules.GetRecordAfterDateTime(identifier, datetime, Context));
 		}
 		#endregion
 	}

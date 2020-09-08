@@ -13,10 +13,62 @@ namespace RoosterBot.Schedule {
 		private readonly ScheduleService m_Schedule;
 		private readonly int m_InitialOffset;
 		private int m_Offset;
+		private bool m_PreInitial = true;
 
-		public RoosterCommandResult Current {
-			get {
-				ScheduleRecord[] result = m_Schedule.GetWeekRecordsAsync(m_Identifier, m_Offset, m_Context).Result;
+		public RoosterCommandResult Current { get; private set; } = null!;
+
+		public WeekScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, int initialWeekOffset) {
+			m_Context = context;
+			m_Identifier = info;
+			m_InitialOffset = initialWeekOffset - 1;
+			m_Offset = m_InitialOffset;
+
+			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
+			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
+		}
+
+		object? IEnumerator.Current => Current;
+
+		public void Dispose() { }
+		public bool MoveNext() {
+			if (m_PreInitial) {
+				m_Offset = m_InitialOffset;
+			} else {
+				m_Offset++;
+			}
+
+			try {
+				return Update();
+			} finally {
+				m_PreInitial = false;
+			}
+		}
+
+		public bool MovePrevious() {
+			if (m_PreInitial) {
+				m_Offset = m_InitialOffset - 1;
+			} else {
+				m_Offset--;
+			}
+
+			try {
+				return Update();
+			} finally {
+				m_PreInitial = false;
+			}
+		}
+
+		public void Reset() {
+			m_Offset = m_InitialOffset;
+			m_PreInitial = true;
+		}
+
+		private bool Update() {
+			ReturnValue<ScheduleRecord[]> scheduleResult =
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_Schedule.GetWeekRecordsAsync(m_Identifier, m_Offset, m_Context)).Result;
+
+			if (scheduleResult.Success) {
+				ScheduleRecord[] result = scheduleResult.Value;
 
 				var dayRecords = result.GroupBy(record => record.Start.DayOfWeek).ToDictionary(
 					/* Key select */ group => group.Key,
@@ -58,38 +110,17 @@ namespace RoosterBot.Schedule {
 					}
 				}
 
-				return new TableResult(m_Identifier.DisplayText + ": " + string.Format(m_Resources.GetString(m_Context.Culture, m_Offset switch
+				Current = new TableResult(m_Identifier.DisplayText + ": " + string.Format(m_Resources.GetString(m_Context.Culture, m_Offset switch
 				{
 					0 => "ScheduleModule_RespondWeek_ScheduleThisWeek",
 					1 => "ScheduleModule_RespondWeek_ScheduleNextWeek",
 					_ => "ScheduleModule_RespondWeek_ScheduleInXWeeks"
 				}), m_Offset), cells);
+				return true;
+			} else {
+				Current = scheduleResult.ErrorResult;
+				return m_PreInitial;
 			}
 		}
-
-		public WeekScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, int initialWeekOffset) {
-			m_Context = context;
-			m_Identifier = info;
-			m_InitialOffset = initialWeekOffset - 1;
-			m_Offset = m_InitialOffset;
-
-			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
-			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
-		}
-
-		object? IEnumerator.Current => Current;
-
-		public void Dispose() { }
-		public bool MoveNext() {
-			m_Offset++;
-			return true;
-		}
-
-		public bool MovePrevious() {
-			m_Offset--;
-			return true;
-		}
-
-		public void Reset() => m_Offset = m_InitialOffset;
 	}
 }

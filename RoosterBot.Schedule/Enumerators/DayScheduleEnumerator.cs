@@ -14,10 +14,62 @@ namespace RoosterBot.Schedule {
 		private readonly string[] m_Header;
 		private readonly DateTime m_InitialDate;
 		private DateTime m_CurrentDate;
+		private bool m_PreInitial = true;
+		
+		object? IEnumerator.Current => Current;
+		public RoosterCommandResult Current { get; private set; } = null!;
 
-		public RoosterCommandResult Current {
-			get {
-				ScheduleRecord[] result = m_Schedule.GetSchedulesForDate(m_Identifier, m_CurrentDate, m_Context).Result;
+		public DayScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, DateTime initialDate, string[] header) {
+			m_Context = context;
+			m_Identifier = info;
+			m_Header = header;
+			m_InitialDate = initialDate;
+			m_CurrentDate = m_InitialDate;
+			
+			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
+			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
+		}
+
+		public void Dispose() { }
+		public bool MoveNext() {
+			if (m_PreInitial) {
+				m_CurrentDate = m_InitialDate;
+			} else {
+				m_CurrentDate = m_CurrentDate.AddDays(1);
+			}
+
+			try {
+				return Update();
+			} finally {
+				m_PreInitial = false;
+			}
+		}
+
+		public bool MovePrevious() {
+			if (m_PreInitial) {
+				m_CurrentDate = m_InitialDate;
+			} else {
+				m_CurrentDate = m_CurrentDate.AddDays(-1);
+			}
+
+			try {
+				return Update();
+			} finally {
+				m_PreInitial = false;
+			}
+		}
+
+		public void Reset() {
+			m_PreInitial = true;
+			m_CurrentDate = m_InitialDate;
+		}
+
+		private bool Update() {
+			ReturnValue<ScheduleRecord[]> scheduleResult =
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_Schedule.GetSchedulesForDate(m_Identifier, m_CurrentDate, m_Context)).Result;
+
+			if (scheduleResult.Success) {
+				ScheduleRecord[] result = scheduleResult.Value;
 				var cells = new IReadOnlyList<string>[Math.Max(result.Length, 1) + 1];
 				cells[0] = m_Header;
 
@@ -32,34 +84,12 @@ namespace RoosterBot.Schedule {
 						recordIndex++;
 					}
 				}
-				return new TableResult(m_Identifier.DisplayText + ": " + DateTimeUtil.GetRelativeDateReference(m_CurrentDate, m_Context.Culture), cells);
+				Current = new TableResult(m_Identifier.DisplayText + ": " + DateTimeUtil.GetRelativeDateReference(m_CurrentDate, m_Context.Culture), cells);
+				return true;
+			} else {
+				Current = scheduleResult.ErrorResult;
+				return m_PreInitial;
 			}
 		}
-
-		public DayScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, DateTime initialDate, string[] header) {
-			m_Context = context;
-			m_Identifier = info;
-			m_Header = header;
-			m_InitialDate = initialDate.AddDays(-1);
-			m_CurrentDate = m_InitialDate;
-			
-			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
-			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
-		}
-
-		object? IEnumerator.Current => Current;
-
-		public void Dispose() { }
-		public bool MoveNext() {
-			m_CurrentDate = m_CurrentDate.AddDays(1);
-			return true;
-		}
-
-		public bool MovePrevious() {
-			m_CurrentDate = m_CurrentDate.AddDays(-1);
-			return true;
-		}
-
-		public void Reset() => m_CurrentDate = m_InitialDate;
 	}
 }
