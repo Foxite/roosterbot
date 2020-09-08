@@ -79,5 +79,16 @@ namespace RoosterBot.GLU {
 				}).Result)
 			);
 		}
+
+		[Command("kut"), IgnoresExtraArguments]
+		public CommandResult BoazBas() {
+			if (!ChannelConfig.TryGetData("glu.jokes.kut", out string? mention)) {
+				mention = Context.User.Mention;
+			}
+			if (MentionUtils.ParseUser(mention) == Context.User.Id) {
+				mention = MentionUtils.MentionUser(133798410024255488); // Foxite
+			}
+			return new TextResult(null, "Kut " + mention);
+		}
 	}
 }

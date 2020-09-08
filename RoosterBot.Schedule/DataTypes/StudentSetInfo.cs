@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace RoosterBot.Schedule {
 	public class StudentSetInfo : IdentifierInfo {
@@ -12,5 +13,8 @@ namespace RoosterBot.Schedule {
 		public override bool Matches(ScheduleRecord record) {
 			return record.StudentSets.Contains(this);
 		}
+
+		public override bool Equals(IdentifierInfo? other) => other != null && other.GetType() == GetType() && ((StudentSetInfo) other).ScheduleCode[0..3] == ScheduleCode[0..3];
+		public override int GetHashCode() => ScheduleCode[0..3].GetHashCode();
 	}
 }
