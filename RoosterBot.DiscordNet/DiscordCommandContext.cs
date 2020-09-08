@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordCommandContext : RoosterCommandContext {
@@ -84,75 +85,85 @@ namespace RoosterBot.DiscordNet {
 				throw new InvalidOperationException("Tried sending a PaginatedResult that didn't have any pages!");
 			}
 
-			IUserMessage message;
-			RoosterCommandResult initial = pr.Current;
-			if (initial is AspectListResult alr) {
-				if (existingResponse == null) {
-					message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
-				} else {
-					message = ((DiscordMessage) existingResponse).DiscordEntity;
-					await message.ModifyAsync(props => {
-						props.Content = pr.Caption;
-						props.Embed = AspectListToEmbedBuilder(alr).Build();
-					});
-				}
+			// Is the first page a TextResult with the error emote?
+			EmoteService emoteService = ServiceProvider.GetService<EmoteService>();
+			if (pr.Current is TextResult tr
+				&& tr.PrefixEmoteName != null
+				&& emoteService.TryGetEmote(DiscordNetComponent.Instance, tr.PrefixEmoteName, out IEmote? emote)
+				&& emote == emoteService.Error(DiscordNetComponent.Instance)
+			) {
+				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this)));
 			} else {
-				string text = pr.Current.ToString(this);
-				if (pr.Caption != null) {
-					text = pr.Caption + "\n" + text;
-				}
-				if (existingResponse == null) {
-					message = await Channel.SendMessageAsync(text);
-				} else {
-					message = ((DiscordMessage) existingResponse).DiscordEntity;
-					await message.ModifyAsync(props => {
-						props.Content = pr.Caption + "\n" + text;
-						props.Embed = null;
-					});
-				}
-			}
-
-			SocketGuildUser? currentGuildUser = ((SocketGuild?) Guild)?.GetUser(Client.CurrentUser.Id);
-			if (currentGuildUser != null &&
-				!currentGuildUser.GuildPermissions.AddReactions &&
-				!currentGuildUser.GuildPermissions.ManageMessages) {
-				Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
-			} else {
-				Task goTo(Func<bool> moveAction) {
-					if (moveAction()) {
-						return message.ModifyAsync(props => {
-							if (pr.Current is AspectListResult alr) {
-								props.Content = pr.Caption;
-								props.Embed = AspectListToEmbedBuilder(alr).Build();
-							} else {
-								string text = pr.Current.ToString(this);
-								if (pr.Caption != null) {
-									text = pr.Caption + "\n" + text;
-								}
-								props.Content = text;
-								props.Embed = null;
-							}
-						});
+				IUserMessage message;
+				RoosterCommandResult initial = pr.Current;
+				if (initial is AspectListResult alr) {
+					if (existingResponse == null) {
+						message = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
 					} else {
-						return message.ModifyAsync(props => {
-							if (pr.Current is AspectListResult alr) {
-								props.Embed = props.Embed.Value.ToEmbedBuilder()
-									.WithFooter(props.Embed.Value.Footer + "\nNo more results")
-									.Build();
-							} else {
-								props.Content += "\nNo more results.";
-							}
+						message = ((DiscordMessage) existingResponse).DiscordEntity;
+						await message.ModifyAsync(props => {
+							props.Content = pr.Caption;
+							props.Embed = AspectListToEmbedBuilder(alr).Build();
+						});
+					}
+				} else {
+					string text = pr.Current.ToString(this);
+					if (pr.Caption != null) {
+						text = pr.Caption + "\n" + text;
+					}
+					if (existingResponse == null) {
+						message = await Channel.SendMessageAsync(text);
+					} else {
+						message = ((DiscordMessage) existingResponse).DiscordEntity;
+						await message.ModifyAsync(props => {
+							props.Content = pr.Caption + "\n" + text;
+							props.Embed = null;
 						});
 					}
 				}
 
-				new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
+				SocketGuildUser? currentGuildUser = ((SocketGuild?) Guild)?.GetUser(Client.CurrentUser.Id);
+				if (currentGuildUser != null &&
+					!currentGuildUser.GuildPermissions.AddReactions &&
+					!currentGuildUser.GuildPermissions.ManageMessages) {
+					Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
+				} else {
+					Task goTo(Func<bool> moveAction) {
+						if (moveAction()) {
+							return message.ModifyAsync(props => {
+								if (pr.Current is AspectListResult alr) {
+									props.Content = pr.Caption;
+									props.Embed = AspectListToEmbedBuilder(alr).Build();
+								} else {
+									string text = pr.Current.ToString(this);
+									if (pr.Caption != null) {
+										text = pr.Caption + "\n" + text;
+									}
+									props.Content = text;
+									props.Embed = null;
+								}
+							});
+						} else {
+							return message.ModifyAsync(props => {
+								if (pr.Current is AspectListResult alr) {
+									props.Embed = props.Embed.Value.ToEmbedBuilder()
+										.WithFooter(props.Embed.Value.Footer + "\nNo more results")
+										.Build();
+								} else {
+									props.Content += "\nNo more results.";
+								}
+							});
+						}
+					}
+
+					new InteractiveMessageHandler(message, User, new Dictionary<Discord.IEmote, Func<Task>>() {
 					{ new Discord.Emoji("◀️"), () => goTo(pr.MovePrevious) },
 					{ new Discord.Emoji("▶️"), () => goTo(pr.MoveNext) },
 					//{ new Discord.Emoji("⏪"), reset }
 				});
+				}
+				return new DiscordMessage(message);
 			}
-			return new DiscordMessage(message);
 		}
 	}
 }
