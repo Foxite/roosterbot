@@ -50,7 +50,7 @@ namespace RoosterBot.GLU.Discord {
 
 				text += "\n";
 				text += $"Voor meer rangen kan je `?ranks` invoeren in {botCommandsMention}\n";
-				text += "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik `!help rooster` of `!commands rooster` om te zien hoe ik werk.";
+				text += "Verder ben ik altijd beschikbaar om het rooster te laten zien. Gebruik `!commands` om te zien hoe ik werk.";
 
 				await welcomeChannel.SendMessageAsync(text);
 			}

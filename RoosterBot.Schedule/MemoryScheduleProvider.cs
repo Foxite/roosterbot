@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 			m_Name = name;
 			List<ScheduleRecord> list = reader.GetSchedule();
 			m_ScheduleBegin = list[0].Start.Date;
-			m_ScheduleEnd = list[list.Count - 1].End.Date;
+			m_ScheduleEnd = list[^1].End.Date;
 			m_Schedule = list
 				.GroupBy(record => record.Start.Date)
 				.ToDictionary(

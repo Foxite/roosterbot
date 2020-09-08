@@ -120,7 +120,6 @@ namespace RoosterBot {
 
 			return new ServiceCollection()
 				.AddSingleton(new RoosterCommandService(resources))
-				.AddSingleton(new HelpService(resources))
 				.AddSingleton(new NotificationService())
 				.AddSingleton(new EmoteService())
 				.AddSingleton(resources)

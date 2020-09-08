@@ -35,8 +35,6 @@ namespace RoosterBot.Weather {
 			commandService.AddTypeParser(new CityInfoParser());
 
 			commandService.AddModule<WeatherModule>();
-
-			services.GetRequiredService<HelpService>().AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 		}
 	}
 }

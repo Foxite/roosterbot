@@ -133,12 +133,11 @@ namespace RoosterBot {
 
 		private void AddComponentModules(IServiceProvider services) {
 			RoosterCommandService commands = services.GetRequiredService<RoosterCommandService>();
-			HelpService help = services.GetRequiredService<HelpService>();
 
 			foreach (Component component in m_Components) {
 				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
 				try {
-					component.AddModulesInternal(services, commands, help);
+					component.AddModulesInternal(services, commands);
 				} catch (Exception ex) {
 					throw new ComponentModuleException("Component " + component.Name + " threw an exception during AddModules.", component.GetType(), ex);
 				}
