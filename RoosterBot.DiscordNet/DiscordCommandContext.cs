@@ -119,14 +119,13 @@ namespace RoosterBot.DiscordNet {
 				Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
 			} else {
 				Task goTo(Func<bool> moveAction) {
-					RoosterCommandResult current = pr.Current;
 					if (moveAction()) {
 						return message.ModifyAsync(props => {
 							if (pr.Current is AspectListResult alr) {
 								props.Content = pr.Caption;
 								props.Embed = AspectListToEmbedBuilder(alr).Build();
 							} else {
-								string text = current.ToString(this);
+								string text = pr.Current.ToString(this);
 								if (pr.Caption != null) {
 									text = pr.Caption + "\n" + text;
 								}
@@ -136,7 +135,7 @@ namespace RoosterBot.DiscordNet {
 						});
 					} else {
 						return message.ModifyAsync(props => {
-							if (current is AspectListResult alr) {
+							if (pr.Current is AspectListResult alr) {
 								props.Embed = props.Embed.Value.ToEmbedBuilder()
 									.WithFooter(props.Embed.Value.Footer + "\nNo more results")
 									.Build();
