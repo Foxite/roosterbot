@@ -11,20 +11,20 @@ namespace RoosterBot.DiscordNet {
 					if (Discord.MentionUtils.TryParseRole(input, out ulong roleId) || ulong.TryParse(input, out roleId)) {
 						Discord.IRole role = igc.Guild.GetRole(roleId);
 						if (role == null) {
-							return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#RoleParser_UnknownRole"));
+							return ValueTaskUtil.FromResult(Unsuccessful(true, "#RoleParser_UnknownRole"));
 						} else if (!(role is TRole tRole)) {
-							return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#DiscordParser_InvalidType"));
+							return ValueTaskUtil.FromResult(Unsuccessful(true, "#DiscordParser_InvalidType"));
 						} else {
 							return ValueTaskUtil.FromResult(Successful(tRole));
 						}
 					} else {
-						return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#RoleParser_InvalidMention"));
+						return ValueTaskUtil.FromResult(Unsuccessful(false, "#RoleParser_InvalidMention"));
 					}
 				} else {
-					return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#RoleParser_GuildsOnly"));
+					return ValueTaskUtil.FromResult(Unsuccessful(false, "#RoleParser_GuildsOnly"));
 				}
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#DiscordOnly"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#DiscordOnly"));
 			}
 		}
 	}

@@ -32,7 +32,7 @@ namespace RoosterBot {
 			if (m_Parsers.TryGetValue(context.Platform, out var parser)) {
 				return parser.ParseAsync(parameter, value, context);
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#PlatformSpecificParser_MissingParser", context.Platform.Name));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, context.Platform.Name));
 			}
 		}
 	}

@@ -20,7 +20,7 @@ namespace RoosterBot.Meta {
 				return ValueTaskUtil.FromResult(Successful(CultureInfo.GetCultureInfo(resultCode)));
 			}
 
-			return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#CultureInfoReader_ParseFailed"));
+			return ValueTaskUtil.FromResult(Unsuccessful(false, "#CultureInfoReader_ParseFailed"));
 		}
 
 		private bool TryGetCultureInfo(string name, [NotNullWhen(true), MaybeNullWhen(false)] out CultureInfo? info) {

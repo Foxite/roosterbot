@@ -23,7 +23,7 @@ namespace RoosterBot.Schedule {
 						result = (await context.ServiceProvider.GetRequiredService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetStudentSet();
 						byMention = true;
 					} else {
-						return Unsuccessful(false, context, "#StudentSetInfoReader_CheckFailed_Direct");
+						return Unsuccessful(false, "#StudentSetInfoReader_CheckFailed_Direct");
 					}
 				}
 
@@ -34,7 +34,7 @@ namespace RoosterBot.Schedule {
 					} else {
 						message = "#StudentSetInfoReader_CheckFailed_MentionSelf";
 					}
-					return Unsuccessful(true, context, message, context.ChannelConfig.CommandPrefix);
+					return Unsuccessful(true, message, context.ChannelConfig.CommandPrefix);
 				} else {
 					return Successful(result);
 				}

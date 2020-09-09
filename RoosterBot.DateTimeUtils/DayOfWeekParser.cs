@@ -26,7 +26,7 @@ namespace RoosterBot.DateTimeUtils {
 					if (result == null) {
 						result = i;
 					} else {
-						return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#DayOfWeekReader_CheckFailed"));
+						return ValueTaskUtil.FromResult(Unsuccessful(false, "#DayOfWeekReader_CheckFailed"));
 					}
 				}
 			}
@@ -34,7 +34,7 @@ namespace RoosterBot.DateTimeUtils {
 			if (result.HasValue) {
 				return ValueTaskUtil.FromResult(Successful(((DayOfWeek[]) typeof(DayOfWeek).GetEnumValues())[result.Value]));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#DayOfWeekReader_CheckFailed"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#DayOfWeekReader_CheckFailed"));
 			}
 		}
 	}

@@ -39,22 +39,16 @@ namespace RoosterBot {
 
 		/// <inheritdoc/>
 		public async override ValueTask<RoosterTypeParserResult<T>> ParseAsync(Parameter parameter, string value, RoosterCommandContext context) {
-			ResourceService resources = context.ServiceProvider.GetRequiredService<ResourceService>();
-			foreach (IRoosterTypeParser reader in m_Parsers) {
-				IRoosterTypeParserResult result = await reader.ParseAsync(parameter, value, context);
+			foreach (IRoosterTypeParser parser in m_Parsers) {
+				IRoosterTypeParserResult result = await parser.ParseAsync(parameter, value, context);
 				if (result.IsSuccessful) {
 					return Successful((T) result.Value!); // should never throw -- see AddReader, there's no way to add an invalid parser
 				} else if (result.InputValid) {
-					Component? resourceComponent;
-					if (reader is IExternalResultStringParser ersp) {
-						resourceComponent = ersp.ErrorReasonComponent;
-					} else {
-						resourceComponent = Program.Instance.Components.GetComponentFromAssembly(reader.GetType().Assembly);
-					}
-					return RoosterTypeParserResult<T>.Unsuccessful(true, resources.ResolveString(context.Culture, resourceComponent, result.Reason));
+					return RoosterTypeParserResult<T>.Unsuccessful(parser, true, result.Reason, result.ErrorReasonObjects);
 				}
 			}
-			return RoosterTypeParserResult<T>.Unsuccessful(false, resources.ResolveString(context.Culture, ErrorReasonComponent, m_ErrorMessage));
+			ResourceService resources = context.ServiceProvider.GetRequiredService<ResourceService>();
+			return Unsuccessful(false, resources.ResolveString(context.Culture, ErrorReasonComponent, m_ErrorMessage));
 		}
 	}
 }
