@@ -154,7 +154,7 @@
     <value>Die command is uitgeschakeld.</value>
   </data>
   <data name="CommandHandling_NotFound" xml:space="preserve">
-    <value>Die command ken ik niet. Gebruik `{0}help` voor informatie.</value>
+    <value>Die command ken ik niet. Gebruik `{0}commands` voor informatie.</value>
     <comment>0: Command prefix</comment>
   </data>
   <data name="CommandHandling_OverloadsFailed" xml:space="preserve">

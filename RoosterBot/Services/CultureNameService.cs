@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -21,13 +22,13 @@ namespace RoosterBot {
 		/// <example>
 		/// Search(CultureInfo.GetCultureInfo("es-ES", "inglés").Name == "en-US"
 		/// </example>
-		public CultureInfo? Search(CultureInfo culture, string input) {
+		public CultureInfo? Search(CultureInfo? culture, string input) {
 			input = input.ToLower();
-			System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>> enumerable = m_Resources.GetAvailableKeys(Assembly.GetExecutingAssembly(), culture);
+			IEnumerable<KeyValuePair<string, string>> enumerable = m_Resources.GetAvailableKeys(Assembly.GetExecutingAssembly(), culture);
 			string? resultCode = enumerable
-				.Where(kvp => kvp.Key.StartsWith(KeyPrefix))
+				.Where(kvp => culture is null || kvp.Key.StartsWith(KeyPrefix))
 				.FirstOrDefault(kvp => kvp.Value.ToLower() == input)
-				.Key.Substring(KeyPrefix.Length);
+				.Key?.Substring(KeyPrefix.Length);
 			return resultCode != null ? CultureInfo.GetCultureInfo(resultCode) : null;
 		}
 

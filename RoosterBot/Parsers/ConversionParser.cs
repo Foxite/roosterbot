@@ -28,7 +28,7 @@ namespace RoosterBot {
 			if (result.IsSuccessful) {
 				return Successful(m_Converter(result.Value));
 			} else {
-				return Unsuccessful(result.InputValid, context, result.Reason);
+				return Unsuccessful(result.InputValid, result.Reason, result.ErrorReasonObjects);
 			}
 		}
 	}

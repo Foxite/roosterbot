@@ -11,7 +11,7 @@ namespace RoosterBot.Console {
 			} else if (value.ToLower() == "you") {
 				return ValueTaskUtil.FromResult(Successful(ConsoleComponent.Instance.ConsoleBotUser));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "Only me or you"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "Only me or you"));
 			}
 		}
 	}

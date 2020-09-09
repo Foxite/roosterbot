@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
@@ -14,12 +15,12 @@ namespace RoosterBot.Meta {
 			}
 
 			CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
-			CultureInfo? result = cns.Search(context.Culture, input);
+			CultureInfo? result = cns.Search(parameter.Command.Module.Attributes.OfType<GlobalLocalizationsAttribute>().Any() ? null : context.Culture, input);
 			if (result != null) {
 				return ValueTaskUtil.FromResult(Successful(result));
 			}
 
-			return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#CultureInfoReader_ParseFailed"));
+			return ValueTaskUtil.FromResult(Unsuccessful(false, "#CultureInfoReader_ParseFailed"));
 		}
 
 		private bool TryGetCultureInfo(string name, [NotNullWhen(true), MaybeNullWhen(false)] out CultureInfo? info) {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public class ScheduleComponent : Component {
-		public override Version ComponentVersion => new Version(2, 1, 1);
+		public override Version ComponentVersion => new Version(2, 2, 0);
 
 		public override IEnumerable<string> RequiredTags { get; } = new[] { "ScheduleProvider", "DayOfWeekReader" };
 
@@ -24,10 +24,6 @@ namespace RoosterBot.Schedule {
 
 			commandService.AddModule<ScheduleModule>();
 			commandService.AddModule<UserIdentifierModule>();
-
-			var help = services.GetRequiredService<HelpService>();
-			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Schedule", "#ScheduleComponent_HelpText_Rooster");
-			help.AddHelpSection(this, "#ScheduleComponent_HelpName_Class", "#ScheduleComponent_HelpText_Class");
 		}
 	}
 }

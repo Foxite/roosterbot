@@ -1,4 +1,6 @@
-﻿using Qmmands;
+﻿using System;
+using System.Collections.Generic;
+using Qmmands;
 
 namespace RoosterBot {
 	/// <summary>
@@ -17,31 +19,40 @@ namespace RoosterBot {
 		object? IRoosterTypeParserResult.Value => Value;
 
 		/// <summary>
+		/// The <see cref="IRoosterTypeParser"/> that generated this result.
+		/// </summary>
+		public IRoosterTypeParser Parser { get; }
+
+		/// <summary>
+		/// A list of objects used with <see cref="string.Format(string, object?[])"/> when handling the error, if this result is unsuccessful.
+		/// </summary>
+		public IReadOnlyList<object> ErrorReasonObjects { get; }
+
+		/// <summary>
 		/// Construct a new successful <see cref="RoosterTypeParserResult{T}"/>.
 		/// </summary>
-		protected RoosterTypeParserResult(T value) : base(value) { }
+		protected RoosterTypeParserResult(IRoosterTypeParser parser, T value) : base(value) {
+			Parser = parser;
+			ErrorReasonObjects = Array.Empty<object>();
+		}
 
 		/// <summary>
 		/// Construct a new unsuccessful <see cref="RoosterTypeParserResult{T}"/>.
 		/// </summary>
-		protected RoosterTypeParserResult(string reason, bool inputValid) : base(reason) {
+		protected RoosterTypeParserResult(IRoosterTypeParser parser, bool inputValid, string reason, params object[] objects) : base(reason) {
+			Parser = parser;
 			InputValid = inputValid;
+			ErrorReasonObjects = objects;
 		}
 
-		/// <summary>
-		/// Get a successful result.
-		/// </summary>
-		public static new RoosterTypeParserResult<T> Successful(T result) => new RoosterTypeParserResult<T>(result);
+		internal static RoosterTypeParserResult<T> Successful(IRoosterTypeParser parser, T result) => new RoosterTypeParserResult<T>(parser, result);
 
-		/// <summary>
-		/// Get an unsuccessful result.
-		/// </summary>
-		public static RoosterTypeParserResult<T> Unsuccessful(bool inputValid, string reason) {
-			return new RoosterTypeParserResult<T>(reason, inputValid);
+		internal static RoosterTypeParserResult<T> Unsuccessful(IRoosterTypeParser parser, bool inputValid, string reason, IReadOnlyList<object> objects) {
+			return new RoosterTypeParserResult<T>(parser, inputValid, reason, objects);
 		}
 
-		internal static RoosterTypeParserResult<T> UnsuccessfulBuiltIn(bool inputValid, string reason) {
-			return new RoosterTypeParserResult<T>(reason, inputValid);
+		internal static RoosterTypeParserResult<T> Unsuccessful(IRoosterTypeParser parser, bool inputValid, string reason, params object[] objects) {
+			return new RoosterTypeParserResult<T>(parser, inputValid, reason, objects);
 		}
 	}
 
@@ -60,6 +71,11 @@ namespace RoosterBot {
 		public string Reason { get; }
 		
 		/// <summary>
+		/// A list of objects used with <see cref="string.Format(string, object?[])"/> when handling the error, if this result is unsuccessful.
+		/// </summary>
+		public IReadOnlyList<object> ErrorReasonObjects { get; }
+		
+		/// <summary>
 		/// Indicates if the result has a value.
 		/// </summary>
 		public bool HasValue { get; }
@@ -73,5 +89,10 @@ namespace RoosterBot {
 		/// The value for the result.
 		/// </summary>
 		public object? Value { get; }
+
+		/// <summary>
+		/// The <see cref="IRoosterTypeParser"/> that generated this result.
+		/// </summary>
+		public IRoosterTypeParser Parser { get; }
 	}
 }

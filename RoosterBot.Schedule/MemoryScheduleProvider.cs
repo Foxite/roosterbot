@@ -36,7 +36,7 @@ namespace RoosterBot.Schedule {
 			IReadOnlyList<ScheduleRecord> list = m_Reader.GetSchedule();
 			if (list.Count > 0) {
 				m_Begin = list[0].Start.Date;
-				End = list[list.Count - 1].End.Date;
+				End = list[^1].End.Date;
 				m_Schedule = list
 					.GroupBy(record => record.Start.Date)
 					.ToDictionary(

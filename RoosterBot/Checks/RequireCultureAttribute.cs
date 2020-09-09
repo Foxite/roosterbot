@@ -33,7 +33,7 @@ namespace RoosterBot {
 			if (Culture == context.Culture) {
 				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 			} else if (Hide) {
-				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_UnknownCommand", context.ChannelConfig.CommandPrefix));
+				return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#CommandHandling_NotFound", context.ChannelConfig.CommandPrefix));
 			} else {
 				CultureNameService cns = context.ServiceProvider.GetRequiredService<CultureNameService>();
 				string localizedName = cns.GetLocalizedName(Culture, context.ChannelConfig.Culture);

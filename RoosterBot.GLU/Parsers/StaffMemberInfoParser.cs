@@ -29,7 +29,7 @@ namespace RoosterBot.GLU {
 						if (lookupResults.Count == 1) {
 							result = lookupResults.First().StaffMember;
 						} else if (lookupResults.Count > 1) {
-							return Unsuccessful(true, context, "#StaffMemberInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.StaffMember.DisplayText)));
+							return Unsuccessful(true, "#StaffMemberInfoReader_MultipleMatches", string.Join(", ", lookupResults.Select(match => match.StaffMember.DisplayText)));
 						}
 					}
 				} else if (context.IsPrivate) {
@@ -37,7 +37,7 @@ namespace RoosterBot.GLU {
 				}
 
 				if (result == null) {
-					return Unsuccessful(false, context, "#StaffMemberInfoReader_CheckFailed");
+					return Unsuccessful(false, "#StaffMemberInfoReader_CheckFailed");
 				} else {
 					return Successful(result);
 				}

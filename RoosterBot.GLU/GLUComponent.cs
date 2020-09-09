@@ -16,7 +16,7 @@ namespace RoosterBot.GLU {
 		private int m_RepeatRecords;
 		private bool m_ExpandActivites;
 
-		public override Version ComponentVersion => new Version(1, 1, 1);
+		public override Version ComponentVersion => new Version(1, 2, 0);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
 		public GLUComponent() {
@@ -106,7 +106,7 @@ namespace RoosterBot.GLU {
 		}
 
 		private class GLUIdentifierValidator : IdentifierValidator {
-			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][12]([ab]?)$", RegexOptions.IgnoreCase);
+			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][12](-?[abcd])?$", RegexOptions.IgnoreCase);
 			private static readonly Regex RoomRegex = new Regex("^[abw][0-4][0-9]{2}$", RegexOptions.IgnoreCase);
 
 			public GLUIdentifierValidator(IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
@@ -115,6 +115,9 @@ namespace RoosterBot.GLU {
 				input = input.ToUpper();
 				IdentifierInfo? result = null;
 				if (StudentSetRegex.IsMatch(input)) {
+					if (input.Length == 5) {
+						input = input.Insert(4, "-"); // Reinsert - if it was not added by user
+					}
 					result = new StudentSetInfo(input);
 				} else if (RoomRegex.IsMatch(input)) {
 					result = new RoomInfo(input);

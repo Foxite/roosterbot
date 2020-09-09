@@ -5,6 +5,7 @@ namespace RoosterBot {
 	/// <summary>
 	/// A result that consists of multiple pages that can be viewed independently.
 	/// </summary>
+	// TODO this should use IBidirectionalAsyncEnumerator
 	public sealed class PaginatedResult : RoosterCommandResult, IBidirectionalEnumerator<RoosterCommandResult> {
 		/// <summary>
 		/// A string to prepend to every page of the result.

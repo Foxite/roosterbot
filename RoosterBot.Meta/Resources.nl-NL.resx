@@ -147,10 +147,7 @@
     <comment>0: new prefix</comment>
   </data>
   <data name="Commands" xml:space="preserve">
-    <value>commands</value>
-  </data>
-  <data name="HelpCommand" xml:space="preserve">
-    <value>help</value>
+    <value>commands|help</value>
   </data>
   <data name="InfoModule_InfoCommand" xml:space="preserve">
     <value>info</value>
@@ -199,40 +196,8 @@
   <data name="Commands_Summary" xml:space="preserve">
     <value>Alle categorieën van commands.</value>
   </data>
-  <data name="HelpCommand_ChapterDoesNotExist" xml:space="preserve">
-    <value>Sorry, dat hoofdstuk bestaat niet.</value>
-  </data>
-  <data name="HelpCommand_HelpPretext" xml:space="preserve">
-    <value>Al mijn commands beginnen met `{0}`.</value>
-  </data>
-  <data name="HelpCommand_HelpSectionsPretext" xml:space="preserve">
-    <value>Gebruik `{0}help &lt;hoofdstuk&gt;` om uitleg te krijgen. Beschikbare hoofdstukken zijn:</value>
-    <comment>0: command prefix</comment>
-  </data>
-  <data name="HelpCommand_PostText" xml:space="preserve">
-    <value>Je kunt ook `{0}commands` gebruiken om een lijst van categorieën te zien, en `{0}commands &lt;categorie&gt;` gebruiken om alle commands voor een categorie te zien.</value>
-  </data>
-  <data name="HelpCommand_Section" xml:space="preserve">
-    <value>hoofdstuk</value>
-  </data>
-  <data name="HelpCommand_Section_Summary" xml:space="preserve">
-    <value>Uitleg over een onderdeel van de bot.</value>
-  </data>
-  <data name="HelpCommand_Summary" xml:space="preserve">
-    <value>Uitleg over de bot.</value>
-  </data>
   <data name="Meta_Name" xml:space="preserve">
     <value>Meta</value>
-  </data>
-  <data name="Meta_HelpName_Edit" xml:space="preserve">
-    <value>edit</value>
-  </data>
-  <data name="Meta_HelpText_Edit" xml:space="preserve">
-    <value>Als je een command verkeerd typt, kun je het bericht bewerken. Ik zie dit en bewerk mijn antwoord volgens je nieuwe command.
-
-Ook verwijder ik mijn antwoorden als je een command verwijdert.
-
-Om snel je laatste bericht te bewerken, klik op het tekstvak en druk op de :arrow_up: toets. Haal het hele bericht weg om het te verwijderen.</value>
   </data>
   <data name="UserConfigModule_GetLanguage" xml:space="preserve">
     <value>Jouw taal is {0}.</value>

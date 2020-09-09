@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
@@ -28,7 +29,7 @@ namespace RoosterBot {
 			IResult result = await Commands.ExecuteAsync(input, context);
 
 			if (!(result.IsSuccessful || result is ExecutionFailedResult)) { // These will be handled by CommandExecuted and CommandExecutionFailed events
-				string response = "";
+				string response;
 
 				switch (result) {
 					case CommandDisabledResult _:
@@ -52,7 +53,7 @@ namespace RoosterBot {
 								response += "`" + context.Message.Content + "`\n`" + new string(' ', context.Message.Content.Length - context.RawArguments.Length + parseResult.FailurePosition.Value) + "^`";
 							}
 						} else {
-							response = $"PostCommandHandler got ArgumentParseFailedResult but it has an unknown ParserResult: {argument.ParserResult.GetType().FullName}. This is the ToString: {argument.ParserResult.ToString()}";
+							response = $"PostCommandHandler got ArgumentParseFailedResult but it has an unknown ParserResult: {argument.ParserResult.GetType().FullName}. This is the ToString: {argument.ParserResult}";
 							Logger.Warning("CommandHandler", response);
 							if (response.Length > 2000) {
 								const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
@@ -63,16 +64,25 @@ namespace RoosterBot {
 						}
 						break;
 					case TypeParseFailedResult type:
-						// This cannot be resolved here because Qmmands does not give us the TypeParserResult.
-						// It creates an instance of the sealed TypeParseFailedResult from the reason of TypeParserResult.
-						// Therefore we can't know which TypeParser created this result and there is no way to get the assembly to resolve it.
 						response = type.Reason;
+						if (type.TypeParserResult is IRoosterTypeParserResult rtpr) {
+							if (!rtpr.Parser.GetType().Assembly.Equals(Assembly.GetExecutingAssembly())) {
+								Component? component;
+								if (rtpr.Parser is IExternalResultStringParser ersp) {
+									component = ersp.ErrorReasonComponent;
+								} else {
+									component = Program.Instance.Components.GetComponentFromAssembly(rtpr.Parser.GetType().Assembly);
+								}
+								response = Resources.ResolveString(context.Culture, component, response);
+							}
+						}
 						break;
 					case ChecksFailedResult check:
+						response = "";
 						foreach ((CheckAttribute Check, CheckResult Result) in check.FailedChecks) {
 							if (Result is RoosterCheckResult rcr) {
 								Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
-								response += Resources.ResolveString(context.Culture, component, Result.Reason);
+								response += string.Format(Resources.ResolveString(context.Culture, component, Result.Reason), rcr.ErrorReasonObjects);
 							} else {
 								response += Result.Reason;
 							}
@@ -80,6 +90,7 @@ namespace RoosterBot {
 						}
 						break;
 					case ParameterChecksFailedResult paramCheck:
+						response = "";
 						foreach ((ParameterCheckAttribute Check, CheckResult Result) in paramCheck.FailedChecks) {
 							if (Result is RoosterCheckResult rcr) {
 								Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
@@ -92,7 +103,7 @@ namespace RoosterBot {
 						}
 						break;
 					default:
-						response = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result.ToString()}";
+						response = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result}";
 						Logger.Warning("CommandHandler", response);
 						await Notifications.AddNotificationAsync(response);
 						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");

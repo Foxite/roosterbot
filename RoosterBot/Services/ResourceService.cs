@@ -43,7 +43,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Resolve a string. When the input starts with a # symbol, it is seen as a string resource key and the string except the # is passed into <see cref="GetString(CultureInfo, string)"/>.
 		/// Otherwise, it is returned as-is.
-		/// If you want your string to start with a # but don't want it to be resolved, then you can escape it with a \. If your string needs to start with \# then you can use \\# and so on.4
+		/// If you want your string to start with a # but don't want it to be resolved, then you can escape it with a \. If your string needs to start with \# then you can use \\# and so on.
 		/// </summary>
 		public string ResolveString(CultureInfo culture, Component? component, string str) {
 			if (str.StartsWith("#")) {
@@ -69,10 +69,18 @@ namespace RoosterBot {
 			}
 		}
 
-		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys(Assembly assembly, CultureInfo culture) {
-			ResourceSet? resourceSet = m_ResourceManagers[assembly].GetResourceSet(culture, true, true);
-			return resourceSet != null
-				? resourceSet.Cast<DictionaryEntry>().Select(Util.ToGeneric<string, string>)
+		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys(Assembly assembly, CultureInfo? culture) {
+			ResourceManager resourceManager = m_ResourceManagers[assembly];
+			IEnumerable<ResourceSet> resourceSets;
+
+			if (culture is null) {
+				resourceSets = GetAvailableCultures(assembly).Select(culture => resourceManager.GetResourceSet(culture, false, true)).WhereNotNull();
+			} else {
+				ResourceSet? resourceSet = resourceManager.GetResourceSet(culture, false, true);
+				resourceSets = resourceSet is null ? Enumerable.Empty<ResourceSet>() : new[] { resourceSet };
+			}
+			return resourceSets != null
+				? resourceSets.Cast<DictionaryEntry>().Select(Util.ToGeneric<string, string>)
 				: Enumerable.Empty<KeyValuePair<string, string>>();
 		}
 

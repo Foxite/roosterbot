@@ -49,6 +49,7 @@ namespace RoosterBot.Meta {
 
 		private bool ShouldNotHide(dynamic moduleOrCommand) => !(
 			((IEnumerable<Attribute>)  moduleOrCommand.Attributes).OfType<HiddenFromListAttribute>().Any() ||
+			((IEnumerable<Attribute>)  moduleOrCommand.Attributes).OfType<GlobalLocalizationsAttribute>().Any() ||
 			((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).OfType<RequireCultureAttribute>().Any(attr => attr.Culture != Culture)
 		);
 

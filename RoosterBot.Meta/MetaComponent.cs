@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
-		private bool m_EnableHelp;
 		private bool m_EnableCommandsList;
 		private EmailSettings m_EmailSettings = new EmailSettings();
 
@@ -22,7 +21,6 @@ namespace RoosterBot.Meta {
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				UseFileConfig = false,
-				EnableHelp = true,
 				EnableCommandsList = true,
 				DefaultCommandPrefix = "!",
 				DefaultCulture = "en-US",
@@ -35,7 +33,6 @@ namespace RoosterBot.Meta {
 					config.DefaultCommandPrefix, CultureInfo.GetCultureInfo(config.DefaultCulture)));
 			}
 
-			m_EnableHelp = config.EnableHelp;
 			m_EnableCommandsList = config.EnableCommandsList;
 			m_EmailSettings = config.EmailSettings;
 		}
@@ -65,9 +62,6 @@ namespace RoosterBot.Meta {
 			if (m_EnableCommandsList) {
 				commandService.AddModule<CommandsListModule>();
 			}
-			if (m_EnableHelp) {
-				commandService.AddModule<HelpModule>();
-			}
 
 			commandService.AddModule<DebuggingModule>();
 			commandService.AddModule<ControlModule>();
@@ -75,8 +69,6 @@ namespace RoosterBot.Meta {
 			commandService.AddModule<ModuleDisableModule>();
 			commandService.AddModule<UserConfigModule>();
 			commandService.AddModule<InfoModule>();
-
-			services.GetRequiredService<HelpService>().AddHelpSection(this, "#Meta_HelpName_Edit", "#Meta_HelpText_Edit");
 
 			new EmailNotificationHandler(services.GetRequiredService<NotificationService>(), m_EmailSettings);
 		}

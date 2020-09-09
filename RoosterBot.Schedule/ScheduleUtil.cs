@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace RoosterBot.Schedule {
 	public static class ScheduleUtil {
@@ -19,6 +21,19 @@ namespace RoosterBot.Schedule {
 			return old;
 		}
 		#endregion
+		
+		internal static async Task<ReturnValue<T>> HandleScheduleProviderErrorAsync<T>(ResourceService resources, CultureInfo culture, Func<Task<T>> action) {
+			try {
+				return ReturnValue<T>.Successful(await action());
+			} catch (Exception e) {
+				return ReturnValue<T>.Unsuccessful(TextResult.Error(resources.GetString(culture, e switch {
+					IdentifierNotFoundException _ => "ScheduleModule_HandleError_NotFound",
+					RecordsOutdatedException    _ => "ScheduleModule_HandleError_RecordsOutdated",
+					NoAllowedChannelsException  _ => "ScheduleModule_HandleError_NoSchedulesAvailableForServer",
+					_ => throw e
+				})));
+			}
+		}
 	}
 
 	public class UserChangedIdentifierEventArgs : EventArgs {

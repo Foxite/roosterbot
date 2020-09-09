@@ -9,14 +9,14 @@ namespace RoosterBot.DiscordNet {
 			if (Discord.MentionUtils.TryParseChannel(input, out ulong channelId) || ulong.TryParse(input, out channelId)) {
 				Discord.IChannel? channel = DiscordNetComponent.Instance.Client.GetChannel(channelId);
 				if (channel == null) {
-					return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#ChannelParser_UnknownChannel"));
+					return ValueTaskUtil.FromResult(Unsuccessful(true, "#ChannelParser_UnknownChannel"));
 				} else if (!(channel is TChannel tChannel)) {
-					return ValueTaskUtil.FromResult(Unsuccessful(true, context, "#DiscordParser_InvalidType"));
+					return ValueTaskUtil.FromResult(Unsuccessful(true, "#DiscordParser_InvalidType"));
 				} else {
 					return ValueTaskUtil.FromResult(Successful(tChannel));
 				}
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#ChannelParser_InvalidMention"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#ChannelParser_InvalidMention"));
 			}
 		}
 	}

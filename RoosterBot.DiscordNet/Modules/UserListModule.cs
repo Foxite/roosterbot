@@ -41,7 +41,7 @@ namespace RoosterBot.DiscordNet {
 				let roleCount =
 					roles.Length == 0
 						? (((IGuildUser) user.DiscordEntity).RoleIds.Count - 1) // Everyone has a role called "@everyone" so ignore that one
-						: ((IGuildUser) user).RoleIds.Intersect(roles.Select(role => role.Id)).Count()
+						: ((IGuildUser) user.DiscordEntity).RoleIds.Intersect(roles.Select(role => role.Id)).Count()
 				where compare(roleCount, count)
 				select user
 			);

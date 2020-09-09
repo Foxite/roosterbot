@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
@@ -23,9 +24,11 @@ namespace RoosterBot.DiscordNet {
 		public BaseSocketClient Client { get; private set; } = null!;
 		public string DiscordLink { get; private set; } = null!;
 		public IReadOnlyList<ulong> BotAdminIds => new ReadOnlyList<ulong>(m_BotOwnerIds);
+		public IReadOnlyList<SocketUser> BotAdmins => BotAdminIds.ListSelect(id => Client.GetUser(id));
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(1, 0, 0);
+
 
 		public DiscordNetComponent() {
 			Instance = this;
@@ -142,11 +145,12 @@ namespace RoosterBot.DiscordNet {
 				emoteService.RegisterEmote(this, item.Key, item.Value);
 			}
 			
-			new MessageReceivedHandler(services);
-			new MessageUpdatedHandler (services);
-			new MessageDeletedHandler (services);
-			new ReadyHandler          (m_GameString, m_Activity, m_NotifyReady);
-			new LogHandler            (Client);
+			new DiscordNotificationHandler(services.GetRequiredService<NotificationService>());
+			new MessageReceivedHandler    (services);
+			new MessageUpdatedHandler     (services);
+			new MessageDeletedHandler     (services);
+			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady);
+			new LogHandler                (Client);
 		}
 
 		protected override void Connect(IServiceProvider services) {

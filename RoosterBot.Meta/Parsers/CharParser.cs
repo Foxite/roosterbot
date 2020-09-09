@@ -9,7 +9,7 @@ namespace RoosterBot.Meta {
 			if (value.Length == 1) {
 				return ValueTaskUtil.FromResult(Successful(value[0]));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#CharParser_TooLong"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#CharParser_TooLong"));
 			}
 		}
 	}

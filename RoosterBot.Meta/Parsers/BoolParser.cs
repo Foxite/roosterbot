@@ -17,7 +17,7 @@ namespace RoosterBot.Meta {
 			} else if (matches("BoolParser_False")) {
 				return ValueTaskUtil.FromResult(Successful(false));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#BoolParser_Invalid"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#BoolParser_Invalid"));
 			}
 		}
 	}

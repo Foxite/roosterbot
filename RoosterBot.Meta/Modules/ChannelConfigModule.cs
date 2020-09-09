@@ -30,6 +30,20 @@ namespace RoosterBot.Meta {
 				return TextResult.Success(GetString("ChannelConfigModule_SetLanguage", CultureNameService.GetLocalizedName(ChannelConfig.Culture, ChannelConfig.Culture)));
 			}
 		}
+
+		[Command("set string"), RequireBotManager]
+		public async Task<CommandResult> SetValue(string key, string value) {
+			ChannelConfig.SetData(key, value);
+			await ChannelConfig.UpdateAsync();
+			return TextResult.Success($"Set {key} to {value} for this channel.");
+		}
+
+		[Command("set int"), RequireBotManager]
+		public async Task<CommandResult> SetValue(string key, int value) {
+			ChannelConfig.SetData(key, value);
+			await ChannelConfig.UpdateAsync();
+			return TextResult.Success($"Set {key} to {value} for this channel.");
+		}
 	}
 
 	// Should be a nested class, temporary workaround for submodules not working

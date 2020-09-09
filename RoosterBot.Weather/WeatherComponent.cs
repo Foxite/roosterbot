@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
-		public override Version ComponentVersion => new Version(0, 3, 1);
+		public override Version ComponentVersion => new Version(0, 3, 2);
 		public bool AttributionLicense { get; private set; }
 
 		public override IEnumerable<string> RequiredTags { get; } = new[] { "DayOfWeekReader" };
@@ -31,8 +31,6 @@ namespace RoosterBot.Weather {
 			commandService.AddTypeParser(new CityInfoParser());
 
 			commandService.AddModule<WeatherModule>();
-
-			services.GetRequiredService<HelpService>().AddHelpSection(this, "#WeatherComponent_HelpName", "#WeatherComponent_HelpText");
 		}
 	}
 }

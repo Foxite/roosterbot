@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 					result = (await context.ServiceProvider.GetRequiredService<UserConfigService>().GetConfigAsync(userResult.Value.GetReference())).GetIdentifier();
 					byMention = true;
 				} else {
-					return Unsuccessful(false, context, userResult.Reason);
+					return Unsuccessful(false, userResult.Reason);
 				}
 			}
 
@@ -31,7 +31,7 @@ namespace RoosterBot.Schedule {
 				} else {
 					message = "#UserIdentifierParser_CheckFailed_MentionSelf";
 				}
-				return Unsuccessful(true, context, message, context.ChannelConfig.CommandPrefix);
+				return Unsuccessful(true, message, context.ChannelConfig.CommandPrefix);
 			} else {
 				return Successful(result);
 			}

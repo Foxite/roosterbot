@@ -43,7 +43,7 @@ namespace RoosterBot {
 				if (indivResult.IsSuccessful) {
 					results[i] = indivResult.Value;
 				} else {
-					return Unsuccessful(indivResult.InputValid, context, indivResult.Reason);
+					return Unsuccessful(indivResult.InputValid, indivResult.Reason, indivResult.ErrorReasonObjects);
 				}
 			}
 			return Successful(results);

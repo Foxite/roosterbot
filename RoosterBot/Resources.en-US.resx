@@ -154,7 +154,7 @@
     <value>That command is disabled.</value>
   </data>
   <data name="CommandHandling_NotFound" xml:space="preserve">
-    <value>I don't know that command. Use `{0}help` for information.</value>
+    <value>I don't know that command. Use `{0}commands` for information.</value>
     <comment>0: Command prefix</comment>
   </data>
   <data name="CommandHandling_OverloadsFailed" xml:space="preserve">

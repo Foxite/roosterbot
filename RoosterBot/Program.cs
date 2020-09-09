@@ -23,7 +23,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The version of RoosterBot.
 		/// </summary>
-		public static readonly Version Version = new Version(3, 0, 0);
+		public static readonly Version Version = new Version(3, 1, 0);
 
 		/// <summary>
 		/// The instance of the Program class.
@@ -106,7 +106,6 @@ namespace RoosterBot {
 
 			return new ServiceCollection()
 				.AddSingleton(new RoosterCommandService(resources))
-				.AddSingleton(new HelpService(resources))
 				.AddSingleton(new NotificationService())
 				.AddSingleton(new EmoteService())
 				.AddSingleton(new CultureNameService(resources))

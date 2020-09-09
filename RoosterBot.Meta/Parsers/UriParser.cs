@@ -10,7 +10,7 @@ namespace RoosterBot.Meta {
 			if (Uri.TryCreate(value, UriKind.Absolute, out Uri? result)) {
 				return ValueTaskUtil.FromResult(Successful(result));
 			} else {
-				return ValueTaskUtil.FromResult(Unsuccessful(false, context, "#UriParser_Invalid"));
+				return ValueTaskUtil.FromResult(Unsuccessful(false, "#UriParser_Invalid"));
 			}
 		}
 	}

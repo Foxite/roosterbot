@@ -11,9 +11,9 @@ namespace RoosterBot.DiscordNet {
 				// By id
 				Discord.IMessage message = await channel.DiscordEntity.GetMessageAsync(messageId);
 				if (message == null) {
-					return Unsuccessful(true, context, "#MessageParser_UnknownChannel");
+					return Unsuccessful(true, "#MessageParser_UnknownChannel");
 				} else if (!(message is TMessage tMessage)) {
-					return Unsuccessful(true, context, "#DiscordParser_InvalidType");
+					return Unsuccessful(true, "#DiscordParser_InvalidType");
 				} else {
 					return Successful(tMessage);
 				}
@@ -29,16 +29,16 @@ namespace RoosterBot.DiscordNet {
 							if (await messageChannel.GetMessageAsync(messageId) is TMessage message) {
 								return Successful(message);
 							} else {
-								return Unsuccessful(true, context, "#DiscordParser_InvalidType");
+								return Unsuccessful(true, "#DiscordParser_InvalidType");
 							}
 						} else {
-							return Unsuccessful(true, context, "#MessageParser_UnknownChannel");
+							return Unsuccessful(true, "#MessageParser_UnknownChannel");
 						}
 					}
 				}
-				return Unsuccessful(true, context, "#MessageParser_InvalidUri");
+				return Unsuccessful(true, "#MessageParser_InvalidUri");
 			} else {
-				return Unsuccessful(false, context, "#MessageParser_InvalidMention");
+				return Unsuccessful(false, "#MessageParser_InvalidMention");
 			}
 		}
 	}

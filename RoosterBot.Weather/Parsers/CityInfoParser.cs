@@ -11,7 +11,7 @@ namespace RoosterBot.Weather {
 			CityInfo? cityResult = await cities.Lookup(input);
 
 			if (cityResult == null) {
-				return Unsuccessful(false, context, "#CityInfoReader_ParseFailed");
+				return Unsuccessful(false, "#CityInfoReader_ParseFailed");
 			} else {
 				return Successful(cityResult);
 			}

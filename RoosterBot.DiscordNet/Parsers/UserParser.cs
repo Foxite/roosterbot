@@ -26,9 +26,9 @@ namespace RoosterBot.DiscordNet {
 			}
 
 			if (user == null) {
-				return Unsuccessful(parseSuccessful, context, parseSuccessful ? "#UserParser_UnknownUser" : "#UserParser_InvalidMention");
+				return Unsuccessful(parseSuccessful, parseSuccessful ? "#UserParser_UnknownUser" : "#UserParser_InvalidMention");
 			} else if (!(user is TUser tUser)) {
-				return Unsuccessful(true, context, "#DiscordParser_InvalidType");
+				return Unsuccessful(true, "#DiscordParser_InvalidType");
 			} else {
 				return Successful(tUser);
 			}

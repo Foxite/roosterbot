@@ -243,19 +243,6 @@
   <data name="WeatherComponent_Attribution" xml:space="preserve">
     <value>Information is provided by WeatherBit.</value>
   </data>
-  <data name="WeatherComponent_HelpName" xml:space="preserve">
-    <value>weather</value>
-  </data>
-  <data name="WeatherComponent_HelpText" xml:space="preserve">
-    <value>I can look up weather predictions for you and show them in Discord. To do this, use the `{0}weather` command.
-This command has a few different forms:
-
-`{0}weather utrecht` shows the current weather situation in Amsterdam. (`{0}weather now utrecht` or `{0}weather in utrecht` also works.)
-`{0}weather in 2 hours amsterdam` or `{0}weather on wednesday 15:00 rotterdam`: These examples speak for themselves.
-`{0}weather in 3 days hilversum` or `{0}weather on wednesday utrecht`: These commands show the weather on the given day, at 08:00, 12:00, and 18:00 hours.
-
-Certain towns (Den Bosch and The Hague) have alternative names or spellings. If you find a city of which I don't know the alternative spelling, let the bot owner know about this.</value>
-  </data>
   <data name="WeatherInfo_Present_ApparentTemperature" xml:space="preserve">
     <value> (feels like {0})</value>
     <comment>0: apparent temperature, unit included</comment>

@@ -151,10 +151,7 @@
     <comment>0: new prefix</comment>
   </data>
   <data name="Commands" xml:space="preserve">
-    <value>commands</value>
-  </data>
-  <data name="HelpCommand" xml:space="preserve">
-    <value>help</value>
+    <value>commands|help</value>
   </data>
   <data name="InfoModule_InfoCommand" xml:space="preserve">
     <value>info</value>
@@ -202,39 +199,8 @@
   <data name="Commands_Summary" xml:space="preserve">
     <value>List of categories with commands.</value>
   </data>
-  <data name="HelpCommand_ChapterDoesNotExist" xml:space="preserve">
-    <value>Sorry, that section does not exist.</value>
-  </data>
-  <data name="HelpCommand_HelpPretext" xml:space="preserve">
-    <value>All my commands start with `{0}`.</value>
-  </data>
-  <data name="HelpCommand_HelpSectionsPretext" xml:space="preserve">
-    <value>Use `{0}help &lt;section&gt;` to get help. Available sections are:</value>
-  </data>
-  <data name="HelpCommand_PostText" xml:space="preserve">
-    <value>You can also use `{0}commands` to get a list of categories, and `{0}commands &lt;category&gt;` to see all commands for a certain category.</value>
-  </data>
-  <data name="HelpCommand_Section" xml:space="preserve">
-    <value>section</value>
-  </data>
-  <data name="HelpCommand_Section_Summary" xml:space="preserve">
-    <value>Explanation for a part of the bot.</value>
-  </data>
-  <data name="HelpCommand_Summary" xml:space="preserve">
-    <value>Explanation for the bot.</value>
-  </data>
   <data name="Meta_Name" xml:space="preserve">
     <value>Meta</value>
-  </data>
-  <data name="Meta_HelpName_Edit" xml:space="preserve">
-    <value>edit</value>
-  </data>
-  <data name="Meta_HelpText_Edit" xml:space="preserve">
-    <value>If you mistype a command, you can edit the message. I will see this and edit my reply according to your new command.
-
-I also remove my replies if you delete a command.
-
-To quickly edit your last message, klik on the textbox and press the :arrow_up: key. Remove the entire message to delete it.</value>
   </data>
   <data name="UserConfigModule_GetLanguage" xml:space="preserve">
     <value>Your language is {0}.</value>

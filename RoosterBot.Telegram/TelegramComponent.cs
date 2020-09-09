@@ -8,7 +8,7 @@ namespace RoosterBot.Telegram {
 		private string m_Token = "";
 
 		public override string PlatformName => "Telegram";
-		public override Version ComponentVersion => new Version(0, 2, 0);
+		public override Version ComponentVersion => new Version(0, 2, 1);
 
 		public TelegramBotClient Client { get; private set; } = null!;
 		public int BotOwnerId { get; private set; }
