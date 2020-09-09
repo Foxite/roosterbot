@@ -7,7 +7,7 @@ namespace RoosterBot.GLU.Discord {
 	public class GLUDiscordComponent : Component {
 		public const long GLUGuildId = 278586698877894657; //346682476149866497;
 
-		public override Version ComponentVersion => new Version(1, 2, 0);
+		public override Version ComponentVersion => new Version(1, 2, 1);
 
 		internal static GLUDiscordComponent Instance { get; private set; } = null!;
 

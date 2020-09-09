@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
-		public override Version ComponentVersion => new Version(0, 3, 2);
+		public override Version ComponentVersion => new Version(0, 3, 3);
 		public bool AttributionLicense { get; private set; }
 
 		public override IEnumerable<string> RequiredTags { get; } = new[] { "DayOfWeekReader" };
