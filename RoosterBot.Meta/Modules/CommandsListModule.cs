@@ -8,7 +8,7 @@ namespace RoosterBot.Meta {
 	public class CommandsListModule : RoosterModule {
 		public RoosterCommandService CmdService { get; set; } = null!;
 
-		[Command("#Commands", "#HelpCommand"), Description("#Commands_Category_Summary")]
+		[Command("#Commands"), Description("#Commands_Category_Summary")]
 		public CommandResult Commands([Remainder, Name("#Commands_ModuleName")] string? query = null) {
 			if (query == null) {
 				return new TextResult(null,

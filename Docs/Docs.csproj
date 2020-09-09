@@ -5,16 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="api\**" />
+    <Compile Remove="templates\last-modified\plugins\**" />
     <Compile Remove="_site\**" />
+    <EmbeddedResource Remove="api\**" />
+    <EmbeddedResource Remove="templates\last-modified\plugins\**" />
     <EmbeddedResource Remove="_site\**" />
+    <None Remove="api\**" />
+    <None Remove="templates\last-modified\plugins\**" />
     <None Remove="_site\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="docfx.console" Version="2.48.1">
+	<!--<PackageReference Include="docfx.console" Version="2.48.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>-->
+  
+    <Folder Include="templates\last-modified\" />
   </ItemGroup>
 
 </Project>

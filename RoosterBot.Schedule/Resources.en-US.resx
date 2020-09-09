@@ -117,34 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ScheduleComponent_HelpText_Rooster" xml:space="preserve">
-    <value>You can query the schedule for a class, staff member or room.
-You don't have to indicate which you mean; I will pick up on this automatically.
-
-You can use these commands to see this:
-`{0}now`, `{0}next`, `{0}today`, `{0}tomorrow`, `{0}this week`, `{0}next week`
-After your command, include what you want to know about. If you want to see where 2GD1 is right now, you do this:
-`{0}now 2gd1`
-
-You can also view day or week level.
-With `{0}day tuesday a223` you can see what is scheduled on wednesday in room A2.23.
-With `{0}in 2 weeks lance krasniqi` you can see the schedule for Lance Krasniqi, for that entire week.
-
-`{0}in` supports hours, days, and weeks. `{0}in 2 hours a127`, `{0}in 3 days 4ga1`, `{0}in 1 week joram`
-
-You can also see what is scheduled after the last item you viewed. Use `{0}after` for this.
-
-Lastly, you can tell me what class you are in, so you won't have to tell me in every command. Use `{0}help your class` for more information.
-Better yet: if I know what class a person is in, you can mention that person in my commands. Keep in mind that person gets a ping when you do this.</value>
-    <comment>0: command prefix</comment>
-  </data>
-  <data name="ScheduleComponent_HelpText_Class" xml:space="preserve">
-    <value>I can remember in what class you are, so you won't have to tell me every time.
-To set your class: `{0}i am in &lt;class&gt;`, for example `{0}i am in 2gd1`.
-After that you won't have to put your class in commands. So you can just type `{0}now` and I will know what to search for.
-You can always check what class I think you're in by just typing `{0}i am in`, to check if it's still correct (or if you're suffering from amnesia, but I don't think that's the case.)</value>
-    <comment>0: command prefix</comment>
-  </data>
   <data name="StaffMemberInfoReader_CheckFailed" xml:space="preserve">
     <value>Is that a staff member? :thinking: If they are new, they need to be added by the bot owner.</value>
   </data>
@@ -327,12 +299,6 @@ You can always check what class I think you're in by just typing `{0}i am in`, t
   </data>
   <data name="ScheduleModule_RespondDay_ColumnStudentSets" xml:space="preserve">
     <value>Class</value>
-  </data>
-  <data name="ScheduleComponent_HelpName_Class" xml:space="preserve">
-    <value>your class</value>
-  </data>
-  <data name="ScheduleComponent_HelpName_Schedule" xml:space="preserve">
-    <value>schedule</value>
   </data>
   <data name="UserClassModule_ConfirmNoChange" xml:space="preserve">
     <value>You're already in {0}!</value>

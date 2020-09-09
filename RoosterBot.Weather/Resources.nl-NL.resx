@@ -117,16 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WeatherComponent_HelpText" xml:space="preserve">
-    <value>Ik kan weersvoorspellingen voor je opzoeken en in Discord laten zien. Hiervoor gebruik je het `weer` command.
-Deze command heeft een aantal verschillende vormen:
-
-`{0}weer in utrecht` laat de huidige weersomstandigheden in Utrecht zien. (`{0}weer nu utrecht` of `{0}weer utrecht` werkt ook.)
-`{0}weer over 2 uur amsterdam` of `{0}weer op woensdag 15:00 rotterdam`: Deze voorbeelden spreken voor zich.
-`{0}weer over 3 dagen hilversum` of `{0}weer op woensdag utrecht`: Deze commands laten het weer zien op de aangegeven dag, om 08:00, 12:00, en 18:00 uur.
-
-Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of spellingen. Als je een stad tegenkomt waarvan de alternatieve spelling niet bekend is, laat dit weten aan de bot eigenaar.</value>
-  </data>
   <data name="WeatherModule_CurrentWeather" xml:space="preserve">
     <value />
   </data>
@@ -312,9 +302,6 @@ Enkele steden (Den Bosch en Den Haag) staan bekend onder alternatieve namen of s
   </data>
   <data name="WeatherModule_UnknownUnit" xml:space="preserve">
     <value>Ik kan alleen op uurniveau het weer voorspellen.</value>
-  </data>
-  <data name="WeatherComponent_HelpName" xml:space="preserve">
-    <value>weer</value>
   </data>
   <data name="WeatherComponent_Attribution" xml:space="preserve">
     <value>Informatie wordt verstrekt door WeatherBit.</value>
