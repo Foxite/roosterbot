@@ -27,7 +27,7 @@ namespace RoosterBot.DiscordNet {
 				char firstChar = message.Content[argPos];
 				if ((firstChar >= 'A' && firstChar <= 'Z') || (firstChar >= 'a' && firstChar <= 'z')) {
 					// Otherwise probably not meant as a command, but an expression (for example !!! or ?!, depending on the prefix used)
-					// TODO this means commands that start with a non alphabetic character don't work on Discord.
+					// TODO (fix) this means commands that start with a non alphabetic character don't work on Discord.
 					// I don't want to ignore unknown commands like Dyno does, but I also don't want to respond to !!! etc.
 
 					return true;

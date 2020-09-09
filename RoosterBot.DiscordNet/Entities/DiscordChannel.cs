@@ -24,7 +24,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		public async Task<IMessage> SendMessageAsync(string content, string? filePath = null) {
-			// TODO prevent messages of over 2000 characters from being sent
+			// TODO (fix) prevent messages of over 2000 characters from being sent
 			if (filePath == null) {
 				return new DiscordMessage(await DiscordEntity.SendMessageAsync(content));
 			} else {
