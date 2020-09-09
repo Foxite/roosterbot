@@ -22,7 +22,7 @@ namespace RoosterBot.DiscordNet {
 		public Discord.IUser BotOwner => Client.GetUser(BotOwnerId);
 
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(1, 0, 0);
+		public override Version ComponentVersion => new Version(1, 1, 0);
 
 		public DiscordNetComponent() {
 			Instance = this;

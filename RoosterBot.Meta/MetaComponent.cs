@@ -7,7 +7,7 @@ namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		private bool m_EnableCommandsList;
 
-		public override Version ComponentVersion => new Version(1, 2, 1);
+		public override Version ComponentVersion => new Version(1, 3, 1);
 
 #nullable disable
 		public static MetaComponent Instance { get; private set; }
