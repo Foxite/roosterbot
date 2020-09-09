@@ -19,7 +19,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The version of RoosterBot.
 		/// </summary>
-		public static readonly Version Version = new Version(3, 0, 0);
+		public static readonly Version Version = new Version(3, 1, 0);
 
 		/// <summary>
 		/// The directory where program data is stored.
