@@ -42,7 +42,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Resolve a string. When the input starts with a # symbol, it is seen as a string resource key and the string except the # is passed into <see cref="GetString(CultureInfo, string)"/>.
 		/// Otherwise, it is returned as-is.
-		/// If you want your string to start with a # but don't want it to be resolved, then you can escape it with a \. If your string needs to start with \# then you can use \\# and so on.4
+		/// If you want your string to start with a # but don't want it to be resolved, then you can escape it with a \. If your string needs to start with \# then you can use \\# and so on.
 		/// </summary>
 		public string ResolveString(CultureInfo culture, Component? component, string str) {
 			if (str.StartsWith("#")) {
