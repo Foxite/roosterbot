@@ -72,7 +72,7 @@ namespace RoosterBot {
 						foreach ((CheckAttribute Check, CheckResult Result) in check.FailedChecks) {
 							if (Result is RoosterCheckResult rcr) {
 								Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
-								response += Resources.ResolveString(context.Culture, component, Result.Reason);
+								response += string.Format(Resources.ResolveString(context.Culture, component, Result.Reason), rcr.ErrorReasonObjects);
 							} else {
 								response += Result.Reason;
 							}
