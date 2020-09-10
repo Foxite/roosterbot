@@ -159,6 +159,9 @@ Nieuwe features worden hier ook aangekondigd.
   <data name="MessageParser_UnknownMessage" xml:space="preserve">
     <value>Ik ken dat bericht niet. Uit een entity-ID kan ik alleen berichten halen uit dit kanaal.</value>
   </data>
+  <data name="RequireUserPermissionInGuild_CheckFailed" xml:space="preserve">
+    <value>Je bent niet gemachtigd om dat te doen.</value>
+  </data>
   <data name="RoleParser_GuildsOnly" xml:space="preserve">
     <value>Ik kan alleen rollen gebruiken binnen een server.</value>
   </data>
@@ -178,6 +181,6 @@ Nieuwe features worden hier ook aangekondigd.
     <value>Discord-gebruiker</value>
   </data>
   <data name="UserParser_UnknownUser" xml:space="preserve">
-    <value>Ik deel geen server met die gebruiker, dus ik kan ze niet gebruiken.</value>
+    <value>Ik deel geen server met die gebruiker, dus ik kan geen informatie ophalen.</value>
   </data>
 </root>

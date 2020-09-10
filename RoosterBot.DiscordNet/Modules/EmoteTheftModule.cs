@@ -9,9 +9,14 @@ using Discord;
 using Qmmands;
 
 namespace RoosterBot.DiscordNet {
-	[Group("emote"), HiddenFromList]
+	[Group("emote"), HiddenFromList, RequireUserPermissionInGuild(GuildPermission.ManageEmojis, 346682476149866497)]
 	public class EmoteTheftModule : RoosterModule<DiscordCommandContext> {
-		[Command("steal"), RequireBotManager]
+		private static readonly ulong[] s_StorageGuilds = new ulong[] {
+			// Currently hardcoded IDs for my private emote storage servers
+			346682476149866497, 649728161281736704
+		};
+
+		[Command("steal")]
 		public async Task<CommandResult> StealEmoteCommand() {
 			// Get last message before command
 			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToListAsync()).SelectMany(c => c).OfType<IUserMessage>();
@@ -30,7 +35,7 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 		
-		[Command("steal"), Priority(1), RequireBotManager]
+		[Command("steal"), Priority(1)]
 		public async Task<CommandResult> StealEmoteCommand(IUserMessage message) {
 			MatchCollection matches = Regex.Matches(message.Content, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)");
 
@@ -38,17 +43,12 @@ namespace RoosterBot.DiscordNet {
 			static bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote =>  emote.Animated) < 50;
 
 			if (matches.Count > 0) {
-				IEnumerable<IGuild> storageGuilds = new ulong[] {
-					// Currently hardcoded IDs for my private emote storage servers
-					346682476149866497, 649728161281736704
-				}.Select(id => Context.Client.GetGuild(id));
-				
 				string stolenEmotes = "";
 				int animatedStealFails = 0;
 				int staticStealFails = 0;
 				bool anySuccessfulSteals = false;
 				using (var webClient = new WebClient()) {
-					IGuild getStorageGuild(Emote emote) => storageGuilds.FirstOrDefault(emote.Animated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
+					IGuild getStorageGuild(Emote emote) => s_StorageGuilds.Select(Context.Client.GetGuild).FirstOrDefault(emote.Animated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
 
 					// Download an emote image while we're uploading the previous one.
 					Task<GuildEmote>? createEmote = null;

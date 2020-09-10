@@ -159,6 +159,9 @@ New features will also be announced here.
   <data name="MessageParser_UnknownMessage" xml:space="preserve">
     <value>I don't know that message. I can only get a message from the current channel from an entity ID.</value>
   </data>
+  <data name="RequireUserPermissionInGuild_CheckFailed" xml:space="preserve">
+    <value>You are not authorized to do that.</value>
+  </data>
   <data name="RoleParser_GuildsOnly" xml:space="preserve">
     <value>I can only use roles within a server.</value>
   </data>
@@ -178,6 +181,6 @@ New features will also be announced here.
     <value>Discord user</value>
   </data>
   <data name="UserParser_UnknownUser" xml:space="preserve">
-    <value>I don't share a server with that user, so I can't get them.</value>
+    <value>I don't share a server with that user, so I can't retrieve their informaton.</value>
   </data>
 </root>
