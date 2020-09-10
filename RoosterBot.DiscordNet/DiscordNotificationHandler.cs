@@ -8,11 +8,11 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private async Task SendNotificationAsync(NotificationEventArgs nea) {
-			Logger.Info("SNSService", "Sending error report to SNS");
+			Logger.Info("DiscordNet", "Sending error report to bot admin");
 			try {
 				await (await DiscordNetComponent.Instance.BotOwner.GetOrCreateDMChannelAsync()).SendMessageAsync(nea.Message);
 			} catch (Exception ex) {
-				Logger.Error("SNSService", "Failed to send error report to SNS", ex);
+				Logger.Error("DiscordNet", "Failed to send error report to bot admin", ex);
 			}
 		}
 	}
