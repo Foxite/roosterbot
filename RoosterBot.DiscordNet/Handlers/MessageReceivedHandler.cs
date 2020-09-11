@@ -26,10 +26,17 @@ namespace RoosterBot.DiscordNet {
 						// RoosterBot doesn't have a concept of guilds, and in Discord it's not convention to have different config per channel.
 						// So we secretly use guilds instead of channels for channel config.
 						ChannelConfig guildConfig = await m_CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, (dum.Channel is Discord.IGuildChannel igc) ? igc.GuildId : dum.Channel.Id));
-						if (DiscordUtil.IsMessageCommand(dum, guildConfig.CommandPrefix, out int argPos)) {
+						if (DiscordUtil.IsMessageCommand(dum.Content, guildConfig.CommandPrefix, out int argPos)) {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
 							await dum.Channel.TriggerTypingAsync();
-							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig));
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig, false));
+						} else {
+							string udContent = dum.Content.UpsideDown();
+							if (DiscordUtil.IsMessageCommand(udContent, guildConfig.CommandPrefix, out argPos)) {
+								UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
+								await dum.Channel.TriggerTypingAsync();
+								await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos).UpsideDown(), new DiscordCommandContext(m_ISP, new DiscordMessage(dum, true), userConfig, guildConfig, true));
+							}
 						}
 					} catch (Exception e) {
 						Logger.Error("Discord", "Exception caught when handling new message", e);

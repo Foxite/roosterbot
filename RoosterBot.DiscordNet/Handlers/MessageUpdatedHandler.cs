@@ -32,8 +32,10 @@ namespace RoosterBot.DiscordNet {
 						UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(messageAfter.Author).GetReference());
 						CommandResponsePair? crp = userConfig.GetResponse(new SnowflakeReference(DiscordNetComponent.Instance, userMessageAfter));
 
-						if (DiscordUtil.IsMessageCommand(userMessageAfter, guildConfig.CommandPrefix, out int argPos)) {
-							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(userMessageAfter), userConfig, guildConfig));
+						if (DiscordUtil.IsMessageCommand(userMessageAfter.Content, guildConfig.CommandPrefix, out int argPos)) {
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(userMessageAfter), userConfig, guildConfig, false));
+						} else if (DiscordUtil.IsMessageCommand(userMessageAfter.Content.UpsideDown(), guildConfig.CommandPrefix, out argPos)) {
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(userMessageAfter.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(userMessageAfter), userConfig, guildConfig, true));
 						} else if (crp != null) {
 							// No longer a command
 							await channel.DeleteMessageAsync((ulong) crp.Response.Id);

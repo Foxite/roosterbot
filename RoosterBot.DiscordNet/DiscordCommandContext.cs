@@ -13,23 +13,28 @@ namespace RoosterBot.DiscordNet {
 		public new Discord.IUser User { get; }
 		public new IMessageChannel Channel { get; }
 		public IGuild? Guild { get; }
+		internal bool UpsideDown { get; }
 
-		public DiscordCommandContext(IServiceProvider isp, DiscordMessage message, UserConfig userConfig, ChannelConfig guildConfig)
+		public DiscordCommandContext(IServiceProvider isp, DiscordMessage message, UserConfig userConfig, ChannelConfig guildConfig, bool upsideDown)
 			: base(isp, DiscordNetComponent.Instance, message, userConfig, guildConfig) {
 			Client = DiscordNetComponent.Instance.Client;
 			Message = message.DiscordEntity;
 			User = Message.Author;
 			Channel = Message.Channel;
 			Guild = Channel is SocketGuildChannel sgc ? sgc.Guild : null;
+			UpsideDown = upsideDown;
 		}
 
-		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
+		protected async override Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
 			if (result.Is<AspectListResult>(out var alr)) {
-				return SendAspectList(alr, existingResponse);
+				return await SendAspectList(alr, existingResponse);
 			} else if (result.Is<PaginatedResult>(out var pr)) {
-				return SendPaginatedResult(pr, existingResponse);
+				return await SendPaginatedResult(pr, existingResponse);
+			} else if (existingResponse == null) {
+				return await new DiscordChannel(Channel).SendMessageAsync(result.ToString(this).UpsideDown(UpsideDown), result.UploadFilePath);
 			} else {
-				return base.SendResultAsync(result, existingResponse);
+				await existingResponse.ModifyAsync(result.ToString(this), result.UploadFilePath);
+				return existingResponse;
 			}
 		}
 
@@ -62,19 +67,19 @@ namespace RoosterBot.DiscordNet {
 			}
 
 			return new EmbedBuilder() {
-				Title = alr.Caption,
-				Description = description,
+				Title = title.UpsideDown(UpsideDown),
+				Description = description?.UpsideDown(UpsideDown),
 				Fields = (
 					from aspect in alr
 					select new EmbedFieldBuilder() {
-						Name = aspect.PrefixEmote.ToString() + " " + aspect.Name,
-						Value = aspect.Value,
+						Name = aspect.PrefixEmote.ToString() + " " + aspect.Name.UpsideDown(UpsideDown),
+						Value = aspect.Value.UpsideDown(UpsideDown),
 						IsInline = aspect.Value.Length < 80
 					}
 				).ToList(),
 				Author = new EmbedAuthorBuilder() {
 					IconUrl = User.GetAvatarUrl(),
-					Name = (User as IGuildUser)?.Nickname ?? (User.Username + "#" + User.Discriminator)
+					Name = ((User as IGuildUser)?.Nickname ?? (User.Username + "#" + User.Discriminator)).UpsideDown(UpsideDown)
 				},
 				Timestamp = DateTimeOffset.UtcNow
 			};
@@ -93,24 +98,24 @@ namespace RoosterBot.DiscordNet {
 				&& emoteService.TryGetEmote(DiscordNetComponent.Instance, tr.PrefixEmoteName, out IEmote? emote)
 				&& emote == emoteService.Error(DiscordNetComponent.Instance)
 			) {
-				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this)));
+				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this).UpsideDown(UpsideDown)));
 			} else {
 				IUserMessage botMessage;
 				RoosterCommandResult initial = pr.Current;
 				if (initial is AspectListResult alr) {
 					if (existingResponse == null) {
-						botMessage = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build());
+						botMessage = await Channel.SendMessageAsync(pr.Caption?.UpsideDown(UpsideDown), embed: AspectListToEmbedBuilder(alr).Build());
 					} else {
 						botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
 						await botMessage.ModifyAsync(props => {
-							props.Content = pr.Caption;
+							props.Content = pr.Caption?.UpsideDown(UpsideDown);
 							props.Embed = AspectListToEmbedBuilder(alr).Build();
 						});
 					}
 				} else {
-					string text = pr.Current.ToString(this);
+					string text = pr.Current.ToString(this).UpsideDown(UpsideDown);
 					if (pr.Caption != null) {
-						text = pr.Caption + "\n" + text;
+						text = pr.Caption.UpsideDown(UpsideDown) + "\n" + text;
 					}
 					if (existingResponse == null) {
 						botMessage = await Channel.SendMessageAsync(text);
@@ -134,12 +139,12 @@ namespace RoosterBot.DiscordNet {
 						if (moveAction()) {
 							return botMessage.ModifyAsync(props => {
 								if (pr.Current is AspectListResult alr) {
-									props.Content = pr.Caption;
+									props.Content = pr.Caption?.UpsideDown(UpsideDown);
 									props.Embed = AspectListToEmbedBuilder(alr).Build();
 								} else {
-									string text = pr.Current.ToString(this);
+									string text = pr.Current.ToString(this).UpsideDown(UpsideDown);
 									if (pr.Caption != null) {
-										text = pr.Caption + "\n" + text;
+										text = pr.Caption?.UpsideDown(UpsideDown) + "\n" + text;
 									}
 									props.Content = text;
 									props.Embed = null;
@@ -149,10 +154,10 @@ namespace RoosterBot.DiscordNet {
 							return botMessage.ModifyAsync(props => {
 								if (pr.Current is AspectListResult alr) {
 									props.Embed = props.Embed.Value.ToEmbedBuilder()
-										.WithFooter(props.Embed.Value.Footer + "\nNo more results")
+										.WithFooter((props.Embed.Value.Footer.HasValue ? props.Embed.Value.Footer.Value.Text.UpsideDown(UpsideDown) + "\n" : null) + "No more results".UpsideDown(UpsideDown))
 										.Build();
 								} else {
-									props.Content += "\nNo more results.";
+									props.Content += "\n" + "No more results.".UpsideDown(UpsideDown);
 								}
 							});
 						}
@@ -165,6 +170,16 @@ namespace RoosterBot.DiscordNet {
 				});
 				}
 				return new DiscordMessage(botMessage);
+			}
+		}
+	}
+
+	internal static class StringUtil {
+		public static string UpsideDown(this string str, bool upsideDown) {
+			if (upsideDown) {
+				return str.UpsideDown();
+			} else {
+				return str;
 			}
 		}
 	}

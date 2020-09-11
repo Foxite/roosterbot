@@ -3,12 +3,14 @@
 namespace RoosterBot.DiscordNet {
 	public class DiscordMessage : IMessage {
 		public Discord.IUserMessage DiscordEntity { get; }
+		public bool UpsideDown { get; }
+
 		public PlatformComponent Platform => DiscordNetComponent.Instance;
 
 		public object Id => DiscordEntity.Id;
 		public IChannel Channel => new DiscordChannel(DiscordEntity.Channel);
 		public IUser User => new DiscordUser(DiscordEntity.Author);
-		public string Content => DiscordEntity.Content;
+		public string Content => UpsideDown ? DiscordEntity.Content.UpsideDown() : DiscordEntity.Content;
 
 		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
 
@@ -20,8 +22,9 @@ namespace RoosterBot.DiscordNet {
 			props.Embed = null;
 		});
 
-		internal DiscordMessage(Discord.IUserMessage discordMessage) {
+		internal DiscordMessage(Discord.IUserMessage discordMessage, bool upsideDown = false) {
 			DiscordEntity = discordMessage;
+			UpsideDown = upsideDown;
 		}
 	}
 }
