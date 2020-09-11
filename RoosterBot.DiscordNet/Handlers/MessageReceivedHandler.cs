@@ -35,7 +35,7 @@ namespace RoosterBot.DiscordNet {
 							if (DiscordUtil.IsMessageCommand(udContent, guildConfig.CommandPrefix, out argPos)) {
 								UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
 								await dum.Channel.TriggerTypingAsync();
-								await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos).UpsideDown(), new DiscordCommandContext(m_ISP, new DiscordMessage(dum, true), userConfig, guildConfig, true));
+								await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.UpsideDown().Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum, true), userConfig, guildConfig, true));
 							}
 						}
 					} catch (Exception e) {
