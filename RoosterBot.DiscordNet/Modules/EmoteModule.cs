@@ -125,7 +125,7 @@ namespace RoosterBot.DiscordNet {
 		public async Task<CommandResult> StealEmote() {
 			IUserMessage? message = await GetMessageBeforeCommand();
 			if (message != null) {
-				return await StealEmote();
+				return await StealEmote(message);
 			} else {
 				return TextResult.Error("Could not get message before your command.");
 			}
