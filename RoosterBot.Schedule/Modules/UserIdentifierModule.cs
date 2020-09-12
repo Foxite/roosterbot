@@ -28,7 +28,7 @@ namespace RoosterBot.Schedule {
 					return TextResult.Success(GetString("UserIdentifierModule_ConfirmUserIsIdentifierWithOld", newIdentifier.DisplayText, oldIdentifier.DisplayText));
 				}
 			} else {
-				return TextResult.Error("#UserIdentifierModule_NotAssignableToUser");
+				return TextResult.Error(GetString("UserIdentifierModule_NotAssignableToUser"));
 			}
 		}
 	}
