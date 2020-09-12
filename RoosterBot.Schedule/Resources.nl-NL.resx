@@ -319,4 +319,7 @@
   <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
     <value>Bekijk je rooster-ID.</value>
   </data>
+  <data name="ScheduleModule_NoRecordsForDay" xml:space="preserve">
+    <value>Er is op die dag niets op het rooster.</value>
+  </data>
 </root>

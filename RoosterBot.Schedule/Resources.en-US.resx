@@ -322,4 +322,7 @@
   <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
     <value>See your schedule identifier.</value>
   </data>
+  <data name="ScheduleModule_NoRecordsForDay" xml:space="preserve">
+    <value>There is nothing on the schedule for that day.</value>
+  </data>
 </root>
