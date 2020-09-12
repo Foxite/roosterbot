@@ -33,7 +33,7 @@ namespace RoosterBot.DiscordNet {
 			} else if (existingResponse == null) {
 				return await new DiscordChannel(Channel).SendMessageAsync(result.ToString(this).UpsideDown(UpsideDown), result.UploadFilePath);
 			} else {
-				await existingResponse.ModifyAsync(result.ToString(this), result.UploadFilePath);
+				await existingResponse.ModifyAsync(result.ToString(this).UpsideDown(UpsideDown), result.UploadFilePath);
 				return existingResponse;
 			}
 		}
