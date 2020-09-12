@@ -47,6 +47,7 @@ namespace RoosterBot.DiscordNet {
 				Activity = ActivityType.Playing,
 				NotifyReady = Array.Empty<ulong>(),
 				BotOwnerIds = Array.Empty<ulong>(),
+				DiscordLink = "",
 				Emotes = new {
 					Info = ":information_source:",
 					Unknown = ":question:",
@@ -75,6 +76,7 @@ namespace RoosterBot.DiscordNet {
 			m_Activity = config.Activity;
 			m_NotifyReady = config.NotifyReady;
 			m_BotOwnerIds = config.BotOwnerIds;
+			DiscordLink = config.DiscordLink;
 
 			EmoteStorageGuilds = config.EmoteStorageGuilds;
 
