@@ -28,7 +28,8 @@ namespace RoosterBot.AWS {
 				ChannelTable = "",
 				NotificationArn = "",
 				DefaultComandPrefix = "!",
-				DefaultCulture = "en-US"
+				DefaultCulture = "en-US",
+				UseCloudwatch = false
 			});
 
 			m_NotificationARN = jsonConfig.NotificationArn;
@@ -46,11 +47,11 @@ namespace RoosterBot.AWS {
 				CultureInfo.GetCultureInfo(jsonConfig.DefaultCulture)
 			));
 
-			m_LogClient = new AmazonCloudWatchLogsClient(awsConfig.Credentials, awsConfig.Region);
-
-			m_LogEndpoint = CloudwatchLogEndpoint.CreateAsync(m_LogClient, TimeSpan.FromSeconds(5)).Result;
-			
-			Logger.AddEndpoint(m_LogEndpoint);
+			if (jsonConfig.UseCloudwatch) {
+				m_LogClient = new AmazonCloudWatchLogsClient(awsConfig.Credentials, awsConfig.Region);
+				m_LogEndpoint = CloudwatchLogEndpoint.CreateAsync(m_LogClient, TimeSpan.FromSeconds(5)).Result;
+				Logger.AddEndpoint(m_LogEndpoint);
+			}
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
