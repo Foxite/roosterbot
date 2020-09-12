@@ -20,7 +20,7 @@ namespace RoosterBot.Schedule {
 		public WeekScheduleEnumerator(RoosterCommandContext context, IdentifierInfo info, int initialWeekOffset) {
 			m_Context = context;
 			m_Identifier = info;
-			m_InitialOffset = initialWeekOffset - 1;
+			m_InitialOffset = initialWeekOffset;
 			m_Offset = m_InitialOffset;
 
 			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
