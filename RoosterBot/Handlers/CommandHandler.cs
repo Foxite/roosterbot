@@ -75,7 +75,7 @@ namespace RoosterBot {
 
 		private string HandleOverloadsFailed(RoosterCommandContext context, OverloadsFailedResult overloads) {
 
-			var rows = overloads.FailedOverloads.Select(kvp => {
+			var rows = overloads.FailedOverloads.Where(kvp => !(kvp.Value is ArgumentParseFailedResult)).Select(kvp => {
 				string reason = kvp.Value switch
 				{
 					ChecksFailedResult          check      => HandleCheckFailed(context, check),
