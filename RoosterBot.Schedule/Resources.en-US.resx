@@ -255,7 +255,7 @@
     <value>i</value>
   </data>
   <data name="UserIdentifierModule_SetCommandName" xml:space="preserve">
-    <value>am|am in</value>
+    <value>am in|am</value>
   </data>
   <data name="IdentifierInfo_MultiReader_TypeDisplayName" xml:space="preserve">
     <value>info</value>
@@ -317,7 +317,7 @@
     <value>You can't assign that to yourself.</value>
   </data>
   <data name="UserIdentifierModule_GetCommandName" xml:space="preserve">
-    <value>am|am in</value>
+    <value>am in|am</value>
   </data>
   <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
     <value>See your schedule identifier.</value>

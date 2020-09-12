@@ -265,7 +265,7 @@
     <value>ik</value>
   </data>
   <data name="UserIdentifierModule_SetCommandName" xml:space="preserve">
-    <value>ben|zit in</value>
+    <value>zit in|ben</value>
   </data>
   <data name="ScheduleModule_ShowFutureCommand_UnitTypeDisplayName" xml:space="preserve">
     <value>uur, dagen, of weken</value>
@@ -314,7 +314,7 @@
     <value>Je kunt dat niet aan jezelf toewijzen.</value>
   </data>
   <data name="UserIdentifierModule_GetCommandName" xml:space="preserve">
-    <value>ben|zit in</value>
+    <value>zit in|ben</value>
   </data>
   <data name="UserIdentifierModule_GetCommandSummary" xml:space="preserve">
     <value>Bekijk je rooster-ID.</value>
