@@ -110,7 +110,7 @@ namespace RoosterBot.GLU {
 
 				if (m_RepeatRecords > 0) {
 					int repeatLength = (int) Math.Abs((schedule[0].Start.Date - schedule[^1].Start.Date).TotalDays);
-					repeatLength += (repeatLength + 6) / 7 * 7; // To next multiple of 7 days (repeat weeks)
+					repeatLength = (repeatLength + 6) / 7 * 7; // To next multiple of 7 days (repeat weeks)
 					var originalSchedule = schedule.ToList(); // Clone list
 					for (int i = 1; i <= m_RepeatRecords; i++) {
 						schedule.AddRange(originalSchedule.Select(record =>
