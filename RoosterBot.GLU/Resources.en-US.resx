@@ -142,7 +142,7 @@
     <value>Time</value>
   </data>
   <data name="GLUScheduleRecord_Quarantine" xml:space="preserve">
-    <value>At least until June 3rd, all classes will be held on Discord. Read your mail for more information.</value>
+    <value>Most classes will be held on Discord.</value>
   </data>
   <data name="GLUScheduleRecord_QuarantineLabel" xml:space="preserve">
     <value>Quarantine</value>
