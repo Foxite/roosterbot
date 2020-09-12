@@ -35,8 +35,8 @@ namespace RoosterBot.Meta {
 		public string SmtpUsername  { get; set; } = "";
 		public string SmtpPassword  { get; set; } = "";
 
-		public bool Empty =>
-			Recipients.Count == 0 || Recipients.All(str => string.IsNullOrWhiteSpace(str)) ||
+		public bool IsEmpty =>
+			Recipients == null || Recipients.Count == 0 || Recipients.All(str => string.IsNullOrWhiteSpace(str)) ||
 			string.IsNullOrWhiteSpace(SenderAddress) ||
 			string.IsNullOrWhiteSpace(SmtpServer)    ||
 			string.IsNullOrWhiteSpace(SmtpUsername)  ||
