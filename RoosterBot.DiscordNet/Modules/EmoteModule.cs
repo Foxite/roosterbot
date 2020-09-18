@@ -131,7 +131,7 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 
-		[Command("steal"), Priority(0), RequireBotManager]
+		[Command("steal"), Priority(-1)]
 		public Task<CommandResult> StealEmote(IUserMessage message) {
 			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url));
 
@@ -159,7 +159,7 @@ namespace RoosterBot.DiscordNet {
 			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
 		}
 
-		[Command("create from url")]
+		[Command("create from url"), Priority(1)]
 		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) {
 			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString()) });
 		}
