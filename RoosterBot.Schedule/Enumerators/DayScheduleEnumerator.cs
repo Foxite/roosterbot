@@ -70,14 +70,14 @@ namespace RoosterBot.Schedule {
 				ScheduleRecord[] result = scheduleResult.Value;
 				
 				if (result.Length == 0) {
-					Current = TextResult.Info(m_Resources.GetString(m_Context.Culture, "ScheduleModule_NoRecordsForDay"));
+					Current = TextResult.Info(m_Context.GetString("ScheduleModule_NoRecordsForDay"));
 				} else {
 					var cells = new IReadOnlyList<string>[Math.Max(result.Length, 1) + 1];
-					cells[0] = result[0].PresentRowHeadings(m_Resources, m_Context.Culture);
+					cells[0] = result[0].PresentRowHeadings(m_Context);
 
 					for (int i = 0; i < result.Length; i++) {
 						var record = result[i];
-						cells[i + 1] = record.PresentRow(m_Resources, m_Context.Culture);
+						cells[i + 1] = record.PresentRow(m_Context);
 					}
 
 					Current = new TableResult(m_Identifier.DisplayText + ": " + DateTimeUtil.GetRelativeDateReference(m_CurrentDate, m_Context.Culture), cells);

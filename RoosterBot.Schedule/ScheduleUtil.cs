@@ -22,11 +22,11 @@ namespace RoosterBot.Schedule {
 		}
 		#endregion
 		
-		internal static async Task<ReturnValue<T>> HandleScheduleProviderErrorAsync<T>(ResourceService resources, CultureInfo culture, Func<Task<T>> action) {
+		internal static async Task<ReturnValue<T>> HandleScheduleProviderErrorAsync<T>(RoosterCommandContext context, Func<Task<T>> action) {
 			try {
 				return ReturnValue<T>.Successful(await action());
 			} catch (Exception e) {
-				return ReturnValue<T>.Unsuccessful(TextResult.Error(resources.GetString(culture, e switch {
+				return ReturnValue<T>.Unsuccessful(TextResult.Error(context.GetString(e switch {
 					IdentifierNotFoundException _ => "ScheduleModule_HandleError_NotFound",
 					RecordsOutdatedException    _ => "ScheduleModule_HandleError_RecordsOutdated",
 					NoAllowedChannelsException  _ => "ScheduleModule_HandleError_NoSchedulesAvailableForServer",

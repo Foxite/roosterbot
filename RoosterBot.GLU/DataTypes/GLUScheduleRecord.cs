@@ -27,13 +27,11 @@ namespace RoosterBot.GLU {
 		[JsonIgnore] public string RoomString => string.Join(", ", Room.Select(info => info.ScheduleCode));
 
 
-		public override IEnumerable<AspectListItem> Present(ResourceService resources, CultureInfo culture) {
-			string getString(string key, params object[] objects) {
-				return string.Format(resources.GetString(culture, key), objects);
-			}
+		public override IEnumerable<AspectListItem> Present(RoosterCommandContext context) {
+			CultureInfo culture = context.Culture;
 
 			AspectListItem getAspect(IEmote emote, string nameKey, string value) {
-				return new AspectListItem(emote, getString(nameKey), value);
+				return new AspectListItem(emote, context.GetString(nameKey), value);
 			}
 
 			yield return getAspect(new Emoji("🗒️"), "GLUScheduleRecord_Aspect_Activity", Activity.DisplayText);
@@ -42,7 +40,7 @@ namespace RoosterBot.GLU {
 				if (Activity.ScheduleCode != "pauze") {
 					if (StaffMember.Count > 0) {
 						if (StaffMember[0].IsUnknown && StaffMember.Count == 1) {
-							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", getString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
+							yield return getAspect(new Emoji("👤"), "GLUScheduleRecord_Aspect_StaffMember", context.GetString("GLUScheduleRecord_UnknownStaffMember", StaffMember[0].ScheduleCode));
 						} else {
 							string staffMembers;
 							if (StaffMember.Count > 5) {
@@ -68,10 +66,10 @@ namespace RoosterBot.GLU {
 					yield return getAspect(new Emoji("🗓️"), "GLUScheduleRecord_Aspect_Date", Start.ToString("D", culture));
 				}
 
-				string timeString = getString("GLUScheduleRecord_TimeStartEnd", Start.ToString("t", culture), End.ToString("t", culture));
+				string timeString = context.GetString("GLUScheduleRecord_TimeStartEnd", Start.ToString("t", culture), End.ToString("t", culture));
 				if (Start.Date == DateTime.Today && Start > DateTime.Now) {
 					TimeSpan timeLeft = Start - DateTime.Now;
-					timeString += getString("GLUScheduleRecord_TimeLeft", timeLeft.ToString("h':'mm':'ss", culture));
+					timeString += context.GetString("GLUScheduleRecord_TimeLeft", timeLeft.ToString("h':'mm':'ss", culture));
 				}
 				yield return getAspect(new Emoji("🕔"), "GLUScheduleRecord_Aspect_TimeStartEnd", timeString);
 
@@ -79,24 +77,24 @@ namespace RoosterBot.GLU {
 				timeString = Duration.ToString("h':'mm", culture);
 				if (Start < DateTime.Now && End > DateTime.Now) {
 					TimeSpan timeLeft = End - DateTime.Now;
-					timeString += getString("GLUScheduleRecord_TimeLeft", timeLeft.ToString("h':'mm':'ss", culture));
+					timeString += context.GetString("GLUScheduleRecord_TimeLeft", timeLeft.ToString("h':'mm':'ss", culture));
 				}
 				yield return getAspect(new Emoji("⏱️"), "GLUScheduleRecord_Aspect_TimeLeft", timeString);
 
 				if (Break != null) {
-					yield return getAspect(new Emoji("☕"), "GLUScheduleRecord_Aspect_Break", getString("GLUScheduleRecord_TimeStartEnd", Break.Start.ToString("t", culture), Break.End.ToString("t", culture)));
+					yield return getAspect(new Emoji("☕"), "GLUScheduleRecord_Aspect_Break", context.GetString("GLUScheduleRecord_TimeStartEnd", Break.Start.ToString("t", culture), Break.End.ToString("t", culture)));
 				}
 
 				if (Activity.ScheduleCode != "pauze") {
-					yield return getAspect(new Emoji("☣️"), "GLUScheduleRecord_QuarantineLabel", getString("GLUScheduleRecord_Quarantine"));
+					yield return getAspect(new Emoji("☣️"), "GLUScheduleRecord_QuarantineLabel", context.GetString("GLUScheduleRecord_Quarantine"));
 				}
 			}
 		}
 
-		public override IReadOnlyList<string> PresentRow(ResourceService resources, CultureInfo culture) {
+		public override IReadOnlyList<string> PresentRow(RoosterCommandContext context) {
 			return new[] {
 				Activity.DisplayText.ToString(),
-				string.Format(resources.GetString(culture, "GLUScheduleRecord_TimeStartEnd"), Start.ToString("t", culture), End.ToString("t", culture)),
+				context.GetString("GLUScheduleRecord_TimeStartEnd", Start.ToString("t", context.Culture), End.ToString("t", context.Culture)),
 				StudentSetsString,
 				StaffMember.Count > 5
 					? string.Join(", ", StaffMember.Take(5).Select(teacher => teacher.DisplayText)) + "... (" + (StaffMember.Count - 5) + " extra)"
@@ -105,18 +103,12 @@ namespace RoosterBot.GLU {
 			};
 		}
 
-		public override IReadOnlyList<string> PresentRowHeadings(ResourceService resources, CultureInfo culture) {
-			string getString(string key) {
-				return resources.GetString(culture, key);
-			}
-
-			return new string[] {
-				getString("ScheduleModule_RespondDay_ColumnActivity"),
-				getString("ScheduleModule_RespondDay_ColumnTime"),
-				getString("ScheduleModule_RespondDay_ColumnStudentSets"),
-				getString("ScheduleModule_RespondDay_ColumnStaffMember"),
-				getString("ScheduleModule_RespondDay_ColumnRoom")
-			};
-		}
+		public override IReadOnlyList<string> PresentRowHeadings(RoosterCommandContext context) => new string[] {
+			context.GetString("ScheduleModule_RespondDay_ColumnActivity"),
+			context.GetString("ScheduleModule_RespondDay_ColumnTime"),
+			context.GetString("ScheduleModule_RespondDay_ColumnStudentSets"),
+			context.GetString("ScheduleModule_RespondDay_ColumnStaffMember"),
+			context.GetString("ScheduleModule_RespondDay_ColumnRoom")
+		};
 	}
 }

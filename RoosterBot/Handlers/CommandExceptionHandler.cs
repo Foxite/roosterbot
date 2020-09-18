@@ -21,7 +21,7 @@ namespace RoosterBot {
 				string report = $"{rcc.ToString()}\nException during {args.Result.CommandExecutionStep.ToString()}";
 				Logger.Error("CommandException", report, args.Result.Exception);
 				await Notification.AddNotificationAsync(report + "\n" + args.Result.Exception.ToStringDemystified());
-				await rcc.RespondAsync(TextResult.Error(Resources.GetString(rcc.Culture, "CommandHandling_FatalError")));
+				await rcc.RespondAsync(TextResult.Error(rcc.GetString("CommandHandling_FatalError")));
 			}
 		}
 	}

@@ -81,9 +81,9 @@ namespace RoosterBot.Weather {
 						appTempString = Math.Round(Temperature * 9 / 5 + 32, 1).ToString() + " °F";
 					}
 
-					temperature += string.Format(m_Resources.GetString(context.Culture, "WeatherInfo_Present_ApparentTemperature"), appTempString);
+					temperature += string.Format(context.GetString("WeatherInfo_Present_ApparentTemperature"), appTempString);
 				}
-				yield return new AspectListItem(new Emoji("🌡️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_TemperatureAspect"), temperature);
+				yield return new AspectListItem(new Emoji("🌡️"), context.GetString("WeatherInfo_Present_TemperatureAspect"), temperature);
 				yield return new AspectListItem(WeatherCode switch {
 					200 => new Emoji("🌩️"),
 					230 => new Emoji("🌩️"),
@@ -124,10 +124,10 @@ namespace RoosterBot.Weather {
 					804 => new Emoji("☁️"),
 					900 => context.ServiceProvider.GetRequiredService<EmoteService>().Unknown(context.Platform),
 					_   => context.ServiceProvider.GetRequiredService<EmoteService>().Error(context.Platform)
-				}, m_Resources.GetString(context.Culture, "WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(context.Culture, WeatherCode));
+				}, context.GetString("WeatherInfo_Present_WeatherAspect"), m_WeatherService.GetDescription(context.Culture, WeatherCode));
 
 				if (WindSpeed == 0) {
-					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_WindAspect"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_NoWind"));
+					yield return new AspectListItem(new Emoji("🌬️"), context.GetString("WeatherInfo_Present_WindAspect"), context.GetString("WeatherInfo_Present_NoWind"));
 				} else {
 					string windSpeedString;
 					if (useMetric) {
@@ -136,7 +136,7 @@ namespace RoosterBot.Weather {
 						windSpeedString = Math.Round(WindSpeed * 1.609, 1).ToString() + " mph";
 					}
 
-					yield return new AspectListItem(new Emoji("🌬️"), m_Resources.GetString(context.Culture, "WeatherInfo_Present_WindAspect"), windSpeedString);
+					yield return new AspectListItem(new Emoji("🌬️"), context.GetString("WeatherInfo_Present_WindAspect"), windSpeedString);
 				}
 			}
 

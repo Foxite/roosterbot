@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
 
 namespace RoosterBot.DateTimeUtils {
@@ -10,11 +9,10 @@ namespace RoosterBot.DateTimeUtils {
 
 		public override ValueTask<RoosterTypeParserResult<DayOfWeek>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			input = input.ToLower();
-			ResourceService resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			CultureInfo culture = context.Culture;
-			if (input == resources.GetString(culture, "DayOfWeekReader_Today")) {
+			if (input == context.GetString("DayOfWeekReader_Today")) {
 				return ValueTaskUtil.FromResult(Successful(DateTime.Today.DayOfWeek));
-			} else if (input == resources.GetString(culture, "DayOfWeekReader_Tomorrow")) {
+			} else if (input == context.GetString("DayOfWeekReader_Tomorrow")) {
 				return ValueTaskUtil.FromResult(Successful(DateTime.Today.AddDays(1).DayOfWeek));
 			}
 

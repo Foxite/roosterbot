@@ -110,12 +110,12 @@ namespace RoosterBot.Schedule {
 					}
 				}
 
-				Current = new TableResult(m_Identifier.DisplayText + ": " + string.Format(m_Resources.GetString(m_Context.Culture, m_Offset switch
+				Current = new TableResult(m_Identifier.DisplayText + ": " + m_Context.GetString(m_Offset switch
 				{
 					0 => "ScheduleModule_RespondWeek_ScheduleThisWeek",
 					1 => "ScheduleModule_RespondWeek_ScheduleNextWeek",
 					_ => "ScheduleModule_RespondWeek_ScheduleInXWeeks"
-				}), m_Offset), cells);
+				}, m_Offset), cells);
 				return true;
 			} else {
 				Current = scheduleResult.ErrorResult;

@@ -18,7 +18,7 @@ namespace RoosterBot {
 						Logger.Warning("CommandHandler", $"A command has returned an unknown result of type {args.Result.GetType().Name}. It cannot be handled.");
 					}
 					
-					string response = rcc.ServiceProvider.GetRequiredService<ResourceService>().GetString(rcc.Culture, "CommandHandling_Empty");
+					string response = rcc.GetString("CommandHandling_Empty");
 					await rcc.RespondAsync(TextResult.Info(response));
 				}
 			}

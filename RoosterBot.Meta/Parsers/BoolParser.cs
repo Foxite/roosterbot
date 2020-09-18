@@ -10,7 +10,7 @@ namespace RoosterBot.Meta {
 		public override ValueTask<RoosterTypeParserResult<bool>> ParseAsync(Parameter parameter, string input, RoosterCommandContext context) {
 			ResourceService resourceService = context.ServiceProvider.GetRequiredService<ResourceService>();
 			bool matches(string key) {
-				return resourceService.GetString(context.Culture, key).Split("|").Contains(input);
+				return context.GetString(key).Split("|").Contains(input);
 			}
 			if (matches("BoolParser_True")) {
 				return ValueTaskUtil.FromResult(Successful(true));

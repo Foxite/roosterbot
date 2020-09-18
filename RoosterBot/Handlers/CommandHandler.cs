@@ -61,7 +61,7 @@ namespace RoosterBot {
 						response = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result}";
 						Logger.Warning("CommandHandler", response);
 						await Notifications.AddNotificationAsync(response);
-						response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
+						response = context.GetString("CommandHandling_FatalError");
 						break;
 				}
 
@@ -69,12 +69,11 @@ namespace RoosterBot {
 			}
 		}
 
-		private string HandleDisabled(RoosterCommandContext context) => Resources.GetString(context.Culture, "CommandHandling_Disabled");
-		private string HandleNotFound(RoosterCommandContext context) => string.Format(Resources.GetString(context.Culture, "CommandHandling_NotFound"), context.ChannelConfig.CommandPrefix);
-		private string HandleCooldown(RoosterCommandContext context, CommandOnCooldownResult cooldown) => string.Format(Resources.GetString(context.Culture, "CommandHandling_Cooldown"), cooldown.Cooldowns.First().RetryAfter.ToString("c", context.Culture));
+		private string HandleDisabled(RoosterCommandContext context) => context.GetString("CommandHandling_Disabled");
+		private string HandleNotFound(RoosterCommandContext context) => context.GetString("CommandHandling_NotFound", context.ChannelConfig.CommandPrefix);
+		private string HandleCooldown(RoosterCommandContext context, CommandOnCooldownResult cooldown) => context.GetString("CommandHandling_Cooldown", cooldown.Cooldowns.First().RetryAfter.ToString("c", context.Culture));
 
 		private string HandleOverloadsFailed(RoosterCommandContext context, OverloadsFailedResult overloads) {
-
 			var rows = overloads.FailedOverloads.Where(kvp => !(kvp.Value is ArgumentParseFailedResult)).Select(kvp => {
 				string reason = kvp.Value switch
 				{
@@ -91,14 +90,14 @@ namespace RoosterBot {
 			if (rows.Values.Distinct().CountEquals(1)) {
 				return rows.Values.First();
 			} else {
-				return Resources.GetString(context.Culture, "CommandHandling_OverloadsFailed") + "\n" + string.Join('\n', rows.Select(kvp => kvp.Key + kvp.Value));
+				return context.GetString("CommandHandling_OverloadsFailed") + "\n" + string.Join('\n', rows.Select(kvp => kvp.Key + kvp.Value));
 			}
 		}
 
 		private async Task<string> HandleArgumentParseFailed(RoosterCommandContext context, ArgumentParseFailedResult argument) {
 			string response;
 			if (argument.ParserResult is DefaultArgumentParserResult parseResult) {
-				response = Resources.GetString(context.Culture, "CommandHandling_Arguments_" + parseResult.Failure.ToString()) + "\n";
+				response = context.GetString("CommandHandling_Arguments_" + parseResult.Failure.ToString()) + "\n";
 				if (parseResult.FailurePosition != null) {
 					response += "`" + context.Message.Content + "`\n`" + new string(' ', context.Message.Content.Length - context.RawArguments.Length + parseResult.FailurePosition.Value) + "^`";
 				}
@@ -110,7 +109,7 @@ namespace RoosterBot {
 					response = TooLong + response.Substring(0, 1999 - TooLong.Length);
 				}
 				await Notifications.AddNotificationAsync(response);
-				response = Resources.GetString(context.Culture, "CommandHandling_FatalError");
+				response = context.GetString("CommandHandling_FatalError");
 			}
 
 			return response;
@@ -127,7 +126,7 @@ namespace RoosterBot {
 				}
 				if (Result is RoosterCheckResult rcr) {
 					Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
-					response += string.Format(Resources.GetString(context.Culture, "CommandHandling_ParamCheckFailed"), paramCheck.Parameter.Name,
+					response += context.GetString("CommandHandling_ParamCheckFailed", paramCheck.Parameter.Name,
 						Resources.ResolveString(context.Culture, component, Result.Reason));
 				} else {
 					response += Result.Reason;

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Reflection;
 using System.Threading.Tasks;
 using Qmmands;
 
@@ -9,12 +8,6 @@ namespace RoosterBot {
 	/// </summary>
 	/// <typeparam name="T">The type of <see cref="RoosterCommandContext"/> required by this module.</typeparam>
 	public abstract class RoosterModule<T> : ModuleBase<T> where T : RoosterCommandContext {
-		// Initializing a property with `null!` will prevent a warning about non-nullable properties being unassigned.
-		// They will be assigned through reflection, and this is the best way to tell the compiler that it's fine.
-		// https://stackoverflow.com/a/57343485/3141917
-		///
-		public ResourceService Resources { get; set; } = null!;
-
 		/// <summary>
 		/// Shorthand for <code>Context.UserConfig</code>
 		/// </summary>
@@ -39,18 +32,14 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
-		/// Get a string resource for the current culture.
+		/// Get a string resource for <see cref="Culture"/>.
 		/// </summary>
-		protected string GetString(string name) {
-			return Resources.GetString(Assembly.GetCallingAssembly(), Culture, name);
-		}
+		protected string GetString(string name) => Context.GetString(name);
 
 		/// <summary>
-		/// Get a string resource for the current culture and format it.
+		/// Get a string resource for <see cref="Culture"/> and format it.
 		/// </summary>
-		protected string GetString(string name, params object[] args) {
-			return string.Format(Resources.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
-		}
+		protected string GetString(string name, params object[] args) => Context.GetString(name, args);
 	}
 
 	/// <summary>

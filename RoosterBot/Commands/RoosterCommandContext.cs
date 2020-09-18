@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Qmmands;
@@ -12,6 +13,8 @@ namespace RoosterBot {
 	/// often accessed by multiple unrelated classes in the execution process, so that these classes do not have to retrieve the config data independently.
 	/// </summary>
 	public class RoosterCommandContext : CommandContext {
+		private ResourceService? m_Resources = null;
+
 		/// <summary>
 		/// The <see cref="PlatformComponent"/> that started execution.
 		/// </summary>
@@ -52,6 +55,8 @@ namespace RoosterBot {
 		/// </summary>
 		public CultureInfo Culture => UserConfig.Culture ?? ChannelConfig.Culture;
 
+		private ResourceService Resources => m_Resources ??= ServiceProvider.GetRequiredService<ResourceService>();
+
 		/// <summary>
 		/// Construct a new <see cref="RoosterCommandContext"/> with the necessary information.
 		/// </summary>
@@ -86,7 +91,7 @@ namespace RoosterBot {
 					response = await SendResultAsync(result, response);
 				} catch (Exception e) {
 					Logger.Error("Result", "Error was caught in SendResultAsync. Sending a generic error result", e);
-					response = await SendResultAsync(TextResult.Error(ServiceProvider.GetService<ResourceService>().GetString(Culture, "CommandHandling_FatalError")), response);
+					response = await SendResultAsync(TextResult.Error(GetString("CommandHandling_FatalError")), response);
 				}
 				UserConfig.SetResponse(Message, response);
 			} else {
@@ -108,6 +113,20 @@ namespace RoosterBot {
 				existingResponse.ModifyAsync(result.ToString(this), result.UploadFilePath);
 				return Task.FromResult(existingResponse);
 			}
+		}
+
+		/// <summary>
+		/// Get a string resource for <see cref="Culture"/>.
+		/// </summary>
+		public string GetString(string name) {
+			return Resources.GetString(Assembly.GetCallingAssembly(), Culture, name);
+		}
+
+		/// <summary>
+		/// Get a string resource for <see cref="Culture"/> and format it.
+		/// </summary>
+		public string GetString(string name, params object[] args) {
+			return string.Format(GetString(name), args);
 		}
 	}
 }

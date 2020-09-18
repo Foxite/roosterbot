@@ -11,7 +11,7 @@ namespace RoosterBot.Schedule {
 			bool byMention;
 			IdentifierInfo? result;
 
-			if (context.ServiceProvider.GetRequiredService<ResourceService>().GetString(context.Culture, "UserIdentifierParser_Self").Split("|").Contains(input.ToLower())) {
+			if (context.GetString("UserIdentifierParser_Self").Split("|").Contains(input.ToLower())) {
 				result = context.UserConfig.GetIdentifier();
 				byMention = false;
 			} else {
