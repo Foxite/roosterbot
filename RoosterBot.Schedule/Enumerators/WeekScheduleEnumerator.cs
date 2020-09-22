@@ -9,7 +9,6 @@ namespace RoosterBot.Schedule {
 	public sealed class WeekScheduleEnumerator : IBidirectionalEnumerator<RoosterCommandResult> {
 		private readonly RoosterCommandContext m_Context;
 		private readonly IdentifierInfo m_Identifier;
-		private readonly ResourceService m_Resources;
 		private readonly ScheduleService m_Schedule;
 		private readonly int m_InitialOffset;
 		private int m_Offset;
@@ -23,7 +22,6 @@ namespace RoosterBot.Schedule {
 			m_InitialOffset = initialWeekOffset;
 			m_Offset = m_InitialOffset;
 
-			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
 			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
 		}
 
@@ -65,7 +63,7 @@ namespace RoosterBot.Schedule {
 
 		private bool Update() {
 			ReturnValue<ScheduleRecord[]> scheduleResult =
-				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_Schedule.GetWeekRecordsAsync(m_Identifier, m_Offset, m_Context)).Result;
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Context, () => m_Schedule.GetWeekRecordsAsync(m_Identifier, m_Offset, m_Context)).Result;
 
 			if (scheduleResult.Success) {
 				ScheduleRecord[] result = scheduleResult.Value;

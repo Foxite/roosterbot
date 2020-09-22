@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using RoosterBot.DateTimeUtils;
 
@@ -9,7 +8,6 @@ namespace RoosterBot.Schedule {
 	public sealed class DayScheduleEnumerator : IBidirectionalEnumerator<RoosterCommandResult> {
 		private readonly RoosterCommandContext m_Context;
 		private readonly IdentifierInfo m_Identifier;
-		private readonly ResourceService m_Resources;
 		private readonly ScheduleService m_Schedule;
 		private readonly DateTime m_InitialDate;
 		private DateTime m_CurrentDate;
@@ -24,7 +22,6 @@ namespace RoosterBot.Schedule {
 			m_InitialDate = initialDate;
 			m_CurrentDate = initialDate;
 			
-			m_Resources = m_Context.ServiceProvider.GetRequiredService<ResourceService>();
 			m_Schedule = m_Context.ServiceProvider.GetRequiredService<ScheduleService>();
 		}
 
@@ -64,7 +61,7 @@ namespace RoosterBot.Schedule {
 
 		private bool Update() {
 			ReturnValue<ScheduleRecord[]> scheduleResult =
-				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_Schedule.GetSchedulesForDate(m_Identifier, m_CurrentDate, m_Context)).Result;
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Context, () => m_Schedule.GetSchedulesForDate(m_Identifier, m_CurrentDate, m_Context)).Result;
 
 			if (scheduleResult.Success) {
 				ScheduleRecord[] result = scheduleResult.Value;
