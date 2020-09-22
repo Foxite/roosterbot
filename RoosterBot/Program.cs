@@ -41,7 +41,7 @@ namespace RoosterBot {
 		public CommandHandler CommandHandler { get; private set; }
 
 		private bool m_ShutDown;
-		private static IHost s_ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
+		private static readonly IHost ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
 
 		private static int Main(string[] args) {
 			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
@@ -53,7 +53,7 @@ namespace RoosterBot {
 			try {
 				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
 
-				s_ConsoleHost.Start();
+				ConsoleHost.Start();
 
 				new Program();
 				return 0;
@@ -66,7 +66,7 @@ namespace RoosterBot {
 #endif
 				return 2;
 			} finally {
-				s_ConsoleHost.Dispose();
+				ConsoleHost.Dispose();
 			}
 		}
 
@@ -144,12 +144,12 @@ namespace RoosterBot {
 				CancellationToken token = cts.Token;
 				_ = pipeServer.WaitForConnectionAsync(token);
 
-				Task consoleShutdown = s_ConsoleHost.WaitForShutdownAsync(token)
+				Task consoleShutdown = ConsoleHost.WaitForShutdownAsync(token)
 					.ContinueWith(t => {
 						if (!token.IsCancellationRequested) {
 							Logger.Info("Main", "SIGTERM received");
 						}
-						s_ConsoleHost.StopAsync();
+						ConsoleHost.StopAsync();
 					});
 
 				var quitConditions = new List<Func<bool>>() {
