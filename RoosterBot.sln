@@ -55,8 +55,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Tools", "RoosterBot.Tools\RoosterBot.Tools.csproj", "{8240830B-E7AD-4931-9B92-ECDF27D90F6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Statistics", "RoosterBot.Statistics\RoosterBot.Statistics.csproj", "{E73A393D-0A24-447F-A7A7-C77AECA702D0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Console", "RoosterBot.Console\RoosterBot.Console.csproj", "{10E77E4D-C0FD-4A0B-87C1-72EAF3367E58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Console.App", "RoosterBot.Console.App\RoosterBot.Console.App.csproj", "{E53983B2-52F6-4080-BAFC-796E115044C0}"
