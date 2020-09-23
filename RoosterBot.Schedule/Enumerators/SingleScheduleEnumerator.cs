@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Schedule {
 	public sealed class SingleScheduleEnumerator : IBidirectionalEnumerator<RoosterCommandResult> {
-		private readonly ResourceService m_Resources;
 		private readonly ScheduleService m_ScheduleService;
 		private readonly RoosterCommandContext m_Context;
 		private readonly ScheduleRecord m_Initial;
@@ -16,7 +14,6 @@ namespace RoosterBot.Schedule {
 		public RoosterCommandResult Current { get; private set; } = null!;
 		
 		public SingleScheduleEnumerator(RoosterCommandContext context, ScheduleRecord initial, IdentifierInfo identifier) {
-			m_Resources = context.ServiceProvider.GetRequiredService<ResourceService>();
 			m_ScheduleService = context.ServiceProvider.GetRequiredService<ScheduleService>();
 			m_Context = context;
 			m_Initial = initial;
@@ -29,11 +26,11 @@ namespace RoosterBot.Schedule {
 				m_CurrentRecord = m_Initial;
 			}
 			ReturnValue<ScheduleRecord> result =
-				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End, m_Context)).Result;
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Context, () => m_ScheduleService.GetRecordAfterDateTime(m_Identifier, m_CurrentRecord.End, m_Context)).Result;
 
 			if (result.Success) {
 				m_CurrentRecord = result.Value;
-				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), false);
 				return true;
 			} else {
 				Current = result.ErrorResult;
@@ -47,11 +44,11 @@ namespace RoosterBot.Schedule {
 			}
 			
 			ReturnValue<ScheduleRecord> result =
-				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Resources, m_Context.Culture, () => m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, m_CurrentRecord.Start, m_Context)).Result;
+				ScheduleUtil.HandleScheduleProviderErrorAsync(m_Context, () => m_ScheduleService.GetRecordBeforeDateTime(m_Identifier, m_CurrentRecord.Start, m_Context)).Result;
 
 			if (result.Success) {
 				m_CurrentRecord = result.Value;
-				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Resources, m_Context.Culture), false);
+				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), false);
 				return true;
 			} else {
 				Current = result.ErrorResult;
