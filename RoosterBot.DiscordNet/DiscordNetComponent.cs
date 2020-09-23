@@ -25,10 +25,10 @@ namespace RoosterBot.DiscordNet {
 		public string DiscordLink { get; private set; } = null!;
 		public IReadOnlyList<ulong> BotAdminIds => new ReadOnlyList<ulong>(m_BotOwnerIds);
 		public IReadOnlyList<SocketUser> BotAdmins => BotAdminIds.ListSelect(id => Client.GetUser(id));
+		public string FFMPEG { get; private set; } = null!;
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(1, 2, 0);
-
 
 		public DiscordNetComponent() {
 			Instance = this;
@@ -48,6 +48,7 @@ namespace RoosterBot.DiscordNet {
 				NotifyReady = Array.Empty<ulong>(),
 				BotOwnerIds = Array.Empty<ulong>(),
 				DiscordLink = "",
+				FFMPEG = "",
 				Emotes = new {
 					Info = ":information_source:",
 					Unknown = ":question:",
@@ -77,6 +78,7 @@ namespace RoosterBot.DiscordNet {
 			m_NotifyReady = config.NotifyReady;
 			m_BotOwnerIds = config.BotOwnerIds;
 			DiscordLink = config.DiscordLink;
+			FFMPEG = config.FFMPEG;
 
 			EmoteStorageGuilds = config.EmoteStorageGuilds;
 
@@ -99,6 +101,7 @@ namespace RoosterBot.DiscordNet {
 			Client = new DiscordSocketClient(discordConfig);
 
 			services.AddSingleton(Client);
+			services.AddSingleton<AudioService>();
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
@@ -139,6 +142,7 @@ namespace RoosterBot.DiscordNet {
 			#endregion
 			
 			commandService.AddModule<EmoteModule>();
+			commandService.AddModule<AudioModule>();
 			commandService.AddModule<UserListModule>();
 			commandService.AddModule<InfoModule>();
 
