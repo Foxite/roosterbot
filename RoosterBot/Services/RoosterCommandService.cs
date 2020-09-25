@@ -80,7 +80,7 @@ namespace RoosterBot {
 		internal async Task<IResult> ExecuteAsync(string input, RoosterCommandContext context) {
 			IResult result = await GetService(context.Culture).ExecuteAsync(input, context);
 			if (result is CommandNotFoundResult ||
-				(result is ChecksFailedResult cfr && cfr.FailedChecks.Count == 1 && cfr.FailedChecks.First().Check is RequireCultureAttribute rca && rca.Hide)) {
+				(result is ChecksFailedResult cfr && cfr.FailedChecks.OfType<RequireCultureAttribute>().Where(rca => rca.Hide).Any())) {
 				return await GetService(null).ExecuteAsync(input, context);
 			} else {
 				return result;
@@ -158,7 +158,9 @@ namespace RoosterBot {
 				return key == null ? null : m_ResourceService.ResolveString(culture, component, key);
 			}
 
-			if (!globalLocalizations) {
+			if (globalLocalizations) {
+				module.AddAttribute(new HiddenFromListAttribute(culture.Name));
+			} else {
 				module.AddCheck(new RequireCultureAttribute(culture.Name, true));
 			}
 
