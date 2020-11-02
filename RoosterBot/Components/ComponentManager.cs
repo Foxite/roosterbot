@@ -123,7 +123,11 @@ namespace RoosterBot {
 				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
 				
 				try {
-					component.AddServicesInternal(serviceCollection, Path.Combine(Program.DataPath, "Config", component.Name));
+					string configFolder = Path.Combine(Program.DataPath, "Config", component.Name);
+
+					Directory.CreateDirectory(configFolder);
+
+					component.AddServicesInternal(serviceCollection, configFolder);
 				} catch (Exception ex) {
 					throw new InvalidOperationException("Component " + component.Name + " threw an exception during AddServices.", ex);
 				}
