@@ -126,7 +126,15 @@ namespace RoosterBot {
 		/// Get a string resource for <see cref="Culture"/> and format it.
 		/// </summary>
 		public string GetString(string name, params object[] args) {
-			return string.Format(GetString(name), args);
+			return string.Format(Resources.GetString(Assembly.GetCallingAssembly(), Culture, name), args);
+		}
+		
+		internal string GetString(Assembly assembly, string name) {
+			return Resources.GetString(assembly, Culture, name);
+		}
+
+		internal string GetString(Assembly assembly, string name, params object[] args) {
+			return string.Format(Resources.GetString(assembly, Culture, name), args);
 		}
 	}
 }

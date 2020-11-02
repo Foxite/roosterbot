@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Reflection;
 using System.Threading.Tasks;
 using Qmmands;
 
@@ -34,12 +35,12 @@ namespace RoosterBot {
 		/// <summary>
 		/// Get a string resource for <see cref="Culture"/>.
 		/// </summary>
-		protected string GetString(string name) => Context.GetString(name);
+		protected string GetString(string name) => Context.GetString(Assembly.GetCallingAssembly(), name);
 
 		/// <summary>
 		/// Get a string resource for <see cref="Culture"/> and format it.
 		/// </summary>
-		protected string GetString(string name, params object[] args) => Context.GetString(name, args);
+		protected string GetString(string name, params object[] args) => Context.GetString(Assembly.GetCallingAssembly(), name, args);
 	}
 
 	/// <summary>
