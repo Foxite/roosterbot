@@ -2,13 +2,20 @@
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using YoutubeExplode;
-using YoutubeExplode.Converter;
 
 namespace RoosterBot.Tools {
 	public class ToolsComponent : Component {
+		public static ToolsComponent Instance { get; private set; } = null!;
+
 		private InspirobotProvider? m_Inspirobot;
 
 		public override Version ComponentVersion => new Version(1, 1, 0);
+
+		public string PathToFFMPEG { get; private set; } = null!;
+
+		public ToolsComponent() {
+			Instance = this;
+		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
@@ -16,8 +23,10 @@ namespace RoosterBot.Tools {
 				MotivationProviders = Array.Empty<string>()
 			});
 
+			PathToFFMPEG = config.PathToFFMPEG;
+
 			services.AddSingleton<YoutubeClient>();
-			services.AddSingleton(isp => new YoutubeConverter(isp.GetRequiredService<YoutubeClient>(), config.PathToFFMPEG));
+			//services.AddSingleton(isp => new YoutubeConverter(isp.GetRequiredService<YoutubeClient>(), config.PathToFFMPEG));
 
 			services.AddSingleton(isp => {
 				var ret = new MotivationService(isp.GetRequiredService<Random>());
