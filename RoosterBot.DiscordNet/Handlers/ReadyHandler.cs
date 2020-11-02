@@ -26,10 +26,10 @@ namespace RoosterBot.DiscordNet {
 
 			if (m_VersionNotReported && m_NotifyReady.Length != 0) {
 				m_VersionNotReported = false;
-				string startReport = $"RoosterBot version: {Program.Version.ToString()}\n";
+				string startReport = $"RoosterBot version: {Program.Version}\n";
 				startReport += "Components:\n";
 				foreach (Component component in Program.Instance.Components.GetComponents()) {
-					startReport += $"- {component.Name}: {component.ComponentVersion.ToString()}\n";
+					startReport += $"- {component.Name}: {component.ComponentVersion}\n";
 				}
 
 				foreach (Task<IDMChannel> ownerDMTask in m_NotifyReady.Select(notificant => DiscordNetComponent.Instance.Client.GetUser(notificant).GetOrCreateDMChannelAsync())) {

@@ -29,7 +29,6 @@ namespace RoosterBot.DiscordNet {
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(1, 2, 0);
 
-
 		public DiscordNetComponent() {
 			Instance = this;
 			m_BotOwnerIds = Array.Empty<ulong>();
