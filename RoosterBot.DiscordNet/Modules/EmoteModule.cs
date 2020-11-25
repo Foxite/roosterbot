@@ -19,8 +19,8 @@ namespace RoosterBot.DiscordNet {
 				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 			}
 
-			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;
-			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => isAnimated) < 50;
+			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !emote.Animated) < 50;
+			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => emote.Animated) < 50;
 
 			return m_StorageGuilds.FirstOrDefault(isAnimated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
 		}
@@ -64,9 +64,9 @@ namespace RoosterBot.DiscordNet {
 				IGuild? guild = null;
 				foreach (EmoteCreationData emote in emotes) {
 					string extension = Path.GetExtension(emote.Url);
-					guild = GetStorageGuild(extension == "gif");
+					guild = GetStorageGuild(extension == ".gif");
 					if (guild == null) {
-						(FailureReason OutOfSpace, bool) key = (FailureReason.OutOfSpace, extension == "gif");
+						(FailureReason OutOfSpace, bool) key = (FailureReason.OutOfSpace, extension == ".gif");
 						if (fails.ContainsKey(key)) {
 							fails[key]++;
 						} else {
@@ -99,7 +99,7 @@ namespace RoosterBot.DiscordNet {
 					response += $"\n- {info.Value} {(info.Key.Animated ? "animated" : "static")} emote(s) because " +
 						info.Key.reason switch {
 							FailureReason.InvalidFormat => "of an unsupported format",
-							FailureReason.OutOfSpace => "because we're out of space",
+							FailureReason.OutOfSpace => "we're out of space",
 							_ => info.Key.reason.ToString()
 						};
 				}
@@ -155,7 +155,7 @@ namespace RoosterBot.DiscordNet {
 
 		#region Create (create from user message)
 		[Command("create from attachment"), MessageHasAttachment]
-		public Task<CommandResult> CreateEmoteFromAttachment(params string[] names) {
+		public Task<CommandResult> CreateEmoteFromAttachment([Count(1, int.MaxValue)] params string[] names) {
 			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
 		}
 
