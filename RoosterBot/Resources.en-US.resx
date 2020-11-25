@@ -175,7 +175,7 @@
     <value>This command only works in a public channel.</value>
   </data>
   <data name="CommandHandling_ParamCheckFailed" xml:space="preserve">
-    <value>Parameter {0}: {1}</value>
+    <value>{0}: {1}</value>
     <comment>0: Parameter name
 1: failure reason</comment>
   </data>
@@ -227,5 +227,14 @@
   </data>
   <data name="ModuleEnabledInChannelAttribute_Unsuccessful" xml:space="preserve">
     <value>This command is disabled.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_Max" xml:space="preserve">
+    <value>I need at most {1} parameters.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_Min" xml:space="preserve">
+    <value>I need at least {0} parameters.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_MinMax" xml:space="preserve">
+    <value>I need between {0} and {1} parameters.</value>
   </data>
 </root>

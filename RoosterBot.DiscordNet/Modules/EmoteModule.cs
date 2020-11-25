@@ -155,7 +155,7 @@ namespace RoosterBot.DiscordNet {
 
 		#region Create (create from user message)
 		[Command("create from attachment"), MessageHasAttachment]
-		public Task<CommandResult> CreateEmoteFromAttachment([Count(1, int.MaxValue)] params string[] names) {
+		public Task<CommandResult> CreateEmoteFromAttachment([Count(1, -1)] params string[] names) {
 			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
 		}
 
