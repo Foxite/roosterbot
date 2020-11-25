@@ -1,73 +1,54 @@
-﻿#nullable disable
-/* I used to be a big fan of this pattern:
- * 
- * var thing = new object() {
- *     Prop = value,
- *     Et = cetera
- * }
- * 
- * But this doesn't work with nullable reference types.
- * So I've abandoned it in favor of proper constructors almost everywhere, except here. The constructs for these classes would have the longest parameter lists in the entire solution,
- *  and I won't have that.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace RoosterBot.PublicTransit {
 	/// <summary>
-	/// A trip from one location to another, 
+	/// A trip from one location to another, consisting of zero or more transfers.
 	/// </summary>
-	public class Journey {
-		public IList<JourneyNotification> Notifications;
-
+	public record Journey(
+		IList<JourneyNotification> Notifications,
+		
 		/// <summary>
 		/// The amount of transfers is not the same as Components.Count - 1 because walking is inherent to transfers.
 		/// For example: taking a bus to a train station, walking to a platform, and taking a train, is 3 components, but only 1 transfer.
 		/// </summary>
-		public int Transfers;
-		
-		public TimeSpan PlannedDuration;
-		public TimeSpan ActualDuration;
-
-		public int DepartureDelayMinutes;
-		public int ArrivalDelayMinutes;
-
-		public DateTime PlannedDepartureTime;
-		public DateTime ActualDepartureTime;
-		public DateTime PlannedArrivalTime;
-		public DateTime ActualArrivalTime;
-
-		public JourneyStatus Status;
-
-		public IList<JourneyComponent> Components;
-	}
+		int Transfers,
+		TimeSpan PlannedDuration,
+		TimeSpan ActualDuration,
+		int DepartureDelayMinutes,
+		int ArrivalDelayMinutes,
+		DateTime PlannedDepartureTime,
+		DateTime ActualDepartureTime,
+		DateTime PlannedArrivalTime,
+		DateTime ActualArrivalTime,
+		JourneyStatus Status,
+		IList<JourneyComponent> Components
+	);
 	
-	public class JourneyNotification {
-		public string Id;
-		public bool Unplanned;
-		public string Text;
-	}
+	public record JourneyNotification(
+		string Id,
+		bool Unplanned,
+		string Text
+	);
 
 	/// <summary>
 	/// A trip from one location to another without transferring.
 	/// </summary>
-	public class JourneyComponent {
-		public string Carrier;
-		public string TransportType;
-		public JourneyComponentStatus Status;
+	public record JourneyComponent(
+		string Carrier,
+		string TransportType,
+		JourneyComponentStatus Status,
+		JourneyStop Departure,
+		JourneyStop Arrival
+	);
 
-		public JourneyStop Departure;
-		public JourneyStop Arrival;
-	}
-
-	public class JourneyStop {
-		public string Location;
-		public string Platform;
-		public bool PlatformModified;
-		public DateTime Time;
-		public int DelayMinutes;
-	}
+	public record JourneyStop(
+		string Location,
+		string Platform,
+		bool PlatformModified,
+		DateTime Time,
+		int DelayMinutes
+	);
 
 	public enum JourneyStatus {
 		OnSchedule, Changed, Delayed, New, NotOptimal, NotPossible, PlanChanged

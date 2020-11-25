@@ -90,7 +90,7 @@ namespace RoosterBot {
 			// https://stackoverflow.com/a/3227549
 			string programLocation = componentAssembly.Location;
 			var resourceFileName = Path.GetFileNameWithoutExtension(programLocation) + ".resources.dll";
-		    var rootDir = new DirectoryInfo(Path.GetDirectoryName(programLocation));
+		    var rootDir = new DirectoryInfo(Path.GetDirectoryName(programLocation)!);
 			return new List<CultureInfo>(
 				from c in CultureInfo.GetCultures(CultureTypes.AllCultures)
 				join d in rootDir.EnumerateDirectories() on c.IetfLanguageTag equals d.Name

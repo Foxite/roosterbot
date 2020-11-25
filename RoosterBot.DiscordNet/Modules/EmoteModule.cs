@@ -14,7 +14,7 @@ namespace RoosterBot.DiscordNet {
 		#region Helper stuff
 		private IEnumerable<IGuild>? m_StorageGuilds;
 
-		private IGuild GetStorageGuild(bool isAnimated) {
+		private IGuild? GetStorageGuild(bool isAnimated) {
 			if (m_StorageGuilds == null) {
 				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 			}

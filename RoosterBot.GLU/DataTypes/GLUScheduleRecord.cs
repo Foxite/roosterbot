@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
-	public class GLUScheduleRecord : ScheduleRecord {
+	public record GLUScheduleRecord : ScheduleRecord {
 		public IReadOnlyList<StudentSetInfo> StudentSets { get; }
 		public IReadOnlyList<StaffMemberInfo> StaffMember { get; }
 		public IReadOnlyList<RoomInfo> Room { get; }
-		public BreakTime? Break { get; set; }
+		public BreakTime? Break { get; }
 
 		public override IEnumerable<IdentifierInfo> InvolvedIdentifiers => ((IEnumerable<IdentifierInfo>) StudentSets).Concat(StaffMember).Concat(Room);
 
@@ -25,7 +25,6 @@ namespace RoosterBot.GLU {
 		[JsonIgnore] public string StudentSetsString => string.Join(", ", StudentSets.Select(info => info.ScheduleCode));
 		[JsonIgnore] public string StaffMemberString => string.Join(", ", StaffMember.Select(info => info.DisplayText));
 		[JsonIgnore] public string RoomString => string.Join(", ", Room.Select(info => info.ScheduleCode));
-
 
 		public override IEnumerable<AspectListItem> Present(RoosterCommandContext context) {
 			CultureInfo culture = context.Culture;

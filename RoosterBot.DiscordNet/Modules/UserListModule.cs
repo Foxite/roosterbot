@@ -11,6 +11,8 @@ namespace RoosterBot.DiscordNet {
 	public class UserListModule : RoosterModule<DiscordCommandContext> {
 		private const string UserConfigListKey = "discord.tools.userList";
 
+		public UserConfigService UCS { get; set; } = null!;
+
 		public static async Task<IEnumerable<DiscordUser>> GetList(DiscordCommandContext context) {
 			IEnumerable<DiscordUser> userList = (await context.Guild!.GetUsersAsync()).Select(igu => new DiscordUser(igu));
 
@@ -54,10 +56,9 @@ namespace RoosterBot.DiscordNet {
 
 		[Command("with config value")]
 		public async Task<CommandResult> UsersWithConfigValue(string key, string value) {
-			var ucs = (UserConfigService) Context.ServiceProvider.GetService(typeof(UserConfigService));
 
 			return ReplyList(Context, (await GetList(Context)).Where(user => {
-				Newtonsoft.Json.Linq.JObject? data = ucs.GetConfigAsync(user.GetReference()).Result?.GetRawData();
+				Newtonsoft.Json.Linq.JObject? data = UCS.GetConfigAsync(user.GetReference()).Result?.GetRawData();
 				if (data != null) {
 					Newtonsoft.Json.Linq.JToken? jt = data.SelectToken(key);
 					string? v = jt?.ToObject<string>();
@@ -68,16 +69,17 @@ namespace RoosterBot.DiscordNet {
 			}));
 		}
 
-		private bool TryGetCompareFunc(string name, [NotNullWhen(true)] out Func<int, int, bool>? func) {
-			switch (name) {
-				case "==": func = (a, b) => a == b; return true;
-				case "!=": func = (a, b) => a != b; return true;
-				case ">" : func = (a, b) => a >  b; return true;
-				case ">=": func = (a, b) => a >= b; return true;
-				case "<" : func = (a, b) => a <  b; return true;
-				case "<=": func = (a, b) => a <= b; return true;
-				default:   func = null;             return false;
-			}
+		private static bool TryGetCompareFunc(string name, [NotNullWhen(true)] out Func<int, int, bool>? func) {
+			func = name switch {
+				"==" => (a, b) => a == b,
+				"!=" => (a, b) => a != b,
+				">"  => (a, b) => a >  b,
+				">=" => (a, b) => a >= b,
+				"<"  => (a, b) => a <  b,
+				"<=" => (a, b) => a <= b,
+				_    => null
+			};
+			return func != null;
 		}
 
 		public static RoosterCommandResult ReplyList(DiscordCommandContext context, IEnumerable<DiscordUser> users) {

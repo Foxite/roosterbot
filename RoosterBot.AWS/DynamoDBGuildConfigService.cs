@@ -34,7 +34,7 @@ namespace RoosterBot.AWS {
 
 					IEnumerable<string> disabledModules;
 					if (customData.TryGetValue("dynamodb.disabledModules", out JToken? value)) {
-						disabledModules = value.ToObject<JArray>().Select(token => token.ToObject<string>()).WhereNotNull();
+						disabledModules = value.ToObject<JArray>()!.Select(token => token.ToObject<string>()).WhereNotNull();
 					} else {
 						disabledModules = Array.Empty<string>();
 					}

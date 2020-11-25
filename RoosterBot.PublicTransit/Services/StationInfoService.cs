@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfoService {
@@ -9,31 +8,18 @@ namespace RoosterBot.PublicTransit {
 
 		public StationInfo DefaultDeparture { get; private set; }
 
-#pragma warning disable CS8618
-		// Non-nullable field is uninitialized. Consider declaring as nullable.
-		// This warning is incorrect, see bug report: https://github.com/dotnet/roslyn/issues/39740
-		// The constructor will throw if DefaultDeparture ends up uninitialized, but the compiler doesn't know that.
-		public StationInfoService(string stationXmlPath, string defaultDepartureCode) {
-#pragma warning restore CS8618
-			Logger.Info("StationInfoService", "Loading stations xml");
+		public StationInfoService(string stationFilePath, string defaultDepartureCode) {
+			Logger.Info("StationInfoService", "Loading stations file");
 
 			m_Stations = new List<StationInfo>();
 
-			var xml = XElement.Load(stationXmlPath);
+			// TODO read data from (probably json) file
+			// Assign DefaultDeparture to the first station you find in the file with the given code
 			
-			foreach (XElement xStation in xml.Elements()) {
-				var station = new StationInfo(xStation);
-				m_Stations.Add(station);
-
-				if (station.Code == defaultDepartureCode) {
-					DefaultDeparture = station;
-				}
-			}
-
 			if (DefaultDeparture == null) {
-				throw new InvalidOperationException("No station matching the default departure code was found in the xml file.");
+				throw new InvalidOperationException("No station matching the default departure code was found in the stations file.");
 			}
-			Logger.Info("StationInfoService", "Finished loading stations xml");
+			Logger.Info("StationInfoService", "Finished loading stations file");
 		}
 
 		public StationInfo? GetByCode(string code) {

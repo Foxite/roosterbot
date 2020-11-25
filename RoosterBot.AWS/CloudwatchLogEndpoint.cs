@@ -34,7 +34,7 @@ namespace RoosterBot.AWS {
 
 			LogGroup existingGroup = (await logClient.DescribeLogGroupsAsync(new DescribeLogGroupsRequest() {
 				LogGroupNamePrefix = "RoosterBot"
-			})).LogGroups.FirstOrDefault();
+			})).LogGroups.First(); // TODO chicken egg problem
 
 			await logClient.CreateLogStreamAsync(new CreateLogStreamRequest(existingGroup.LogGroupName, logStreamName));
 
@@ -42,7 +42,7 @@ namespace RoosterBot.AWS {
 		}
 
 		public override void Log(LogMessage message) {
-			string logString = $"[{message.Level.ToString()}] {message.Tag} : {message.Message}";
+			string logString = $"[{message.Level}] {message.Tag} : {message.Message}";
 
 			if (message.Exception != null) {
 				logString += "\n" + message.Exception.ToStringDemystified();

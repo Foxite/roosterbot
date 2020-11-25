@@ -11,7 +11,7 @@ namespace RoosterBot.PublicTransit {
 			StationInfoService sis = context.ServiceProvider.GetRequiredService<StationInfoService>();
 			RoosterTypeParserResult<StationInfo> result;
 			if (input.StartsWith("$")) {
-				StationInfo? lookupResult = sis.GetByCode(input.Substring(1));
+				StationInfo? lookupResult = sis.GetByCode(input[1..]);
 				if (lookupResult != null) {
 					result = Successful(lookupResult);
 				} else {

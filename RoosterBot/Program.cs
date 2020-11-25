@@ -51,7 +51,7 @@ namespace RoosterBot {
 			}
 
 			try {
-				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
+				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!, args[0]);
 
 				ConsoleHost.Start();
 

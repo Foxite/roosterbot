@@ -31,9 +31,5 @@ namespace RoosterBot.PublicTransit {
 
 			commandService.AddModule<PTModule>();
 		}
-
-		protected override void Dispose(bool disposing) {
-			m_NSAPI?.Dispose();
-		}
 	}
 }

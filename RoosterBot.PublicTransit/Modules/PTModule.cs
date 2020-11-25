@@ -21,7 +21,7 @@ namespace RoosterBot.PublicTransit {
 				stationTo = stops[0];
 			}
 
-			Journey[] journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
+			IList<Journey> journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
 
 			var result = new CompoundResult("\n", new TextResult(null, $"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName}:"));
 

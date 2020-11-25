@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfo : IEquatable<StationInfo> {
@@ -17,28 +16,7 @@ namespace RoosterBot.PublicTransit {
 
 		private IEnumerable<string> Names => Synonyms.Concat(new[] { ShortName, MidName, LongName }.WhereNotNull());
 
-		internal StationInfo(XElement xmlStation) {
-			Code = xmlStation.Element(XName.Get("Code")).Value;
-			IEnumerable<XElement> names =
-				from name in xmlStation.Element(XName.Get("Namen")).Elements()
-				select name;
-
-			string? getXmlName(string identifier) {
-				return names.SingleOrDefault(element => element.Name == identifier)?.Value;
-			}
-			
-			ShortName = getXmlName("Kort");
-			MidName = getXmlName("Middel");
-			LongName = getXmlName("Lang");
-
-			XElement synos = xmlStation.Element(XName.Get("Synoniemen"));
-			if (synos == null) {
-				Synonyms = new List<string>().AsReadOnly();
-			} else {
-				Synonyms = (from syno in synos.Elements()
-							select syno.Value).ToList().AsReadOnly();
-			}
-		}
+		public StationInfo() => throw new NotImplementedException();
 
 		/// <summary>
 		/// Lower return value means better score.
