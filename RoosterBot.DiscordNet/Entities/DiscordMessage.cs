@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordMessage : IMessage {
@@ -11,6 +12,7 @@ namespace RoosterBot.DiscordNet {
 		public IChannel Channel => new DiscordChannel(DiscordEntity.Channel);
 		public IUser User => new DiscordUser(DiscordEntity.Author);
 		public string Content => UpsideDown ? DiscordEntity.Content.UpsideDown() : DiscordEntity.Content;
+		public DateTimeOffset SentAt => DiscordEntity.EditedTimestamp ?? DiscordEntity.CreatedAt;
 
 		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
 
