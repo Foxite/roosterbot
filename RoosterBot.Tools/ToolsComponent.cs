@@ -52,6 +52,7 @@ namespace RoosterBot.Tools {
 			commandService.AddModule<MotivationModule>();
 			commandService.AddModule<StrawpollModule>();
 			commandService.AddModule<YoutubeModule>();
+			commandService.AddModule<PingModule>();
 		}
 
 		protected override void Dispose(bool disposing) {
