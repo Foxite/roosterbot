@@ -119,15 +119,21 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 		#endregion
-
+		
 		#region Steal (create from other message)
 		[Command("steal")]
 		public async Task<CommandResult> StealEmote() {
-			IUserMessage? message = await GetMessageBeforeCommand();
-			if (message != null) {
-				return await StealEmote(message);
+			if (Context.Message.ReferencedMessage != null) {
+				// If this ever throws a StackOverflowException, the person who caused it will be eligible for a free Mars bar,
+				// offer expires one hour before the error occured.
+				return await StealEmote(Context.Message.ReferencedMessage);
 			} else {
-				return TextResult.Error("Could not get message before your command.");
+				IUserMessage? message = await GetMessageBeforeCommand();
+				if (message != null) {
+					return await StealEmote(message);
+				} else {
+					return TextResult.Error("Could not get message before your command.");
+				}
 			}
 		}
 
