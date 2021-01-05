@@ -15,7 +15,7 @@ namespace RoosterBot.GLU {
 		private bool m_SkipPastRecords;
 		private int m_RepeatRecords;
 		private bool m_ExpandActivites;
-		private string m_ICalLink;
+		private string? m_ICalLink;
 
 		public static Version Version => new Version(1, 3, 0);
 		public override Version ComponentVersion => Version;
@@ -25,7 +25,6 @@ namespace RoosterBot.GLU {
 			m_Schedules = new List<ScheduleRegistryInfo>();
 			m_AllowedChannels = Array.Empty<SnowflakeReference>();
 			m_StaffMemberPath = "";
-			m_ICalLink = "";
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
@@ -53,7 +52,7 @@ namespace RoosterBot.GLU {
 				where !(platform is null)
 				select new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(uncheckedSR.Id))
 			).ToArray();
-			m_ICalLink = config.ICalLink;
+			m_ICalLink = string.IsNullOrWhiteSpace(config.ICalLink) ? null : config.ICalLink;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
@@ -85,14 +84,16 @@ namespace RoosterBot.GLU {
 			ScheduleService scheduleService = services.GetRequiredService<ScheduleService>();
 			StaffMemberService staffMembers = services.GetService<StaffMemberService>();
 
-			scheduleService.RegisterProvider(
-				typeof(StudentSetInfo),
-				new MemoryScheduleProvider(
-					"test",
-					new MyTimetableScheduleReader(m_ICalLink, staffMembers, m_AllowedChannels[0]),
-					m_AllowedChannels
-				)
-			);
+			if (m_ICalLink is not null) {
+				scheduleService.RegisterProvider(
+					typeof(StudentSetInfo),
+					new MemoryScheduleProvider(
+						"GLU-ICal",
+						new MyTimetableScheduleReader(m_ICalLink, staffMembers, m_AllowedChannels[0]),
+						m_AllowedChannels
+					)
+				);
+			}
 
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
 				scheduleService.RegisterProvider(
