@@ -2,6 +2,7 @@
 using Qmmands;
 
 namespace RoosterBot.Tools {
+	[HiddenFromList]
 	public class PingModule : RoosterModule {
 		[Command("ping"), IgnoresExtraArguments]
 		public RoosterCommandResult Ping() {
