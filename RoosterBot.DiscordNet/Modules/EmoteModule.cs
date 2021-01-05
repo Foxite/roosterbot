@@ -45,6 +45,7 @@ namespace RoosterBot.DiscordNet {
 			return Regex.Matches(text, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)")
 				.Select(match => Emote.TryParse(match.Captures[0].Value, out Emote ret) ? ret : null)
 				.WhereNotNull()
+				.DistinctBy(emote => emote.Id)
 				.ToList();
 		}
 
