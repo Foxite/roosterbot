@@ -126,8 +126,14 @@ namespace RoosterBot {
 				}
 				if (Result is RoosterCheckResult rcr) {
 					Component? component = Program.Instance.Components.GetComponentFromAssembly(Check.GetType().Assembly);
-					response += context.GetString("CommandHandling_ParamCheckFailed", paramCheck.Parameter.Name,
-						Resources.ResolveString(context.Culture, component, Result.Reason));
+					response += context.GetString(
+						"CommandHandling_ParamCheckFailed",
+						paramCheck.Parameter.Name,
+						string.Format(
+							Resources.ResolveString(context.Culture, component, Result.Reason),
+							rcr.ErrorReasonObjects.ToArray()
+						)
+					);
 				} else {
 					response += Result.Reason;
 				}

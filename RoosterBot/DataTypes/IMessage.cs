@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace RoosterBot {
 	/// <summary>
@@ -19,6 +20,11 @@ namespace RoosterBot {
 		/// The content of the message.
 		/// </summary>
 		string Content { get; }
+		
+		/// <summary>
+		/// The exact time at which the message was sent by the client, or alternatively when it was received by the PlatformComponent.
+		/// </summary>
+		DateTimeOffset SentAt { get; }
 
 		/// <summary>
 		/// Delete the message.

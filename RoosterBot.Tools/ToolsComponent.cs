@@ -9,8 +9,7 @@ namespace RoosterBot.Tools {
 
 		private InspirobotProvider? m_Inspirobot;
 
-		public override Version ComponentVersion => new Version(1, 1, 0);
-
+		public override Version ComponentVersion => new Version(1, 1, 1);
 		public string PathToFFMPEG { get; private set; } = null!;
 
 		public ToolsComponent() {
@@ -26,7 +25,6 @@ namespace RoosterBot.Tools {
 			PathToFFMPEG = config.PathToFFMPEG;
 
 			services.AddSingleton<YoutubeClient>();
-			//services.AddSingleton(isp => new YoutubeConverter(isp.GetRequiredService<YoutubeClient>(), config.PathToFFMPEG));
 
 			services.AddSingleton(isp => {
 				var ret = new MotivationService(isp.GetRequiredService<Random>());
@@ -54,6 +52,7 @@ namespace RoosterBot.Tools {
 			commandService.AddModule<MotivationModule>();
 			commandService.AddModule<StrawpollModule>();
 			commandService.AddModule<YoutubeModule>();
+			commandService.AddModule<PingModule>();
 		}
 
 		protected override void Dispose(bool disposing) {

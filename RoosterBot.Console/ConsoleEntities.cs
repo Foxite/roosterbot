@@ -58,6 +58,8 @@ namespace RoosterBot.Console {
 		IChannel IMessage.Channel => Channel;
 		IUser IMessage.User => User;
 
+		public DateTimeOffset SentAt { get; } = DateTimeOffset.Now;
+
 		public ConsoleMessage(string content, bool sentByRoosterBot) : base((ulong) DateTime.Now.Ticks) {
 			Content = content;
 			User = sentByRoosterBot ? ConsoleComponent.Instance.ConsoleBotUser : ConsoleComponent.Instance.TheConsoleUser;

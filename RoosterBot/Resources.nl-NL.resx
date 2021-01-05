@@ -175,7 +175,7 @@
     <value>Deze command werkt alleen in een openbaar kanaal.</value>
   </data>
   <data name="CommandHandling_ParamCheckFailed" xml:space="preserve">
-    <value>Parameter {0}: {1}</value>
+    <value>{0}: {1}</value>
     <comment>0: Parameter name
 1: failure reason</comment>
   </data>
@@ -230,5 +230,14 @@
   </data>
   <data name="ModuleEnabledInChannelAttribute_Unsuccessful" xml:space="preserve">
     <value>Deze command is uitgeschakeld.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_Max" xml:space="preserve">
+    <value>Ik heb maximaal {0} parameters nodig.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_Min" xml:space="preserve">
+    <value>Ik heb minimaal {0} parameters nodig.</value>
+  </data>
+  <data name="Program_OnCommandExecuted_BadArgCount_MinMax" xml:space="preserve">
+    <value>Ik heb tussen {0} en {1} parameters nodig.</value>
   </data>
 </root>

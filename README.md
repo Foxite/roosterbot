@@ -9,4 +9,4 @@ RoosterBot is a foundation for a multi-purpose, multi-platform chat bot written 
 
 It does nothing by itself, but it loads external assemblies known as Components. Refer to the folders in this repository for more documentation on each component.
 
-Technical documentation can be found [here](https://docs.rooster.bot).
+Technical documentation can be found [here](https://rooster.bot).

@@ -47,11 +47,20 @@ namespace RoosterBot.Meta {
 			}
 		}
 
-		private bool ShouldNotHide(dynamic moduleOrCommand) => !(
-			((IEnumerable<Attribute>)  moduleOrCommand.Attributes).OfType<HiddenFromListAttribute>().Any() ||
-			((IEnumerable<Attribute>)  moduleOrCommand.Attributes).OfType<GlobalLocalizationsAttribute>().Any() ||
-			((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).OfType<RequireCultureAttribute>().Any(attr => attr.Culture != Culture)
-		);
+		private bool ShouldNotHide(dynamic moduleOrCommand) {
+			var hiddenFromList = ((IEnumerable<Attribute>) moduleOrCommand.Attributes).OfType<HiddenFromListAttribute>();
+
+			// If the module/command has a HiddenFromListAttribute that explicitly allows the current culture, ignore the other rules.
+			if (hiddenFromList.Any(attr => attr.VisibleInCultures.Contains(Culture))) {
+				return true;
+			}
+
+			// Otherwise, hide this item if it has a HiddenFromListAttribute (that does not contain the current culture), or a RequireCultureAttribute that does not match the current culture.
+			return !(
+				hiddenFromList.Any() ||
+				((IEnumerable<CheckAttribute>) moduleOrCommand.Checks).OfType<RequireCultureAttribute>().Any(attr => attr.Culture != Culture)
+			);
+		}
 
 		private IEnumerable<Command> GetCommands(string category) =>
 			from module in CmdService.GetAllModules(Context.Culture)

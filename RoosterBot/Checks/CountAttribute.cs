@@ -32,10 +32,18 @@ namespace RoosterBot {
 		protected override ValueTask<RoosterCheckResult> CheckAsync(object value, RoosterCommandContext context) {
 			if (value.GetType().IsArray) {
 				int length = ((Array) value).Length;
-				if (length >= Min && length <= Max) {
+				if ((Min < 0 || length >= Min) && (Max < 0 || length <= Max)) {
 					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.Successful);
 				} else {
-					return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("Program_OnCommandExecuted_BadArgCount"));
+					if (Min > 0 && Max > 0) {
+						return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_BadArgCount_MinMax", Min, Max));
+					} else if (Min > 0) {
+						return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_BadArgCount_Min", Min));
+					} else if (Max > 0) {
+						return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("#Program_OnCommandExecuted_BadArgCount_Max", Max));
+					} else {
+						return new ValueTask<RoosterCheckResult>(RoosterCheckResult.UnsuccessfulBuiltIn("If you see this, you may slap the developer."));
+					}
 				}
 			} else {
 				throw new InvalidOperationException("CountAttribute can only be used on array parameters.");

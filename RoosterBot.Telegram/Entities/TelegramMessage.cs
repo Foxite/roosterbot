@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using File = System.IO.File;
@@ -13,6 +14,7 @@ namespace RoosterBot.Telegram {
 		public string Content => TelegramEntity.Text;
 
 		object ISnowflake.Id => Id;
+		public DateTimeOffset SentAt => TelegramEntity.EditDate ?? TelegramEntity.ForwardDate ?? TelegramEntity.Date;
 
 		public TelegramMessage(Message telegramEntity) {
 			TelegramEntity = telegramEntity;

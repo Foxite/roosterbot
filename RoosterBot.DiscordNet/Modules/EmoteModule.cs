@@ -19,8 +19,8 @@ namespace RoosterBot.DiscordNet {
 				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 			}
 
-			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !isAnimated) < 50;
-			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => isAnimated) < 50;
+			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !emote.Animated) < 50;
+			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => emote.Animated) < 50;
 
 			return m_StorageGuilds.FirstOrDefault(isAnimated ? (Func<IGuild, bool>) canStoreAnimatedEmote : canStoreStaticEmote);
 		}
@@ -45,6 +45,7 @@ namespace RoosterBot.DiscordNet {
 			return Regex.Matches(text, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)")
 				.Select(match => Emote.TryParse(match.Captures[0].Value, out Emote ret) ? ret : null)
 				.WhereNotNull()
+				.DistinctBy(emote => emote.Id)
 				.ToList();
 		}
 
@@ -64,9 +65,9 @@ namespace RoosterBot.DiscordNet {
 				IGuild? guild = null;
 				foreach (EmoteCreationData emote in emotes) {
 					string extension = Path.GetExtension(emote.Url);
-					guild = GetStorageGuild(extension == "gif");
+					guild = GetStorageGuild(extension == ".gif");
 					if (guild == null) {
-						(FailureReason OutOfSpace, bool) key = (FailureReason.OutOfSpace, extension == "gif");
+						(FailureReason OutOfSpace, bool) key = (FailureReason.OutOfSpace, extension == ".gif");
 						if (fails.ContainsKey(key)) {
 							fails[key]++;
 						} else {
@@ -99,7 +100,7 @@ namespace RoosterBot.DiscordNet {
 					response += $"\n- {info.Value} {(info.Key.Animated ? "animated" : "static")} emote(s) because " +
 						info.Key.reason switch {
 							FailureReason.InvalidFormat => "of an unsupported format",
-							FailureReason.OutOfSpace => "because we're out of space",
+							FailureReason.OutOfSpace => "we're out of space",
 							_ => info.Key.reason.ToString()
 						};
 				}
@@ -119,19 +120,25 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 		#endregion
-
+		
 		#region Steal (create from other message)
 		[Command("steal")]
 		public async Task<CommandResult> StealEmote() {
-			IUserMessage? message = await GetMessageBeforeCommand();
-			if (message != null) {
-				return await StealEmote(message);
+			if (Context.Message.ReferencedMessage != null) {
+				// If this ever throws a StackOverflowException, the person who caused it will be eligible for a free Mars bar,
+				// offer expires one hour before the error occured.
+				return await StealEmote(Context.Message.ReferencedMessage);
 			} else {
-				return TextResult.Error("Could not get message before your command.");
+				IUserMessage? message = await GetMessageBeforeCommand();
+				if (message != null) {
+					return await StealEmote(message);
+				} else {
+					return TextResult.Error("Could not get message before your command.");
+				}
 			}
 		}
 
-		[Command("steal"), Priority(0), RequireBotManager]
+		[Command("steal"), Priority(-1)]
 		public Task<CommandResult> StealEmote(IUserMessage message) {
 			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url));
 
@@ -155,11 +162,11 @@ namespace RoosterBot.DiscordNet {
 
 		#region Create (create from user message)
 		[Command("create from attachment"), MessageHasAttachment]
-		public Task<CommandResult> CreateEmoteFromAttachment(params string[] names) {
+		public Task<CommandResult> CreateEmoteFromAttachment([Count(1, -1)] params string[] names) {
 			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
 		}
 
-		[Command("create from url")]
+		[Command("create from url"), Priority(1)]
 		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) {
 			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString()) });
 		}
