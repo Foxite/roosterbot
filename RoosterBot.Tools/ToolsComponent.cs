@@ -9,7 +9,7 @@ namespace RoosterBot.Tools {
 
 		private InspirobotProvider? m_Inspirobot;
 
-		public override Version ComponentVersion => new Version(1, 1, 0);
+		public override Version ComponentVersion => new Version(1, 1, 1);
 		public string PathToFFMPEG { get; private set; } = null!;
 
 		public ToolsComponent() {
