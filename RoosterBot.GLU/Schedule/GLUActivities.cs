@@ -1,84 +1,63 @@
 ﻿namespace RoosterBot.GLU {
 	public static class GLUActivities {
 		public static string GetActivityFromAbbr(string abbr) {
-			switch (abbr) {
+			return abbr switch {
 				// Specific expansions
-				case "ned":
-					return "Nederlands";
-				case "eng":
-					return "Engels";
-				case "program":
-					return "Programmeren";
-				case "gamedes":
-					return "Gamedesign";
-				case "ond":
-					return "Onderneming";
-				case "k0072":
-					return "Keuzedeel (k0072)";
-				case "k0821":
-					return "Keuzedeel (k0821)";
-				case "k0901":
-					return "Keuzedeel (k0901)";
-				case "burger":
-					return "Burgerschap";
-				case "rek":
-					return "Rekenen";
-				case "vormg":
-					return "Vormgeving";
-				case "engine":
-					return "Engineering";
-				case "to":
-					return "Teamoverleg";
-				case "skc":
-					return "Studiekeuzecheck";
-				case "soll":
-					return "Solliciteren";
-				case "mastercl":
-					return "Masterclass";
+				"ned" => "Nederlands",
+				"eng" => "Engels",
+				"program" => "Programmeren",
+				"gamedes" => "Gamedesign",
+				"ond" => "Onderneming",
+				"k0072" => "Keuzedeel (k0072)",
+				"k0821" => "Keuzedeel (k0821)",
+				"k0901" => "Keuzedeel (k0901)",
+				"burger" => "Burgerschap",
+				"rek" => "Rekenen",
+				"vormg" => "Vormgeving",
+				"engine" => "Engineering",
+				"to" => "Teamoverleg",
+				"skc" => "Studiekeuzecheck",
+				"soll" => "Solliciteren",
+				"mastercl" => "Masterclass",
 
 				// Day off
-				case "studiedag":
-				case "stdag doc":
-					return "Studiedag :tada:";
+				"studiedag" or
+				"stdag doc" => "Studiedag :tada:",
 
 				// Display as abbreviation
-				case "3d":
-				case "2d":
-				case "bpv":
-				case "vb bpv":
-				case "vb pvb":
-				case "2d/3d":
-				case "slb":
-				case "avo":
-					return abbr.ToUpper();
+				"3d" or
+				"2d" or
+				"bpv" or
+				"vb bpv" or
+				"vb pvb" or
+				"2d/3d" or
+				"slb" or
+				"avo" => abbr.ToUpper(),
 
 				// Display literally
-				case "pauze":
-				case "gameaudio":
-				case "keuzedeel":
-				case "gametech":
-				case "project":
-				case "rapid":
-				case "gameplay":
-				case "taken":
-				case "stage":
-				case "examen":
-				case "animatie":
-				case "werkveld":
-				case "afstudeer":
-				case "rozosho":
-				case "rozosho-i":
-				case "twinstick":
-					return abbr[0].ToString().ToUpper() + abbr.Substring(1);
+				"pauze" or
+				"gameaudio" or
+				"keuzedeel" or
+				"gametech" or
+				"project" or
+				"rapid" or
+				"gameplay" or
+				"taken" or
+				"stage" or
+				"examen" or
+				"animatie" or
+				"werkveld" or
+				"afstudeer" or
+				"rozosho" or
+				"rozosho-i" or
+				"twinstick" => abbr[0].ToString().ToUpper() + abbr[1..],
 
 				// Special
-				case "Sinterklaas":
-					return abbr;
+				"Sinterklaas" => abbr,
 
 				// Not found
-				default:
-					return $"\"{abbr}\"";
-			}
+				_ => $"\"{abbr}\"",
+			};
 		}
 	}
 }

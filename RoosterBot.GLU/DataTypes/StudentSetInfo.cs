@@ -9,10 +9,10 @@ namespace RoosterBot.GLU {
 		public StudentSetInfo(string scheduleCode) : base(scheduleCode) { }
 
 		public override bool Matches(ScheduleRecord record) {
-			return record is GLUScheduleRecord gluRecord && gluRecord.StudentSets.Contains(this);
+			return record is GLUScheduleRecord gluRecord && (gluRecord.StudentSets.Contains(this) || gluRecord.StudentSets.Any(ssi => ssi.ScheduleCode == ScheduleCode[0..4]));
 		}
 
-		public override bool Equals(IdentifierInfo? other) => other != null && other.GetType() == GetType() && ((StudentSetInfo) other).ScheduleCode[0..3] == ScheduleCode[0..3];
-		public override int GetHashCode() => ScheduleCode[0..3].GetHashCode();
+		public override bool Equals(IdentifierInfo? other) => other is StudentSetInfo ssi && ssi.ScheduleCode.ToLower() == ScheduleCode.ToLower(); // hack to avoid reprocessing all our user's student sets (which are fully capitalized, while the schedules don't capitalize the subgroup letter)
+		public override int GetHashCode() => ScheduleCode[0..4].GetHashCode();
 	}
 }

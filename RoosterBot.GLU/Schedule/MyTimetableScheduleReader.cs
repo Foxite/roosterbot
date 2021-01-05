@@ -61,7 +61,7 @@ namespace RoosterBot.GLU {
 					evt.EndDateTime.UtcDateTime,
 					studentSets,
 					staffMember,
-					evt.Location.Value.Split(", ").ListSelect(location => new RoomInfo(location))
+					evt.Location.Value.Split(", ", StringSplitOptions.RemoveEmptyEntries).ListSelect(location => new RoomInfo(location))
 				);
 			});
 		}

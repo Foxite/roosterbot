@@ -18,7 +18,7 @@ namespace RoosterBot {
 
 			ReadOnlySpan<char> result = target;
 			while (result.StartsWith(trimString)) {
-				result = result.Slice(trimString.Length);
+				result = result[trimString.Length..];
 			}
 
 			return result;
