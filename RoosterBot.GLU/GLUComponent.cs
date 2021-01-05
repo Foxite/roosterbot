@@ -77,11 +77,20 @@ namespace RoosterBot.GLU {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commands) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
-			ScheduleService provider = services.GetRequiredService<ScheduleService>();
+			ScheduleService scheduleService = services.GetRequiredService<ScheduleService>();
 			StaffMemberService staffMembers = services.GetService<StaffMemberService>();
 
+			scheduleService.RegisterProvider(
+				typeof(StudentSetInfo),
+				new MemoryScheduleProvider(
+					"test",
+					new MyTimetableScheduleReader(@"C:\ProgramData\RoosterBot\Config\GLU\timetable_2021-01-05.ics", staffMembers,  m_AllowedChannels[0]),
+					m_AllowedChannels
+				)
+			);
+
 			foreach (ScheduleRegistryInfo sri in m_Schedules) {
-				provider.RegisterProvider(
+				scheduleService.RegisterProvider(
 					sri.IdentifierType,
 					new MemoryScheduleProvider(sri.Name,
 						new GLUScheduleReader(sri.Path, staffMembers, m_AllowedChannels[0], m_SkipPastRecords, m_RepeatRecords, m_ExpandActivites),

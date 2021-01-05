@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CsvHelper" Version="15.0.5" />
+		<PackageReference Include="EWSoftware.PDI.Data" Version="2020.11.25" />
 	</ItemGroup>
 
 	<ItemGroup>
