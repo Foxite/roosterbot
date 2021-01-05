@@ -17,7 +17,7 @@ namespace RoosterBot.GLU {
 		private bool m_ExpandActivites;
 		private string m_ICalLink;
 
-		public static Version Version => new Version(1, 2, 1);
+		public static Version Version => new Version(1, 3, 0);
 		public override Version ComponentVersion => Version;
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
