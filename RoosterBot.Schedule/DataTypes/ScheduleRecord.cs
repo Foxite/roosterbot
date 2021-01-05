@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 namespace RoosterBot.Schedule {
 	[JsonObject(MemberSerialization.OptOut, ItemTypeNameHandling = TypeNameHandling.Objects)]
 	[DebuggerDisplay("{Activity.ScheduleCode} on {Start.ToString(\"yyyy-MM-dd\")} from {Start.ToString(\"hh:mm\")} to {End.ToString(\"hh:mm\")}")]
-	public abstract record ScheduleRecord {
+	public abstract class ScheduleRecord {
 		public ActivityInfo Activity { get; }
 		public DateTime Start { get; }
-		public DateTime End { get; }
+		public DateTime End { get; set; }
 
 		/// <summary>
 		/// Used in optimizing <see cref="MemoryScheduleProvider"/>. If you don't use that provider, this will be unused.

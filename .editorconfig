@@ -249,6 +249,9 @@ dotnet_diagnostic.CA1810.severity = none
 # CA1806: Unused object creation
 dotnet_diagnostic.CA1806.severity = none
 
+# CA1822: Member can be marked static
+dotnet_diagnostic.CA1822.severity = none
+
 # Nullability
 dotnet_diagnostic.CS8600.severity = error # Converting null literal or possible null value to non-nullable type.
 dotnet_diagnostic.CS8601.severity = error # Possible null reference assignment.

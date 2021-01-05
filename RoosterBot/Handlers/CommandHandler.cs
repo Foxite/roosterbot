@@ -71,7 +71,7 @@ namespace RoosterBot {
 
 		private string HandleDisabled(RoosterCommandContext context) => context.GetString("CommandHandling_Disabled");
 		private string HandleNotFound(RoosterCommandContext context) => context.GetString("CommandHandling_NotFound", context.ChannelConfig.CommandPrefix);
-		private string HandleCooldown(RoosterCommandContext context, CommandOnCooldownResult cooldown) => context.GetString("CommandHandling_Cooldown", cooldown.Cooldowns.First().RetryAfter.ToString("c", context.Culture));
+		private string HandleCooldown(RoosterCommandContext context, CommandOnCooldownResult cooldown) => context.GetString("CommandHandling_Cooldown", cooldown.Cooldowns[0].RetryAfter.ToString("c", context.Culture));
 
 		private string HandleOverloadsFailed(RoosterCommandContext context, OverloadsFailedResult overloads) {
 			var rows = overloads.FailedOverloads.Where(kvp => !(kvp.Value is ArgumentParseFailedResult)).Select(kvp => {
