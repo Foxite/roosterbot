@@ -19,7 +19,8 @@ namespace RoosterBot.DiscordNet {
 				}
 			} else if (Uri.TryCreate(input, UriKind.Absolute, out Uri? result)) {
 				// By message link
-				if (result.GetComponents(UriComponents.Host, UriFormat.Unescaped) == "discordapp.com") {
+				string host = result.GetComponents(UriComponents.Host, UriFormat.Unescaped);
+				if (host == "discordapp.com" || host == "discord.com") {
 					string[] pathComponents = result.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped).Substring(1).Split('/');
 					if (pathComponents.Length == 4 && pathComponents[0] == "channels" &&
 						ulong.TryParse(pathComponents[1], out _) &&
