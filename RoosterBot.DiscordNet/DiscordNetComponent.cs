@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -19,6 +20,7 @@ namespace RoosterBot.DiscordNet {
 		private ActivityType m_Activity;
 		private ulong[] m_NotifyReady;
 		private ulong[] m_BotOwnerIds;
+		private readonly ManualResetEvent m_ClientReady;
 
 		public IReadOnlyList<ulong> EmoteStorageGuilds { get; private set; }
 		public BaseSocketClient Client { get; private set; } = null!;
@@ -34,6 +36,8 @@ namespace RoosterBot.DiscordNet {
 			m_BotOwnerIds = Array.Empty<ulong>();
 			m_NotifyReady = Array.Empty<ulong>();
 			EmoteStorageGuilds = Array.Empty<ulong>();
+
+			m_ClientReady = new ManualResetEvent(true);
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
@@ -145,18 +149,26 @@ namespace RoosterBot.DiscordNet {
 			foreach (var item in m_Emotes) {
 				emoteService.RegisterEmote(this, item.Key, item.Value);
 			}
-			
+		}
+
+		protected override void AddHandlers(IServiceProvider services, RoosterCommandService commandService) {
 			new DiscordNotificationHandler(services.GetRequiredService<NotificationService>());
 			new MessageReceivedHandler    (services);
 			new MessageUpdatedHandler     (services);
 			new MessageDeletedHandler     (services);
-			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady);
+			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady, m_ClientReady);
 			new LogHandler                (Client);
+
+
 		}
 
 		protected override void Connect(IServiceProvider services) {
-			Client.LoginAsync(TokenType.Bot, m_Token).GetAwaiter().GetResult();
-			Client.StartAsync().GetAwaiter().GetResult();
+			Task.Run(async () => {
+				m_ClientReady.Reset();
+				await Client.LoginAsync(TokenType.Bot, m_Token);
+				await Client.StartAsync();
+				m_ClientReady.WaitOne();
+			}).GetAwaiter().GetResult();
 		}
 
 		protected override void Disconnect() {

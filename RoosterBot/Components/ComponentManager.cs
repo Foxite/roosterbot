@@ -39,6 +39,8 @@ namespace RoosterBot {
 			CheckDependencies(m_Components);
 			IServiceProvider services = AddComponentServices(serviceCollection);
 			AddComponentModules(services);
+			AddComponentHandlers(services);
+			
 			Logger.Info("ComponentManager", "Components ready");
 			ConnectPlatforms(services);
 			return services;
@@ -144,6 +146,19 @@ namespace RoosterBot {
 					component.AddModulesInternal(services, commands);
 				} catch (Exception ex) {
 					throw new InvalidOperationException("Component " + component.Name + " threw an exception during AddModules.", ex);
+				}
+			}
+		}
+
+		private void AddComponentHandlers(IServiceProvider services) {
+			RoosterCommandService commands = services.GetRequiredService<RoosterCommandService>();
+
+			foreach (Component component in m_Components) {
+				Logger.Debug("ComponentManager", "Adding handlers from " + component.Name);
+				try {
+					component.AddHandlersInternal(services, commands);
+				} catch (Exception ex) {
+					throw new InvalidOperationException("Component " + component.Name + " threw an exception during AddHandlers.", ex);
 				}
 			}
 		}

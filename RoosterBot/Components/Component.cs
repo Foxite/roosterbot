@@ -41,6 +41,7 @@ namespace RoosterBot {
 
 		/// <summary>
 		/// Add your services to the global <see cref="IServiceProvider"/>.
+		/// This function is called after all components have been constructed.
 		/// </summary>
 		/// <param name="services">The <see cref="IServiceCollection"/> that will be used to create the global <see cref="IServiceProvider"/>.</param>
 		/// <param name="configPath">The path to your config folder.</param>
@@ -48,11 +49,20 @@ namespace RoosterBot {
 
 		/// <summary>
 		/// Add your modules to the <see cref="RoosterCommandService"/>.
+		/// This function is called after all components have had <see cref="AddServices(IServiceCollection, string)"/> called.
 		/// </summary>
 		protected virtual void AddModules(IServiceProvider services, RoosterCommandService commandService) { }
 
+		/// <summary>
+		/// Create your handlers and do all the work that requires that all modules have been registered.
+		/// This function is called after all components have had <see cref="AddModules(IServiceProvider, RoosterCommandService)"/> called and all <see cref="PlatformComponent"/>s have been connected.
+		/// </summary>
+		protected virtual void AddHandlers(IServiceProvider services, RoosterCommandService commandService) { }
+
 		internal void AddServicesInternal(IServiceCollection services, string configPath) => AddServices(services, configPath);
 		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService) => AddModules(services, commandService);
+		internal void AddHandlersInternal(IServiceProvider services, RoosterCommandService commandService) => AddHandlers(services, commandService);
+		
 		
 		#region IDisposable Support
 		/// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -11,16 +12,19 @@ namespace RoosterBot.DiscordNet {
 		private readonly string m_GameString;
 		private readonly ActivityType m_ActivityType;
 		private readonly ulong[] m_NotifyReady;
+		private readonly ManualResetEvent m_MRE;
 
-		public ReadyHandler(string gameString, ActivityType activityType, ulong[] notifyReady) {
+		public ReadyHandler(string gameString, ActivityType activityType, ulong[] notifyReady, ManualResetEvent clientReady) {
 			Client.Ready += OnClientReady;
 
 			m_GameString = gameString;
 			m_ActivityType = activityType;
 			m_NotifyReady = notifyReady;
+			m_MRE = clientReady;
 		}
 
 		private async Task OnClientReady() {
+			m_MRE.Set();
 			await Client.SetGameAsync(m_GameString, type: m_ActivityType);
 			Logger.Info("Discord", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
