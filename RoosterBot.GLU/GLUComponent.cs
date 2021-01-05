@@ -15,7 +15,7 @@ namespace RoosterBot.GLU {
 		private bool m_SkipPastRecords;
 		private int m_RepeatRecords;
 		private bool m_ExpandActivites;
-		private string m_MTTSessionId; // Unfortunately, MyTimetable isn't written by a robotic TV personality.
+		private string m_ICalLink;
 
 		public static Version Version => new Version(1, 2, 1);
 		public override Version ComponentVersion => Version;
@@ -25,7 +25,7 @@ namespace RoosterBot.GLU {
 			m_Schedules = new List<ScheduleRegistryInfo>();
 			m_AllowedChannels = Array.Empty<SnowflakeReference>();
 			m_StaffMemberPath = "";
-			m_MTTSessionId = "";
+			m_ICalLink = "";
 		}
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
@@ -41,7 +41,7 @@ namespace RoosterBot.GLU {
 					}
 				},
 				ExpandActivites = true,
-				MTTSessionId = ""
+				ICalLink = ""
 			});
 
 			m_SkipPastRecords = config.SkipPastRecords;
@@ -53,7 +53,7 @@ namespace RoosterBot.GLU {
 				where !(platform is null)
 				select new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(uncheckedSR.Id))
 			).ToArray();
-			m_MTTSessionId = config.MTTSessionId;
+			m_ICalLink = config.ICalLink;
 
 			void addSchedule<T>(string name) where T : IdentifierInfo {
 				m_Schedules.Add(new ScheduleRegistryInfo(typeof(T), name, Path.Combine(configPath, config.Schedules[name])));
@@ -89,7 +89,7 @@ namespace RoosterBot.GLU {
 				typeof(StudentSetInfo),
 				new MemoryScheduleProvider(
 					"test",
-					new MyTimetableScheduleReader(m_MTTSessionId, staffMembers, m_AllowedChannels[0]),
+					new MyTimetableScheduleReader(m_ICalLink, staffMembers, m_AllowedChannels[0]),
 					m_AllowedChannels
 				)
 			);

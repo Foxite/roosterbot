@@ -8,29 +8,24 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	public class MyTimetableScheduleReader : ScheduleReader {
-		private readonly string m_SessionToken;
+		private readonly string m_ICalLink;
 		private readonly StaffMemberService m_StaffMembers;
 		private readonly SnowflakeReference m_StaffMemberChannel;
 
-		public MyTimetableScheduleReader(string mttSessionToken, StaffMemberService staffMembers, SnowflakeReference staffMemberChannel) {
-			m_SessionToken = mttSessionToken;
+		public MyTimetableScheduleReader(string icalLink, StaffMemberService staffMembers, SnowflakeReference staffMemberChannel) {
+			m_ICalLink = icalLink;
 			m_StaffMembers = staffMembers;
 			m_StaffMemberChannel = staffMemberChannel;
 		}
 
 		public override IReadOnlyList<ScheduleRecord> GetSchedule() {
-			var cookieContainer = new CookieContainer();
-			cookieContainer.Add(new Uri("https://rooster.glu.nl"), new Cookie("JSESSIONID", m_SessionToken));
-			cookieContainer.Add(new Uri("https://rooster.glu.nl"), new Cookie("zoneview", "false"));
-
-			using var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-			using var client = new HttpClient(handler);
+			using var client = new HttpClient();
 			client.DefaultRequestHeaders.Add("User-Agent", $"RoosterBot.GLU/{Program.Version}-{GLUComponent.Version}");
 
 			DateTime startDate = DateTime.Today - TimeSpan.FromDays(14);
 			DateTime endDate = DateTime.Today + TimeSpan.FromDays(60);
-			string icsUrl = $"https://rooster.glu.nl/export?format=ICAL&locale=en_GB&group=true&startDate={startDate.Year}-{startDate.Month:00}-{startDate.Day:00}&endDate={endDate.Year}-{endDate.Month:00}-{endDate.Day:00}";
-			using Stream downloadStream = client.GetStreamAsync(icsUrl).GetAwaiter().GetResult();
+
+			using Stream downloadStream = client.GetStreamAsync(m_ICalLink).GetAwaiter().GetResult();
 			using var sr = new StreamReader(downloadStream);
 
 			var calParser = new EWSoftware.PDI.Parser.VCalendarParser();
