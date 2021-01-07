@@ -62,8 +62,8 @@ namespace RoosterBot.DiscordNet {
 			string? description = null;
 			int colonIndex = title.IndexOf(':');
 			if (colonIndex != -1) {
-				title = title.Substring(0, colonIndex);
-				description = title.Substring(colonIndex + 1).Trim();
+				title = title[0..colonIndex];
+				description = title[(colonIndex + 1)..].Trim();
 			}
 
 			return new EmbedBuilder() {

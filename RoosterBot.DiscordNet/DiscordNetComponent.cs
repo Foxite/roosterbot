@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +26,9 @@ namespace RoosterBot.DiscordNet {
 		public IReadOnlyList<SocketUser> BotAdmins => BotAdminIds.ListSelect(id => Client.GetUser(id));
 
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(1, 2, 0);
+		public override Version ComponentVersion => new Version(1, 2, 2);
 
+		public override Type SnowflakeIdType => typeof(ulong);
 
 		public DiscordNetComponent() {
 			Instance = this;
@@ -151,6 +151,7 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler    (services);
 			new MessageUpdatedHandler     (services);
 			new MessageDeletedHandler     (services);
+			new VoteToPinHandler          (services);
 			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady);
 			new LogHandler                (Client);
 		}

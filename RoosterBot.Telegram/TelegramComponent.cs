@@ -15,6 +15,8 @@ namespace RoosterBot.Telegram {
 
 		public static TelegramComponent Instance { get; private set; } = null!;
 
+		public override Type SnowflakeIdType => typeof(long);
+
 		public TelegramComponent() {
 			Instance = this;
 		}

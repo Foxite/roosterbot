@@ -29,13 +29,13 @@ namespace RoosterBot.DiscordNet {
 						if (DiscordUtil.IsMessageCommand(dum.Content, guildConfig.CommandPrefix, out int argPos)) {
 							UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
 							await dum.Channel.TriggerTypingAsync();
-							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig, false));
+							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content[argPos..], new DiscordCommandContext(m_ISP, new DiscordMessage(dum), userConfig, guildConfig, false));
 						} else {
 							string udContent = dum.Content.UpsideDown();
 							if (DiscordUtil.IsMessageCommand(udContent, guildConfig.CommandPrefix, out argPos)) {
 								UserConfig userConfig = await m_UCS.GetConfigAsync(new DiscordUser(dum.Author).GetReference());
 								await dum.Channel.TriggerTypingAsync();
-								await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.UpsideDown().Substring(argPos), new DiscordCommandContext(m_ISP, new DiscordMessage(dum, true), userConfig, guildConfig, true));
+								await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content.UpsideDown()[argPos..], new DiscordCommandContext(m_ISP, new DiscordMessage(dum, true), userConfig, guildConfig, true));
 							}
 						}
 					} catch (Exception e) {

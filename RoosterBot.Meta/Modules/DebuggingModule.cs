@@ -20,7 +20,7 @@ namespace RoosterBot.Meta {
 		}
 
 		[Command("channelconfig")]
-		public async Task<CommandResult> ShowUserConfig(IChannel channel) {
+		public async Task<CommandResult> ShowChannelConfig(IChannel channel) {
 			ChannelConfig config;
 			if (channel.Platform.Name == Context.Platform.Name && channel.Id == Context.Channel.Id) {
 				config = Context.ChannelConfig;
@@ -29,6 +29,11 @@ namespace RoosterBot.Meta {
 			}
 
 			return TextResult.Info(config.GetRawData().ToString());
+		}
+
+		[Command("channelconfig")]
+		public CommandResult ShowChannelConfig() {
+			return TextResult.Info(Context.ChannelConfig.GetRawData().ToString());
 		}
 	}
 }

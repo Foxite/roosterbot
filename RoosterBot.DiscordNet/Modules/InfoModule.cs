@@ -1,4 +1,5 @@
-﻿using Qmmands;
+﻿using System.Linq;
+using Qmmands;
 
 namespace RoosterBot.DiscordNet {
 	[Name("#InfoModule_Name")]
