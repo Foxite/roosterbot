@@ -18,7 +18,7 @@ namespace RoosterBot {
 
 		private async Task HandleError(CommandExecutionFailedEventArgs args) {
 			if (args.Context is RoosterCommandContext rcc) {
-				string report = $"{rcc.ToString()}\nException during {args.Result.CommandExecutionStep.ToString()}";
+				string report = $"{rcc}\nException during {args.Result.CommandExecutionStep}";
 				Logger.Error("CommandException", report, args.Result.Exception);
 				await Notification.AddNotificationAsync(report + "\n" + args.Result.Exception.ToStringDemystified());
 				await rcc.RespondAsync(TextResult.Error(Resources.GetString(rcc.Culture, "CommandHandling_FatalError")));
