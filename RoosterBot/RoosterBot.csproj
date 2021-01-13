@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Ben.Demystifier" Version="0.1.6" />
-		<PackageReference Include="Foxite.Common" Version="1.1.0" />
+		<PackageReference Include="Foxite.Common" Version="1.1.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.7" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
