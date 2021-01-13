@@ -26,7 +26,7 @@ namespace RoosterBot.DiscordNet {
 		public IReadOnlyList<SocketUser> BotAdmins => BotAdminIds.ListSelect(id => Client.GetUser(id));
 
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(1, 2, 2);
+		public override Version ComponentVersion => new Version(1, 3, 0);
 
 		public override Type SnowflakeIdType => typeof(ulong);
 
