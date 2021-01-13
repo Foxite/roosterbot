@@ -50,7 +50,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private enum FailureReason {
-			OutOfSpace, InvalidFormat
+			OutOfSpace, InvalidFormat, OversizedEmote
 		}
 
 		private async Task<CommandResult> CreateEmotes(IEnumerable<EmoteCreationData> emotes) {
@@ -77,6 +77,17 @@ namespace RoosterBot.DiscordNet {
 					}
 
 					byte[] emoteBytes = await webClient.DownloadDataTaskAsync(emote.Url);
+
+					if (emoteBytes.Length >= 1024 * 256) {
+						(FailureReason OversizedEmote, bool) key = (FailureReason.OversizedEmote, extension == ".gif");
+						if (fails.ContainsKey(key)) {
+							fails[key]++;
+						} else {
+							fails[key] = 1;
+						}
+						continue;
+					}
+
 					if (createEmote != null) {
 						stolenEmote = await createEmote;
 						successfulEmotes.Add(stolenEmote);
@@ -101,6 +112,7 @@ namespace RoosterBot.DiscordNet {
 						info.Key.reason switch {
 							FailureReason.InvalidFormat => "of an unsupported format",
 							FailureReason.OutOfSpace => "we're out of space",
+							FailureReason.OversizedEmote => "the emote is too big",
 							_ => info.Key.reason.ToString()
 						};
 				}
