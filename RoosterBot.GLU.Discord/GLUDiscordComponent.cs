@@ -16,8 +16,7 @@ namespace RoosterBot.GLU.Discord {
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
-			commandService.AddModule<GLUModule>();
-			commandService.AddModule<OnlineClassesModule>();
+			commandService.AddAllModules();
 
 			new RoleAssignmentHandler();
 			new ManualRanksHintHandler();

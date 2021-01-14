@@ -117,7 +117,7 @@ namespace RoosterBot.GLU {
 			identifierReaders.AddParser(new StaffMemberInfoParser());
 			identifierReaders.AddParser(new RoomInfoParser());
 
-			commands.AddModule<StaffMemberModule>();
+			commands.AddAllModules();
 		}
 
 		private class GLUIdentifierValidator : IdentifierValidator {

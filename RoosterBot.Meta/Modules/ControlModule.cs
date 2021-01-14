@@ -3,7 +3,6 @@ using Qmmands;
 
 namespace RoosterBot.Meta {
 	[HiddenFromList]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Command system cannot use static members")]
 	public class ControlModule : RoosterModule {
 		[Command("shutdown"), RequireBotManager]
 		public Task ShutdownCommand() {

@@ -52,8 +52,8 @@ namespace RoosterBot {
 							{
 								CooldownType.User => rcc.User.GetReference().ToString(),
 								CooldownType.Channel => rcc.ChannelConfig.ChannelReference.ToString(),
-								CooldownType.ModuleUser => rcc.User.GetReference().ToString() + "@" + rcc.Command.Module.FullAliases.First(),
-								CooldownType.ModuleChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + rcc.Command.Module.FullAliases.First(),
+								CooldownType.ModuleUser => rcc.User.GetReference().ToString() + "@" + rcc.Command.Module.FullAliases[0],
+								CooldownType.ModuleChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + rcc.Command.Module.FullAliases[0],
 								CooldownType.ComponentUser => rcc.User.GetReference().ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
 								CooldownType.ComponentChannel => rcc.ChannelConfig.ChannelReference.ToString() + "@" + Program.Instance.Components.GetComponentForModule(rcc.Command.Module).Name,
 								_ => type.ToString()
@@ -100,6 +100,18 @@ namespace RoosterBot {
 		}
 
 		#region AddModule and LocalizeModule
+		/// <summary>
+		/// Finds all implementations of <see cref="RoosterModule"/> in your component and adds them using <see cref="AddModule{T}(Action{ModuleBuilder}?)"/>.
+		/// You can exclude specific modules from being added by this function by marking them with <see cref="DoNotAddAttribute"/>.
+		/// </summary>
+		public IReadOnlyList<Module> AddAllModules(Action<ModuleBuilder>? postBuild = null) {
+			var ret = new List<Module>();
+			foreach (Type moduleType in System.Reflection.Assembly.GetCallingAssembly().GetTypes().Where(type => typeof(IRoosterModule).IsAssignableFrom(type) && type.GetCustomAttributes(typeof(DoNotAddAttribute), true).Length == 0)) {
+				ret.AddRange(AddModule(moduleType, postBuild));
+			}
+			return ret;
+		}
+
 		/// <summary>
 		/// Add a module.
 		/// </summary>

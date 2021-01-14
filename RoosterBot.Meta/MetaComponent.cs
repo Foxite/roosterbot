@@ -63,12 +63,7 @@ namespace RoosterBot.Meta {
 				commandService.AddModule<CommandsListModule>();
 			}
 
-			commandService.AddModule<DebuggingModule>();
-			commandService.AddModule<ControlModule>();
-			commandService.AddModule<ChannelConfigModule>();
-			commandService.AddModule<ModuleDisableModule>();
-			commandService.AddModule<UserConfigModule>();
-			commandService.AddModule<InfoModule>();
+			commandService.AddAllModules();
 
 			if (!(m_EmailSettings?.IsEmpty ?? true)) {
 				new EmailNotificationHandler(services.GetRequiredService<NotificationService>(), m_EmailSettings);

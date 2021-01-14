@@ -29,7 +29,7 @@ namespace RoosterBot.PublicTransit {
 			commandService.AddTypeParser(stationInfoReader);
 			commandService.AddTypeParser(new ArrayParser<StationInfo>(stationInfoReader));
 
-			commandService.AddModule<PTModule>();
+			commandService.AddAllModules();
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace RoosterBot.Weather {
 
 			commandService.AddTypeParser(new CityInfoParser());
 
-			commandService.AddModule<WeatherModule>();
+			commandService.AddAllModules();
 		}
 	}
 }

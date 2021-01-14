@@ -140,10 +140,8 @@ namespace RoosterBot.DiscordNet {
 			commandService.GetPlatformSpecificParser<IMessage>().RegisterParser(this, new ConversionParser<IUserMessage, IMessage>("Discord message", messageParser, discordMessage => new DiscordMessage(discordMessage)));
 			commandService.GetPlatformSpecificParser<IChannel>().RegisterParser(this, new ConversionParser<IMessageChannel, IChannel>("Discord channel", channelParser, discordChannel => new DiscordChannel(discordChannel)));
 			#endregion
-			
-			commandService.AddModule<EmoteModule>();
-			commandService.AddModule<UserListModule>();
-			commandService.AddModule<InfoModule>();
+
+			commandService.AddAllModules();
 
 			var emoteService = services.GetRequiredService<EmoteService>();
 			foreach (var item in m_Emotes) {

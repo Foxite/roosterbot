@@ -4,7 +4,7 @@ using System.Linq;
 using Qmmands;
 
 namespace RoosterBot.Meta {
-	[Name("#Meta_Name")]
+	[Name("#Meta_Name"), DoNotAdd]
 	public class CommandsListModule : RoosterModule {
 		public RoosterCommandService CmdService { get; set; } = null!;
 

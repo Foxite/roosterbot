@@ -22,8 +22,7 @@ namespace RoosterBot.Schedule {
 			var identifierReaders = new MultiParser<IdentifierInfo>(this, "#ScheduleModule_ReplyErrorMessage_UnknownIdentifier", "#IdentifierInfo_MultiReader_TypeDisplayName");
 			commandService.AddTypeParser(identifierReaders);
 
-			commandService.AddModule<ScheduleModule>();
-			commandService.AddModule<UserIdentifierModule>();
+			commandService.AddAllModules();
 		}
 	}
 }

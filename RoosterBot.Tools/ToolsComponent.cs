@@ -49,10 +49,7 @@ namespace RoosterBot.Tools {
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.Tools.Resources");
 
-			commandService.AddModule<MotivationModule>();
-			commandService.AddModule<StrawpollModule>();
-			commandService.AddModule<YoutubeModule>();
-			commandService.AddModule<PingModule>();
+			commandService.AddAllModules();
 		}
 
 		protected override void Dispose(bool disposing) {
