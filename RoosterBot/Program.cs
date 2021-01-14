@@ -23,7 +23,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The version of RoosterBot.
 		/// </summary>
-		public static readonly Version Version = new Version(3, 2, 3);
+		public static readonly Version Version = new Version(3, 2, 4);
 
 		/// <summary>
 		/// The instance of the Program class.
