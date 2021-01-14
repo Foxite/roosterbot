@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -110,6 +112,11 @@ namespace RoosterBot {
 				.AddSingleton(new EmoteService())
 				.AddSingleton(new CultureNameService(resources))
 				.AddSingleton(new Random())
+				.AddSingleton(isp => {
+					var ret = new HttpClient();
+					ret.DefaultRequestHeaders.Add("User-Agent", $"RoosterBot/{Version}");
+					return ret;
+				})
 				.AddSingleton(resources);
 		}
 
