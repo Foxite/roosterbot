@@ -22,6 +22,7 @@ namespace RoosterBot.Tools {
 
 				var streams = await Client.Videos.Streams.GetManifestAsync(id);
 				if (streams.GetAudioOnly().Any()) {
+					// Would make more sense to use a stream directly, but then I have to manually wrangle FFMPEG and I'm too lazy for that right now.
 					DirectoryInfo directory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 					string filePath = Path.Combine(Path.GetTempPath(), directory.FullName, video.Title + "." + format);
 					await Client.Videos.DownloadAsync(id, new ConversionRequest(ToolsComponent.Instance.PathToFFMPEG, filePath, new ConversionFormat(format), ConversionPreset.Slow));
@@ -29,8 +30,11 @@ namespace RoosterBot.Tools {
 					if (new FileInfo(filePath).Length > 8e6) {
 						return TextResult.Error(GetString("YoutubeModule_Convert_Fail_Filesize"));
 					} else {
-						var ret = TextResult.Success(GetString("YoutubeModule_Convert_Success", video.Title, video.Author, video.Duration.ToString("c", Culture)));
-						ret.UploadFilePath = filePath;
+						var ret = new MediaResult(
+							TextResult.Success(GetString("YoutubeModule_Convert_Success", video.Title, video.Author, video.Duration.ToString("c", Culture))).Response,
+							video.Title + "." + format,
+							() => File.OpenRead(filePath)
+						);
 						return ret;
 					}
 				} else {

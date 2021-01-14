@@ -108,9 +108,9 @@ namespace RoosterBot {
 		/// </summary>
 		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
 			if (existingResponse == null) {
-				return Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
+				return Channel.SendMessageAsync(result.ToString(this));
 			} else {
-				existingResponse.ModifyAsync(result.ToString(this), result.UploadFilePath);
+				existingResponse.ModifyAsync(result.ToString(this));
 				return Task.FromResult(existingResponse);
 			}
 		}

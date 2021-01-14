@@ -30,10 +30,14 @@ namespace RoosterBot.DiscordNet {
 				return await SendAspectList(alr, existingResponse);
 			} else if (result.Is<PaginatedResult>(out var pr)) {
 				return await SendPaginatedResult(pr, existingResponse);
+			} else if (result.Is<MediaResult>(out var mr)) {
+				using System.IO.Stream stream = mr.GetStream();
+				var message = await Channel.SendFileAsync(stream, mr.Filename, mr.Message, messageReference: Message.Reference);
+				return new DiscordMessage(message);
 			} else if (existingResponse == null) {
-				return await new DiscordChannel(Channel).SendMessageAsync(result.ToString(this).UpsideDown(UpsideDown), result.UploadFilePath);
+				return new DiscordMessage(await Channel.SendMessageAsync(result.ToString(this).UpsideDown(UpsideDown), messageReference: Message.Reference));
 			} else {
-				await existingResponse.ModifyAsync(result.ToString(this).UpsideDown(UpsideDown), result.UploadFilePath);
+				await existingResponse.ModifyAsync(result.ToString(this).UpsideDown(UpsideDown));
 				return existingResponse;
 			}
 		}
@@ -41,11 +45,7 @@ namespace RoosterBot.DiscordNet {
 		private async Task<IMessage> SendAspectList(AspectListResult alr, IMessage? existingResponse) {
 			Embed embed = AspectListToEmbedBuilder(alr).Build();
 			if (existingResponse == null) {
-				if (alr.UploadFilePath == null) {
-					return new DiscordMessage(await Channel.SendMessageAsync(embed: embed));
-				} else {
-					return new DiscordMessage(await Channel.SendFileAsync(alr.UploadFilePath, embed: embed));
-				}
+				return new DiscordMessage(await Channel.SendMessageAsync(embed: embed, messageReference: Message.Reference));
 			} else {
 				var discordResponse = (DiscordMessage) existingResponse;
 				await discordResponse.DiscordEntity.ModifyAsync(props => {
@@ -98,13 +98,13 @@ namespace RoosterBot.DiscordNet {
 				&& emoteService.TryGetEmote(DiscordNetComponent.Instance, tr.PrefixEmoteName, out IEmote? emote)
 				&& emote == emoteService.Error(DiscordNetComponent.Instance)
 			) {
-				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this).UpsideDown(UpsideDown)));
+				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this).UpsideDown(UpsideDown), messageReference: Message.Reference));
 			} else {
 				IUserMessage botMessage;
 				RoosterCommandResult initial = pr.Current;
 				if (initial is AspectListResult alr) {
 					if (existingResponse == null) {
-						botMessage = await Channel.SendMessageAsync(pr.Caption?.UpsideDown(UpsideDown), embed: AspectListToEmbedBuilder(alr).Build());
+						botMessage = await Channel.SendMessageAsync(pr.Caption?.UpsideDown(UpsideDown), embed: AspectListToEmbedBuilder(alr).Build(), messageReference: Message.Reference);
 					} else {
 						botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
 						await botMessage.ModifyAsync(props => {
@@ -118,7 +118,7 @@ namespace RoosterBot.DiscordNet {
 						text = pr.Caption.UpsideDown(UpsideDown) + "\n" + text;
 					}
 					if (existingResponse == null) {
-						botMessage = await Channel.SendMessageAsync(text);
+						botMessage = await Channel.SendMessageAsync(text, messageReference: Message.Reference);
 					} else {
 						botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
 						await botMessage.ModifyAsync(props => {
