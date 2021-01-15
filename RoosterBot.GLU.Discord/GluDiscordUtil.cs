@@ -6,6 +6,8 @@ namespace RoosterBot.GLU.Discord {
 	internal static class GluDiscordUtil {
 		private static readonly IReadOnlyDictionary<string, ulong[]> Roles;
 
+		public const ulong NewUserRank = 278937741478330389; //669257158969524244;
+
 		const ulong DevRole =
 			278587815271464970;
 			//689201635331014743;

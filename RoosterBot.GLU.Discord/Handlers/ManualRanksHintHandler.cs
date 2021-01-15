@@ -18,7 +18,7 @@ namespace RoosterBot.GLU.Discord {
 					if (normalContent.EndsWith("e jaar")) {
 						respond = true;
 					} else {
-						string manualRank = normalContent.Substring(argPos);
+						string manualRank = normalContent[argPos..];
 						if (manualRank == "developer" || manualRank == "artist") {
 							respond = true;
 						}
