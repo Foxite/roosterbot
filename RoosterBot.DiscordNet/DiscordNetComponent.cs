@@ -150,6 +150,10 @@ namespace RoosterBot.DiscordNet {
 
 			RegisterResultAdapter(new TextResultAdapter());
 			RegisterResultAdapter(new AspectListResultAdapter());
+			RegisterResultAdapter(new MediaResultAdapter());
+			RegisterResultAdapter(new TableResultAdapter());
+			// TODO: PaginatedResultAdapter
+			// I'm doing it later because PaginatedResult was actually very complicated, and I'm not refactoring the shit out of that (like I know I can't help to do) at 12:37 AM.
 		}
 
 		protected override void AddHandlers(IServiceProvider services, RoosterCommandService commandService) {

@@ -88,6 +88,7 @@ namespace RoosterBot.DiscordNet {
 					successfulEmotes.Add(stolenEmote);
 				}
 			}
+			// TODO should use bare text result with emote depending on total result
 			var result = new CompoundResult("\n");
 
 			if (successfulEmotes.Count > 0) {

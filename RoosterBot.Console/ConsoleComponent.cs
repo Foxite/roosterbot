@@ -71,7 +71,7 @@ namespace RoosterBot.Console {
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
-						/* TODO 
+						/* TODO Use console context and adapters
 						await Program.Instance.CommandHandler.ExecuteCommandAsync(consoleMessage.Content, new RoosterCommandContext(services, this, consoleMessage,
 							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
 							await ccs.GetConfigAsync(TheConsoleChannel.GetReference())

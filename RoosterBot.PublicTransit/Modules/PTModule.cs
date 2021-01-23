@@ -23,6 +23,7 @@ namespace RoosterBot.PublicTransit {
 
 			IList<Journey> journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
 
+			// TODO should use paginated table (with cached journeys in the paginator)
 			var result = new CompoundResult("\n", new TextResult(null, $"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName}:"));
 
 			foreach (Journey journey in journeys) {

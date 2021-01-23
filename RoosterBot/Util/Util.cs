@@ -40,6 +40,7 @@ namespace RoosterBot {
 		/// - A <see cref="CompoundResult"/> with only a single result which is type of <typeparamref name="T"/>, in which case <paramref name="result"/> will be set to that item.
 		/// Otherwise this will return false and <paramref name="result"/> will be set to null.
 		/// </summary>
+		[Obsolete("CompoundResult is obsolete")]
 		public static bool Is<T>(this RoosterCommandResult input, [MaybeNullWhen(false), NotNullWhen(true)] out T? result) where T : RoosterCommandResult {
 			result =                                    // Hard-to-read expression - I've laid it out here:
 				input as T ??                           // Simple, if result is T then return result as T.
@@ -60,25 +61,6 @@ namespace RoosterBot {
 		/// </summary>
 		public static KeyValuePair<TKey, TValue> ToGeneric<TKey, TValue>(this DictionaryEntry de) {
 			return new KeyValuePair<TKey, TValue>((TKey) de.Key, (TValue) de.Value!);
-		}
-
-		/// <summary>
-		/// Returns a non-generic <see cref="Task"/> that awaits a generic <see cref="Task"/>, so you can avoid making your function async.
-		/// </summary>
-		/// <example>
-		/// <code>
-		/// <![CDATA[
-		/// public override Task GetStuffDone(string data) {
-		///		// SendMessageAsync() returns Task<IMessage>;
-		///		return SendMessageAsync(data).ToTypelessTask();
-		///		// No need to make GetStuffDone() async.
-		/// }
-		/// ]]>
-		/// </code>
-		/// </example>
-		// TODO (NO PUSH) move to Foxite.Common
-		public static async Task ToTypelessTask<T>(this Task<T> task) {
-			await task;
 		}
 	}
 }

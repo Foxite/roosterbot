@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordCommandContext : RoosterCommandContext {
@@ -12,6 +10,7 @@ namespace RoosterBot.DiscordNet {
 		public new IUserMessage Message { get; }
 		public new Discord.IUser User { get; }
 		public new IMessageChannel Channel { get; }
+		public new IUserMessage? Response { get; }
 		public IGuild? Guild { get; }
 
 		public DiscordCommandContext(IServiceProvider isp, DiscordMessage message, UserConfig userConfig, ChannelConfig guildConfig)
@@ -20,6 +19,8 @@ namespace RoosterBot.DiscordNet {
 			Message = message.DiscordEntity;
 			User = Message.Author;
 			Channel = Message.Channel;
+			Response = ((DiscordMessage?) base.Response)?.DiscordEntity;
+
 			Guild = Channel is SocketGuildChannel sgc ? sgc.Guild : null;
 		}
 
@@ -27,19 +28,12 @@ namespace RoosterBot.DiscordNet {
 			return DiscordNetComponent.Instance.GetResultAdapter(this, result).First().HandleResult(this, result);
 
 			/*
-			if (result.Is<AspectListResult>(out var alr)) {
-				return await SendAspectList(alr, existingResponse);
-			} else if (result.Is<PaginatedResult>(out var pr)) {
+			if (result.Is<PaginatedResult>(out var pr)) {
 				return await SendPaginatedResult(pr, existingResponse);
 			} else if (result.Is<MediaResult>(out var mr)) {
 				using System.IO.Stream stream = mr.GetStream();
 				var message = await Channel.SendFileAsync(stream, mr.Filename, mr.Message, messageReference: Message.GetReference());
 				return new DiscordMessage(message);
-			} else if (existingResponse == null) {
-				return new DiscordMessage(await Channel.SendMessageAsync(result.ToString(this), messageReference: Message.GetReference()));
-			} else {
-				await existingResponse.ModifyAsync(result.ToString(this));
-				return existingResponse;
 			}
 		}
 

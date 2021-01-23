@@ -61,6 +61,7 @@ namespace RoosterBot.Weather {
 
 		private void Attribution() {
 			if (Weather.Attribution) {
+				// TODO use aspect list footer, then remove m_Result
 				m_Result.AddResult(new TextResult(null, GetString("WeatherComponent_Attribution")));
 			}
 		}

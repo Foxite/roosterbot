@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RoosterBot {
 	/// <summary>
 	/// Represents multiple <see cref="RoosterCommandResult"/>s that are displayed together.
 	/// </summary>
+	[Obsolete("Needing this is symptomatic of bad UI. Find a more semantic way to express your information than chaining results")]
 	public class CompoundResult : RoosterCommandResult {
 		/// <summary>
 		/// The individual results of this CompoundResult.

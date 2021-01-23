@@ -15,7 +15,7 @@ namespace RoosterBot.Telegram {
 			User = message.From;
 		}
 
-		// TODO NO PUSH
+		// TODO Use adapters
 		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result) => throw new NotImplementedException();
 	}
 }
