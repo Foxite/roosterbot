@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RoosterBot {
 	/// <summary>
@@ -35,5 +37,21 @@ namespace RoosterBot {
 		/// Get a platform-specific object that can be used as an <see cref="ISnowflake.Id"/>.
 		/// </summary>
 		public abstract object GetSnowflakeIdFromString(string input);
+
+		private readonly List<ResultAdapter> m_ResultAdapters = new();
+		
+		/// <summary>
+		/// Register a <see cref="ResultAdapter"/> for this <see cref="PlatformComponent"/> to use.
+		/// </summary>
+		public void RegisterResultAdapter(ResultAdapter adapter) {
+			m_ResultAdapters.Add(adapter);
+		}
+
+		/// <summary>
+		/// Enumerate registered <see cref="ResultAdapter"/>s that can process the given <paramref name="result"/> for the given <paramref name="context"/>.
+		/// </summary>
+		public IEnumerable<ResultAdapter> GetResultAdapter(RoosterCommandContext context, RoosterCommandResult result) {
+			return m_ResultAdapters.Where(adapter => adapter.CanHandleResult(context, result));
+		}
 	}
 }

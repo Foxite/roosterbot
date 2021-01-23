@@ -27,7 +27,7 @@ namespace RoosterBot {
 		}
 
 		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext r) => Caption + "\n" + string.Join('\n', m_Aspects.Select(item => item.Present(IncludeAspectNames)));
+		//public override string ToString(RoosterCommandContext r) => Caption + "\n" + string.Join('\n', m_Aspects.Select(item => item.Present(IncludeAspectNames)));
 
 		/// <inheritdoc/>
 		public IEnumerator<AspectListItem> GetEnumerator() => m_Aspects.GetEnumerator();

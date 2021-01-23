@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
 namespace RoosterBot.Telegram {
@@ -13,5 +14,8 @@ namespace RoosterBot.Telegram {
 			Channel = message.Chat;
 			User = message.From;
 		}
+
+		// TODO NO PUSH
+		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result) => throw new NotImplementedException();
 	}
 }

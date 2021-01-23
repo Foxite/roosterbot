@@ -23,19 +23,6 @@ namespace RoosterBot {
 			Response = response;
 		}
 
-		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext rcc) {
-			string ret = Response;
-			if (PrefixEmoteName != null) {
-				if (rcc.ServiceProvider.GetRequiredService<EmoteService>().TryGetEmote(rcc.Platform, PrefixEmoteName, out IEmote? emote)) {
-					ret = emote.ToString() + " " + ret;
-				} else {
-					Logger.Error("TextResult", "PlatformComponent " + rcc.Platform.Name + " does not define an emote named " + PrefixEmoteName + ". No emote will be used.");
-				}
-			}
-			return ret;
-		}
-
 		/// <summary>
 		/// Get a TextResult with an emote indicating success.
 		/// </summary>

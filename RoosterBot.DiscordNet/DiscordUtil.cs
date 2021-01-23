@@ -1,6 +1,8 @@
-﻿namespace RoosterBot.DiscordNet {
-	internal class DiscordUtil {
-		public static bool IsMessageCommand(string content, string prefix, out int argPos) {
+﻿using Discord;
+
+namespace RoosterBot.DiscordNet {
+	public static class DiscordUtil {
+		internal static bool IsMessageCommand(string content, string prefix, out int argPos) {
 			argPos = 0;
 			string mention = DiscordNetComponent.Instance.Client.CurrentUser.Mention;
 			if (content.StartsWith(mention)) {
@@ -29,6 +31,10 @@
 				return true;
 			}
 			return false;
+		}
+
+		public static MessageReference GetReference(this IUserMessage message) {
+			return new MessageReference(message.Id);
 		}
 	}
 }

@@ -32,9 +32,10 @@ namespace RoosterBot {
 			m_IndividualResults.Add(result);
 		}
 
+		/*
 		/// <inheritdoc/>
 		public override string ToString(RoosterCommandContext rcc) {
 			return string.Join(Separator, IndividualResults.Select(result => result.ToString(rcc)));
-		}
+		}//*/
 	}
 }

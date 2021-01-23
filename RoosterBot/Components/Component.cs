@@ -63,7 +63,6 @@ namespace RoosterBot {
 		internal void AddModulesInternal(IServiceProvider services, RoosterCommandService commandService) => AddModules(services, commandService);
 		internal void AddHandlersInternal(IServiceProvider services, RoosterCommandService commandService) => AddHandlers(services, commandService);
 		
-		
 		#region IDisposable Support
 		/// <summary>
 		/// Called when RoosterBot shuts down.

@@ -49,25 +49,5 @@ namespace RoosterBot {
 			@"68𝘓95ߤ↋↊⇂[]{}<>()\/ʻ.╻¿¡ʎʍʌnʇɹbdouɯʅʞɾᴉɥƃⅎǝpɔqɐ".Reverse().Zip(
 			@"abcdefghijklmnopqrtuvwy!?'.,/\()<>{}[]123456789"
 		).ToDictionary(tuple => tuple.First, tuple => tuple.Second);
-
-		/// <summary>
-		/// Makes a string upside-down.
-		/// </summary>
-		public static string UpsideDown(this string str) {
-			var ret = new StringBuilder(str.Length);
-
-			foreach (char c in str.ToLowerInvariant().Reverse()) {
-				if (UpsideDownVariants.TryGetValue(c, out char upsideDown)) {
-					ret.Append(upsideDown);
-				} else if (UpsideDownVariants2.TryGetValue(c, out upsideDown)) {
-					ret.Append(upsideDown);
-				} else {
-					ret.Append(c);
-				}
-			}
-
-			string v = ret.ToString();
-			return v;
-		}
 	}
 }

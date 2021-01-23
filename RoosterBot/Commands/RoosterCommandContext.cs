@@ -12,7 +12,7 @@ namespace RoosterBot {
 	/// It also holds the <see cref="RoosterBot.UserConfig"/> for the <see cref="User"/> and the <see cref="RoosterBot.ChannelConfig"/> for the <see cref="Channel"/>, which is
 	/// often accessed by multiple unrelated classes in the execution process, so that these classes do not have to retrieve the config data independently.
 	/// </summary>
-	public class RoosterCommandContext : CommandContext {
+	public abstract class RoosterCommandContext : CommandContext {
 		private ResourceService? m_Resources = null;
 
 		/// <summary>
@@ -50,6 +50,8 @@ namespace RoosterBot {
 		/// </summary>
 		public ChannelConfig ChannelConfig { get; }
 
+		public IMessage? Response { get; protected set; }
+
 		/// <summary>
 		/// Shorthand for <code><see cref="UserConfig.Culture"/> ?? <see cref="ChannelConfig.Culture"/></code>
 		/// </summary>
@@ -60,7 +62,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Construct a new <see cref="RoosterCommandContext"/> with the necessary information.
 		/// </summary>
-		public RoosterCommandContext(IServiceProvider isp, PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig channelConfig) : base(isp) {
+		protected RoosterCommandContext(IServiceProvider isp, PlatformComponent platform, IMessage message, UserConfig userConfig, ChannelConfig channelConfig) : base(isp) {
 			Platform = platform;
 			Message = message;
 			User = message.User;
@@ -68,6 +70,9 @@ namespace RoosterBot {
 
 			UserConfig = userConfig;
 			ChannelConfig = channelConfig;
+
+			CommandResponsePair? crp = UserConfig.GetResponse(Message);
+			Response = crp == null ? null : Channel.GetMessageAsync(crp.Response.Id).Result;
 		}
 
 		/// <summary>
@@ -83,37 +88,36 @@ namespace RoosterBot {
 		/// </summary>
 		public async Task<IMessage> RespondAsync(RoosterCommandResult result) {
 			//Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
-			CommandResponsePair? crp = UserConfig.GetResponse(Message);
-			IMessage? response = crp == null ? null : await Channel.GetMessageAsync(crp.Response.Id);
-			if (response == null) {
+			
+			if (Response == null) {
 				// The response was already deleted, or there was no response to begin with.
 				try {
-					response = await SendResultAsync(result, response);
+					Response = await SendResultAsync(result);
 				} catch (Exception e) {
 					Logger.Error("Result", "Error was caught in SendResultAsync. Sending a generic error result", e);
-					response = await SendResultAsync(TextResult.Error(GetString("CommandHandling_FatalError")), response);
+					Response = await SendResultAsync(TextResult.Error(GetString("CommandHandling_FatalError")));
 				}
-				UserConfig.SetResponse(Message, response);
+				UserConfig.SetResponse(Message, Response);
 			} else {
 				// The command was edited.
-				await SendResultAsync(result, response);
+				await SendResultAsync(result);
 			}
 			await UserConfig.UpdateAsync();
 
-			return response;
+			return Response;
 		}
 
 		/// <summary>
 		/// Send the result to the channel. You may override this for your platform to provide custom presentations of built-in or external <see cref="RoosterCommandResult"/> types.
 		/// </summary>
-		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
+		protected abstract Task<IMessage> SendResultAsync(RoosterCommandResult result);/*{
 			if (existingResponse == null) {
 				return Channel.SendMessageAsync(result.ToString(this));
 			} else {
 				existingResponse.ModifyAsync(result.ToString(this));
 				return Task.FromResult(existingResponse);
 			}
-		}
+		}//*/
 
 		/// <summary>
 		/// Get a string resource for <see cref="Culture"/>.

@@ -89,6 +89,6 @@ namespace RoosterBot {
 		}
 
 		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext r) => Caption + "\n```" + Foxite.Common.StringUtil.FormatTextTable(Cells, MaxColumnWidth) + "```";
+		//public override string ToString(RoosterCommandContext r) => Caption + "\n```" + Foxite.Common.StringUtil.FormatTextTable(Cells, MaxColumnWidth) + "```";
 	}
 }

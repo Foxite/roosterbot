@@ -23,64 +23,24 @@ namespace RoosterBot.DiscordNet {
 			Guild = Channel is SocketGuildChannel sgc ? sgc.Guild : null;
 		}
 
-		protected async override Task<IMessage> SendResultAsync(RoosterCommandResult result, IMessage? existingResponse) {
+		protected override Task<IMessage> SendResultAsync(RoosterCommandResult result) {
+			return DiscordNetComponent.Instance.GetResultAdapter(this, result).First().HandleResult(this, result);
+
+			/*
 			if (result.Is<AspectListResult>(out var alr)) {
 				return await SendAspectList(alr, existingResponse);
 			} else if (result.Is<PaginatedResult>(out var pr)) {
 				return await SendPaginatedResult(pr, existingResponse);
 			} else if (result.Is<MediaResult>(out var mr)) {
 				using System.IO.Stream stream = mr.GetStream();
-				var message = await Channel.SendFileAsync(stream, mr.Filename, mr.Message, messageReference: Message.Reference);
+				var message = await Channel.SendFileAsync(stream, mr.Filename, mr.Message, messageReference: Message.GetReference());
 				return new DiscordMessage(message);
 			} else if (existingResponse == null) {
-				return new DiscordMessage(await Channel.SendMessageAsync(result.ToString(this), messageReference: Message.Reference));
+				return new DiscordMessage(await Channel.SendMessageAsync(result.ToString(this), messageReference: Message.GetReference()));
 			} else {
 				await existingResponse.ModifyAsync(result.ToString(this));
 				return existingResponse;
 			}
-		}
-
-		private async Task<IMessage> SendAspectList(AspectListResult alr, IMessage? existingResponse) {
-			Embed embed = AspectListToEmbedBuilder(alr).Build();
-			if (existingResponse == null) {
-				return new DiscordMessage(await Channel.SendMessageAsync(embed: embed, messageReference: Message.Reference));
-			} else {
-				var discordResponse = (DiscordMessage) existingResponse;
-				await discordResponse.DiscordEntity.ModifyAsync(props => {
-					props.Content = "";
-					props.Embed = embed;
-				});
-				// TODO (block) Can't change file attachment
-				return discordResponse;
-			}
-		}
-
-		private EmbedBuilder AspectListToEmbedBuilder(AspectListResult alr) {
-			string title = alr.Caption;
-			string? description = null;
-			int colonIndex = title.IndexOf(':');
-			if (colonIndex != -1) {
-				title = title.Substring(0, colonIndex);
-				description = title[(colonIndex + 1)..].Trim();
-			}
-
-			return new EmbedBuilder() {
-				Title = title,
-				Description = description,
-				Fields = (
-					from aspect in alr
-					select new EmbedFieldBuilder() {
-						Name = aspect.PrefixEmote.ToString() + " " + aspect.Name,
-						Value = aspect.Value,
-						IsInline = aspect.Value.Length < 80
-					}
-				).ToList(),
-				Author = new EmbedAuthorBuilder() {
-					IconUrl = User.GetAvatarUrl(),
-					Name = (User as IGuildUser)?.Nickname ?? (User.Username + "#" + User.Discriminator)
-				},
-				Timestamp = DateTimeOffset.UtcNow
-			};
 		}
 
 		private async Task<IMessage> SendPaginatedResult(PaginatedResult pr, IMessage? existingResponse) {
@@ -96,13 +56,13 @@ namespace RoosterBot.DiscordNet {
 				&& emoteService.TryGetEmote(DiscordNetComponent.Instance, tr.PrefixEmoteName, out IEmote? emote)
 				&& emote == emoteService.Error(DiscordNetComponent.Instance)
 			) {
-				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this), messageReference: Message.Reference));
+				return new DiscordMessage(await Channel.SendMessageAsync(tr.ToString(this), messageReference: Message.GetReference()));
 			} else {
 				IUserMessage botMessage;
 				RoosterCommandResult initial = pr.Current;
 				if (initial is AspectListResult alr) {
 					if (existingResponse == null) {
-						botMessage = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build(), messageReference: Message.Reference);
+						botMessage = await Channel.SendMessageAsync(pr.Caption, embed: AspectListToEmbedBuilder(alr).Build(), messageReference: Message.GetReference());
 					} else {
 						botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
 						await botMessage.ModifyAsync(props => {
@@ -116,7 +76,7 @@ namespace RoosterBot.DiscordNet {
 						text = pr.Caption + "\n" + text;
 					}
 					if (existingResponse == null) {
-						botMessage = await Channel.SendMessageAsync(text, messageReference: Message.Reference);
+						botMessage = await Channel.SendMessageAsync(text, messageReference: Message.GetReference());
 					} else {
 						botMessage = ((DiscordMessage) existingResponse).DiscordEntity;
 						await botMessage.ModifyAsync(props => {
@@ -169,6 +129,7 @@ namespace RoosterBot.DiscordNet {
 				}
 				return new DiscordMessage(botMessage);
 			}
+			//*/
 		}
 	}
 }

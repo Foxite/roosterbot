@@ -31,6 +31,6 @@ namespace RoosterBot {
 		public Stream GetStream() => m_GetStream();
 
 		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext rcc) => Message;
+		//public override string ToString(RoosterCommandContext rcc) => Message;
 	}
 }

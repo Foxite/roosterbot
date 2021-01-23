@@ -34,11 +34,12 @@ namespace RoosterBot {
 		/// <inheritdoc/>
 		public void Reset() => m_Enumerator.Reset();
 
+		/*
 		/// <inheritdoc/>
 		public override string ToString(RoosterCommandContext rcc) {
 			MoveNext();
 			return Current.ToString(rcc);
-		}
+		}//*/
 	}
 
 	/// <summary>

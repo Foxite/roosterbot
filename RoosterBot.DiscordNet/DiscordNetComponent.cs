@@ -147,6 +147,9 @@ namespace RoosterBot.DiscordNet {
 			foreach (var item in m_Emotes) {
 				emoteService.RegisterEmote(this, item.Key, item.Value);
 			}
+
+			RegisterResultAdapter(new TextResultAdapter());
+			RegisterResultAdapter(new AspectListResultAdapter());
 		}
 
 		protected override void AddHandlers(IServiceProvider services, RoosterCommandService commandService) {

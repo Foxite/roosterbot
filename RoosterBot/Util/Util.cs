@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -59,6 +60,25 @@ namespace RoosterBot {
 		/// </summary>
 		public static KeyValuePair<TKey, TValue> ToGeneric<TKey, TValue>(this DictionaryEntry de) {
 			return new KeyValuePair<TKey, TValue>((TKey) de.Key, (TValue) de.Value!);
+		}
+
+		/// <summary>
+		/// Returns a non-generic <see cref="Task"/> that awaits a generic <see cref="Task"/>, so you can avoid making your function async.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// <![CDATA[
+		/// public override Task GetStuffDone(string data) {
+		///		// SendMessageAsync() returns Task<IMessage>;
+		///		return SendMessageAsync(data).ToTypelessTask();
+		///		// No need to make GetStuffDone() async.
+		/// }
+		/// ]]>
+		/// </code>
+		/// </example>
+		// TODO (NO PUSH) move to Foxite.Common
+		public static async Task ToTypelessTask<T>(this Task<T> task) {
+			await task;
 		}
 	}
 }

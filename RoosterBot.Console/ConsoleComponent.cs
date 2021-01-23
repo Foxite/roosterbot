@@ -71,10 +71,12 @@ namespace RoosterBot.Console {
 
 						var consoleMessage = new ConsoleMessage(input, false);
 						TheConsoleChannel.m_Messages.Add(consoleMessage);
+						/* TODO 
 						await Program.Instance.CommandHandler.ExecuteCommandAsync(consoleMessage.Content, new RoosterCommandContext(services, this, consoleMessage,
 							await ucs.GetConfigAsync(TheConsoleUser.GetReference()),
 							await ccs.GetConfigAsync(TheConsoleChannel.GetReference())
 						));
+						*/
 					}
 				} catch (Exception e) {
 					if (e is IOException && pipeServer != null && !pipeServer.IsConnected && wasConnected) {

@@ -11,7 +11,7 @@ namespace RoosterBot.DiscordNet {
 		public object Id => DiscordEntity.Id;
 		public IChannel Channel => new DiscordChannel(DiscordEntity.Channel);
 		public IUser User => new DiscordUser(DiscordEntity.Author);
-		public string Content => UpsideDown ? DiscordEntity.Content.UpsideDown() : DiscordEntity.Content;
+		public string Content => DiscordEntity.Content;
 		public DateTimeOffset SentAt => DiscordEntity.EditedTimestamp ?? DiscordEntity.CreatedAt;
 
 		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
@@ -24,9 +24,8 @@ namespace RoosterBot.DiscordNet {
 			props.Embed = null;
 		});
 
-		internal DiscordMessage(Discord.IUserMessage discordMessage, bool upsideDown = false) {
+		internal DiscordMessage(Discord.IUserMessage discordMessage) {
 			DiscordEntity = discordMessage;
-			UpsideDown = upsideDown;
 		}
 	}
 }
