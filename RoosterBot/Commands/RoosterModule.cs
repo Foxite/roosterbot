@@ -8,7 +8,7 @@ namespace RoosterBot {
 	/// The base class for all command modules used within RoosterBot.
 	/// </summary>
 	/// <typeparam name="T">The type of <see cref="RoosterCommandContext"/> required by this module.</typeparam>
-	public abstract class RoosterModule<T> : ModuleBase<T> where T : RoosterCommandContext {
+	public abstract class RoosterModule<T> : ModuleBase<T>, IRoosterModule where T : RoosterCommandContext {
 		/// <summary>
 		/// Shorthand for <code>Context.UserConfig</code>
 		/// </summary>
@@ -42,6 +42,8 @@ namespace RoosterBot {
 		/// </summary>
 		protected string GetString(string name, params object[] args) => Context.GetString(Assembly.GetCallingAssembly(), name, args);
 	}
+
+	internal interface IRoosterModule { }
 
 	/// <summary>
 	/// Shorthand for <code>RoosterModule&lt;RoosterCommandContext&gt;</code>. This module type accepts all contexts.
