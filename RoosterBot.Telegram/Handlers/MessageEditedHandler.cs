@@ -24,7 +24,7 @@ namespace RoosterBot.Telegram {
 				if (e.Message.Text.StartsWith(channelConfig.CommandPrefix)) {
 					await TelegramComponent.Instance.Client.SendChatActionAsync(e.Message.Chat, ChatAction.Typing);
 					await Program.Instance.CommandHandler.ExecuteCommandAsync(
-						e.Message.Text.Substring(channelConfig.CommandPrefix.Length),
+						e.Message.Text[channelConfig.CommandPrefix.Length..],
 						new TelegramCommandContext(
 							m_ISP,
 							e.Message,

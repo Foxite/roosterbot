@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Weather {
 	// TODO (hold) (refactor) this should be split into a full WeatherBit C# api, which could actually become an entirely new library that this component uses
-	public class WeatherService : IDisposable {
+	public sealed class WeatherService : IDisposable {
 		private const string BaseUrl = "https://api.weatherbit.io/v2.0/";
 
 		private readonly string m_WeatherBitKey;
@@ -62,22 +62,8 @@ namespace RoosterBot.Weather {
 			return JObject.Parse(result);
 		}
 
-		#region IDisposable Support
-		private bool m_DisposedValue = false;
-
-		protected virtual void Dispose(bool disposing) {
-			if (!m_DisposedValue) {
-				if (disposing) {
-					m_Web.Dispose();
-				}
-
-				m_DisposedValue = true;
-			}
-		}
-
 		public void Dispose() {
-			Dispose(true);
+			m_Web.Dispose();
 		}
-		#endregion
 	}
 }

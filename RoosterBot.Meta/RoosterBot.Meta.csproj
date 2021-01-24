@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="FluentEmail.Smtp" Version="2.8.0" />
+	  <PackageReference Include="FluentEmail.Smtp" Version="3.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup>

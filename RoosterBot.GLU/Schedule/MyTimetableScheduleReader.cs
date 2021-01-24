@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using RoosterBot.Schedule;
 
@@ -13,7 +12,9 @@ namespace RoosterBot.GLU {
 		private readonly SnowflakeReference m_StaffMemberChannel;
 
 		public MyTimetableScheduleReader(string icalLink, StaffMemberService staffMembers, SnowflakeReference staffMemberChannel) {
-			m_ICalLink = icalLink;
+			//m_ICalLink = icalLink;
+			string key = "VW50aXMhY2xhc3MhMUdBMQ==";
+			m_ICalLink = $"https://rooster.glu.nl/ical?600d7c5d&group=true&timetable=!{key}&eu=NTI1MjEx&h=LbVcJBDyLelZKX5vLJR-7OCTxitAbA6WXHyu2HRJ8Jw=";
 			m_StaffMembers = staffMembers;
 			m_StaffMemberChannel = staffMemberChannel;
 		}

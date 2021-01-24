@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace RoosterBot {
+﻿namespace RoosterBot {
 	/// <summary>
 	/// A TextResult consists of an optional emote followed by a string.
 	/// </summary>

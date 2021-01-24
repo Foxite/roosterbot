@@ -152,8 +152,7 @@ namespace RoosterBot.DiscordNet {
 			RegisterResultAdapter(new AspectListResultAdapter());
 			RegisterResultAdapter(new MediaResultAdapter());
 			RegisterResultAdapter(new TableResultAdapter());
-			// TODO: PaginatedResultAdapter
-			// I'm doing it later because PaginatedResult was actually very complicated, and I'm not refactoring the shit out of that (like I know I can't help to do) at 12:37 AM.
+			RegisterResultAdapter(new PaginatedResultAdapter());
 		}
 
 		protected override void AddHandlers(IServiceProvider services, RoosterCommandService commandService) {
@@ -164,7 +163,7 @@ namespace RoosterBot.DiscordNet {
 			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady, m_ClientReady);
 			new LogHandler                (Client);
 
-
+			// This is where slash commands will be registered, if any .NET library ever adds support for that. *grumble*
 		}
 
 		protected override void Connect(IServiceProvider services) {

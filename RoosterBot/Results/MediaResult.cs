@@ -29,8 +29,5 @@ namespace RoosterBot {
 		/// Obtain a stream with the data to be sent.
 		/// </summary>
 		public Stream GetStream() => m_GetStream();
-
-		/// <inheritdoc/>
-		//public override string ToString(RoosterCommandContext rcc) => Message;
 	}
 }

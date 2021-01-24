@@ -82,7 +82,7 @@ namespace RoosterBot.GLU {
 			services.GetRequiredService<ResourceService>().RegisterResources("RoosterBot.GLU.Resources");
 
 			ScheduleService scheduleService = services.GetRequiredService<ScheduleService>();
-			StaffMemberService staffMembers = services.GetService<StaffMemberService>();
+			StaffMemberService staffMembers = services.GetRequiredService<StaffMemberService>();
 
 			if (m_ICalLink is not null) {
 				scheduleService.RegisterProvider(

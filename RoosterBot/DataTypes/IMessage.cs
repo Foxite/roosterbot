@@ -30,10 +30,5 @@ namespace RoosterBot {
 		/// Delete the message.
 		/// </summary>
 		Task DeleteAsync();
-
-		/// <summary>
-		/// Modify the message.
-		/// </summary>
-		Task ModifyAsync(string newContent, string? filePath = null);
 	}
 }

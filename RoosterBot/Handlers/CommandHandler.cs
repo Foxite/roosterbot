@@ -16,9 +16,9 @@ namespace RoosterBot {
 		private NotificationService Notifications { get; }
 
 		internal CommandHandler(IServiceProvider isp) {
-			Commands = isp.GetService<RoosterCommandService>();
-			Resources = isp.GetService<ResourceService>();
-			Notifications = isp.GetService<NotificationService>();
+			Commands = isp.GetRequiredService<RoosterCommandService>();
+			Resources = isp.GetRequiredService<ResourceService>();
+			Notifications = isp.GetRequiredService<NotificationService>();
 		}
 
 		/// <summary>

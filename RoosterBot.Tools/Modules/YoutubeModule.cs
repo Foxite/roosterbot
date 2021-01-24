@@ -45,4 +45,31 @@ namespace RoosterBot.Tools {
 			}
 		}
 	}
+
+	public class TestModule : RoosterModule {
+		public Random RNG { get; set; } = null!;
+
+		[Command("test attachment")]
+		public CommandResult TestAttachment(string type) {
+			string path = type switch {
+				"image" => "K:/public/foxite_/Wallpapers",
+				"audio" => "D:/Music",
+				_ => throw new NotSupportedException()
+			};
+
+			string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+			string file = files[RNG.Next(0, files.Length)];
+			return new MediaResult($"Here is your `{type}`", Path.GetFileName(file), () => File.OpenRead(file));
+		}
+
+		[Command("test large attachment")]
+		public CommandResult TestLargeAttachment() {
+			return new MediaResult("If you see this, something has gone horribly right somewhere.", "The Water Rises.wav", () => File.OpenRead(@"D:\Music\Online Content Creators\Game Music\water_rising_final.wav"));
+		}
+
+		[Command("test private reply"), RespondInPrivate]
+		public CommandResult TestReplyInPrivate() {
+			return TextResult.Success("Here you go");
+		}
+	}
 }

@@ -39,15 +39,5 @@ namespace RoosterBot {
 
 			return result;
 		}
-
-		private static readonly IDictionary<char, char> UpsideDownVariants =
-			@"abcdefghijklmnopqrtuvwy!?'.,/\()<>{}[]123456789".Zip(
-			@"68𝘓95ߤ↋↊⇂[]{}<>()\/ʻ.╻¿¡ʎʍʌnʇɹbdouɯʅʞɾᴉɥƃⅎǝpɔqɐ".Reverse()
-		).ToDictionary(tuple => tuple.First, tuple => tuple.Second);
-
-		private static readonly IDictionary<char, char> UpsideDownVariants2 =
-			@"68𝘓95ߤ↋↊⇂[]{}<>()\/ʻ.╻¿¡ʎʍʌnʇɹbdouɯʅʞɾᴉɥƃⅎǝpɔqɐ".Reverse().Zip(
-			@"abcdefghijklmnopqrtuvwy!?'.,/\()<>{}[]123456789"
-		).ToDictionary(tuple => tuple.First, tuple => tuple.Second);
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RoosterBot {
 	/// <summary>
@@ -33,11 +32,5 @@ namespace RoosterBot {
 		public void AddResult(RoosterCommandResult result) {
 			m_IndividualResults.Add(result);
 		}
-
-		/*
-		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext rcc) {
-			return string.Join(Separator, IndividualResults.Select(result => result.ToString(rcc)));
-		}//*/
 	}
 }

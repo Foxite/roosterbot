@@ -20,8 +20,8 @@ namespace RoosterBot.GLU.Discord {
 
 			new RoleAssignmentHandler();
 			new ManualRanksHintHandler();
-			new NewUserHandler(services.GetService<UserConfigService>());
-			new NicknameChangedHandler(services.GetService<UserConfigService>());
+			new NewUserHandler(services.GetRequiredService<UserConfigService>());
+			new NicknameChangedHandler(services.GetRequiredService<UserConfigService>());
 		}
 	}
 }

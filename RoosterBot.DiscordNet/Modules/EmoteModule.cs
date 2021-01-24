@@ -88,15 +88,19 @@ namespace RoosterBot.DiscordNet {
 					successfulEmotes.Add(stolenEmote);
 				}
 			}
-			// TODO should use bare text result with emote depending on total result
-			var result = new CompoundResult("\n");
+
+			string response = "";
 
 			if (successfulEmotes.Count > 0) {
-				result.AddResult(TextResult.Success(string.Join(' ', successfulEmotes.Select(emote => emote.ToString()))));
+				response = string.Join(' ', successfulEmotes.Select(emote => emote.ToString()));
+
+				if (fails.Count > 0) {
+					response += "\n";
+				}
 			}
 
 			if (fails.Count > 0) {
-				string response = "Unable to create";
+				response += "Unable to create";
 				foreach (var info in fails) {
 					response += $"\n- {info.Value} {(info.Key.Animated ? "animated" : "static")} emote(s) because " +
 						info.Key.reason switch {
@@ -105,10 +109,15 @@ namespace RoosterBot.DiscordNet {
 							_ => info.Key.reason.ToString()
 						};
 				}
-				result.AddResult(successfulEmotes.Count > 0 ? TextResult.Warning(response) : TextResult.Error(response));
 			}
 
-			return result;
+			if (successfulEmotes.Count == 0) {
+				return TextResult.Error(response);
+			} else if (fails.Count == 0) {
+				return TextResult.Success(response);
+			} else {
+				return TextResult.Warning(response);
+			}
 		}
 
 		private struct EmoteCreationData {

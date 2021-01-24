@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RoosterBot {
 	/// <summary>
@@ -15,7 +14,7 @@ namespace RoosterBot {
 		public string Caption { get; }
 
 		/// <summary>
-		/// Indicates if <see cref="ToString(RoosterCommandContext)"/> should include the aspect names.
+		/// Indicates if the <see cref="ResultAdapter"/> should include the aspect names.
 		/// </summary>
 		public bool IncludeAspectNames { get; }
 
@@ -25,9 +24,6 @@ namespace RoosterBot {
 			m_Aspects = aspects;
 			IncludeAspectNames = includeAspectNames;
 		}
-
-		/// <inheritdoc/>
-		//public override string ToString(RoosterCommandContext r) => Caption + "\n" + string.Join('\n', m_Aspects.Select(item => item.Present(IncludeAspectNames)));
 
 		/// <inheritdoc/>
 		public IEnumerator<AspectListItem> GetEnumerator() => m_Aspects.GetEnumerator();

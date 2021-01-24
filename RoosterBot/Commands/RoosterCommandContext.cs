@@ -50,6 +50,9 @@ namespace RoosterBot {
 		/// </summary>
 		public ChannelConfig ChannelConfig { get; }
 
+		/// <summary>
+		/// The response sent by RoosterBot.
+		/// </summary>
 		public IMessage? Response { get; protected set; }
 
 		/// <summary>
@@ -110,7 +113,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// Send the result to the channel. You may override this for your platform to provide custom presentations of built-in or external <see cref="RoosterCommandResult"/> types.
 		/// </summary>
-		protected abstract Task<IMessage> SendResultAsync(RoosterCommandResult result);/*{
+		protected abstract Task<IMessage> SendResultAsync(RoosterCommandResult result); /* {
 			if (existingResponse == null) {
 				return Channel.SendMessageAsync(result.ToString(this));
 			} else {

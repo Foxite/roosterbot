@@ -14,13 +14,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ben.Demystifier" Version="0.1.6" />
-		<PackageReference Include="Foxite.Common" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.7" />
+		<PackageReference Include="Ben.Demystifier" Version="0.3.0" />
+		<PackageReference Include="Foxite.Common" Version="1.1.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-		<PackageReference Include="QmmandsAlt" Version="3.0.1" />
+		<PackageReference Include="QmmandsAlt" Version="3.0.3" />
 	</ItemGroup>
 </Project>
