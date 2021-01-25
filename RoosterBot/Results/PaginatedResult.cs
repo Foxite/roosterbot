@@ -7,12 +7,17 @@ namespace RoosterBot {
 	/// </summary>
 	// TODO (refactor) this should use IBidirectionalAsyncEnumerator
 	public sealed class PaginatedResult : RoosterCommandResult, IBidirectionalEnumerator<RoosterCommandResult> {
+		private readonly IBidirectionalEnumerator<RoosterCommandResult> m_Enumerator;
+
 		/// <summary>
-		/// A string to prepend to every page of the result.
+		/// A string to display with every page of the result.
 		/// </summary>
 		public string? Caption { get; }
 
-		private readonly IBidirectionalEnumerator<RoosterCommandResult> m_Enumerator;
+		/// <summary>
+		/// The amount of pages, if known. The number of pages that can be enumerated can be unlimited. In such a case, or if the amount of pages is not known, this is null.
+		/// </summary>
+		public int? PageCount { get; }
 
 		/// <inheritdoc/>
 		public RoosterCommandResult Current => m_Enumerator.Current;
@@ -20,9 +25,10 @@ namespace RoosterBot {
 		object? IEnumerator.Current => m_Enumerator.Current;
 
 		///
-		public PaginatedResult(IBidirectionalEnumerator<RoosterCommandResult> pageEnumerator, string? caption) {
+		public PaginatedResult(IBidirectionalEnumerator<RoosterCommandResult> pageEnumerator, string? caption, int? pageCount = null) {
 			m_Enumerator = pageEnumerator;
 			Caption = caption;
+			PageCount = pageCount;
 		}
 
 		/// <inheritdoc/>
@@ -33,13 +39,6 @@ namespace RoosterBot {
 		public bool MovePrevious() => m_Enumerator.MovePrevious();
 		/// <inheritdoc/>
 		public void Reset() => m_Enumerator.Reset();
-
-		/*
-		/// <inheritdoc/>
-		public override string ToString(RoosterCommandContext rcc) {
-			MoveNext();
-			return Current.ToString(rcc);
-		}//*/
 	}
 
 	/// <summary>

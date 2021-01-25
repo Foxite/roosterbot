@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RoosterBot;
 
 namespace System.Linq {
 	/// <summary>
@@ -25,6 +26,13 @@ namespace System.Linq {
 					yield return item.Value;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Creates a <see cref="IBidirectionalEnumerator{T}"/> over a <see cref="IReadOnlyList{T}"/>.
+		/// </summary>
+		public static BidirectionalListEnumerator<T> GetBidirectionalEnumerator<T>(this IReadOnlyList<T> list, int position = 0) {
+			return new BidirectionalListEnumerator<T>(list, position);
 		}
 	}
 }
