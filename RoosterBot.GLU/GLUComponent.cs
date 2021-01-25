@@ -9,6 +9,8 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	public class GLUComponent : Component {
+		internal const string LogTag = "GLU";
+
 		private readonly List<ScheduleRegistryInfo> m_Schedules;
 		private SnowflakeReference[] m_AllowedChannels;
 		private string m_StaffMemberPath;

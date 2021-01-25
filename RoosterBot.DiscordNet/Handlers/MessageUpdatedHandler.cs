@@ -39,7 +39,7 @@ namespace RoosterBot.DiscordNet {
 							userConfig.RemoveCommand(crp.Command);
 						} // else: was not a command, is not a command
 					} catch (Exception e) {
-						Logger.Error("Discord", "Exception caught when handling edited message", e);
+						Logger.Error(DiscordNetComponent.LogTag, "Exception caught when handling edited message", e);
 					}
 				});
 			}

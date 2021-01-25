@@ -97,7 +97,7 @@ namespace RoosterBot {
 				try {
 					Response = await SendResultAsync(result);
 				} catch (Exception e) {
-					Logger.Error("Result", "Error was caught in SendResultAsync. Sending a generic error result", e);
+					Logger.Error(Logger.Tags.Pipeline, "Error was caught in SendResultAsync. Sending a generic error result", e);
 					Response = await SendResultAsync(TextResult.Error(GetString("CommandHandling_FatalError")));
 				}
 				UserConfig.SetResponse(Message, Response);

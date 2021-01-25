@@ -24,7 +24,7 @@ namespace RoosterBot.DiscordNet {
 					}
 				}
 			} catch (Exception e) {
-				Logger.Error("Discord", "Exception caught when deleting message", e);
+				Logger.Error(DiscordNetComponent.LogTag, "Exception caught when deleting message", e);
 			}
 		}
 	}

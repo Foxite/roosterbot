@@ -45,7 +45,7 @@ namespace RoosterBot.Console {
 			if (!(filePath is null)) {
 				msg += " File path: " + filePath;
 			}
-			Logger.Info("Console", msg);
+			Logger.Info(ConsoleComponent.LogTag, $"Response: ```{content}```");
 			return Task.FromResult((IMessage) message);
 		}
 	}

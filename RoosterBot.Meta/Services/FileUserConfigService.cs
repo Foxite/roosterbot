@@ -13,7 +13,7 @@ namespace RoosterBot.Meta {
 		private readonly ConcurrentDictionary<SnowflakeReference, UserConfig> m_ConfigMap;
 
 		public FileUserConfigService(string configPath) {
-			Logger.Info("FileUserConfigService", "Loading user config json");
+			Logger.Info(MetaComponent.LogTag, "Loading user config json");
 
 			m_ConfigFilePath = configPath;
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, UserConfig>();
@@ -44,7 +44,7 @@ namespace RoosterBot.Meta {
 				using var sw = File.CreateText(m_ConfigFilePath);
 				sw.Write("{}");
 			}
-			Logger.Info("FileUserConfigService", "Finished loading user config json");
+			Logger.Info(MetaComponent.LogTag, "Finished loading user config json");
 		}
 
 		public override Task<UserConfig> GetConfigAsync(SnowflakeReference user) {

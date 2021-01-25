@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
+		internal const string LogTag = "Meta";
+
 		private bool m_EnableCommandsList;
 		private EmailSettings m_EmailSettings = new EmailSettings();
 

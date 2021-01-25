@@ -139,7 +139,7 @@ namespace RoosterBot {
 				return new[] {
 					GetService(null).AddModule(moduleType, (builder) => {
 						if (builder.Commands.SelectMany(command => command.Attributes).OfType<RunModeAttribute>().Any()) {
-							Logger.Info("RoosterCommandService", $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
+							Logger.Info(Logger.Tags.RoosterBot, $"A command was found module `{builder.Name}` that has a RunMode attribute. " +
 								"This is no longer necessary as commands are always executed off-thread.");
 						}
 
@@ -194,7 +194,7 @@ namespace RoosterBot {
 
 			foreach (CommandBuilder command in module.Commands) {
 				if (command.Attributes.OfType<RunModeAttribute>().Any()) {
-					Logger.Info("RoosterCommandService", $"The command `{command.Name}` in `{module.Name}` has a RunMode attribute. " +
+					Logger.Info(Logger.Tags.RoosterBot, $"The command `{command.Name}` in `{module.Name}` has a RunMode attribute. " +
 						"This is no longer necessary as commands are always executed off-thread.");
 				}
 
@@ -347,7 +347,7 @@ namespace RoosterBot {
 		private static Func<Exception, Task> GetEventErrorHandler(string name) {
 			string logMessage = $"A {name} handler has thrown an exception.";
 			return e => {
-				Logger.Error("RoosterCommandService", logMessage, e);
+				Logger.Error(Logger.Tags.RoosterBot, logMessage, e);
 				return Task.CompletedTask;
 			};
 		}

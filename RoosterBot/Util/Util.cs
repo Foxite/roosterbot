@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -21,8 +20,8 @@ namespace RoosterBot {
 			if (File.Exists(filePath)) {
 				return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath), jss) ?? throw new InvalidOperationException("Configuration being deserialized is null.");
 			} else {
-				Logger.Warning("Main", "A config file was not found and a blank template has been created: " + filePath);
-				Logger.Warning("Main", "You should read the file and change it where necessary. The template config will likely not function properly.");
+				Logger.Warning(Logger.Tags.RoosterBot, "A config file was not found and a blank template has been created: " + filePath);
+				Logger.Warning(Logger.Tags.RoosterBot, "You should read the file and change it where necessary. The template config will likely not function properly.");
 
 				jss ??= new JsonSerializerSettings();
 				jss.Converters.Add(new StringEnumConverter());

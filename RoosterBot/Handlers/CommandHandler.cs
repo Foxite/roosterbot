@@ -59,7 +59,7 @@ namespace RoosterBot {
 						break;
 					default:
 						response = $"PostCommandHandler got an unknown result: {result.GetType().FullName}. This is the ToString: {result}";
-						Logger.Warning("CommandHandler", response);
+						Logger.Warning(Logger.Tags.Pipeline, response);
 						await Notifications.AddNotificationAsync(response);
 						response = context.GetString("CommandHandling_FatalError");
 						break;
@@ -103,7 +103,7 @@ namespace RoosterBot {
 				}
 			} else {
 				response = $"PostCommandHandler got ArgumentParseFailedResult but it has an unknown ParserResult: {argument.ParserResult.GetType().FullName}. This is the ToString: {argument.ParserResult}";
-				Logger.Warning("CommandHandler", response);
+				Logger.Warning(Logger.Tags.Pipeline, response);
 				if (response.Length > 2000) {
 					const string TooLong = "The error message was longer than 2000 characters. This is the first section:\n";
 					response = TooLong + response.Substring(0, 1999 - TooLong.Length);

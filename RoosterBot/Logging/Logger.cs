@@ -6,6 +6,11 @@ namespace RoosterBot {
 	/// The static class that takes care of logging in the entire program.
 	/// </summary>
 	public static class Logger {
+		internal static class Tags {
+			public const string RoosterBot = "RoosterBot";
+			public const string Pipeline = "Pipeline";
+		}
+
 		private static readonly List<LogEndpoint> Endpoints = new List<LogEndpoint>();
 
 		/// <summary>

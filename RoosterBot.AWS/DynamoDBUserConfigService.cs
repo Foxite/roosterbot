@@ -11,9 +11,9 @@ namespace RoosterBot.AWS {
 		private readonly Table m_Table;
 
 		public DynamoDBUserConfigService(AmazonDynamoDBClient client, string tableName) {	
-			Logger.Info("DynamoDBUser", "Loading user table");
+			Logger.Info(AWSComponent.LogTag, "Loading user table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("DynamoDBUser", "Finished loading user table");
+			Logger.Info(AWSComponent.LogTag, "Finished loading user table");
 		}
 
 		public async override Task<UserConfig> GetConfigAsync(SnowflakeReference user) {

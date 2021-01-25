@@ -17,7 +17,7 @@ namespace RoosterBot.Weather {
 		}
 
 		public void ReadCityCSV() {
-			Logger.Info("CityService", "Loading cities.csv");
+			Logger.Info(WeatherComponent.LogTag, "Loading cities.csv");
 
 			string csvPath = Path.Combine(m_ConfigPath, "cities.csv");
 			using StreamReader reader = File.OpenText(csvPath);
@@ -42,7 +42,7 @@ namespace RoosterBot.Weather {
 				);
 				m_Cities.Add(city);
 			}
-			Logger.Info("CityService", "Finished loading cities.csv");
+			Logger.Info(WeatherComponent.LogTag, "Finished loading cities.csv");
 		}
 
 		public Task<CityInfo?> GetByWeatherBitIdAsync(int weatherBitId) => Task.Run(() => {

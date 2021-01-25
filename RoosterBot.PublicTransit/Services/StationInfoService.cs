@@ -9,7 +9,7 @@ namespace RoosterBot.PublicTransit {
 		public StationInfo DefaultDeparture { get; private set; }
 
 		public StationInfoService(string stationFilePath, string defaultDepartureCode) {
-			Logger.Info("StationInfoService", "Loading stations file");
+			Logger.Info(PublicTransitComponent.LogTag, "Loading stations file");
 
 			m_Stations = new List<StationInfo>();
 
@@ -19,7 +19,7 @@ namespace RoosterBot.PublicTransit {
 			if (DefaultDeparture == null) {
 				throw new InvalidOperationException("No station matching the default departure code was found in the stations file.");
 			}
-			Logger.Info("StationInfoService", "Finished loading stations file");
+			Logger.Info(PublicTransitComponent.LogTag, "Finished loading stations file");
 		}
 
 		public StationInfo? GetByCode(string code) {
@@ -55,11 +55,11 @@ namespace RoosterBot.PublicTransit {
 			}
 
 			if (count == 1) {
-				Logger.Debug("SCS", $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}");
+				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}");
 			} else if (count == 0) {
-				Logger.Debug("SCS", $"Asked for {count} matches for `{input}`: No results (how?)");
+				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: No results (how?)");
 			} else {
-				Logger.Debug("SCS", $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}, worst is {matches.Last!.Value.Station.DisplayName} with {matches.Last.Value.Score}");
+				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}, worst is {matches.Last!.Value.Station.DisplayName} with {matches.Last.Value.Score}");
 			}
 
 			return matches.ToArray();

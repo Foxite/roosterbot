@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Console {
 	public class ConsoleComponent : PlatformComponent {
+		internal const string LogTag = "Console";
+
 		private readonly CancellationTokenSource m_CTS;
 
 		public override Version ComponentVersion => new Version(1, 0, 0);
@@ -57,7 +59,7 @@ namespace RoosterBot.Console {
 				try {
 					pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
 					pipeServer.WaitForConnection();
-					Logger.Info("Console", "Console interface connected");
+					Logger.Info(LogTag, "Console interface connected");
 
 					sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
@@ -65,7 +67,7 @@ namespace RoosterBot.Console {
 						string? input = sr.ReadLine();
 
 						if (input == null) {
-							Logger.Info("Console", "Console handler disconnected");
+							Logger.Info(LogTag, "Console handler disconnected");
 							return;
 						}
 
@@ -80,12 +82,12 @@ namespace RoosterBot.Console {
 					}
 				} catch (Exception e) {
 					if (e is IOException && pipeServer != null && !pipeServer.IsConnected && wasConnected) {
-						Logger.Info("Console", "Console interface disconnected");
+						Logger.Info(LogTag, "Console interface disconnected");
 					} else {
-						Logger.Error("Console", "Console handler caught an exception: ", e);
+						Logger.Error(LogTag, "Console handler caught an exception: ", e);
 					}
 				} finally {
-					Logger.Debug("Console", "Console handler exiting");
+					Logger.Debug(LogTag, "Console handler exiting");
 					if (m_CTS.IsCancellationRequested) {
 						m_CTS.Dispose();
 					}

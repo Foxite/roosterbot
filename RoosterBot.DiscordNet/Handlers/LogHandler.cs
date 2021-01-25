@@ -10,7 +10,7 @@ namespace RoosterBot.DiscordNet {
 
 		private Task Log(Discord.LogMessage msg) {
 			var level = (LogLevel) Enum.Parse(typeof(LogLevel), msg.Severity.ToString());
-			Logger.Log(level, (msg.Source == "Discord" ? "" : "Discord-") + msg.Source, msg.Message, msg.Exception);
+			Logger.Log(level, DiscordNetComponent.LogTag + "-" + msg.Source, msg.Message, msg.Exception);
 
 			return Task.CompletedTask;
 		}

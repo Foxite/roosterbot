@@ -14,9 +14,9 @@ namespace RoosterBot.AWS {
 
 		public DynamoDBChannelConfigService(AmazonDynamoDBClient client, string tableName, string defaultCommandPrefix, CultureInfo defaultCulture)
 			: base(defaultCommandPrefix, defaultCulture) {
-			Logger.Info("DynamoDBChannel", "Loading channel table");
+			Logger.Info(AWSComponent.LogTag, "Loading channel table");
 			m_Table = Table.LoadTable(client, tableName);
-			Logger.Info("DynamoDBChannel", "Finished loading channel table");
+			Logger.Info(AWSComponent.LogTag, "Finished loading channel table");
 		}
 
 		public async override Task<ChannelConfig> GetConfigAsync(SnowflakeReference channel) {

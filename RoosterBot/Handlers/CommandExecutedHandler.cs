@@ -15,7 +15,7 @@ namespace RoosterBot {
 					await rcc.RespondAsync(rcr);
 				} else {
 					if (!(args.Result is null)) {
-						Logger.Warning("CommandHandler", $"A command has returned an unknown result of type {args.Result.GetType().Name}. It cannot be handled.");
+						Logger.Warning(Logger.Tags.Pipeline, $"A command has returned an unknown result of type {args.Result.GetType().Name}. It cannot be handled.");
 					}
 					
 					string response = rcc.GetString("CommandHandling_Empty");

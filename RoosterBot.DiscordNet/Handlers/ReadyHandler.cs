@@ -26,7 +26,7 @@ namespace RoosterBot.DiscordNet {
 		private async Task OnClientReady() {
 			m_MRE.Set();
 			await Client.SetGameAsync(m_GameString, type: m_ActivityType);
-			Logger.Info("Discord", $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
+			Logger.Info(DiscordNetComponent.LogTag, $"Username is {Client.CurrentUser.Username}#{Client.CurrentUser.Discriminator}");
 
 			if (m_VersionNotReported && m_NotifyReady.Length != 0) {
 				m_VersionNotReported = false;

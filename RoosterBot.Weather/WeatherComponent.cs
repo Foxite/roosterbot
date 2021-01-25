@@ -5,16 +5,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.Weather {
 	public class WeatherComponent : Component {
+		internal const string LogTag = "LogTag";
+
 		public override Version ComponentVersion => new Version(0, 3, 3);
 		public bool AttributionLicense { get; private set; }
 
 		public override IEnumerable<string> RequiredTags { get; } = new[] { "DayOfWeekReader" };
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
-			Logger.Debug("Weather", "Loading cities file");
+			Logger.Debug(LogTag, "Loading cities file");
 			var cityService = new CityService(configPath);
 			cityService.ReadCityCSV();
-			Logger.Debug("Weather", "Finished loading cities file");
+			Logger.Debug(LogTag, "Finished loading cities file");
 
 			var jsonConfig = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
 				WeatherBitKey = "",

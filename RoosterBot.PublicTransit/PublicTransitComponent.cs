@@ -6,6 +6,8 @@ namespace RoosterBot.PublicTransit {
 	// Do not localize this component.
 	// This functionality is only useful in the Netherlands.
 	public class PublicTransitComponent : Component {
+		internal const string LogTag = "PublicTransit";
+
 #nullable disable
 		private NSAPI m_NSAPI;
 #nullable restore

@@ -61,7 +61,7 @@ namespace RoosterBot {
 				new Program();
 				return 0;
 			} catch (Exception e) {
-				Logger.Critical("Program", "Application has crashed.", e);
+				Logger.Critical(Logger.Tags.RoosterBot, "Application has crashed.", e);
 #if DEBUG
 				if (!Console.IsInputRedirected) {
 					Console.ReadKey();
@@ -88,7 +88,7 @@ namespace RoosterBot {
 			Logger.AddEndpoint(new FileLogEndpoint());
 			Logger.AddEndpoint(new ConsoleLogEndpoint());
 
-			Logger.Info("Main", "Starting program");
+			Logger.Info(Logger.Tags.RoosterBot, "Starting program");
 
 			Components = new ComponentManager();
 			IServiceCollection serviceCollection = CreateRBServices();
@@ -98,7 +98,7 @@ namespace RoosterBot {
 
 			WaitForQuitCondition();
 
-			Logger.Info("Main", "Stopping program");
+			Logger.Info(Logger.Tags.RoosterBot, "Stopping program");
 
 			Components.ShutdownComponents();
 		}
@@ -155,7 +155,7 @@ namespace RoosterBot {
 				Task consoleShutdown = ConsoleHost.WaitForShutdownAsync(token)
 					.ContinueWith(t => {
 						if (!token.IsCancellationRequested) {
-							Logger.Info("Main", "SIGTERM received");
+							Logger.Info(Logger.Tags.RoosterBot, "SIGTERM received");
 						}
 						ConsoleHost.StopAsync();
 					});
@@ -167,7 +167,7 @@ namespace RoosterBot {
 						if (pipeServer.IsConnected) {
 							string? input = sr.ReadLine();
 							if (input == "stop") {
-								Logger.Info("Main", "Stop command received from external process");
+								Logger.Info(Logger.Tags.RoosterBot, "Stop command received from external process");
 								pipeServer.Disconnect();
 								return true;
 							} else {
@@ -186,7 +186,7 @@ namespace RoosterBot {
 						if (Console.KeyAvailable) {
 							ConsoleKeyInfo keyPress = Console.ReadKey(true);
 							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-								Logger.Info("Main", "Ctrl-Q pressed");
+								Logger.Info(Logger.Tags.RoosterBot, "Ctrl-Q pressed");
 								return true;
 							}
 						}
@@ -206,7 +206,7 @@ namespace RoosterBot {
 		/// Signal the program to stop and exit.
 		/// </summary>
 		public void Shutdown() {
-			Logger.Info("Main", "Shutdown() has been called");
+			Logger.Info(Logger.Tags.RoosterBot, "Shutdown() has been called");
 			m_ShutDown = true;
 		}
 
@@ -214,7 +214,7 @@ namespace RoosterBot {
 		/// Signal the program to stop and exit, and then start again.
 		/// </summary>
 		public void Restart() {
-			Logger.Info("Main", "Restart() has been called");
+			Logger.Info(Logger.Tags.RoosterBot, "Restart() has been called");
 			m_ShutDown = true;
 			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 		}

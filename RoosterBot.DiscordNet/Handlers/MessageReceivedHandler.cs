@@ -32,7 +32,7 @@ namespace RoosterBot.DiscordNet {
 							await Program.Instance.CommandHandler.ExecuteCommandAsync(dum.Content[argPos..], new DiscordCommandContext(m_ISP, dum, userConfig, guildConfig));
 						}
 					} catch (Exception e) {
-						Logger.Error("Discord", "Exception caught when handling new message", e);
+						Logger.Error(DiscordNetComponent.LogTag, "Exception caught when handling new message", e);
 					}
 				});
 			}

@@ -35,7 +35,7 @@ namespace RoosterBot.GLU.Discord {
 							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
 						}
 					} catch (Exception e) {
-						Logger.Error("GLU-Roles", $"Could not assign roles to user {user.Username}#{user.Discriminator}.");
+						Logger.Error("GLU-Discord", $"Could not assign roles to user {user.Username}#{user.Discriminator}.");
 						foreach (SocketUser admin in DiscordNetComponent.Instance.BotAdminIds.Select(id => DiscordNetComponent.Instance.Client.GetUser(id))) {
 							await admin.SendMessageAsync("Failed to assign role: " + e.ToString());
 						}

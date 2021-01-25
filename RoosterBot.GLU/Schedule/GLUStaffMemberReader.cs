@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using CsvHelper;
-using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU {
 	internal class GLUStaffMemberReader {
@@ -14,7 +13,7 @@ namespace RoosterBot.GLU {
 		}
 
 		public IEnumerable<StaffMemberInfo> ReadCSV() {
-			Logger.Info("GLUStaffMemberReader", $"Loading staff CSV file {Path.GetFileName(m_Path)}");
+			Logger.Info(GLUComponent.LogTag, $"Loading staff CSV file {Path.GetFileName(m_Path)}");
 
 			using StreamReader reader = File.OpenText(m_Path);
 			using var csv = new CsvReader(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "," });
@@ -40,7 +39,7 @@ namespace RoosterBot.GLU {
 
 				yield return record;
 			}
-			Logger.Info("GLUStaffMemberReader", $"Successfully loaded staff CSV file {Path.GetFileName(m_Path)}");
+			Logger.Info(GLUComponent.LogTag, $"Successfully loaded staff CSV file {Path.GetFileName(m_Path)}");
 		}
 	}
 }

@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.AWS {
 	public class AWSComponent : Component {
+		internal const string LogTag = "AWS";
+
 		public override Version ComponentVersion => new Version(1, 2, 1);
 
 #nullable disable

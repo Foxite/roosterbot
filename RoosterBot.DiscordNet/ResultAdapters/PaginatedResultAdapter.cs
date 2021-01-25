@@ -20,7 +20,7 @@ namespace RoosterBot.DiscordNet {
 			if (currentGuildUser != null &&
 				!currentGuildUser.GuildPermissions.AddReactions &&
 				!currentGuildUser.GuildPermissions.ManageMessages) {
-				Logger.Warning("Discord", "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
+				Logger.Warning(DiscordNetComponent.LogTag, "Insufficient permissions in guild " + currentGuildUser.Guild.Name + " for pagination. Require at least AddReactions and ManageMessages");
 			} else {
 				Task goTo(Func<bool> moveAction) {
 					RoosterCommandResult current = pr.Current;

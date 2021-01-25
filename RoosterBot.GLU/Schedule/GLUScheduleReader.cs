@@ -25,7 +25,7 @@ namespace RoosterBot.GLU {
 		}
 
 		public override IReadOnlyList<ScheduleRecord> GetSchedule() {
-			Logger.Info("GLUScheduleReader", $"Loading CSV file from {m_Path}");
+			Logger.Info(GLUComponent.LogTag, $"Loading CSV file from {m_Path}");
 
 			int line = 1;
 			try {
@@ -120,7 +120,7 @@ namespace RoosterBot.GLU {
 
 				return schedule;
 			} catch (Exception e) {
-				Logger.Critical("GLUScheduleReader", $"The following exception was thrown while loading the CSV at \"{m_Path}\" on line {line}", e);
+				Logger.Critical(GLUComponent.LogTag, $"The following exception was thrown while loading the CSV at \"{m_Path}\" on line {line}", e);
 				throw;
 			}
 		}

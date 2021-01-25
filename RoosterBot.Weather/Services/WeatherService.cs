@@ -43,7 +43,7 @@ namespace RoosterBot.Weather {
 			string ret = m_Resources.GetString(culture, "WeatherBit_Code_" + weatherCode);
 
 			if (ret == null) {
-				Logger.Error("WeatherInfo", "Unknown code " + weatherCode);
+				Logger.Error(WeatherComponent.LogTag, "Unknown code " + weatherCode);
 				return m_Resources.GetString(culture, "WeatherBit_Code_Unknown");
 			} else {
 				return ret;

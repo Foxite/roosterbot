@@ -20,8 +20,8 @@ namespace RoosterBot.Tools {
 
 		public string GetQuote(CultureInfo culture) {
 			if (m_Providers.Count == 0) {
-				Logger.Error("Motivation", "Tried to get a motivational quote, but there are no providers installed! In lieu of a quote, you will be mocked.");
-				return "Here's a quote for you: the bot administrator is an idiot who does not read instructions prior to installing arbitrary components into his bot.";
+				Logger.Error("Tools", "Tried to get a motivational quote, but there are no providers installed! In lieu of a quote, you will be mocked.");
+				return $"Here's a quote for you: the bot administrator is an idiot who does not read instructions prior to installing arbitrary components into his bot.\n- RoosterBot {DateTime.Today.Year}";
 			} else {
 				return m_Providers[m_RNG.Next(0, m_Providers.Count)].GetQuote(culture);
 			}

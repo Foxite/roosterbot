@@ -25,7 +25,7 @@ namespace RoosterBot {
 		/// Runs the full initialization process for components.
 		/// </summary>
 		internal IServiceProvider SetupComponents(IServiceCollection serviceCollection) {
-			Logger.Info("ComponentManager", "ComponentManager starting");
+			Logger.Info(Logger.Tags.RoosterBot, "ComponentManager starting");
 
 			// Load assemblies and find classes deriving from ComponentBase
 			IEnumerable<string> componentNames = ReadComponentsFile();
@@ -41,7 +41,7 @@ namespace RoosterBot {
 			AddComponentModules(services);
 			AddComponentHandlers(services);
 			
-			Logger.Info("ComponentManager", "Components ready");
+			Logger.Info(Logger.Tags.RoosterBot, "Components ready");
 			ConnectPlatforms(services);
 			return services;
 		}
@@ -67,12 +67,12 @@ namespace RoosterBot {
 				string path = Path.Combine(AppContext.BaseDirectory, "Components", componentName, componentName + ".dll");
 
 				if (File.Exists(path)) {
-					Logger.Debug("ComponentManager", "Loading assembly " + componentName);
+					Logger.Debug(Logger.Tags.RoosterBot, "Loading assembly " + componentName);
 
 					var assembly = Assembly.LoadFrom(path);
 					assemblies.Add(assembly);
 				} else {
-					Logger.Error("ComponentManager", "Component " + componentName + " could not be found");
+					Logger.Error(Logger.Tags.RoosterBot, "Component " + componentName + " could not be found");
 				}
 			}
 			return assemblies;
@@ -99,7 +99,7 @@ namespace RoosterBot {
 
 		private void ConstructComponents(IEnumerable<Type> componentTypes) {
 			foreach (Type type in componentTypes) {
-				Logger.Debug("ComponentManager", "Constructing component " + type.Name);
+				Logger.Debug(Logger.Tags.RoosterBot, "Constructing component " + type.Name);
 				try {
 					Component component = (Activator.CreateInstance(type) as Component)!; // Can technically be null but should never happen.
 					m_Components.Add(component);
@@ -122,7 +122,7 @@ namespace RoosterBot {
 
 		private IServiceProvider AddComponentServices(IServiceCollection serviceCollection) {
 			foreach (Component component in m_Components) {
-				Logger.Debug("ComponentManager", "Adding services from " + component.Name);
+				Logger.Debug(Logger.Tags.RoosterBot, "Adding services from " + component.Name);
 				
 				try {
 					string configFolder = Path.Combine(Program.DataPath, "Config", component.Name);
@@ -141,7 +141,7 @@ namespace RoosterBot {
 			RoosterCommandService commands = services.GetRequiredService<RoosterCommandService>();
 
 			foreach (Component component in m_Components) {
-				Logger.Debug("ComponentManager", "Adding modules from " + component.Name);
+				Logger.Debug(Logger.Tags.RoosterBot, "Adding modules from " + component.Name);
 				try {
 					component.AddModulesInternal(services, commands);
 				} catch (Exception ex) {
@@ -154,7 +154,7 @@ namespace RoosterBot {
 			RoosterCommandService commands = services.GetRequiredService<RoosterCommandService>();
 
 			foreach (Component component in m_Components) {
-				Logger.Debug("ComponentManager", "Adding handlers from " + component.Name);
+				Logger.Debug(Logger.Tags.RoosterBot, "Adding handlers from " + component.Name);
 				try {
 					component.AddHandlersInternal(services, commands);
 				} catch (Exception ex) {

@@ -12,6 +12,8 @@ using Qommon.Collections;
 
 namespace RoosterBot.DiscordNet {
 	public class DiscordNetComponent : PlatformComponent {
+		internal const string LogTag = "DiscordNet";
+
 		public static DiscordNetComponent Instance { get; private set; } = null!;
 
 		private Dictionary<string, DiscordEmote> m_Emotes = new Dictionary<string, DiscordEmote>();
