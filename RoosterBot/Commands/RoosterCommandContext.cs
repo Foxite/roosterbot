@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +14,7 @@ namespace RoosterBot {
 	/// It also holds the <see cref="RoosterBot.UserConfig"/> for the <see cref="User"/> and the <see cref="RoosterBot.ChannelConfig"/> for the <see cref="Channel"/>, which is
 	/// often accessed by multiple unrelated classes in the execution process, so that these classes do not have to retrieve the config data independently.
 	/// </summary>
-	public abstract class RoosterCommandContext : CommandContext {
+	public class RoosterCommandContext : CommandContext {
 		private ResourceService? m_Resources = null;
 
 		/// <summary>
@@ -87,7 +89,7 @@ namespace RoosterBot {
 		}
 
 		/// <summary>
-		/// Convert a <see cref="RoosterCommandResult"/> to a string that can be passed into this context's <see cref="IChannel.SendMessageAsync(string, string)"/>.
+		/// Convert a <see cref="RoosterCommandResult"/> to a string that can be passed into this context's <see cref="IChannel.SendMessageAsync(string)"/>.
 		/// </summary>
 		public async Task<IMessage> RespondAsync(RoosterCommandResult result) {
 			//Channel.SendMessageAsync(result.ToString(this), result.UploadFilePath);
@@ -113,14 +115,16 @@ namespace RoosterBot {
 		/// <summary>
 		/// Send the result to the channel. You may override this for your platform to provide custom presentations of built-in or external <see cref="RoosterCommandResult"/> types.
 		/// </summary>
-		protected abstract Task<IMessage> SendResultAsync(RoosterCommandResult result); /* {
-			if (existingResponse == null) {
-				return Channel.SendMessageAsync(result.ToString(this));
+		protected virtual Task<IMessage> SendResultAsync(RoosterCommandResult result) {
+			IEnumerable<ResultAdapter> adapters = Platform.GetResultAdapter(this, result);
+			if (adapters.Any()) {
+				return adapters.First().HandleResult(this, result);
 			} else {
-				existingResponse.ModifyAsync(result.ToString(this));
-				return Task.FromResult(existingResponse);
+				var error = TextResult.Error($"Missing ResultAdapter for {result.GetType().FullName}");
+				Logger.Error(Logger.Tags.Pipeline, $"Missing ResultAdapter for {result.GetType().FullName}");
+				return Platform.GetResultAdapter(this, error).First().HandleResult(this, error); // Throw linq exception
 			}
-		}//*/
+		}
 
 		/// <summary>
 		/// Get a string resource for <see cref="Culture"/>.

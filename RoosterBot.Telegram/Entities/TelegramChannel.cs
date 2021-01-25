@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
-using File = System.IO.File;
 
 namespace RoosterBot.Telegram {
 	public class TelegramChannel : TelegramSnowflake, IChannel {
@@ -28,17 +25,12 @@ namespace RoosterBot.Telegram {
 			if (rawId is long id) {
 				return Task.FromResult<IMessage>(new TelegramMessageFacade(this, id));
 			} else {
-				throw new ArgumentException("ID must be long for Telegram entities.", nameof(id));
+				throw new ArgumentException("ID must be long for Telegram entities.", nameof(rawId));
 			}
 		}
 
-		public async Task<IMessage> SendMessageAsync(string content, string? filePath = null) {
-			if (filePath == null) {
-				return new TelegramMessage(await TelegramComponent.Instance.Client.SendTextMessageAsync(TelegramEntity, content, global::Telegram.Bot.Types.Enums.ParseMode.Markdown));
-			} else {
-				return new TelegramMessage(await TelegramComponent.Instance.Client.SendDocumentAsync(TelegramEntity,
-					new InputOnlineFile(File.OpenRead(filePath), Path.GetFileName(filePath)), content, global::Telegram.Bot.Types.Enums.ParseMode.Markdown));
-			}
+		public async Task<IMessage> SendMessageAsync(string content) {
+			return new TelegramMessage(await TelegramComponent.Instance.Client.SendTextMessageAsync(TelegramEntity, content, ParseMode.Markdown));
 		}
 	}
 }

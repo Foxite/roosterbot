@@ -35,14 +35,5 @@ Unfortunately it does not seem to be possible to obtain an actual Message object
 		}
 
 		public Task DeleteAsync() => TelegramComponent.Instance.Client.DeleteMessageAsync(ChatId, (int) Id);
-		public Task ModifyAsync(string newContent, string? filePath = null) {
-			if (filePath == null) {
-				return TelegramComponent.Instance.Client.EditMessageTextAsync(ChatId, (int) Id, newContent, global::Telegram.Bot.Types.Enums.ParseMode.Markdown);
-			} else {
-				TelegramComponent.Instance.Client.EditMessageTextAsync(ChatId, (int) Id, newContent, global::Telegram.Bot.Types.Enums.ParseMode.Markdown);
-				return TelegramComponent.Instance.Client.EditMessageMediaAsync(ChatId, (int) Id,
-					new InputMediaDocument(new InputMedia(File.OpenRead(filePath), Path.GetFileName(filePath))));
-			}
-		}
 	}
 }

@@ -13,10 +13,10 @@ namespace RoosterBot.DiscordNet {
 		public string Content => DiscordEntity.Content;
 		public DateTimeOffset SentAt => DiscordEntity.EditedTimestamp ?? DiscordEntity.CreatedAt;
 
-		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
-
 		internal DiscordMessage(Discord.IUserMessage discordMessage) {
 			DiscordEntity = discordMessage;
 		}
+
+		public Task DeleteAsync() => DiscordEntity.DeleteAsync();
 	}
 }

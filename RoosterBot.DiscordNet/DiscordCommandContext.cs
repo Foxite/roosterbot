@@ -23,14 +23,5 @@ namespace RoosterBot.DiscordNet {
 
 			Guild = Channel is SocketGuildChannel sgc ? sgc.Guild : null;
 		}
-
-		protected async override Task<IMessage> SendResultAsync(RoosterCommandResult result) {
-			System.Collections.Generic.IEnumerable<ResultAdapter> adapters = DiscordNetComponent.Instance.GetResultAdapter(this, result);
-			if (adapters.Any()) {
-				return await adapters.First().HandleResult(this, result);
-			} else {
-				return new DiscordMessage(await Channel.SendMessageAsync("als je dit ziet mag je de developer slaan")); // TODO
-			}
-		}
 	}
 }

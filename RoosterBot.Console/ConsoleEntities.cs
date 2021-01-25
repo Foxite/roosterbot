@@ -38,13 +38,9 @@ namespace RoosterBot.Console {
 
 		public Task<IMessage> GetMessageAsync(object id) => Task.FromResult((IMessage) m_Messages.First(message => message.Id == Id));
 
-		public Task<IMessage> SendMessageAsync(string content, string? filePath = null) {
+		public Task<IMessage> SendMessageAsync(string content) {
 			var message = new ConsoleMessage(content, true);
 			m_Messages.Add(message);
-			string msg = "Response: ```" + content + "```";
-			if (!(filePath is null)) {
-				msg += " File path: " + filePath;
-			}
 			Logger.Info(ConsoleComponent.LogTag, $"Response: ```{content}```");
 			return Task.FromResult((IMessage) message);
 		}
@@ -67,11 +63,6 @@ namespace RoosterBot.Console {
 
 		public Task DeleteAsync() {
 			Channel.m_Messages.Remove(this);
-			return Task.CompletedTask;
-		}
-
-		public Task ModifyAsync(string newContent, string? filePath = null) {
-			Content = newContent;
 			return Task.CompletedTask;
 		}
 	}
