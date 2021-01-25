@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using RoosterBot.DateTimeUtils;
@@ -8,7 +7,6 @@ using RoosterBot.DateTimeUtils;
 namespace RoosterBot.Weather {
 	public class WeatherInfo {
 		private readonly WeatherService m_WeatherService;
-		private readonly ResourceService m_Resources;
 
 		public CityInfo City { get; }
 
@@ -30,8 +28,7 @@ namespace RoosterBot.Weather {
 		/// </summary>
 		public short WeatherCode { get; }
 
-		internal WeatherInfo(ResourceService resources, WeatherService service, CityInfo city, JObject jsonInfo) {
-			m_Resources = resources;
+		internal WeatherInfo(WeatherService service, CityInfo city, JObject jsonInfo) {
 			m_WeatherService = service;
 			City = city;
 
@@ -47,10 +44,11 @@ namespace RoosterBot.Weather {
 		/// <summary>
 		/// Creates an AspectListResult that contains all information from <see cref="Present(RoosterCommandContext, string, bool)"/>, as well as a pretext with the City and Region name and the DateTime.
 		/// </summary>
-		public AspectListResult Present(RoosterCommandContext context, DateTime datetime, bool useMetric) {
+		public AspectListResult Present(RoosterCommandContext context, DateTime datetime, bool useMetric, bool attribution) {
 			string pretext;
 
 			if (City.Name == City.Region.Name) {
+				// TODO localize
 				pretext = $"{City.Name}: Weer ";
 			} else {
 				pretext = $"{City.Name}, {City.Region}: Weer ";
@@ -61,10 +59,10 @@ namespace RoosterBot.Weather {
 			} else {
 				pretext += DateTimeUtil.GetRelativeDateReference(datetime.Date, context.Culture) + " " + datetime.ToString("s", context.Culture);
 			}
-			return Present(context, pretext, useMetric);
+			return Present(context, pretext, useMetric, attribution);
 		}
 
-		public AspectListResult Present(RoosterCommandContext context, string caption, bool useMetric) {
+		public AspectListResult Present(RoosterCommandContext context, string caption, bool useMetric, bool attribution) {
 			IEnumerable<AspectListItem> getAspects() {
 				string temperature;
 				if (useMetric) {
@@ -140,7 +138,7 @@ namespace RoosterBot.Weather {
 				}
 			}
 
-			return new AspectListResult(caption, getAspects());
+			return new AspectListResult(caption, getAspects(), footer: attribution ? context.GetString("WeatherComponent_Attribution") : null);
 		}
 	}
 }

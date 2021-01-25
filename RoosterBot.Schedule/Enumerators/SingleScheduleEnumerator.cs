@@ -30,7 +30,7 @@ namespace RoosterBot.Schedule {
 
 			if (result.Success) {
 				m_CurrentRecord = result.Value;
-				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), false);
+				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), includeAspectNames: false);
 				return true;
 			} else {
 				Current = result.ErrorResult;
@@ -48,7 +48,7 @@ namespace RoosterBot.Schedule {
 
 			if (result.Success) {
 				m_CurrentRecord = result.Value;
-				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), false);
+				Current = new AspectListResult(m_Identifier.DisplayText, m_CurrentRecord.Present(m_Context), includeAspectNames: false);
 				return true;
 			} else {
 				Current = result.ErrorResult;

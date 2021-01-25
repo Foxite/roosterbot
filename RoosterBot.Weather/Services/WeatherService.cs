@@ -27,13 +27,13 @@ namespace RoosterBot.Weather {
 		}
 
 		public async Task<WeatherInfo> GetCurrentWeatherAsync(CityInfo city) {
-			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("current", new Dictionary<string, string>() {
+			return new WeatherInfo(this, city, (await GetResponseAsync("current", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() }
 			}))!["data"]![0]!.ToObject<JObject>()!);
 		}
 
 		public async Task<WeatherInfo> GetWeatherForecastAsync(CityInfo city, int hoursFromNow) {
-			return new WeatherInfo(m_Resources, this, city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
+			return new WeatherInfo(this, city, (await GetResponseAsync("forecast/hourly", new Dictionary<string, string>() {
 				{ "city_id", city.CityId.ToString() },
 				{ "hours", hoursFromNow.ToString() }
 			}))!["data"]!.Last!.ToObject<JObject>()!);

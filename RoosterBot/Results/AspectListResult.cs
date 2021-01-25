@@ -9,9 +9,14 @@ namespace RoosterBot {
 		private readonly IEnumerable<AspectListItem> m_Aspects;
 
 		/// <summary>
-		/// The text to prepend to the aspect list.
+		/// The text to display above to the aspect list.
 		/// </summary>
 		public string Caption { get; }
+
+		/// <summary>
+		/// The text to display below the aspect list.
+		/// </summary>
+		public string? Footer { get; }
 
 		/// <summary>
 		/// Indicates if the <see cref="ResultAdapter"/> should include the aspect names.
@@ -19,9 +24,10 @@ namespace RoosterBot {
 		public bool IncludeAspectNames { get; }
 
 		/// 
-		public AspectListResult(string caption, IEnumerable<AspectListItem> aspects, bool includeAspectNames = false) {
-			Caption = caption;
+		public AspectListResult(string header, IEnumerable<AspectListItem> aspects, string? footer = null, bool includeAspectNames = false) {
+			Caption = header;
 			m_Aspects = aspects;
+			Footer = footer;
 			IncludeAspectNames = includeAspectNames;
 		}
 

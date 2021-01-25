@@ -8,8 +8,6 @@ namespace RoosterBot.Weather {
 	// should request just that, instead of being shown a per-hour forecast of the entire day (24 calls), while they only care about one data point.
 	[Name("#WeatherModule_Name"), Group("#WeatherModule_Group")]
 	public class WeatherModule : RoosterModule {
-		private readonly CompoundResult m_Result = new CompoundResult("\n");
-
 		public WeatherService Weather { get; set; } = null!;
 
 		[Command("#WeatherModule_CurrentWeather"), Description("#WeatherModule_CurrentWeather_Description")]
@@ -18,10 +16,7 @@ namespace RoosterBot.Weather {
 
 			weather = await Weather.GetCurrentWeatherAsync(city);
 			ChannelConfig.TryGetData("metric", out bool metric, true);
-			m_Result.AddResult(weather.Present(Context, DateTime.Now, metric));
-			Attribution();
-
-			return m_Result;
+			return weather.Present(Context, DateTime.Now, metric, Weather.Attribution);
 		}
 
 		[Command("#WeatherModule_TimeForecast"), Description("#WeatherModule_TimeForecast_Description")]
@@ -33,10 +28,7 @@ namespace RoosterBot.Weather {
 			datetime = DateTime.Today.AddDays(day - DateTime.Today.DayOfWeek).Add(timeOffset);
 			weather = await Weather.GetWeatherForecastAsync(city, (int) (datetime - DateTime.Now).TotalHours);
 			ChannelConfig.TryGetData("metric", out bool metric, true);
-			m_Result.AddResult(weather.Present(Context, datetime, metric));
-			Attribution();
-
-			return m_Result;
+			return weather.Present(Context, datetime, metric, Weather.Attribution);
 		}
 
 		[Command("#WeatherModule_UnitForecast"), Description("#WeatherModule_UnitForecast_Description")]
@@ -50,19 +42,10 @@ namespace RoosterBot.Weather {
 					WeatherInfo weather;
 					weather = await Weather.GetWeatherForecastAsync(city, amount);
 					ChannelConfig.TryGetData("metric", out bool metric, true);
-					m_Result.AddResult(weather.Present(Context, DateTime.Now.AddHours(amount), metric));
-					Attribution();
-					return m_Result;
+					return weather.Present(Context, DateTime.Now.AddHours(amount), metric, Weather.Attribution);
 				}
 			} else {
 				return TextResult.Error(GetString("WeatherModule_UnknownUnit"));
-			}
-		}
-
-		private void Attribution() {
-			if (Weather.Attribution) {
-				// TODO use aspect list footer, then remove m_Result
-				m_Result.AddResult(new TextResult(null, GetString("WeatherComponent_Attribution")));
 			}
 		}
 	}
