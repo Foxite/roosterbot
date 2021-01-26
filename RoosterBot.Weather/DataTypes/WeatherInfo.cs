@@ -32,6 +32,7 @@ namespace RoosterBot.Weather {
 			m_WeatherService = service;
 			City = city;
 
+			// TODO should just deserialize a model record
 			Temperature = jsonInfo["temp"]!.ToObject<float>();
 			ApparentTemperature = jsonInfo["app_temp"]!.ToObject<float>();
 
