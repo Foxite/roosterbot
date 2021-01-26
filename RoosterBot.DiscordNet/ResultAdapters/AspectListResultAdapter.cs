@@ -20,6 +20,9 @@ namespace RoosterBot.DiscordNet {
 
 			return new EmbedBuilder() {
 				Title = title,
+				Footer = new EmbedFooterBuilder() {
+					Text = alr.Footer
+				},
 				Description = description,
 				Fields = alr.Select(aspect => new EmbedFieldBuilder() {
 					Name = aspect.PrefixEmote.ToString() + " " + aspect.Name,
