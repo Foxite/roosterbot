@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace RoosterBot.PublicTransit {
 	public class StationInfoService {
@@ -13,9 +14,17 @@ namespace RoosterBot.PublicTransit {
 
 			m_Stations = new List<StationInfo>();
 
-			// TODO read data from (probably json) file
-			// Assign DefaultDeparture to the first station you find in the file with the given code
-			
+			var xml = XElement.Load(stationFilePath);
+
+			foreach (XElement xStation in xml.Elements()) {
+				var station = new StationInfo(xStation);
+				m_Stations.Add(station);
+
+				if (station.Code == defaultDepartureCode) {
+					DefaultDeparture = station;
+				}
+			}
+
 			if (DefaultDeparture == null) {
 				throw new InvalidOperationException("No station matching the default departure code was found in the stations file.");
 			}
@@ -23,13 +32,13 @@ namespace RoosterBot.PublicTransit {
 		}
 
 		public StationInfo? GetByCode(string code) {
-			return m_Stations.Find(info =>  info.Code == code);
+			return m_Stations.Find(info => info.Code == code);
 		}
 
 		public StationMatchInfo[] Lookup(string input, int count) {
 			string inputLower = input.ToLower();
 			var matches = new LinkedList<StationMatchInfo>();
-			
+
 			void insertMatch(StationMatchInfo match) {
 				LinkedListNode<StationMatchInfo>? insertAfter = null;
 				foreach (LinkedListNode<StationMatchInfo> current in matches.GetNodes()) {
@@ -55,11 +64,11 @@ namespace RoosterBot.PublicTransit {
 			}
 
 			if (count == 1) {
-				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}");
+				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.Name} with {matches.First.Value.Score}");
 			} else if (count == 0) {
 				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: No results (how?)");
 			} else {
-				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.DisplayName} with {matches.First.Value.Score}, worst is {matches.Last!.Value.Station.DisplayName} with {matches.Last.Value.Score}");
+				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.Name} with {matches.First.Value.Score}, worst is {matches.Last!.Value.Station.Name} with {matches.Last.Value.Score}");
 			}
 
 			return matches.ToArray();

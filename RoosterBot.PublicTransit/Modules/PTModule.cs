@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Qmmands;
 
@@ -21,21 +23,22 @@ namespace RoosterBot.PublicTransit {
 				stationTo = stops[0];
 			}
 
-			IList<Journey> journeys = await NSAPI.GetTravelRecommendation(2, stationFrom, stationTo);
+			IReadOnlyList<Trip>? journeys = await NSAPI.GetTravelRecommendation(stationFrom, stationTo, Context.Message.SentAt, false, null);
 
-			// TODO should use paginated table (with cached journeys in the paginator)
-			var result = new CompoundResult("\n", new TextResult(null, $"Mogelijkheden van {stationFrom.DisplayName} naar {stationTo.DisplayName}:"));
-
-			foreach (Journey journey in journeys) {
-				string caption = "";
+			throw new NotImplementedException();
+			/*
+			return new PaginatedResult(new BidirectionalListEnumerator<TableResult>(journeys.ListSelect(journey => {
+				// TODO Move this code to Journey.Present()
+				string tableCaption = "";
 				if (journey.Status != JourneyStatus.OnSchedule) {
-					caption = JourneyStatusFunctions.HumanStringFromJStatus(journey.Status);
+					tableCaption = JourneyStatusFunctions.HumanStringFromJStatus(journey.Status);
 				}
 
 				string[][] cells = new string[journey.Components.Count + 1][];
 				cells[0] = new string[] { "Trein", "Vertrek om", "Vertrekspoor", "Aankomst", "Aankomst om", "Aankomstspoor", "Waarschuwing" };
 				int recordIndex = 1;
 				foreach (JourneyComponent component in journey.Components) {
+					// TODO Move this code into JourneyComponent.PresentRow()
 					cells[recordIndex] = new string[7];
 
 					cells[recordIndex][0] = $"{component.Carrier} {component.TransportType}";
@@ -72,9 +75,9 @@ namespace RoosterBot.PublicTransit {
 
 					recordIndex++;
 				}
-				result.AddResult(new TableResult(caption, cells));
-			}
-			return result;
+				return new TableResult(tableCaption, cells);
+			})), $"Mogelijkheden van {stationFrom.Name} naar {stationTo.Name}:");
+			*/
 		}
 
 		[Command("stations"), Description("Zoek een station op in de lijst.")]
@@ -84,7 +87,7 @@ namespace RoosterBot.PublicTransit {
 			IReadOnlyList<StationMatchInfo> matches = Stations.Lookup(input, 3);
 			int i = 1;
 			foreach (StationMatchInfo matchInfo in matches) {
-				response += $"{i}. {matchInfo.Station.DisplayName}";
+				response += $"{i}. {matchInfo.Station.Name}";
 
 				if (matchInfo.Station.Synonyms.Count != 1) {
 					string aka = " (ook bekend als: ";
@@ -92,7 +95,7 @@ namespace RoosterBot.PublicTransit {
 					int count = 0;
 					bool notFirst = false;
 					for (int j = 1; j < matchInfo.Station.Synonyms.Count; j++) {
-						if (matchInfo.Station.Synonyms[j] != matchInfo.Station.DisplayName.ToLower()) {
+						if (matchInfo.Station.Synonyms[j] != matchInfo.Station.Name.ToLower()) {
 							if (notFirst) {
 								aka += ", ";
 							}

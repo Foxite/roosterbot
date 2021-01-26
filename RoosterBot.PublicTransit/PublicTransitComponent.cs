@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RoosterBot.PublicTransit {
@@ -8,21 +9,15 @@ namespace RoosterBot.PublicTransit {
 	public class PublicTransitComponent : Component {
 		internal const string LogTag = "PublicTransit";
 
-#nullable disable
-		private NSAPI m_NSAPI;
-#nullable restore
-
 		public override Version ComponentVersion => new Version(1, 2, 1);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
-				Username = "",
-				Password = "",
+				Key = "",
 				DefaultDepartureCode = ""
 			});
 
-			m_NSAPI = new NSAPI(config.Username, config.Password);
-			services.AddSingleton(m_NSAPI);
+			services.AddSingleton(isp => new NSAPI(config.Key, isp.GetRequiredService<HttpClient>()));
 			services.AddSingleton(new StationInfoService(Path.Combine(configPath, "stations.xml"), config.DefaultDepartureCode));
 		}
 
