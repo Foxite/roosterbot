@@ -24,7 +24,9 @@ namespace RoosterBot.PublicTransit {
 		[property: JsonProperty("punctuality")]
 		float Punctuality
 	) {
-		public TableResult Present() {
+		public RoosterCommandResult Present() {
+			// This approach works, technically, if your screen is wide enough (phone screen are universally not wide enough.
+			// I'm going to try to think of a better way to present the data. If all else fails, I might make DiscordNet render wide tables to an image.
 			string tableCaption = "";
 			if (Status != TripStatus.Normal) {
 				tableCaption = Status.ToString(); // TODO localize

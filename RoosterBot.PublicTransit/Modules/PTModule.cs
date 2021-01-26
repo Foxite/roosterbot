@@ -25,7 +25,7 @@ namespace RoosterBot.PublicTransit {
 
 			TripsResponse journeys = await NSAPI.GetTravelRecommendation(stationFrom, stationTo, Context.Message.SentAt, false, null);
 
-			return new PaginatedResult(new BidirectionalListEnumerator<TableResult>(journeys.Trips.ListSelect(trip => trip.Present())), $"Mogelijkheden van {stationFrom.Name} naar {stationTo.Name}:");
+			return new PaginatedResult(new BidirectionalListEnumerator<RoosterCommandResult>(journeys.Trips.ListSelect(trip => trip.Present())), $"Mogelijkheden van {stationFrom.Name} naar {stationTo.Name}:");
 		}
 
 		[Command("stations"), Description("Zoek een station op in de lijst.")]
@@ -37,6 +37,7 @@ namespace RoosterBot.PublicTransit {
 			foreach (StationMatchInfo matchInfo in matches) {
 				response += $"{i}. {matchInfo.Station.Name}";
 
+				// TODO remove
 				if (matchInfo.Station.Synonyms.Count != 1) {
 					string aka = " (ook bekend als: ";
 
