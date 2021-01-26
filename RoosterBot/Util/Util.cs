@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -31,23 +29,6 @@ namespace RoosterBot {
 				sw.Write(JsonConvert.SerializeObject(template, jss));
 				return template;
 			}
-		}
-
-		/// <summary>
-		/// This returns true if <paramref name="input"/> is either:
-		/// - Type of <typeparamref name="T"/>, in which case <paramref name="result"/> will be set to <paramref name="input"/>, or
-		/// - A <see cref="CompoundResult"/> with only a single result which is type of <typeparamref name="T"/>, in which case <paramref name="result"/> will be set to that item.
-		/// Otherwise this will return false and <paramref name="result"/> will be set to null.
-		/// </summary>
-		[Obsolete("CompoundResult is obsolete")]
-		public static bool Is<T>(this RoosterCommandResult input, [MaybeNullWhen(false), NotNullWhen(true)] out T? result) where T : RoosterCommandResult {
-			result =                                    // Hard-to-read expression - I've laid it out here:
-				input as T ??                           // Simple, if result is T then return result as T.
-				((input is CompoundResult cr            // If it's not T: Is it a compound result...
-				&& cr.IndividualResults.CountEquals(1)) //  with only one item?
-				? cr.IndividualResults.First() as T     //   Then return the first (and only) item as T, returning null if it's not T.
-				: null);                                // otherwise return null.
-			return result != null;
 		}
 
 		/// <summary>
