@@ -22,6 +22,8 @@ namespace RoosterBot.Console {
 
 		public override string PlatformName => "Console";
 
+		public override Type SnowflakeIdType => typeof(ulong);
+
 		public ConsoleComponent() {
 			Instance = this;
 			m_CTS = new CancellationTokenSource();

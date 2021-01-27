@@ -25,6 +25,10 @@ namespace RoosterBot {
 		/// Construct a new SnowflakeReference.
 		/// </summary>
 		public SnowflakeReference(PlatformComponent platform, object id) {
+			if (!id.GetType().IsAssignableFrom(platform.SnowflakeIdType)) {
+				throw new InvalidOperationException($"Attempt to create a SnowflakeReference with an id type that does not match the platform's id type. Given ID: {id.GetType().Name}/\"{id}\" platform id type: {platform.SnowflakeIdType.Name}");
+			}
+
 			Platform = platform;
 			Id = id;
 		}

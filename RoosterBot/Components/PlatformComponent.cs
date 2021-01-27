@@ -21,6 +21,11 @@ namespace RoosterBot {
 		public abstract string PlatformName { get; }
 
 		/// <summary>
+		/// Returns the type used for the Id of all <see cref="ISnowflake"/> produced by this platform.
+		/// </summary>
+		public abstract Type SnowflakeIdType { get; }
+
+		/// <summary>
 		/// Start the connection to the platform.
 		/// </summary>
 		protected abstract void Connect(IServiceProvider services);

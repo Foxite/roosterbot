@@ -11,7 +11,11 @@ namespace RoosterBot.DiscordNet {
 			Logger.Info(DiscordNetComponent.LogTag, "Sending error report to Discord admins");
 			try {
 				foreach (SocketUser admin in DiscordNetComponent.Instance.BotAdmins) {
-					await (await admin.GetOrCreateDMChannelAsync()).SendMessageAsync(nea.Message);
+					string message = nea.Message;
+					if (message.Length > 1995) {
+						message = message[0..1995];
+					}
+					await (await admin.GetOrCreateDMChannelAsync()).SendMessageAsync(message);
 				}
 			} catch (Exception ex) {
 				Logger.Error(DiscordNetComponent.LogTag, "Failed to send error report Discord admins", ex);

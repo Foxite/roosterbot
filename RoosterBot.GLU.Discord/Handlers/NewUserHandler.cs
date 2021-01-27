@@ -36,6 +36,7 @@ namespace RoosterBot.GLU.Discord {
 
 				if (info == null) {
 					text += $"- Stel in {botCommandsMention} jouw klas in door `!ik zit in <klas>` te sturen: bijvoorbeeld `!ik zit in 2gd1` of `!ik zit in 1ga2`. Je krijgt dan automatisch een rang die jouw klas aangeeft.\n";
+					await user.AddRoleAsync(user.Guild.GetRole(GluDiscordUtil.NewUserRank));
 				}
 
 				if (nickname != null) {

@@ -32,6 +32,7 @@ namespace RoosterBot.DiscordNet {
 
 		public override string PlatformName => "Discord";
 		public override Version ComponentVersion => new Version(1, 2, 0);
+		public override Type SnowflakeIdType => typeof(ulong);
 
 		public DiscordNetComponent() {
 			Instance = this;
@@ -162,6 +163,7 @@ namespace RoosterBot.DiscordNet {
 			new MessageReceivedHandler    (services);
 			new MessageUpdatedHandler     (services);
 			new MessageDeletedHandler     (services);
+			new VoteToPinHandler          (services);
 			new ReadyHandler              (m_GameString, m_Activity, m_NotifyReady, m_ClientReady);
 			new LogHandler                (Client);
 

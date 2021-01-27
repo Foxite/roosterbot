@@ -50,7 +50,7 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private enum FailureReason {
-			OutOfSpace, InvalidFormat
+			OutOfSpace, InvalidFormat, OversizedEmote
 		}
 
 		private async Task<CommandResult> CreateEmotes(IEnumerable<EmoteCreationData> emotes) {
@@ -77,6 +77,17 @@ namespace RoosterBot.DiscordNet {
 					}
 
 					byte[] emoteBytes = await webClient.DownloadDataTaskAsync(emote.Url);
+
+					if (emoteBytes.Length >= 1024 * 256) {
+						(FailureReason OversizedEmote, bool) key = (FailureReason.OversizedEmote, extension == ".gif");
+						if (fails.ContainsKey(key)) {
+							fails[key]++;
+						} else {
+							fails[key] = 1;
+						}
+						continue;
+					}
+
 					if (createEmote != null) {
 						stolenEmote = await createEmote;
 						successfulEmotes.Add(stolenEmote);
@@ -106,6 +117,7 @@ namespace RoosterBot.DiscordNet {
 						info.Key.reason switch {
 							FailureReason.InvalidFormat => "of an unsupported format",
 							FailureReason.OutOfSpace => "we're out of space",
+							FailureReason.OversizedEmote => "the emote is too big",
 							_ => info.Key.reason.ToString()
 						};
 				}
@@ -130,42 +142,53 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 		#endregion
-		
+
 		#region Steal (create from other message)
-		[Command("steal")]
+		[Command("steal"), Priority(-1)]
 		public async Task<CommandResult> StealEmote() {
-			if (Context.Message.ReferencedMessage != null) {
-				// If this ever throws a StackOverflowException, the person who caused it will be eligible for a free Mars bar,
-				// offer expires one hour before the error occured.
-				return await StealEmote(Context.Message.ReferencedMessage);
+			IUserMessage? message = Context.Message.ReferencedMessage ?? await GetMessageBeforeCommand();
+
+			if (message != null) {
+				return await StealEmote(message);
 			} else {
-				IUserMessage? message = await GetMessageBeforeCommand();
-				if (message != null) {
-					return await StealEmote(message);
-				} else {
-					return TextResult.Error("Could not get message before your command.");
-				}
+				return TextResult.Error("Could not get message before your command.");
 			}
 		}
 
-		[Command("steal"), Priority(-1)]
+		[Command("steal"), Priority(2)]
 		public Task<CommandResult> StealEmote(IUserMessage message) {
 			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url));
 
 			if (emotes.Any()) {
 				return CreateEmotes(emotes);
 			} else {
-				return Task.FromResult((CommandResult) TextResult.Error("Did not find any emotes"));
+				return Task.FromResult((CommandResult) TextResult.Error("Did not find any emotes (or you forgot to specify a name)"));
 			}
 		}
 
-		[Command("steal from attachment"), Priority(1)]
-		public async Task<CommandResult> StealEmoteFromAttachment(params string[] names) {
-			IUserMessage? message = await GetMessageBeforeCommand();
+		[Command("steal"), Priority(1)]
+		public async Task<CommandResult> StealEmote([Count(1, -1)] params string[] names) {
+			IUserMessage? message = Context.Message.ReferencedMessage ?? await GetMessageBeforeCommand();
+			
 			if (message != null) {
-				return await CreateEmotes(message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
+				return await StealEmote(message, names);
 			} else {
 				return TextResult.Error("Could not get message before your command.");
+			}
+		}
+
+		[Command("steal"), Priority(3)]
+		public async Task<CommandResult> StealEmote(IUserMessage message, [Count(1, -1)] params string[] names) {
+			var linkParser = new Regex(@"(?:https?:|www\.)\S+", RegexOptions.IgnoreCase);
+
+			IEnumerable<EmoteCreationData> emotes = message.Attachments.Select(att => att.Url)
+				.Concat(linkParser.Matches(message.Content).Select(match => match.Value))
+				.Zip(names, (url, name) => new EmoteCreationData(name, url));
+
+			if (emotes.Any()) {
+				return await CreateEmotes(emotes);
+			} else {
+				return TextResult.Error("Did not find suitable attachments");
 			}
 		}
 		#endregion

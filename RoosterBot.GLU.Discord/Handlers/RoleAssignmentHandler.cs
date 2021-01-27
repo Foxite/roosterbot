@@ -9,8 +9,6 @@ using RoosterBot.Schedule;
 
 namespace RoosterBot.GLU.Discord {
 	internal sealed class RoleAssignmentHandler {
-		private const ulong NewUserRank = 278937741478330389; //669257158969524244;
-
 		public RoleAssignmentHandler() {
 			ScheduleUtil.UserChangedIdentifier += OnUserChangedClass;
 		}
@@ -31,8 +29,8 @@ namespace RoosterBot.GLU.Discord {
 							}
 						}
 
-						if (user.RoleIds.Contains(NewUserRank)) {
-							await user.RemoveRoleAsync(user.Guild.GetRole(NewUserRank));
+						if (user.RoleIds.Contains(GluDiscordUtil.NewUserRank)) {
+							await user.RemoveRoleAsync(user.Guild.GetRole(GluDiscordUtil.NewUserRank));
 						}
 					} catch (Exception e) {
 						Logger.Error("GLU-Discord", $"Could not assign roles to user {user.Username}#{user.Discriminator}.");

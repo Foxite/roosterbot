@@ -21,13 +21,15 @@ namespace RoosterBot.DiscordNet {
 
 		private Task HandleReaction(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3) {
 			Task.Run(async () => { // Run off thread
-				ChannelConfig channelConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, ((IGuildChannel) arg2).Guild.Id));
+				if (arg2 is IGuildChannel igc) {
+					ChannelConfig channelConfig = await CCS.GetConfigAsync(new SnowflakeReference(DiscordNetComponent.Instance, igc.Guild.Id));
 
-				if (channelConfig.TryGetData(EmoteIdKey, out string? emoteName)) {
-					if (channelConfig.TryGetData(VoteCountKey, out int minVotes)) {
-						if (arg3.Emote.Name == emoteName) {
-							if ((await arg1.GetOrDownloadAsync()).Reactions[arg3.Emote].ReactionCount >= minVotes) {
-								await (await arg1.GetOrDownloadAsync()).PinAsync();
+					if (channelConfig.TryGetData(EmoteIdKey, out string? emoteName)) {
+						if (channelConfig.TryGetData(VoteCountKey, out int minVotes)) {
+							if (arg3.Emote.Name == emoteName) {
+								if ((await arg1.GetOrDownloadAsync()).Reactions[arg3.Emote].ReactionCount >= minVotes) {
+									await (await arg1.GetOrDownloadAsync()).PinAsync();
+								}
 							}
 						}
 					}
