@@ -39,5 +39,23 @@ namespace RoosterBot {
 
 			return result;
 		}
+
+		// TODO move to Foxite.Common
+		/// <summary>
+		/// Determines the line number of the given position in the string.
+		/// You can specify the delimiter, so it doesn't actually have to be the line number, it could also be the column number.
+		/// </summary>
+		public static int LineOfIndex(this string str, int index, string delimiter = "\n") {
+			if (index == 0) {
+				return 0;
+			}
+
+			int line = 0;
+			int lastLineIndex = 0;
+			while ((lastLineIndex = str.IndexOf(delimiter, lastLineIndex + 1)) != -1 && lastLineIndex < index) {
+				line++;
+			}
+			return line;
+		}
 	}
 }

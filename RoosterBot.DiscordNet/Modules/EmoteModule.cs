@@ -41,12 +41,16 @@ namespace RoosterBot.DiscordNet {
 			return null;
 		}
 
-		private static List<Emote> GetEmotesFromText(string text) {
+		private static IEnumerable<EmoteCreationData> GetEmotesFromText(string text) {
 			return Regex.Matches(text, @"((?<!\\)\<a?:[A-z0-9\-_]+?:[0-9]+?\>)")
-				.Select(match => Emote.TryParse(match.Captures[0].Value, out Emote ret) ? ret : null)
-				.WhereNotNull()
-				.DistinctBy(emote => emote.Id)
-				.ToList();
+				.Select(match => {
+					var emote = Emote.Parse(match.Captures[0].Value);
+					return (emote.Id, new EmoteCreationData(emote.Name, emote.Url, text.LineOfIndex(match.Index)));
+				})
+				.ToList()
+				.DistinctBy(tuple => tuple.Id)
+				.Select(tuple => tuple.Item2)
+				;
 		}
 
 		private enum FailureReason {
@@ -54,13 +58,13 @@ namespace RoosterBot.DiscordNet {
 		}
 
 		private async Task<CommandResult> CreateEmotes(IEnumerable<EmoteCreationData> emotes) {
-			var successfulEmotes = new List<Emote>();
+			var successfulEmotes = new List<(int Line, Emote)>();
 
 			var fails = new Dictionary<(FailureReason reason, bool Animated), int>();
 
 			using (var webClient = new WebClient()) {
 				// Download an emote image while we're uploading the previous one.
-				Task<GuildEmote>? createEmote = null;
+				(int Line, Task<GuildEmote> Task)? createEmote = null;
 				GuildEmote stolenEmote;
 				IGuild? guild = null;
 				foreach (EmoteCreationData emote in emotes) {
@@ -88,22 +92,35 @@ namespace RoosterBot.DiscordNet {
 						continue;
 					}
 
-					if (createEmote != null) {
-						stolenEmote = await createEmote;
-						successfulEmotes.Add(stolenEmote);
+					if (createEmote.HasValue) {
+						stolenEmote = await createEmote.Value.Task;
+						successfulEmotes.Add((createEmote.Value.Line, stolenEmote));
 					}
-					createEmote = guild.CreateEmoteAsync(emote.Name, new Image(new MemoryStream(emoteBytes)));
+					createEmote = (emote.Line, guild.CreateEmoteAsync(emote.Name, new Image(new MemoryStream(emoteBytes))));
 				}
-				if (createEmote != null) {
-					stolenEmote = await createEmote;
-					successfulEmotes.Add(stolenEmote);
+				if (createEmote.HasValue) {
+					stolenEmote = await createEmote.Value.Task;
+					successfulEmotes.Add((createEmote.Value.Line, stolenEmote));
 				}
 			}
 
 			string response = "";
 
 			if (successfulEmotes.Count > 0) {
-				response = string.Join(' ', successfulEmotes.Select(emote => emote.ToString()));
+				//response = string.Join(' ', successfulEmotes.Select(emote => emote.ToString()));
+				int lastLine = 0;
+				bool multipleLines = false;
+				foreach ((int Line, Emote Emote) in successfulEmotes) {
+					if (Line != lastLine) {
+						response += "\n";
+						lastLine = Line;
+						multipleLines = true;
+					}
+					response += Emote.ToString();
+				}
+				if (multipleLines) {
+					response = "\n" + response;
+				}
 
 				if (fails.Count > 0) {
 					response += "\n";
@@ -132,15 +149,11 @@ namespace RoosterBot.DiscordNet {
 			}
 		}
 
-		private struct EmoteCreationData {
-			public string Name { get; }
-			public string Url { get; }
-
-			public EmoteCreationData(string name, string url) {
-				Name = name;
-				Url = url;
-			}
-		}
+		private record EmoteCreationData(
+			string Name,
+			string Url,
+			int Line
+		);
 		#endregion
 
 		#region Steal (create from other message)
@@ -157,7 +170,7 @@ namespace RoosterBot.DiscordNet {
 
 		[Command("steal"), Priority(2)]
 		public Task<CommandResult> StealEmote(IUserMessage message) {
-			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content).Select(emote => new EmoteCreationData(emote.Name, emote.Url));
+			IEnumerable<EmoteCreationData> emotes = GetEmotesFromText(message.Content);
 
 			if (emotes.Any()) {
 				return CreateEmotes(emotes);
@@ -181,9 +194,11 @@ namespace RoosterBot.DiscordNet {
 		public async Task<CommandResult> StealEmote(IUserMessage message, [Count(1, -1)] params string[] names) {
 			var linkParser = new Regex(@"(?:https?:|www\.)\S+", RegexOptions.IgnoreCase);
 
-			IEnumerable<EmoteCreationData> emotes = message.Attachments.Select(att => att.Url)
-				.Concat(linkParser.Matches(message.Content).Select(match => match.Value))
-				.Zip(names, (url, name) => new EmoteCreationData(name, url));
+			var emotes = message.Attachments.Select(att => new EmoteCreationData(null!, att.Url, 0))
+				.Concat(
+					linkParser.Matches(message.Content).Select(match => new EmoteCreationData(null!, match.Value, message.Content.LineOfIndex(match.Index))
+				)
+				.Zip(names, (ecd, name) => ecd with { Name = name }));
 
 			if (emotes.Any()) {
 				return await CreateEmotes(emotes);
@@ -196,12 +211,12 @@ namespace RoosterBot.DiscordNet {
 		#region Create (create from user message)
 		[Command("create from attachment"), MessageHasAttachment]
 		public Task<CommandResult> CreateEmoteFromAttachment([Count(1, -1)] params string[] names) {
-			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url)));
+			return CreateEmotes(Context.Message.Attachments.Zip(names, (att, name) => new EmoteCreationData(name, att.Url, 1)));
 		}
 
 		[Command("create from url"), Priority(1)]
 		public Task<CommandResult> CreateEmoteFromUrl(Uri uri, [Remainder] string name) {
-			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString()) });
+			return CreateEmotes(new[] { new EmoteCreationData(name, uri.ToString(), 1) });
 		}
 		#endregion
 	}
