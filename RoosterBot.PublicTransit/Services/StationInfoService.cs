@@ -63,19 +63,14 @@ namespace RoosterBot.PublicTransit {
 				insertMatch(new StationMatchInfo(v, v.Match(inputLower)));
 			}
 
-			if (count == 1) {
-				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.Name} with {matches.First.Value.Score}");
-			} else if (count == 0) {
-				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: No results (how?)");
-			} else {
-				Logger.Debug(PublicTransitComponent.LogTag, $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.Name} with {matches.First.Value.Score}, worst is {matches.Last!.Value.Station.Name} with {matches.Last.Value.Score}");
-			}
-
+			Logger.Debug(PublicTransitComponent.LogTag, count switch
+			{
+				1 => $"Asked for 1 for `{input}`: result is {matches.First!.Value.Station.Name} with {matches.First!.Value.Score}",
+				0 => $"Asked for {count} matches for `{input}`: No results (how?)",
+				_ => $"Asked for {count} matches for `{input}`: best result is {matches.First!.Value.Station.Name} with {matches.First!.Value.Score}, worst is {matches.Last!.Value.Station.Name} with {matches.Last!.Value.Score}"
+			});
+			
 			return matches.ToArray();
-		}
-
-		public StationMatchInfo Lookup(string input) {
-			return Lookup(input, 1)[0];
 		}
 	}
 }

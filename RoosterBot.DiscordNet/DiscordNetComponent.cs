@@ -16,7 +16,7 @@ namespace RoosterBot.DiscordNet {
 
 		public static DiscordNetComponent Instance { get; private set; } = null!;
 
-		private Dictionary<string, DiscordEmote> m_Emotes = new Dictionary<string, DiscordEmote>();
+		private Dictionary<string, DiscordEmote> m_Emotes = new();
 		private string m_Token = null!;
 		private string m_GameString = "";
 		private ActivityType m_Activity;
@@ -31,7 +31,7 @@ namespace RoosterBot.DiscordNet {
 		public IReadOnlyList<SocketUser> BotAdmins => BotAdminIds.ListSelect(id => Client.GetUser(id));
 
 		public override string PlatformName => "Discord";
-		public override Version ComponentVersion => new Version(1, 2, 0);
+		public override Version ComponentVersion => new(1, 2, 0);
 		public override Type SnowflakeIdType => typeof(ulong);
 
 		public DiscordNetComponent() {
@@ -147,8 +147,8 @@ namespace RoosterBot.DiscordNet {
 			commandService.AddAllModules();
 
 			var emoteService = services.GetRequiredService<EmoteService>();
-			foreach (var item in m_Emotes) {
-				emoteService.RegisterEmote(this, item.Key, item.Value);
+			foreach ((string key, DiscordEmote value) in m_Emotes) {
+				emoteService.RegisterEmote(this, key, value);
 			}
 
 			RegisterResultAdapter(new TextResultAdapter());

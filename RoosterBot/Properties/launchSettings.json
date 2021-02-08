@@ -2,7 +2,7 @@
   "profiles": {
     "RoosterBot": {
       "commandName": "Project",
-      "commandLineArgs": "C:/ProgramData/RoosterBot"
+      "commandLineArgs": "../Config"
     }
   }
 }

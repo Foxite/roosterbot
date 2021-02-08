@@ -46,7 +46,7 @@ namespace RoosterBot {
 			return services;
 		}
 
-		private IEnumerable<string> ReadComponentsFile() {
+		private IReadOnlyList<string> ReadComponentsFile() {
 			try {
 				return Util.LoadJsonConfigFromTemplate(Path.Combine(Program.DataPath, "Config", "Components.json"), new { Components = Array.Empty<string>() }).Components;
 			} catch (JsonReaderException e) {
@@ -55,7 +55,7 @@ namespace RoosterBot {
 		}
 		
 		private void EnsureNoDuplicates(IEnumerable<string> componentNames) {
-			IEnumerable<string> duplicates = componentNames.Duplicates();
+			var duplicates = componentNames.Duplicates().ToArray();
 			if (duplicates.Any()) {
 				throw new InvalidOperationException("One or more components was listed more than once in Components.json:\n" + string.Join("\n", duplicates));
 			}
@@ -72,7 +72,7 @@ namespace RoosterBot {
 					var assembly = Assembly.LoadFrom(path);
 					assemblies.Add(assembly);
 				} else {
-					Logger.Error(Logger.Tags.RoosterBot, "Component " + componentName + " could not be found");
+					throw new DllNotFoundException("Component " + componentName + " could not be found");
 				}
 			}
 			return assemblies;
@@ -89,7 +89,7 @@ namespace RoosterBot {
 		}
 
 		private void EnsureNoMultiComponentAssemblies(IEnumerable<Type> componentTypes) {
-			var assembliesWithMultipleComponents = componentTypes.GroupBy(component => component.Assembly).Where(group => group.Count() > 1);
+			var assembliesWithMultipleComponents = componentTypes.GroupBy(component => component.Assembly).Where(group => group.Count() > 1).ToArray();
 			if (assembliesWithMultipleComponents.Any()) {
 				throw new InvalidOperationException(
 					$"One or more assemblies contain more than one {nameof(Component)} class. An assembly can have at most one component. The offending assemblies are:\n"
@@ -110,7 +110,7 @@ namespace RoosterBot {
 			}
 		}
 
-		private void CheckDependencies(IEnumerable<Component> components) {
+		private void CheckDependencies(IReadOnlyCollection<Component> components) {
 			IEnumerable<string> presentTags = components.SelectMany(component => component.Tags);
 			IEnumerable<string> requiredTags = components.SelectMany(component => component.RequiredTags);
 

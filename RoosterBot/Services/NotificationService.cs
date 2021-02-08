@@ -8,7 +8,7 @@ namespace RoosterBot {
 	/// You cannot send notifications yourself, but you can provide delivery target for the notification.
 	/// </summary>
 	public sealed class NotificationService {
-		private readonly AsynchronousEvent<NotificationEventArgs> m_NotificationAddedEvent = new AsynchronousEvent<NotificationEventArgs>();
+		private readonly AsynchronousEvent<NotificationEventArgs> m_NotificationAddedEvent = new();
 
 		/// <summary>
 		/// Fired when a notification is emitted by RoosterBot.

@@ -60,13 +60,13 @@ namespace RoosterBot.Console {
 				bool wasConnected = false;
 				try {
 					pipeServer = new NamedPipeServerStream("roosterBotConsolePipe", PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough);
-					pipeServer.WaitForConnection();
+					await pipeServer.WaitForConnectionAsync();
 					Logger.Info(LogTag, "Console interface connected");
 
 					sr = new StreamReader(pipeServer, Encoding.UTF8, true, 2047, true);
 					while (pipeServer.IsConnected && !m_CTS.IsCancellationRequested) {
 						wasConnected = true;
-						string? input = sr.ReadLine();
+						string? input = await sr.ReadLineAsync();
 
 						if (input == null) {
 							Logger.Info(LogTag, "Console handler disconnected");
