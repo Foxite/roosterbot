@@ -8,26 +8,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
-	public class FileUserConfigService : UserConfigService {
+	internal class JsonUserConfigService : UserConfigService {
 		private readonly string m_ConfigFilePath;
 		private readonly ConcurrentDictionary<SnowflakeReference, UserConfig> m_ConfigMap;
 
-		public FileUserConfigService(string configPath) {
+		public JsonUserConfigService(string configPath) {
 			Logger.Info(MetaComponent.LogTag, "Loading user config json");
 
 			m_ConfigFilePath = configPath;
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, UserConfig>();
 
 			if (File.Exists(m_ConfigFilePath)) {
-				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileUserConfig>>>(File.ReadAllText(m_ConfigFilePath));
+				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, JsonUserConfig>>>(File.ReadAllText(m_ConfigFilePath));
 
-				foreach (KeyValuePair<string, IDictionary<string, FileUserConfig>> platformKvp in jsonConfig) {
+				foreach (KeyValuePair<string, IDictionary<string, JsonUserConfig>> platformKvp in jsonConfig) {
 					PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
 					if (platform is null) {
 						continue;
 					}
 
-					foreach (KeyValuePair<string, FileUserConfig> configItem in platformKvp.Value) {
+					foreach (KeyValuePair<string, JsonUserConfig> configItem in platformKvp.Value) {
 						var userRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
 						m_ConfigMap.TryAdd(
 							userRef,
@@ -59,7 +59,7 @@ namespace RoosterBot.Meta {
 					grp => grp.Key,
 					grp => JObject.FromObject(grp.ToDictionary(
 						kvp => kvp.Key.Id.ToString() ?? "null",
-						kvp => new FileUserConfig() {
+						kvp => new JsonUserConfig() {
 							Culture = kvp.Value.Culture?.Name ?? null,
 							CustomData = (kvp.Value.GetRawData() as IDictionary<string, JToken?>).ToDictionary(
 								innerKvp => innerKvp.Key,
@@ -71,7 +71,7 @@ namespace RoosterBot.Meta {
 			).ToString(Formatting.None));
 		}
 
-		private class FileUserConfig {
+		private class JsonUserConfig {
 			public string? Culture { get; set; } = null!;
 			public IDictionary<string, JToken> CustomData { get; set; } = null!;
 		}

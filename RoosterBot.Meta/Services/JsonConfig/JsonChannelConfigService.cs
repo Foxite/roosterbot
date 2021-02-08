@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,26 +8,26 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
-	public class FileChannelConfigService : ChannelConfigService {
+	internal class JsonChannelConfigService : ChannelConfigService {
 		private readonly string m_ConfigFilePath;
 		private readonly ConcurrentDictionary<SnowflakeReference, ChannelConfig> m_ConfigMap;
 
-		public FileChannelConfigService(string configPath, string defaultCommandPrefix, CultureInfo defaultCulture) : base(defaultCommandPrefix, defaultCulture) {
+		public JsonChannelConfigService(string configPath, string defaultCommandPrefix, CultureInfo defaultCulture) : base(defaultCommandPrefix, defaultCulture) {
 			Logger.Info(MetaComponent.LogTag, "Loading channel config json");
 
 			m_ConfigFilePath = configPath;
 			m_ConfigMap = new ConcurrentDictionary<SnowflakeReference, ChannelConfig>();
 
 			if (File.Exists(m_ConfigFilePath)) {
-				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, FileChannelConfig>>>(File.ReadAllText(m_ConfigFilePath));
+				var jsonConfig = JsonConvert.DeserializeObject<IDictionary<string, IDictionary<string, JsonChannelConfig>>>(File.ReadAllText(m_ConfigFilePath));
 
-				foreach (KeyValuePair<string, IDictionary<string, FileChannelConfig>> platformKvp in jsonConfig) {
+				foreach (KeyValuePair<string, IDictionary<string, JsonChannelConfig>> platformKvp in jsonConfig) {
 					PlatformComponent? platform = Program.Instance.Components.GetPlatform(platformKvp.Key);
 					if (platform is null) {
 						continue;
 					}
 
-					foreach (KeyValuePair<string, FileChannelConfig> configItem in platformKvp.Value) {
+					foreach (KeyValuePair<string, JsonChannelConfig> configItem in platformKvp.Value) {
 						var channelRef = new SnowflakeReference(platform, platform.GetSnowflakeIdFromString(configItem.Key));
 						m_ConfigMap.TryAdd(
 							channelRef,
@@ -56,14 +55,14 @@ namespace RoosterBot.Meta {
 		}
 
 		public override Task UpdateChannelAsync(ChannelConfig config) {
-			m_ConfigMap.AddOrUpdate(config.ChannelReference, config, (channel, old) => config);
+			m_ConfigMap.AddOrUpdate(config.ChannelReference, config, (_, _) => config);
 
 			return File.WriteAllTextAsync(m_ConfigFilePath, JObject.FromObject(
 				m_ConfigMap.GroupBy(kvp => kvp.Key.Platform.PlatformName).ToDictionary(
 					grp => grp.Key,
 					grp => JObject.FromObject(grp.ToDictionary(
 						kvp => kvp.Key.Id.ToString() ?? "null",
-						kvp => new FileChannelConfig() {
+						kvp => new JsonChannelConfig() {
 							Culture = kvp.Value.Culture.Name,
 							CommandPrefix = kvp.Value.CommandPrefix,
 							CustomData = (kvp.Value.GetRawData() as IDictionary<string, JToken?>).ToDictionary(
@@ -77,7 +76,7 @@ namespace RoosterBot.Meta {
 			).ToString(Formatting.None));
 		}
 
-		private class FileChannelConfig {
+		private class JsonChannelConfig {
 			public string Culture { get; set; } = null!;
 			public string CommandPrefix { get; set; } = null!;
 			public IDictionary<string, JToken> CustomData { get; set; } = null!;

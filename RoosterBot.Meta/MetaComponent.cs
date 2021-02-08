@@ -2,37 +2,35 @@
 using System.Globalization;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	public class MetaComponent : Component {
 		internal const string LogTag = "Meta";
 
 		private bool m_EnableCommandsList;
-		private EmailSettings m_EmailSettings = new EmailSettings();
+		private EmailSettings? m_EmailSettings;
 
-		public override Version ComponentVersion => new Version(1, 3, 3);
-
-#nullable disable
-		public static MetaComponent Instance { get; private set; }
-#nullable restore
-
-		public MetaComponent() {
-			Instance = this;
-		}
+		public override Version ComponentVersion => new Version(1, 4);
 
 		protected override void AddServices(IServiceCollection services, string configPath) {
 			var config = Util.LoadJsonConfigFromTemplate(Path.Combine(configPath, "Config.json"), new {
-				UseFileConfig = false,
+				ConfigProvider = "None",
 				EnableCommandsList = true,
 				DefaultCommandPrefix = "!",
 				DefaultCulture = "en-US",
-				EmailSettings = new EmailSettings()
+				EmailSettings = new EmailSettings(),
+				DatabaseProvider = new PostgresProvider("", 5432, "", "", "")
 			});
 
-			if (config.UseFileConfig) {
-				services.AddSingleton<UserConfigService   >(new FileUserConfigService   (Path.Combine(configPath, "Users.json")));
-				services.AddSingleton<ChannelConfigService>(new FileChannelConfigService(Path.Combine(configPath, "Channels.json"),
-					config.DefaultCommandPrefix, CultureInfo.GetCultureInfo(config.DefaultCulture)));
+			if (config.ConfigProvider == "Json") {
+				services.AddSingleton<UserConfigService   >(new JsonUserConfigService   (Path.Combine(configPath, "Users.json")));
+				services.AddSingleton<ChannelConfigService>(new JsonChannelConfigService(Path.Combine(configPath, "Channels.json"), config.DefaultCommandPrefix, CultureInfo.GetCultureInfo(config.DefaultCulture)));
+			} else if (config.ConfigProvider == "EntityFramework") {
+				services.AddSingleton<UserConfigService   >(new EFUserConfigService(config.DatabaseProvider));
+				services.AddSingleton<ChannelConfigService>(new EFChannelConfigService(config.DatabaseProvider, config.DefaultCommandPrefix, CultureInfo.GetCultureInfo(config.DefaultCulture)));
+			} else if (config.ConfigProvider != "None") {
+				Logger.Warning(LogTag, $"Unrecognized config provider {config.ConfigProvider}. Valid options are None, Json, and EntityFramework.");
 			}
 
 			m_EnableCommandsList = config.EnableCommandsList;
@@ -67,7 +65,7 @@ namespace RoosterBot.Meta {
 
 			commandService.AddAllModules();
 
-			if (!(m_EmailSettings?.IsEmpty ?? true)) {
+			if (m_EmailSettings is not null && !m_EmailSettings.IsEmpty) {
 				new EmailNotificationHandler(services.GetRequiredService<NotificationService>(), m_EmailSettings);
 			}
 		}
