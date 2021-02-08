@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -26,7 +22,7 @@ namespace RoosterBot {
 		/// <summary>
 		/// The version of RoosterBot.
 		/// </summary>
-		public static readonly Version Version = new Version(3, 3, 0);
+		public static readonly Version Version = new(3, 3, 0);
 
 		/// <summary>
 		/// The instance of the Program class.
@@ -36,33 +32,47 @@ namespace RoosterBot {
 		/// <summary>
 		/// The instance of the <see cref="ComponentManager"/> class.
 		/// </summary>
-		public ComponentManager Components { get; private set; }
+		public ComponentManager Components { get; }
 
 		/// <summary>
 		/// The instance of the <see cref="RoosterBot.CommandHandler"/> class.
 		/// </summary>
-		public CommandHandler CommandHandler { get; private set; }
+		public CommandHandler CommandHandler { get; }
 
-		private bool m_ShutDown;
+		private readonly CancellationTokenSource m_ShutDown = new();
 		private static readonly IHost ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
 
 		private static int Main(string[] args) {
-			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
-				Console.ReadKey();
-				return 1;
+			if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0])) {
+				DataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "RoosterBot");
+			} else if (Path.IsPathRooted(args[0])) {
+				DataPath = args[0];
+			} else {
+				DataPath = Path.GetFullPath(args[0], Environment.CurrentDirectory);
 			}
-
+			
+			Mutex? mutex = null;
 			try {
-				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!, args[0]);
+				mutex = new Mutex(false, $"RoosterBot-{DataPath.Replace('/', '_')}"); // Works on linux, idk if it works on windows
+				if (mutex.WaitOne(1)) {
+					ConsoleHost.Start();
 
-				ConsoleHost.Start();
+					new Program();
 
-				new Program();
-				return 0;
+					return 0;
+				} else {
+					// This cannot be logged, because we can't access the log file
+					Console.WriteLine("It appears another RoosterBot instance is already running inside the specified data folder.");
+
+					if (!Console.IsInputRedirected) {
+						Console.ReadKey();
+					}
+
+					return 1;
+				}
 			} catch (Exception e) {
 				Logger.Critical(Logger.Tags.RoosterBot, "Application has crashed.", e);
-#if DEBUG
+#if false && DEBUG
 				if (!Console.IsInputRedirected) {
 					Console.ReadKey();
 				}
@@ -70,6 +80,7 @@ namespace RoosterBot {
 				return 2;
 			} finally {
 				ConsoleHost.Dispose();
+				mutex?.Dispose();
 			}
 		}
 
@@ -93,7 +104,11 @@ namespace RoosterBot {
 			Components = new ComponentManager();
 			IServiceCollection serviceCollection = CreateRBServices();
 			IServiceProvider serviceProvider = Components.SetupComponents(serviceCollection);
-			CommandHandler = CreateHandlers(serviceProvider);
+			
+			new CommandExecutedHandler(serviceProvider);
+			new CommandExceptionHandler(serviceProvider);
+			CommandHandler = new CommandHandler(serviceProvider);
+			
 			NotifyAppStart();
 
 			WaitForQuitCondition();
@@ -113,7 +128,7 @@ namespace RoosterBot {
 				.AddSingleton(new EmoteService())
 				.AddSingleton(new CultureNameService(resources))
 				.AddSingleton(new Random())
-				.AddSingleton(isp => {
+				.AddSingleton(_ => {
 					var ret = new HttpClient();
 					ret.DefaultRequestHeaders.Add("User-Agent", $"RoosterBot/{Version}");
 					return ret;
@@ -121,13 +136,7 @@ namespace RoosterBot {
 				.AddSingleton(resources);
 		}
 
-		private CommandHandler CreateHandlers(IServiceProvider services) {
-			new CommandExecutedHandler(services);
-			new CommandExceptionHandler(services);
-			return new CommandHandler(services);
-		}
-
-		private void NotifyAppStart() {
+		private static void NotifyAppStart() {
 			// Find an open Ready pipe and report
 			NamedPipeClientStream? pipeClient = null;
 			try {
@@ -139,67 +148,42 @@ namespace RoosterBot {
 			} catch (TimeoutException) {
 				// Pass
 			} finally {
-				if (pipeClient != null) {
-					pipeClient.Dispose();
-				}
+				pipeClient?.Dispose();
 			}
 		}
 
 		private void WaitForQuitCondition() {
-			var cts = new CancellationTokenSource();
-			using (var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In))
-			using (var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true)) {
-				CancellationToken token = cts.Token;
-				_ = pipeServer.WaitForConnectionAsync(token);
+			CancellationToken token = m_ShutDown.Token;
 
-				Task consoleShutdown = ConsoleHost.WaitForShutdownAsync(token)
-					.ContinueWith(t => {
-						if (!token.IsCancellationRequested) {
-							Logger.Info(Logger.Tags.RoosterBot, "SIGTERM received");
-						}
-						ConsoleHost.StopAsync();
-					});
+			_ = Task.Run(async () => {
+				await using var pipeServer = new NamedPipeServerStream("roosterbotStopPipe", PipeDirection.In);
+				using var sr = new StreamReader(pipeServer, Encoding.UTF8, true, 512, true);
 
-				var quitConditions = new List<Func<bool>>() {
-					() => m_ShutDown,
-					() => {
-						// Pipe connection by stop executable
-						if (pipeServer.IsConnected) {
-							string? input = sr.ReadLine();
-							if (input == "stop") {
-								Logger.Info(Logger.Tags.RoosterBot, "Stop command received from external process");
-								pipeServer.Disconnect();
-								return true;
-							} else {
-								pipeServer.Disconnect();
-								_ = pipeServer.WaitForConnectionAsync(cts.Token);
-							}
-						}
-						return false;
-					},
-					() => consoleShutdown.IsCompleted
-				};
+				try {
+					await pipeServer.WaitForConnectionAsync(token);
+					// Pipe connection by stop executable
+					if (pipeServer.IsConnected) {
+						Logger.Info(Logger.Tags.RoosterBot, "Stop command received from external process");
+						pipeServer.Disconnect();
+						m_ShutDown.Cancel();
+					}
+				} catch (TaskCanceledException) { }
+			});
 
-				if (!Console.IsInputRedirected) {
-					quitConditions.Add(() => {
-						// Ctrl-Q pressed by user
-						if (Console.KeyAvailable) {
-							ConsoleKeyInfo keyPress = Console.ReadKey(true);
-							if (keyPress.Modifiers == ConsoleModifiers.Control && keyPress.Key == ConsoleKey.Q) {
-								Logger.Info(Logger.Tags.RoosterBot, "Ctrl-Q pressed");
-								return true;
-							}
-						}
-						return false;
-					});
-				}
+			_ = Task.Run(async () => {
+				try {
+					await ConsoleHost.WaitForShutdownAsync(token);
+					
+					// If we get here, then the wait did not get cancelled as we would see the exception here.
+					Logger.Info(Logger.Tags.RoosterBot, "SIGTERM received");
+					await ConsoleHost.StopAsync();
+					m_ShutDown.Cancel();
+				} catch (TaskCanceledException) { }
+			});
 
-				while (!quitConditions.Any(condition => condition())) {
-					Thread.Sleep(500);
-				}
-			}
-			cts.Cancel();
-			cts.Dispose();
+			m_ShutDown.Token.WaitHandle.WaitOne();
+
+			m_ShutDown.Dispose();
 		}
 
 		/// <summary>
@@ -207,7 +191,7 @@ namespace RoosterBot {
 		/// </summary>
 		public void Shutdown() {
 			Logger.Info(Logger.Tags.RoosterBot, "Shutdown() has been called");
-			m_ShutDown = true;
+			m_ShutDown.Cancel();
 		}
 
 		/// <summary>
@@ -215,7 +199,7 @@ namespace RoosterBot {
 		/// </summary>
 		public void Restart() {
 			Logger.Info(Logger.Tags.RoosterBot, "Restart() has been called");
-			m_ShutDown = true;
+			m_ShutDown.Cancel();
 			Process.Start(new ProcessStartInfo(@"..\AppStart\AppStart.exe", "delay 20000"));
 		}
 	}
