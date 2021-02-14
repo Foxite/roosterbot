@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,9 +22,18 @@ namespace RoosterBot.Meta {
 			return result?.ToRealConfig(this) ?? GetDefaultConfig(user);
 		}
 
-		public override Task UpdateUserAsync(UserConfig config) => Task.Run(() => {
-			using var ctx = new EFContext(m_DbProvider);
-			ctx.Users.Update(EFUser.FromRealConfig(config));
-		});
+		public async override Task UpdateUserAsync(UserConfig config) {
+			await using var ctx = new EFContext(m_DbProvider);
+			var efu = EFUser.FromRealConfig(config);
+			// BAD! BAD! BAD!
+			// Only for testing. This is going to cause concurrency errors one day.
+			// TODO Find a way to use SQL transactions under EF
+			if (ctx.Users.Any(item => item.Platform == config.UserReference.Platform.PlatformName && item.PlatformId == config.UserReference.Id.ToString())) {
+				ctx.Users.Update(efu);
+			} else {
+				ctx.Users.Add(efu);
+			}
+			await ctx.SaveChangesAsync();
+		}
 	}
 }

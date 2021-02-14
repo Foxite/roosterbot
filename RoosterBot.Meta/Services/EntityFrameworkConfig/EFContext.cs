@@ -18,6 +18,12 @@ namespace RoosterBot.Meta {
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			m_DbProvider.ConfigureContext(optionsBuilder);
 		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder) {
+			base.OnModelCreating(modelBuilder);
+			modelBuilder.Entity(typeof(EFChannel)).HasKey(nameof(EFChannel.Platform), nameof(EFChannel.PlatformId));
+			modelBuilder.Entity(typeof(EFUser)).HasKey(nameof(EFUser.Platform), nameof(EFUser.PlatformId));
+		}
 	}
 
 	public abstract class DatabaseProvider {
@@ -31,21 +37,17 @@ namespace RoosterBot.Meta {
 	}
 
 	public class PostgresProvider : DatabaseProvider {
-		private readonly ProvidePasswordCallback m_PasswordCallback;
-
 		public PostgresProvider(
 			[JsonProperty("Host")] string host,
 			[JsonProperty("Port")] int port,
 			[JsonProperty("Username")] string username,
 			[JsonProperty("Password")] string password,
-			[JsonProperty("Database")] string name) : base($"Server={host}:{port}/{username};Database={name}") {
-			m_PasswordCallback = (_, _, _, _) => password;
-		}
+			[JsonProperty("Database")] string name)
+			: base($"host={host};database={name};user id={username};password={password}") { }
 
 		public override void ConfigureContext(DbContextOptionsBuilder optionsBuilder) {
 			optionsBuilder.UseNpgsql(
-				ConnectionString,
-				postgres => postgres.ProvidePasswordCallback(m_PasswordCallback)
+				ConnectionString
 			);
 		}
 	}

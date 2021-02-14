@@ -1,14 +1,15 @@
 using System;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace RoosterBot.Meta {
 	internal class EFUser {
-		public string CustomDataJson { get; set; } = null!;
 		public string Platform { get; set; } = null!;
 		public string PlatformId { get; set; } = null!;
 		public string? Culture { get; set; }
+		public string CustomDataJson { get; set; } = null!;
 
 		public UserConfig ToRealConfig(UserConfigService service) {
 			PlatformComponent? pfc = Program.Instance.Components.GetPlatform(Platform);
