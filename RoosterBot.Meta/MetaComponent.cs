@@ -19,7 +19,7 @@ namespace RoosterBot.Meta {
 				EnableCommandsList = true,
 				DefaultCommandPrefix = "!",
 				DefaultCulture = "en-US",
-				EmailSettings = new EmailSettings(),
+				EmailSettings = (EmailSettings?) new EmailSettings(),
 				DatabaseProvider = new PostgresProvider("", 5432, "", "", "")
 			});
 
@@ -34,7 +34,7 @@ namespace RoosterBot.Meta {
 			}
 
 			m_EnableCommandsList = config.EnableCommandsList;
-			m_EmailSettings = config.EmailSettings;
+			m_EmailSettings = config.EmailSettings ?? new EmailSettings();
 		}
 
 		protected override void AddModules(IServiceProvider services, RoosterCommandService commandService) {
