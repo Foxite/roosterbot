@@ -69,20 +69,21 @@ namespace RoosterBot {
 			}
 		}
 
-		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys(Assembly assembly, CultureInfo? culture) {
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// !!     Do not touch code beneath this line      !!
+		// !! If you do, THIS HEADACHE NOW BELONGS TO YOU. !!
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys(Assembly assembly, CultureInfo culture) {
 			ResourceManager resourceManager = m_ResourceManagers[assembly];
-			IEnumerable<ResourceSet> resourceSets;
-
-			if (culture is null) {
-				resourceSets = GetAvailableCultures(assembly).Select(culture => resourceManager.GetResourceSet(culture, false, true)).WhereNotNull();
-			} else {
-				ResourceSet? resourceSet = resourceManager.GetResourceSet(culture, false, true);
-				resourceSets = resourceSet is null ? Enumerable.Empty<ResourceSet>() : new[] { resourceSet };
-			}
-			return resourceSets != null
-				? resourceSets.Cast<DictionaryEntry>().Select(Util.ToGeneric<string, string>)
-				: Enumerable.Empty<KeyValuePair<string, string>>();
+			ResourceSet resourceSet = resourceManager.GetResourceSet(culture, true, true)!;
+			return resourceSet.Cast<DictionaryEntry>().Select(de => new KeyValuePair<string, string>((string) de.Key, (string) de.Value!));
 		}
+
+		internal IEnumerable<KeyValuePair<string, string>> GetAvailableKeys() =>
+			from assembly in m_ResourceManagers.Keys
+			from culture in GetAvailableCultures(assembly)
+			from kvp in GetAvailableKeys(assembly, culture)
+			select kvp;
 
 		internal static IReadOnlyCollection<CultureInfo> GetAvailableCultures(Component component) => GetAvailableCultures(component.GetType().Assembly);
 
@@ -94,7 +95,8 @@ namespace RoosterBot {
 			return new List<CultureInfo>(
 				from c in CultureInfo.GetCultures(CultureTypes.AllCultures)
 				join d in rootDir.EnumerateDirectories() on c.IetfLanguageTag equals d.Name
-				where d.EnumerateFiles(resourceFileName).Any()
+				let v = d.EnumerateFiles(resourceFileName).Any()
+				where v
 				select c
 			);
 		}

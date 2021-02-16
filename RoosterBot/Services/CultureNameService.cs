@@ -24,7 +24,7 @@ namespace RoosterBot {
 		/// </example>
 		public CultureInfo? Search(CultureInfo? culture, string input) {
 			input = input.ToLower();
-			IEnumerable<KeyValuePair<string, string>> enumerable = m_Resources.GetAvailableKeys(Assembly.GetExecutingAssembly(), culture);
+			IEnumerable<KeyValuePair<string, string>> enumerable = m_Resources.GetAvailableKeys();
 			string? resultCode = enumerable
 				.Where(kvp => culture is null || kvp.Key.StartsWith(KeyPrefix))
 				.FirstOrDefault(kvp => kvp.Value.ToLower() == input)
