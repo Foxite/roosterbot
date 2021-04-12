@@ -14,10 +14,8 @@ namespace RoosterBot.DiscordNet {
 		#region Helper stuff
 		private IEnumerable<IGuild>? m_StorageGuilds;
 
-		private IGuild GetStorageGuild(bool isAnimated) {
-			if (m_StorageGuilds == null) {
-				m_StorageGuilds = DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
-			}
+		private IGuild? GetStorageGuild(bool isAnimated) {
+			m_StorageGuilds ??= DiscordNetComponent.Instance.EmoteStorageGuilds.Select(id => Context.Client.GetGuild(id));
 
 			bool canStoreStaticEmote(IGuild guild) => guild.Emotes.Count(emote => !emote.Animated) < 50;
 			bool canStoreAnimatedEmote(IGuild guild) => guild.Emotes.Count(emote => emote.Animated) < 50;
@@ -28,14 +26,12 @@ namespace RoosterBot.DiscordNet {
 		private async Task<IUserMessage?> GetMessageBeforeCommand() {
 			// Get last message before command
 			IEnumerable<IUserMessage> messages = (await Context.Channel.GetMessagesAsync(5).ToListAsync()).SelectMany(c => c).OfType<IUserMessage>();
-			if (messages.Any()) {
-				bool sawCommand = false;
-				foreach (IUserMessage message in messages) {
-					if (sawCommand) {
-						return message;
-					} else if (message.Id == Context.Message.Id) {
-						sawCommand = true;
-					}
+			bool sawCommand = false;
+			foreach (IUserMessage message in messages) {
+				if (sawCommand) {
+					return message;
+				} else if (message.Id == Context.Message.Id) {
+					sawCommand = true;
 				}
 			}
 			return null;
