@@ -55,6 +55,10 @@ namespace RoosterBot.Meta {
 				return true;
 			}
 
+			if (moduleOrCommand is Module module) {
+				Console.WriteLine(module.Type.Name);
+			}
+			
 			// Otherwise, hide this item if it has a HiddenFromListAttribute (that does not contain the current culture), or a RequireCultureAttribute that does not match the current culture.
 			return !(
 				hiddenFromList.Any() ||
@@ -64,14 +68,14 @@ namespace RoosterBot.Meta {
 
 		private IEnumerable<Command> GetCommands(string category) =>
 			from module in CmdService.GetAllModules(Context.Culture)
-			where ShouldNotHide(module) && module.Name.ToLower() == category
+			where ShouldNotHide(module) && !ChannelConfig.DisabledModules.Contains(module.Type.Name) && module.Name.ToLower() == category
 			from command in module.Commands
 			where ShouldNotHide(command)
 			select command;
 
 		private IEnumerable<string> GetCategories() => (
 			from module in CmdService.GetAllModules(Context.Culture)
-			where ShouldNotHide(module) && module.Commands.Any(command => ShouldNotHide(command))
+			where ShouldNotHide(module) && !ChannelConfig.DisabledModules.Contains(module.Type.Name) && module.Commands.Any(command => ShouldNotHide(command))
 			select module.Name
 		).Distinct();
 	}
