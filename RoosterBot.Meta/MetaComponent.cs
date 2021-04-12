@@ -8,7 +8,7 @@ namespace RoosterBot.Meta {
 		private bool m_EnableCommandsList;
 		private EmailSettings m_EmailSettings = new EmailSettings();
 
-		public override Version ComponentVersion => new Version(1, 3, 3);
+		public override Version ComponentVersion => new Version(1, 3, 4);
 
 #nullable disable
 		public static MetaComponent Instance { get; private set; }
