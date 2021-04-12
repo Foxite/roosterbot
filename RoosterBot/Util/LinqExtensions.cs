@@ -26,5 +26,33 @@ namespace System.Linq {
 				}
 			}
 		}
+
+		public static TSource MaxBy<TSource, TSelect>(this IEnumerable<TSource> enumerable, Func<TSource, TSelect> selector) where TSelect : IComparable<TSelect> {
+			using var enumerator = enumerable.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty.");
+			}
+			TSource max = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (selector(enumerator.Current).CompareTo(selector(enumerator.Current)) > 0) {
+					max = enumerator.Current;
+				}
+			}
+			return max;
+		}
+
+		public static TSource MinBy<TSource, TSelect>(this IEnumerable<TSource> enumerable, Func<TSource, TSelect> selector) where TSelect : IComparable<TSelect> {
+			using var enumerator = enumerable.GetEnumerator();
+			if (!enumerator.MoveNext()) {
+				throw new InvalidOperationException("Sequence is empty.");
+			}
+			TSource min = enumerator.Current;
+			while (enumerator.MoveNext()) {
+				if (selector(enumerator.Current).CompareTo(selector(enumerator.Current)) < 0) {
+					min = enumerator.Current;
+				}
+			}
+			return min;
+		}
 	}
 }
