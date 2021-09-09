@@ -16,7 +16,7 @@ namespace RoosterBot.GLU {
 		private int m_RepeatRecords;
 		private bool m_ExpandActivites;
 
-		public override Version ComponentVersion => new Version(1, 2, 1);
+		public override Version ComponentVersion => new Version(1, 2, 2);
 		public override IEnumerable<string> Tags => new[] { "ScheduleProvider" };
 
 		public GLUComponent() {
