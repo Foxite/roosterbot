@@ -106,7 +106,7 @@ namespace RoosterBot.GLU {
 		}
 
 		private class GLUIdentifierValidator : IdentifierValidator {
-			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][12](-?[abcd])?$", RegexOptions.IgnoreCase);
+			private static readonly Regex StudentSetRegex = new Regex("^[1-4]g[ad][1-4](-?[abcd])?$", RegexOptions.IgnoreCase);
 			private static readonly Regex RoomRegex = new Regex(@"^[abw][0-4]\.?[0-9]{2}$", RegexOptions.IgnoreCase);
 
 			public GLUIdentifierValidator(IReadOnlyCollection<SnowflakeReference> allowedChannels) : base(allowedChannels) { }
