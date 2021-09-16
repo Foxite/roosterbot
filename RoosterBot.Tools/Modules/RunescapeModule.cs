@@ -6,6 +6,7 @@ using AngleSharp.Common;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using Qmmands;
 
 namespace RoosterBot.Tools {
@@ -15,7 +16,7 @@ namespace RoosterBot.Tools {
 
 		[Command("vis"), Description("Today's Rune Goldberg combinations")]
 		public async Task<CommandResult> Vis() {
-			var vis = JObject.Parse(await Http.GetStringAsync("https://runeguide.info/alt1/viswax/api/getVisWaxCombo.php")).ToObject<IDictionary<string, VisData>>().First().Value;
+			var vis = JObject.Parse(await Http.GetStringAsync("https://runeguide.info/alt1/viswax/api/getVisWaxCombo.php")).ToObject<IDictionary<string, VisData>>()!["75,76,378,66118165"];
 
 			var sb = new StringBuilder("Runes for today:\n");
 			sb.AppendLine($"- Slot 1: {string.Join(", ", vis.Slot1.Select(vso => $"{vso.Emote} {vso.ProfitFormat}"))}");
@@ -33,20 +34,37 @@ namespace RoosterBot.Tools {
 			public IReadOnlyList<VisSlotOption> Slot1 { get; }
 			public IReadOnlyList<IReadOnlyList<VisSlotOption>> Slot2 { get; }
 
-			public VisData(string? data, string source, int lastupdated, int slot1_best, VisSlotOption[] slot1_other, int slot2_1_best, VisSlotOption[] slot2_1_other, int slot2_2_best, VisSlotOption[] slot2_2_other, int slot2_3_best, VisSlotOption[] slot2_3_other, string lastupdated_format) {
+			// ReSharper disable InconsistentNaming
+			public VisData(string? data, string source, int lastupdated, int slot1_best, VisSlotOption?[] slot1_other, int slot2_1_best, VisSlotOption?[] slot2_1_other, int slot2_2_best, VisSlotOption[] slot2_2_other, int slot2_3_best, VisSlotOption?[] slot2_3_other, string lastupdated_format) {
+				// ReSharper restore InconsistentNaming
 				Data = data;
 				Source = source;
 				LastUpdated = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(lastupdated);
 
-				Slot1 = slot1_other.Append(new VisSlotOption(slot1_best, 30)).OrderByDescending(vso => vso.Profit).ToList();
+				Slot1 = GetVisSlotOptionList(new VisSlotOption(slot1_best, 30), slot1_other);
+				//Slot1 = (slot1_other ?? Array.Empty<VisSlotOption>()).Append(new VisSlotOption(slot1_best, 30)).OrderByDescending(vso => vso.Profit).ToList();
 
 				Slot2 = new List<List<VisSlotOption>>() {
-					slot2_1_other.Append(new VisSlotOption(slot2_1_best, 30)).OrderByDescending(vso => vso.Profit).ToList(),
-					slot2_2_other.Append(new VisSlotOption(slot2_2_best, 30)).OrderByDescending(vso => vso.Profit).ToList(),
-					slot2_3_other.Append(new VisSlotOption(slot2_3_best, 30)).OrderByDescending(vso => vso.Profit).ToList()
+					GetVisSlotOptionList(new VisSlotOption(slot2_1_best, 30), slot2_1_other),
+					GetVisSlotOptionList(new VisSlotOption(slot2_2_best, 30), slot2_2_other),
+					GetVisSlotOptionList(new VisSlotOption(slot2_3_best, 30), slot2_3_other),
+					//(slot2_1_other ?? Array.Empty<VisSlotOption>()).Append(new VisSlotOption(slot2_1_best, 30)).OrderByDescending(vso => vso.Profit).ToList(),
+					//(slot2_2_other ?? Array.Empty<VisSlotOption>()).Append(new VisSlotOption(slot2_2_best, 30)).OrderByDescending(vso => vso.Profit).ToList(),
+					//(slot2_3_other ?? Array.Empty<VisSlotOption>()).Append(new VisSlotOption(slot2_3_best, 30)).OrderByDescending(vso => vso.Profit).ToList()
 				};
 			}
 
+			private static List<VisSlotOption> GetVisSlotOptionList(VisSlotOption best, VisSlotOption?[] others) {
+				var ret = new List<VisSlotOption>(1 + (others?.Length ?? 0));
+				ret.Add(best);
+				if (others != null) {
+					ret.AddRange(others.WhereNotNull().Where(vso => vso.Id != best.Id));
+				}
+				ret.Sort((left, right) => left.Profit > right.Profit ? 1 : -1);
+				return ret;
+			}
+
+			[JsonConverter(typeof(VisSlotOptionConverter))]
 			public class VisSlotOption {
 				private static readonly Dictionary<int, (string Name, string Emote, int Price, int Amount)> s_NameLut = new Dictionary<int, (string Name, string Emote, int Price, int Amount)>() {
 					{ 556, ("Air", "<:air_rune:831129078580641802>", 71, 1000) },
@@ -98,6 +116,27 @@ namespace RoosterBot.Tools {
 					Vis = vis;
 					Price = s_NameLut[id].Price;
 					Amount = s_NameLut[id].Amount;
+				}
+
+				public class VisSlotOptionConverter : JsonConverter {
+					public override bool CanWrite => false;
+					public override bool CanRead => true;
+
+					public override bool CanConvert(Type objectType) => typeof(VisSlotOption).IsAssignableFrom(objectType);
+					
+					public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) => throw new NotSupportedException();
+					
+					public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
+						//reader.Read();
+						Console.WriteLine(reader.TokenType);
+						if (reader.TokenType == JsonToken.StartArray) {
+							reader.Skip(); // reader.TokenType == JsonToken.EndArray
+							return null;
+						} else {
+							var jo = serializer.Deserialize<JObject>(reader)!;
+							return new VisSlotOption(jo["id"]!.ToObject<int>(), jo["vis"]!.ToObject<int>());
+						}
+					}
 				}
 			}
 		}
