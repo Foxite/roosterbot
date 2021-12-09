@@ -1,12 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>GLU.Discord</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<Import Project="../Component.targets" />
 
 	<ItemGroup>
 		<ProjectReference Include="..\RoosterBot.DateTimeUtils\RoosterBot.DateTimeUtils.csproj">
@@ -25,11 +23,6 @@
 			<IncludeAssets>compile</IncludeAssets>
 		</ProjectReference>
 		<ProjectReference Include="..\RoosterBot.Schedule\RoosterBot.Schedule.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
 			<Private>false</Private>
 			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 			<IncludeAssets>compile</IncludeAssets>

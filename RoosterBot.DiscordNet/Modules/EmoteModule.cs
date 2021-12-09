@@ -9,7 +9,7 @@ using Discord;
 using Qmmands;
 
 namespace RoosterBot.DiscordNet {
-	[Group("emote"), HiddenFromList, RequireUserPermissionInGuild(GuildPermission.ManageEmojis, 346682476149866497)]
+	[Group("emote"), HiddenFromList, RequireUserPermissionInGuild(GuildPermission.ManageEmojis, 913156169114222592)]
 	public class EmoteModule : RoosterModule<DiscordCommandContext> {
 		#region Helper stuff
 		private IEnumerable<IGuild>? m_StorageGuilds;

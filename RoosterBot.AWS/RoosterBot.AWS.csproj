@@ -1,26 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>AWS</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<Import Project="../Component.targets" />
 
 	<ItemGroup>
 		<PackageReference Include="AWS.Logger.Core" Version="1.6.0" />
 		<PackageReference Include="AWSSDK.Core" Version="3.3.107.40" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.106.47" />
 		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.102.17" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
 	</ItemGroup>
 
 </Project>

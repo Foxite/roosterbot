@@ -9,7 +9,7 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<RestoreSources>https://www.myget.org/F/foxite/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
+		<RestoreSources>https://nuget.repo.corsac.nl/v3/index.json;https://www.myget.org/F/foxite/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
 	</PropertyGroup>
 
 	<ItemGroup>

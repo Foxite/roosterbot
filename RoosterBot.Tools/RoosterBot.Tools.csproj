@@ -1,25 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>Tools</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<Import Project="../Component.targets" />
+	
 	<ItemGroup>
 		<PackageReference Include="StrawPollNET" Version="1.0.2" />
 		<PackageReference Include="YoutubeExplode" Version="5.1.8" />
 		<PackageReference Include="YoutubeExplode.Converter" Version="2.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
 	</ItemGroup>
 
 </Project>

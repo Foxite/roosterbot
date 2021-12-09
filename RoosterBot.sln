@@ -51,6 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 		LICENSE = LICENSE
 		README.md = README.md
+		Component.targets = Component.targets
+		generatedockerfile.sh = generatedockerfile.sh
+		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoosterBot.Tools", "RoosterBot.Tools\RoosterBot.Tools.csproj", "{8240830B-E7AD-4931-9B92-ECDF27D90F6D}"

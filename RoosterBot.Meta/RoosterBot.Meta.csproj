@@ -1,23 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project>
+	
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>Meta</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<Import Project="../Component.targets" />
 
 	<ItemGroup>
 	  <PackageReference Include="FluentEmail.Smtp" Version="2.8.0" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
 	</ItemGroup>
 	
 	<ItemGroup>

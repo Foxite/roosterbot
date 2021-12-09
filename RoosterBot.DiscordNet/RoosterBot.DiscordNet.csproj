@@ -1,27 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AssemblyName>DiscordNet</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+﻿<Project>
 	
 	<PropertyGroup>
-		<RestoreSources>https://www.myget.org/F/foxite/api/v3/index.json;https://www.myget.org/F/discord-net/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
+		<AssemblyName>DiscordNet</AssemblyName>
+	</PropertyGroup>
+
+	<Import Project="../Component.targets" />
+	
+	<PropertyGroup>
+		<RestoreSources>https://nuget.repo.corsac.nl/v3/index.json;https://www.myget.org/F/foxite/api/v3/index.json;https://www.myget.org/F/discord-net/api/v3/index.json;https://api.nuget.org/v3/index.json</RestoreSources>
 	</PropertyGroup>
 	
 	<ItemGroup>
 	  <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201223.7" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
-	</ItemGroup>
-
+	
 </Project>

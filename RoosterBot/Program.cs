@@ -45,12 +45,6 @@ namespace RoosterBot {
 		private static IHost s_ConsoleHost = new HostBuilder().UseConsoleLifetime().Build();
 
 		private static int Main(string[] args) {
-			if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1) {
-				Console.WriteLine("There is already a process named RoosterBot running. There cannot be more than one instance of the bot.");
-				Console.ReadKey();
-				return 1;
-			}
-
 			try {
 				DataPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)!, args[0]);
 

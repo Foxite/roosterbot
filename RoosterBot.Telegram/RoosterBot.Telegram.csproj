@@ -1,24 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>Telegram</AssemblyName>
-		<OutDir>..\Output\RoosterBot\Components\$(AssemblyName)</OutDir>
-		<Nullable>enable</Nullable>
 		<RootNamespace>RoosterBot.Telegram</RootNamespace>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="Telegram.Bot" Version="15.7.1" />
-	</ItemGroup>
+	<Import Project="../Component.targets" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\RoosterBot\RoosterBot.csproj">
-			<Private>false</Private>
-			<CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-			<IncludeAssets>compile</IncludeAssets>
-		</ProjectReference>
+	  <PackageReference Include="Telegram.Bot" Version="15.7.1" />
 	</ItemGroup>
 
 </Project>

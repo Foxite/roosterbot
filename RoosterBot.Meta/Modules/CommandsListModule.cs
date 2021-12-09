@@ -55,10 +55,6 @@ namespace RoosterBot.Meta {
 				return true;
 			}
 
-			if (moduleOrCommand is Module module) {
-				Console.WriteLine(module.Type.Name);
-			}
-			
 			// Otherwise, hide this item if it has a HiddenFromListAttribute (that does not contain the current culture), or a RequireCultureAttribute that does not match the current culture.
 			return !(
 				hiddenFromList.Any() ||
